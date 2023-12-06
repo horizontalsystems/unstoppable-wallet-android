@@ -298,15 +298,12 @@ fun DescriptionCard(title: String, description: String, image: ImageSource) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RowScope.CategoryCard(
+fun CategoryCard(
     type: DiscoveryItem,
     onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .padding(6.dp)
-            .height(128.dp)
-            .weight(1f),
+        modifier = Modifier.height(128.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = 0.dp,
         backgroundColor = ComposeAppTheme.colors.lawrence,
@@ -402,8 +399,6 @@ fun PreviewListErrorView() {
 @Composable
 fun CardPreview() {
     ComposeAppTheme {
-        Row {
-            CategoryCard(DiscoveryItem.TopCoins, { })
-        }
+        CategoryCard(DiscoveryItem.TopCoins, { })
     }
 }

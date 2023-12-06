@@ -3,15 +3,11 @@ package cash.p.terminal.modules.market.overview.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -20,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
@@ -40,22 +35,7 @@ import java.math.BigDecimal
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MetricChartsView(marketMetrics: MarketOverviewModule.MarketMetrics, navController: NavController) {
-    val pagerState = rememberPagerState(pageCount = { 4 })
-
-    HorizontalPager(
-        state = pagerState,
-        beyondBoundsPageCount = 1,
-        pageSize = object : PageSize {
-            override fun Density.calculateMainAxisPageSize(
-                availableSpace: Int,
-                pageSpacing: Int
-            ): Int {
-                return (availableSpace - 1 * pageSpacing) / 2
-            }
-        },
-        contentPadding = PaddingValues(16.dp),
-        pageSpacing = 8.dp,
-    ) { page ->
+    MarketsHorizontalCards(4) { page ->
         ChartView(marketMetrics[page], navController)
     }
 }

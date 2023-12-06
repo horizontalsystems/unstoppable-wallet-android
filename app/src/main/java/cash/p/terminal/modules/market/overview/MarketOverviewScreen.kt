@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -21,16 +22,14 @@ import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.category.MarketCategoryFragment
 import cash.p.terminal.modules.market.overview.ui.BoardsView
 import cash.p.terminal.modules.market.overview.ui.MetricChartsView
-import cash.p.terminal.modules.market.overview.ui.TopNftCollectionsBoardView
 import cash.p.terminal.modules.market.overview.ui.TopPlatformsBoardView
 import cash.p.terminal.modules.market.overview.ui.TopSectorsBoardView
 import cash.p.terminal.modules.market.platform.MarketPlatformFragment
 import cash.p.terminal.modules.market.topcoins.MarketTopCoinsFragment
-import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsFragment
 import cash.p.terminal.modules.market.topplatforms.TopPlatformsFragment
-import cash.p.terminal.modules.nft.collection.NftCollectionFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.VSpacer
 
 @Composable
 fun MarketOverviewScreen(
@@ -85,36 +84,6 @@ fun MarketOverviewScreen(
                                 }
                             )
 
-                            TopSectorsBoardView(
-                                board = viewItem.topSectorsBoard,
-                                onClickSeeAll = {
-                                    navController.slideFromRight(R.id.marketSearchFragment)
-                                },
-                                onItemClick = { coinCategory ->
-                                    navController.slideFromBottom(
-                                        R.id.marketCategoryFragment,
-                                        bundleOf(MarketCategoryFragment.categoryKey to coinCategory)
-                                    )
-                                }
-                            )
-
-                            TopNftCollectionsBoardView(
-                                viewItem.topNftCollectionsBoard,
-                                onSelectTimeDuration = { timeDuration ->
-                                    viewModel.onSelectTopNftsTimeDuration(timeDuration)
-                                },
-                                onClickCollection = { blockchainType, collectionUid ->
-                                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType.uid)
-                                    navController.slideFromBottom(R.id.nftCollectionFragment, args)
-                                },
-                                onClickSeeAll = {
-                                    val (sortingField, timeDuration) = viewModel.topNftCollectionsParams
-                                    val args = TopNftCollectionsFragment.prepareParams(sortingField, timeDuration)
-
-                                    navController.slideFromBottom(R.id.marketTopNftCollectionsFragment, args)
-                                }
-                            )
-
                             TopPlatformsBoardView(
                                 viewItem.topPlatformsBoard,
                                 onSelectTimeDuration = { timeDuration ->
@@ -131,6 +100,17 @@ fun MarketOverviewScreen(
                                     navController.slideFromBottom(R.id.marketTopPlatformsFragment, args)
                                 }
                             )
+
+                            TopSectorsBoardView(
+                                board = viewItem.topSectorsBoard
+                            ) { coinCategory ->
+                                navController.slideFromBottom(
+                                    R.id.marketCategoryFragment,
+                                    bundleOf(MarketCategoryFragment.categoryKey to coinCategory)
+                                )
+                            }
+
+                            VSpacer(height = 32.dp)
                         }
                     }
                 }
