@@ -48,7 +48,15 @@ object MarketOverviewModule {
         val volume24h: MetricData,
         val defiCap: MetricData,
         val defiTvl: MetricData,
-    )
+    ) {
+        operator fun get(page: Int) = when (page) {
+            0 -> totalMarketCap
+            1 -> volume24h
+            2 -> defiCap
+            3 -> defiTvl
+            else -> throw  IndexOutOfBoundsException()
+        }
+    }
 
     data class MarketMetricsPoint(
         val value: BigDecimal,
