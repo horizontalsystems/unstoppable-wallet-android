@@ -1,7 +1,17 @@
 package cash.p.terminal.modules.market.overview.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
@@ -10,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
@@ -26,31 +37,34 @@ import cash.p.terminal.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartMinimal
 import java.math.BigDecimal
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MetricChartsView(marketMetrics: MarketOverviewModule.MarketMetrics, navController: NavController) {
-    Column(
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
-    ) {
-        Row {
-            ChartView(marketMetrics.totalMarketCap, navController)
-            Spacer(Modifier.width(8.dp))
-            ChartView(marketMetrics.volume24h, navController)
-        }
-        Spacer(Modifier.height(8.dp))
-        Row {
-            ChartView(marketMetrics.defiCap, navController)
-            Spacer(Modifier.width(8.dp))
-            ChartView(marketMetrics.defiTvl, navController)
-        }
+    val pagerState = rememberPagerState(pageCount = { 4 })
+
+    HorizontalPager(
+        state = pagerState,
+        beyondBoundsPageCount = 1,
+        pageSize = object : PageSize {
+            override fun Density.calculateMainAxisPageSize(
+                availableSpace: Int,
+                pageSpacing: Int
+            ): Int {
+                return (availableSpace - 1 * pageSpacing) / 2
+            }
+        },
+        contentPadding = PaddingValues(16.dp),
+        pageSpacing = 8.dp,
+    ) { page ->
+        ChartView(marketMetrics[page], navController)
     }
 }
 
 @Composable
-private fun RowScope.ChartView(metricsData: MetricData, navController: NavController) {
+private fun ChartView(metricsData: MetricData, navController: NavController) {
     Card(
         modifier = Modifier
             .height(105.dp)
-            .weight(1f)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
                 openMetricsPage(metricsData.type, navController)
