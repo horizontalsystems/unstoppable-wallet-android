@@ -5,104 +5,130 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.entities.viewState
-import io.horizontalsystems.bankwallet.modules.market.TimeDuration
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.FullCoin
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.UnknownHostException
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.withContext
 
 class MarketSearchViewModel(
-    private val service: MarketSearchService
+    private val marketKit: MarketKitWrapper,
+    private val marketFavoritesManager: MarketFavoritesManager,
+    private val localStorage: ILocalStorage,
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
+    enum class Mode {
+        Loading, Discovery, SearchResults
+    }
 
-    val timePeriodMenu by service::timePeriodMenu
-    val sortDescending by service::sortDescending
+    private var popularFullCoins: List<FullCoin>? = null
 
-    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
-        private set
+    private var results: List<MarketSearchModule.CoinItem>? = null
+    private var recent: List<MarketSearchModule.CoinItem>? = null
+    private var popular: List<MarketSearchModule.CoinItem>? = null
+    private var query: String = ""
+    private var mode: Mode = Mode.Loading
 
-    var itemsData by mutableStateOf<MarketSearchModule.Data?>(null)
-        private set
-
-    var errorMessage by mutableStateOf<TranslatableString?>(null)
+    var uiState by mutableStateOf(
+        UiState(
+            mode = mode,
+            recent = recent,
+            popular = popular,
+            results = results,
+        )
+    )
         private set
 
     init {
-        service.serviceDataFlow
-            .collectWith(viewModelScope) { result ->
-                result.viewState?.let {
-                    viewState = it
-                }
-                itemsData = result.getOrNull()
-                errorMessage = result.exceptionOrNull()?.let { errorText(it) }
+        viewModelScope.launch {
+            marketFavoritesManager.dataUpdatedAsync.asFlow().collect {
+                refreshItems()
+                emitState()
             }
-
-        service.favoriteDataUpdated
-            .subscribeIO {
-                viewModelScope.launch {
-                    service.updateState()
-                }
-            }.let {
-                disposables.add(it)
-            }
+        }
 
         viewModelScope.launch {
-            service.updateState()
+            fetchDiscoveryItems()
         }
     }
 
-    override fun onCleared() {
-        disposables.clear()
-    }
+    private suspend fun fetchDiscoveryItems() = withContext(Dispatchers.IO) {
+        popularFullCoins = marketKit.fullCoins(filter = "")
 
-    fun refresh() {
-        viewModelScope.launch {
-            service.updateState()
+        if (mode == Mode.Loading) {
+            mode = Mode.Discovery
+            val recentFullCoins = marketKit
+                .fullCoins(localStorage.marketSearchRecentCoinUids)
+                .sortedBy {
+                    localStorage.marketSearchRecentCoinUids.indexOf(it.coin.uid)
+                }
+            recent = coinItems(recentFullCoins)
+            popular = popularFullCoins?.let { coinItems(it) }
+            emitState()
         }
     }
 
     fun searchByQuery(query: String) {
+        this.query = query
+
+        refreshItems()
+        emitState()
+    }
+
+    private fun refreshItems() {
+        if (query.isBlank()) {
+            mode = Mode.Discovery
+            val recentFullCoins = marketKit
+                .fullCoins(localStorage.marketSearchRecentCoinUids)
+                .sortedBy {
+                    localStorage.marketSearchRecentCoinUids.indexOf(it.coin.uid)
+                }
+            recent = coinItems(recentFullCoins)
+            popular = popularFullCoins?.let { coinItems(it) }
+            results = null
+        } else {
+            mode = Mode.SearchResults
+            recent = null
+            popular = null
+            results = coinItems(marketKit.fullCoins(query))
+        }
+    }
+
+    private fun coinItems(fullCoins: List<FullCoin>) =
+        fullCoins.map {
+            MarketSearchModule.CoinItem(
+                it,
+                marketFavoritesManager.isCoinInFavorites(it.coin.uid)
+            )
+        }
+
+    private fun emitState() {
         viewModelScope.launch {
-            service.setFilter(query.trim())
+            uiState = UiState(mode, recent, popular, results)
         }
     }
 
     fun onFavoriteClick(favourited: Boolean, coinUid: String) {
         if (favourited) {
-            service.unFavorite(coinUid)
+            marketFavoritesManager.remove(coinUid)
         } else {
-            service.favorite(coinUid)
+            marketFavoritesManager.add(coinUid)
         }
     }
 
-    fun toggleTimePeriod(timeDuration: TimeDuration) {
-        viewModelScope.launch {
-            service.setTimePeriod(timeDuration)
-        }
+    fun onCoinOpened(coin: Coin) {
+        localStorage.marketSearchRecentCoinUids =
+            (listOf(coin.uid) + localStorage.marketSearchRecentCoinUids).distinct().take(5)
     }
 
-    fun toggleSortType() {
-        viewModelScope.launch {
-            service.toggleSortType()
-        }
-    }
-
-    fun errorShown() {
-        errorMessage = null
-    }
-
-    private fun errorText(error: Throwable): TranslatableString {
-        return when (error) {
-            is UnknownHostException -> TranslatableString.ResString(R.string.Hud_Text_NoInternet)
-            else -> TranslatableString.PlainString(error.message ?: error.javaClass.simpleName)
-        }
-    }
-
+    data class UiState(
+        val mode: Mode,
+        val recent: List<MarketSearchModule.CoinItem>?,
+        val popular: List<MarketSearchModule.CoinItem>?,
+        val results: List<MarketSearchModule.CoinItem>?
+    )
 }

@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.search
 
-import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,193 +26,157 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
-import io.horizontalsystems.bankwallet.modules.market.TimeDuration
-import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
-import io.horizontalsystems.bankwallet.ui.compose.components.CategoryCard
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
-import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
-import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
-import io.horizontalsystems.bankwallet.ui.compose.components.SnackbarError
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
-import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 import io.horizontalsystems.marketkit.models.Coin
+import java.util.Optional
 
 class MarketSearchFragment : BaseComposeFragment() {
-
-    private val viewModel by viewModels<MarketSearchViewModel> { MarketSearchModule.Factory() }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        MarketSearchScreen(
-            viewModel,
-            navController,
+        val viewModel = viewModel<MarketSearchViewModel>(
+            factory = MarketSearchModule.Factory()
         )
+        MarketSearchScreen(viewModel, navController)
     }
-
 }
 
 @Composable
-fun MarketSearchScreen(
-    viewModel: MarketSearchViewModel,
-    navController: NavController,
-) {
+fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavController) {
+    val focusRequester = remember { FocusRequester() }
 
-    val viewState = viewModel.viewState
-    val errorMessage = viewModel.errorMessage
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
+    val uiState = viewModel.uiState
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         SearchView(
+            focusRequester = focusRequester,
             onSearchTextChange = { query -> viewModel.searchByQuery(query) },
-            onRightTextButtonClick = {
-                navController.slideFromRight(R.id.marketAdvancedSearchFragment)
-            },
             leftIcon = R.drawable.ic_back,
             onBackButtonClick = { navController.popBackStack() }
         )
-        Crossfade(viewState) { viewState ->
-            when (viewState) {
-                ViewState.Loading -> {
-                    Loading()
+
+        val itemSections: Map<Optional<String>, List<CoinItem>>? = when (uiState.mode) {
+            MarketSearchViewModel.Mode.Loading -> null
+            MarketSearchViewModel.Mode.Discovery -> buildMap {
+                uiState.recent?.let {
+                    put(Optional.of(stringResource(R.string.Market_Search_Sections_RecentTitle)), it)
                 }
-
-                is ViewState.Error -> {
-                    ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
+                uiState.popular?.let {
+                    put(Optional.of(stringResource(R.string.Market_Search_Sections_PopularTitle)), it)
                 }
-
-                ViewState.Success -> {
-                    when (val itemsData = viewModel.itemsData) {
-                        is MarketSearchModule.Data.DiscoveryItems -> {
-                            CardsGrid(
-                                viewItems = itemsData.discoveryItems,
-                                timePeriodSelect = viewModel.timePeriodMenu,
-                                sortDescending = viewModel.sortDescending,
-                                onToggleSortType = {
-                                    viewModel.toggleSortType()
-                                },
-                                onCategoryClick = { viewItemType ->
-                                    when (viewItemType) {
-                                        MarketSearchModule.DiscoveryItem.TopCoins -> {
-                                            navController.slideFromBottom(
-                                                R.id.marketTopCoinsFragment
-                                            )
-                                        }
-
-                                        is MarketSearchModule.DiscoveryItem.Category -> {
-                                            navController.slideFromBottom(
-                                                R.id.marketCategoryFragment,
-                                                bundleOf(MarketCategoryFragment.categoryKey to viewItemType.coinCategory)
-                                            )
-                                        }
-                                    }
-                                }
-                            ) { viewModel.toggleTimePeriod(it) }
-                        }
-
-                        is MarketSearchModule.Data.SearchResult -> {
-                            if (itemsData.coinItems.isEmpty()) {
-                                ListEmptyView(
-                                    text = stringResource(R.string.EmptyResults),
-                                    icon = R.drawable.ic_not_found
-                                )
-                            } else {
-                                MarketSearchResults(
-                                    coinResult = itemsData.coinItems,
-                                    onCoinClick = { coin ->
-                                        val arguments = CoinFragment.prepareParams(coin.uid, "market_search")
-                                        navController.slideFromRight(
-                                            R.id.coinFragment,
-                                            arguments
-                                        )
-                                    }
-                                ) { favorited, coinUid ->
-                                    viewModel.onFavoriteClick(favorited, coinUid)
-                                }
-                            }
-                        }
-
-                        null -> {}
-                    }
+            }
+            MarketSearchViewModel.Mode.SearchResults -> buildMap {
+                uiState.results?.let {
+                    put(Optional.ofNullable<String>(null), it)
                 }
             }
         }
-    }
-
-    errorMessage?.let {
-        SnackbarError(it.getString())
-        viewModel.errorShown()
+        itemSections?.let {
+            MarketSearchResults(
+                itemSections = itemSections,
+                onCoinClick = { coin ->
+                    viewModel.onCoinOpened(coin)
+                    navController.slideFromRight(
+                        R.id.coinFragment,
+                        CoinFragment.prepareParams(coin.uid, "market_search")
+                    )
+                }
+            ) { favorited, coinUid ->
+                viewModel.onFavoriteClick(favorited, coinUid)
+            }
+        }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketSearchResults(
-    coinResult: List<CoinItem>,
+    itemSections: Map<Optional<String>, List<CoinItem>>,
     onCoinClick: (Coin) -> Unit,
-    onFavoriteClick: (Boolean, String) -> Unit
+    onFavoriteClick: (Boolean, String) -> Unit,
 ) {
-    LazyColumn {
-        item {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-            )
-        }
-        items(coinResult) { coinViewItem ->
-            MarketCoin(
-                coinViewItem.fullCoin.coin.code,
-                coinViewItem.fullCoin.coin.name,
-                coinViewItem.fullCoin.coin.imageUrl,
-                coinViewItem.fullCoin.iconPlaceholder,
-                favorited = coinViewItem.favourited,
-                onClick = { onCoinClick(coinViewItem.fullCoin.coin) },
-                onFavoriteClick = {
-                    onFavoriteClick(
-                        coinViewItem.favourited,
-                        coinViewItem.fullCoin.coin.uid
+    if (itemSections.all { (_, items) -> items.isEmpty() }) {
+        ListEmptyView(
+            text = stringResource(R.string.EmptyResults),
+            icon = R.drawable.ic_not_found
+        )
+    } else {
+        LazyColumn {
+            itemSections.forEach { (title, coinItems) ->
+                title.ifPresent {
+                    stickyHeader {
+                        HeaderStick(
+                            borderTop = true,
+                            text = title.get()
+                        )
+                    }
+                }
+                items(coinItems) { coinViewItem ->
+                    MarketCoin(
+                        coinViewItem.fullCoin.coin.code,
+                        coinViewItem.fullCoin.coin.name,
+                        coinViewItem.fullCoin.coin.imageUrl,
+                        coinViewItem.fullCoin.iconPlaceholder,
+                        favorited = coinViewItem.favourited,
+                        onClick = { onCoinClick(coinViewItem.fullCoin.coin) },
+                        onFavoriteClick = {
+                            onFavoriteClick(
+                                coinViewItem.favourited,
+                                coinViewItem.fullCoin.coin.uid
+                            )
+                        }
                     )
                 }
-            )
-        }
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
         }
     }
 }
 
 @Composable
 fun SearchView(
+    focusRequester: FocusRequester = remember { FocusRequester() },
     onSearchTextChange: (String) -> Unit,
-    onRightTextButtonClick: () -> Unit,
     leftIcon: Int,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var searchText by rememberSaveable { mutableStateOf("") }
@@ -246,6 +211,7 @@ fun SearchView(
                 onSearchTextChange(value)
             },
             modifier = Modifier
+                .focusRequester(focusRequester)
                 .weight(1f),
             singleLine = true,
             textStyle = ColoredTextStyle(
@@ -260,71 +226,6 @@ fun SearchView(
             },
             cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
         )
-        Box(
-            modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                onRightTextButtonClick.invoke()
-            }
-        ) {
-            headline2_jacob(
-                text = stringResource(R.string.Market_Filters),
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-            )
-        }
-    }
-
-}
-
-@Composable
-fun CardsGrid(
-    viewItems: List<MarketSearchModule.DiscoveryItem>,
-    timePeriodSelect: Select<TimeDuration>,
-    sortDescending: Boolean,
-    onToggleSortType: () -> Unit,
-    onCategoryClick: (MarketSearchModule.DiscoveryItem) -> Unit,
-    onTimePeriodMenuToggle: (TimeDuration) -> Unit
-) {
-
-    var timePeriodMenu by remember { mutableStateOf(timePeriodSelect) }
-
-    LazyColumn {
-        item {
-            HeaderSorting(borderTop = true) {
-                ButtonSecondaryCircle(
-                    modifier = Modifier
-                        .padding(start = 16.dp),
-                    icon = if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
-                    onClick = { onToggleSortType() }
-                )
-                Spacer(Modifier.weight(1f))
-                ButtonSecondaryToggle(
-                    modifier = Modifier.padding(end = 16.dp),
-                    select = timePeriodMenu,
-                    onSelect = {
-                        onTimePeriodMenuToggle.invoke(it)
-                        timePeriodMenu = Select(it, timePeriodSelect.options)
-                    }
-                )
-            }
-            Spacer(Modifier.height(4.dp))
-        }
-        // Turning the list in a list of lists of two elements each
-        items(viewItems.windowed(2, 2, true)) { chunk ->
-            Row(modifier = Modifier.padding(horizontal = 10.dp)) {
-                CategoryCard(chunk[0]) { onCategoryClick(chunk[0]) }
-                if (chunk.size > 1) {
-                    CategoryCard(chunk[1]) { onCategoryClick(chunk[1]) }
-                } else {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
-
-        }
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
     }
 }
 
@@ -342,7 +243,7 @@ private fun MarketCoin(
 ) {
 
     SectionItemBorderedRowUniversalClear(
-        borderBottom = true,
+        borderTop = true,
         onClick = onClick
     ) {
         CoinImage(
@@ -393,9 +294,7 @@ fun SearchViewPreview() {
     ComposeAppTheme {
         SearchView(
             onSearchTextChange = { },
-            onRightTextButtonClick = { },
-            leftIcon = R.drawable.ic_back,
-            onBackButtonClick = { }
-        )
+            leftIcon = R.drawable.ic_back
+        ) { }
     }
 }

@@ -144,7 +144,7 @@ fun LazyListScope.transactionList(
 
     transactionsMap.forEach { (dateHeader, transactions) ->
         stickyHeader {
-            DateHeader(dateHeader)
+            HeaderStick(text = dateHeader)
         }
 
         val itemsCount = transactions.size
@@ -185,17 +185,6 @@ private fun getBottomReachedUid(transactionsMap: Map<String, List<TransactionVie
     val index = if (txList.size > 4) txList.size - 4 else 0
 
     return txList.getOrNull(index)?.uid
-}
-
-@Composable
-fun DateHeader(dateHeader: String) {
-    HeaderSorting {
-        subhead1_grey(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            text = dateHeader,
-            maxLines = 1,
-        )
-    }
 }
 
 @Composable
