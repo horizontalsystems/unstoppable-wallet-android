@@ -84,35 +84,31 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
             onBackButtonClick = { navController.popBackStack() }
         )
 
-        val itemSections: Map<Optional<String>, List<CoinItem>>? = when (uiState.mode) {
-            MarketSearchViewModel.Mode.Loading -> null
-            MarketSearchViewModel.Mode.Discovery -> buildMap {
-                uiState.recent?.let {
-                    put(Optional.of(stringResource(R.string.Market_Search_Sections_RecentTitle)), it)
-                }
-                uiState.popular?.let {
-                    put(Optional.of(stringResource(R.string.Market_Search_Sections_PopularTitle)), it)
-                }
+        val itemSections = when (uiState.page) {
+            is MarketSearchViewModel.Page.Discovery -> {
+                mapOf(
+                    Optional.of(stringResource(R.string.Market_Search_Sections_RecentTitle)) to uiState.page.recent,
+                    Optional.of(stringResource(R.string.Market_Search_Sections_PopularTitle)) to uiState.page.popular,
+                )
             }
-            MarketSearchViewModel.Mode.SearchResults -> buildMap {
-                uiState.results?.let {
-                    put(Optional.ofNullable<String>(null), it)
-                }
+            is MarketSearchViewModel.Page.SearchResults -> {
+                mapOf(
+                    Optional.ofNullable<String>(null) to uiState.page.items
+                )
             }
         }
-        itemSections?.let {
-            MarketSearchResults(
-                itemSections = itemSections,
-                onCoinClick = { coin ->
-                    viewModel.onCoinOpened(coin)
-                    navController.slideFromRight(
-                        R.id.coinFragment,
-                        CoinFragment.prepareParams(coin.uid, "market_search")
-                    )
-                }
-            ) { favorited, coinUid ->
-                viewModel.onFavoriteClick(favorited, coinUid)
+
+        MarketSearchResults(
+            itemSections = itemSections,
+            onCoinClick = { coin ->
+                viewModel.onCoinOpened(coin)
+                navController.slideFromRight(
+                    R.id.coinFragment,
+                    CoinFragment.prepareParams(coin.uid, "market_search")
+                )
             }
+        ) { favorited, coinUid ->
+            viewModel.onFavoriteClick(favorited, coinUid)
         }
     }
 }
