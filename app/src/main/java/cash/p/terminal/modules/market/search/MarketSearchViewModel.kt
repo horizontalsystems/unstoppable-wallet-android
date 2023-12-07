@@ -5,97 +5,61 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.managers.MarketKitWrapper
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.withContext
 
 class MarketSearchViewModel(
-    private val marketKit: MarketKitWrapper,
     private val marketFavoritesManager: MarketFavoritesManager,
-    private val localStorage: ILocalStorage,
+    private val marketSearchService: MarketSearchService,
+    private val marketDiscoveryService: MarketDiscoveryService,
 ) : ViewModel() {
-
-    enum class Mode {
-        Loading, Discovery, SearchResults
-    }
-
-    private var popularFullCoins: List<FullCoin>? = null
-
-    private var results: List<MarketSearchModule.CoinItem>? = null
-    private var recent: List<MarketSearchModule.CoinItem>? = null
-    private var popular: List<MarketSearchModule.CoinItem>? = null
-    private var query: String = ""
-    private var mode: Mode = Mode.Loading
-
-    var uiState by mutableStateOf(
-        UiState(
-            mode = mode,
-            recent = recent,
-            popular = popular,
-            results = results,
-        )
+    private var searchState = marketSearchService.stateFlow.value
+    private var discoveryState = marketDiscoveryService.stateFlow.value
+    private var page: Page = Page.Discovery(
+        recent = coinItems(discoveryState.recent),
+        popular = coinItems(discoveryState.popular),
     )
+
+    var uiState by mutableStateOf(UiState(page))
         private set
 
     init {
         viewModelScope.launch {
+            marketSearchService.stateFlow.collect {
+                handleUpdatedSearchState(it)
+            }
+        }
+        viewModelScope.launch {
+            marketDiscoveryService.stateFlow.collect {
+                handleUpdatedDiscoveryState(it)
+            }
+        }
+        viewModelScope.launch {
             marketFavoritesManager.dataUpdatedAsync.asFlow().collect {
-                refreshItems()
                 emitState()
             }
         }
 
-        viewModelScope.launch {
-            fetchDiscoveryItems()
-        }
+        marketDiscoveryService.start()
     }
 
-    private suspend fun fetchDiscoveryItems() = withContext(Dispatchers.IO) {
-        popularFullCoins = marketKit.fullCoins(filter = "")
+    private fun handleUpdatedDiscoveryState(discoveryState: MarketDiscoveryService.State) {
+        this.discoveryState = discoveryState
 
-        if (mode == Mode.Loading) {
-            mode = Mode.Discovery
-            val recentFullCoins = marketKit
-                .fullCoins(localStorage.marketSearchRecentCoinUids)
-                .sortedBy {
-                    localStorage.marketSearchRecentCoinUids.indexOf(it.coin.uid)
-                }
-            recent = coinItems(recentFullCoins)
-            popular = popularFullCoins?.let { coinItems(it) }
-            emitState()
-        }
-    }
-
-    fun searchByQuery(query: String) {
-        this.query = query
-
-        refreshItems()
         emitState()
     }
 
-    private fun refreshItems() {
-        if (query.isBlank()) {
-            mode = Mode.Discovery
-            val recentFullCoins = marketKit
-                .fullCoins(localStorage.marketSearchRecentCoinUids)
-                .sortedBy {
-                    localStorage.marketSearchRecentCoinUids.indexOf(it.coin.uid)
-                }
-            recent = coinItems(recentFullCoins)
-            popular = popularFullCoins?.let { coinItems(it) }
-            results = null
-        } else {
-            mode = Mode.SearchResults
-            recent = null
-            popular = null
-            results = coinItems(marketKit.fullCoins(query))
-        }
+    private fun handleUpdatedSearchState(searchState: MarketSearchService.State) {
+        this.searchState = searchState
+
+        emitState()
+    }
+
+    fun searchByQuery(query: String) {
+        marketSearchService.setQuery(query)
     }
 
     private fun coinItems(fullCoins: List<FullCoin>) =
@@ -107,8 +71,17 @@ class MarketSearchViewModel(
         }
 
     private fun emitState() {
+        page = if (searchState.query.isNotBlank()) {
+            Page.SearchResults(coinItems(searchState.results))
+        } else {
+            Page.Discovery(
+                coinItems(discoveryState.recent),
+                coinItems(discoveryState.popular),
+            )
+        }
+
         viewModelScope.launch {
-            uiState = UiState(mode, recent, popular, results)
+            uiState = UiState(page)
         }
     }
 
@@ -121,14 +94,15 @@ class MarketSearchViewModel(
     }
 
     fun onCoinOpened(coin: Coin) {
-        localStorage.marketSearchRecentCoinUids =
-            (listOf(coin.uid) + localStorage.marketSearchRecentCoinUids).distinct().take(5)
+        marketDiscoveryService.addCoinToRecent(coin)
     }
 
     data class UiState(
-        val mode: Mode,
-        val recent: List<MarketSearchModule.CoinItem>?,
-        val popular: List<MarketSearchModule.CoinItem>?,
-        val results: List<MarketSearchModule.CoinItem>?
+        val page: Page
     )
+
+    sealed class Page {
+        data class Discovery(val recent: List<MarketSearchModule.CoinItem>, val popular: List<MarketSearchModule.CoinItem>) : Page()
+        data class SearchResults(val items: List<MarketSearchModule.CoinItem>) : Page()
+    }
 }

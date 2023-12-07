@@ -14,9 +14,9 @@ object MarketSearchModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return MarketSearchViewModel(
-                App.marketKit,
                 App.marketFavoritesManager,
-                App.localStorage
+                MarketSearchService(App.marketKit),
+                MarketDiscoveryService(App.marketKit, App.localStorage),
             ) as T
         }
     }
