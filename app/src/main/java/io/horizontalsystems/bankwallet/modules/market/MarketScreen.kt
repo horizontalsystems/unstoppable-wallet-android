@@ -38,11 +38,18 @@ fun MarketScreen(navController: NavController) {
             menuItems = listOf(
                 MenuItem(
                     title = TranslatableString.ResString(R.string.Market_Search),
-                    icon = R.drawable.ic_search_discovery_24,
+                    icon = R.drawable.icon_search,
                     onClick = {
                         navController.slideFromRight(R.id.marketSearchFragment)
                     }
-                )
+                ),
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Market_Filters),
+                    icon = R.drawable.ic_manage_2_24,
+                    onClick = {
+                        navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+                    }
+                ),
             )
         )
 
