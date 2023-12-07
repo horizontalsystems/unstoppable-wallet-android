@@ -13,18 +13,12 @@ object MarketSearchModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MarketSearchService(
+            return MarketSearchViewModel(
                 App.marketKit,
                 App.marketFavoritesManager,
-                App.currencyManager.baseCurrency
-            )
-            return MarketSearchViewModel(service) as T
+                App.localStorage
+            ) as T
         }
-    }
-
-    sealed class Data {
-        class DiscoveryItems(val discoveryItems: List<DiscoveryItem>) : Data()
-        class SearchResult(val coinItems: List<CoinItem>) : Data()
     }
 
     sealed class DiscoveryItem {

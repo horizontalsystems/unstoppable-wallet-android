@@ -65,6 +65,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var marketSearchRecentCoinUids: List<String>
     var zcashAccountIds: Set<String>
     var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
