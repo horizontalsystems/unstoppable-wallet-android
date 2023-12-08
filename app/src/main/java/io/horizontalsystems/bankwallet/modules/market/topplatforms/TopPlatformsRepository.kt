@@ -48,9 +48,10 @@ class TopPlatformsRepository(
         ): List<TopPlatformItem> {
             return topPlatforms.map { platform ->
                 val prevRank = when (timeDuration) {
-                    TimeDuration.OneDay -> platform.rank1D
+                    TimeDuration.OneDay -> null
                     TimeDuration.SevenDay -> platform.rank1W
                     TimeDuration.ThirtyDay -> platform.rank1M
+                    TimeDuration.ThreeMonths -> platform.rank3M
                 }
 
                 val rankDiff = if (prevRank == platform.rank || prevRank == null) {
@@ -60,9 +61,10 @@ class TopPlatformsRepository(
                 }
 
                 val marketCapDiff = when (timeDuration) {
-                    TimeDuration.OneDay -> platform.change1D
+                    TimeDuration.OneDay -> null
                     TimeDuration.SevenDay -> platform.change1W
                     TimeDuration.ThirtyDay -> platform.change1M
+                    TimeDuration.ThreeMonths -> platform.change3M
                 }
 
                 TopPlatformItem(
