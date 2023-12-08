@@ -52,6 +52,7 @@ class TopNftCollectionsRepository(
             TimeDuration.OneDay -> oneDayVolume
             TimeDuration.SevenDay -> sevenDayVolume
             TimeDuration.ThirtyDay -> thirtyDayVolume
+            TimeDuration.ThreeMonths -> null
         }
 
     private fun NftCollectionItem.volumeDiff(timeDuration: TimeDuration) =
@@ -59,6 +60,7 @@ class TopNftCollectionsRepository(
             TimeDuration.OneDay -> oneDayVolumeDiff
             TimeDuration.SevenDay -> sevenDayVolumeDiff
             TimeDuration.ThirtyDay -> thirtyDayVolumeDiff
+            TimeDuration.ThreeMonths -> null
         }
 
 }

@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.parcelize.IgnoredOnParcel
@@ -187,7 +187,8 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
 enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle, Parcelable {
     OneDay(R.string.CoinPage_TimeDuration_Day),
     SevenDay(R.string.CoinPage_TimeDuration_Week),
-    ThirtyDay(R.string.CoinPage_TimeDuration_Month);
+    ThirtyDay(R.string.CoinPage_TimeDuration_Month),
+    ThreeMonths(R.string.CoinPage_TimeDuration_Month3);
 
     @IgnoredOnParcel
     override val title = TranslatableString.ResString(titleResId)

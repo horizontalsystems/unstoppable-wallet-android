@@ -90,6 +90,7 @@ class CoinRankViewModel(
                                 TimeDuration.OneDay -> anyValue.rankMultiValue.value1d
                                 TimeDuration.SevenDay -> anyValue.rankMultiValue.value7d
                                 TimeDuration.ThirtyDay -> anyValue.rankMultiValue.value30d
+                                TimeDuration.ThreeMonths -> null
                             }
                         }
 
