@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
@@ -126,7 +127,14 @@ fun MarketSearchResults(
             icon = R.drawable.ic_not_found
         )
     } else {
-        LazyColumn {
+        LazyColumn(
+            state = rememberSaveable(
+                itemSections,
+                saver = LazyListState.Saver
+            ) {
+                LazyListState()
+            }
+        ) {
             itemSections.forEach { (title, coinItems) ->
                 title.ifPresent {
                     stickyHeader {
