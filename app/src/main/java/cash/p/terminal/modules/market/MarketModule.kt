@@ -11,11 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
-import cash.p.terminal.entities.Currency
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.parcelize.IgnoredOnParcel
@@ -187,7 +187,8 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
 enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle, Parcelable {
     OneDay(R.string.CoinPage_TimeDuration_Day),
     SevenDay(R.string.CoinPage_TimeDuration_Week),
-    ThirtyDay(R.string.CoinPage_TimeDuration_Month);
+    ThirtyDay(R.string.CoinPage_TimeDuration_Month),
+    ThreeMonths(R.string.CoinPage_TimeDuration_Month3);
 
     @IgnoredOnParcel
     override val title = TranslatableString.ResString(titleResId)

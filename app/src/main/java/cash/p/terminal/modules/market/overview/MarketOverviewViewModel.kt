@@ -71,7 +71,7 @@ class MarketOverviewViewModel(
     var topNftsTimeDuration: TimeDuration = TimeDuration.SevenDay
         private set
     val topNftsSortingField: SortingField = SortingField.HighestVolume
-    var topPlatformsTimeDuration: TimeDuration = TimeDuration.OneDay
+    var topPlatformsTimeDuration: TimeDuration = TimeDuration.SevenDay
         private set
 
     var topMovers: TopMovers? = null
@@ -140,6 +140,7 @@ class MarketOverviewViewModel(
             TimeDuration.OneDay -> HsTimePeriod.Day1
             TimeDuration.SevenDay -> HsTimePeriod.Week1
             TimeDuration.ThirtyDay -> HsTimePeriod.Month1
+            TimeDuration.ThreeMonths -> HsTimePeriod.Month3
         }
         val nftCollectionItems = marketOverview.nftCollections.getOrElse(timePeriod) { listOf() }.map { it.nftCollectionItem }
 
