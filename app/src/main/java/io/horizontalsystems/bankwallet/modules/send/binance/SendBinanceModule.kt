@@ -14,7 +14,6 @@ object SendBinanceModule {
     class Factory(
         private val wallet: Wallet,
         private val predefinedAddress: String?,
-        private val showAddressInput: Boolean
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBinanceAdapter) ?: throw IllegalStateException("SendBinanceAdapter is null")
 
@@ -34,7 +33,7 @@ object SendBinanceModule {
                 feeService,
                 xRateService,
                 App.contactsRepository,
-                showAddressInput,
+                predefinedAddress == null,
             ) as T
         }
 

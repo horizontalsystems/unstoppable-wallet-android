@@ -14,8 +14,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 object SendTonModule {
     class Factory(
         private val wallet: Wallet,
-        private val prefilledAddress: String?,
-        private val showAddressInput: Boolean,
+        private val predefinedAddress: String?,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTonAdapter) ?: throw IllegalStateException("ISendTonAdapter is null")
 
@@ -27,7 +26,7 @@ object SendTonModule {
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
                     val amountService = SendTonAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
-                    val addressService = SendTonAddressService(prefilledAddress)
+                    val addressService = SendTonAddressService(predefinedAddress)
                     val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
@@ -43,7 +42,7 @@ object SendTonModule {
                         feeService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        showAddressInput
+                        predefinedAddress == null
                     ) as T
                 }
 
