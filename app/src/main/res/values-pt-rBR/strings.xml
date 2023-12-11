@@ -300,13 +300,13 @@
     <string name="Balance_NetworkSelectDescription">Escolha rede para receber um endereço.</string>
     <string name="Balance_ReceiveAddressHint">Seu endereço para o depósito %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Endereço do relógio do %s</string>
-    <string name="Balance_ReceiveWarningText">Envie apenas %s para este endereço. Enviar outros tipos de tokens para este endereço resultará em sua perda suprema.</string>
     <string name="Balance_Receive_AddressFormatDescription">Escolha um formato para fornecer um endereço a receber.</string>
     <string name="Balance_Receive_AddressFormat">Formato do Endereço</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">O formato de endereço em dinheiro é preferido para receber Bitcoin Cash (BCH) devido à sua experiência e compatibilidade melhoradas. No entanto, ambos os formatos de endereço podem ser usados internamente para receber BCH, independentemente do formato de endereço do remetente.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">O formato Nativo SegWit é preferido em Bitcoin para melhorar a taxa de transferência e a segurança. Todos os formatos de endereço (Taproot, SegWit, Legacy) podem ser usados intermudanças para receber BTC independentemente do formato de endereço do remetente, permitindo transações ininterruptas entre diferentes tipos de moedas.</string>
     <string name="Balance_Receive_Account">Conta</string>
     <string name="Balance_Receive_NotActive">Não ativo</string>
+    <string name="Balance_Receive_Amount">Montante</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
     <!--Send NFT-->
@@ -1082,7 +1082,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurar Fonte</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Após mudar a Restauração, a carteira terá que ressincronizar-se com a blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Comunicação</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recomendado)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Comum antes de 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Comum depois de 2018</string>
     <!-- Tor -->
