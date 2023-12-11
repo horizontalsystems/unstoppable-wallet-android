@@ -53,7 +53,6 @@ class SendBitcoinViewModel constructor(
     private var addressState = addressService.stateFlow.value
     private var pluginState = pluginService.stateFlow.value
     private var fee = feeService.feeFlow.value
-    private val prefilledAddress = addressService.address
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
@@ -70,7 +69,6 @@ class SendBitcoinViewModel constructor(
             feeRateCaution = feeRateState.feeRateCaution,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     )
         private set
@@ -114,7 +112,6 @@ class SendBitcoinViewModel constructor(
             feeRateCaution = feeRateState.feeRateCaution,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
 
         viewModelScope.launch {
@@ -263,5 +260,4 @@ data class SendBitcoinUiState(
     val feeRateCaution: HSCaution?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
-    val prefilledAddress: Address?,
 )

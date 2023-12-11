@@ -48,7 +48,6 @@ class SendBinanceViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
-    private val prefilledAddress = addressService.address
 
     var uiState by mutableStateOf(
         SendBinanceUiState(
@@ -59,7 +58,6 @@ class SendBinanceViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     )
         private set
@@ -132,7 +130,6 @@ class SendBinanceViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     }
 
@@ -197,5 +194,4 @@ data class SendBinanceUiState(
     val amountCaution: HSCaution?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
-    val prefilledAddress: Address?,
 )

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.IAddressParser
-import io.horizontalsystems.bankwallet.entities.AddressUriParserResult
+import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
 import io.horizontalsystems.bankwallet.ui.compose.components.TextPreprocessor
 import java.math.BigDecimal
 import java.util.UUID
@@ -19,16 +19,12 @@ class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount
     override fun process(text: String): String {
         var processed = text
         if (lastEnteredText.isNullOrBlank()) {
-
-            when (val addressData = parser.parse(text)) {
-                is AddressUriParserResult.Data -> {
-                    amountUnique = addressData.addressData.amount?.let { AmountUnique(it) }
-                    processed = addressData.addressData.address
-                }
-
-                else -> {
-
-                }
+            // parse only to get amount, full parsing done in AddressViewModel
+            val addressData = parser.parse(text)
+            val amount = (addressData as? AddressUriResult.Uri)?.addressUri?.amount
+            if (amount != null) {
+                amountUnique = AmountUnique(amount)
+                processed = addressData.addressUri.address
             }
         }
 

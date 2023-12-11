@@ -4,9 +4,9 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
-import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
+import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.nft.EvmNftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -50,7 +50,7 @@ object SendNftModule {
                     EvmKitWrapperHoldingViewModel(evmKitWrapper) as T
                 }
                 AddressParserViewModel::class.java -> {
-                    AddressParserViewModel(AddressParserFactory.parser(nftUid.blockchainType), null) as T
+                    AddressParserViewModel(AddressUriParser(nftUid.blockchainType, null), null) as T
                 }
                 else -> throw IllegalArgumentException()
             }

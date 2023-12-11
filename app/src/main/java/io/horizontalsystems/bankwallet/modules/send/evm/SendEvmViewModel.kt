@@ -32,7 +32,6 @@ class SendEvmViewModel(
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-    private val prefilledAddress = addressService.evmAddress?.let { Address(it.eip55) }
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -41,7 +40,6 @@ class SendEvmViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress
         )
     )
         private set
@@ -88,7 +86,6 @@ class SendEvmViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     }
 

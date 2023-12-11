@@ -27,6 +27,7 @@ class DepositAddressViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
+    private var uri = ""
     private var amount: BigDecimal? = null
     private var memo: String? = null
     private val networkName = network?.name ?: cexAsset.depositNetworks.firstOrNull()?.name ?: ""
@@ -36,6 +37,7 @@ class DepositAddressViewModel(
         ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
             additionalItems = getAdditionalData(),
@@ -62,6 +64,7 @@ class DepositAddressViewModel(
                         memo = cexAddress.tag
                     }
                     address = cexAddress.address
+                    uri = cexAddress.address
                     viewState = ViewState.Success
                 }
             } catch (t: Throwable) {
@@ -75,6 +78,7 @@ class DepositAddressViewModel(
         uiState = ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
             additionalItems = getAdditionalData(),
