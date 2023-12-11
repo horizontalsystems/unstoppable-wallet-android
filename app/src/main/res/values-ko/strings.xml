@@ -300,13 +300,13 @@
     <string name="Balance_NetworkSelectDescription">네트워크를 선택하고 입금할 주소를 받으세요.</string>
     <string name="Balance_ReceiveAddressHint">입금 주소: %s</string>
     <string name="Balance_ReceiveWatchAddressHint">%s의 시계 주소</string>
-    <string name="Balance_ReceiveWarningText">이 주소로는 %s만 보내주세요. 다른 종류의 토큰을 이 주소로 보내면 최종적으로 손실이 발생합니다.</string>
     <string name="Balance_Receive_AddressFormatDescription">주소를 입력받기 위한 형식을 선택하세요.</string>
     <string name="Balance_Receive_AddressFormat">주소 형식</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">향상된 사용자 경험과 호환성으로 인해 비트코인 캐시(BCH)를 수신하는 데 현금 주소 형식이 선호됩니다. 그러나 두 주소 형식은 보낸 사람의 주소 형식에 관계없이 BCH를 수신하는 데 상호 교환적으로 사용될 수 있습니다.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">향상된 처리량과 보안을 위해 Bitcoin에서는 기본 SegWit 형식이 선호됩니다. 모든 주소 형식(Taproot, SegWit, Legacy)을 사용하여 보낸 사람의 주소 형식에 관계없이 BTC를 수신할 수 있으므로 다양한 코인 유형에 걸쳐 원활한 거래가 가능합니다.</string>
     <string name="Balance_Receive_Account">계정</string>
     <string name="Balance_Receive_NotActive">비활성화됨</string>
+    <string name="Balance_Receive_Amount">양</string>
     <string name="Balance_LockedAmount_Title">잠김</string>
     <string name="Balance_Error_InvalidQrCode">인식할 수 없음</string>
     <!--Send NFT-->
@@ -1090,7 +1090,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">매개 변수 복원</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">이 변경 후에 지갑은 %s 블록체인과 다시 동기화 되어야합니다.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">통신</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">현금주소(권장)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018년 이전 공통</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018년 이후 공통</string>
     <!-- Tor -->
