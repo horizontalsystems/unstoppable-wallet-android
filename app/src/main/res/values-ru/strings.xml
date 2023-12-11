@@ -302,13 +302,13 @@
     <string name="Balance_NetworkSelectDescription">Выберите сеть для получения адреса.</string>
     <string name="Balance_ReceiveAddressHint">Ваш адрес для депозита %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Отслеживаемый адрес %s</string>
-    <string name="Balance_ReceiveWarningText">Отправка только %s на этот адрес. Отправка других типов токенов на этот адрес приведет к их окончательной потере.</string>
     <string name="Balance_Receive_AddressFormatDescription">Выберите формат для предоставления адреса для получения.</string>
     <string name="Balance_Receive_AddressFormat">Формат адреса</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Формат Cash Address предпочтителен для получения Bitcoin Cash (BCH) из-за улучшенного пользовательского опыта и совместимости. Однако, оба формата адреса могут использоваться взаимозаменяемо для получения BCH, независимо от формата адреса отправителя.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Формат Native SegWit предпочтителен в Биткойне для повышения пропускной способности и безопасности. Все форматы адресов (Taproot, SegWit, Legacy) могут использоваться взаимозаменяемо для получения BTC независимо от формата адреса отправителя, что обеспечивает бесперебойные транзакции между различными типами монет.</string>
     <string name="Balance_Receive_Account">Аккаунт</string>
     <string name="Balance_Receive_NotActive">Не активен</string>
+    <string name="Balance_Receive_Amount">Сумма</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
     <!--Send NFT-->
@@ -1087,7 +1087,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (рекомендуется)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">до 2018 года</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">после 2018 года</string>
     <!-- Tor -->
