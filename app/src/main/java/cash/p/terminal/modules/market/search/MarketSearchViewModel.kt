@@ -18,12 +18,13 @@ class MarketSearchViewModel(
 ) : ViewModel() {
     private var searchState = marketSearchService.stateFlow.value
     private var discoveryState = marketDiscoveryService.stateFlow.value
+    private var listId: String = ""
     private var page: Page = Page.Discovery(
         recent = coinItems(discoveryState.recent),
         popular = coinItems(discoveryState.popular),
     )
 
-    var uiState by mutableStateOf(UiState(page))
+    var uiState by mutableStateOf(UiState(page, listId))
         private set
 
     init {
@@ -71,17 +72,19 @@ class MarketSearchViewModel(
         }
 
     private fun emitState() {
-        page = if (searchState.query.isNotBlank()) {
-            Page.SearchResults(coinItems(searchState.results))
+        if (searchState.query.isNotBlank()) {
+            page = Page.SearchResults(coinItems(searchState.results))
+            listId = searchState.query
         } else {
-            Page.Discovery(
+            page = Page.Discovery(
                 coinItems(discoveryState.recent),
                 coinItems(discoveryState.popular),
             )
+            listId = ""
         }
 
         viewModelScope.launch {
-            uiState = UiState(page)
+            uiState = UiState(page, listId)
         }
     }
 
@@ -98,7 +101,8 @@ class MarketSearchViewModel(
     }
 
     data class UiState(
-        val page: Page
+        val page: Page,
+        val listId: String
     )
 
     sealed class Page {
