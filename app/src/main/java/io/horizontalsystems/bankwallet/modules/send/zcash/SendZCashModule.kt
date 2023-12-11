@@ -14,7 +14,6 @@ object SendZCashModule {
     class Factory(
         private val wallet: Wallet,
         private val predefinedAddress: String?,
-        private val showAddressInput: Boolean
     ) : ViewModelProvider.Factory {
         val adapter =
             (App.adapterManager.getAdapterForWallet(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
@@ -38,7 +37,7 @@ object SendZCashModule {
                 addressService,
                 memoService,
                 App.contactsRepository,
-                showAddressInput
+                predefinedAddress == null
             ) as T
         }
     }
