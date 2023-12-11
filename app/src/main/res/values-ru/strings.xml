@@ -600,7 +600,7 @@
     <string name="Transactions_From">от %s</string>
     <string name="Transaction_Unlimited">неограниченно %s</string>
     <string name="Transactions_All">Все</string>
-    <string name="Transactions_Filter_Blockchain">Фильтр по блокчейну</string>
+    <string name="Transactions_Filter_Coin">Монета</string>
     <string name="Transactions_Filter_AllBlockchains">Все блокчейны</string>
     <string name="Transactions_Filter_AllCoins">Все токены</string>
     <string name="Transactions_Filter_ChooseCoin">Выберите токен</string>
