@@ -276,13 +276,13 @@
     <string name="Balance_NetworkSelectDescription">Bir ağ seçin ve para yatırmak için bir adres alın.</string>
     <string name="Balance_ReceiveAddressHint">%s yatırmak için adresiniz</string>
     <string name="Balance_ReceiveWatchAddressHint">%s adresini izle</string>
-    <string name="Balance_ReceiveWarningText">Bu adrese yalnızca %s gönderin. Bu adrese başka türden jetonların gönderilmesi nihai kayıplarına neden olacaktır.</string>
     <string name="Balance_Receive_AddressFormatDescription">Adresinizi almak için bir adres biçimi seçin.</string>
     <string name="Balance_Receive_AddressFormat">Adres Formatı</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Geliştirilmiş kullanıcı deneyimi ve uyumluluğu nedeniyle Bitcoin Cash (BCH) almak için Nakit Adresi formatı tercih edilmektedir. Ancak gönderenin adres formatı ne olursa olsun, BCH\'yi almak için her iki adres formatı da birbirinin yerine kullanılabilir.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Bitcoin\'de daha iyi bir verimlilik ve güvenlik için yerel SegWit formatı tercih edilir. Tüm adres formatları (Taproot, SegWit, Legacy), gönderenin adres formatına bakılmaksızın BTC almak için birbirinin yerine kullanılabilir ve farklı para birimlerinde kesintisiz işlemlere olanak tanır.</string>
     <string name="Balance_Receive_Account">Hesap</string>
     <string name="Balance_Receive_NotActive">Aktif değil</string>
+    <string name="Balance_Receive_Amount">Tutar</string>
     <string name="Balance_LockedAmount_Title">Kilitli</string>
     <string name="Balance_Error_InvalidQrCode">Tanıyamıyorum</string>
     <!--Send NFT-->
@@ -1057,7 +1057,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Geri Yükleme Ayarları</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Bu değişiklikten sonra cüzdan %s blok zinciri ile kendini yeniden senkronize etmek zorunda kalacak.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">İletişim</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (önerilen)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018 öncesinde yaygın</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018 sonrasında yaygın</string>
     <!-- Tor -->
