@@ -53,7 +53,6 @@ class SendTronViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState: FeeState = FeeState.Loading
     private var cautions: List<HSCaution> = listOf()
-    private var prefilledAddress = addressService.address
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -65,7 +64,6 @@ class SendTronViewModel(
             feeViewState = feeState.viewState,
             cautions = listOf(),
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     )
         private set
@@ -289,7 +287,6 @@ class SendTronViewModel(
             feeViewState = feeState.viewState,
             cautions = cautions,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     }
 }

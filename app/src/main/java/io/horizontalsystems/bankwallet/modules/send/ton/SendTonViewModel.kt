@@ -46,7 +46,6 @@ class SendTonViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
-    private val prefilledAddress = addressService.tonAddress?.let { Address(it) }
 
     var uiState by mutableStateOf(
         SendTonUiState(
@@ -55,7 +54,6 @@ class SendTonViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
             fee = feeState.fee
         )
     )
@@ -172,7 +170,6 @@ class SendTonViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
             fee = feeState.fee,
         )
     }
@@ -184,6 +181,5 @@ data class SendTonUiState(
     val addressError: Throwable?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
-    val prefilledAddress: Address?,
     val fee: BigDecimal?,
 )

@@ -175,7 +175,7 @@ fun ReceiveAddressScreen(
                         }
 
                         ViewState.Success -> {
-                            val qrCodeBitmap = TextHelper.getQrCodeBitmap(uiState.address)
+                            val qrCodeBitmap = TextHelper.getQrCodeBitmap(uiState.uri)
                             Column(
                                 modifier = Modifier
                                     .weight(1f)
@@ -194,10 +194,12 @@ fun ReceiveAddressScreen(
                                         .background(ComposeAppTheme.colors.lawrence),
                                 ) {
                                     Column(
-                                        modifier = Modifier.clickable {
-                                            TextHelper.copyText(uiState.address)
-                                            HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
-                                        },
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                TextHelper.copyText(uiState.uri)
+                                                HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+                                            },
                                         horizontalAlignment = Alignment.CenterHorizontally,
                                     ) {
                                         VSpacer(32.dp)
@@ -267,7 +269,7 @@ fun ReceiveAddressScreen(
                                 VSpacer(52.dp)
 
                                 ActionButtonsRow(
-                                    address = uiState.address,
+                                    uri = uiState.uri,
                                     watchAccount = uiState.watchAccount,
                                     openAmountDialog = openAmountDialog,
                                     onShareClick = onShareClick,
@@ -316,7 +318,7 @@ private fun WarningTextView(
 
 @Composable
 private fun ActionButtonsRow(
-    address: String,
+    uri: String,
     watchAccount: Boolean,
     openAmountDialog: MutableState<Boolean>,
     onShareClick: (String) -> Unit,
@@ -341,7 +343,7 @@ private fun ActionButtonsRow(
             icon = R.drawable.ic_share_24px,
             buttonText = stringResource(R.string.Button_Share),
             onClick = {
-                onShareClick.invoke(address)
+                onShareClick.invoke(uri)
             },
         )
         if (watchAccount) {
@@ -351,7 +353,7 @@ private fun ActionButtonsRow(
             icon = R.drawable.ic_copy_24px,
             buttonText = stringResource(R.string.Button_Copy),
             onClick = {
-                TextHelper.copyText(address)
+                TextHelper.copyText(uri)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
             },
         )

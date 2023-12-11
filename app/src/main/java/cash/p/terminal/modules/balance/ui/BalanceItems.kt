@@ -6,7 +6,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
@@ -16,8 +23,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,14 +45,32 @@ import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.balance.*
+import cash.p.terminal.modules.balance.AccountViewItem
+import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.modules.balance.BalanceUiState
+import cash.p.terminal.modules.balance.BalanceViewItem2
+import cash.p.terminal.modules.balance.BalanceViewModel
+import cash.p.terminal.modules.balance.HeaderNote
+import cash.p.terminal.modules.balance.ReceiveAllowedState
+import cash.p.terminal.modules.balance.TotalUIState
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.rateapp.RateAppModule
 import cash.p.terminal.modules.rateapp.RateAppViewModel
 import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithIcon
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
+import cash.p.terminal.ui.compose.components.DoubleText
+import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.SelectorDialogCompose
+import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -338,7 +368,12 @@ fun BalanceItems(
     uiState.openSend?.let { openSend ->
         navController.slideFromRight(
             R.id.sendTokenSelectFragment,
-            SendTokenSelectFragment.prepareParams(openSend.blockchainTypes, openSend.address, openSend.amount)
+            SendTokenSelectFragment.prepareParams(
+                openSend.blockchainTypes,
+                openSend.tokenTypes,
+                openSend.address,
+                openSend.amount
+            )
         )
         viewModel.onSendOpened()
     }

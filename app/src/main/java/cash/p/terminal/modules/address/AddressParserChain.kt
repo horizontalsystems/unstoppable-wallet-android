@@ -30,6 +30,10 @@ class AddressParserChain(
         }
     }
 
+    fun addHandler(handler: IAddressHandler) {
+        addressHandlers.add(handler)
+    }
+
     fun getAddressFromDomain(address: String): Address? {
         return domainHandlers.firstOrNull { it.isSupported(address) }?.parseAddress(address)
     }

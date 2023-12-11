@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.title
+import cash.p.terminal.core.utils.AddressUriParser
+import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -18,6 +21,8 @@ import kotlinx.coroutines.withContext
 class AddressViewModel(
     val blockchainType: BlockchainType,
     private val contactsRepository: ContactsRepository,
+    private val addressUriParser: AddressUriParser,
+    private val addressParserChain: AddressParserChain,
     initial: Address?
 ) : ViewModel() {
 
@@ -27,21 +32,22 @@ class AddressViewModel(
         private set
     var value by mutableStateOf(initial?.hex ?: "")
         private set
-    private val addressHandlers = mutableListOf<IAddressHandler>()
     private var parseAddressJob: Job? = null
 
-    fun addAddressHandler(handler: IAddressHandler) {
-        addressHandlers.add(handler)
+    init {
+        initial?.hex?.let {
+            parseAddress(it)
+        }
     }
 
     fun hasContacts() =
         contactsRepository.getContactsFiltered(blockchainType).isNotEmpty()
 
-    fun parseAddress(value: String) {
-        this.value = value
+    fun parseText(value: String) {
         parseAddressJob?.cancel()
 
         if (value.isBlank()) {
+            this.value = value
             inputState = null
             address = null
             return
@@ -51,14 +57,33 @@ class AddressViewModel(
 
         inputState = DataState.Loading
 
+        parseForUri(vTrimmed)
+    }
+
+    private fun parseForUri(text: String) {
+        when (val result = addressUriParser.parse(text)) {
+            is AddressUriResult.Uri -> {
+                parseAddress(result.addressUri.address)
+            }
+
+            AddressUriResult.InvalidBlockchainType -> {
+                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Blockchain Type"), blockchainType.title))
+            }
+
+            AddressUriResult.InvalidTokenType -> {
+                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Token Type"), blockchainType.title))
+            }
+
+            AddressUriResult.NoUri, AddressUriResult.WrongUri -> {
+                parseAddress(text)
+            }
+        }
+    }
+
+    private fun parseAddress(addressText: String) {
+        value = addressText
         parseAddressJob = viewModelScope.launch(Dispatchers.IO) {
-            val handler = addressHandlers.firstOrNull {
-                try {
-                    it.isSupported(vTrimmed)
-                } catch (t: Throwable) {
-                    false
-                }
-            } ?: run {
+            val handler = addressParserChain.supportedHandler(addressText) ?: run {
                 ensureActive()
                 withContext(Dispatchers.Main) {
                     inputState = DataState.Error(AddressValidationException.Unsupported())
@@ -67,7 +92,7 @@ class AddressViewModel(
             }
 
             try {
-                val parsedAddress = handler.parseAddress(vTrimmed)
+                val parsedAddress = handler.parseAddress(addressText)
                 ensureActive()
                 withContext(Dispatchers.Main) {
                     address = parsedAddress

@@ -9,7 +9,10 @@ import cash.p.terminal.R
 import cash.p.terminal.core.IAdapterManager
 import cash.p.terminal.core.accountTypeDerivation
 import cash.p.terminal.core.bitcoinCashCoinType
+import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.utils.AddressUriParser
+import cash.p.terminal.entities.AddressUri
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.address.ReceiveAddressModule.AdditionalData
@@ -25,6 +28,7 @@ class ReceiveAddressViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
+    private var uri = ""
     private var amount: BigDecimal? = null
     private var accountActive = true
     private var networkName = ""
@@ -36,6 +40,7 @@ class ReceiveAddressViewModel(
         ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
             additionalItems = getAdditionalData(),
@@ -94,6 +99,7 @@ class ReceiveAddressViewModel(
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
             address = adapter.receiveAddress
+            uri = getUri()
             accountActive = adapter.isAccountActive
             mainNet = adapter.isMainNet
             viewState = ViewState.Success
@@ -103,10 +109,26 @@ class ReceiveAddressViewModel(
         syncState()
     }
 
+    private fun getUri(): String {
+        var newUri = address
+        amount?.let {
+            val parser = AddressUriParser(wallet.token.blockchainType, wallet.token.type)
+            val addressUri = AddressUri(wallet.token.blockchainType.uriScheme ?: "")
+            addressUri.address = newUri
+            addressUri.parameters[AddressUri.Field.amountField(wallet.token.blockchainType)] = it.toString()
+            addressUri.parameters[AddressUri.Field.BlockchainUid] = wallet.token.blockchainType.uid
+            addressUri.parameters[AddressUri.Field.TokenUid] = wallet.token.type.id
+            newUri = parser.uri(addressUri)
+        }
+
+        return newUri
+    }
+
     private fun syncState() {
         uiState = ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
             additionalItems = getAdditionalData(),
@@ -146,6 +168,7 @@ class ReceiveAddressViewModel(
             }
         }
         this.amount = amount
+        uri = getUri()
         syncState()
     }
 

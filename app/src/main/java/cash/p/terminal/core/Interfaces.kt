@@ -6,10 +6,10 @@ import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.Bep2TokenInfoService
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.providers.FeeRates
+import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.AddressUriParserResult
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.CexType
 import cash.p.terminal.entities.EnabledWallet
@@ -452,7 +452,7 @@ interface IFeeRateProvider {
 }
 
 interface IAddressParser {
-    fun parse(paymentAddress: String): AddressUriParserResult
+    fun parse(addressUri: String): AddressUriResult
 }
 
 interface IAccountCleaner {

@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.HSAddressInput
@@ -24,10 +25,10 @@ import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationModule
+import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
-import java.math.BigDecimal
 
 @Composable
 fun SendEvmScreen(
@@ -36,7 +37,7 @@ fun SendEvmScreen(
     viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
-    prefilledAmount: BigDecimal? = null,
+    prefilledData: PrefilledData?,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -48,7 +49,7 @@ fun SendEvmScreen(
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
     val view = LocalView.current
@@ -97,7 +98,7 @@ fun SendEvmScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = uiState.prefilledAddress,
+                    initial = prefilledData?.address?.let { Address(it) },
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,

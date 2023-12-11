@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.sendtokenselect
 
+import android.os.Bundle
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
@@ -16,6 +17,7 @@ import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -23,9 +25,12 @@ class SendTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val blockchainTypes = arguments?.getParcelableArrayList<BlockchainType>(blockchainTypesKey)
+        val blockchainTypesUids = arguments?.getStringArrayList(blockchainTypesKey)
+        val tokenTypesIds = arguments?.getStringArrayList(tokenTypesKey)
         val prefilledData = arguments?.getParcelable<PrefilledData>(addressDataKey)
         val view = LocalView.current
+        val blockchainTypes = blockchainTypesUids?.mapNotNull { BlockchainType.fromUid(it) }
+        val tokenTypes = tokenTypesIds?.mapNotNull { TokenType.fromId(it) }
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Balance_Send),
@@ -53,19 +58,30 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                     }
                 }
             },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes)),
+            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
             emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
         )
     }
 
     companion object {
         private const val blockchainTypesKey = "blockchainTypesKey"
+        private const val tokenTypesKey = "tokenTypesKey"
         private const val addressDataKey = "addressDataKey"
 
-        fun prepareParams(blockchainTypes: List<BlockchainType>? = null, address: String, amount: BigDecimal?) = bundleOf(
-            blockchainTypesKey to blockchainTypes,
-            addressDataKey to PrefilledData(address, amount)
-        )
+        fun prepareParams(
+            blockchainTypes: List<BlockchainType>? = null,
+            tokenTypes: List<TokenType>? = null,
+            address: String,
+            amount: BigDecimal?
+        ) : Bundle {
+            val blockchainTypesUids = blockchainTypes?.map { it.uid }
+            val tokenTypesIds = tokenTypes?.map { it.id }
+            return bundleOf(
+                blockchainTypesKey to blockchainTypesUids,
+                tokenTypesKey to tokenTypesIds,
+                addressDataKey to PrefilledData(address, amount)
+            )
+        }
 
     }
 }

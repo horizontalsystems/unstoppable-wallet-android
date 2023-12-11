@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 sealed class AddressValidationException : Exception(), Parcelable {
-    class Blank : AddressValidationException()
+    object Blank : AddressValidationException()
     class Unsupported(val blockchain: String? = null) : AddressValidationException()
     class Invalid(override val cause: Throwable, val blockchain: String? = null) : AddressValidationException()
 

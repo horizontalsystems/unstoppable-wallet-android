@@ -25,6 +25,7 @@ object ReceiveAddressModule {
     data class UiState(
         val viewState: ViewState,
         val address: String,
+        val uri: String,
         val networkName: String,
         val watchAccount: Boolean,
         val additionalItems: List<AdditionalData>,
