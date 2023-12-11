@@ -18,8 +18,7 @@ object SendSolanaModule {
 
     class Factory(
         private val wallet: Wallet,
-        private val prefilledAddress: String?,
-        private val showAddressInput: Boolean
+        private val predefinedAddress: String?,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("SendSolanaAdapter is null")
 
@@ -36,7 +35,7 @@ object SendSolanaModule {
                         adapter.availableBalance.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative,
                     )
-                    val addressService = SendSolanaAddressService(prefilledAddress)
+                    val addressService = SendSolanaAddressService(predefinedAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -50,7 +49,7 @@ object SendSolanaModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        showAddressInput,
+                        predefinedAddress == null,
                         App.connectivityManager,
                     ) as T
                 }

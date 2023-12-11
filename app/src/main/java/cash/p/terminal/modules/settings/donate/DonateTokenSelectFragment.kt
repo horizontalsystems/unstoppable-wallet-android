@@ -1,11 +1,9 @@
 package cash.p.terminal.modules.settings.donate
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,10 +24,10 @@ import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.headline2_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 
 class DonateTokenSelectFragment : BaseComposeFragment() {
 
@@ -88,27 +86,19 @@ private fun DonateHeader(navController: NavController) {
 private fun GetAddressCell(
     onClick: () -> Unit
 ) {
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
-    )
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+    VSpacer(24.dp)
+    ButtonPrimaryDefault(
+        title = stringResource(R.string.Settings_Donate_GetAddress),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
         onClick = onClick
-    ) {
-        body_leah(
-            text = stringResource(R.string.Settings_Donate_GetAddress),
-            maxLines = 1,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .weight(1f)
-        )
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-        )
-    }
+    )
+    VSpacer(24.dp)
+    subhead2_grey(
+        text = stringResource(R.string.Settings_Donate_OrSelectCoinToDonate),
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center
+    )
+    VSpacer(24.dp)
 }
 
 @Preview

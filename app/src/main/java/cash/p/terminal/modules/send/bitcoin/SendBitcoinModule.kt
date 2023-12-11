@@ -14,7 +14,6 @@ object SendBitcoinModule {
     class Factory(
         private val wallet: Wallet,
         private val predefinedAddress: String?,
-        private val showAddressInput: Boolean
     ) : ViewModelProvider.Factory {
         val adapter =
             (App.adapterManager.getAdapterForWallet(wallet) as? ISendBitcoinAdapter) ?: throw IllegalStateException("SendBitcoinAdapter is null")
@@ -37,7 +36,7 @@ object SendBitcoinModule {
                 XRateService(App.marketKit, App.currencyManager.baseCurrency),
                 App.btcBlockchainManager,
                 App.contactsRepository,
-                showAddressInput,
+                predefinedAddress == null,
             ) as T
         }
     }

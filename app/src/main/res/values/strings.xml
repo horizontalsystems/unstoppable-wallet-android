@@ -859,6 +859,7 @@
     <string name="Settings_DonateWith">Donate with</string>
     <string name="Settings_Donate_GetAddress">Get Address</string>
     <string name="Settings_Donate_Addresses">Addresses</string>
+    <string name="Settings_Donate_OrSelectCoinToDonate">Or select a coin to donate</string>
 
     <string name="SettingsSecurity_AutoLock_Immediate">Immediate</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>

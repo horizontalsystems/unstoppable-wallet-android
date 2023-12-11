@@ -18,8 +18,7 @@ object SendTronModule {
 
     class Factory(
         private val wallet: Wallet,
-        private val prefilledAddress: String?,
-        private val showAddressInput: Boolean
+        private val predefinedAddress: String?,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTronAdapter) ?: throw IllegalStateException("SendTronAdapter is null")
 
@@ -36,7 +35,7 @@ object SendTronModule {
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative,
                     )
-                    val addressService = SendTronAddressService(adapter, wallet.token, prefilledAddress)
+                    val addressService = SendTronAddressService(adapter, wallet.token, predefinedAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -50,7 +49,7 @@ object SendTronModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        showAddressInput,
+                        predefinedAddress == null,
                         App.connectivityManager,
                     ) as T
                 }
