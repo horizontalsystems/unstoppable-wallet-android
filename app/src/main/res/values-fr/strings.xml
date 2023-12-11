@@ -300,13 +300,13 @@
     <string name="Balance_NetworkSelectDescription">Choisissez le réseau pour recevoir une adresse.</string>
     <string name="Balance_ReceiveAddressHint">Votre adresse pour le dépôt %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Adresse de la montre de %s</string>
-    <string name="Balance_ReceiveWarningText">Envoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
     <string name="Balance_Receive_AddressFormatDescription">Choisissez un format pour fournir une adresse à recevoir.</string>
     <string name="Balance_Receive_AddressFormat">Format de l\'adresse</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Le format d\'adresse en espèces est préféré pour recevoir Bitcoin Cash (BCH) en raison de son expérience utilisateur améliorée et de sa compatibilité. Cependant, les deux formats d\'adresse peuvent être utilisés de façon interchangeable pour recevoir le BCH, quel que soit le format de l\'adresse de l\'expéditeur.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Le format Native SegWit est préféré dans Bitcoin pour améliorer le débit et la sécurité. Tous les formats d\'adresse (Taproot, SegWit, Legacy) peuvent être utilisés de manière interchangeable pour recevoir BTC quel que soit le format d\'adresse de l\'expéditeur, permettant des transactions transparentes entre différents types de pièces.</string>
     <string name="Balance_Receive_Account">Compte</string>
     <string name="Balance_Receive_NotActive">Non actif</string>
+    <string name="Balance_Receive_Amount">Montant</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
     <!--Send NFT-->
@@ -1088,7 +1088,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
     <!-- Tor -->
