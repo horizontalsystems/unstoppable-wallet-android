@@ -301,13 +301,13 @@
     <string name="Balance_NetworkSelectDescription">Wählen Sie das Netzwerk aus, um eine Adresse zu erhalten.</string>
     <string name="Balance_ReceiveAddressHint">Ihre Adresse für %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Beobachtungsadresse von %s</string>
-    <string name="Balance_ReceiveWarningText">Senden Sie nur %s an diese Adresse. Das Senden anderer Arten von Tokens an diese Adresse führt zu ihrem ultimativen Verlust.</string>
     <string name="Balance_Receive_AddressFormatDescription">Wählen Sie ein Format für die Angabe einer Adresse, die empfangen werden soll.</string>
     <string name="Balance_Receive_AddressFormat">Adressformatierung</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Das Cash Address Format wird bevorzugt für den Erhalt von Bitcoin Cash (BCH) aufgrund seiner verbesserten Benutzerfreundlichkeit und Kompatibilität bevorzugt. Beide Adressformate können jedoch unabhängig vom Adressformat des Absenders austauschbar genutzt werden, um BCH zu empfangen.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Das Native SegWit Format wird in Bitcoin bevorzugt für einen verbesserten Durchsatz und mehr Sicherheit. Alle Adressformate (Taproot, SegWit, Legacy) können unabhängig vom Adressformat des Absenders zum Empfang von BTC verwendet werden ermöglicht nahtlose Transaktionen über verschiedene Münztypen.</string>
     <string name="Balance_Receive_Account">Konto</string>
     <string name="Balance_Receive_NotActive">Nicht aktiv</string>
+    <string name="Balance_Receive_Amount">Betrag</string>
     <string name="Balance_LockedAmount_Title">Gesperrt</string>
     <string name="Balance_Error_InvalidQrCode">Kann nicht erkennen</string>
     <!--Send NFT-->
@@ -1081,7 +1081,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Parameter wiederherstellen</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Nach dieser Änderung muss sich das Wallet mit der %s Blockchain neu synchronisieren.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Kommunikation</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (empfohlen)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Üblich vor 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Üblich nach 2018</string>
     <!-- Tor -->
