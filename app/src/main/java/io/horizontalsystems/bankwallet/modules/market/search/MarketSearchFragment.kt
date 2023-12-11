@@ -107,6 +107,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
         }
 
         MarketSearchResults(
+            uiState.listId,
             itemSections = itemSections,
             onCoinClick = { coin ->
                 viewModel.onCoinOpened(coin)
@@ -124,6 +125,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketSearchResults(
+    vararg inputs: Any?,
     itemSections: Map<Optional<String>, List<CoinItem>>,
     onCoinClick: (Coin) -> Unit,
     onFavoriteClick: (Boolean, String) -> Unit,
@@ -139,7 +141,7 @@ fun MarketSearchResults(
 
         LazyColumn(
             state = rememberSaveable(
-                itemSections,
+                *inputs,
                 saver = LazyListState.Saver
             ) {
                 LazyListState()
