@@ -45,7 +45,6 @@ class SendZCashViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var memoState = memoService.stateFlow.value
-    private val prefilledAddress = addressService.address
 
     var uiState by mutableStateOf(
         SendZCashUiState(
@@ -56,7 +55,6 @@ class SendZCashViewModel(
             memoIsAllowed = memoState.memoIsAllowed,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     )
         private set
@@ -126,7 +124,6 @@ class SendZCashViewModel(
             memoIsAllowed = memoState.memoIsAllowed,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     }
 
@@ -190,5 +187,4 @@ data class SendZCashUiState(
     val memoIsAllowed: Boolean,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
-    val prefilledAddress: Address?,
 )

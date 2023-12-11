@@ -3,7 +3,11 @@ package io.horizontalsystems.bankwallet.core.managers
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class EvmBlockchainManager(
     private val backgroundManager: BackgroundManager,
@@ -13,22 +17,11 @@ class EvmBlockchainManager(
 ) {
     private val evmKitManagersMap = mutableMapOf<BlockchainType, Pair<EvmKitManager, EvmAccountManager>>()
 
-    val allBlockchainTypes = listOf(
-            BlockchainType.Ethereum,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon,
-            BlockchainType.Avalanche,
-            BlockchainType.Optimism,
-            BlockchainType.ArbitrumOne,
-            BlockchainType.Gnosis,
-            BlockchainType.Fantom,
-    )
-
     val allBlockchains: List<Blockchain>
-        get() = marketKit.blockchains(allBlockchainTypes.map { it.uid })
+        get() = marketKit.blockchains(blockchainTypes.map { it.uid })
 
     val allMainNetBlockchains: List<Blockchain>
-        get() = marketKit.blockchains(allBlockchainTypes.map { it.uid })
+        get() = marketKit.blockchains(blockchainTypes.map { it.uid })
 
     private fun getEvmKitManagers(blockchainType: BlockchainType): Pair<EvmKitManager, EvmAccountManager> {
         val evmKitManagers = evmKitManagersMap[blockchainType]
@@ -77,4 +70,16 @@ class EvmBlockchainManager(
     fun getBaseToken(blockchainType: BlockchainType): Token? =
         marketKit.token(TokenQuery(blockchainType, TokenType.Native))
 
+    companion object{
+        val blockchainTypes = listOf(
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceSmartChain,
+            BlockchainType.Polygon,
+            BlockchainType.Avalanche,
+            BlockchainType.Optimism,
+            BlockchainType.ArbitrumOne,
+            BlockchainType.Gnosis,
+            BlockchainType.Fantom,
+        )
+    }
 }

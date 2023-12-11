@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.tron
 
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.ViewState
 import java.math.BigDecimal
 
@@ -14,5 +13,4 @@ data class SendUiState(
     val feeViewState: ViewState,
     val cautions: List<HSCaution>,
     val showAddressInput: Boolean,
-    val prefilledAddress: Address?,
 )

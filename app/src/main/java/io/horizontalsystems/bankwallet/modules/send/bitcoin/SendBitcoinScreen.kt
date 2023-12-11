@@ -24,6 +24,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
@@ -35,6 +36,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -56,7 +58,7 @@ fun SendBitcoinNavHost(
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
-    prefilledAmount: BigDecimal?
+    prefilledData: PrefilledData?,
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -71,7 +73,7 @@ fun SendBitcoinNavHost(
                 viewModel,
                 amountInputModeViewModel,
                 sendEntryPointDestId,
-                prefilledAmount,
+                prefilledData,
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
@@ -94,7 +96,7 @@ fun SendBitcoinScreen(
     viewModel: SendBitcoinViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
-    prefilledAmount: BigDecimal?,
+    prefilledData: PrefilledData?,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -110,7 +112,7 @@ fun SendBitcoinScreen(
     val rate = viewModel.coinRate
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
@@ -172,7 +174,7 @@ fun SendBitcoinScreen(
                     Spacer(modifier = Modifier.height(12.dp))
                     HSAddressInput(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        initial = uiState.prefilledAddress,
+                        initial = prefilledData?.address?.let{ Address(it) },
                         tokenQuery = wallet.token.tokenQuery,
                         coinCode = wallet.coin.code,
                         error = addressError,

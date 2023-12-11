@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
@@ -24,10 +25,10 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
+import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
-import java.math.BigDecimal
 
 @Composable
 fun SendSolanaScreen(
@@ -36,7 +37,7 @@ fun SendSolanaScreen(
     viewModel: SendSolanaViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
-    prefilledAmount: BigDecimal?,
+    prefilledData: PrefilledData?,
 ) {
     val view = LocalView.current
     val wallet = viewModel.wallet
@@ -49,7 +50,7 @@ fun SendSolanaScreen(
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token.blockchainType, prefilledAmount)
+        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
@@ -97,7 +98,7 @@ fun SendSolanaScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = uiState.prefilledAddress,
+                    initial = prefilledData?.address?.let { Address(it) },
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,

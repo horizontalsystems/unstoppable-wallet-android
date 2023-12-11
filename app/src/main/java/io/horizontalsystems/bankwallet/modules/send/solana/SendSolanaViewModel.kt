@@ -48,7 +48,6 @@ class SendSolanaViewModel(
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-    private val prefilledAddress = addressService.solanaAddress?.let { Address(it.toString()) }
 
     var uiState by mutableStateOf(
         SendUiState(
@@ -57,7 +56,6 @@ class SendSolanaViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress
         )
     )
         private set
@@ -162,7 +160,6 @@ class SendSolanaViewModel(
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
             showAddressInput = showAddressInput,
-            prefilledAddress = prefilledAddress,
         )
     }
 

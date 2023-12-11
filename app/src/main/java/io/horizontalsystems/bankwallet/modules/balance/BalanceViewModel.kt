@@ -8,12 +8,13 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
-import io.horizontalsystems.bankwallet.core.factories.AddressParserFactory
+import io.horizontalsystems.bankwallet.core.factories.uriScheme
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.utils.AddressParser
+import io.horizontalsystems.bankwallet.core.supported
+import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
+import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AddressData
-import io.horizontalsystems.bankwallet.entities.AddressUriParserResult
+import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
@@ -22,6 +23,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectL
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
 import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -220,39 +222,56 @@ class BalanceViewModel(
         }
     }
 
-    private fun handleAddressData(scannedText: String) {
-        var uriBlockchainType: BlockchainType? = null
-        var addressData: AddressData? = null
-        var address = scannedText
-        if (AddressParser.hasUriPrefix(scannedText)) {
-            val data: Pair<BlockchainType, AddressData>? = AddressParserFactory.uriBlockchainTypes.firstNotNullOfOrNull { blockchainType ->
-                when (val result = AddressParserFactory.parser(blockchainType).parse(scannedText)) {
-                    is AddressUriParserResult.Data -> Pair(blockchainType, result.addressData)
-                    else -> null
+    private fun uri(text: String): AddressUri? {
+        if (AddressUriParser.hasUriPrefix(text)) {
+            val abstractUriParse = AddressUriParser(null, null)
+            return when (val result = abstractUriParse.parse(text)) {
+                is AddressUriResult.Uri -> {
+                    if (BlockchainType.supported.map { it.uriScheme }.contains(result.addressUri.scheme))
+                        result.addressUri
+                    else
+                        null
                 }
-            }
-            data?.let {
-                uriBlockchainType = when (data.first) {
-                    BlockchainType.Ethereum -> null
-                    else -> it.first
-                }
-            }
-            addressData = data?.second
-        }
-        address = addressData?.address ?: address
 
-        val addressParserChain = addressHandlerFactory.parserChain(uriBlockchainType)
-        val supportedHandlers = addressParserChain.supportedAddressHandlers(address)
-        if (supportedHandlers.isNotEmpty()) {
-            val address = supportedHandlers.first().parseAddress(address)
+                else -> null
+            }
+        }
+        return null
+    }
+
+    private fun handleAddressData(text: String) {
+        val uri = uri(text)
+        if (uri != null) {
+            val allowedBlockchainTypes = uri.allowedBlockchainTypes
+            var allowedTokenTypes: List<TokenType>? = null
+            uri.value<String>(AddressUri.Field.TokenUid)?.let { uid ->
+                TokenType.fromId(uid)?.let { tokenType ->
+                    allowedTokenTypes = listOf(tokenType)
+                }
+            }
+
             openSendTokenSelect = OpenSendTokenSelect(
-                blockchainTypes = supportedHandlers.map { it.blockchainType },
-                address = address.hex,
-                amount = addressData?.amount
+                blockchainTypes = allowedBlockchainTypes,
+                tokenTypes = allowedTokenTypes,
+                address = uri.address,
+                amount = uri.amount
             )
             emitState()
         } else {
-            errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+            val chain = addressHandlerFactory.parserChain(null)
+            val types = chain.supportedAddressHandlers(text)
+            if (types.isEmpty()) {
+                errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                emitState()
+                return
+            }
+
+            openSendTokenSelect = OpenSendTokenSelect(
+                blockchainTypes = types.map { it.blockchainType },
+                tokenTypes = null,
+                address = text,
+                amount = null
+            )
             emitState()
         }
     }
@@ -301,7 +320,8 @@ data class BalanceUiState(
 )
 
 data class OpenSendTokenSelect(
-    val blockchainTypes: List<BlockchainType>,
+    val blockchainTypes: List<BlockchainType>?,
+    val tokenTypes: List<TokenType>?,
     val address: String,
     val amount: BigDecimal? = null,
 )
