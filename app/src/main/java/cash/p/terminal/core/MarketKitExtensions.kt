@@ -312,7 +312,11 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                 else -> false
             }
         }
-        is AccountType.BitcoinAddress -> this === accountType.blockchainType
+
+        is AccountType.BitcoinAddress -> {
+            this === accountType.blockchainType
+        }
+
         is AccountType.EvmAddress ->
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
@@ -402,8 +406,47 @@ val FullCoin.iconPlaceholder: Int
         }
     }
 
+fun Token.supports(accountType: AccountType): Boolean {
+    return when (accountType) {
+        is AccountType.BitcoinAddress -> {
+            tokenQuery.tokenType == accountType.tokenType
+        }
+
+        is AccountType.HdExtendedKey -> {
+            when (blockchainType) {
+                BlockchainType.Bitcoin,
+                BlockchainType.Litecoin -> {
+                    val type = type
+                    if (type is TokenType.Derived) {
+                        if (!accountType.hdExtendedKey.purposes.contains(type.derivation.purpose)) {
+                            false
+                        } else if (blockchainType == BlockchainType.Bitcoin) {
+                            accountType.hdExtendedKey.coinTypes.contains(ExtendedKeyCoinType.Bitcoin)
+                        } else {
+                            accountType.hdExtendedKey.coinTypes.contains(ExtendedKeyCoinType.Litecoin)
+                        }
+                    } else {
+                        false
+                    }
+                }
+
+                BlockchainType.BitcoinCash,
+                BlockchainType.ECash,
+                BlockchainType.Dash -> {
+                    accountType.hdExtendedKey.purposes.contains(HDWallet.Purpose.BIP44)
+                }
+
+                else -> false
+            }
+        }
+
+        else -> true
+    }
+}
+
 fun FullCoin.eligibleTokens(accountType: AccountType): List<Token> {
-    return supportedTokens.filter { it.blockchainType.supports(accountType) }
+    return supportedTokens
+        .filter { it.supports(accountType) && it.blockchainType.supports(accountType) }
 }
 
 val HsPointTimePeriod.title: Int

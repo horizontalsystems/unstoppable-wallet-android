@@ -106,8 +106,8 @@ class ManageWalletsService(
         val tokens = if (filter.isNotBlank()) {
             eligibleTokens
         } else if (
-            eligibleTokens.all { it.type is TokenType.Derived } ||
-            eligibleTokens.all { it.type is TokenType.AddressTyped }
+            accountType !is AccountType.HdExtendedKey &&
+            (eligibleTokens.all { it.type is TokenType.Derived } || eligibleTokens.all { it.type is TokenType.AddressTyped })
         ) {
             eligibleTokens.filter { isEnabled(it) || it.type.isDefault }
         } else {
