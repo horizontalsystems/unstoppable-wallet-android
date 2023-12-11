@@ -137,7 +137,7 @@ fun MarketSearchResults(
         )
     } else {
         val coroutineScope = rememberCoroutineScope()
-        var revealedCardId by remember { mutableStateOf<String?>(null) }
+        var revealedCardId by remember(*inputs) { mutableStateOf<String?>(null) }
 
         LazyColumn(
             state = rememberSaveable(
