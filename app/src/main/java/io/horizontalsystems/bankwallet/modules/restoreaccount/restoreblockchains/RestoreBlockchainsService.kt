@@ -92,7 +92,7 @@ class RestoreBlockchainsService(
             .map { it.nativeTokenQueries }
             .flatten()
 
-        tokens = marketKit.tokens(tokenQueries)
+        tokens = marketKit.tokens(tokenQueries).filter { it.supports(accountType) }
     }
 
     private fun handleApproveTokens(blockchain: Blockchain, tokens: List<Token>) {
