@@ -6,12 +6,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -23,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,18 +48,21 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
+import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HeaderStick
-import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
 import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui.compose.components.body_grey50
 import io.horizontalsystems.marketkit.models.Coin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Optional
+import kotlin.jvm.optionals.getOrDefault
 
 class MarketSearchFragment : BaseComposeFragment() {
     @Composable
@@ -127,6 +134,9 @@ fun MarketSearchResults(
             icon = R.drawable.ic_not_found
         )
     } else {
+        val coroutineScope = rememberCoroutineScope()
+        var revealedCardId by remember { mutableStateOf<String?>(null) }
+
         LazyColumn(
             state = rememberSaveable(
                 itemSections,
@@ -144,21 +154,70 @@ fun MarketSearchResults(
                         )
                     }
                 }
-                items(coinItems) { coinViewItem ->
-                    MarketCoin(
-                        coinViewItem.fullCoin.coin.code,
-                        coinViewItem.fullCoin.coin.name,
-                        coinViewItem.fullCoin.coin.imageUrl,
-                        coinViewItem.fullCoin.iconPlaceholder,
-                        favorited = coinViewItem.favourited,
-                        onClick = { onCoinClick(coinViewItem.fullCoin.coin) },
-                        onFavoriteClick = {
-                            onFavoriteClick(
-                                coinViewItem.favourited,
-                                coinViewItem.fullCoin.coin.uid
+                items(coinItems) { item ->
+                    val coin = item.fullCoin.coin
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Max)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .background(if (item.favourited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                                .align(Alignment.CenterEnd)
+                                .width(100.dp)
+                                .clickable {
+                                    onFavoriteClick(
+                                        item.favourited,
+                                        coin.uid
+                                    )
+
+                                    coroutineScope.launch {
+                                        delay(200)
+                                        revealedCardId = null
+                                    }
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                painter = painterResource(id = if (item.favourited) R.drawable.ic_star_off_24 else R.drawable.ic_star_24),
+                                tint = ComposeAppTheme.colors.claude,
+                                contentDescription = stringResource(if (item.favourited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
                             )
                         }
-                    )
+                        val cardId = title.getOrDefault("") + coin.uid
+                        DraggableCardSimple(
+                            key = cardId,
+                            isRevealed = revealedCardId == cardId,
+                            cardOffset = 100f,
+                            onReveal = {
+                                if (revealedCardId != cardId) {
+                                    revealedCardId = cardId
+                                }
+                            },
+                            onConceal = {
+                                revealedCardId = null
+                            },
+                            content = {
+                                Box(modifier = Modifier.background(ComposeAppTheme.colors.tyler)) {
+                                    MarketCoin(
+                                        coinCode = coin.code,
+                                        coinName = coin.name,
+                                        coinIconUrl = coin.imageUrl,
+                                        coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                                        onClick = { onCoinClick(coin) }
+                                    )
+                                }
+                            }
+                        )
+                        Divider(
+                            thickness = 1.dp,
+                            color = ComposeAppTheme.colors.steel10,
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                        )
+                    }
                 }
             }
 
@@ -239,8 +298,6 @@ private fun MarketCoin(
     coinName: String,
     coinIconUrl: String,
     coinIconPlaceholder: Int,
-    favorited: Boolean,
-    onFavoriteClick: () -> Unit,
     onClick: () -> Unit,
     coinRate: String? = null,
     marketDataValue: MarketDataValue? = null,
@@ -264,14 +321,6 @@ private fun MarketCoin(
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(coinName, marketDataValue, null)
         }
-
-        HsIconButton(onClick = onFavoriteClick) {
-            Icon(
-                painter = painterResource(if (favorited) R.drawable.ic_star_filled_20 else R.drawable.ic_star_20),
-                contentDescription = "coin icon",
-                tint = if (favorited) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey
-            )
-        }
     }
 }
 
@@ -285,8 +334,6 @@ fun MarketCoinPreview() {
             coin.name,
             coin.imageUrl,
             R.drawable.coin_placeholder,
-            false,
-            {},
             {},
         )
     }
