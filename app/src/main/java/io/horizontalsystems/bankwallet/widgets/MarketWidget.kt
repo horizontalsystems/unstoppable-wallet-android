@@ -61,7 +61,7 @@ class MarketWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            content(context)
+            Content(context)
         }
     }
 
@@ -72,8 +72,9 @@ class MarketWidget : GlanceAppWidget() {
     override val stateDefinition = MarketWidgetStateDefinition
 
     @Composable
-    private fun content(context: Context) {
+    private fun Content(context: Context) {
         val state = currentState<MarketWidgetState>()
+        val deeplinkScheme = context.getString(R.string.DeeplinkScheme)
 
         AppWidgetTheme {
             Column(
@@ -150,12 +151,13 @@ class MarketWidget : GlanceAppWidget() {
                         )
                     } else {
                         state.items.forEach { item ->
+                            val deeplinkUri = getDeeplinkUri(item, state.type, deeplinkScheme)
                             Box(
                                 modifier = GlanceModifier
                                     .height(60.dp)
                                     .background(ImageProvider(R.drawable.widget_list_item_background))
                                     .clickable(
-                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
+                                        actionStartActivity(Intent(Intent.ACTION_VIEW, deeplinkUri))
                                     )
                             ) {
                                 Item(item = item)
@@ -164,7 +166,7 @@ class MarketWidget : GlanceAppWidget() {
                                     GlanceModifier
                                         .fillMaxSize()
                                         .clickable(
-                                            actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
+                                            actionStartActivity(Intent(Intent.ACTION_VIEW, deeplinkUri))
                                         )
                                 )
                             }
@@ -182,16 +184,17 @@ class MarketWidget : GlanceAppWidget() {
         }
     }
 
-    private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType): Uri = when (type) {
+    @Composable
+    private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType, deeplinkScheme: String): Uri = when (type) {
         MarketWidgetType.Watchlist,
         MarketWidgetType.TopGainers -> {
-            "unstoppable://coin-page?uid=${item.uid}".toUri()
+            "$deeplinkScheme://coin-page?uid=${item.uid}".toUri()
         }
         MarketWidgetType.TopNfts -> {
-            "unstoppable://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
+            "$deeplinkScheme://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
         }
         MarketWidgetType.TopPlatforms -> {
-            "unstoppable://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
+            "$deeplinkScheme://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
         }
     }
 
