@@ -15,7 +15,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -33,7 +32,6 @@ fun AddressFormatSelectScreen(
     navController: NavController,
     addressFormatItems: List<AddressFormatItem>,
     description: String,
-    popupDestinationId: Int?,
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -62,10 +60,9 @@ fun AddressFormatSelectScreen(
                         title = item.title,
                         subtitle = item.subtitle,
                         onClick = {
-
                             navController.slideFromRight(
                                 R.id.receiveFragment,
-                                ReceiveAddressFragment.Input(item.wallet, popupDestinationId)
+                                item.wallet
                             )
                         }
                     )

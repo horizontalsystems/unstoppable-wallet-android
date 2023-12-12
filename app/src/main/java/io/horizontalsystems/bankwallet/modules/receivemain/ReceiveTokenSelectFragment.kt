@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.core.imagePlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -98,14 +97,14 @@ fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Accoun
                                     CoinForReceiveType.MultipleAddressTypes -> {
                                         navController.slideFromRight(
                                             R.id.receiveBchAddressTypeSelectFragment,
-                                            BchAddressTypeSelectFragment.Input(coin.uid, popupDestinationId)
+                                            BchAddressTypeSelectFragment.Input(coin.uid)
                                         )
                                     }
 
                                     CoinForReceiveType.MultipleDerivations -> {
                                         navController.slideFromRight(
                                             R.id.receiveDerivationSelectFragment,
-                                            DerivationSelectFragment.Input(coin.uid, popupDestinationId)
+                                            DerivationSelectFragment.Input(coin.uid)
                                         )
                                     }
 
@@ -119,7 +118,7 @@ fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Accoun
                                     is CoinForReceiveType.Single -> {
                                         navController.slideFromRight(
                                             R.id.receiveFragment,
-                                            ReceiveAddressFragment.Input(coinActiveWalletsType.wallet, popupDestinationId)
+                                            coinActiveWalletsType.wallet
                                         )
                                     }
 

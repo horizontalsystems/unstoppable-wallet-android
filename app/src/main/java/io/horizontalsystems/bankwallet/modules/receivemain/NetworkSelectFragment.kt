@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -112,11 +111,10 @@ fun NetworkSelectScreen(
                             imageUrl = blockchain.type.imageUrl,
                             onClick = {
                                 coroutineScope.launch {
-                                    val wallet = viewModel.getOrCreateWallet(token)
-
                                     navController.slideFromRight(
                                         R.id.receiveFragment,
-                                        ReceiveAddressFragment.Input(wallet, popupDestinationId)                                    )
+                                        viewModel.getOrCreateWallet(token)
+                                    )
                                 }
                             }
                         )

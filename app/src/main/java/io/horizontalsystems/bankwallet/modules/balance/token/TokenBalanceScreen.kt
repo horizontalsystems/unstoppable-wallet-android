@@ -46,7 +46,6 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
@@ -315,8 +314,7 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: TokenBalanceViewModel) {
     val onClickReceive = {
         try {
-            val params = ReceiveAddressFragment.Input(viewModel.getWalletForReceive(viewItem))
-            navController.slideFromRight(R.id.receiveFragment, params)
+            navController.slideFromRight(R.id.receiveFragment, viewModel.getWalletForReceive(viewItem))
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,

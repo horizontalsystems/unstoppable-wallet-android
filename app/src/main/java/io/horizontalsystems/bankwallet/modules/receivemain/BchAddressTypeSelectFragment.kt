@@ -28,12 +28,11 @@ class BchAddressTypeSelectFragment : BaseComposeFragment() {
             AddressFormatSelectScreen(
                 navController,
                 viewModel.items,
-                stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType),
-                input.popupDestinationId
+                stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType)
             )
         }
     }
 
     @Parcelize
-    data class Input(val coinUid: String, val popupDestinationId: Int?) : Parcelable
+    data class Input(val coinUid: String) : Parcelable
 }
