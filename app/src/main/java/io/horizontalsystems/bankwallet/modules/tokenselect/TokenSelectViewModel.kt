@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,7 +29,8 @@ class TokenSelectViewModel(
     private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?,
     private val balanceSorter: BalanceSorter,
     private val balanceHiddenManager: BalanceHiddenManager,
-    private val blockchainTypes: List<BlockchainType>?
+    private val blockchainTypes: List<BlockchainType>?,
+    private val tokenTypes: List<TokenType>?
 ) : ViewModel() {
 
     private var noItems = false
@@ -59,6 +61,11 @@ class TokenSelectViewModel(
                 blockchainTypes?.let { types ->
                     itemsFiltered = itemsFiltered.filter { item ->
                         types.contains(item.wallet.token.blockchainType)
+                    }
+                }
+                tokenTypes?.let { types ->
+                    itemsFiltered = itemsFiltered.filter { item ->
+                        types.contains(item.wallet.token.type)
                     }
                 }
                 itemsFilter?.let {
@@ -113,7 +120,10 @@ class TokenSelectViewModel(
         service.clear()
     }
 
-    class FactoryForSend(private val blockchainTypes: List<BlockchainType>? = null) : ViewModelProvider.Factory {
+    class FactoryForSend(
+        private val blockchainTypes: List<BlockchainType>? = null,
+        private val tokenTypes: List<TokenType>? = null
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TokenSelectViewModel(
@@ -124,6 +134,7 @@ class TokenSelectViewModel(
                 balanceSorter = BalanceSorter(),
                 balanceHiddenManager = App.balanceHiddenManager,
                 blockchainTypes = blockchainTypes,
+                tokenTypes = tokenTypes,
             ) as T
         }
     }
@@ -141,6 +152,7 @@ class TokenSelectViewModel(
                 balanceSorter = BalanceSorter(),
                 balanceHiddenManager = App.balanceHiddenManager,
                 blockchainTypes = null,
+                tokenTypes = null,
             ) as T
         }
     }

@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -26,6 +27,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
         val input = navController.getInput<Input>()
 
         val blockchainTypes = input?.blockchainTypes
+        val tokenTypes = input?.tokenTypes
         val prefilledData = input?.prefilledData
         val view = LocalView.current
         TokenSelectScreen(
@@ -39,8 +41,8 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                             R.id.sendXFragment,
                             SendFragment.Input(
                                 wallet = it.wallet,
-                                title = sendTitle,
                                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                                title = sendTitle,
                                 prefilledAddressData = prefilledData,
                             )
                         )
@@ -55,14 +57,15 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                     }
                 }
             },
-            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes)),
+            viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend(blockchainTypes, tokenTypes)),
             emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
         )
     }
 
     @Parcelize
     data class Input(
-        val blockchainTypes: List<BlockchainType>,
+        val blockchainTypes: List<BlockchainType>?,
+        val tokenTypes: List<TokenType>?,
         val address: String,
         val amount: BigDecimal?,
     ) : Parcelable {

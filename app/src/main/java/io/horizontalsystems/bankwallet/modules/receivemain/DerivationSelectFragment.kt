@@ -27,12 +27,11 @@ class DerivationSelectFragment : BaseComposeFragment() {
             AddressFormatSelectScreen(
                 navController,
                 viewModel.items,
-                stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation),
-                input.popupDestinationId
+                stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation)
             )
         }
     }
 
     @Parcelize
-    data class Input(val coinUid: String, val popupDestinationId: Int?) : Parcelable
+    data class Input(val coinUid: String) : Parcelable
 }
