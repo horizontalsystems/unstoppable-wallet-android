@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -32,6 +31,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
@@ -114,16 +114,21 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
+            VSpacer(8.dp)
 
             FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+                horizontalArrangement = Arrangement.Center
             ) {
                 uiState.wordOptions.forEach { wordOption ->
-                    Box(modifier = Modifier.height(28.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .height(28.dp)
+                            .padding(horizontal = 4.dp)
+                    ) {
                         ButtonSecondaryDefault(
                             title = wordOption.word,
                             enabled = wordOption.enabled,
@@ -132,7 +137,6 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                             }
                         )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
                 }
             }
         }
