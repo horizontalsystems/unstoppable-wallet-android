@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
+import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -240,6 +241,19 @@ class BalanceViewModel(
     }
 
     private fun handleAddressData(text: String) {
+        if (text.contains("//")) {
+            //handle this type of uri ton://transfer/<address>
+            val toncoinAddress = ToncoinUriParser.getAddress(text) ?: return
+            openSendTokenSelect = OpenSendTokenSelect(
+                blockchainTypes = listOf(BlockchainType.Ton),
+                tokenTypes = null,
+                address = toncoinAddress,
+                amount = null
+            )
+            emitState()
+            return
+        }
+
         val uri = uri(text)
         if (uri != null) {
             val allowedBlockchainTypes = uri.allowedBlockchainTypes

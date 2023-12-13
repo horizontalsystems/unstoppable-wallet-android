@@ -37,7 +37,7 @@ object BalanceModule {
                 App.localStorage,
                 App.wc2Service,
                 App.wc2Manager,
-                AddressHandlerFactory(App.appConfigProvider.udnApiKey)
+                AddressHandlerFactory(App.appConfigProvider.udnApiKey),
             ) as T
         }
     }
