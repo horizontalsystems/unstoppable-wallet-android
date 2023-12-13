@@ -43,6 +43,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.D2
 import io.horizontalsystems.bankwallet.ui.compose.components.D7
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -215,16 +216,18 @@ fun SeedPhraseList(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+            maxItemsInEachRow = 4,
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+            horizontalArrangement = Arrangement.Center
         ) {
-            wordsNumbered.chunked(3).forEach {
-                it.forEach { word ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        D7(text = word.number.toString())
-                        Spacer(modifier = Modifier.width(8.dp))
-                        B2(text = word.word)
-                    }
-                    Spacer(modifier = Modifier.width(12.dp))
+            wordsNumbered.forEach { word ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 6.dp)
+                ) {
+                    D7(text = word.number.toString())
+                    HSpacer(8.dp)
+                    B2(text = word.word)
                 }
             }
         }
