@@ -13,6 +13,7 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.core.utils.AddressUriResult
+import cash.p.terminal.core.utils.ToncoinUriParser
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AddressUri
 import cash.p.terminal.entities.ViewState
@@ -240,6 +241,19 @@ class BalanceViewModel(
     }
 
     private fun handleAddressData(text: String) {
+        if (text.contains("//")) {
+            //handle this type of uri ton://transfer/<address>
+            val toncoinAddress = ToncoinUriParser.getAddress(text) ?: return
+            openSendTokenSelect = OpenSendTokenSelect(
+                blockchainTypes = listOf(BlockchainType.Ton),
+                tokenTypes = null,
+                address = toncoinAddress,
+                amount = null
+            )
+            emitState()
+            return
+        }
+
         val uri = uri(text)
         if (uri != null) {
             val allowedBlockchainTypes = uri.allowedBlockchainTypes
