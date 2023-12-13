@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
+import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
@@ -61,6 +62,12 @@ class AddressViewModel(
     }
 
     private fun parseForUri(text: String) {
+        if (blockchainType == BlockchainType.Ton && text.contains("//")) {
+            ToncoinUriParser.getAddress(text)?.let { address ->
+                parseAddress(address)
+                return
+            }
+        }
         when (val result = addressUriParser.parse(text)) {
             is AddressUriResult.Uri -> {
                 parseAddress(result.addressUri.address)
