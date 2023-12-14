@@ -48,16 +48,6 @@ class TokenTransactionsService(
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
     fun start() {
-        val transactionWallet = TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
-
-        transactionSyncStateRepository.setTransactionWallets(listOf(transactionWallet))
-        transactionRecordRepository.setWallets(
-            listOf(transactionWallet),
-            transactionWallet,
-            FilterTransactionType.All,
-            null
-        )
-
         transactionRecordRepository.itemsObservable
             .subscribeIO {
                 handleUpdatedRecords(it)
@@ -101,6 +91,16 @@ class TokenTransactionsService(
                 handleContactsUpdate()
             }
         }
+
+        val transactionWallet = TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
+
+        transactionSyncStateRepository.setTransactionWallets(listOf(transactionWallet))
+        transactionRecordRepository.setWallets(
+            listOf(transactionWallet),
+            transactionWallet,
+            FilterTransactionType.All,
+            null
+        )
     }
 
     @Synchronized
