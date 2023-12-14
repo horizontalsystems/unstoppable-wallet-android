@@ -58,6 +58,7 @@
     <string name="Button_TryAgain">Попробовать ещё раз</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Apply">Применить</string>
+    <string name="Button_SetAmount">Установить сумму</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -157,6 +158,8 @@
     <string name="Market_Field_PriceDiff">Цена</string>
     <string name="Market_Title">Рынки</string>
     <string name="Market_Search">Поиск</string>
+    <string name="Market_Search_Sections_RecentTitle">Недавние</string>
+    <string name="Market_Search_Sections_PopularTitle">ПОПУЛЯРНЫЕ</string>
     <string name="Market_FilterSection_MarketParameters">ПАРАМЕТРЫ РЫНКА</string>
     <string name="Market_FilterSection_PriceParameters">ПАРАМЕТРЫ ЦЕНЫ</string>
     <string name="Market_FilterSection_NetworkParameters">ПАРАМЕТРЫ СЕТИ</string>
@@ -184,6 +187,7 @@
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">Лучшие секторы</string>
+    <string name="Market_Overview_Sectors">Секторы</string>
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Лучшие платформы</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">Лучшие блокчейн-платформы</string>
@@ -309,7 +313,10 @@
     <string name="Balance_Receive_Account">Аккаунт</string>
     <string name="Balance_Receive_NotActive">Не активен</string>
     <string name="Balance_Receive_Amount">Сумма</string>
+    <string name="Balance_Receive_SetAmount">Установить сумму</string>
+    <string name="Balance_Receive_AddressType">Тип адреса</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
+    <string name="Balance_Receive_Memo">Memo(Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
