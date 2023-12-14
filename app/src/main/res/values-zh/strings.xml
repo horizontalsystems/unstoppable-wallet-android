@@ -58,6 +58,7 @@
     <string name="Button_TryAgain">再试一次</string>
     <string name="Button_Share">分享</string>
     <string name="Button_Apply">应用</string>
+    <string name="Button_SetAmount">设定金额</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
@@ -155,6 +156,8 @@
     <string name="Market_Field_PriceDiff">价格</string>
     <string name="Market_Title">市场</string>
     <string name="Market_Search">查询</string>
+    <string name="Market_Search_Sections_RecentTitle">过去的</string>
+    <string name="Market_Search_Sections_PopularTitle">热门</string>
     <string name="Market_FilterSection_MarketParameters">市场参数</string>
     <string name="Market_FilterSection_PriceParameters">价格参数</string>
     <string name="Market_FilterSection_NetworkParameters">网络参数</string>
@@ -182,6 +185,7 @@
     <string name="Market_Category_TopCoins_Description">币种排名描述</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">前列行业</string>
+    <string name="Market_Overview_Sectors">行业</string>
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">前列平台</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">顶级区块链平台</string>
@@ -307,6 +311,7 @@
     <string name="Balance_Receive_Account">账户</string>
     <string name="Balance_Receive_NotActive">不活动</string>
     <string name="Balance_Receive_Amount">金额</string>
+    <string name="Balance_Receive_SetAmount">设定金额</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
     <!--Send NFT-->
