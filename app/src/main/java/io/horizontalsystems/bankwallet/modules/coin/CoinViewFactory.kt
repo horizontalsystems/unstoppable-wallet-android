@@ -106,7 +106,8 @@ class CoinViewFactory(
             roi = getRoi(overview.performance),
             links = getLinks(overview, item.guideUrl),
             about = overview.description,
-            marketData = getMarketItems(item)
+            marketData = getMarketItems(item),
+            marketCapRank = item.marketInfoOverview.marketCapRank
         )
     }
 
