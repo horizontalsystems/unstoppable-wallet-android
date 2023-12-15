@@ -317,6 +317,7 @@
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">인식할 수 없음</string>
     <string name="Balance_Receive_WatchAddressAlert">이 주소는 감시 계정의 주소입니다. 네트워크 호환 토큰만 보냅니다.</string>
+    <string name="Balance_Receive_AddressAlert">네트워크 호환 토큰만 허용됩니다. 그 외에는 소멸됩니다.</string>
     <string name="Balance_Receive_AddressMemoAlert">필요한 메모 (태그)를 제공하고 호환되는 네트워크 토큰만 보내십시오. 그렇지 않으면 소멸됩니다.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">전송</string>
@@ -826,7 +827,10 @@
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">빠르게, 개인 정보 없음</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">느리고 개인 정보 없음</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">느리지만 개인 정보 보호</string>
     <string name="SetDuressPin_Title">긴급 상황 비밀번호</string>
     <string name="SetDuressPin_Description">긴급 상황 모드용 비밀번호를 설정하세요</string>
     <string name="EditDuressPin_Title">긴급 상황 비밀번호 편집</string>
