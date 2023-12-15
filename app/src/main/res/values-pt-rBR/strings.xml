@@ -58,6 +58,7 @@
     <string name="Button_TryAgain">Tentar novamente</string>
     <string name="Button_Share">Partilhar</string>
     <string name="Button_Apply">Aplicar</string>
+    <string name="Button_SetAmount">Definir Quantidade</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
     <string name="Error">Erro</string>
@@ -155,6 +156,8 @@
     <string name="Market_Field_PriceDiff">Preço</string>
     <string name="Market_Title">Mercados</string>
     <string name="Market_Search">Buscar</string>
+    <string name="Market_Search_Sections_RecentTitle">RECENTES</string>
+    <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
     <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
     <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
     <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
@@ -182,6 +185,7 @@
     <string name="Market_Category_TopCoins_Description">Top moedas por classificação de capitalização de mercado</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">Principais Setores</string>
+    <string name="Market_Overview_Sectors">Setores</string>
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Melhores Plataformas</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">Principais Plataformas de Blockchain</string>
@@ -307,8 +311,13 @@
     <string name="Balance_Receive_Account">Conta</string>
     <string name="Balance_Receive_NotActive">Não ativo</string>
     <string name="Balance_Receive_Amount">Montante</string>
+    <string name="Balance_Receive_SetAmount">Definir Quantidade</string>
+    <string name="Balance_Receive_AddressType">Tipo de endereço</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
+    <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
+    <string name="Balance_Receive_WatchAddressAlert">Esse endereço é o endereço da conta observada. Envie apenas tokens compatíveis com a rede.</string>
+    <string name="Balance_Receive_AddressMemoAlert">Forneça o Memo necessário (Tag) e envie apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <string name="SendNft_Error_NotEnoughtBalance">Saldo insuficiente</string>
@@ -385,7 +394,9 @@
     <string name="FeeSettings_GasPrice_Info">A taxa para transação na rede é medida em unidades de gás. O preço do gás é a quantidade que um usuário está disposto a gastar por unidade de gás. Quando a rede está ocupada, os preços do gás são altos e baixos quando está inativa. Um preço de gás insuficiente é frequentemente uma razão para que uma transação permaneça pendente por um período prolongado.</string>
     <string name="FeeSettings_BaseFee">Taxa Base</string>
     <string name="FeeSettings_BaseFee_Info">O protocolo de rede determina o preço base por gas para cada bloco, a taxa base. Varia de acordo com o nível de utilização da rede de bloco para bloco. Ele pode aumentar ou diminuir em não mais do que 12,5% no próximo bloco, tornando as taxas mais previsíveis. O valor mostrado aqui é a taxa base de taxa atual do bloco.</string>
+    <string name="FeeSettings_MaxFee">Taxa Máxima</string>
     <string name="FeeSettings_MaxFee_Info">Este é o preço total máximo por gas que o usuário está disposto a pagar. Ela deve cobrir a taxa base da rede e a taxa máxima de prioridade. O valor mostrado aqui é sugerido com base em uma estimativa da taxa base do próximo bloco mais a taxa máxima de prioridade escolhida pelo usuário. A taxa real paga normalmente será menor. Definir isso mais baixo que a taxa base atual irá limitar a taxa paga, mas resultará em períodos de espera mais longos para que a transação seja confirmada, ou até mesmo em uma transação travada.</string>
+    <string name="FeeSettings_MaxMinerTips">Taxa de prioridade máxima</string>
     <string name="FeeSettings_MaxMinerTips_Info">Os usuários pagam taxas de prioridade para incentivar uma transação a ser confirmada mais rapidamente. Às vezes são chamados de dicas. A taxa máxima de prioridade é o preço adicional máximo por gás que o usuário está disposto a pagar acima da taxa base. O valor mostrado aqui é sugerido com base nas condições previstas de rede. A taxa de prioridade real normalmente será menor. Definir como zero pode resultar em um longo tempo de espera para que a transação seja confirmada, como é colocado no final da fila de transações pendentes de todos os usuários.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Arriscado</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">A transação pode permanecer pendente por um tempo ou falhar completamente.</string>
@@ -602,6 +613,7 @@
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited">ilimitado %s</string>
     <string name="Transactions_All">Todas</string>
+    <string name="Transactions_Filter_Blockchain">Blockchain</string>
     <string name="Transactions_Filter_Coin">Moeda</string>
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
     <string name="Transactions_Filter_AllCoins">Todas as moedas</string>
@@ -615,6 +627,7 @@
     <string name="Transactions_Unknown_Description">Transação não pôde ser analisada</string>
     <string name="Transactions_Multiple">Múltiplo</string>
     <string name="Transactions_Filter">Filtro</string>
+    <string name="Transactions_Filter_HideSuspiciousTx">Ocultar Transações Suspeitas</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Ocultando transações de entrada com montantes ínfimos em stablecoins, isso resolve parcialmente os problemas de ataques de envenenamento de endereço.</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transação</string>
@@ -715,7 +728,9 @@
     <string name="Settings_Donate">Doar</string>
     <string name="Settings_DonateToken">Doe %s</string>
     <string name="Settings_DonateWith">Doar com</string>
+    <string name="Settings_Donate_GetAddress">Endereço de Doação</string>
     <string name="Settings_Donate_Addresses">Endereços</string>
+    <string name="Settings_Donate_OrSelectCoinToDonate">Ou selecione uma moeda para doar</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Imediato</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minuto</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 Minutos</string>
@@ -744,11 +759,13 @@
     <string name="BackupManager_RestoreBackup">Restaurar Backup</string>
     <string name="BackupManager_CreateBackup">Criar Novo Backup</string>
     <string name="BackupManager_BаckupFile">Arquivo de backup</string>
+    <string name="BackupManager_Wallets">CARTEIRAS</string>
     <string name="BackupManager_Other">OUTRA</string>
     <string name="BackupManager_Restore">Restaurar</string>
     <string name="BackupManager_BackupFileContents">Lista de conteúdo do arquivo de backup.</string>
     <string name="BackupManager_MergeTitle">Aviso</string>
     <string name="BackupManager_MergeButton">Substituir</string>
+    <string name="BackupManager_MergeDescription">Esta ação sobrescreverá seus contatos de pagamento locais.</string>
     <string name="BackupManager_BackupRequired">Backup necessário</string>
     <string name="BackupManager_WatchWallets">Carteiras de Relógio</string>
     <string name="BackupManager_Watchlist">Catálogo</string>
@@ -775,6 +792,7 @@
     <string name="AddEvmSyncSource_Warning_UrlExists">Fonte RPC com esta url já existe</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Url inserida é inválida. URL válida deve ter um dos seguintes esquemas: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Após alterar a fonte, a carteira terá que ressincronizar.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Selecione uma fonte de dados para restaurar uma carteira com transações.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entrada/Saída</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Configurações de transação</string>
@@ -804,8 +822,6 @@
     <string name="SettingsSecurity_SortingBip69">Bip69 Determinístico</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexação Lexicográfica</string>
     <string name="SettingsSecurity_SyncModeBlockchair">API Blockchair</string>
-    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, Privado, Centralizado</string>
-    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SetDuressPin_Title">Senha do Modo Coação</string>
     <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
@@ -819,8 +835,11 @@
     <string name="DuressPin_Notes_PasscodeDisabling_Title">Desabilitação da Senha</string>
     <string name="DuressPin_Notes_PasscodeDisabling_Description">Desativar a senha no modo principal redefinirá automaticamente o Modo de Coação.</string>
     <string name="DuressPin_Notes_PasscodeChange_Title">Alteração de Senha</string>
+    <string name="DuressPin_Notes_PasscodeChange_Description">Alterar a senha no Modo de Coação também irá alterar a senha atual para esse modo.</string>
     <string name="DuressPinSelectAccounts_Title">Escolher Carteiras</string>
     <string name="DuressPinSelectAccounts_Description">Selecione as carteiras que serão exibidas no Modo de Coação.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">CARTEIRAS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ASSISTA CARTEIRAS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">A carteira Unstoppable foi criada para quem deseja investir e armazenar criptomoedas de maneira privada e independente.
 \n\nÉ uma carteira peer-to-peer sem custódia, onde apenas o usuário tem controle sobre os fundos. A carteira não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do mesmo em um aplicativo de carteira específico.
@@ -917,6 +936,7 @@
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">do Arquivo</string>
+    <string name="ImportWallet_BackupFile_Description">Importar um arquivo de backup da sua pasta local.</string>
     <string name="ImportWallet_RecoveryPhrase">da frase de recuperação</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importar usando frase de recuperação ou chave privada.</string>
     <string name="ImportWallet_ExchangeWallet">da Exchange Wallet</string>
@@ -931,9 +951,11 @@
     <string name="ImportBackupFile_EnterPassword_Description">Digite a senha de backup para importar sua carteira.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Senha inválida</string>
     <string name="ImportBackupFile_BackupPassword">Fazer Backup da Senha</string>
+    <string name="Watch_Address_Hint">Digite seu EVM, TRON, TON ou Endereço Público (Bitcoin, Litecoin, Bitcoin Cash) ou Conta xPubKey.</string>
     <string name="Watch_Address_Watch">Ver</string>
     <string name="Watch_Select_Blockchains">Escolha as Blockchains</string>
     <string name="Watch_Select_Coins">Escolher Moedas</string>
+    <string name="Watch_Error_InvalidAddressFormat">Formato de endereço não suportado</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nome</string>
     <string name="ManageAccount_Save">Salvar</string>
@@ -979,6 +1001,7 @@
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Carteira de Backup</string>
     <string name="BackupRecoveryPhrase_Description">Fazer backup desta carteira criando uma cópia de sua frase de recuperação. Será necessário para acessar a carteira se seu telefone for perdido, roubado, quebrado, etc.</string>
+    <string name="BackupRecoveryPhrase_Backup">Cópia de segurança</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Backup Manual</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Backup Local</string>
     <string name="BackupRecoveryPhrase_Later">Mais tarde</string>
@@ -1025,7 +1048,9 @@
     <string name="RecoveryPhraseVerify_Title">Verificar</string>
     <string name="RecoveryPhraseVerify_Description">Selecione duas palavras solicitadas da sua frase de recuperação de carteira</string>
     <!-- Backup Key -->
+    <string name="BackupKey_Title">Cópia de segurança</string>
     <string name="BackupKey_Description">As frases de recuperação que serão mostradas a seguir são a única maneira de restaurar seus fundos caso seu telefone seja perdido, roubado, quebrado etc.\n\nCertifique-se de que ninguém está olhando para sua tela.</string>
+    <string name="BackupKey_ButtonBackup">Cópia de segurança</string>
     <string name="BackupConfirmKey_Description">Digite as frases de recuperação na ordem correta para confirmar</string>
     <string name="BackupConfirmKey_EmptyOrInvalidWords">As palavras inseridas estão vazias ou inválidas</string>
     <string name="BackupConfirmKey_Error_EmptyWord">Palavra vazia</string>
@@ -1211,6 +1236,7 @@
     <string name="CoinPage_SignalSmoothing">Suavização de sinal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium Unstoppable.</string>
     <string name="CoinPage_AiGeneratedText">Esta é uma descrição gerada por IA com base no material de referência fornecido para a criptomoeda em questão. Pode conter erros.</string>
+    <string name="CoinPage_MarketsLabel_Verified">VERIFICADO</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Confirmado</string>
     <string name="CoinPage_MarketsVerifiedMenu_All">Todas</string>
     <string name="CoinAnalytics_CexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
@@ -1453,6 +1479,9 @@
     <string name="PinSet_ConfirmInfo">Confirmar</string>
     <string name="PinSet_ErrorPinsDontMatch">Senhas não conferem. Tente novamente.</string>
     <string name="PinSet_ErrorFailedToSavePin">Ocorreu um erro ao enviar a mensagem. Tente novamente.</string>
+    <string name="PinSet_ForBiometrics">Definir uma senha para habilitar Biometria</string>
+    <string name="PinSet_ForDuress">Defina uma senha para ativar o modo de Coação</string>
+    <string name="PinSet_ErrorPinInUse">Esta senha já está sendo usada.</string>
     <!--Edit Pin-->
     <string name="EditPin_Title">Editar senha</string>
     <string name="EditPin_UnlockInfo">Senha Atual</string>
