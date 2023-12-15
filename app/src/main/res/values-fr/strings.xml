@@ -316,6 +316,8 @@
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
     <string name="Balance_Receive_Memo">Mémo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
+    <string name="Balance_Receive_WatchAddressAlert">Cette adresse est l\'adresse du compte surveillé. N\'envoyer que des jetons compatibles avec le réseau.</string>
+    <string name="Balance_Receive_AddressAlert">Seuls les jetons compatibles avec le réseau seront conservés. Les autres seront perdus.</string>
     <string name="Balance_Receive_AddressMemoAlert">Fournissez le Mémo requis (Tag) et envoyez uniquement des jetons compatibles avec le réseau. D\'autres seront perdus.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
@@ -817,7 +819,10 @@
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rapide, sans privé</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">Slower, pas de privé</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Ralentissement, privé</string>
     <string name="SetDuressPin_Title">Code Duress</string>
     <string name="SetDuressPin_Description">Définir un code d\'accès pour le mode Duress</string>
     <string name="EditDuressPin_Title">Modifier le code de détresse</string>
