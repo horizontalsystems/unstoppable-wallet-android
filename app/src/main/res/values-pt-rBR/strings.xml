@@ -317,6 +317,7 @@
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
     <string name="Balance_Receive_WatchAddressAlert">Esse endereço é o endereço da conta observada. Envie apenas tokens compatíveis com a rede.</string>
+    <string name="Balance_Receive_AddressAlert">Apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
     <string name="Balance_Receive_AddressMemoAlert">Forneça o Memo necessário (Tag) e envie apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
@@ -822,7 +823,10 @@
     <string name="SettingsSecurity_SortingBip69">Bip69 Determinístico</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexação Lexicográfica</string>
     <string name="SettingsSecurity_SyncModeBlockchair">API Blockchair</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, Sem Privado</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">Devagar, Sem Privado</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado</string>
     <string name="SetDuressPin_Title">Senha do Modo Coação</string>
     <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
     <string name="EditDuressPin_Title">Editar Senha do Modo Coação</string>
