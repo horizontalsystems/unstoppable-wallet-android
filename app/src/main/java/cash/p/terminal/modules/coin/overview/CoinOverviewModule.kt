@@ -86,5 +86,6 @@ data class CoinOverviewViewItem(
     val roi: List<RoiViewItem>,
     val links: List<CoinLink>,
     val about: String,
-    val marketData: MutableList<CoinDataItem>
+    val marketData: MutableList<CoinDataItem>,
+    val marketCapRank: Int?
 )

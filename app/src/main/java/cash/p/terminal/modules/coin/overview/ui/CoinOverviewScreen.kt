@@ -142,7 +142,7 @@ fun CoinOverviewScreen(
                             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                                 CoinScreenTitle(
                                     fullCoin.coin.name,
-                                    fullCoin.coin.marketCapRank,
+                                    overview.marketCapRank,
                                     fullCoin.coin.imageUrl,
                                     fullCoin.iconPlaceholder
                                 )
