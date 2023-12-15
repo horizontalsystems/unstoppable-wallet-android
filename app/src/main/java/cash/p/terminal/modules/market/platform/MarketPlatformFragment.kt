@@ -6,14 +6,21 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,7 +42,15 @@ import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AlertGroup
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.CoinList
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.SortMenu
+import cash.p.terminal.ui.compose.components.TopCloseButton
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.title3_leah
 import io.horizontalsystems.core.parcelable
 
 class MarketPlatformFragment : BaseComposeFragment() {
@@ -191,7 +206,7 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
         ) {
             Column(
                 modifier = Modifier
-                    .padding(top = 12.dp, end = 8.dp)
+                    .padding(top = 12.dp)
                     .weight(1f)
             ) {
                 title3_leah(
@@ -204,21 +219,14 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            Box(
+            Image(
+                painter = image.painter(),
+                contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-            ) {
-                Image(
-                    painter = image.painter(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(24.dp),
-                )
-            }
+                    .padding(start = 24.dp)
+                    .size(32.dp),
+            )
         }
     }
 }
