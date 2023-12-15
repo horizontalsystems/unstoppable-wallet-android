@@ -17,8 +17,8 @@ class PlatformChartService(
     private val marketKit: MarketKitWrapper,
 ) : AbstractChartService() {
 
-    override val initialChartInterval = HsTimePeriod.Day1
-    override val chartIntervals = listOf(HsTimePeriod.Day1, HsTimePeriod.Week1, HsTimePeriod.Month1)
+    override val initialChartInterval = HsTimePeriod.Week1
+    override val chartIntervals = listOf(HsTimePeriod.Week1, HsTimePeriod.Month1, HsTimePeriod.Month3)
     override val chartViewType = ChartViewType.Line
 
     override fun getItems(
