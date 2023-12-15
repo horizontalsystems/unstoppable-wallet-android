@@ -317,6 +317,7 @@
     <string name="Balance_Receive_Memo">Memo (Etiqueta)</string>
     <string name="Balance_Error_InvalidQrCode">No se puede reconocer</string>
     <string name="Balance_Receive_WatchAddressAlert">Esta dirección es la dirección de la cuenta vigilada. Enviar sólo tokens compatibles con la red.</string>
+    <string name="Balance_Receive_AddressAlert">Sólo tokens compatibles con la red. Otros se perderán.</string>
     <string name="Balance_Receive_AddressMemoAlert">Proporcionar memo requerido (Tag) y enviar sólo tokens compatibles con la red. Otros se perderán.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
@@ -818,7 +819,10 @@
     <string name="SettingsSecurity_SortingBip69">Bip69 determinista</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexación Lexicográfica</string>
     <string name="SettingsSecurity_SyncModeBlockchair">API de Blockchair</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, sin privado</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">Lento, sin privado</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, sin privado</string>
     <string name="SetDuressPin_Title">Durar contraseña</string>
     <string name="SetDuressPin_Description">Establecer un código de acceso para el modo Duress</string>
     <string name="EditDuressPin_Title">Editar contraseña de Duración</string>
