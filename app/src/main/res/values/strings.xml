@@ -373,7 +373,7 @@
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Can\'t recognize</string>
     <string name="Balance_Receive_WatchAddressAlert">This address is the address of the watched account. Send only network-compatible tokens.</string>
-    <string name="Balance_Receive_AddressAlert">Send only network-compatible tokens. Others will be lost.</string>
+    <string name="Balance_Receive_AddressAlert">Network-compatible tokens only. Others will be lost.</string>
     <string name="Balance_Receive_AddressMemoAlert">Provide required Memo (Tag) and send only network-compatible tokens. Others will be lost.</string>
 
     <!--Send NFT-->
@@ -982,11 +982,11 @@
     <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
-    <string name="SettingsSecurity_SyncModeBlockchairDescription">Fast, Private, Centralized</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Fast, Not Private</string>
     <string name="SettingsSecurity_SyncModeHybrid" translatable="false">Hybrid</string>
-    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">Slow, Not Private</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Decentralized Restore</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Slow, Private</string>
 
     <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
