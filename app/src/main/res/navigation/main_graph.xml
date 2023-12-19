@@ -288,6 +288,9 @@
         android:id="@+id/receiveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressFragment"/>
     <fragment
+     android:id="@+id/usedAddressesFragment"
+     android:name="io.horizontalsystems.bankwallet.modules.receive.usedaddress.UsedAddressesFragment" />
+    <fragment
         android:id="@+id/receiveTokenSelectFragment"
         android:name="io.horizontalsystems.bankwallet.modules.receivemain.ReceiveTokenSelectFragment" />
     <fragment

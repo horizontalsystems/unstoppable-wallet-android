@@ -24,6 +24,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -60,9 +61,12 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
+import io.horizontalsystems.bankwallet.modules.receive.usedaddress.UsedAddressesFragment
+import io.horizontalsystems.bankwallet.modules.receive.usedaddress.UsedAddressesViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -109,6 +113,7 @@ class ReceiveAddressFragment : BaseComposeFragment() {
 
         ReceiveAddressScreen(
             title = stringResource(R.string.Deposit_Title, wallet.coin.code),
+            coinName = wallet.coin.name,
             uiState = viewModel.uiState,
             onErrorClick = { viewModel.onErrorClick() },
             setAmount = { amount -> viewModel.setAmount(amount) },
@@ -138,6 +143,7 @@ class ReceiveAddressFragment : BaseComposeFragment() {
 @Composable
 fun ReceiveAddressScreen(
     title: String,
+    coinName: String,
     uiState: ReceiveAddressModule.UiState,
     navController: NavController,
     setAmount: (BigDecimal?) -> Unit,
@@ -263,6 +269,42 @@ fun ReceiveAddressScreen(
                                                 navController.slideFromBottom(R.id.notActiveAccountDialog, args)
                                             }
                                         )
+                                    }
+
+                                    if (uiState.usedAddresses.isNotEmpty()) {
+                                        Divider(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            thickness = 1.dp,
+                                            color = ComposeAppTheme.colors.steel10
+                                        )
+                                        RowUniversal(
+                                            modifier = Modifier.height(48.dp),
+                                            onClick = {
+                                                navController.slideFromRight(
+                                                    R.id.usedAddressesFragment,
+                                                    UsedAddressesFragment.prepareParams(
+                                                        UsedAddressesViewItem(
+                                                            coinName = coinName,
+                                                            usedAddresses = uiState.usedAddresses
+                                                        )
+                                                    )
+                                                )
+                                            }
+                                        ) {
+                                            subhead2_grey(
+                                                modifier = Modifier
+                                                    .padding(start = 16.dp)
+                                                    .weight(1f),
+                                                text = stringResource(R.string.Balance_Receive_UsedAddresses),
+                                            )
+
+                                            Icon(
+                                                modifier = Modifier.padding(end = 16.dp),
+                                                painter = painterResource(id = R.drawable.ic_arrow_right),
+                                                contentDescription = null,
+                                                tint = ComposeAppTheme.colors.grey
+                                            )
+                                        }
                                     }
                                 }
 
@@ -408,7 +450,9 @@ private fun AdditionalDataSection(
                         modifier = Modifier.padding(horizontal = 16.dp)
                     )
                     ButtonSecondaryCircle(
-                        modifier = Modifier.height(28.dp).padding(end = 16.dp),
+                        modifier = Modifier
+                            .height(28.dp)
+                            .padding(end = 16.dp),
                         icon = R.drawable.ic_copy_20,
                         onClick = {
                             TextHelper.copyText(item.value)

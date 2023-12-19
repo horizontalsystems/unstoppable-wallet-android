@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.factories.uriScheme
@@ -28,6 +29,7 @@ class ReceiveAddressViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
+    private var usedAddresses: List<UsedAddress> = listOf()
     private var uri = ""
     private var amount: BigDecimal? = null
     private var accountActive = true
@@ -40,6 +42,7 @@ class ReceiveAddressViewModel(
         ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            usedAddresses = usedAddresses,
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
@@ -99,6 +102,7 @@ class ReceiveAddressViewModel(
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
             address = adapter.receiveAddress
+            usedAddresses = adapter.usedAddresses
             uri = getUri()
             accountActive = adapter.isAccountActive
             mainNet = adapter.isMainNet
@@ -128,6 +132,7 @@ class ReceiveAddressViewModel(
         uiState = ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            usedAddresses = usedAddresses,
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
