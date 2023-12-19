@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.market.overview.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -31,31 +31,19 @@ import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartMinimal
 import java.math.BigDecimal
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MetricChartsView(marketMetrics: MarketOverviewModule.MarketMetrics, navController: NavController) {
-    Column(
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp)
-    ) {
-        Row {
-            ChartView(marketMetrics.totalMarketCap, navController)
-            Spacer(Modifier.width(8.dp))
-            ChartView(marketMetrics.volume24h, navController)
-        }
-        Spacer(Modifier.height(8.dp))
-        Row {
-            ChartView(marketMetrics.defiCap, navController)
-            Spacer(Modifier.width(8.dp))
-            ChartView(marketMetrics.defiTvl, navController)
-        }
+    MarketsHorizontalCards(4) { page ->
+        ChartView(marketMetrics[page], navController)
     }
 }
 
 @Composable
-private fun RowScope.ChartView(metricsData: MetricData, navController: NavController) {
+private fun ChartView(metricsData: MetricData, navController: NavController) {
     Card(
         modifier = Modifier
             .height(105.dp)
-            .weight(1f)
             .clip(RoundedCornerShape(12.dp))
             .clickable {
                 openMetricsPage(metricsData.type, navController)
