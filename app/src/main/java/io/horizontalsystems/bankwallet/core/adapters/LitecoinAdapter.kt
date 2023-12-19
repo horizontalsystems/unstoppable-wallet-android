@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.purpose
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -84,6 +85,9 @@ class LitecoinAdapter(
     }
 
     override val blockchainType = BlockchainType.Litecoin
+
+    override val usedAddresses: List<UsedAddress>
+        get() = kit.usedAddresses().map { UsedAddress(it.index, it.address, "https://blockchair.com/litecoin/address/${it.address}" ) }
 
 
     companion object {

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.receive.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import java.math.BigDecimal
@@ -25,6 +26,7 @@ object ReceiveAddressModule {
     data class UiState(
         val viewState: ViewState,
         val address: String,
+        val usedAddresses: List<UsedAddress>,
         val uri: String,
         val networkName: String,
         val watchAccount: Boolean,

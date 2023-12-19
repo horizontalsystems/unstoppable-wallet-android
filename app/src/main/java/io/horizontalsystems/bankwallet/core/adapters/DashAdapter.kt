@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
@@ -77,6 +78,9 @@ class DashAdapter(
     }
 
     override val blockchainType = BlockchainType.Dash
+
+    override val usedAddresses: List<UsedAddress>
+        get() = kit.usedAddresses().map { UsedAddress(it.index, it.address, "https://insight.dash.org/insight/address/${it.address}" ) }
 
     companion object {
         private const val confirmationsThreshold = 3

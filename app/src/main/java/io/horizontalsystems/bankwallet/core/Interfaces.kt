@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core
 
+import android.os.Parcelable
 import com.google.gson.JsonObject
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
@@ -48,6 +49,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.util.Date
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
@@ -286,7 +288,17 @@ interface IReceiveAdapter {
 
     val isAccountActive: Boolean
         get() = true
+
+    val usedAddresses: List<UsedAddress>
+        get() = listOf()
 }
+
+@Parcelize
+data class UsedAddress(
+    val index: Int,
+    val address: String,
+    val explorerUrl: String
+): Parcelable
 
 interface ISendBitcoinAdapter {
     val balanceData: BalanceData
