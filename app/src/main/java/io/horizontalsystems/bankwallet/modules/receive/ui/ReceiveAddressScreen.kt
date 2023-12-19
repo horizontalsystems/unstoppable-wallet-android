@@ -59,24 +59,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.UsedAddress
+import cash.p.terminal.core.App
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
+import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.modules.receive.ReceiveModule
+import cash.p.terminal.modules.receive.usedaddress.UsedAddressesParams
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.HsTextButton
 import cash.p.terminal.ui.compose.components.ListErrorView
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantError
 import cash.p.terminal.ui.compose.components.TextImportantWarning
@@ -89,7 +94,6 @@ import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.compose.components.title3_leah
-import cash.p.terminal.ui.extensions.BottomSheetHeader
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -224,14 +228,53 @@ fun ReceiveAddressScreen(
                                                     }
                                                 }
                                             }
-                                            VSpacer(12.dp)
-                                            subhead2_leah(
-                                                modifier = Modifier.padding(horizontal = 32.dp),
-                                                text = uiState.address,
-                                                textAlign = TextAlign.Center,
-                                            )
-                                            VSpacer(12.dp)
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/ReceiveAddressScreen.kt
+                                        }
+                                        VSpacer(12.dp)
+                                        subhead2_leah(
+                                            modifier = Modifier.padding(horizontal = 32.dp),
+                                            text = uiState.address,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                        VSpacer(12.dp)
+                                        subhead2_grey(
+                                            modifier = Modifier.padding(horizontal = 32.dp),
+                                            text = uiState.networkName,
+                                            textAlign = TextAlign.Center,
+                                        )
+                                        VSpacer(24.dp)
+                                    }
+                                    if (uiState.additionalItems.isNotEmpty()) {
+                                        AdditionalDataSection(
+                                            items = uiState.additionalItems,
+                                            onClearAmount = { setAmount(null) },
+                                            showAccountNotActiveWarningDialog = {
+                                                val args = NotActiveWarningDialog.Input(
+                                                    Translator.getString(R.string.Tron_AddressNotActive_Title),
+                                                    Translator.getString(R.string.Tron_AddressNotActive_Info),
+                                                )
+                                                navController.slideFromBottom(R.id.notActiveAccountDialog, args)
+                                            }
+                                        )
+                                    }
+
+                                    if (uiState.usedAddresses.isNotEmpty()) {
+                                        Divider(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            thickness = 1.dp,
+                                            color = ComposeAppTheme.colors.steel10
+                                        )
+                                        RowUniversal(
+                                            modifier = Modifier.height(48.dp),
+                                            onClick = {
+                                                navController.slideFromRight(
+                                                    R.id.usedAddressesFragment,
+                                                    UsedAddressesParams(
+                                                        coinName = coinName,
+                                                        usedAddresses = uiState.usedAddresses
+                                                    )
+                                                )
+                                            }
+                                        ) {
                                             subhead2_grey(
                                                 modifier = Modifier.padding(horizontal = 32.dp),
                                                 text = uiState.networkName,

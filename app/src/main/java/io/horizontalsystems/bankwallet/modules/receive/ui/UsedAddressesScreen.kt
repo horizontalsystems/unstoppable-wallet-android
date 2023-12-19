@@ -16,8 +16,10 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.UsedAddress
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
@@ -32,17 +34,20 @@ import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 
-data class UsedAddressesParams(
-    val coinName: String,
-    val usedAddresses: List<UsedAddress>
-)
+class UsedAddressesFragment : BaseComposeFragment() {
+
+    @Composable
+    override fun GetContent(navController: NavController) {
+        UsedAddressScreen(navController, navController.requireInput())
+    }
+
+}
 
 @Composable
 fun UsedAddressScreen(
-    params: UsedAddressesParams,
-    onBackPress: () -> Unit
+    navController: NavController,
+    params: UsedAddressesParams
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -64,12 +69,12 @@ fun UsedAddressScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            InfoText(text = stringResource(id = R.string.Balance_Receive_UsedAddressesDescriptoin, viewItem.coinName))
+            InfoText(text = stringResource(id = R.string.Balance_Receive_UsedAddressesDescriptoin, params.coinName))
             Spacer(Modifier.height(12.dp))
 
             CellUniversalLawrenceSection(
                 buildList {
-                    for (item in viewItem.usedAddresses)
+                    for (item in params.usedAddresses)
                         add {
                             TransactionInfoAddressCell(index = item.index.toString(), address = item.address, explorerUrl = item.explorerUrl)
                         }
