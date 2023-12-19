@@ -64,8 +64,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.receive.usedaddress.UsedAddressesFragment
-import io.horizontalsystems.bankwallet.modules.receive.usedaddress.UsedAddressesViewItem
+import io.horizontalsystems.bankwallet.modules.receive.usedaddress.UsedAddressesParams
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -269,11 +268,9 @@ fun ReceiveAddressScreen(
                                             onClick = {
                                                 navController.slideFromRight(
                                                     R.id.usedAddressesFragment,
-                                                    UsedAddressesFragment.prepareParams(
-                                                        UsedAddressesViewItem(
-                                                            coinName = coinName,
-                                                            usedAddresses = uiState.usedAddresses
-                                                        )
+                                                    UsedAddressesParams(
+                                                        coinName = coinName,
+                                                        usedAddresses = uiState.usedAddresses
                                                     )
                                                 )
                                             }

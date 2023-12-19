@@ -16,10 +16,10 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -34,26 +34,20 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 
 class UsedAddressesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewItem = requireArguments().parcelable<UsedAddressesViewItem>(USED_ADDRESSES_VIEW_ITEM)!!
-        UsedAddressScreen(navController, viewItem)
+        UsedAddressScreen(navController, navController.requireInput())
     }
 
-    companion object {
-        private const val USED_ADDRESSES_VIEW_ITEM = "used_addresses_view_item"
-        fun prepareParams(item: UsedAddressesViewItem) = bundleOf(USED_ADDRESSES_VIEW_ITEM to item)
-    }
 }
 
 @Composable
 fun UsedAddressScreen(
     navController: NavController,
-    viewItem: UsedAddressesViewItem
+    params: UsedAddressesParams
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -75,12 +69,12 @@ fun UsedAddressScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            InfoText(text = stringResource(id = R.string.Balance_Receive_UsedAddressesDescriptoin, viewItem.coinName))
+            InfoText(text = stringResource(id = R.string.Balance_Receive_UsedAddressesDescriptoin, params.coinName))
             Spacer(Modifier.height(12.dp))
 
             CellUniversalLawrenceSection(
                 buildList {
-                    for (item in viewItem.usedAddresses)
+                    for (item in params.usedAddresses)
                         add {
                             TransactionInfoAddressCell(index = item.index.toString(), address = item.address, explorerUrl = item.explorerUrl)
                         }
