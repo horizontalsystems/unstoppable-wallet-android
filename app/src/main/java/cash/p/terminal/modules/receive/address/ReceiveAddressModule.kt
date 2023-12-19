@@ -3,6 +3,7 @@ package cash.p.terminal.modules.receive.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.UsedAddress
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
 import java.math.BigDecimal
@@ -25,6 +26,7 @@ object ReceiveAddressModule {
     data class UiState(
         val viewState: ViewState,
         val address: String,
+        val usedAddresses: List<UsedAddress>,
         val uri: String,
         val networkName: String,
         val watchAccount: Boolean,

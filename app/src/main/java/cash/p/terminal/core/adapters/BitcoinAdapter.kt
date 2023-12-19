@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.UsedAddress
 import cash.p.terminal.core.purpose
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
@@ -90,6 +91,8 @@ class BitcoinAdapter(
 
     override val blockchainType = BlockchainType.Bitcoin
 
+    override val usedAddresses: List<UsedAddress>
+        get() = kit.usedAddresses().map { UsedAddress(it.index, it.address, "https://blockchair.com/bitcoin/address/${it.address}" ) }
 
     companion object {
         private const val confirmationsThreshold = 3

@@ -288,6 +288,9 @@
         android:id="@+id/receiveFragment"
         android:name="cash.p.terminal.modules.receive.address.ReceiveAddressFragment"/>
     <fragment
+     android:id="@+id/usedAddressesFragment"
+     android:name="cash.p.terminal.modules.receive.usedaddress.UsedAddressesFragment" />
+    <fragment
         android:id="@+id/receiveTokenSelectFragment"
         android:name="cash.p.terminal.modules.receivemain.ReceiveTokenSelectFragment" />
     <fragment

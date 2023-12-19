@@ -37,6 +37,7 @@ class DepositAddressViewModel(
         ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            usedAddresses = listOf(),
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
@@ -78,6 +79,7 @@ class DepositAddressViewModel(
         uiState = ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            usedAddresses = listOf(),
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,

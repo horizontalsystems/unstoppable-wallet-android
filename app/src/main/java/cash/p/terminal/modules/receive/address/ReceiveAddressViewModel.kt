@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.core.UsedAddress
 import cash.p.terminal.core.accountTypeDerivation
 import cash.p.terminal.core.bitcoinCashCoinType
 import cash.p.terminal.core.factories.uriScheme
@@ -28,6 +29,7 @@ class ReceiveAddressViewModel(
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
+    private var usedAddresses: List<UsedAddress> = listOf()
     private var uri = ""
     private var amount: BigDecimal? = null
     private var accountActive = true
@@ -40,6 +42,7 @@ class ReceiveAddressViewModel(
         ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            usedAddresses = usedAddresses,
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
@@ -99,6 +102,7 @@ class ReceiveAddressViewModel(
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
             address = adapter.receiveAddress
+            usedAddresses = adapter.usedAddresses
             uri = getUri()
             accountActive = adapter.isAccountActive
             mainNet = adapter.isMainNet
@@ -130,6 +134,7 @@ class ReceiveAddressViewModel(
         uiState = ReceiveAddressModule.UiState(
             viewState = viewState,
             address = address,
+            usedAddresses = usedAddresses,
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,

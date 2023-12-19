@@ -44,6 +44,7 @@ class DepositCexFragment : BaseComposeFragment() {
 
                 ReceiveAddressScreen(
                     title = stringResource(R.string.CexDeposit_Title, cexAsset.id),
+                    coinName = cexAsset.name,
                     uiState = viewModel.uiState,
                     onErrorClick = { viewModel.onErrorClick() },
                     setAmount = { amount -> viewModel.setAmount(amount) },
