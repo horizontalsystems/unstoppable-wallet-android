@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.core.UsedAddress
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class UsedAddressesViewItem(
+data class UsedAddressesParams(
     val coinName: String,
     val usedAddresses: List<UsedAddress>
 ): Parcelable
