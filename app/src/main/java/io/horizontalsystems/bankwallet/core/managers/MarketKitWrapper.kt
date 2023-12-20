@@ -239,8 +239,14 @@ class MarketKitWrapper(
     fun topPlatformsSingle(currencyCode: String, apiTag: String) =
         marketKit.topPlatformsSingle(currencyCode, apiTag)
 
-    fun topPlatformMarketCapPointsSingle(chain: String, timePeriod: HsTimePeriod, currencyCode: String) =
-        marketKit.topPlatformMarketCapPointsSingle(chain, timePeriod, currencyCode)
+    fun topPlatformMarketCapStartTimeSingle(platform: String) =
+        marketKit.topPlatformMarketCapStartTimeSingle(platform)
+
+    fun topPlatformMarketCapPointsSingle(
+        chain: String,
+        currencyCode: String,
+        periodType: HsPeriodType
+    ) = marketKit.topPlatformMarketCapPointsSingle(chain, currencyCode, periodType)
 
     fun topPlatformCoinListSingle(chain: String, currencyCode: String, apiTag: String) =
         marketKit.topPlatformMarketInfosSingle(chain, currencyCode, apiTag)
