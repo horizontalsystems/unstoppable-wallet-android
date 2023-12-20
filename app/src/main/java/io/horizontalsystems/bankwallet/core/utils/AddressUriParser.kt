@@ -113,7 +113,11 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
             uriBuilder.appendQueryParameter(key, value)
         }
 
-        return uriBuilder.build().toString().replace("/", "")
+        return uriBuilder
+            .build()
+            .toString()
+            .replace("/", "")
+            .replace("%3A", ":")
     }
 
     companion object {
