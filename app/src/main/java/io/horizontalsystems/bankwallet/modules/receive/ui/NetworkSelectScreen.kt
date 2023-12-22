@@ -1,6 +1,5 @@
-package io.horizontalsystems.bankwallet.modules.receivemain
+package io.horizontalsystems.bankwallet.modules.receive.ui
 
-import android.os.Parcelable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,7 +11,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,12 +18,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.description
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.receive.viewmodels.NetworkSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -36,46 +33,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalIte
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
-
-class NetworkSelectFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        if (input == null) {
-            HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
-            navController.popBackStack()
-        } else {
-            val initViewModel = viewModel(initializer = {
-                NetworkSelectInitViewModel(input.coinUid)
-            })
-
-            val activeAccount = initViewModel.activeAccount
-            val fullCoin = initViewModel.fullCoin
-
-            if (activeAccount != null && fullCoin != null) {
-                NetworkSelectScreen(navController, input.popupDestinationId, activeAccount, fullCoin)
-            } else {
-                HudHelper.showErrorMessage(LocalView.current, "Active account and/or full coin is null")
-                navController.popBackStack()
-            }
-        }
-    }
-
-    @Parcelize
-    data class Input(val coinUid: String, val popupDestinationId: Int?) : Parcelable
-}
 
 @Composable
 fun NetworkSelectScreen(
     navController: NavController,
-    popupDestinationId: Int?,
     activeAccount: Account,
     fullCoin: FullCoin,
+    onSelect: (Wallet) -> Unit
 ) {
     val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
     val coroutineScope = rememberCoroutineScope()
@@ -111,10 +77,7 @@ fun NetworkSelectScreen(
                             imageUrl = blockchain.type.imageUrl,
                             onClick = {
                                 coroutineScope.launch {
-                                    navController.slideFromRight(
-                                        R.id.receiveFragment,
-                                        viewModel.getOrCreateWallet(token)
-                                    )
+                                    onSelect.invoke(viewModel.getOrCreateWallet(token))
                                 }
                             }
                         )

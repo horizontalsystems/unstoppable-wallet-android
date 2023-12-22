@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.receivemain
+package io.horizontalsystems.bankwallet.modules.receive
 
 import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper

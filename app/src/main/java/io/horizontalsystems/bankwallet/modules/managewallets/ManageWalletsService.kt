@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.bankwallet.modules.receivemain.FullCoinsProvider
+import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token

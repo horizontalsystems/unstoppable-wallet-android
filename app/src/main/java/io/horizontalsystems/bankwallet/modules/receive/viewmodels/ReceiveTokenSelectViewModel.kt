@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.receivemain
+package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.isDefault
 import io.horizontalsystems.bankwallet.core.utils.Utils
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType

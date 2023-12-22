@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.receivemain
+package io.horizontalsystems.bankwallet.modules.receive.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,9 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -29,9 +27,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun AddressFormatSelectScreen(
-    navController: NavController,
     addressFormatItems: List<AddressFormatItem>,
     description: String,
+    onSelect: (Wallet) -> Unit,
+    onBackPress: () -> Unit
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -39,7 +38,7 @@ fun AddressFormatSelectScreen(
             AppBar(
                 title = stringResource(R.string.Balance_Receive_AddressFormat),
                 navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
+                    HsBackButton(onClick = onBackPress)
                 },
                 menuItems = listOf()
             )
@@ -60,10 +59,7 @@ fun AddressFormatSelectScreen(
                         title = item.title,
                         subtitle = item.subtitle,
                         onClick = {
-                            navController.slideFromRight(
-                                R.id.receiveFragment,
-                                item.wallet
-                            )
+                            onSelect.invoke(item.wallet)
                         }
                     )
                 }
