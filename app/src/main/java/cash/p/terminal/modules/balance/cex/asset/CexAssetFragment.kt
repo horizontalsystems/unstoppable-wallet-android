@@ -32,12 +32,12 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
 import cash.p.terminal.modules.balance.cex.WalletIconCex
 import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.depositcex.DepositCexFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
@@ -216,7 +216,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
             title = stringResource(R.string.Balance_Deposit),
             enabled = viewItem.depositEnabled,
             onClick = {
-                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.args(viewItem.cexAsset))
+                navController.slideFromRight(R.id.depositCexFragment, viewItem.cexAsset)
             },
         )
         HSpacer(width = 8.dp)

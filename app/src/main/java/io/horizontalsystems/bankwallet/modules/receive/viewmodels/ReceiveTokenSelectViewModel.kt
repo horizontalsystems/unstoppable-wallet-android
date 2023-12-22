@@ -1,4 +1,5 @@
-package cash.p.terminal.modules.receivemain
+package cash.p.terminal.modules.receive.viewmodels
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/viewmodels/ReceiveTokenSelectViewModel.kt
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +14,8 @@ import cash.p.terminal.core.isDefault
 import cash.p.terminal.core.utils.Utils
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.receive.FullCoinsProvider
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/viewmodels/ReceiveTokenSelectViewModel.kt
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType

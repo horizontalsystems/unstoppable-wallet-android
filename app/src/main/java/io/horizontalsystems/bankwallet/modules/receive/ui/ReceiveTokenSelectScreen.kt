@@ -1,4 +1,5 @@
-package cash.p.terminal.modules.receivemain
+package cash.p.terminal.modules.receive.ui
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/ReceiveTokenSelectScreen.kt
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
@@ -13,20 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.imagePlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
+import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.receive.viewmodels.CoinForReceiveType
+import cash.p.terminal.modules.receive.viewmodels.ReceiveTokenSelectViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.RowUniversal
@@ -35,29 +34,19 @@ import cash.p.terminal.ui.compose.components.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.helpers.HudHelper
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/ReceiveTokenSelectScreen.kt
 import kotlinx.coroutines.launch
-
-class ReceiveTokenSelectFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        val viewModel = viewModel<ReceiveTokenSelectInitViewModel>()
-
-        val activeAccount = viewModel.getActiveAccount()
-
-        if (activeAccount == null) {
-            HudHelper.showErrorMessage(LocalView.current, "No active account")
-            navController.popBackStack()
-        } else {
-            ReceiveTokenSelectScreen(navController, activeAccount)
-        }
-    }
-}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Account) {
+fun ReceiveTokenSelectScreen(
+    activeAccount: Account,
+    onMultipleAddressesClick: (String) -> Unit,
+    onMultipleDerivationsClick: (String) -> Unit,
+    onMultipleBlockchainsClick: (String) -> Unit,
+    onCoinClick: (Wallet) -> Unit,
+    onBackPress: () -> Unit,
+) {
     val viewModel = viewModel<ReceiveTokenSelectViewModel>(
         factory = ReceiveTokenSelectViewModel.Factory(activeAccount)
     )
@@ -71,7 +60,7 @@ fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Accoun
                 title = stringResource(R.string.Balance_Receive),
                 searchHintText = "",
                 menuItems = listOf(),
-                onClose = { navController.popBackStack() },
+                onClose = onBackPress,
                 onSearchTextChanged = { text ->
                     viewModel.updateFilter(text)
                 }
@@ -95,31 +84,20 @@ fun ReceiveTokenSelectScreen(navController: NavController, activeAccount: Accoun
                             coroutineScope.launch {
                                 when (val coinActiveWalletsType = viewModel.getCoinForReceiveType(fullCoin)) {
                                     CoinForReceiveType.MultipleAddressTypes -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveBchAddressTypeSelectFragment,
-                                            BchAddressTypeSelectFragment.prepareParams(coin.uid)
-                                        )
+                                        onMultipleAddressesClick.invoke(coin.uid)
                                     }
 
                                     CoinForReceiveType.MultipleDerivations -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveDerivationSelectFragment,
-                                            DerivationSelectFragment.prepareParams(coin.uid)
-                                        )
+                                        onMultipleDerivationsClick.invoke(coin.uid)
                                     }
 
                                     CoinForReceiveType.MultipleBlockchains -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveNetworkSelectFragment,
-                                            NetworkSelectFragment.prepareParams(coin.uid)
-                                        )
+                                        onMultipleBlockchainsClick.invoke(coin.uid)
                                     }
 
                                     is CoinForReceiveType.Single -> {
-                                        navController.slideFromRight(
-                                            R.id.receiveFragment,
-                                            bundleOf(ReceiveAddressFragment.WALLET_KEY to coinActiveWalletsType.wallet)
-                                        )
+                                        onCoinClick.invoke(coinActiveWalletsType.wallet)
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/ReceiveTokenSelectScreen.kt
                                     }
 
                                     null -> Unit

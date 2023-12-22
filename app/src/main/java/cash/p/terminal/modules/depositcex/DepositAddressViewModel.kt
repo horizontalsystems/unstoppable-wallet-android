@@ -13,7 +13,7 @@ import cash.p.terminal.core.providers.CexDepositNetwork
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.receive.address.ReceiveAddressModule
+import cash.p.terminal.modules.receive.ReceiveModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -34,7 +34,7 @@ class DepositAddressViewModel(
     private val watchAccount = false
 
     var uiState by mutableStateOf(
-        ReceiveAddressModule.UiState(
+        ReceiveModule.UiState(
             viewState = viewState,
             address = address,
             usedAddresses = listOf(),
@@ -76,7 +76,7 @@ class DepositAddressViewModel(
     }
 
     private fun emitState() {
-        uiState = ReceiveAddressModule.UiState(
+        uiState = ReceiveModule.UiState(
             viewState = viewState,
             address = address,
             usedAddresses = listOf(),
@@ -89,12 +89,12 @@ class DepositAddressViewModel(
         )
     }
 
-    private fun getAdditionalData(): List<ReceiveAddressModule.AdditionalData> {
-        val items = mutableListOf<ReceiveAddressModule.AdditionalData>()
+    private fun getAdditionalData(): List<ReceiveModule.AdditionalData> {
+        val items = mutableListOf<ReceiveModule.AdditionalData>()
 
         memo?.let {
             items.add(
-                ReceiveAddressModule.AdditionalData.Memo(
+                ReceiveModule.AdditionalData.Memo(
                     value = it
                 )
             )
@@ -102,7 +102,7 @@ class DepositAddressViewModel(
 
         amount?.let {
             items.add(
-                ReceiveAddressModule.AdditionalData.Amount(
+                ReceiveModule.AdditionalData.Amount(
                     value = it.toString()
                 )
             )
@@ -111,13 +111,13 @@ class DepositAddressViewModel(
         return items
     }
 
-    private fun getAlertText(hasMemo: Boolean): ReceiveAddressModule.AlertText {
+    private fun getAlertText(hasMemo: Boolean): ReceiveModule.AlertText {
         return when {
-            hasMemo -> ReceiveAddressModule.AlertText.Critical(
+            hasMemo -> ReceiveModule.AlertText.Critical(
                 Translator.getString(R.string.Balance_Receive_AddressMemoAlert)
             )
 
-            else -> ReceiveAddressModule.AlertText.Normal(
+            else -> ReceiveModule.AlertText.Normal(
                 Translator.getString(R.string.Balance_Receive_AddressAlert)
             )
         }

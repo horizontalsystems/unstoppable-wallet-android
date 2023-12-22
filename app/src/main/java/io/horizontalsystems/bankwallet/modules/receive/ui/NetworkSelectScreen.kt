@@ -1,6 +1,6 @@
-package cash.p.terminal.modules.receivemain
+package cash.p.terminal.modules.receive.ui
 
-import android.os.Bundle
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/NetworkSelectScreen.kt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,7 +12,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,12 +20,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
+import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.receive.viewmodels.NetworkSelectViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -37,48 +35,16 @@ import cash.p.terminal.ui.compose.components.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
-
-class NetworkSelectFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        val coinUid = arguments?.getString("coinUid")
-
-        if (coinUid == null) {
-            HudHelper.showErrorMessage(LocalView.current, R.string.Error_ParameterNotSet)
-            navController.popBackStack()
-        } else {
-            val initViewModel = viewModel(initializer = {
-                NetworkSelectInitViewModel(coinUid)
-            })
-
-            val activeAccount = initViewModel.activeAccount
-            val fullCoin = initViewModel.fullCoin
-
-            if (activeAccount != null && fullCoin != null) {
-                NetworkSelectScreen(navController, activeAccount, fullCoin)
-            } else {
-                HudHelper.showErrorMessage(LocalView.current, "Active account and/or full coin is null")
-                navController.popBackStack()
-            }
-        }
-    }
-
-    companion object {
-        fun prepareParams(coinUid: String): Bundle {
-            return bundleOf("coinUid" to coinUid)
-        }
-    }
-}
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/NetworkSelectScreen.kt
 
 @Composable
 fun NetworkSelectScreen(
     navController: NavController,
     activeAccount: Account,
     fullCoin: FullCoin,
+    onSelect: (Wallet) -> Unit
 ) {
     val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
     val coroutineScope = rememberCoroutineScope()
@@ -114,12 +80,8 @@ fun NetworkSelectScreen(
                             imageUrl = blockchain.type.imageUrl,
                             onClick = {
                                 coroutineScope.launch {
-                                    val wallet = viewModel.getOrCreateWallet(token)
-
-                                    navController.slideFromRight(
-                                        R.id.receiveFragment,
-                                        bundleOf(ReceiveAddressFragment.WALLET_KEY to wallet)
-                                    )
+                                    onSelect.invoke(viewModel.getOrCreateWallet(token))
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/NetworkSelectScreen.kt
                                 }
                             }
                         )

@@ -13,9 +13,6 @@
         android:id="@+id/depositCexFragment"
         android:name="cash.p.terminal.modules.depositcex.DepositCexFragment"/>
     <fragment
-        android:id="@+id/depositCexChooseAssetFragment"
-        android:name="cash.p.terminal.modules.depositcex.DepositCexChooseAssetFragment"/>
-    <fragment
         android:id="@+id/wc2SessionFragment"
         android:name="cash.p.terminal.modules.walletconnect.session.v2.WC2SessionFragment"/>
     <fragment
@@ -286,22 +283,7 @@
         android:name="cash.p.terminal.modules.zcashconfigure.ZcashConfigure"/>
     <fragment
         android:id="@+id/receiveFragment"
-        android:name="cash.p.terminal.modules.receive.address.ReceiveAddressFragment"/>
-    <fragment
-     android:id="@+id/usedAddressesFragment"
-     android:name="cash.p.terminal.modules.receive.usedaddress.UsedAddressesFragment" />
-    <fragment
-        android:id="@+id/receiveTokenSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.ReceiveTokenSelectFragment" />
-    <fragment
-        android:id="@+id/receiveNetworkSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.NetworkSelectFragment"/>
-    <fragment
-        android:id="@+id/receiveBchAddressTypeSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.BchAddressTypeSelectFragment"/>
-    <fragment
-        android:id="@+id/receiveDerivationSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.DerivationSelectFragment"/>
+        android:name="cash.p.terminal.modules.receive.ReceiveFragment" />
     <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="cash.p.terminal.modules.evmnetwork.EvmNetworkFragment"
@@ -406,7 +388,4 @@
     <dialog
         android:id="@+id/periodSelectDialog"
         android:name="cash.p.terminal.ui.compose.components.PeriodSelectDialog" />
-    <dialog
-        android:id="@+id/notActiveAccountDialog"
-        android:name="cash.p.terminal.modules.receive.address.NotActiveWarningDialog" />
 </navigation>

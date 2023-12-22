@@ -13,7 +13,7 @@ import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
-import cash.p.terminal.modules.receivemain.FullCoinsProvider
+import cash.p.terminal.modules.receive.FullCoinsProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token

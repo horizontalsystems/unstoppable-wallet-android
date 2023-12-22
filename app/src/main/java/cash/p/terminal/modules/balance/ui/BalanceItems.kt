@@ -235,7 +235,7 @@ fun BalanceItems(
                             onClick = {
                                 when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
-                                        navController.slideFromRight(R.id.receiveTokenSelectFragment)
+                                        navController.slideFromRight(R.id.receiveFragment)
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {

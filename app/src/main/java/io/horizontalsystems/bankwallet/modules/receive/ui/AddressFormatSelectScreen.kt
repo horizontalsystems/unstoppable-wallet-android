@@ -1,4 +1,5 @@
-package cash.p.terminal.modules.receivemain
+package cash.p.terminal.modules.receive.ui
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/AddressFormatSelectScreen.kt
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,12 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.receive.address.ReceiveAddressFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -28,12 +25,14 @@ import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/AddressFormatSelectScreen.kt
 
 @Composable
 fun AddressFormatSelectScreen(
-    navController: NavController,
     addressFormatItems: List<AddressFormatItem>,
     description: String,
+    onSelect: (Wallet) -> Unit,
+    onBackPress: () -> Unit
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -41,7 +40,7 @@ fun AddressFormatSelectScreen(
             AppBar(
                 title = stringResource(R.string.Balance_Receive_AddressFormat),
                 navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
+                    HsBackButton(onClick = onBackPress)
                 },
                 menuItems = listOf()
             )
@@ -62,10 +61,8 @@ fun AddressFormatSelectScreen(
                         title = item.title,
                         subtitle = item.subtitle,
                         onClick = {
-                            navController.slideFromRight(
-                                R.id.receiveFragment,
-                                bundleOf(ReceiveAddressFragment.WALLET_KEY to item.wallet)
-                            )
+                            onSelect.invoke(item.wallet)
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/AddressFormatSelectScreen.kt
                         }
                     )
                 }

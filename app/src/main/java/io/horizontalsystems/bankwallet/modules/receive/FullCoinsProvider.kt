@@ -1,4 +1,5 @@
-package cash.p.terminal.modules.receivemain
+package cash.p.terminal.modules.receive
+>>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/FullCoinsProvider.kt
 
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.MarketKitWrapper
