@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.receive.usedaddress
+package io.horizontalsystems.bankwallet.modules.receive.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,10 +16,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -35,19 +33,15 @@ import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 
-class UsedAddressesFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        UsedAddressScreen(navController, navController.requireInput())
-    }
-
-}
+data class UsedAddressesParams(
+    val coinName: String,
+    val usedAddresses: List<UsedAddress>
+)
 
 @Composable
 fun UsedAddressScreen(
-    navController: NavController,
-    params: UsedAddressesParams
+    params: UsedAddressesParams,
+    onBackPress: () -> Unit
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -55,7 +49,7 @@ fun UsedAddressScreen(
             AppBar(
                 title = stringResource(id = R.string.Balance_Receive_UsedAddresses),
                 navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
+                    HsBackButton(onClick = onBackPress)
                 }
 
             )

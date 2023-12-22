@@ -37,7 +37,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewItem
 import io.horizontalsystems.bankwallet.modules.balance.cex.WalletIconCex
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.depositcex.DepositCexFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
@@ -207,7 +206,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
             title = stringResource(R.string.Balance_Deposit),
             enabled = viewItem.depositEnabled,
             onClick = {
-                navController.slideFromRight(R.id.depositCexFragment, DepositCexFragment.Input(viewItem.cexAsset))
+                navController.slideFromRight(R.id.depositCexFragment, viewItem.cexAsset)
             },
         )
         HSpacer(width = 8.dp)

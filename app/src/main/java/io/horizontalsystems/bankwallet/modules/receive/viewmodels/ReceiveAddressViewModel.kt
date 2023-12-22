@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.receive.address
+package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +16,8 @@ import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.receive.address.ReceiveAddressModule.AdditionalData
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
+import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
@@ -36,10 +37,10 @@ class ReceiveAddressViewModel(
     private var networkName = ""
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
-    private var alertText: ReceiveAddressModule.AlertText = getAlertText(watchAccount)
+    private var alertText: ReceiveModule.AlertText = getAlertText(watchAccount)
 
     var uiState by mutableStateOf(
-        ReceiveAddressModule.UiState(
+        ReceiveModule.UiState(
             viewState = viewState,
             address = address,
             usedAddresses = usedAddresses,
@@ -87,12 +88,12 @@ class ReceiveAddressViewModel(
         syncState()
     }
 
-    private fun getAlertText(watchAccount: Boolean): ReceiveAddressModule.AlertText {
+    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText {
         return when {
-            watchAccount -> ReceiveAddressModule.AlertText.Normal(
+            watchAccount -> ReceiveModule.AlertText.Normal(
                 Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
             )
-            else -> ReceiveAddressModule.AlertText.Normal(
+            else -> ReceiveModule.AlertText.Normal(
                 Translator.getString(R.string.Balance_Receive_AddressAlert)
             )
         }
@@ -129,7 +130,7 @@ class ReceiveAddressViewModel(
     }
 
     private fun syncState() {
-        uiState = ReceiveAddressModule.UiState(
+        uiState = ReceiveModule.UiState(
             viewState = viewState,
             address = address,
             usedAddresses = usedAddresses,
