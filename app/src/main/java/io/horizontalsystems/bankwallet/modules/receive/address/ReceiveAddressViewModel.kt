@@ -117,7 +117,9 @@ class ReceiveAddressViewModel(
             addressUri.address = newUri
             addressUri.parameters[AddressUri.Field.amountField(wallet.token.blockchainType)] = it.toString()
             addressUri.parameters[AddressUri.Field.BlockchainUid] = wallet.token.blockchainType.uid
-            addressUri.parameters[AddressUri.Field.TokenUid] = wallet.token.type.id
+            if (wallet.token.type !is TokenType.Derived && wallet.token.type !is TokenType.AddressTyped) {
+                addressUri.parameters[AddressUri.Field.TokenUid] = wallet.token.type.id
+            }
             newUri = parser.uri(addressUri)
         }
 
