@@ -64,7 +64,11 @@ class TonAdapter(
             is AccountType.Mnemonic -> {
                 val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
                 val privateKey = hdWallet.privateKey(0)
-                tonKitFactory.create(privateKey.privKeyBytes, wallet.account.id)
+                var privateKeyBytes = privateKey.privKeyBytes
+                if (privateKeyBytes.size > 32) {
+                    privateKeyBytes = privateKeyBytes.copyOfRange(1, privateKeyBytes.size)
+                }
+                tonKitFactory.create(privateKeyBytes, wallet.account.id)
             }
 
             is AccountType.TonAddress -> {
