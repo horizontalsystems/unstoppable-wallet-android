@@ -237,6 +237,9 @@
         android:id="@+id/marketTopPlatformsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment"/>
     <fragment
+        android:id="@+id/topPairsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsFragment"/>
+    <fragment
         android:id="@+id/marketPlatformFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.platform.MarketPlatformFragment"/>
     <fragment
