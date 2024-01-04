@@ -19,12 +19,14 @@ class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
     private var isRefreshing = false
     private var loading = false
     private var items = listOf<TopPairViewItem>()
+    private var error: Throwable? = null
 
     var uiState by mutableStateOf(
         TopPairsUiState(
             isRefreshing = isRefreshing,
             loading = loading,
             items = items,
+            error = error,
         )
     )
         private set
@@ -41,9 +43,14 @@ class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
     }
 
     private suspend fun fetchItems() = withContext(Dispatchers.Default) {
-        val topPairs = marketKit.topPairsSingle(1, 100).await()
-        items = topPairs.map {
-            TopPairViewItem.createFromTopPair(it)
+        try {
+            error = null
+            val topPairs = marketKit.topPairsSingle(1, 100).await()
+            items = topPairs.map {
+                TopPairViewItem.createFromTopPair(it)
+            }
+        } catch (e: Throwable) {
+            error = e
         }
     }
 
@@ -53,6 +60,7 @@ class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
                 isRefreshing = isRefreshing,
                 loading = loading,
                 items = items,
+                error = error,
             )
         }
     }
@@ -69,6 +77,10 @@ class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
         }
     }
 
+    fun onErrorClick() {
+        refresh()
+    }
+
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -81,5 +93,6 @@ class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
 data class TopPairsUiState(
     val isRefreshing: Boolean,
     val loading: Boolean,
-    val items: List<TopPairViewItem>
+    val items: List<TopPairViewItem>,
+    val error: Throwable?
 )
