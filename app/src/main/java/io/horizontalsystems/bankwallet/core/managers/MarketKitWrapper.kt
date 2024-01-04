@@ -219,6 +219,8 @@ class MarketKitWrapper(
 
     fun marketOverviewSingle(currencyCode: String) = marketKit.marketOverviewSingle(currencyCode)
 
+    fun topPairsSingle(page: Int, limit: Int) = marketKit.topPairsSingle(page, limit)
+
     fun topMoversSingle(currencyCode: String) = marketKit.topMoversSingle(currencyCode)
 
     // Chart Info

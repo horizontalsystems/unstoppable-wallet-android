@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCo
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
+import io.horizontalsystems.marketkit.models.TopPair
 import java.math.BigDecimal
 
 object MarketOverviewModule {
@@ -41,6 +42,7 @@ object MarketOverviewModule {
         val topNftCollectionsBoard: TopNftCollectionsBoard,
         val topSectorsBoard: TopSectorsBoard,
         val topPlatformsBoard: TopPlatformsBoard,
+        val topMarketPairs: List<TopPairViewItem>,
     )
 
     data class MarketMetrics(
@@ -95,4 +97,42 @@ object MarketOverviewModule {
         val items: List<TopPlatformViewItem>
     )
 
+}
+
+data class TopPairViewItem(
+    val title: String,
+    val rank: String,
+    val name: String,
+    val iconUrl: String?,
+    val tradeUrl: String?,
+    val volume: String,
+    val price: String?
+) {
+    companion object {
+        fun createFromTopPair(topPair: TopPair): TopPairViewItem {
+            val volumeStr = App.numberFormatter.formatFiatShort(
+                topPair.volume,
+                App.currencyManager.baseCurrency.symbol,
+                2
+            )
+
+            val priceStr = topPair.price?.let {
+                App.numberFormatter.formatCoinShort(
+                    it,
+                    topPair.target,
+                    8
+                )
+            }
+
+            return TopPairViewItem(
+                title = "${topPair.base}/${topPair.target}",
+                name = topPair.marketName ?: "",
+                iconUrl = topPair.marketLogo,
+                rank = topPair.rank.toString(),
+                tradeUrl = topPair.tradeUrl,
+                volume = volumeStr,
+                price = priceStr,
+            )
+        }
+    }
 }

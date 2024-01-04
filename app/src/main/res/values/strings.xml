@@ -217,7 +217,11 @@
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
 
+    <string name="TopPairs_Title">Top Market Pairs</string>
+    <string name="TopPairs_Description">Top trading pairs by volume in every exchanges</string>
+
     <!--Market Overview-->
+    <string name="Market_Overview_TopPairs">Top Market Pairs</string>
     <string name="Market_Overview_TopSectors">Top Sectors</string>
     <string name="Market_Overview_Sectors">Sectors</string>
 
