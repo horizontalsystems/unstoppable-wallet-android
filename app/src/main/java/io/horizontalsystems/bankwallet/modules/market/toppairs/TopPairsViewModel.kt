@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.overview.TopPairViewItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -17,40 +18,37 @@ import kotlinx.coroutines.withContext
 
 class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
     private var isRefreshing = false
-    private var loading = false
     private var items = listOf<TopPairViewItem>()
-    private var error: Throwable? = null
+    private var viewState: ViewState = ViewState.Loading
 
     var uiState by mutableStateOf(
         TopPairsUiState(
             isRefreshing = isRefreshing,
-            loading = loading,
             items = items,
-            error = error,
+            viewState = viewState
         )
     )
         private set
 
     init {
-        loading = true
+        viewState = ViewState.Loading
         emitState()
 
         viewModelScope.launch {
             fetchItems()
-            loading = false
             emitState()
         }
     }
 
     private suspend fun fetchItems() = withContext(Dispatchers.Default) {
         try {
-            error = null
             val topPairs = marketKit.topPairsSingle(1, 100).await()
             items = topPairs.map {
                 TopPairViewItem.createFromTopPair(it)
             }
+            viewState = ViewState.Success
         } catch (e: Throwable) {
-            error = e
+            viewState = ViewState.Error(e)
         }
     }
 
@@ -58,9 +56,8 @@ class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
         viewModelScope.launch {
             uiState = TopPairsUiState(
                 isRefreshing = isRefreshing,
-                loading = loading,
                 items = items,
-                error = error,
+                viewState = viewState,
             )
         }
     }
@@ -92,7 +89,6 @@ class TopPairsViewModel(private val marketKit: MarketKitWrapper) : ViewModel() {
 
 data class TopPairsUiState(
     val isRefreshing: Boolean,
-    val loading: Boolean,
     val items: List<TopPairViewItem>,
-    val error: Throwable?
+    val viewState: ViewState
 )
