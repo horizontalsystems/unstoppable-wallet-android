@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopPairItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.TopCloseButton
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -52,6 +53,11 @@ fun TopPairsScreen(navController: NavController) {
                 Crossfade(uiState.loading, label = "") { loading ->
                     if (loading) {
                         Loading()
+                    } else if (uiState.error != null) {
+                        ListErrorView(
+                            stringResource(R.string.SyncError),
+                            viewModel::onErrorClick
+                        )
                     } else {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize()
@@ -74,11 +80,6 @@ fun TopPairsScreen(navController: NavController) {
                                 VSpacer(height = 32.dp)
                             }
                         }
-
-//                        ListErrorView(
-//                            stringResource(R.string.SyncError),
-//                            viewModel::onErrorClick
-//                        )
                     }
                 }
             }
