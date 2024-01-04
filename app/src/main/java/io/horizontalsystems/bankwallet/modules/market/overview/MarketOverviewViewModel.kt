@@ -154,7 +154,7 @@ class MarketOverviewViewModel(
             topSectorsBoard = topSectorsBoard(coinCategoryItems),
             topPlatformsBoard = topPlatformsBoard(topPlatformItems),
             topMarketPairs = marketOverview.topPairs.map {
-                TopPairViewItem.createFromTopPair(it)
+                TopPairViewItem.createFromTopPair(it, baseCurrency.symbol)
             },
         )
     }

@@ -109,12 +109,8 @@ data class TopPairViewItem(
     val price: String?
 ) {
     companion object {
-        fun createFromTopPair(topPair: TopPair): TopPairViewItem {
-            val volumeStr = App.numberFormatter.formatFiatShort(
-                topPair.volume,
-                App.currencyManager.baseCurrency.symbol,
-                2
-            )
+        fun createFromTopPair(topPair: TopPair, currencySymbol: String): TopPairViewItem {
+            val volumeStr = App.numberFormatter.formatFiatShort(topPair.volume, currencySymbol, 2)
 
             val priceStr = topPair.price?.let {
                 App.numberFormatter.formatCoinShort(
