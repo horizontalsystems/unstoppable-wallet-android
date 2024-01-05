@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.modules.send.ton
+package cash.p.terminal.modules.send.ton
 
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.Address
+import cash.p.terminal.R
+import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.entities.Address
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

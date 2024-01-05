@@ -1,13 +1,13 @@
-package io.horizontalsystems.bankwallet.modules.send.ton
+package cash.p.terminal.modules.send.ton
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ISendTonAdapter
-import io.horizontalsystems.bankwallet.entities.Wallet
-import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
-import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
-import io.horizontalsystems.bankwallet.modules.xrate.XRateService
+import cash.p.terminal.core.App
+import cash.p.terminal.core.ISendTonAdapter
+import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.amount.AmountValidator
+import cash.p.terminal.modules.amount.SendAmountService
+import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType

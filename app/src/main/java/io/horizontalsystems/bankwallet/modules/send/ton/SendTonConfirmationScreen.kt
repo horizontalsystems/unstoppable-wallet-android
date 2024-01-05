@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.ton
+package cash.p.terminal.modules.send.ton
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -6,9 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationScreen
-import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
+import cash.p.terminal.modules.amount.AmountInputModeViewModel
+import cash.p.terminal.modules.send.SendConfirmationScreen
+import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 
 @Composable
 fun SendTonConfirmationScreen(

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.send.ton
+package cash.p.terminal.modules.send.ton
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,18 +13,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
-import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
-import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
-import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.R
+import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.address.AddressParserModule
+import cash.p.terminal.modules.address.AddressParserViewModel
+import cash.p.terminal.modules.address.HSAddressInput
+import cash.p.terminal.modules.amount.AmountInputModeViewModel
+import cash.p.terminal.modules.amount.HSAmountInput
+import cash.p.terminal.modules.availablebalance.AvailableBalance
+import cash.p.terminal.modules.send.SendConfirmationFragment
+import cash.p.terminal.modules.send.SendScreen
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import java.math.BigDecimal
 
 @Composable
