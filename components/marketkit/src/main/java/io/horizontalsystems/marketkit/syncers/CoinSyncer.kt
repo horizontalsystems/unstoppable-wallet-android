@@ -24,14 +24,14 @@ class CoinSyncer(
 
     val fullCoinsUpdatedObservable = PublishSubject.create<Unit>()
 
-    fun sync(coinsTimestamp: Int, blockchainsTimestamp: Int, tokensTimestamp: Int) {
-        val lastCoinsSyncTimestamp = syncerStateDao.get(keyCoinsLastSyncTimestamp)?.toInt() ?: 0
+    fun sync(coinsTimestamp: Long, blockchainsTimestamp: Long, tokensTimestamp: Long) {
+        val lastCoinsSyncTimestamp = syncerStateDao.get(keyCoinsLastSyncTimestamp)?.toLong() ?: 0
         val coinsOutdated = lastCoinsSyncTimestamp != coinsTimestamp
 
-        val lastBlockchainsSyncTimestamp = syncerStateDao.get(keyBlockchainsLastSyncTimestamp)?.toInt() ?: 0
+        val lastBlockchainsSyncTimestamp = syncerStateDao.get(keyBlockchainsLastSyncTimestamp)?.toLong() ?: 0
         val blockchainsOutdated = lastBlockchainsSyncTimestamp != blockchainsTimestamp
 
-        val lastTokensSyncTimestamp = syncerStateDao.get(keyTokensLastSyncTimestamp)?.toInt() ?: 0
+        val lastTokensSyncTimestamp = syncerStateDao.get(keyTokensLastSyncTimestamp)?.toLong() ?: 0
         val tokensOutdated = lastTokensSyncTimestamp != tokensTimestamp
 
         if (!coinsOutdated && !blockchainsOutdated && !tokensOutdated) return
@@ -136,7 +136,7 @@ class CoinSyncer(
         return tokenEntitiesMutable
     }
 
-    private fun saveLastSyncTimestamps(coins: Int, blockchains: Int, tokens: Int) {
+    private fun saveLastSyncTimestamps(coins: Long, blockchains: Long, tokens: Long) {
         syncerStateDao.save(keyCoinsLastSyncTimestamp, coins.toString())
         syncerStateDao.save(keyBlockchainsLastSyncTimestamp, blockchains.toString())
         syncerStateDao.save(keyTokensLastSyncTimestamp, tokens.toString())

@@ -790,7 +790,7 @@
     <string name="AddEvmSyncSource_Error_InvalidUrl">La url introducida no es válida. La url válida debe tener uno de los siguientes esquemas: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">Después de cambiar la fuente, el monedero tendrá que resinc sí mismo.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación Unstoppable debería usar para sincronizar la(s) cartera(s).</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Elige la fuente que la aplicación P.CASH debería usar para sincronizar la(s) cartera(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Entradas/Salidas</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Ajustes de la transacción</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Entradas / salidas de transacciones</string>
@@ -855,7 +855,7 @@
     <string name="SettingsTerms_Bugs">Puede haber problemas de software no descubiertos en el código que permite que esta aplicación funcione mal.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
+    <string name="SettingsShare_Text">Be Free</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contáctenos</string>
     <!--Setting_Notifications-->
@@ -1432,7 +1432,7 @@
     <string name="ReleaseNotes_FollowUs">Síguenos</string>
     <string name="CoinPage_Chart_Locked">Bloqueado</string>
     <string name="ProUsersInfo_Title">Usuario Pro</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_UnstoppablePass">P.CASH Pass</string>
     <string name="ProUsersInfo_SubTitle">Información adicional del token</string>
     <string name="ProUsersInfo_Description">Para activar estos datos, debes obtener NFT de bronce de nivel \"Coin Info+\"\n\nTambién obtendrás acceso a los datos a continuación:</string>
     <string name="ProUsersInfo_Features_DexVolume">Volumen y Rango DEX</string>

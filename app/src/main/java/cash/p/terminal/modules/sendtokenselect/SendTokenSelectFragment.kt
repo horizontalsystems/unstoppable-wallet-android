@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.providers.Translator
@@ -14,7 +15,6 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType

@@ -109,7 +109,7 @@
     <string name="Language_Portuguese">Português</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
+    <string name="RateApp_Description_Rate_This_App">Gostou da P.CASH? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
     <string name="RateApp_Button_RateIt">Avaliar</string>
     <string name="RateApp_Button_NotNow">Agora não</string>
     <!--Restore-->
@@ -1238,7 +1238,7 @@
     <string name="CoinPage_FastLength">Comprimento Rápido</string>
     <string name="CoinPage_SlowLength">Comprimento Lento</string>
     <string name="CoinPage_SignalSmoothing">Suavização de sinal</string>
-    <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium Unstoppable.</string>
+    <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium P.CASH.</string>
     <string name="CoinPage_AiGeneratedText">Esta é uma descrição gerada por IA com base no material de referência fornecido para a criptomoeda em questão. Pode conter erros.</string>
     <string name="CoinPage_MarketsLabel_Verified">VERIFICADO</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Confirmado</string>

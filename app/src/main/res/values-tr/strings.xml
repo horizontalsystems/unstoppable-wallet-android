@@ -1225,7 +1225,7 @@
     <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Önderlik</string>
-    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding P.CASH NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="CoinPage_Indicators">Göstergeler</string>
     <string name="CoinPage_MovingAverages">Hareketli Ortalamalar</string>
@@ -1441,7 +1441,7 @@
     <string name="ReleaseNotes_FollowUs">Bizi Takip Et</string>
     <string name="CoinPage_Chart_Locked">Kilitli</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_UnstoppablePass">P.CASH Pass</string>
     <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>

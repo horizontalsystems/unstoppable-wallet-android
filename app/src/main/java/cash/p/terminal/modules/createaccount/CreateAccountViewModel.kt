@@ -144,9 +144,9 @@ class CreateAccountViewModel(
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
             TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
             //TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0x35f3ffffcb622bc9f64fa561d74e983fd488d90c")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0x499954f9c977b74a48d4bb14ba9904bea6cb7b01")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xe9e7cea3dedca5984780bafc599bd69add087d56")),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xafcc12e4040615e7afe9fb4330eb3d9120acac05")),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0x5f980533b994c93631a639deda7892fc49995839")),
+            //TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xe9e7cea3dedca5984780bafc599bd69add087d56")),
         )
         walletActivator.activateWallets(account, tokenQueries)
     }

@@ -151,7 +151,12 @@ fun ContactScreen(
                 FormsInput(
                     modifier = Modifier
                         .focusRequester(focusRequester)
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .onGloballyPositioned {
+                            if (uiState.focusOnContactName) {
+                                focusRequester.requestFocus()
+                            }
+                        },
                     initial = viewModel.contact.name,
                     pasteEnabled = false,
                     state = uiState.error?.let { DataState.Error(it) },
@@ -177,11 +182,6 @@ fun ContactScreen(
 
                 Spacer(Modifier.height(32.dp))
             }
-        }
-    }
-    LaunchedEffect(key1 = uiState.focusOnContactName) {
-        if (uiState.focusOnContactName) {
-            focusRequester.requestFocus()
         }
     }
 }

@@ -20,7 +20,6 @@ import com.walletconnect.sign.client.SignClient
 import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
-import cash.p.terminal.core.factories.AddressParserFactory
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import cash.p.terminal.core.managers.AccountCleaner
 import cash.p.terminal.core.managers.AccountManager

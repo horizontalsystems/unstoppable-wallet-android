@@ -795,7 +795,7 @@
     <string name="BtcBlockchainSettings_TransactionSettings">交易设置</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">交易输入 / 输出</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">通过改变交易结构的方式使您的BTC、LTC、BCH交易更难被追踪。</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">大多数比特币交易，以及比特币现金、Dash和莱特币等加密货币的交易，都会产生两种输出。一种输出是发送给接收者的数量，另一个是返回给发送者的找零输出。大多数钱包构造交易的方式使第三方很容易理解哪些输出发送给了接收方，哪些是返回给发送方的找零。当返回给发送方的输出稍后用于未来的交易时，这两个交易之间的连接就变得明显了。\n\nUnstoppable钱包实施了一些措施，让人们更难弄清楚哪些输出流向了哪里。\n\n对于Unstoppable用户有两种选项可用：\n\n1. 随机变换：每一交易的交易输出顺序均实现了随机化。有时候便令可能是第一个输出，有时可能是第二个。如果用户信任应用的开发者，那么可以考虑这一推荐选项。\n\n2. 确定性：有一个共同商定的交易输出顺序标准（称为BIP69）。在开源钱包中，该标准确保钱包用户不需要信任应用程序开发者如何实现输出顺序。由于这个标准非常新，还没有太多钱包对其进行了实现。因此，有可能可以看到在一个区块链上的一个交易是否是从使用或不使用该标准的钱包上发送。</string>
+    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">大多数比特币交易，以及比特币现金、Dash和莱特币等加密货币的交易，都会产生两种输出。一种输出是发送给接收者的数量，另一个是返回给发送者的找零输出。大多数钱包构造交易的方式使第三方很容易理解哪些输出发送给了接收方，哪些是返回给发送方的找零。当返回给发送方的输出稍后用于未来的交易时，这两个交易之间的连接就变得明显了。\n\nP.CASH钱包实施了一些措施，让人们更难弄清楚哪些输出流向了哪里。\n\n对于P.CASH用户有两种选项可用：\n\n1. 随机变换：每一交易的交易输出顺序均实现了随机化。有时候便令可能是第一个输出，有时可能是第二个。如果用户信任应用的开发者，那么可以考虑这一推荐选项。\n\n2. 确定性：有一个共同商定的交易输出顺序标准（称为BIP69）。在开源钱包中，该标准确保钱包用户不需要信任应用程序开发者如何实现输出顺序。由于这个标准非常新，还没有太多钱包对其进行了实现。因此，有可能可以看到在一个区块链上的一个交易是否是从使用或不使用该标准的钱包上发送。</string>
     <!--Info screen-->
     <string name="Info_Title">信息</string>
     <!--Setting_Security-->

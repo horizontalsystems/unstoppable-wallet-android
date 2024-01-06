@@ -69,7 +69,7 @@ fun CoinScreen(
     fragmentManager: FragmentManager
 ) {
     if (coinViewModel != null) {
-        CoinTabs(coinViewModel, navController, fragmentManager)
+        CoinTabs(apiTag, coinViewModel, navController, fragmentManager)
     } else {
         CoinNotFound(coinUid, navController)
     }

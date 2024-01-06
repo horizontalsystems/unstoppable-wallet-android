@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -63,8 +64,7 @@ fun FilterScreen(
     val filterResetEnabled by viewModel.filterResetEnabled.collectAsState()
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
-    val filterHideUnknownTokens = viewModel.filterHideUnknownTokens
-    val filterStablecoinsDust = viewModel.filterHideStablecoinsDust
+    val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx
 
     val filterCoin = filterCoins?.find { it.selected }?.item
     val coinCode = filterCoin?.token?.coin?.code
@@ -106,8 +106,9 @@ fun FilterScreen(
                 CellSingleLineLawrenceSection(
                     listOf {
                         FilterDropdownCell(
-                            title = stringResource(R.string.Market_Filter_Blockchains),
-                            value = filterBlockchain?.name,
+                            title = stringResource(R.string.Transactions_Filter_Blockchain),
+                            value = filterBlockchain?.name ?: stringResource(id = R.string.Transactions_Filter_AllBlockchains) ,
+                            valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
                                 navController.slideFromRight(R.id.filterBlockchainFragment)
                             }
@@ -118,8 +119,9 @@ fun FilterScreen(
                 CellSingleLineLawrenceSection(
                     listOf {
                         FilterDropdownCell(
-                            title = stringResource(R.string.Transactions_Coins),
-                            value = selectedCoinFilterTitle,
+                            title = stringResource(R.string.Transactions_Filter_Coin),
+                            value = selectedCoinFilterTitle ?: stringResource(id = R.string.Transactions_Filter_AllCoins) ,
+                            valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
                                 navController.slideFromRight(R.id.filterCoinFragment)
                             }
@@ -130,22 +132,10 @@ fun FilterScreen(
                 CellSingleLineLawrenceSection(
                     listOf {
                         FilterSwitch(
-                            title = stringResource(R.string.Transactions_Filter_HideUnknownTokens),
+                            title = stringResource(R.string.Transactions_Filter_HideSuspiciousTx),
                             enabled = filterHideUnknownTokens,
                             onChecked = { checked ->
-                                viewModel.updateFilterHideUnknownTokens(checked)
-                            }
-                        )
-                    }
-                )
-                VSpacer(32.dp)
-                CellSingleLineLawrenceSection(
-                    listOf {
-                        FilterSwitch(
-                            title = stringResource(R.string.Transactions_Filter_StablecoinDustAmount),
-                            enabled = filterStablecoinsDust,
-                            onChecked = { checked ->
-                                viewModel.updateFilterHideStablecoinsDust(checked)
+                                viewModel.updateFilterHideSuspiciousTx(checked)
                             }
                         )
                     }
@@ -174,7 +164,8 @@ fun FilterScreen(
 @Composable
 private fun FilterDropdownCell(
     title: String,
-    value: String?,
+    value: String,
+    valueColor: Color,
     onClick: () -> Unit
 ) {
     Row(
@@ -200,7 +191,7 @@ private fun FilterDropdownCell(
                 text = value ?: stringResource(R.string.Any),
                 maxLines = 1,
                 style = ComposeAppTheme.typography.body,
-                color = if (value != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                color = valueColor
             )
             Icon(
                 modifier = Modifier.padding(start = 4.dp),

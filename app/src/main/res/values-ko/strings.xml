@@ -800,7 +800,7 @@
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">트랜잭션 입력/출력</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">거래 구조를 변경하여 BTC, LTC, BCH 거래를 추적하기 어렵게 만드십시오.</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">대부분의 비트코인 ​​거래는 물론 비트코인 ​​캐시, 대시 및 라이트코인을 포함한 유사한 암호화폐의 거래는 두 가지 출력을 생성합니다. 하나의 출력은 수신자에게 가는 금액이고 다른 하나는 발신자에게 반환되는 변경 출력입니다. 대부분의 지갑이 트랜잭션을 구성하는 방식을 통해 제3자는 출력 중 어느 것이 수신 당사자에게 갔고 어느 것이 발신자에게 반환된 변경 금액인지 쉽게 이해할 수 있습니다. 발신자에게 반환된 출력은 나중에 미래의 거래에 사용되기 때문에 이 두 거래 사이의 연결이 분명해집니다.
-\n\nUnstoppable 지갑은 누군가가 어떤 출력이 어디로 가는지 알아내기 어렵게 하는 조치를 구현합니다.
+\n\nP.CASH 지갑은 누군가가 어떤 출력이 어디로 가는지 알아내기 어렵게 하는 조치를 구현합니다.
 \n\n 멈출 수 없는 사용자가 사용할 수 있는 두 가지 옵션:
 \n\n1. 셔플: 트랜잭션 출력 순서는 모든 트랜잭션에서 무작위로 지정됩니다. 때로는 변화가 첫 번째 출력이 될 수도 있고 때로는 두 번째 출력이 될 수도 있습니다. 사용자가 앱 개발자를 신뢰한다면 이것을 권장 옵션으로 고려하십시오.
 \n\n2. 결정적: 트랜잭션 출력 주문에 대해 일반적으로 합의된 표준이 있습니다(BIP69로 알려짐). 오픈 소스 지갑에서 이 표준은 지갑 사용자가 앱 개발자가 출력 순서를 구현하는 방법을 신뢰할 필요가 없도록 합니다. 이 표준은 새롭기 때문에 아직 많은 지갑에서 구현하지 않았습니다. 결과적으로 해당 표준을 사용하는 지갑에서 트랜잭션이 전송되었는지 여부를 블록체인에서 확인할 수 있습니다.</string>
@@ -1220,7 +1220,7 @@
     <string name="CoinPage_MajorHolders_InTopWallets">상위 10 소유주 중</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">총 소유주: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">리드</string>
-    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
+    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding P.CASH NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\n검색 결과가 없습니다</string>
     <string name="CoinPage_Indicators">지표</string>
     <string name="CoinPage_MovingAverages">이동 평균</string>
@@ -1236,7 +1236,7 @@
     <string name="CoinPage_FastLength">빠른 길이</string>
     <string name="CoinPage_SlowLength">느린 길이</string>
     <string name="CoinPage_SignalSmoothing">신호 평활화</string>
-    <string name="CoinPage_IndicatorsAlertText">지표는 Unstoppable Wallet 프리미엄 사용자만 이용할 수 있습니다.</string>
+    <string name="CoinPage_IndicatorsAlertText">지표는 P.CASH Wallet 프리미엄 사용자만 이용할 수 있습니다.</string>
     <string name="CoinPage_AiGeneratedText">이것은 주어진 암호화폐에 대한 참고 자료를 기반으로 한 AI 생성된 설명입니다. 오류가 포함될 수 있습니다.</string>
     <string name="CoinPage_MarketsLabel_Verified">검증됨</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">확인</string>
@@ -1436,7 +1436,7 @@
     <string name="ReleaseNotes_FollowUs">팔로우</string>
     <string name="CoinPage_Chart_Locked">잠김</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
+    <string name="ProUsersInfo_UnstoppablePass">P.CASH 패스</string>
     <string name="ProUsersInfo_SubTitle">추가 토큰 정보</string>
     <string name="ProUsersInfo_Description">이 데이터를 활성화하려면 브론즈 레벨 UW NFTs \'Coin Info+\'를 획득해야 합니다.
 \n\n또한 아래의 데이터에 액세스할 수 있습니다:</string>

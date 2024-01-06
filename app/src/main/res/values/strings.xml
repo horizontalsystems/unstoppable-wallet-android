@@ -945,7 +945,7 @@
 
     <!--Btc Blockchain Settings -->
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">After changing source the wallet will have to resync itself.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source Unstoppable app should use for synchronizing wallet(s).</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Choose the source P.CASH app should use for synchronizing wallet(s).</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Inputs/Outputs</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Transaction Settings</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Transaction Inputs / Outputs</string>

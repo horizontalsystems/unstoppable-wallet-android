@@ -1437,7 +1437,7 @@
     <string name="ReleaseNotes_FollowUs">Folge Uns</string>
     <string name="CoinPage_Chart_Locked">Gesperrt</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_UnstoppablePass">P.CASH Pass</string>
     <string name="ProUsersInfo_SubTitle">Zusätzliche Token Info</string>
     <string name="ProUsersInfo_Description">Um diese Daten zu aktivieren, solltest du Bronze-Level UW NFTs “Coin Info+”\n\nerwerben:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX-Volume und Rang</string>

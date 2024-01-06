@@ -75,9 +75,8 @@ class MainFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         MainScreenWithRootedDeviceCheck(
             transactionsViewModel = transactionsViewModel,
-            deepLink = activity?.intent?.data?.toString(),
+            deepLink = intentUri,
             navController = navController,
-            clearActivityData = { activity?.intent?.data = null }
         )
     }
 
@@ -245,10 +244,6 @@ private fun MainScreen(
 
     if (uiState.wcSupportState != null) {
         when (val wcSupportState = uiState.wcSupportState) {
-            SupportState.Supported -> {
-                fragmentNavController.slideFromRight(R.id.wallet_connect_graph)
-            }
-
             SupportState.NotSupportedDueToNoActiveAccount -> {
                 fragmentNavController.slideFromBottom(R.id.wcErrorNoAccountFragment)
             }
@@ -268,7 +263,7 @@ private fun MainScreen(
                 )
             }
 
-            null -> {}
+            else -> {}
         }
         viewModel.wcSupportStateHandled()
     }

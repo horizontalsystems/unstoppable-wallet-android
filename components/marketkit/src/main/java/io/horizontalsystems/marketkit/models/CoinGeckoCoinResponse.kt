@@ -24,7 +24,7 @@ data class CoinGeckoCoinResponse(
     val exchangeIds: List<String>
         get() = tickers.map { it.market.id }
 
-    fun marketTickers(imageUrls: Map<String, String>, coins: List<Coin>): List<MarketTicker> {
+    fun marketTickers(verifiedExchangeUids: List<String>, imageUrls: Map<String, String>, coins: List<Coin>): List<MarketTicker> {
         val contractAddresses = platforms.mapNotNull { (platformName, contractAddress) ->
             if (smartContractPlatforms.contains(platformName)) {
                 contractAddress.lowercase()
@@ -94,13 +94,14 @@ data class CoinGeckoCoinResponse(
                     lastRate = BigDecimal.ONE.divide(lastRate, 4, RoundingMode.HALF_EVEN)
                 }
                 MarketTicker(
-                    base,
-                    target,
-                    it.market.name,
-                    imageUrl,
-                    lastRate,
-                    volume,
-                    it.tradeUrl
+                    base = base,
+                    target = target,
+                    marketName = it.market.name,
+                    marketImageUrl = imageUrl,
+                    rate = lastRate,
+                    volume = volume,
+                    tradeUrl = it.tradeUrl,
+                    verified = verifiedExchangeUids.contains(it.market.id)
                 )
         }
     }
