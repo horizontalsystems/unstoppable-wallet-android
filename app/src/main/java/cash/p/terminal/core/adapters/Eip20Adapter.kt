@@ -19,7 +19,6 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
-import java.math.BigInteger
 
 class Eip20Adapter(
     context: Context,
@@ -31,7 +30,7 @@ class Eip20Adapter(
     evmLabelManager: EvmLabelManager
 ) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
 
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, baseToken, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, App.spamManager, baseToken, evmLabelManager)
 
     private val contractAddress: Address = Address(contractAddress)
     val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
@@ -69,8 +68,9 @@ class Eip20Adapter(
 
     // ISendEthereumAdapter
 
-    override fun getTransactionData(amount: BigInteger, address: Address): TransactionData {
-        return eip20Kit.buildTransferTransactionData(address, amount)
+    override fun getTransactionData(amount: BigDecimal, address: Address): TransactionData {
+        val amountBigInt = amount.movePointRight(decimal).toBigInteger()
+        return eip20Kit.buildTransferTransactionData(address, amountBigInt)
     }
 
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {

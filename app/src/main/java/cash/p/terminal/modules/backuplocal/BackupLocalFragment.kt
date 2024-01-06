@@ -14,17 +14,16 @@ import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsScreen
 import cash.p.terminal.modules.backuplocal.password.BackupType
 import cash.p.terminal.modules.backuplocal.password.LocalBackupPasswordScreen
 import cash.p.terminal.modules.backuplocal.terms.LocalBackupTermsScreen
-import io.horizontalsystems.core.findNavController
 
 class BackupLocalFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val accountId = arguments?.getString(ACCOUNT_ID_KEY)
         if (accountId != null) {
-            SingleWalletBackupNavHost(findNavController(), accountId)
+            SingleWalletBackupNavHost(navController, accountId)
         } else {
-            FullBackupNavHost(fragmentNavController = findNavController())
+            FullBackupNavHost(fragmentNavController = navController)
         }
     }
 

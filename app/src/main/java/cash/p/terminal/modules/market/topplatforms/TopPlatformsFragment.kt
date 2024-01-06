@@ -34,7 +34,6 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 
@@ -46,13 +45,11 @@ class TopPlatformsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            TopPlatformsScreen(
-                viewModel,
-                findNavController(),
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        TopPlatformsScreen(
+            viewModel,
+            navController,
+        )
     }
 
     companion object {
@@ -89,12 +86,14 @@ fun TopPlatformsScreen(
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
                                 viewModel::onErrorClick
                             )
                         }
+
                         ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
                                 TopPlatformsList(
@@ -161,6 +160,7 @@ fun TopPlatformsScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+
             SelectorDialogState.Closed -> {}
         }
     }

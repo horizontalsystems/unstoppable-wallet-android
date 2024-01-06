@@ -34,15 +34,14 @@ import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class ManageAccountsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ManageAccountsScreen(
-            findNavController(),
+            navController,
             arguments?.parcelable(ManageAccountsModule.MODE)!!
         )
     }
@@ -62,63 +61,61 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
         navController.popBackStack()
     }
 
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(R.string.ManageAccounts_Title),
-                navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
-            )
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = stringResource(R.string.ManageAccounts_Title),
+            navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
+        )
 
-            LazyColumn(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-                item {
-                    Spacer(modifier = Modifier.height(12.dp))
+        LazyColumn(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
 
-                    viewItems?.let { (regularAccounts, watchAccounts) ->
-                        if (regularAccounts.isNotEmpty()) {
-                            AccountsSection(regularAccounts, viewModel, navController)
-                            Spacer(modifier = Modifier.height(32.dp))
-                        }
-
-                        if (watchAccounts.isNotEmpty()) {
-                            AccountsSection(watchAccounts, viewModel, navController)
-                            Spacer(modifier = Modifier.height(32.dp))
-                        }
+                viewItems?.let { (regularAccounts, watchAccounts) ->
+                    if (regularAccounts.isNotEmpty()) {
+                        AccountsSection(regularAccounts, viewModel, navController)
+                        Spacer(modifier = Modifier.height(32.dp))
                     }
 
-                    val args = when (mode) {
-                        ManageAccountsModule.Mode.Manage -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, false)
-                        ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, true)
+                    if (watchAccounts.isNotEmpty()) {
+                        AccountsSection(watchAccounts, viewModel, navController)
+                        Spacer(modifier = Modifier.height(32.dp))
                     }
-
-                    val actions = listOf(
-                        ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
-                            navController.navigateWithTermsAccepted {
-                                navController.slideFromRight(R.id.createAccountFragment, args)
-                            }
-                        },
-                        ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
-                            navController.slideFromRight(R.id.importWalletFragment, args)
-                        },
-                        ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
-                            navController.slideFromRight(R.id.watchAddressFragment, args)
-                        }
-                    )
-                    CellUniversalLawrenceSection(actions) {
-                        RowUniversal(
-                            onClick = it.callback
-                        ) {
-                            Icon(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                painter = painterResource(id = it.icon),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.jacob
-                            )
-                            body_jacob(text = stringResource(id = it.title))
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(32.dp))
                 }
+
+                val args = when (mode) {
+                    ManageAccountsModule.Mode.Manage -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, false)
+                    ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, true)
+                }
+
+                val actions = listOf(
+                    ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
+                        navController.navigateWithTermsAccepted {
+                            navController.slideFromRight(R.id.createAccountFragment, args)
+                        }
+                    },
+                    ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
+                        navController.slideFromRight(R.id.importWalletFragment, args)
+                    },
+                    ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
+                        navController.slideFromRight(R.id.watchAddressFragment, args)
+                    }
+                )
+                CellUniversalLawrenceSection(actions) {
+                    RowUniversal(
+                        onClick = it.callback
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            painter = painterResource(id = it.icon),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.jacob
+                        )
+                        body_jacob(text = stringResource(id = it.title))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }

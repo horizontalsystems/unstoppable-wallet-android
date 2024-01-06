@@ -17,4 +17,5 @@ interface ITransactionRecordRepository : Clearable {
     fun setWalletAndBlockchain(transactionWallet: TransactionWallet?, blockchain: Blockchain?)
     fun setTransactionType(transactionType: FilterTransactionType)
     fun loadNext()
+    fun reload()
 }

@@ -26,7 +26,6 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.nftkit.models.NftType
 
 class SendNftFragment : BaseComposeFragment() {
@@ -34,7 +33,7 @@ class SendNftFragment : BaseComposeFragment() {
     private val vmFactory by lazy { getFactory(requireArguments()) }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val factory = vmFactory
 
         when (factory?.evmNftRecord?.nftType) {
@@ -50,7 +49,7 @@ class SendNftFragment : BaseComposeFragment() {
                 }
                 val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
                 SendEip721Screen(
-                    findNavController(),
+                    navController,
                     eip721ViewModel,
                     addressViewModel,
                     addressParserViewModel,
@@ -70,7 +69,7 @@ class SendNftFragment : BaseComposeFragment() {
                 }
                 val addressParserViewModel by viewModels<AddressParserViewModel> { factory }
                 SendEip1155Screen(
-                    findNavController(),
+                    navController,
                     eip1155ViewModel,
                     addressViewModel,
                     addressParserViewModel,
@@ -79,7 +78,7 @@ class SendNftFragment : BaseComposeFragment() {
             }
 
             else -> {
-                ShowErrorMessage(findNavController())
+                ShowErrorMessage(navController)
             }
         }
     }
@@ -120,28 +119,26 @@ private fun getFactory(requireArguments: Bundle): SendNftModule.Factory? {
 
 @Composable
 private fun ShowErrorMessage(navController: NavController) {
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.SendNft_Title),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { navController.popBackStack() }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.SendNft_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { navController.popBackStack() }
                     )
                 )
-            }
-        ) {
-            Column(Modifier.padding(it)) {
-                ScreenMessageWithAction(
-                    text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
-                )
-            }
+            )
+        }
+    ) {
+        Column(Modifier.padding(it)) {
+            ScreenMessageWithAction(
+                text = stringResource(R.string.Error),
+                icon = R.drawable.ic_error_48
+            )
         }
     }
 }

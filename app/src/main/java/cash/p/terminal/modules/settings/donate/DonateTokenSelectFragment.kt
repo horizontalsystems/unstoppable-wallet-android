@@ -1,11 +1,9 @@
 package cash.p.terminal.modules.settings.donate
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,17 +24,15 @@ import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.headline2_leah
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui.compose.components.subhead2_grey
 
 class DonateTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val navController = findNavController()
+    override fun GetContent(navController: NavController) {
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_DonateWith),
@@ -54,9 +50,8 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                 )
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
-            emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend),
-            header = { DonateHeader(navController) }
-        )
+            emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
+        ) { DonateHeader(navController) }
     }
 }
 
@@ -65,20 +60,19 @@ private fun DonateHeader(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 32.dp, vertical = 24.dp),
+            .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        VSpacer(24.dp)
         headline2_leah(
             text = stringResource(R.string.Settings_Donate_Info),
             textAlign = TextAlign.Center
         )
         VSpacer(24.dp)
-        Image(
-            painter = painterResource(id = R.drawable.hands_32),
+        Icon(
+            painter = painterResource(id = R.drawable.ic_heart_filled_24),
+            tint = ComposeAppTheme.colors.jacob,
             contentDescription = null,
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-                .padding(horizontal = 24.dp)
         )
     }
 
@@ -91,27 +85,19 @@ private fun DonateHeader(navController: NavController) {
 private fun GetAddressCell(
     onClick: () -> Unit
 ) {
-    Divider(
-        thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
-    )
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
+    VSpacer(24.dp)
+    ButtonPrimaryDefault(
+        title = stringResource(R.string.Settings_Donate_GetAddress),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
         onClick = onClick
-    ) {
-        body_leah(
-            text = stringResource(R.string.Settings_Donate_GetAddress),
-            maxLines = 1,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .weight(1f)
-        )
-        Image(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(id = R.drawable.ic_arrow_right),
-            contentDescription = null,
-        )
-    }
+    )
+    VSpacer(24.dp)
+    subhead2_grey(
+        text = stringResource(R.string.Settings_Donate_OrSelectCoinToDonate),
+        modifier = Modifier.fillMaxWidth(),
+        textAlign = TextAlign.Center
+    )
+    VSpacer(24.dp)
 }
 
 @Preview

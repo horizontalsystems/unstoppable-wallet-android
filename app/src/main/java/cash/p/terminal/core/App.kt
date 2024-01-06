@@ -20,7 +20,6 @@ import com.walletconnect.sign.client.SignClient
 import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
-import cash.p.terminal.core.factories.AddressParserFactory
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import cash.p.terminal.core.managers.AccountCleaner
 import cash.p.terminal.core.managers.AccountManager
@@ -55,6 +54,7 @@ import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import cash.p.terminal.core.managers.SolanaWalletManager
+import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TermsManager
@@ -160,7 +160,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
         lateinit var numberFormatter: IAppNumberFormatter
-        lateinit var addressParserFactory: AddressParserFactory
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
@@ -191,6 +190,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var cexAssetManager: CexAssetManager
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
+        lateinit var spamManager: SpamManager
     }
 
     override fun onCreate() {
@@ -244,7 +244,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
         evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, appConfigProvider, marketKit)
 
         binanceKitManager = BinanceKitManager()
 
@@ -351,8 +351,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         feeCoinProvider = FeeTokenProvider(marketKit)
 
-        addressParserFactory = AddressParserFactory()
-
         pinComponent = PinComponent(
             pinSettingsStorage = pinSettingsStorage,
             excludedActivityNames = listOf(
@@ -383,7 +381,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             MarketFavoritesMenuService(localStorage, marketWidgetManager),
             TopNftCollectionsRepository(marketKit),
             TopNftCollectionsViewItemFactory(numberFormatter),
-            TopPlatformsRepository(marketKit, currencyManager),
+            TopPlatformsRepository(marketKit, currencyManager, "widget"),
             currencyManager
         )
 
@@ -437,6 +435,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaRpcSourceManager = solanaRpcSourceManager,
             contactsRepository = contactsRepository
         )
+
+        spamManager = SpamManager(localStorage)
 
         startTasks()
     }

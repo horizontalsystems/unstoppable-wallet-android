@@ -37,79 +37,77 @@ fun SelectBackupItemsScreen(
     val viewModel = viewModel<SelectBackupItemsViewModel>(factory = SelectBackupItemsViewModel.Factory())
     val uiState = viewModel.uiState
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.BackupManager_BаckupFile),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
-                    },
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.BackupManager_BаckupFile),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                },
+            )
+        },
+        bottomBar = {
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.Button_Next),
+                    onClick = {
+                        onNextClick(viewModel.selectedWallets)
+                    }
                 )
-            },
-            bottomBar = {
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.Button_Next),
-                        onClick = {
-                            onNextClick(viewModel.selectedWallets)
-                        }
-                    )
-                }
             }
-        ) {
-            LazyColumn(modifier = Modifier.padding(it)) {
+        }
+    ) {
+        LazyColumn(modifier = Modifier.padding(it)) {
 
-                when (uiState.viewState) {
-                    ViewState.Success -> {
-                        if (uiState.wallets.isNotEmpty()) {
-                            item {
-                                HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                                CellUniversalLawrenceSection(items = uiState.wallets, showFrame = true) { wallet ->
-                                    RowUniversal(
-                                        modifier = Modifier.padding(horizontal = 16.dp),
-                                        onClick = { viewModel.toggle(wallet) }
-                                    ) {
-
-                                        Column(modifier = Modifier.weight(1f)) {
-                                            body_leah(text = wallet.name)
-                                            if (wallet.backupRequired) {
-                                                subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
-                                            } else {
-                                                subhead2_grey(
-                                                    text = wallet.type,
-                                                    overflow = TextOverflow.Ellipsis,
-                                                    maxLines = 1
-                                                )
-                                            }
-                                        }
-                                        HsCheckbox(
-                                            checked = wallet.selected,
-                                            onCheckedChange = {
-                                                viewModel.toggle(wallet)
-                                            },
-                                        )
-                                    }
-                                }
-                                VSpacer(height = 24.dp)
-                            }
-                        }
-
+            when (uiState.viewState) {
+                ViewState.Success -> {
+                    if (uiState.wallets.isNotEmpty()) {
                         item {
-                            OtherBackupItems(uiState.otherBackupItems)
-                            VSpacer(height = 32.dp)
+                            HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
+                            CellUniversalLawrenceSection(items = uiState.wallets, showFrame = true) { wallet ->
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    onClick = { viewModel.toggle(wallet) }
+                                ) {
+
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        body_leah(text = wallet.name)
+                                        if (wallet.backupRequired) {
+                                            subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
+                                        } else {
+                                            subhead2_grey(
+                                                text = wallet.type,
+                                                overflow = TextOverflow.Ellipsis,
+                                                maxLines = 1
+                                            )
+                                        }
+                                    }
+                                    HsCheckbox(
+                                        checked = wallet.selected,
+                                        onCheckedChange = {
+                                            viewModel.toggle(wallet)
+                                        },
+                                    )
+                                }
+                            }
+                            VSpacer(height = 24.dp)
                         }
                     }
 
-                    is ViewState.Error,
-                    ViewState.Loading -> Unit
+                    item {
+                        OtherBackupItems(uiState.otherBackupItems)
+                        VSpacer(height = 32.dp)
+                    }
                 }
 
+                is ViewState.Error,
+                ViewState.Loading -> Unit
             }
+
         }
     }
 }

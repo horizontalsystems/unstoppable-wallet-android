@@ -13,7 +13,7 @@ import io.horizontalsystems.marketkit.models.Token
 
 object CoinOverviewModule {
 
-    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
+    class Factory(private val fullCoin: FullCoin, private val apiTag: String) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
@@ -22,6 +22,7 @@ object CoinOverviewModule {
                     val currency = App.currencyManager.baseCurrency
                     val service = CoinOverviewService(
                         fullCoin,
+                        apiTag,
                         App.marketKit,
                         App.currencyManager,
                         App.appConfigProvider,
@@ -85,5 +86,6 @@ data class CoinOverviewViewItem(
     val roi: List<RoiViewItem>,
     val links: List<CoinLink>,
     val about: String,
-    val marketData: MutableList<CoinDataItem>
+    val marketData: MutableList<CoinDataItem>,
+    val marketCapRank: Int?
 )

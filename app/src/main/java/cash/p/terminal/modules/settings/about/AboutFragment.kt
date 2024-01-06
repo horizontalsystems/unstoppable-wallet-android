@@ -44,15 +44,12 @@ import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
-import io.horizontalsystems.core.findNavController
 
 class AboutFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            AboutNavHost(findNavController())
-        }
+    override fun GetContent(navController: NavController) {
+        AboutNavHost(navController)
     }
 
 }

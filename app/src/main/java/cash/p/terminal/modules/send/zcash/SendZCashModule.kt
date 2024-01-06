@@ -11,8 +11,12 @@ import cash.p.terminal.modules.xrate.XRateService
 
 object SendZCashModule {
 
-    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
-        val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
+    class Factory(
+        private val wallet: Wallet,
+        private val predefinedAddress: String?,
+    ) : ViewModelProvider.Factory {
+        val adapter =
+            (App.adapterManager.getAdapterForWallet(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -25,7 +29,16 @@ object SendZCashModule {
             val addressService = SendZCashAddressService(adapter, predefinedAddress)
             val memoService = SendZCashMemoService()
 
-            return SendZCashViewModel(adapter, wallet, xRateService, amountService, addressService, memoService, App.contactsRepository) as T
+            return SendZCashViewModel(
+                adapter,
+                wallet,
+                xRateService,
+                amountService,
+                addressService,
+                memoService,
+                App.contactsRepository,
+                predefinedAddress == null
+            ) as T
         }
     }
 }

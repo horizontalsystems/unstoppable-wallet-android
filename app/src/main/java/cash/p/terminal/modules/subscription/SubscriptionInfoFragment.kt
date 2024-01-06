@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
@@ -27,29 +28,25 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.InfoH3
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.body_bran
-import io.horizontalsystems.core.findNavController
 
 class SubscriptionInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            val uriHandler = LocalUriHandler.current
-            val navController = findNavController()
+    override fun GetContent(navController: NavController) {
+        val uriHandler = LocalUriHandler.current
 
-            SubscriptionInfoScreen(
-                onClickGetPremium = {
-                    uriHandler.openUri(App.appConfigProvider.analyticsLink)
-                },
-                onClickHavePremium = {
-                    navController.popBackStack()
-                    navController.slideFromBottom(R.id.activateSubscription)
-                },
-                onClose = {
-                    navController.popBackStack()
-                }
-            )
-        }
+        SubscriptionInfoScreen(
+            onClickGetPremium = {
+                uriHandler.openUri(App.appConfigProvider.analyticsLink)
+            },
+            onClickHavePremium = {
+                navController.popBackStack()
+                navController.slideFromBottom(R.id.activateSubscription)
+            },
+            onClose = {
+                navController.popBackStack()
+            }
+        )
     }
 
 }

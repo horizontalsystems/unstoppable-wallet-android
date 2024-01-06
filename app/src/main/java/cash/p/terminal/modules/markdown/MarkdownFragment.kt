@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
@@ -14,25 +15,22 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
-import io.horizontalsystems.core.findNavController
 
 class MarkdownFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            MarkdownScreen(
-                handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false,
-                showAsPopup = arguments?.getBoolean(showAsPopupKey) ?: false,
-                markdownUrl = arguments?.getString(markdownUrlKey) ?: "",
-                onCloseClick = { findNavController().popBackStack() },
-                onUrlClick = { url ->
-                    findNavController().slideFromRight(
-                        R.id.markdownFragment, bundleOf(markdownUrlKey to url)
-                    )
-                }
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        MarkdownScreen(
+            handleRelativeUrl = arguments?.getBoolean(handleRelativeUrlKey) ?: false,
+            showAsPopup = arguments?.getBoolean(showAsPopupKey) ?: false,
+            markdownUrl = arguments?.getString(markdownUrlKey) ?: "",
+            onCloseClick = { navController.popBackStack() },
+            onUrlClick = { url ->
+                navController.slideFromRight(
+                    R.id.markdownFragment, bundleOf(markdownUrlKey to url)
+                )
+            }
+        )
     }
 
     companion object {

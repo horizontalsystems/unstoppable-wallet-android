@@ -27,21 +27,20 @@ class CoinMarketsService(
         VolumeMenuType.Currency(currency.code)
     )
 
+    private var verifiedType: VerifiedType = VerifiedType.Verified
     private var volumeType: VolumeMenuType = volumeOptions[0]
 
+    val verifiedMenu = Select(verifiedType, VerifiedType.values().toList())
     val volumeMenu = Select(volumeType, volumeOptions)
-
     val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> = BehaviorSubject.create()
 
     val currency get() = currencyManager.baseCurrency
 
-    var sortType = SortType.HighestVolume
-        private set
 
     fun start() {
         marketKit.marketTickersSingle(fullCoin.coin.uid)
-            .subscribeIO({
-                marketTickers = it
+            .subscribeIO({ marketTickers ->
+                this.marketTickers = marketTickers.sortedByDescending { it.volume }
                 emitItems()
             }, {
                 stateObservable.onNext(DataState.Error(it))
@@ -54,8 +53,8 @@ class CoinMarketsService(
         disposables.clear()
     }
 
-    fun setSortType(sortType: SortType) {
-        this.sortType = sortType
+    fun setVerifiedType(verifiedType: VerifiedType) {
+        this.verifiedType = verifiedType
 
         emitItems()
     }
@@ -68,12 +67,12 @@ class CoinMarketsService(
 
     @Synchronized
     private fun emitItems() {
-        val sorted = when (sortType) {
-            SortType.HighestVolume -> marketTickers.sortedByDescending { it.volume }
-            SortType.LowestVolume -> marketTickers.sortedBy { it.volume }
+        val filtered = when (verifiedType) {
+            VerifiedType.Verified -> marketTickers.filter { it.verified }
+            VerifiedType.All -> marketTickers
         }
 
-        stateObservable.onNext(DataState.Success(sorted.map { createItem(it) }))
+        stateObservable.onNext(DataState.Success(filtered.map { createItem(it) }))
     }
 
     private fun createItem(marketTicker: MarketTicker): MarketTickerItem {
@@ -90,7 +89,8 @@ class CoinMarketsService(
             marketTicker.rate,
             volume,
             volumeType,
-            marketTicker.tradeUrl
+            marketTicker.tradeUrl,
+            marketTicker.verified
         )
     }
 }

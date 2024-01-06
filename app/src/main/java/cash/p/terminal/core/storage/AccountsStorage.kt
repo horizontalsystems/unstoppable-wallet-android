@@ -21,19 +21,23 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
         private const val ADDRESS = "address"
         private const val SOLANA_ADDRESS = "solana_address"
         private const val TRON_ADDRESS = "tron_address"
+        private const val TON_ADDRESS = "ton_address"
+        private const val BITCOIN_ADDRESS = "bitcoin_address"
         private const val HD_EXTENDED_LEY = "hd_extended_key"
         private const val CEX = "cex"
     }
 
-    override var activeAccountId: String?
-        get() = dao.getActiveAccount()?.accountId
-        set(value) {
-            if (value != null) {
-                dao.insertActiveAccount(ActiveAccount(value))
-            } else {
-                dao.deleteActiveAccount()
-            }
+    override fun getActiveAccountId(level: Int): String? {
+        return dao.getActiveAccount(level)?.accountId
+    }
+
+    override fun setActiveAccountId(level: Int, id: String?) {
+        if (id == null) {
+            dao.deleteActiveAccount(level)
+        } else {
+            dao.insertActiveAccount(ActiveAccount(level, id))
         }
+    }
 
     override val isAccountsEmpty: Boolean
         get() = dao.getTotalCount() == 0
@@ -48,6 +52,8 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
                             ADDRESS -> AccountType.EvmAddress(record.key!!.value)
                             SOLANA_ADDRESS -> AccountType.SolanaAddress(record.key!!.value)
                             TRON_ADDRESS -> AccountType.TronAddress(record.key!!.value)
+                            TON_ADDRESS -> AccountType.TonAddress(record.key!!.value)
+                            BITCOIN_ADDRESS -> AccountType.BitcoinAddress.fromSerialized(record.key!!.value)
                             HD_EXTENDED_LEY -> AccountType.HdExtendedKey(record.key!!.value)
                             CEX -> {
                                 CexType.deserialize(record.key!!.value)?.let {
@@ -134,6 +140,14 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
             is AccountType.TronAddress -> {
                 key = SecretString(account.type.address)
                 accountType = TRON_ADDRESS
+            }
+            is AccountType.TonAddress -> {
+                key = SecretString(account.type.address)
+                accountType = TON_ADDRESS
+            }
+            is AccountType.BitcoinAddress -> {
+                key = SecretString(account.type.serialized)
+                accountType = BITCOIN_ADDRESS
             }
             is AccountType.HdExtendedKey -> {
                 key = SecretString(account.type.keySerialized)

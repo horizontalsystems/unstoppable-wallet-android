@@ -36,14 +36,11 @@ import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
-import io.horizontalsystems.core.findNavController
 
 class SetDuressPinSelectAccountsFragment : BaseComposeFragment() {
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            SetDuressPinSelectAccountsScreen(findNavController())
-        }
+    override fun GetContent(navController: NavController) {
+        SetDuressPinSelectAccountsScreen(navController)
     }
 }
 

@@ -19,14 +19,13 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import io.horizontalsystems.core.findNavController
 
 class TimeLockFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         ExperimentalScreen(
-            findNavController()
+            navController
         )
     }
 
@@ -37,29 +36,27 @@ private fun ExperimentalScreen(
     navController: NavController,
     viewModel: TimeLockViewModel = viewModel(factory = TimeLockModule.Factory())
 ) {
-    ComposeAppTheme {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                title = stringResource(R.string.BitcoinHodling_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            )
-            Column(
-                Modifier.verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                ActivateCell(
-                    checked = viewModel.timeLockActivated,
-                    onChecked = { activated -> viewModel.setActivated(activated) }
-                )
-                InfoText(
-                    text = stringResource(R.string.BitcoinHodling_Description)
-                )
-                Spacer(Modifier.height(24.dp))
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.BitcoinHodling_Title),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
             }
+        )
+        Column(
+            Modifier.verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(12.dp))
+            ActivateCell(
+                checked = viewModel.timeLockActivated,
+                onChecked = { activated -> viewModel.setActivated(activated) }
+            )
+            InfoText(
+                text = stringResource(R.string.BitcoinHodling_Description)
+            )
+            Spacer(Modifier.height(24.dp))
         }
     }
 }

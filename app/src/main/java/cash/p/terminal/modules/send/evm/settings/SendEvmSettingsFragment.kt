@@ -18,7 +18,6 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
@@ -41,29 +40,27 @@ import java.math.BigDecimal
 class SendEvmSettingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
         val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
         val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
 
-        ComposeAppTheme {
-            val feeSettingsViewModel = viewModel<ViewModel>(
-                factory = EvmFeeModule.Factory(
-                    feeViewModel.feeService,
-                    feeViewModel.gasPriceService,
-                    feeViewModel.coinService
-                )
+        val feeSettingsViewModel = viewModel<ViewModel>(
+            factory = EvmFeeModule.Factory(
+                feeViewModel.feeService,
+                feeViewModel.gasPriceService,
+                feeViewModel.coinService
             )
-            val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
-                factory = SendEvmSettingsModule.Factory(sendViewModel.service.settingsService, feeViewModel.coinService)
-            )
-            SendEvmFeeSettingsScreen(
-                viewModel = sendSettingsViewModel,
-                feeSettingsViewModel = feeSettingsViewModel,
-                nonceViewModel = nonceViewModel,
-                navController = findNavController()
-            )
-        }
+        )
+        val sendSettingsViewModel = viewModel<SendEvmSettingsViewModel>(
+            factory = SendEvmSettingsModule.Factory(sendViewModel.service.settingsService, feeViewModel.coinService)
+        )
+        SendEvmFeeSettingsScreen(
+            viewModel = sendSettingsViewModel,
+            feeSettingsViewModel = feeSettingsViewModel,
+            nonceViewModel = nonceViewModel,
+            navController = navController
+        )
     }
 
     companion object {

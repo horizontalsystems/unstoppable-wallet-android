@@ -34,53 +34,47 @@ fun AddressFormatSelectScreen(
     navController: NavController,
     addressFormatItems: List<AddressFormatItem>,
     description: String,
-    popupDestinationId: Int?,
 ) {
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Balance_Receive_AddressFormat),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf()
-                )
-            }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Balance_Receive_AddressFormat),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+                menuItems = listOf()
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                InfoText(
-                    text = stringResource(R.string.Balance_Receive_AddressFormatDescription)
-                )
-                VSpacer(20.dp)
-                CellUniversalLawrenceSection(addressFormatItems) { item ->
-                    SectionUniversalItem {
-                        AddressFormatCell(
-                            title = item.title,
-                            subtitle = item.subtitle,
-                            onClick = {
-                                navController.slideFromRight(
-                                    R.id.receiveFragment,
-                                    bundleOf(
-                                        ReceiveAddressFragment.WALLET_KEY to item.wallet,
-                                        ReceiveAddressFragment.POPUP_DESTINATION_ID_KEY to popupDestinationId,
-                                    )
-                                )
-                            }
-                        )
-                    }
+            InfoText(
+                text = stringResource(R.string.Balance_Receive_AddressFormatDescription)
+            )
+            VSpacer(20.dp)
+            CellUniversalLawrenceSection(addressFormatItems) { item ->
+                SectionUniversalItem {
+                    AddressFormatCell(
+                        title = item.title,
+                        subtitle = item.subtitle,
+                        onClick = {
+                            navController.slideFromRight(
+                                R.id.receiveFragment,
+                                bundleOf(ReceiveAddressFragment.WALLET_KEY to item.wallet)
+                            )
+                        }
+                    )
                 }
-                VSpacer(32.dp)
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = description
-                )
             }
+            VSpacer(32.dp)
+            TextImportantWarning(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = description
+            )
         }
     }
 }

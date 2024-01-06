@@ -18,6 +18,9 @@ class BtcBlockchainSettingsService(
     var restoreMode: BtcRestoreMode = btcBlockchainManager.restoreMode(blockchain.type)
         private set
 
+    val restoreModes: List<BtcRestoreMode>
+        get() = btcBlockchainManager.availableRestoreModes(blockchain.type)
+
     fun save() {
         if (restoreMode != btcBlockchainManager.restoreMode(blockchain.type)) {
             btcBlockchainManager.save(restoreMode, blockchain.type)

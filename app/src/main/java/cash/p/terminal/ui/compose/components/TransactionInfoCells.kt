@@ -86,6 +86,16 @@ fun SectionTitleCell(
 }
 
 @Composable
+fun WarningMessageCell(message: String) {
+    TextImportantWarning(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        text = message
+    )
+}
+
+@Composable
 fun TransactionNftAmountCell(
     amount: ColoredValue,
     iconUrl: String?,
@@ -141,7 +151,7 @@ fun TransactionAmountCell(
 ) {
     val clickable = coinUid?.let {
         Modifier.clickable {
-            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it))
+            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it, "transaction_info"))
         }
     } ?: Modifier
 

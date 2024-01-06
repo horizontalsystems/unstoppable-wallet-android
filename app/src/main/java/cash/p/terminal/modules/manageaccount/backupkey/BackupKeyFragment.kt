@@ -31,15 +31,14 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.MenuItem
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val account = requireArguments().parcelable<Account>(BackupKeyModule.ACCOUNT)!!
-        RecoveryPhraseScreen(findNavController(), account)
+        RecoveryPhraseScreen(navController, account)
     }
 
 }
@@ -51,59 +50,57 @@ fun RecoveryPhraseScreen(
 ) {
     val viewModel = viewModel<BackupKeyViewModel>(factory = BackupKeyModule.Factory(account))
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.RecoveryPhrase_Title),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Info_Title),
-                            icon = R.drawable.ic_info_24,
-                            onClick = {
-                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                            }
-                        ),
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = {
-                                navController.popBackStack()
-                            }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.RecoveryPhrase_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Info_Title),
+                        icon = R.drawable.ic_info_24,
+                        onClick = {
+                            FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                        }
+                    ),
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack()
+                        }
                     )
                 )
-            }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                var hidden by remember { mutableStateOf(true) }
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            var hidden by remember { mutableStateOf(true) }
 
-                InfoText(text = stringResource(R.string.RecoveryPhrase_Description))
-                Spacer(Modifier.height(12.dp))
-                SeedPhraseList(
-                    wordsNumbered = viewModel.wordsNumbered,
-                    hidden = hidden
-                ) {
-                    hidden = !hidden
-                }
-                Spacer(Modifier.height(24.dp))
-                PassphraseCell(viewModel.passphrase, hidden)
-                Spacer(modifier = Modifier.weight(1f))
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.RecoveryPhrase_Verify),
-                        onClick = {
-                            navController.slideFromRight(
-                                R.id.backupConfirmationKeyFragment,
-                                BackupConfirmKeyModule.prepareParams(viewModel.account)
-                            )
-                        },
-                    )
-                }
+            InfoText(text = stringResource(R.string.RecoveryPhrase_Description))
+            Spacer(Modifier.height(12.dp))
+            SeedPhraseList(
+                wordsNumbered = viewModel.wordsNumbered,
+                hidden = hidden
+            ) {
+                hidden = !hidden
+            }
+            Spacer(Modifier.height(24.dp))
+            PassphraseCell(viewModel.passphrase, hidden)
+            Spacer(modifier = Modifier.weight(1f))
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.RecoveryPhrase_Verify),
+                    onClick = {
+                        navController.slideFromRight(
+                            R.id.backupConfirmationKeyFragment,
+                            BackupConfirmKeyModule.prepareParams(viewModel.account)
+                        )
+                    },
+                )
             }
         }
     }

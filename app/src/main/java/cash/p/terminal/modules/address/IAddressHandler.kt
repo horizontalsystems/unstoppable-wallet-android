@@ -1,7 +1,9 @@
 package cash.p.terminal.modules.address
 
 import com.unstoppabledomains.resolution.Resolution
+import cash.p.terminal.core.adapters.zcash.ZcashAddressValidator
 import cash.p.terminal.entities.Address
+import cash.p.terminal.entities.BitcoinAddress
 import io.horizontalsystems.binancechainkit.helpers.Crypto
 import io.horizontalsystems.bitcoincore.network.Network
 import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
@@ -11,22 +13,27 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.tonkit.TonKit
 import io.horizontalsystems.tronkit.account.AddressHandler
 import org.web3j.ens.EnsResolver
 
 interface IAddressHandler {
+    val blockchainType: BlockchainType
     fun isSupported(value: String): Boolean
     fun parseAddress(value: String): Address
 }
 
-class AddressHandlerEns(private val ensResolver: EnsResolver) : IAddressHandler {
+class AddressHandlerEns(
+    override val blockchainType: BlockchainType,
+    private val ensResolver: EnsResolver
+) : IAddressHandler {
     private val cache = mutableMapOf<String, Address>()
 
     override fun isSupported(value: String): Boolean {
         if (!EnsResolver.isValidEnsName(value)) return false
 
         try {
-            cache[value] = Address(ensResolver.resolve(value), value)
+            cache[value] = Address(ensResolver.resolve(value), value, blockchainType)
             return true
         } catch (e: Exception) {
             return false
@@ -48,9 +55,11 @@ class AddressHandlerUdn(
     private val chainCoinCode by lazy { chainCoinCode(tokenQuery.blockchainType) }
     private val cache = mutableMapOf<String, Address>()
 
+    override val blockchainType = tokenQuery.blockchainType
+
     override fun isSupported(value: String): Boolean {
         return try {
-            cache[value] = Address(resolveAddress(value), value)
+            cache[value] = Address(resolveAddress(value), value, blockchainType)
             true
         } catch (e: Exception) {
             false
@@ -104,6 +113,7 @@ class AddressHandlerUdn(
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> "ETH"
+
             BlockchainType.Bitcoin -> "BTC"
             BlockchainType.BitcoinCash -> "BCH"
             BlockchainType.ECash -> "XEC"
@@ -112,6 +122,7 @@ class AddressHandlerUdn(
             BlockchainType.Zcash -> "ZEC"
             BlockchainType.Solana -> "SOL"
             BlockchainType.Tron -> "TRX"
+            BlockchainType.Ton -> "TON"
             is BlockchainType.Unsupported -> blockchainType.uid
         }
 
@@ -120,6 +131,7 @@ class AddressHandlerUdn(
                 BlockchainType.Polygon -> "MATIC"
                 else -> null
             }
+
             is TokenType.Eip20 -> when (tokenQuery.blockchainType) {
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Polygon -> "MATIC"
@@ -129,15 +141,18 @@ class AddressHandlerUdn(
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom -> "ERC20"
+
                 else -> null
             }
+
             else -> null
         }
     }
 
 }
 
-class AddressHandlerEvm : IAddressHandler {
+class AddressHandlerEvm(override val blockchainType: BlockchainType) : IAddressHandler {
+
     override fun isSupported(value: String) = try {
         AddressValidator.validate(value)
         true
@@ -147,12 +162,12 @@ class AddressHandlerEvm : IAddressHandler {
 
     override fun parseAddress(value: String): Address {
         val evmAddress = io.horizontalsystems.ethereumkit.models.Address(value)
-        return Address(evmAddress.hex)
+        return Address(evmAddress.hex, blockchainType = blockchainType)
     }
 
 }
 
-class AddressHandlerBase58(network: Network) : IAddressHandler {
+class AddressHandlerBase58(network: Network, override val blockchainType: BlockchainType) : IAddressHandler {
     private val converter = Base58AddressConverter(network.addressVersion, network.addressScriptVersion)
 
     override fun isSupported(value: String) = try {
@@ -163,11 +178,12 @@ class AddressHandlerBase58(network: Network) : IAddressHandler {
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(converter.convert(value).stringValue)
+        val address = converter.convert(value)
+        return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, scriptType = address.scriptType)
     }
 }
 
-class AddressHandlerBech32(network: Network) : IAddressHandler {
+class AddressHandlerBech32(network: Network, override val blockchainType: BlockchainType) : IAddressHandler {
     private val converter = SegwitAddressConverter(network.addressSegwitHrp)
 
     override fun isSupported(value: String) = try {
@@ -178,11 +194,12 @@ class AddressHandlerBech32(network: Network) : IAddressHandler {
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(converter.convert(value).stringValue)
+        val address = converter.convert(value)
+        return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, scriptType = address.scriptType)
     }
 }
 
-class AddressHandlerBitcoinCash(network: Network) : IAddressHandler {
+class AddressHandlerBitcoinCash(network: Network, override val blockchainType: BlockchainType) : IAddressHandler {
     private val converter = CashAddressConverter(network.addressSegwitHrp)
 
     override fun isSupported(value: String) = try {
@@ -193,11 +210,13 @@ class AddressHandlerBitcoinCash(network: Network) : IAddressHandler {
     }
 
     override fun parseAddress(value: String): Address {
-        return Address(converter.convert(value).stringValue)
+        val address = converter.convert(value)
+        return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, scriptType = address.scriptType)
     }
 }
 
 class AddressHandlerBinanceChain : IAddressHandler {
+    override val blockchainType = BlockchainType.BinanceChain
     override fun isSupported(value: String) = try {
         Crypto.decodeAddress(value)
         true
@@ -207,12 +226,21 @@ class AddressHandlerBinanceChain : IAddressHandler {
 
     override fun parseAddress(value: String): Address {
         Crypto.decodeAddress(value)
-        return Address(value)
+        return Address(value, blockchainType = blockchainType)
     }
 }
 
 class AddressHandlerSolana : IAddressHandler {
-    override fun isSupported(value: String) = true
+    override fun isSupported(value: String): Boolean {
+        return try {
+            io.horizontalsystems.solanakit.models.Address(value)
+            true
+        } catch (e: Throwable) {
+            false
+        }
+    }
+
+    override val blockchainType = BlockchainType.Solana
 
     override fun parseAddress(value: String): Address {
         try {
@@ -222,28 +250,61 @@ class AddressHandlerSolana : IAddressHandler {
             throw AddressValidator.AddressValidationException(e.message ?: "")
         }
 
-        return Address(value)
+        return Address(value, blockchainType = blockchainType)
+    }
+
+}
+
+class AddressHandlerZcash : IAddressHandler {
+    override val blockchainType = BlockchainType.Zcash
+
+    override fun isSupported(value: String): Boolean {
+        return ZcashAddressValidator.validate(value)
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(value, blockchainType = blockchainType)
     }
 
 }
 
 class AddressHandlerTron : IAddressHandler {
+    override val blockchainType = BlockchainType.Tron
+
     override fun isSupported(value: String) = try {
         io.horizontalsystems.tronkit.models.Address.fromBase58(value)
         true
     } catch (e: AddressHandler.AddressValidationException) {
         false
+    } catch (e: IllegalArgumentException) {
+        false
     }
 
     override fun parseAddress(value: String): Address {
         val tronAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(value)
-        return Address(tronAddress.base58)
+        return Address(tronAddress.base58, blockchainType = blockchainType)
     }
 }
 
-class AddressHandlerPure : IAddressHandler {
+class AddressHandlerTon : IAddressHandler {
+    override val blockchainType = BlockchainType.Ton
+
+    override fun isSupported(value: String) = try {
+        TonKit.validate(value)
+        true
+    } catch (e: Exception) {
+        false
+    }
+
+    override fun parseAddress(value: String): Address {
+        return Address(value, blockchainType = blockchainType)
+    }
+}
+
+class AddressHandlerPure(override val blockchainType: BlockchainType) : IAddressHandler {
+
     override fun isSupported(value: String) = true
 
-    override fun parseAddress(value: String) = Address(value)
+    override fun parseAddress(value: String) = Address(value, blockchainType = blockchainType)
 
 }

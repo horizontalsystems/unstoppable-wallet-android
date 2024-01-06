@@ -1,27 +1,45 @@
 package cash.p.terminal.core.factories
 
-import cash.p.terminal.core.utils.AddressParser
+import cash.p.terminal.core.managers.EvmBlockchainManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-class AddressParserFactory {
-    fun parser(blockchainType: BlockchainType) = when (blockchainType) {
-        BlockchainType.Bitcoin -> AddressParser("bitcoin", true)
-        BlockchainType.BitcoinCash -> AddressParser("bitcoincash", false)
-        BlockchainType.ECash -> AddressParser("ecash", false)
-        BlockchainType.Litecoin -> AddressParser("litecoin", true)
-        BlockchainType.Dash -> AddressParser("dash", true)
-        BlockchainType.Zcash -> AddressParser("zcash", true)
-        BlockchainType.Ethereum -> AddressParser("ethereum", true)
-        BlockchainType.BinanceSmartChain -> AddressParser("", true)
-        BlockchainType.BinanceChain -> AddressParser("binance", true)
-        BlockchainType.Polygon,
-        BlockchainType.Avalanche,
-        BlockchainType.Optimism,
-        BlockchainType.ArbitrumOne,
-        BlockchainType.Solana,
-        BlockchainType.Gnosis,
-        BlockchainType.Fantom,
-        BlockchainType.Tron,
-        is BlockchainType.Unsupported -> AddressParser("", false)
+val BlockchainType.uriScheme: String?
+    get() {
+        if (EvmBlockchainManager.blockchainTypes.contains(this)) {
+            return "ethereum"
+        }
+
+        return when (this) {
+            BlockchainType.Bitcoin -> "bitcoin"
+            BlockchainType.BitcoinCash -> "bitcoincash"
+            BlockchainType.ECash -> "ecash"
+            BlockchainType.Litecoin -> "litecoin"
+            BlockchainType.Dash -> "dash"
+            BlockchainType.Zcash -> "zcash"
+            BlockchainType.Ethereum -> "ethereum"
+            BlockchainType.BinanceChain -> "binancecoin"
+            BlockchainType.Ton -> "toncoin"
+            BlockchainType.Tron -> "tron"
+            else -> null
+        }
     }
-}
+
+val BlockchainType.removeScheme: Boolean
+    get() {
+        if (EvmBlockchainManager.blockchainTypes.contains(this)) {
+            return true
+        }
+
+        return when (this) {
+            BlockchainType.Bitcoin,
+            BlockchainType.Litecoin,
+            BlockchainType.Dash,
+            BlockchainType.Zcash,
+            BlockchainType.Ethereum,
+            BlockchainType.BinanceChain,
+            BlockchainType.Ton,
+            BlockchainType.Tron -> true
+
+            else -> false
+        }
+    }

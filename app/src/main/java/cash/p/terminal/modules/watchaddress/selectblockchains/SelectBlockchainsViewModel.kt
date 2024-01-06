@@ -36,21 +36,27 @@ class SelectBlockchainsViewModel(
         private set
 
     init {
+        val tokens = service.tokens(accountType)
+        selectedCoins = tokens.toSet()
+
         when (accountType) {
+            is AccountType.SolanaAddress,
+            is AccountType.TronAddress,
+            is AccountType.BitcoinAddress,
+            is AccountType.TonAddress,
             is AccountType.Cex,
             is AccountType.Mnemonic,
-            is AccountType.EvmPrivateKey,
-            is AccountType.SolanaAddress,
-            is AccountType.TronAddress -> Unit // N/A
+            is AccountType.EvmPrivateKey -> Unit // N/A
             is AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
-                coinViewItems = service.tokens(accountType).map {
+                coinViewItems = tokens.map {
                     coinViewItemForBlockchain(it)
                 }
             }
+
             is AccountType.HdExtendedKey -> {
                 title = R.string.Watch_Select_Coins
-                coinViewItems = service.tokens(accountType).map {
+                coinViewItems = tokens.map {
                     coinViewItemForToken(it, label = it.badge)
                 }
             }
@@ -66,7 +72,7 @@ class SelectBlockchainsViewModel(
             imageSource = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
             title = blockchain.name,
             subtitle = blockchain.description,
-            enabled = false
+            enabled = true
         )
     }
 
@@ -76,7 +82,7 @@ class SelectBlockchainsViewModel(
             imageSource = ImageSource.Remote(token.fullCoin.coin.imageUrl, R.drawable.coin_placeholder),
             title = token.fullCoin.coin.code,
             subtitle = token.fullCoin.coin.name,
-            enabled = false,
+            enabled = true,
             label = label
         )
     }

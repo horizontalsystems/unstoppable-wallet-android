@@ -5,23 +5,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.IAddressParser
+import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import java.math.BigDecimal
-import java.util.*
+import java.util.UUID
 
-class AddressParserViewModel(private val parser: IAddressParser) : ViewModel(), TextPreprocessor {
+class AddressParserViewModel(private val parser: IAddressParser, prefilledAmount: BigDecimal?) : ViewModel(), TextPreprocessor {
     private var lastEnteredText: String? = null
 
-    var amountUnique by mutableStateOf<AmountUnique?>(null)
+    var amountUnique by mutableStateOf<AmountUnique?>(prefilledAmount?.let { AmountUnique(it) })
         private set
 
     override fun process(text: String): String {
         var processed = text
         if (lastEnteredText.isNullOrBlank()) {
+            // parse only to get amount, full parsing done in AddressViewModel
             val addressData = parser.parse(text)
-
-            amountUnique = addressData.amount?.let { AmountUnique(it) }
-            processed = addressData.address
+            val amount = (addressData as? AddressUriResult.Uri)?.addressUri?.amount
+            if (amount != null) {
+                amountUnique = AmountUnique(amount)
+                processed = addressData.addressUri.address
+            }
         }
 
         lastEnteredText = text

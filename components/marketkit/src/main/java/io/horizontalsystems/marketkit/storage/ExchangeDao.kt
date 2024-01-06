@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.horizontalsystems.marketkit.models.Exchange
+import io.horizontalsystems.marketkit.models.VerifiedExchange
 
 @Dao
 interface ExchangeDao {
@@ -19,4 +20,14 @@ interface ExchangeDao {
 
     @Query("SELECT * FROM Exchange WHERE id IN (:ids)")
     fun getItems(ids: List<String>): List<Exchange>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertVerifiedExchanges(items: List<VerifiedExchange>)
+
+    @Query("SELECT * FROM VerifiedExchange")
+    fun getVerifiedExchanges(): List<VerifiedExchange>
+
+    @Query("DELETE FROM VerifiedExchange")
+    fun deleteVerifiedExchanges()
+
 }

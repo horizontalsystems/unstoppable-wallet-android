@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.entities.ViewState
@@ -51,18 +51,16 @@ class CoinInvestmentsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            CoinInvestmentsScreen(
-                viewModel = viewModel,
-                onClickNavigation = {
-                    findNavController().popBackStack()
-                },
-                onClickFundUrl = {
-                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
-                }
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        CoinInvestmentsScreen(
+            viewModel = viewModel,
+            onClickNavigation = {
+                navController.popBackStack()
+            },
+            onClickFundUrl = {
+                LinkHelper.openLinkInAppBrowser(requireContext(), it)
+            }
+        )
     }
 
     companion object {

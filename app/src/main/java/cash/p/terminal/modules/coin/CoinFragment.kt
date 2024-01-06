@@ -23,7 +23,6 @@ import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,22 +30,15 @@ import kotlinx.coroutines.launch
 class CoinFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val uid = try {
-            activity?.intent?.data?.getQueryParameter("uid")
-        } catch (e: UnsupportedOperationException) {
-            null
-        }
-
-        val coinUid = requireArguments().getString(COIN_UID_KEY, uid ?: "")
-        if (uid != null) {
-            activity?.intent?.data = null
-        }
+    override fun GetContent(navController: NavController) {
+        val coinUid = requireArguments().getString(COIN_UID_KEY, "")
+        val apiTag = requireArguments().getString(API_TAG_KEY, "")
 
         CoinScreen(
             coinUid,
+            apiTag,
             coinViewModel(coinUid),
-            findNavController(),
+            navController,
             childFragmentManager
         )
     }
@@ -62,30 +54,31 @@ class CoinFragment : BaseComposeFragment() {
 
     companion object {
         private const val COIN_UID_KEY = "coin_uid_key"
+        private const val API_TAG_KEY = "api_tag_key"
 
-        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
+        fun prepareParams(coinUid: String, apiTag: String) = bundleOf(COIN_UID_KEY to coinUid, API_TAG_KEY to apiTag)
     }
 }
 
 @Composable
 fun CoinScreen(
     coinUid: String,
+    apiTag: String,
     coinViewModel: CoinViewModel?,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
-    ComposeAppTheme {
-        if (coinViewModel != null) {
-            CoinTabs(coinViewModel, navController, fragmentManager)
-        } else {
-            CoinNotFound(coinUid, navController)
-        }
+    if (coinViewModel != null) {
+        CoinTabs(apiTag, coinViewModel, navController, fragmentManager)
+    } else {
+        CoinNotFound(coinUid, navController)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CoinTabs(
+    apiTag: String,
     viewModel: CoinViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
@@ -149,15 +142,19 @@ fun CoinTabs(
             when (tabs[page]) {
                 CoinModule.Tab.Overview -> {
                     CoinOverviewScreen(
+                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController
                     )
                 }
+
                 CoinModule.Tab.Market -> {
                     CoinMarketsScreen(fullCoin = viewModel.fullCoin)
                 }
+
                 CoinModule.Tab.Details -> {
                     CoinAnalyticsScreen(
+                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController,
                         fragmentManager = fragmentManager

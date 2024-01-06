@@ -50,7 +50,6 @@ import cash.p.terminal.ui.compose.components.subhead1_grey
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -66,14 +65,12 @@ class CoinMajorHoldersFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            CoinMajorHoldersScreen(
-                coinUid,
-                blockchain,
-                findNavController(),
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        CoinMajorHoldersScreen(
+            coinUid,
+            blockchain,
+            navController,
+        )
     }
 
     companion object {

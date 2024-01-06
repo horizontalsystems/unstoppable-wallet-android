@@ -21,18 +21,15 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui.compose.components.MenuItem
-import io.horizontalsystems.core.findNavController
 
 class TransactionLockTimeInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            InfoScreen(
-                requireArguments().getString(LOCK_TIME)!!,
-                findNavController()
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        InfoScreen(
+            requireArguments().getString(LOCK_TIME)!!,
+            navController
+        )
     }
 
     companion object {

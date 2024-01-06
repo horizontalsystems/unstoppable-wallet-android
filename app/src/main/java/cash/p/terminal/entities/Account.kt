@@ -133,7 +133,28 @@ sealed class AccountType : Parcelable {
     data class SolanaAddress(val address: String) : AccountType()
 
     @Parcelize
-    data class TronAddress(val address: String): AccountType()
+    data class TronAddress(val address: String) : AccountType()
+
+    @Parcelize
+    data class TonAddress(val address: String) : AccountType()
+
+    @Parcelize
+    data class BitcoinAddress(val address: String, val blockchainType: BlockchainType, val tokenType: TokenType) : AccountType() {
+
+        val serialized: String
+            get() = "$address|${blockchainType.uid}|${tokenType.id}"
+
+        companion object {
+            fun fromSerialized(serialized: String): BitcoinAddress {
+                val split = serialized.split("|")
+                return BitcoinAddress(
+                    split[0],
+                    BlockchainType.fromUid(split[1]),
+                    TokenType.fromId(split[2])!!
+                )
+            }
+        }
+    }
 
     @Parcelize
     data class Mnemonic(val words: List<String>, val passphrase: String) : AccountType() {
@@ -226,9 +247,11 @@ sealed class AccountType : Parcelable {
                     Translator.getString(R.string.ManageAccount_NWords, count)
                 }
             }
+            is BitcoinAddress -> "BTC Address"
             is EvmAddress -> "EVM Address"
             is SolanaAddress -> "Solana Address"
             is TronAddress -> "Tron Address"
+            is TonAddress -> "Ton Address"
             is EvmPrivateKey -> "EVM Private Key"
             is HdExtendedKey -> {
                 when (this.hdExtendedKey.derivedType) {
@@ -258,13 +281,15 @@ sealed class AccountType : Parcelable {
         }
 
     val hideZeroBalances: Boolean
-        get() = this is EvmAddress || this is SolanaAddress
+        get() = false
 
     val detailedDescription: String
         get() = when (this) {
             is EvmAddress -> this.address.shorten()
             is SolanaAddress -> this.address.shorten()
             is TronAddress -> this.address.shorten()
+            is TonAddress -> this.address.shorten()
+            is BitcoinAddress -> this.address.shorten()
             else -> this.description
         }
 
@@ -285,6 +310,8 @@ sealed class AccountType : Parcelable {
             is EvmAddress -> true
             is SolanaAddress -> true
             is TronAddress -> true
+            is TonAddress -> true
+            is BitcoinAddress -> true
             is HdExtendedKey -> hdExtendedKey.isPublic
             else -> false
         }
@@ -295,7 +322,7 @@ sealed class AccountType : Parcelable {
         else -> null
     }
 
-    fun sign(message: ByteArray, isLegacy: Boolean = false) : ByteArray? {
+    fun sign(message: ByteArray, isLegacy: Boolean = false): ByteArray? {
         val signer = when (this) {
             is Mnemonic -> {
                 Signer.getInstance(seed, App.evmBlockchainManager.getChain(BlockchainType.Ethereum))

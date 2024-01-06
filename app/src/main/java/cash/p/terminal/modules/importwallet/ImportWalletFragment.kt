@@ -34,7 +34,6 @@ import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -43,14 +42,14 @@ import java.io.File
 class ImportWalletFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val popUpToInclusiveId =
             arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.importWalletFragment) ?: R.id.importWalletFragment
 
         val inclusive =
             arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
 
-        ImportWalletScreen(findNavController(), popUpToInclusiveId, inclusive)
+        ImportWalletScreen(navController, popUpToInclusiveId, inclusive)
     }
 
 }
@@ -100,86 +99,84 @@ private fun ImportWalletScreen(
         }
     }
 
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = bottomSheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                ConfirmationBottomSheet(
-                    title = stringResource(R.string.ImportWallet_WarningInvalidJson),
-                    text = stringResource(R.string.ImportWallet_WarningInvalidJsonDescription),
-                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
-                    confirmText = stringResource(R.string.ImportWallet_SelectAnotherFile),
-                    cautionType = Caution.Type.Warning,
-                    cancelText = stringResource(R.string.Button_Cancel),
-                    onConfirm = {
-                        restoreLauncher.launch(arrayOf("application/json"))
-                        coroutineScope.launch { bottomSheetState.hide() }
-                    },
-                    onClose = {
-                        coroutineScope.launch { bottomSheetState.hide() }
-                    }
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            ConfirmationBottomSheet(
+                title = stringResource(R.string.ImportWallet_WarningInvalidJson),
+                text = stringResource(R.string.ImportWallet_WarningInvalidJsonDescription),
+                iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                confirmText = stringResource(R.string.ImportWallet_SelectAnotherFile),
+                cautionType = Caution.Type.Warning,
+                cancelText = stringResource(R.string.Button_Cancel),
+                onConfirm = {
+                    restoreLauncher.launch(arrayOf("application/json"))
+                    coroutineScope.launch { bottomSheetState.hide() }
+                },
+                onClose = {
+                    coroutineScope.launch { bottomSheetState.hide() }
+                }
+            )
+        }
+    ) {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = stringResource(R.string.ManageAccounts_ImportWallet),
+                    navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
                 )
             }
         ) {
-            Scaffold(
-                backgroundColor = ComposeAppTheme.colors.tyler,
-                topBar = {
-                    AppBar(
-                        title = stringResource(R.string.ManageAccounts_ImportWallet),
-                        navigationIcon = { HsBackButton(onClick = { navController.popBackStack() }) }
-                    )
-                }
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .verticalScroll(rememberScrollState())
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(it)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    VSpacer(12.dp)
-                    ImportOption(
-                        title = stringResource(R.string.ImportWallet_RecoveryPhrase),
-                        description = stringResource(R.string.ImportWallet_RecoveryPhrase_Description),
-                        icon = R.drawable.ic_edit_24,
-                        onClick = {
-                            navController.navigateWithTermsAccepted {
-                                navController.slideFromBottom(
-                                    R.id.restoreAccountFragment,
-                                    bundleOf(
-                                        ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-                                        ManageAccountsModule.popOffInclusiveKey to inclusive,
-                                    )
-                                )
-                            }
-                        }
-                    )
-                    VSpacer(12.dp)
-                    ImportOption(
-                        title = stringResource(R.string.ImportWallet_BackupFile),
-                        description = stringResource(R.string.ImportWallet_BackupFile_Description),
-                        icon = R.drawable.ic_download_24,
-                        onClick = {
-                            restoreLauncher.launch(arrayOf("application/json"))
-                        }
-                    )
-                    VSpacer(12.dp)
-                    ImportOption(
-                        title = stringResource(R.string.ImportWallet_ExchangeWallet),
-                        description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
-                        icon = R.drawable.icon_link_24,
-                        onClick = {
+                VSpacer(12.dp)
+                ImportOption(
+                    title = stringResource(R.string.ImportWallet_RecoveryPhrase),
+                    description = stringResource(R.string.ImportWallet_RecoveryPhrase_Description),
+                    icon = R.drawable.ic_edit_24,
+                    onClick = {
+                        navController.navigateWithTermsAccepted {
                             navController.slideFromBottom(
-                                R.id.importCexAccountFragment,
+                                R.id.restoreAccountFragment,
                                 bundleOf(
                                     ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
                                     ManageAccountsModule.popOffInclusiveKey to inclusive,
                                 )
                             )
                         }
-                    )
-                    VSpacer(12.dp)
-                }
+                    }
+                )
+                VSpacer(12.dp)
+                ImportOption(
+                    title = stringResource(R.string.ImportWallet_BackupFile),
+                    description = stringResource(R.string.ImportWallet_BackupFile_Description),
+                    icon = R.drawable.ic_download_24,
+                    onClick = {
+                        restoreLauncher.launch(arrayOf("application/json"))
+                    }
+                )
+                VSpacer(12.dp)
+                ImportOption(
+                    title = stringResource(R.string.ImportWallet_ExchangeWallet),
+                    description = stringResource(R.string.ImportWallet_ExchangeWallet_Description),
+                    icon = R.drawable.icon_link_24,
+                    onClick = {
+                        navController.slideFromBottom(
+                            R.id.importCexAccountFragment,
+                            bundleOf(
+                                ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
+                                ManageAccountsModule.popOffInclusiveKey to inclusive,
+                            )
+                        )
+                    }
+                )
+                VSpacer(12.dp)
             }
         }
     }

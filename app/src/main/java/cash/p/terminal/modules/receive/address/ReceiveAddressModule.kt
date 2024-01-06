@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
+import java.math.BigDecimal
 
 object ReceiveAddressModule {
 
@@ -15,27 +16,26 @@ object ReceiveAddressModule {
         }
     }
 
-    sealed class DescriptionItem {
-        class Value(val title: String, val value: String) : DescriptionItem()
-        class ValueInfo(val title: String, val value: String, val infoTitle: String, val infoText: String) : DescriptionItem()
+    sealed class AdditionalData {
+        class Amount(val value: String) : AdditionalData()
+        class Memo(val value: String) : AdditionalData()
+        object AccountNotActive : AdditionalData()
     }
-
-    data class PopupWarningItem(
-        val title: String,
-        val description: String,
-    )
 
     data class UiState(
         val viewState: ViewState,
-        val coinCode: String,
         val address: String,
-        val qrDescription: String,
-        val descriptionItems: List<DescriptionItem>,
-        val warning: String?,
-        val popupWarningItem: PopupWarningItem?
+        val uri: String,
+        val networkName: String,
+        val watchAccount: Boolean,
+        val additionalItems: List<AdditionalData>,
+        val amount: BigDecimal?,
+        val alertText: AlertText,
     )
 
-    class NoReceiverAdapter : Error("No Receiver Adapter")
-    class NoWalletData : Error("No Wallet Data")
+    sealed class AlertText {
+        class Normal(val content: String) : AlertText()
+        class Critical(val content: String) : AlertText()
+    }
 
 }

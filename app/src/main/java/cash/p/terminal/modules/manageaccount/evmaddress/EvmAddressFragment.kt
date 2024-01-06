@@ -24,7 +24,6 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
@@ -34,9 +33,9 @@ class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val evmAddress = arguments?.getString(EVM_ADDRESS_KEY) ?: ""
-        EvmAddressScreen(evmAddress, findNavController())
+        EvmAddressScreen(evmAddress, navController)
     }
 
 }
@@ -44,37 +43,35 @@ class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 @Composable
 private fun EvmAddressScreen(evmAddress: String, navController: NavController) {
     val view = LocalView.current
-    ComposeAppTheme {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(R.string.PublicKeys_EvmAddress),
-                navigationIcon = {
-                    HsBackButton(onClick = navController::popBackStack)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = {
-                            FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-                        }
-                    )
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            title = stringResource(R.string.PublicKeys_EvmAddress),
+            navigationIcon = {
+                HsBackButton(onClick = navController::popBackStack)
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Info_Title),
+                    icon = R.drawable.ic_info_24,
+                    onClick = {
+                        FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                    }
                 )
             )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Spacer(Modifier.height(12.dp))
-                HidableContent(evmAddress)
-                Spacer(Modifier.height(24.dp))
-            }
-            ActionButton(R.string.Alert_Copy) {
-                TextHelper.copyText(evmAddress)
-                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-            }
+        )
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top
+        ) {
+            Spacer(Modifier.height(12.dp))
+            HidableContent(evmAddress)
+            Spacer(Modifier.height(24.dp))
+        }
+        ActionButton(R.string.Alert_Copy) {
+            TextHelper.copyText(evmAddress)
+            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
         }
     }
 }

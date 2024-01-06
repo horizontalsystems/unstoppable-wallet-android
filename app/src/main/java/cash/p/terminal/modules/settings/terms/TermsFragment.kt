@@ -48,10 +48,8 @@ class TermsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            TermsScreen(navController = findNavController())
-        }
+    override fun GetContent(navController: NavController) {
+        TermsScreen(navController = navController)
     }
 
     companion object {

@@ -7,10 +7,10 @@ data class TopPlatform(
     val rank: Int,
     val protocols: Int,
     val marketCap: BigDecimal,
-    val rank1D: Int?,
     val rank1W: Int?,
     val rank1M: Int?,
-    val change1D: BigDecimal?,
+    val rank3M: Int?,
     val change1W: BigDecimal?,
-    val change1M: BigDecimal?
+    val change1M: BigDecimal?,
+    val change3M: BigDecimal?
 )

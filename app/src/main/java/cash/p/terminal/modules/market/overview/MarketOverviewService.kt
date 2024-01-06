@@ -28,7 +28,11 @@ class MarketOverviewService(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     val topMarketOptions: List<TopMarket> = TopMarket.values().toList()
-    val timeDurationOptions: List<TimeDuration> = TimeDuration.values().toList()
+    val timeDurationOptions: List<TimeDuration> = listOf(
+        TimeDuration.SevenDay,
+        TimeDuration.ThirtyDay,
+        TimeDuration.ThreeMonths,
+    )
     val topMoversObservable: BehaviorSubject<Result<TopMovers>> = BehaviorSubject.create()
     val marketOverviewObservable: BehaviorSubject<Result<MarketOverview>> = BehaviorSubject.create()
 

@@ -10,6 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import io.horizontalsystems.core.findNavController
 
 abstract class BaseComposeFragment(
     @LayoutRes layoutResId: Int = 0,
@@ -27,13 +30,15 @@ abstract class BaseComposeFragment(
             )
 
             setContent {
-                GetContent()
+                ComposeAppTheme {
+                    GetContent(findNavController())
+                }
             }
         }
     }
 
     @Composable
-    abstract fun GetContent()
+    abstract fun GetContent(navController: NavController)
 
     override fun onResume() {
         super.onResume()

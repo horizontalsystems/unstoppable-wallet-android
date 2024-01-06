@@ -10,4 +10,5 @@ data class MarketTicker(
     val rate: BigDecimal,
     val volume: BigDecimal,
     val tradeUrl: String?,
+    val verified: Boolean
 )

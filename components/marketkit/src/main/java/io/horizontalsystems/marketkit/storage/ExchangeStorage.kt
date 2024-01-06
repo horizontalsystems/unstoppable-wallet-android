@@ -1,6 +1,7 @@
 package io.horizontalsystems.marketkit.storage
 
 import io.horizontalsystems.marketkit.models.Exchange
+import io.horizontalsystems.marketkit.models.VerifiedExchange
 
 class ExchangeStorage(marketDatabase: MarketDatabase) {
     private val exchangeDao = marketDatabase.exchangeDao()
@@ -21,4 +22,14 @@ class ExchangeStorage(marketDatabase: MarketDatabase) {
         deleteAll()
         save(exchanges)
     }
+
+    fun verifiedExchanges(): List<VerifiedExchange> {
+        return exchangeDao.getVerifiedExchanges()
+    }
+
+    fun updateVerifiedExchanges(exchanges: List<VerifiedExchange>) {
+        exchangeDao.deleteVerifiedExchanges()
+        exchangeDao.insertVerifiedExchanges(exchanges)
+    }
+
 }

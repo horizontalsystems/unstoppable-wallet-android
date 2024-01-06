@@ -24,14 +24,13 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
 import kotlinx.coroutines.launch
 
 class AppearanceFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        AppearanceScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        AppearanceScreen(navController)
     }
 
 }
@@ -48,149 +47,147 @@ fun AppearanceScreen(navController: NavController) {
         ModalBottomSheetValue.Hidden
     )
 
-    ComposeAppTheme {
-        Surface(color = ComposeAppTheme.colors.tyler) {
-            ModalBottomSheetLayout(
-                sheetState = sheetState,
-                sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-                sheetContent = {
-                    AppCloseWarningBottomSheet(
-                        onCloseClick = { scope.launch { sheetState.hide() } },
-                        onChangeClick = {
-                            selectedAppIcon?.let { viewModel.onEnterAppIcon(it) }
-                            scope.launch { sheetState.hide() }
-                        }
-                    )
-                }
-            ) {
-                Column {
-                    AppBar(
-                        title = stringResource(R.string.Settings_Appearance),
-                        navigationIcon = {
-                            HsBackButton(onClick = { navController.popBackStack() })
-                        },
-                        menuItems = listOf(),
-                    )
-
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState()),
-                    ) {
-                        HeaderText(text = stringResource(id = R.string.Appearance_Theme))
-                        CellUniversalLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
-                            RowSelect(
-                                imageContent = {
-                                    Image(
-                                        modifier = Modifier.size(24.dp),
-                                        painter = painterResource(id = option.iconRes),
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-                                    )
-                                },
-                                text = option.title.getString(),
-                                selected = option == uiState.themeOptions.selected
-                            ) {
-                                viewModel.onEnterTheme(option)
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        HeaderText(text = stringResource(id = R.string.Appearance_Tab))
-                        CellUniversalLawrenceSection(
-                            listOf {
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                ) {
-                                    Image(
-                                        modifier = Modifier.size(24.dp),
-                                        painter = painterResource(id = R.drawable.ic_market_20),
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-                                    )
-
-                                    body_leah(
-                                        text = stringResource(id = R.string.Appearance_MarketsTab),
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(horizontal = 16.dp)
-                                    )
-
-                                    HsSwitch(
-                                        checked = uiState.marketsTabEnabled,
-                                        onCheckedChange = {
-                                            viewModel.onSetMarketTabsEnabled(it)
-                                        }
-                                    )
-
-                                }
-
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        AnimatedVisibility(visible = uiState.marketsTabEnabled) {
-                            Column {
-                                HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
-                                CellUniversalLawrenceSection(uiState.launchScreenOptions.options) { option ->
-                                    RowSelect(
-                                        imageContent = {
-                                            Image(
-                                                modifier = Modifier.size(24.dp),
-                                                painter = painterResource(id = option.iconRes),
-                                                contentDescription = null,
-                                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
-                                            )
-                                        },
-                                        text = option.title.getString(),
-                                        selected = option == uiState.launchScreenOptions.selected
-                                    ) {
-                                        viewModel.onEnterLaunchPage(option)
-                                    }
-                                }
-                                Spacer(modifier = Modifier.height(24.dp))
-                            }
-                        }
-
-                        HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
-                        CellUniversalLawrenceSection(uiState.baseTokenOptions.options) { option ->
-                            RowSelect(
-                                imageContent = {
-                                    CoinImage(
-                                        iconUrl = option.coin.imageUrl,
-                                        modifier = Modifier.size(32.dp)
-                                    )
-                                },
-                                text = option.coin.code,
-                                selected = option == uiState.baseTokenOptions.selected
-                            ) {
-                                viewModel.onEnterBaseToken(option)
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        HeaderText(text = stringResource(id = R.string.Appearance_BalanceValue))
-                        CellUniversalLawrenceSection(uiState.balanceViewTypeOptions.options) { option ->
-                            RowMultilineSelect(
-                                title = stringResource(id = option.titleResId),
-                                subtitle = stringResource(id = option.subtitleResId),
-                                selected = option == uiState.balanceViewTypeOptions.selected
-                            ) {
-                                viewModel.onEnterBalanceViewType(option)
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(24.dp))
-
-                        HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
-                        AppIconSection(uiState.appIconOptions) {
-                            scope.launch {
-                                selectedAppIcon = it
-                                sheetState.show()
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(32.dp))
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        ModalBottomSheetLayout(
+            sheetState = sheetState,
+            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+            sheetContent = {
+                AppCloseWarningBottomSheet(
+                    onCloseClick = { scope.launch { sheetState.hide() } },
+                    onChangeClick = {
+                        selectedAppIcon?.let { viewModel.onEnterAppIcon(it) }
+                        scope.launch { sheetState.hide() }
                     }
+                )
+            }
+        ) {
+            Column {
+                AppBar(
+                    title = stringResource(R.string.Settings_Appearance),
+                    navigationIcon = {
+                        HsBackButton(onClick = { navController.popBackStack() })
+                    },
+                    menuItems = listOf(),
+                )
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState()),
+                ) {
+                    HeaderText(text = stringResource(id = R.string.Appearance_Theme))
+                    CellUniversalLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
+                        RowSelect(
+                            imageContent = {
+                                Image(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(id = option.iconRes),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                )
+                            },
+                            text = option.title.getString(),
+                            selected = option == uiState.themeOptions.selected
+                        ) {
+                            viewModel.onEnterTheme(option)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    HeaderText(text = stringResource(id = R.string.Appearance_Tab))
+                    CellUniversalLawrenceSection(
+                        listOf {
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+                                Image(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(id = R.drawable.ic_market_20),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                )
+
+                                body_leah(
+                                    text = stringResource(id = R.string.Appearance_MarketsTab),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(horizontal = 16.dp)
+                                )
+
+                                HsSwitch(
+                                    checked = uiState.marketsTabEnabled,
+                                    onCheckedChange = {
+                                        viewModel.onSetMarketTabsEnabled(it)
+                                    }
+                                )
+
+                            }
+
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    AnimatedVisibility(visible = uiState.marketsTabEnabled) {
+                        Column {
+                            HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
+                            CellUniversalLawrenceSection(uiState.launchScreenOptions.options) { option ->
+                                RowSelect(
+                                    imageContent = {
+                                        Image(
+                                            modifier = Modifier.size(24.dp),
+                                            painter = painterResource(id = option.iconRes),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                        )
+                                    },
+                                    text = option.title.getString(),
+                                    selected = option == uiState.launchScreenOptions.selected
+                                ) {
+                                    viewModel.onEnterLaunchPage(option)
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(24.dp))
+                        }
+                    }
+
+                    HeaderText(text = stringResource(id = R.string.Appearance_BalanceConversion))
+                    CellUniversalLawrenceSection(uiState.baseTokenOptions.options) { option ->
+                        RowSelect(
+                            imageContent = {
+                                CoinImage(
+                                    iconUrl = option.coin.imageUrl,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            },
+                            text = option.coin.code,
+                            selected = option == uiState.baseTokenOptions.selected
+                        ) {
+                            viewModel.onEnterBaseToken(option)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    HeaderText(text = stringResource(id = R.string.Appearance_BalanceValue))
+                    CellUniversalLawrenceSection(uiState.balanceViewTypeOptions.options) { option ->
+                        RowMultilineSelect(
+                            title = stringResource(id = option.titleResId),
+                            subtitle = stringResource(id = option.subtitleResId),
+                            selected = option == uiState.balanceViewTypeOptions.selected
+                        ) {
+                            viewModel.onEnterBalanceViewType(option)
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
+                    AppIconSection(uiState.appIconOptions) {
+                        scope.launch {
+                            selectedAppIcon = it
+                            sheetState.show()
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }

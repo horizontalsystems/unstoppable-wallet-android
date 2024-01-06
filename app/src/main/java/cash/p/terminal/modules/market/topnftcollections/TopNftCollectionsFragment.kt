@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
@@ -30,7 +31,6 @@ import cash.p.terminal.modules.nft.collection.NftCollectionFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.BlockchainType
 
@@ -47,17 +47,15 @@ class TopNftCollectionsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            TopNftCollectionsScreen(
-                viewModel,
-                { findNavController().popBackStack() },
-                { blockchainType, collectionUid ->
-                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
-                    findNavController().slideFromBottom(R.id.nftCollectionFragment, args)
-                }
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        TopNftCollectionsScreen(
+            viewModel,
+            { navController.popBackStack() },
+            { blockchainType, collectionUid ->
+                val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType.uid)
+                navController.slideFromBottom(R.id.nftCollectionFragment, args)
+            }
+        )
     }
 
     companion object {

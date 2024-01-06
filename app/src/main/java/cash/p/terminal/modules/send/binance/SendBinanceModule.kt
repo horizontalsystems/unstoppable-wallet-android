@@ -11,7 +11,10 @@ import cash.p.terminal.modules.xrate.XRateService
 
 object SendBinanceModule {
 
-    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val predefinedAddress: String?,
+    ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBinanceAdapter) ?: throw IllegalStateException("SendBinanceAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -29,7 +32,8 @@ object SendBinanceModule {
                 addressService,
                 feeService,
                 xRateService,
-                App.contactsRepository
+                App.contactsRepository,
+                predefinedAddress == null,
             ) as T
         }
 

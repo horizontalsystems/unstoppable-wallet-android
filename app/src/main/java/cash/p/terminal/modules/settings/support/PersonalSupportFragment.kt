@@ -44,18 +44,15 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class PersonalSupportFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            PersonalSupportScreen(
-                findNavController()
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        PersonalSupportScreen(
+            navController
+        )
     }
 
 }
@@ -79,23 +76,21 @@ private fun PersonalSupportScreen(navController: NavController) {
         }
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Settings_PersonalSupport),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                )
-            }
-        ) { paddingValues ->
-            if (uiState.showRequestForm) {
-                RequestForm(paddingValues, viewModel, uiState)
-            } else {
-                SupportEnabled(paddingValues, viewModel)
-            }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Settings_PersonalSupport),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+            )
+        }
+    ) { paddingValues ->
+        if (uiState.showRequestForm) {
+            RequestForm(paddingValues, viewModel, uiState)
+        } else {
+            SupportEnabled(paddingValues, viewModel)
         }
     }
 }

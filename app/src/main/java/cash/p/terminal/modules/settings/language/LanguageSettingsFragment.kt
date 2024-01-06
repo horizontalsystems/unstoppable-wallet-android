@@ -32,14 +32,13 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 
 class LanguageSettingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         LanguageScreen(
-            findNavController(),
+            navController,
             { activity?.let { MainModule.startAsNewTask(it) } }
         )
     }
@@ -62,31 +61,29 @@ private fun LanguageScreen(
         reloadApp()
     }
 
-    ComposeAppTheme {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                title = stringResource(R.string.Settings_Language),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            )
-            Column(
-                Modifier.verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                CellUniversalLawrenceSection(viewModel.languageItems) { item ->
-                    LanguageCell(
-                        title = item.name,
-                        subtitle = item.nativeName,
-                        icon = item.icon,
-                        checked = item.current,
-                        onClick = { viewModel.onSelectLocale(item.localeType) }
-                    )
-                }
-                Spacer(Modifier.height(24.dp))
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.Settings_Language),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
             }
+        )
+        Column(
+            Modifier.verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(12.dp))
+            CellUniversalLawrenceSection(viewModel.languageItems) { item ->
+                LanguageCell(
+                    title = item.name,
+                    subtitle = item.nativeName,
+                    icon = item.icon,
+                    checked = item.current,
+                    onClick = { viewModel.onSelectLocale(item.localeType) }
+                )
+            }
+            Spacer(Modifier.height(24.dp))
         }
     }
 }

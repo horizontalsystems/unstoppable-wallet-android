@@ -48,29 +48,26 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 
 class CexAssetFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val asset = requireArguments().parcelable<CexAsset>(ASSET_KEY)
         if (asset == null) {
             Toast.makeText(App.instance, "Asset is Null", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            navController.popBackStack()
             return
         }
 
         val viewModel by viewModels<CexAssetViewModel> { CexAssetViewModel.Factory(asset) }
 
-        ComposeAppTheme {
-            CexAssetScreen(
-                viewModel,
-                findNavController()
-            )
-        }
+        CexAssetScreen(
+            viewModel,
+            navController
+        )
     }
 
     companion object {
@@ -231,7 +228,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
                 viewItem.coinUid?.let { coinUid ->
                     navController.slideFromRight(
                         R.id.coinFragment,
-                        CoinFragment.prepareParams(coinUid)
+                        CoinFragment.prepareParams(coinUid, "cex_asset")
                     )
                 }
             },

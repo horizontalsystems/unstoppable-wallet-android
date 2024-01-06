@@ -65,7 +65,6 @@ import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -77,7 +76,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val popUpToInclusiveId =
             arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
 
@@ -87,15 +86,13 @@ class RestoreLocalFragment : BaseComposeFragment() {
         val backupJsonString = arguments?.getString(jsonFileKey)
         val fileName = arguments?.getString(fileNameKey)
 
-        ComposeAppTheme {
-            RestoreLocalNavHost(
-                backupJsonString,
-                fileName,
-                findNavController(),
-                popUpToInclusiveId,
-                popUpInclusive
-            ) { activity?.let { MainModule.startAsNewTask(it) } }
-        }
+        RestoreLocalNavHost(
+            backupJsonString,
+            fileName,
+            navController,
+            popUpToInclusiveId,
+            popUpInclusive
+        ) { activity?.let { MainModule.startAsNewTask(it) } }
     }
 
 }
@@ -210,60 +207,58 @@ private fun RestoreLocalScreen(
         }
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.ImportBackupFile_EnterPassword),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = onBackClick
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.ImportBackupFile_EnterPassword),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = onBackClick
                     )
                 )
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(
+                        rememberScrollState()
+                    )
+            ) {
+
+                InfoText(text = stringResource(R.string.ImportBackupFile_EnterPassword_Description))
+                VSpacer(24.dp)
+                FormsInputPassword(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.ImportBackupFile_BackupPassword),
+                    state = uiState.passphraseState,
+                    onValueChange = viewModel::onChangePassphrase,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    hide = hidePassphrase,
+                    onToggleHide = {
+                        hidePassphrase = !hidePassphrase
+                    }
+                )
+                VSpacer(32.dp)
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(
+
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellowWithSpinner(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(
-                            rememberScrollState()
-                        )
-                ) {
-
-                    InfoText(text = stringResource(R.string.ImportBackupFile_EnterPassword_Description))
-                    VSpacer(24.dp)
-                    FormsInputPassword(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        hint = stringResource(R.string.ImportBackupFile_BackupPassword),
-                        state = uiState.passphraseState,
-                        onValueChange = viewModel::onChangePassphrase,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        hide = hidePassphrase,
-                        onToggleHide = {
-                            hidePassphrase = !hidePassphrase
-                        }
-                    )
-                    VSpacer(32.dp)
-                }
-
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellowWithSpinner(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.Button_Restore),
-                        showSpinner = uiState.showButtonSpinner,
-                        enabled = uiState.showButtonSpinner.not(),
-                        onClick = {
-                            viewModel.onImportClick()
-                        },
-                    )
-                }
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.Button_Restore),
+                    showSpinner = uiState.showButtonSpinner,
+                    enabled = uiState.showButtonSpinner.not(),
+                    onClick = {
+                        viewModel.onImportClick()
+                    },
+                )
             }
         }
     }
@@ -306,92 +301,90 @@ private fun BackupFileItems(
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = bottomSheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                ConfirmationBottomSheet(
-                    title = stringResource(R.string.BackupManager_MergeTitle),
-                    text = stringResource(R.string.BackupManager_MergeDescription),
-                    iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                    iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
-                    confirmText = stringResource(R.string.BackupManager_MergeButton),
-                    cautionType = Caution.Type.Error,
-                    cancelText = stringResource(R.string.Button_Cancel),
-                    onConfirm = {
-                        viewModel.restoreFullBackup()
-                        coroutineScope.launch { bottomSheetState.hide() }
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            ConfirmationBottomSheet(
+                title = stringResource(R.string.BackupManager_MergeTitle),
+                text = stringResource(R.string.BackupManager_MergeDescription),
+                iconPainter = painterResource(R.drawable.icon_warning_2_20),
+                iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                confirmText = stringResource(R.string.BackupManager_MergeButton),
+                cautionType = Caution.Type.Error,
+                cancelText = stringResource(R.string.Button_Cancel),
+                onConfirm = {
+                    viewModel.restoreFullBackup()
+                    coroutineScope.launch { bottomSheetState.hide() }
+                },
+                onClose = {
+                    coroutineScope.launch { bottomSheetState.hide() }
+                }
+            )
+        }
+    ) {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = stringResource(R.string.BackupManager_BаckupFile),
+                    navigationIcon = {
+                        HsBackButton(onClick = onBackClick)
                     },
-                    onClose = {
-                        coroutineScope.launch { bottomSheetState.hide() }
-                    }
                 )
+            },
+            bottomBar = {
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp),
+                        title = stringResource(R.string.BackupManager_Restore),
+                        onClick = {
+                            if (viewModel.shouldShowReplaceWarning()) {
+                                coroutineScope.launch { bottomSheetState.show() }
+                            } else {
+                                viewModel.restoreFullBackup()
+                            }
+                        }
+                    )
+                }
             }
         ) {
-            Scaffold(
-                backgroundColor = ComposeAppTheme.colors.tyler,
-                topBar = {
-                    AppBar(
-                        title = stringResource(R.string.BackupManager_BаckupFile),
-                        navigationIcon = {
-                            HsBackButton(onClick = onBackClick)
-                        },
-                    )
-                },
-                bottomBar = {
-                    ButtonsGroupWithShade {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.BackupManager_Restore),
-                            onClick = {
-                                if (viewModel.shouldShowReplaceWarning()) {
-                                    coroutineScope.launch { bottomSheetState.show() }
-                                } else {
-                                    viewModel.restoreFullBackup()
-                                }
-                            }
-                        )
-                    }
+            LazyColumn(modifier = Modifier.padding(it)) {
+                item {
+                    InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
                 }
-            ) {
-                LazyColumn(modifier = Modifier.padding(it)) {
+
+                if (walletBackupViewItems.isNotEmpty()) {
                     item {
-                        InfoText(text = stringResource(R.string.BackupManager_BackupFileContents), paddingBottom = 32.dp)
-                    }
+                        HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
+                        CellUniversalLawrenceSection(items = walletBackupViewItems, showFrame = true) { walletBackupViewItem ->
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
 
-                    if (walletBackupViewItems.isNotEmpty()) {
-                        item {
-                            HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                            CellUniversalLawrenceSection(items = walletBackupViewItems, showFrame = true) { walletBackupViewItem ->
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                ) {
-
-                                    Column(modifier = Modifier.weight(1f)) {
-                                        body_leah(text = walletBackupViewItem.name)
-                                        if (walletBackupViewItem.backupRequired) {
-                                            subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
-                                        } else {
-                                            subhead2_grey(
-                                                text = walletBackupViewItem.type,
-                                                overflow = TextOverflow.Ellipsis,
-                                                maxLines = 1
-                                            )
-                                        }
+                                Column(modifier = Modifier.weight(1f)) {
+                                    body_leah(text = walletBackupViewItem.name)
+                                    if (walletBackupViewItem.backupRequired) {
+                                        subhead2_lucian(text = stringResource(id = R.string.BackupManager_BackupRequired))
+                                    } else {
+                                        subhead2_grey(
+                                            text = walletBackupViewItem.type,
+                                            overflow = TextOverflow.Ellipsis,
+                                            maxLines = 1
+                                        )
                                     }
                                 }
                             }
-                            VSpacer(height = 24.dp)
                         }
+                        VSpacer(height = 24.dp)
                     }
+                }
 
-                    item {
-                        OtherBackupItems(otherBackupViewItems)
-                        VSpacer(height = 32.dp)
-                    }
+                item {
+                    OtherBackupItems(otherBackupViewItems)
+                    VSpacer(height = 32.dp)
                 }
             }
         }

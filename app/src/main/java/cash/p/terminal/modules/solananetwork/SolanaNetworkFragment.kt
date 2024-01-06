@@ -26,17 +26,15 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 
 class SolanaNetworkFragment : BaseComposeFragment() {
 
@@ -45,13 +43,11 @@ class SolanaNetworkFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            SolanaNetworkScreen(
-                viewModel,
-                findNavController()
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        SolanaNetworkScreen(
+            viewModel,
+            navController
+        )
     }
 
 }
@@ -98,9 +94,12 @@ private fun SolanaNetworkScreen(
             ) {
 
                 item {
-                    HeaderText(stringResource(R.string.AddEvmSyncSource_RpcSource)) {
-                        navController.slideFromBottom(R.id.evmBlockchainSyncModeInfoFragment)
-                    }
+                    VSpacer(12.dp)
+                    subhead2_grey(
+                        modifier = Modifier.padding(horizontal = 32.dp),
+                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+                    )
+                    VSpacer(32.dp)
                 }
 
                 item {
@@ -128,7 +127,9 @@ private fun NetworkSettingCell(
     RowUniversal(
         onClick = onClick
     ) {
-        Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
+        Column(modifier = Modifier
+            .padding(start = 16.dp)
+            .weight(1f)) {
             body_leah(
                 text = title,
                 maxLines = 1,

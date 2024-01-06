@@ -1,10 +1,8 @@
 package cash.p.terminal.modules.market.overview
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -22,14 +20,16 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.category.MarketCategoryFragment
-import cash.p.terminal.modules.market.overview.ui.*
+import cash.p.terminal.modules.market.overview.ui.BoardsView
+import cash.p.terminal.modules.market.overview.ui.MetricChartsView
+import cash.p.terminal.modules.market.overview.ui.TopPlatformsBoardView
+import cash.p.terminal.modules.market.overview.ui.TopSectorsBoardView
 import cash.p.terminal.modules.market.platform.MarketPlatformFragment
 import cash.p.terminal.modules.market.topcoins.MarketTopCoinsFragment
-import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsFragment
 import cash.p.terminal.modules.market.topplatforms.TopPlatformsFragment
-import cash.p.terminal.modules.nft.collection.NftCollectionFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.VSpacer
 
 @Composable
 fun MarketOverviewScreen(
@@ -63,11 +63,7 @@ fun MarketOverviewScreen(
                                 .fillMaxSize()
                                 .verticalScroll(scrollState)
                         ) {
-                            Box(
-                                modifier = Modifier.height(240.dp)
-                            ) {
-                                MetricChartsView(viewItem.marketMetrics, navController)
-                            }
+                            MetricChartsView(viewItem.marketMetrics, navController)
                             BoardsView(
                                 boards = viewItem.boards,
                                 navController = navController,
@@ -88,36 +84,6 @@ fun MarketOverviewScreen(
                                 }
                             )
 
-                            TopSectorsBoardView(
-                                board = viewItem.topSectorsBoard,
-                                onClickSeeAll = {
-                                    navController.slideFromRight(R.id.marketSearchFragment)
-                                },
-                                onItemClick = { coinCategory ->
-                                    navController.slideFromBottom(
-                                        R.id.marketCategoryFragment,
-                                        bundleOf(MarketCategoryFragment.categoryKey to coinCategory)
-                                    )
-                                }
-                            )
-
-                            TopNftCollectionsBoardView(
-                                viewItem.topNftCollectionsBoard,
-                                onSelectTimeDuration = { timeDuration ->
-                                    viewModel.onSelectTopNftsTimeDuration(timeDuration)
-                                },
-                                onClickCollection = { blockchainType, collectionUid ->
-                                    val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType)
-                                    navController.slideFromBottom(R.id.nftCollectionFragment, args)
-                                },
-                                onClickSeeAll = {
-                                    val (sortingField, timeDuration) = viewModel.topNftCollectionsParams
-                                    val args = TopNftCollectionsFragment.prepareParams(sortingField, timeDuration)
-
-                                    navController.slideFromBottom(R.id.marketTopNftCollectionsFragment, args)
-                                }
-                            )
-
                             TopPlatformsBoardView(
                                 viewItem.topPlatformsBoard,
                                 onSelectTimeDuration = { timeDuration ->
@@ -134,6 +100,17 @@ fun MarketOverviewScreen(
                                     navController.slideFromBottom(R.id.marketTopPlatformsFragment, args)
                                 }
                             )
+
+                            TopSectorsBoardView(
+                                board = viewItem.topSectorsBoard
+                            ) { coinCategory ->
+                                navController.slideFromBottom(
+                                    R.id.marketCategoryFragment,
+                                    bundleOf(MarketCategoryFragment.categoryKey to coinCategory)
+                                )
+                            }
+
+                            VSpacer(height = 32.dp)
                         }
                     }
                 }

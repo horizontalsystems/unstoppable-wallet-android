@@ -27,7 +27,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
-class SendBitcoinViewModel(
+class SendBitcoinViewModel constructor(
     private val adapter: ISendBitcoinAdapter,
     val wallet: Wallet,
     private val feeRateService: SendBitcoinFeeRateService,
@@ -37,7 +37,8 @@ class SendBitcoinViewModel(
     private val pluginService: SendBitcoinPluginService,
     private val xRateService: XRateService,
     private val btcBlockchainManager: BtcBlockchainManager,
-    private val contactsRepo: ContactsRepository
+    private val contactsRepo: ContactsRepository,
+    private val showAddressInput: Boolean
 ) : ViewModel() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -52,7 +53,6 @@ class SendBitcoinViewModel(
     private var addressState = addressService.stateFlow.value
     private var pluginState = pluginService.stateFlow.value
     private var fee = feeService.feeFlow.value
-    private val showAddressInput = addressService.predefinedAddress == null
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 

@@ -19,7 +19,7 @@ object TvlModule {
     @Suppress("UNCHECKED_CAST")
     class Factory : ViewModelProvider.Factory {
         private val globalMarketRepository: GlobalMarketRepository by lazy {
-            GlobalMarketRepository(App.marketKit)
+            GlobalMarketRepository(App.marketKit, "market_global_tvl_metrics")
         }
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

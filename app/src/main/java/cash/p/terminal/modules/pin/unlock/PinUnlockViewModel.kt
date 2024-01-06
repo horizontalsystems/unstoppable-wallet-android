@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.pin.core.ILockoutManager
 import cash.p.terminal.modules.pin.core.LockoutState
@@ -21,10 +22,14 @@ class PinUnlockViewModel(
     private val pinComponent: IPinComponent,
     private val lockoutManager: ILockoutManager,
     systemInfoManager: ISystemInfoManager,
-    private val timer: OneTimeTimer
+    private val timer: OneTimeTimer,
+    private val localStorage: ILocalStorage,
 ) : ViewModel(), OneTimerDelegate {
 
     private var attemptsLeft: Int? = null
+
+    var pinRandomized by mutableStateOf(localStorage.pinRandomized)
+        private set
 
     var uiState by mutableStateOf(
         PinUnlockViewState(
@@ -46,6 +51,11 @@ class PinUnlockViewModel(
 
     override fun onFire() {
         updateLockoutState()
+    }
+
+    fun updatePinRandomized(random: Boolean) {
+        localStorage.pinRandomized = random
+        pinRandomized = random
     }
 
     fun onBiometricsUnlock() {

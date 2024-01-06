@@ -74,12 +74,17 @@ class WC2Service : SignClient.WalletDelegate {
         sessionsUpdatedSubject.onNext(Unit)
     }
 
-    fun pair(uri: String) {
+    fun pair(
+        uri: String,
+        onSuccess: (Core.Params.Pair) -> Unit = {},
+        onError: (Core.Model.Error) -> Unit = {},
+    ) {
         val pair = Core.Params.Pair(uri.trim())
-        CoreClient.Pairing.pair(pair) { error ->
-            Log.e(TAG, "pair onError: ", error.throwable)
-            event = Event.Error(error.throwable)
-        }
+        CoreClient.Pairing.pair(pair, onSuccess = onSuccess, onError = {
+            onError.invoke(it)
+            event = Event.Error(it.throwable)
+            Log.e(TAG, "pair onError: ", it.throwable)
+        })
     }
 
     fun getPairings(): List<Core.Model.Pairing> {
@@ -235,6 +240,7 @@ class WC2Service : SignClient.WalletDelegate {
                 event = Event.SessionSettled(settleSessionResponse.session)
                 sessionsUpdatedSubject.onNext(Unit)
             }
+
             is Sign.Model.SettledSessionResponse.Error -> {
                 event = Event.Error(Throwable(settleSessionResponse.errorMessage))
             }

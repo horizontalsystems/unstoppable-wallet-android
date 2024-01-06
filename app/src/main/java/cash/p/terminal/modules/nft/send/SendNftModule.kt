@@ -4,9 +4,9 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.adapters.nft.INftAdapter
-import cash.p.terminal.core.factories.AddressParserFactory
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.NftMetadataManager
+import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.nft.EvmNftRecord
 import cash.p.terminal.entities.nft.NftUid
@@ -50,8 +50,7 @@ object SendNftModule {
                     EvmKitWrapperHoldingViewModel(evmKitWrapper) as T
                 }
                 AddressParserViewModel::class.java -> {
-                    val factory = AddressParserFactory()
-                    AddressParserViewModel(factory.parser(nftUid.blockchainType)) as T
+                    AddressParserViewModel(AddressUriParser(nftUid.blockchainType, null), null) as T
                 }
                 else -> throw IllegalArgumentException()
             }

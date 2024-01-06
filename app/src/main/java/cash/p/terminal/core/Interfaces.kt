@@ -6,10 +6,10 @@ import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.Bep2TokenInfoService
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.providers.FeeRates
+import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.AddressData
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.CexType
 import cash.p.terminal.entities.EnabledWallet
@@ -49,7 +49,6 @@ import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.util.Date
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.horizontalsystems.tronkit.models.Address as TronAddress
@@ -66,6 +65,7 @@ interface IAdapterManager {
 }
 
 interface ILocalStorage {
+    var marketSearchRecentCoinUids: List<String>
     var zcashAccountIds: Set<String>
     var autoLockInterval: AutoLockInterval
     var chartIndicatorsEnabled: Boolean
@@ -111,6 +111,8 @@ interface ILocalStorage {
     val marketsTabEnabledFlow: StateFlow<Boolean>
     var nonRecommendedAccountAlertDismissedAccounts: Set<String>
     var personalSupportEnabled: Boolean
+    var hideSuspiciousTransactions: Boolean
+    var pinRandomized: Boolean
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
@@ -318,7 +320,7 @@ interface ISendEthereumAdapter {
     val evmKitWrapper: EvmKitWrapper
     val balanceData: BalanceData
 
-    fun getTransactionData(amount: BigInteger, address: Address): TransactionData
+    fun getTransactionData(amount: BigDecimal, address: Address): TransactionData
 }
 
 interface ISendBinanceAdapter {
@@ -351,20 +353,27 @@ interface ISendSolanaAdapter {
     suspend fun send(amount: BigDecimal, to: SolanaAddress): FullTransaction
 }
 
+interface ISendTonAdapter {
+    val availableBalance: BigDecimal
+    suspend fun send(amount: BigDecimal, address: String)
+    suspend fun estimateFee() : BigDecimal
+}
+
 interface ISendTronAdapter {
     val balanceData: BalanceData
     val trxBalanceData: BalanceData
 
-    suspend fun estimateFee(amount: BigInteger, to: TronAddress): List<Fee>
-    suspend fun send(amount: BigInteger, to: TronAddress, feeLimit: Long?)
+    suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
+    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
     suspend fun isAddressActive(address: TronAddress): Boolean
     fun isOwnAddress(address: TronAddress): Boolean
 }
 
 interface IAccountsStorage {
-    var activeAccountId: String?
     val isAccountsEmpty: Boolean
 
+    fun getActiveAccountId(level: Int): String?
+    fun setActiveAccountId(level: Int, id: String?)
     fun allAccounts(accountsMinLevel: Int): List<Account>
     fun save(account: Account)
     fun update(account: Account)
@@ -443,7 +452,7 @@ interface IFeeRateProvider {
 }
 
 interface IAddressParser {
-    fun parse(paymentAddress: String): AddressData
+    fun parse(addressUri: String): AddressUriResult
 }
 
 interface IAccountCleaner {

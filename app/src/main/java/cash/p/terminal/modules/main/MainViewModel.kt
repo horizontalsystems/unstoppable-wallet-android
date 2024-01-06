@@ -1,11 +1,13 @@
 package cash.p.terminal.modules.main
 
+import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
+import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ILocalStorage
@@ -16,7 +18,12 @@ import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LaunchPage
+import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.main.MainModule.MainNavigation
+import cash.p.terminal.modules.market.platform.MarketPlatformFragment
+import cash.p.terminal.modules.market.topplatforms.Platform
+import cash.p.terminal.modules.nft.collection.NftCollectionFragment
+import cash.p.terminal.modules.walletconnect.list.WCListFragment
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
@@ -33,8 +40,8 @@ class MainViewModel(
     private val releaseNotesManager: ReleaseNotesManager,
     private val localStorage: ILocalStorage,
     wc2SessionManager: WC2SessionManager,
-    wc2Manager: WC2Manager,
-    private val wcDeepLink: String?
+    private val wc2Manager: WC2Manager,
+    deepLink: Uri?
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
@@ -45,8 +52,8 @@ class MainViewModel(
     private val launchPage: LaunchPage
         get() = localStorage.launchPage ?: LaunchPage.Auto
 
-    private var currentMainTab: MainNavigation?
-        get() = localStorage.mainTab
+    private var currentMainTab: MainNavigation
+        get() = localStorage.mainTab ?: MainNavigation.Balance
         set(value) {
             localStorage.mainTab = value
         }
@@ -73,7 +80,8 @@ class MainViewModel(
             )
         }
 
-    private var selectedPageIndex = getPageIndexToOpen()
+    private var selectedTabIndex = getTabIndexToOpen(deepLink)
+    private var deeplinkPage: DeeplinkPage? = null
     private var mainNavItems = navigationItems()
     private var showRateAppDialog = false
     private var contentHidden = pinComponent.isLocked
@@ -90,7 +98,8 @@ class MainViewModel(
 
     var uiState by mutableStateOf(
         MainModule.UiState(
-            selectedPageIndex = selectedPageIndex,
+            selectedTabIndex = selectedTabIndex,
+            deeplinkPage = deeplinkPage,
             mainNavItems = mainNavItems,
             showRateAppDialog = showRateAppDialog,
             contentHidden = contentHidden,
@@ -143,11 +152,6 @@ class MainViewModel(
             }
         }
 
-        wcDeepLink?.let {
-            wcSupportState = wc2Manager.getWalletConnectSupportState()
-            syncState()
-        }
-
         accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
             (it as? ActiveAccountState.ActiveAccount)?.let { state ->
                 activeWallet = state.account
@@ -193,7 +197,7 @@ class MainViewModel(
         if (mainNavItem != MainNavigation.Settings) {
             currentMainTab = mainNavItem
         }
-        selectedPageIndex = items.indexOf(mainNavItem)
+        selectedTabIndex = items.indexOf(mainNavItem)
         syncNavigation()
     }
 
@@ -209,7 +213,8 @@ class MainViewModel(
 
     private fun syncState() {
         uiState = MainModule.UiState(
-            selectedPageIndex = selectedPageIndex,
+            selectedTabIndex = selectedTabIndex,
+            deeplinkPage = deeplinkPage,
             mainNavItems = mainNavItems,
             showRateAppDialog = showRateAppDialog,
             contentHidden = contentHidden,
@@ -222,7 +227,7 @@ class MainViewModel(
 
     private fun navigationItems(): List<MainModule.NavigationViewItem> {
         return items.mapIndexed { index, mainNavItem ->
-            getNavItem(mainNavItem, index == selectedPageIndex)
+            getNavItem(mainNavItem, index == selectedTabIndex)
         }
     }
 
@@ -234,6 +239,7 @@ class MainViewModel(
                 enabled = true,
             )
         }
+
         MainNavigation.Transactions -> {
             MainModule.NavigationViewItem(
                 mainNavItem = item,
@@ -241,6 +247,7 @@ class MainViewModel(
                 enabled = transactionsEnabled,
             )
         }
+
         MainNavigation.Settings -> {
             MainModule.NavigationViewItem(
                 mainNavItem = item,
@@ -249,6 +256,7 @@ class MainViewModel(
                 badge = settingsBadge
             )
         }
+
         MainNavigation.Balance -> {
             MainModule.NavigationViewItem(
                 mainNavItem = item,
@@ -258,32 +266,88 @@ class MainViewModel(
         }
     }
 
-    private fun getPageIndexToOpen(): Int {
-        val page = when {
-            wcDeepLink != null -> {
-                MainNavigation.Settings
-            }
+    private fun getTabIndexToOpen(deepLink: Uri? = null): Int {
+        deepLink?.let {
+            val (tab, deeplinkPageData) = getNavigationDataForDeeplink(it)
+            deeplinkPage = deeplinkPageData
+            currentMainTab = tab
+            return items.indexOf(tab)
+        }
+
+        val tab = when {
             relaunchBySettingChange -> {
                 relaunchBySettingChange = false
                 MainNavigation.Settings
             }
+
             !marketsTabEnabled -> {
                 MainNavigation.Balance
             }
-            else -> when (launchPage) {
-                LaunchPage.Market,
-                LaunchPage.Watchlist -> MainNavigation.Market
-                LaunchPage.Balance -> MainNavigation.Balance
-                LaunchPage.Auto -> currentMainTab ?: MainNavigation.Balance
-            }
+
+            else -> getLaunchTab()
         }
-        return items.indexOf(page)
+
+        return items.indexOf(tab)
+    }
+
+    private fun getLaunchTab(): MainNavigation = when (launchPage) {
+        LaunchPage.Market,
+        LaunchPage.Watchlist -> MainNavigation.Market
+
+        LaunchPage.Balance -> MainNavigation.Balance
+        LaunchPage.Auto -> currentMainTab
+    }
+
+    private fun getNavigationDataForDeeplink(deepLink: Uri): Pair<MainNavigation, DeeplinkPage?> {
+        var tab = currentMainTab
+        var deeplinkPage: DeeplinkPage? = null
+        val deeplinkString = deepLink.toString()
+        when {
+            deeplinkString.startsWith("unstoppable:") -> {
+                val uid = deepLink.getQueryParameter("uid")
+                when {
+                    deeplinkString.contains("coin-page") -> {
+                        uid?.let {
+                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.prepareParams(it, "widget_click"))
+                        }
+                    }
+
+                    deeplinkString.contains("nft-collection") -> {
+                        val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
+                        if (uid != null && blockchainTypeUid != null) {
+                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.prepareParams(uid, blockchainTypeUid))
+                        }
+                    }
+
+                    deeplinkString.contains("top-platforms") -> {
+                        val title = deepLink.getQueryParameter("title")
+                        if (title != null && uid != null) {
+                            val platform = Platform(uid, title)
+                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, MarketPlatformFragment.prepareParams(platform))
+                        }
+                    }
+                }
+
+                tab = MainNavigation.Market
+            }
+
+            deeplinkString.startsWith("wc:") -> {
+                wcSupportState = wc2Manager.getWalletConnectSupportState()
+                if (wcSupportState == WC2Manager.SupportState.Supported) {
+                    deeplinkPage = DeeplinkPage(R.id.wallet_connect_graph, WCListFragment.prepareParams(deeplinkString))
+                    tab = MainNavigation.Settings
+                }
+            }
+
+            else -> {}
+        }
+        return Pair(tab, deeplinkPage)
     }
 
     private fun syncNavigation() {
         mainNavItems = navigationItems()
-        if (selectedPageIndex >= mainNavItems.size) {
-            selectedPageIndex = mainNavItems.size - 1
+        if (selectedTabIndex >= mainNavItems.size) {
+            selectedTabIndex = mainNavItems.size - 1
         }
         syncState()
     }
@@ -310,6 +374,11 @@ class MainViewModel(
             null
         }
         syncNavigation()
+    }
+
+    fun deeplinkPageHandled() {
+        deeplinkPage = null
+        syncState()
     }
 
 }

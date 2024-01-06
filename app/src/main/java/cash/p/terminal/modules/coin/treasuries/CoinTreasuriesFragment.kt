@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
@@ -54,10 +55,8 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            CoinTreasuriesScreen(viewModel)
-        }
+    override fun GetContent(navController: NavController) {
+        CoinTreasuriesScreen(viewModel)
     }
 
     @Composable
@@ -87,9 +86,11 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
                         }
+
                         ViewState.Success -> {
                             LazyColumn(modifier = Modifier.fillMaxSize()) {
                                 treasuriesData?.let { treasuriesData ->
@@ -129,6 +130,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                                 }
                             }
                         }
+
                         null -> {}
                     }
                 }

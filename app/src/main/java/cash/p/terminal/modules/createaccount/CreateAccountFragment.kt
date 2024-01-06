@@ -37,19 +37,18 @@ import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.body_leah
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
 class CreateAccountFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val popUpToInclusiveId =
             arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.createAccountFragment) ?: R.id.createAccountFragment
         val inclusive =
             arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
-        CreateAccountNavHost(findNavController(), popUpToInclusiveId, inclusive)
+        CreateAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
 
 }
@@ -105,57 +104,55 @@ private fun CreateAccountIntroScreen(
         }
     }
 
-    ComposeAppTheme {
-        Surface(color = ComposeAppTheme.colors.tyler) {
-            Column(Modifier.fillMaxSize()) {
-                AppBar(
-                    title = stringResource(R.string.ManageAccounts_CreateNewWallet),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Create),
-                            onClick = viewModel::createAccount
-                        )
-                    ),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
-                    },
-                    backgroundColor = Color.Transparent
-                )
-                Spacer(Modifier.height(12.dp))
+    Surface(color = ComposeAppTheme.colors.tyler) {
+        Column(Modifier.fillMaxSize()) {
+            AppBar(
+                title = stringResource(R.string.ManageAccounts_CreateNewWallet),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Create),
+                        onClick = viewModel::createAccount
+                    )
+                ),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                },
+                backgroundColor = Color.Transparent
+            )
+            Spacer(Modifier.height(12.dp))
 
-                HeaderText(stringResource(id = R.string.ManageAccount_Name))
-                FormsInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = viewModel.accountName,
-                    pasteEnabled = false,
-                    hint = viewModel.defaultAccountName,
-                    onValueChange = viewModel::onChangeAccountName
-                )
+            HeaderText(stringResource(id = R.string.ManageAccount_Name))
+            FormsInput(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                initial = viewModel.accountName,
+                pasteEnabled = false,
+                hint = viewModel.defaultAccountName,
+                onValueChange = viewModel::onChangeAccountName
+            )
 
-                Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(32.dp))
 
-                CellSingleLineLawrenceSection {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clickable {
-                                openCreateAdvancedScreen.invoke()
-                            }
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        body_leah(text = stringResource(R.string.Button_Advanced))
-                        Spacer(modifier = Modifier.weight(1f))
-                        Image(
-                            modifier = Modifier.size(20.dp),
-                            painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = null,
-                        )
-                    }
+            CellSingleLineLawrenceSection {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clickable {
+                            openCreateAdvancedScreen.invoke()
+                        }
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    body_leah(text = stringResource(R.string.Button_Advanced))
+                    Spacer(modifier = Modifier.weight(1f))
+                    Image(
+                        modifier = Modifier.size(20.dp),
+                        painter = painterResource(id = R.drawable.ic_arrow_right),
+                        contentDescription = null,
+                    )
                 }
-
-                Spacer(Modifier.height(32.dp))
             }
+
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

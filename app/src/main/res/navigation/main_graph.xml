@@ -8,15 +8,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="cash.p.terminal.modules.main.MainFragment">
-        <deepLink
-            app:action=""
-            android:id="@+id/deepLink"
-            app:uri="wc:{topic}"/>
-        <argument android:name="topic" app:argType="string"/>
-        <argument android:name="bridge" app:argType="string"/>
-        <argument android:name="key" app:argType="string"/>
-    </fragment>
+        android:name="cash.p.terminal.modules.main.MainFragment"/>
     <fragment
         android:id="@+id/depositCexFragment"
         android:name="cash.p.terminal.modules.depositcex.DepositCexFragment"/>
@@ -38,6 +30,12 @@
     <fragment
         android:id="@+id/filterCoinFragment"
         android:name="cash.p.terminal.modules.transactions.FilterCoinFragment" />
+   <fragment
+        android:id="@+id/filterBlockchainFragment"
+        android:name="cash.p.terminal.modules.transactions.FilterBlockchainFragment" />
+   <fragment
+        android:id="@+id/transactionFilterFragment"
+        android:name="cash.p.terminal.modules.transactions.TransactionsFilterFragment" />
     <fragment
         android:id="@+id/transactionInfoFragment"
         android:name="cash.p.terminal.modules.transactionInfo.TransactionInfoFragment" />
@@ -80,12 +78,6 @@
     <fragment
         android:id="@+id/backupLocalFragment"
         android:name="cash.p.terminal.modules.backuplocal.BackupLocalFragment"/>
-    <fragment
-        android:id="@+id/btcBlockchainRestoreSourceInfoFragment"
-        android:name="cash.p.terminal.modules.info.BtcBlockchainRestoreSourceInfoFragment"/>
-    <fragment
-        android:id="@+id/evmBlockchainSyncModeInfoFragment"
-        android:name="cash.p.terminal.modules.info.EvmBlockchainSyncModeInfoFragment"/>
      <fragment
         android:id="@+id/transactionLockTimeInfoFragment"
         android:name="cash.p.terminal.modules.info.TransactionLockTimeInfoFragment"/>
@@ -147,11 +139,7 @@
         android:name="cash.p.terminal.modules.market.metricspage.MetricsPageFragment" />
     <fragment
         android:id="@+id/coinFragment"
-        android:name="cash.p.terminal.modules.coin.CoinFragment" >
-        <deepLink
-            app:action="android.intent.action.VIEW"
-            app:uri="pcash://coin-page?uid={coinUid}" />
-    </fragment>
+        android:name="cash.p.terminal.modules.coin.CoinFragment" />
     <fragment
         android:id="@+id/technicalIndicatorsDetailsFragment"
         android:name="cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment" />
@@ -253,11 +241,7 @@
         android:name="cash.p.terminal.modules.market.topplatforms.TopPlatformsFragment"/>
     <fragment
         android:id="@+id/marketPlatformFragment"
-        android:name="cash.p.terminal.modules.market.platform.MarketPlatformFragment">
-        <deepLink
-            app:action="android.intent.action.VIEW"
-            app:uri="pcash://top-platforms?uid={platformUid}&amp;title={platformName}" />
-    </fragment>
+        android:name="cash.p.terminal.modules.market.platform.MarketPlatformFragment"/>
     <fragment
         android:id="@+id/marketAdvancedSearchFragment"
         android:name="cash.p.terminal.modules.market.filters.MarketFiltersFragment"/>
@@ -340,11 +324,7 @@
         android:name="cash.p.terminal.modules.nft.send.SendNftFragment" />
     <fragment
         android:id="@+id/nftCollectionFragment"
-        android:name="cash.p.terminal.modules.nft.collection.NftCollectionFragment">
-        <deepLink
-            app:action="android.intent.action.VIEW"
-            app:uri="pcash://nft-collection?uid={collectionUid}" />
-    </fragment>
+        android:name="cash.p.terminal.modules.nft.collection.NftCollectionFragment"/>
     <fragment
         android:id="@+id/sendXFragment"
         android:name="cash.p.terminal.modules.send.SendFragment" />

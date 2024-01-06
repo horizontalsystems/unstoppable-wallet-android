@@ -21,7 +21,7 @@ import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
 
-@Database(version = 57, exportSchema = false, entities = [
+@Database(version = 58, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -110,6 +110,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_54_55,
                             Migration_55_56,
                             Migration_56_57,
+                            Migration_57_58,
                     )
                     .build()
         }

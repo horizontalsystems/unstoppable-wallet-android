@@ -34,38 +34,35 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.headline2_jacob
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 
 class OverallScoreInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val scoreCategory = requireArguments().parcelable<ScoreCategory>(SCORE_CATEGORY_KEY)
         val categoryScores = getScores(scoreCategory)
-        ComposeAppTheme {
-            if (scoreCategory == null) {
-                ScreenMessageWithAction(
-                    text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
-                ) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth(),
-                        title = stringResource(R.string.Button_Close),
-                        onClick = { findNavController().popBackStack() }
-                    )
-                }
-            } else {
-                InfoScreen(
-                    scoreCategory.title,
-                    scoreCategory.description,
-                    categoryScores,
-                    findNavController()
+        if (scoreCategory == null) {
+            ScreenMessageWithAction(
+                text = stringResource(R.string.Error),
+                icon = R.drawable.ic_error_48
+            ) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 48.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    onClick = { navController.popBackStack() }
                 )
             }
+        } else {
+            InfoScreen(
+                scoreCategory.title,
+                scoreCategory.description,
+                categoryScores,
+                navController
+            )
         }
     }
 

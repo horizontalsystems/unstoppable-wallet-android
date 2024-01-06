@@ -107,6 +107,8 @@ class ManageAccountViewModel(
             is AccountType.EvmAddress -> listOf()
             is AccountType.SolanaAddress -> listOf()
             is AccountType.TronAddress -> listOf()
+            is AccountType.TonAddress -> listOf()
+            is AccountType.BitcoinAddress -> listOf()
             is AccountType.HdExtendedKey -> {
                 if (account.type.hdExtendedKey.isPublic) {
                     listOf(KeyAction.PublicKeys)

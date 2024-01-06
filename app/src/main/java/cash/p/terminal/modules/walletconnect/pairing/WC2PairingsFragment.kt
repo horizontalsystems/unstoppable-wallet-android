@@ -37,13 +37,12 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.body_lucian
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 
 class WC2PairingsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        WCPairingsScreen(findNavController())
+    override fun GetContent(navController: NavController) {
+        WCPairingsScreen(navController)
     }
 
 }
@@ -59,57 +58,55 @@ fun WCPairingsScreen(navController: NavController) {
         }
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.WalletConnect_PairedDApps),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                )
-            }
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.WalletConnect_PairedDApps),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(modifier = Modifier.height(12.dp))
-                val pairings = uiState.pairings
-                CellUniversalLawrenceSection(pairings) { pairing ->
-                    Pairing(pairing = pairing) {
-                        viewModel.delete(pairing)
+            Spacer(modifier = Modifier.height(12.dp))
+            val pairings = uiState.pairings
+            CellUniversalLawrenceSection(pairings) { pairing ->
+                Pairing(pairing = pairing) {
+                    viewModel.delete(pairing)
+                }
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+            CellUniversalLawrenceSection(
+                listOf {
+                    RowUniversal(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        onClick = {
+                            ConfirmDeleteAllPairingsDialog.onConfirm(navController) {
+                                viewModel.deleteAll()
+                            }
+                            navController.slideFromBottom(R.id.confirmDeleteAllPairingsDialog)
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_delete_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.lucian
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        body_lucian(text = stringResource(id = R.string.WalletConnect_Pairings_DeleteAll))
                     }
                 }
-                Spacer(modifier = Modifier.height(32.dp))
-                CellUniversalLawrenceSection(
-                    listOf {
-                        RowUniversal(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .fillMaxWidth(),
-                            onClick = {
-                                ConfirmDeleteAllPairingsDialog.onConfirm(navController) {
-                                    viewModel.deleteAll()
-                                }
-                                navController.slideFromBottom(R.id.confirmDeleteAllPairingsDialog)
-                            }
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_delete_20),
-                                contentDescription = null,
-                                tint = ComposeAppTheme.colors.lucian
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            body_lucian(text = stringResource(id = R.string.WalletConnect_Pairings_DeleteAll))
-                        }
-                    }
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-            }
+            )
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

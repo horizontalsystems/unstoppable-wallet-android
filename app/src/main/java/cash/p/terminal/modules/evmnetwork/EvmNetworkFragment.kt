@@ -48,7 +48,6 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.EvmSyncSource
 import cash.p.terminal.modules.btcblockchainsettings.BlockchainSettingCell
 import cash.p.terminal.modules.evmnetwork.addrpc.AddRpcScreen
-import cash.p.terminal.modules.info.EvmNetworkInfoScreen
 import cash.p.terminal.modules.walletconnect.list.ui.ActionsRow
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.modules.walletconnect.list.ui.getShape
@@ -61,28 +60,25 @@ import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class EvmNetworkFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            EvmNetworkNavHost(
-                requireArguments(),
-                findNavController()
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        EvmNetworkNavHost(
+            requireArguments(),
+            navController
+        )
     }
 
 }
 
 private const val EvmNetworkPage = "evm_network"
-private const val EvmNetworkInfoPage = "evm_network_info"
 private const val AddRpcPage = "add_rpc"
 
 @Composable
@@ -103,7 +99,6 @@ private fun EvmNetworkNavHost(
             )
         }
         composablePopup(AddRpcPage) { AddRpcScreen(navController, arguments) }
-        composablePopup(EvmNetworkInfoPage) { EvmNetworkInfoScreen(navController) }
     }
 }
 
@@ -150,14 +145,17 @@ private fun EvmNetworkScreen(
             ) {
 
                 item {
-                    HeaderText(stringResource(R.string.AddEvmSyncSource_RpcSource)) {
-                        navController.navigate(EvmNetworkInfoPage)
-                    }
+                    VSpacer(12.dp)
+                    subhead2_grey(
+                        modifier = Modifier.padding(horizontal = 32.dp),
+                        text = stringResource(R.string.BtcBlockchainSettings_RestoreSourceSettingsDescription)
+                    )
+                    VSpacer(32.dp)
                 }
 
                 item {
                     CellUniversalLawrenceSection(viewModel.viewState.defaultItems) { item ->
-                        BlockchainSettingCell(item.name, item.url, item.selected) {
+                        BlockchainSettingCell(item.name, item.url, item.selected, null) {
                             viewModel.onSelectSyncSource(item.syncSource)
                         }
                     }

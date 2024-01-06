@@ -40,7 +40,6 @@ import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
@@ -48,25 +47,23 @@ import kotlinx.coroutines.delay
 class SelectBlockchainsFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            val popUpToInclusiveId =
-                arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
-            val inclusive =
-                arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-            val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
-            val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
-            if (accountType != null) {
-                SelectBlockchainsScreen(
-                    accountType,
-                    accountName,
-                    findNavController(),
-                    popUpToInclusiveId,
-                    inclusive
-                )
-            } else {
-                findNavController().popBackStack()
-            }
+    override fun GetContent(navController: NavController) {
+        val popUpToInclusiveId =
+            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
+        val inclusive =
+            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+        val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
+        val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
+        if (accountType != null) {
+            SelectBlockchainsScreen(
+                accountType,
+                accountName,
+                navController,
+                popUpToInclusiveId,
+                inclusive
+            )
+        } else {
+            navController.popBackStack()
         }
     }
 
@@ -112,7 +109,7 @@ private fun SelectBlockchainsScreen(
             },
             menuItems = listOf(
                 MenuItem(
-                    title = TranslatableString.ResString(R.string.Watch_Address_Watch),
+                    title = TranslatableString.ResString(R.string.Button_Done),
                     onClick = viewModel::onClickWatch,
                     enabled = submitEnabled
                 )

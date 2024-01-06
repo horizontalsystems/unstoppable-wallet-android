@@ -109,6 +109,10 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.oneInchApiKey)
     }
 
+    val blockchairApiKey by lazy {
+        Translator.getString(R.string.blockchairApiKey)
+    }
+
     val fiatDecimal: Int = 2
     val feeRateAdjustForCurrencies: List<String> = listOf("USD", "EUR")
 
@@ -152,6 +156,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
             BlockchainType.Solana to "CefzHT5zCUncm3yhTLck9bCRYkbjHrKToT1GpPUyqCMa",
             BlockchainType.Gnosis to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
             BlockchainType.Fantom to "0x696Ed8f9E2b3265Abc24a6A035d6c5094f61e61B",
+            BlockchainType.Ton to "UQCYTBH7n8OnQ6BgOfdkNRWF7socLJb9U-JMRcoz3UpL_0V6",
             BlockchainType.Tron to "TV4wYRcDun4iHb4oUgcse4Whptk9JKVui2"
         ).toList().sortedBy { (key, _) -> key.order }.toMap()
     }

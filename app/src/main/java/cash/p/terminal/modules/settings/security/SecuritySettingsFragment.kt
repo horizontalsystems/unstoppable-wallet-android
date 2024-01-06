@@ -39,7 +39,6 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.extensions.ConfirmationDialog
-import io.horizontalsystems.core.findNavController
 import kotlin.system.exitProcess
 
 class SecuritySettingsFragment : BaseComposeFragment() {
@@ -53,16 +52,14 @@ class SecuritySettingsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            SecurityCenterScreen(
-                securitySettingsViewModel = securitySettingsViewModel,
-                torViewModel = torViewModel,
-                navController = findNavController(),
-                showAppRestartAlert = { showAppRestartAlert() },
-                restartApp = { restartApp() },
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        SecurityCenterScreen(
+            securitySettingsViewModel = securitySettingsViewModel,
+            torViewModel = torViewModel,
+            navController = navController,
+            showAppRestartAlert = { showAppRestartAlert() },
+            restartApp = { restartApp() },
+        )
     }
 
     private fun showAppRestartAlert() {

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.bitcoinCashCoinType
-import cash.p.terminal.core.providers.Translator
 import io.horizontalsystems.marketkit.models.TokenType
 
 class BchAddressTypeSelectViewModel(coinUid: String, walletManager: IWalletManager) : ViewModel() {
@@ -19,7 +18,7 @@ class BchAddressTypeSelectViewModel(coinUid: String, walletManager: IWalletManag
             val bitcoinCashCoinType = addressType.bitcoinCashCoinType
 
             AddressFormatItem(
-                title = Translator.getString(bitcoinCashCoinType.title),
+                title = bitcoinCashCoinType.title,
                 subtitle = bitcoinCashCoinType.value.uppercase(),
                 wallet = wallet
             )

@@ -35,51 +35,49 @@ fun WC2UnsupportedRequestScreen(
 ) {
     val viewModel = viewModel<WC2UnsupportedRequestViewModel>(factory = WC2UnsupportedRequestViewModel.Factory(requestData))
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.WalletConnect_UnsupportedRequest_Title),
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { navController.popBackStack() }
-                        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.WalletConnect_UnsupportedRequest_Title),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = { navController.popBackStack() }
                     )
                 )
-            }
+            )
+        }
+    ) {
+        Column(
+            modifier = Modifier.padding(it)
         ) {
-            Column(
-                modifier = Modifier.padding(it)
-            ) {
-                Spacer(modifier = Modifier.padding(top = 12.dp))
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    title = stringResource(R.string.WalletConnect_UnsupportedRequest_WarningTitle),
-                    text = stringResource(R.string.WalletConnect_UnsupportedRequest_WarningDescription),
-                    icon = R.drawable.ic_attention_20
+            Spacer(modifier = Modifier.padding(top = 12.dp))
+            TextImportantWarning(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                title = stringResource(R.string.WalletConnect_UnsupportedRequest_WarningTitle),
+                text = stringResource(R.string.WalletConnect_UnsupportedRequest_WarningDescription),
+                icon = R.drawable.ic_attention_20
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Column(Modifier.padding(horizontal = 24.dp)) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
+                    enabled = false,
+                    onClick = { },
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.WalletConnect_SignMessageRequest_ButtonSign),
-                        enabled = false,
-                        onClick = { },
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    ButtonPrimaryDefault(
-                        modifier = Modifier.fillMaxWidth(),
-                        title = stringResource(R.string.Button_Reject),
-                        onClick = {
-                            viewModel.reject()
-                            navController.popBackStack()
-                        }
-                    )
-                    Spacer(Modifier.height(32.dp))
-                }
+                Spacer(Modifier.height(16.dp))
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Reject),
+                    onClick = {
+                        viewModel.reject()
+                        navController.popBackStack()
+                    }
+                )
+                Spacer(Modifier.height(32.dp))
             }
         }
     }

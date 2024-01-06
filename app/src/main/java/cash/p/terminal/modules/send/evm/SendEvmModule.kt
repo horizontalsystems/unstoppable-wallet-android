@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.Warning
+import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
-import cash.p.terminal.modules.send.SendAmountAdvancedService
+import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 import cash.p.terminal.modules.swap.SwapMainModule.PriceImpactViewItem
 import cash.p.terminal.modules.walletconnect.request.WCRequestChain
@@ -130,10 +131,11 @@ object SendEvmModule {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendAmountAdvancedService(
+                    val amountService = SendAmountService(
+                        amountValidator,
+                        wallet.token.coin.code,
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
-                        wallet.token,
-                        amountValidator
+                        wallet.token.type.isNative
                     )
                     val addressService = SendEvmAddressService(predefinedAddress)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
@@ -145,7 +147,9 @@ object SendEvmModule {
                         xRateService,
                         amountService,
                         addressService,
-                        coinMaxAllowedDecimals
+                        coinMaxAllowedDecimals,
+                        predefinedAddress == null,
+                        App.connectivityManager,
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

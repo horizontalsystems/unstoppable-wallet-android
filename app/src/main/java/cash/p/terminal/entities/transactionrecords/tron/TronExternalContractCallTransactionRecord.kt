@@ -1,8 +1,8 @@
 package cash.p.terminal.entities.transactionrecords.tron
 
+import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.evm.EvmTransactionRecord
-import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.TransferEvent
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.Token
@@ -12,6 +12,7 @@ class TronExternalContractCallTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
+    spamManager: SpamManager,
     val incomingEvents: List<TransferEvent>,
     val outgoingEvents: List<TransferEvent>
 ) : TronTransactionRecord(
@@ -19,7 +20,7 @@ class TronExternalContractCallTransactionRecord(
     baseToken = baseToken,
     source = source,
     foreignTransaction = true,
-    spam = ExternalContractCallTransactionRecord.isSpam(incomingEvents, outgoingEvents)
+    spam = spamManager.isSpam(incomingEvents, outgoingEvents)
 ) {
 
     override val mainValue: TransactionValue?

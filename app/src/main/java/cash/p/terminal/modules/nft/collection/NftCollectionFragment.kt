@@ -28,7 +28,6 @@ import cash.p.terminal.ui.compose.components.TabItem
 import cash.p.terminal.ui.compose.components.Tabs
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.launch
@@ -36,14 +35,9 @@ import kotlinx.coroutines.launch
 class NftCollectionFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val uid = activity?.intent?.data?.getQueryParameter("uid")
-        val blockchainTypeUidFromIntent = activity?.intent?.data?.getQueryParameter("blockchainTypeUid")
-        if (uid != null) {
-            activity?.intent?.data = null
-        }
-        val nftCollectionUid = requireArguments().getString(collectionUidKey, uid ?: "")
-        val blockchainTypeString = requireArguments().getString(blockchainTypeKey, blockchainTypeUidFromIntent ?: "")
+    override fun GetContent(navController: NavController) {
+        val nftCollectionUid = requireArguments().getString(collectionUidKey, "")
+        val blockchainTypeString = requireArguments().getString(blockchainTypeUidKey, "")
         val blockchainType = BlockchainType.fromUid(blockchainTypeString)
 
         val viewModel by navGraphViewModels<NftCollectionOverviewViewModel>(R.id.nftCollectionFragment) {
@@ -51,76 +45,76 @@ class NftCollectionFragment : BaseComposeFragment() {
         }
 
         NftCollectionScreen(
-            findNavController(),
+            navController,
             viewModel
         )
     }
 
     companion object {
         private const val collectionUidKey = "collectionUid"
-        private const val blockchainTypeKey = "blockchainType"
+        private const val blockchainTypeUidKey = "blockchainTypeUid"
 
-        fun prepareParams(collectionUid: String, blockchainType: BlockchainType) =
-            bundleOf(collectionUidKey to collectionUid, blockchainTypeKey to blockchainType.uid)
+        fun prepareParams(collectionUid: String, blockchainTypeUid: String) =
+            bundleOf(collectionUidKey to collectionUid, blockchainTypeUidKey to blockchainTypeUid)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NftCollectionScreen(navController: NavController, viewModel: NftCollectionOverviewViewModel) {
-    ComposeAppTheme {
-        val tabs = viewModel.tabs
-        val pagerState = rememberPagerState(initialPage = 0) { tabs.size}
-        val coroutineScope = rememberCoroutineScope()
-        val view = LocalView.current
-        val context = LocalContext.current
+    val tabs = viewModel.tabs
+    val pagerState = rememberPagerState(initialPage = 0) { tabs.size }
+    val coroutineScope = rememberCoroutineScope()
+    val view = LocalView.current
+    val context = LocalContext.current
 
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    )
+    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        AppBar(
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Close),
+                    icon = R.drawable.ic_close,
+                    onClick = {
+                        navController.popBackStack()
+                    }
                 )
             )
+        )
 
-            val selectedTab = tabs[pagerState.currentPage]
-            val tabItems = tabs.map {
-                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+        val selectedTab = tabs[pagerState.currentPage]
+        val tabItems = tabs.map {
+            TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+        }
+        Tabs(tabItems, onClick = {
+            coroutineScope.launch {
+                pagerState.scrollToPage(it.ordinal)
             }
-            Tabs(tabItems, onClick = {
-                coroutineScope.launch {
-                    pagerState.scrollToPage(it.ordinal)
-                }
-            })
+        })
 
-            HorizontalPager(
-                state = pagerState,
-                userScrollEnabled = false
-            ) { page ->
-                when (tabs[page]) {
-                    NftCollectionModule.Tab.Overview -> {
-                        NftCollectionOverviewScreen(
-                            viewModel,
-                            onCopyText = {
-                                TextHelper.copyText(it)
-                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
-                            },
-                            onOpenUrl = {
-                                LinkHelper.openLinkInAppBrowser(context, it)
-                            }
-                        )
-                    }
-                    NftCollectionModule.Tab.Items -> {
-                        NftCollectionAssetsScreen(navController, viewModel.blockchainType, viewModel.collectionUid)
-                    }
-                    NftCollectionModule.Tab.Activity -> {
-                        NftCollectionEventsScreen(navController, viewModel.blockchainType, viewModel.collectionUid, viewModel.contracts)
-                    }
+        HorizontalPager(
+            state = pagerState,
+            userScrollEnabled = false
+        ) { page ->
+            when (tabs[page]) {
+                NftCollectionModule.Tab.Overview -> {
+                    NftCollectionOverviewScreen(
+                        viewModel,
+                        onCopyText = {
+                            TextHelper.copyText(it)
+                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                        },
+                        onOpenUrl = {
+                            LinkHelper.openLinkInAppBrowser(context, it)
+                        }
+                    )
+                }
+
+                NftCollectionModule.Tab.Items -> {
+                    NftCollectionAssetsScreen(navController, viewModel.blockchainType, viewModel.collectionUid)
+                }
+
+                NftCollectionModule.Tab.Activity -> {
+                    NftCollectionEventsScreen(navController, viewModel.blockchainType, viewModel.collectionUid, viewModel.contracts)
                 }
             }
         }

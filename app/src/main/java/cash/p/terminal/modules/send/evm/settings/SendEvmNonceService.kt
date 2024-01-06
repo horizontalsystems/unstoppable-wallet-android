@@ -74,10 +74,14 @@ class SendEvmNonceService(
     }
 
     private suspend fun setRecommended() = withContext(Dispatchers.IO) {
-        val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
-        sync(nonce, default = true)
+        try {
+            val nonce = evmKit.getNonce(DefaultBlockParameter.Pending).await()
+            sync(nonce, default = true)
 
-        latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
+            latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
+        } catch (e: Throwable) {
+            state = DataState.Error(e)
+        }
     }
 
     data class State(

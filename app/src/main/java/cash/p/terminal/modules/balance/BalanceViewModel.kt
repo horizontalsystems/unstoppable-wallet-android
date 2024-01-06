@@ -5,19 +5,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.R
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.factories.uriScheme
+import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.supported
+import cash.p.terminal.core.utils.AddressUriParser
+import cash.p.terminal.core.utils.AddressUriResult
+import cash.p.terminal.core.utils.ToncoinUriParser
 import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AddressUri
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class BalanceViewModel(
     private val service: BalanceService,
@@ -26,20 +38,25 @@ class BalanceViewModel(
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
     private val wc2Service: WC2Service,
-    private val wC2Manager: WC2Manager
+    private val wC2Manager: WC2Manager,
+    private val addressHandlerFactory: AddressHandlerFactory,
 ) : ViewModel(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
     private var isRefreshing = false
+    private var openSendTokenSelect: OpenSendTokenSelect? = null
+    private var errorMessage: String? = null
 
     var uiState by mutableStateOf(
         BalanceUiState(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            headerNote = HeaderNote.None
+            headerNote = HeaderNote.None,
+            errorMessage = errorMessage,
+            openSend = openSendTokenSelect
         )
     )
         private set
@@ -96,7 +113,9 @@ class BalanceViewModel(
             balanceViewItems = balanceViewItems,
             viewState = viewState,
             isRefreshing = isRefreshing,
-            headerNote = headerNote()
+            headerNote = headerNote(),
+            errorMessage = errorMessage,
+            openSend = openSendTokenSelect
         )
 
         viewModelScope.launch {
@@ -131,17 +150,6 @@ class BalanceViewModel(
             }
 
             emitState()
-        }
-    }
-
-    fun setConnectionUri(uri: String) {
-        connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
-            2 -> {
-                wc2Service.pair(uri)
-                null
-            }
-
-            else -> WalletConnectListViewModel.ConnectionResult.Error
         }
     }
 
@@ -180,6 +188,7 @@ class BalanceViewModel(
                     emitState()
                 }
             }
+
             else -> Unit
         }
     }
@@ -205,6 +214,103 @@ class BalanceViewModel(
         return wC2Manager.getWalletConnectSupportState()
     }
 
+    fun handleScannedData(scannedText: String) {
+        val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
+        if (wcUriVersion == 2) {
+            handleWalletConnectUri(scannedText)
+        } else {
+            handleAddressData(scannedText)
+        }
+    }
+
+    private fun uri(text: String): AddressUri? {
+        if (AddressUriParser.hasUriPrefix(text)) {
+            val abstractUriParse = AddressUriParser(null, null)
+            return when (val result = abstractUriParse.parse(text)) {
+                is AddressUriResult.Uri -> {
+                    if (BlockchainType.supported.map { it.uriScheme }.contains(result.addressUri.scheme))
+                        result.addressUri
+                    else
+                        null
+                }
+
+                else -> null
+            }
+        }
+        return null
+    }
+
+    private fun handleAddressData(text: String) {
+        if (text.contains("//")) {
+            //handle this type of uri ton://transfer/<address>
+            val toncoinAddress = ToncoinUriParser.getAddress(text) ?: return
+            openSendTokenSelect = OpenSendTokenSelect(
+                blockchainTypes = listOf(BlockchainType.Ton),
+                tokenTypes = null,
+                address = toncoinAddress,
+                amount = null
+            )
+            emitState()
+            return
+        }
+
+        val uri = uri(text)
+        if (uri != null) {
+            val allowedBlockchainTypes = uri.allowedBlockchainTypes
+            var allowedTokenTypes: List<TokenType>? = null
+            uri.value<String>(AddressUri.Field.TokenUid)?.let { uid ->
+                TokenType.fromId(uid)?.let { tokenType ->
+                    allowedTokenTypes = listOf(tokenType)
+                }
+            }
+
+            openSendTokenSelect = OpenSendTokenSelect(
+                blockchainTypes = allowedBlockchainTypes,
+                tokenTypes = allowedTokenTypes,
+                address = uri.address,
+                amount = uri.amount
+            )
+            emitState()
+        } else {
+            val chain = addressHandlerFactory.parserChain(null)
+            val types = chain.supportedAddressHandlers(text)
+            if (types.isEmpty()) {
+                errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                emitState()
+                return
+            }
+
+            openSendTokenSelect = OpenSendTokenSelect(
+                blockchainTypes = types.map { it.blockchainType },
+                tokenTypes = null,
+                address = text,
+                amount = null
+            )
+            emitState()
+        }
+    }
+
+    private fun handleWalletConnectUri(scannedText: String) {
+        wc2Service.pair(
+            uri = scannedText,
+            onSuccess = {
+                connectionResult = null
+            },
+            onError = {
+                connectionResult = WalletConnectListViewModel.ConnectionResult.Error
+            })
+    }
+
+    fun onSendOpened() {
+        openSendTokenSelect = null
+        emitState()
+    }
+
+    fun errorShown() {
+        errorMessage = null
+        emitState()
+    }
+
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
         class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
@@ -222,7 +328,16 @@ data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem2>,
     val viewState: ViewState?,
     val isRefreshing: Boolean,
-    val headerNote: HeaderNote
+    val headerNote: HeaderNote,
+    val errorMessage: String?,
+    val openSend: OpenSendTokenSelect? = null,
+)
+
+data class OpenSendTokenSelect(
+    val blockchainTypes: List<BlockchainType>?,
+    val tokenTypes: List<TokenType>?,
+    val address: String,
+    val amount: BigDecimal? = null,
 )
 
 sealed class TotalUIState {

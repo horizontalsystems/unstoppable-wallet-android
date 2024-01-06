@@ -20,12 +20,12 @@ data class TopPlatformResponse(
                 rank,
                 protocols,
                 marketCap,
-                stats["rank_1d"]?.toInt(),
                 stats["rank_1w"]?.toInt(),
                 stats["rank_1m"]?.toInt(),
-                stats["change_1d"],
+                stats["rank_3m"]?.toInt(),
                 stats["change_1w"],
-                stats["change_1m"]
+                stats["change_1m"],
+                stats["change_3m"],
             )
 
 }

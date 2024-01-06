@@ -17,8 +17,8 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 92
-        versionName "0.36.1"
+        versionCode 94
+        versionName "0.37.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -94,6 +94,7 @@ android {
             resValue "string", "trongridApiKey", "33374494-8060-447e-8367-90c5efd4ed95"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
+            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
         }
 
         appcenterdebug {
@@ -135,6 +136,7 @@ android {
             resValue "string", "trongridApiKey", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
+            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
         }
 
         appcenterrelease {
@@ -210,7 +212,7 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.1"
 
     //AppWidgets
-    implementation 'androidx.glance:glance-appwidget:1.0.0-rc01'
+    implementation 'androidx.glance:glance-appwidget:1.0.0'
 
     // Room
     def room_version = '2.5.2'
@@ -237,7 +239,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation "androidx.biometric:biometric:$biometric_version"
 
     implementation 'com.atlassian.commonmark:commonmark:0.17.0'
@@ -270,13 +272,14 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:bc62893'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:94bb971'
+    implementation 'com.github.horizontalsystems:ton-kit-kmm:18bc110'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:59b8e4e'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:3a02f3a'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
-    implementation 'com.github.horizontalsystems:binance-chain-kit-android:7e4d7c0'
-    // implementation 'com.github.horizontalsystems:market-kit-android:f5cb101'
-    implementation 'com.github.horizontalsystems:solana-kit-android:5cc6e81'
-    implementation 'com.github.horizontalsystems:tron-kit-android:67f8d53'
+    implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
+    // implementation 'com.github.horizontalsystems:market-kit-android:746d398'
+    implementation 'com.github.horizontalsystems:solana-kit-android:34ef394'
+    implementation 'com.github.horizontalsystems:tron-kit-android:5eb6395'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:2.0.1"
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
@@ -296,8 +299,8 @@ dependencies {
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.3'
 
     // UI modules
 
@@ -307,7 +310,7 @@ dependencies {
     implementation project(':components:marketkit')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.7.2'
+    implementation 'androidx.activity:activity-compose:1.8.0'
     // Compose Material Design
     implementation "androidx.compose.material:material:$compose_version"
     // Animations
@@ -315,7 +318,7 @@ dependencies {
     // Tooling support (Previews, etc.)
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2'
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
@@ -357,7 +360,10 @@ dependencies {
 }
 
 configurations.all {
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    resolutionStrategy {
+        cacheChangingModulesFor 0, 'seconds'
+        force 'com.github.horizontalsystems:hd-wallet-kit-android:a74b51f'
+    }
 }
 
 // fixes reproducible builds (fixes difference in assets/dexopt/baseline.profm)

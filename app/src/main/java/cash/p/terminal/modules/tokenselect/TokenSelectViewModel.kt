@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
+import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.swappable
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceService
@@ -15,6 +16,8 @@ import cash.p.terminal.modules.balance.BalanceSorter
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,7 +27,10 @@ class TokenSelectViewModel(
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?,
-    private val balanceSorter: BalanceSorter
+    private val balanceSorter: BalanceSorter,
+    private val balanceHiddenManager: BalanceHiddenManager,
+    private val blockchainTypes: List<BlockchainType>?,
+    private val tokenTypes: List<TokenType>?
 ) : ViewModel() {
 
     private var noItems = false
@@ -52,6 +58,16 @@ class TokenSelectViewModel(
         withContext(Dispatchers.IO) {
             if (balanceItems != null) {
                 var itemsFiltered: List<BalanceModule.BalanceItem> = balanceItems
+                blockchainTypes?.let { types ->
+                    itemsFiltered = itemsFiltered.filter { item ->
+                        types.contains(item.wallet.token.blockchainType)
+                    }
+                }
+                tokenTypes?.let { types ->
+                    itemsFiltered = itemsFiltered.filter { item ->
+                        types.contains(item.wallet.token.type)
+                    }
+                }
                 itemsFilter?.let {
                     itemsFiltered = itemsFiltered.filter(it)
                 }
@@ -70,7 +86,7 @@ class TokenSelectViewModel(
                     balanceViewItemFactory.viewItem2(
                         item = balanceItem,
                         currency = service.baseCurrency,
-                        hideBalance = false,
+                        hideBalance = balanceHiddenManager.balanceHidden,
                         watchAccount = service.isWatchAccount,
                         balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
                         networkAvailable = service.networkAvailable
@@ -104,7 +120,10 @@ class TokenSelectViewModel(
         service.clear()
     }
 
-    class FactoryForSend : ViewModelProvider.Factory {
+    class FactoryForSend(
+        private val blockchainTypes: List<BlockchainType>? = null,
+        private val tokenTypes: List<TokenType>? = null
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TokenSelectViewModel(
@@ -112,7 +131,10 @@ class TokenSelectViewModel(
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = null,
-                balanceSorter = BalanceSorter()
+                balanceSorter = BalanceSorter(),
+                balanceHiddenManager = App.balanceHiddenManager,
+                blockchainTypes = blockchainTypes,
+                tokenTypes = tokenTypes,
             ) as T
         }
     }
@@ -127,7 +149,10 @@ class TokenSelectViewModel(
                 itemsFilter = {
                     it.wallet.token.swappable
                 },
-                balanceSorter = BalanceSorter()
+                balanceSorter = BalanceSorter(),
+                balanceHiddenManager = App.balanceHiddenManager,
+                blockchainTypes = null,
+                tokenTypes = null,
             ) as T
         }
     }

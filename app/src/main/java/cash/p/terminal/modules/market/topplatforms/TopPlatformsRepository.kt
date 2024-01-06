@@ -13,7 +13,8 @@ import kotlinx.coroutines.withContext
 
 class TopPlatformsRepository(
     private val marketKit: MarketKitWrapper,
-    private val currencyManager: CurrencyManager
+    private val currencyManager: CurrencyManager,
+    private val apiTag: String,
 ) {
     private var itemsCache: List<TopPlatform>? = null
 
@@ -26,7 +27,7 @@ class TopPlatformsRepository(
         val currentCache = itemsCache
 
         val items = if (forceRefresh || currentCache == null) {
-            marketKit.topPlatformsSingle(currencyManager.baseCurrency.code).await()
+            marketKit.topPlatformsSingle(currencyManager.baseCurrency.code, apiTag).await()
         } else {
             currentCache
         }
@@ -47,9 +48,10 @@ class TopPlatformsRepository(
         ): List<TopPlatformItem> {
             return topPlatforms.map { platform ->
                 val prevRank = when (timeDuration) {
-                    TimeDuration.OneDay -> platform.rank1D
+                    TimeDuration.OneDay -> null
                     TimeDuration.SevenDay -> platform.rank1W
                     TimeDuration.ThirtyDay -> platform.rank1M
+                    TimeDuration.ThreeMonths -> platform.rank3M
                 }
 
                 val rankDiff = if (prevRank == platform.rank || prevRank == null) {
@@ -59,9 +61,10 @@ class TopPlatformsRepository(
                 }
 
                 val marketCapDiff = when (timeDuration) {
-                    TimeDuration.OneDay -> platform.change1D
+                    TimeDuration.OneDay -> null
                     TimeDuration.SevenDay -> platform.change1W
                     TimeDuration.ThirtyDay -> platform.change1M
+                    TimeDuration.ThreeMonths -> platform.change3M
                 }
 
                 TopPlatformItem(

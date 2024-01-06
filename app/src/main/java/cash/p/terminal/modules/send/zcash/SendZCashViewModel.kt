@@ -33,7 +33,8 @@ class SendZCashViewModel(
     private val amountService: SendAmountService,
     private val addressService: SendZCashAddressService,
     private val memoService: SendZCashMemoService,
-    private val contactsRepo: ContactsRepository
+    private val contactsRepo: ContactsRepository,
+    private val showAddressInput: Boolean
 ) : ViewModel() {
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -44,7 +45,6 @@ class SendZCashViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var memoState = memoService.stateFlow.value
-    private val showAddressInput = addressService.predefinedAddress == null
 
     var uiState by mutableStateOf(
         SendZCashUiState(

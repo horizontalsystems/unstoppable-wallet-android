@@ -6,14 +6,21 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
@@ -34,40 +42,39 @@ import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui.compose.components.AlertGroup
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.CoinList
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.SortMenu
+import cash.p.terminal.ui.compose.components.TopCloseButton
+import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.title3_leah
 import io.horizontalsystems.core.parcelable
 
 class MarketPlatformFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        val platformUid = activity?.intent?.data?.getQueryParameter("uid")
-        val platformTitle = activity?.intent?.data?.getQueryParameter("title")
+    override fun GetContent(navController: NavController) {
 
-        val platform = if (platformUid != null && platformTitle != null) {
-            Platform(platformUid, platformTitle)
-        } else {
-            arguments?.parcelable(platformKey)
-        }
+        val platform = arguments?.parcelable<Platform>(platformKey)
 
         if (platform == null) {
-            findNavController().popBackStack()
+            navController.popBackStack()
             return
         }
 
         val factory = MarketPlatformModule.Factory(platform)
 
-        ComposeAppTheme {
-            PlatformScreen(
-                factory = factory,
-                onCloseButtonClick = { findNavController().popBackStack() },
-                onCoinClick = { coinUid ->
-                    val arguments = CoinFragment.prepareParams(coinUid)
-                    findNavController().slideFromRight(R.id.coinFragment, arguments)
-                }
-            )
-        }
+        PlatformScreen(
+            factory = factory,
+            onCloseButtonClick = { navController.popBackStack() },
+            onCoinClick = { coinUid ->
+                val arguments = CoinFragment.prepareParams(coinUid, "market_platform")
+                navController.slideFromRight(R.id.coinFragment, arguments)
+            }
+        )
     }
 
     companion object {
@@ -108,12 +115,14 @@ private fun PlatformScreen(
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
                                 viewModel::onErrorClick
                             )
                         }
+
                         ViewState.Success -> {
                             viewModel.viewItems.let { viewItems ->
                                 CoinList(
@@ -180,6 +189,7 @@ private fun PlatformScreen(
                     { viewModel.onSelectorDialogDismiss() }
                 )
             }
+
             else -> {}
         }
     }
@@ -196,7 +206,7 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
         ) {
             Column(
                 modifier = Modifier
-                    .padding(top = 12.dp, end = 8.dp)
+                    .padding(top = 12.dp)
                     .weight(1f)
             ) {
                 title3_leah(
@@ -209,21 +219,14 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            Box(
+            Image(
+                painter = image.painter(),
+                contentDescription = null,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .size(48.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-            ) {
-                Image(
-                    painter = image.painter(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(24.dp),
-                )
-            }
+                    .padding(start = 24.dp)
+                    .size(32.dp),
+            )
         }
     }
 }

@@ -44,10 +44,10 @@ class BlockchainsSelectorFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         FilterByBlockchainsScreen(
             viewModel,
-            findNavController(),
+            navController,
         )
     }
 
@@ -71,35 +71,33 @@ private fun FilterByBlockchainsScreen(
     viewModel: MarketFiltersViewModel,
     navController: NavController
 ) {
-    ComposeAppTheme {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                title = stringResource(R.string.Market_Filter_Blockchains),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            )
-            Column(
-                Modifier.verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(12.dp))
-                HSSectionRounded {
-                    AnyCell(
-                        checked = viewModel.selectedBlockchains.isEmpty(),
-                        onClick = { viewModel.anyBlockchains() }
-                    )
-                    viewModel.blockchainOptions.forEach { item ->
-                        BlockchainCell(
-                            item = item,
-                            onCheck = { viewModel.onBlockchainCheck(it) },
-                            onUncheck = { viewModel.onBlockchainUncheck(it) },
-                        )
-                    }
-                }
-                Spacer(Modifier.height(32.dp))
+    Column(
+        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.Market_Filter_Blockchains),
+            navigationIcon = {
+                HsBackButton(onClick = { navController.popBackStack() })
             }
+        )
+        Column(
+            Modifier.verticalScroll(rememberScrollState())
+        ) {
+            Spacer(Modifier.height(12.dp))
+            HSSectionRounded {
+                AnyCell(
+                    checked = viewModel.selectedBlockchains.isEmpty(),
+                    onClick = { viewModel.anyBlockchains() }
+                )
+                viewModel.blockchainOptions.forEach { item ->
+                    BlockchainCell(
+                        item = item,
+                        onCheck = { viewModel.onBlockchainCheck(it) },
+                        onUncheck = { viewModel.onBlockchainUncheck(it) },
+                    )
+                }
+            }
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

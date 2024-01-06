@@ -18,6 +18,7 @@ import cash.p.terminal.core.adapters.SolanaAdapter
 import cash.p.terminal.core.adapters.SolanaTransactionConverter
 import cash.p.terminal.core.adapters.SolanaTransactionsAdapter
 import cash.p.terminal.core.adapters.SplAdapter
+import cash.p.terminal.core.adapters.TonAdapter
 import cash.p.terminal.core.adapters.Trc20Adapter
 import cash.p.terminal.core.adapters.TronAdapter
 import cash.p.terminal.core.adapters.TronTransactionConverter
@@ -137,6 +138,9 @@ class AdapterFactory(
             }
             BlockchainType.Tron -> {
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
+            }
+            BlockchainType.Ton -> {
+                TonAdapter(wallet)
             }
 
             else -> null

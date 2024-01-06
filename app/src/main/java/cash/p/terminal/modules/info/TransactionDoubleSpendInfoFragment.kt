@@ -22,6 +22,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.shorten
@@ -34,22 +35,19 @@ import cash.p.terminal.ui.compose.components.CellSingleLineLawrence
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            InfoScreen(
-                txHash = requireArguments().getString(TRANSACTION_HASH)!!,
-                conflictingTxHash = requireArguments().getString(
-                    CONFLICTING_TRANSACTION_HASH
-                )!!,
-                onBackClick = { findNavController().popBackStack() }
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        InfoScreen(
+            txHash = requireArguments().getString(TRANSACTION_HASH)!!,
+            conflictingTxHash = requireArguments().getString(
+                CONFLICTING_TRANSACTION_HASH
+            )!!,
+            onBackClick = { navController.popBackStack() }
+        )
     }
 
     companion object {

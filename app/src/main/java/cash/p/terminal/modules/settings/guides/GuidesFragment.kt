@@ -43,17 +43,14 @@ import cash.p.terminal.ui.compose.components.ScrollableTabs
 import cash.p.terminal.ui.compose.components.TabItem
 import cash.p.terminal.ui.compose.components.caption_grey
 import cash.p.terminal.ui.compose.components.title3_leah
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.DateHelper
 import java.net.UnknownHostException
 
 class GuidesFragment : BaseComposeFragment() {
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            GuidesScreen(findNavController())
-        }
+    override fun GetContent(navController: NavController) {
+        GuidesScreen(navController)
     }
 
 }
@@ -80,6 +77,7 @@ fun GuidesScreen(navController: NavController) {
                 ViewState.Loading -> {
                     Loading()
                 }
+
                 is ViewState.Error -> {
                     val s = when (val error = viewState.t) {
                         is UnknownHostException -> stringResource(R.string.Hud_Text_NoInternet)
@@ -89,6 +87,7 @@ fun GuidesScreen(navController: NavController) {
 
                     ScreenMessageWithAction(s, R.drawable.ic_error_48)
                 }
+
                 ViewState.Success -> {
                     if (selectedCategory != null) {
                         Column {

@@ -433,7 +433,7 @@ class BackupProvider(
 
         val watchlist = marketFavoritesManager.getAll().map { it.coinUid }
 
-        val swapProviders = evmBlockchainManager.allBlockchainTypes.map { blockchainType ->
+        val swapProviders = EvmBlockchainManager.blockchainTypes.map { blockchainType ->
             val provider = localStorage.getSwapProviderId(blockchainType) ?: SwapMainModule.OneInchProvider.id
             SwapProvider(blockchainType.uid, provider)
         }

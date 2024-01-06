@@ -1,10 +1,11 @@
 package cash.p.terminal.modules.market.topcoins
 
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.entities.Currency
+import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.sort
-import cash.p.terminal.entities.Currency
 import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.Single
 import java.lang.Integer.min
@@ -20,11 +21,13 @@ class MarketTopMoversRepository(
         size: Int,
         sortingField: SortingField,
         limit: Int,
-        baseCurrency: Currency
+        baseCurrency: Currency,
+        marketField: MarketField
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
             try {
-                val marketInfoList = marketKit.marketInfosSingle(size, baseCurrency.code).blockingGet()
+                val appTag = "market_top_${size}_${sortingField.name}_${marketField.name}"
+                val marketInfoList = marketKit.marketInfosSingle(size, baseCurrency.code, false, appTag).blockingGet()
                 val marketItemList = marketInfoList.map { marketInfo ->
                     MarketItem.createFromCoinMarket(
                         marketInfo,

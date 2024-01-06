@@ -33,7 +33,6 @@ import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Token
@@ -45,14 +44,12 @@ class ManageWalletsFragment : BaseComposeFragment() {
     private val restoreSettingsViewModel by viewModels<RestoreSettingsViewModel> { vmFactory }
 
     @Composable
-    override fun GetContent() {
-        ComposeAppTheme {
-            ManageWalletsScreen(
-                findNavController(),
-                viewModel,
-                restoreSettingsViewModel
-            )
-        }
+    override fun GetContent(navController: NavController) {
+        ManageWalletsScreen(
+            navController,
+            viewModel,
+            restoreSettingsViewModel
+        )
     }
 
 }

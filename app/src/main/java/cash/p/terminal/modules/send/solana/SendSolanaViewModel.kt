@@ -11,10 +11,11 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendSolanaAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
-import cash.p.terminal.modules.send.SendAmountAdvancedService
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.SendUiState
@@ -34,16 +35,17 @@ class SendSolanaViewModel(
     val feeToken: Token,
     val adapter: ISendSolanaAdapter,
     private val xRateService: XRateService,
-    private val amountService: SendAmountAdvancedService,
+    private val amountService: SendAmountService,
     private val addressService: SendSolanaAddressService,
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
+    private val showAddressInput: Boolean,
+    private val connectivityManager: ConnectivityManager,
 ) : ViewModel() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
-    private val showAddressInput = addressService.predefinedAddress == null
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
 
@@ -53,7 +55,7 @@ class SendSolanaViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput
+            showAddressInput = showAddressInput,
         )
     )
         private set
@@ -65,7 +67,7 @@ class SendSolanaViewModel(
     var sendResult by mutableStateOf<SendResult?>(null)
         private set
     private val decimalAmount: BigDecimal
-        get() = amountState.evmAmount!!.toBigDecimal().movePointLeft(sendToken.decimals)
+        get() = amountState.amount!!
 
     init {
         amountService.stateFlow.collectWith(viewModelScope) {
@@ -112,7 +114,16 @@ class SendSolanaViewModel(
         }
     }
 
+    fun hasConnection(): Boolean {
+        return connectivityManager.isConnected
+    }
+
     private suspend fun send() = withContext(Dispatchers.IO) {
+        if (!hasConnection()){
+            sendResult = SendResult.Failed(createCaution(UnknownHostException()))
+            return@withContext
+        }
+
         try {
             sendResult = SendResult.Sending
 
@@ -130,7 +141,7 @@ class SendSolanaViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private fun handleUpdatedAmountState(amountState: SendAmountAdvancedService.State) {
+    private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
 
         emitState()
@@ -148,7 +159,7 @@ class SendSolanaViewModel(
             amountCaution = amountState.amountCaution,
             addressError = addressState.addressError,
             canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput
+            showAddressInput = showAddressInput,
         )
     }
 

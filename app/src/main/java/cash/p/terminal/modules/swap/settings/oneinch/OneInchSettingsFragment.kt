@@ -32,7 +32,6 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.setNavigationResult
@@ -69,31 +68,29 @@ class OneInchSettingsFragment : BaseComposeFragment() {
     }
 
     @Composable
-    override fun GetContent() {
+    override fun GetContent(navController: NavController) {
         val dexValue = dex
-        ComposeAppTheme {
-            if (dexValue != null) {
-                OneInchSettingsScreen(
-                    onCloseClick = {
-                        findNavController().popBackStack()
-                    },
-                    dex = dexValue,
-                    factory = OneInchSwapSettingsModule.Factory(address, slippage),
-                    navController = findNavController()
+        if (dexValue != null) {
+            OneInchSettingsScreen(
+                onCloseClick = {
+                    navController.popBackStack()
+                },
+                dex = dexValue,
+                factory = OneInchSwapSettingsModule.Factory(address, slippage),
+                navController = navController
+            )
+        } else {
+            ScreenMessageWithAction(
+                text = stringResource(R.string.Error),
+                icon = R.drawable.ic_error_48
+            ) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 48.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    onClick = { navController.popBackStack() }
                 )
-            } else {
-                ScreenMessageWithAction(
-                    text = stringResource(R.string.Error),
-                    icon = R.drawable.ic_error_48
-                ) {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 48.dp)
-                            .fillMaxWidth(),
-                        title = stringResource(R.string.Button_Close),
-                        onClick = { findNavController().popBackStack() }
-                    )
-                }
             }
         }
     }

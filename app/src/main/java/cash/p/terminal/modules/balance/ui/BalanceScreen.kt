@@ -8,24 +8,23 @@ import cash.p.terminal.modules.balance.BalanceAccountsViewModel
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceScreenState
 import cash.p.terminal.modules.balance.cex.BalanceForAccountCex
-import cash.p.terminal.ui.compose.ComposeAppTheme
 
 @Composable
 fun BalanceScreen(navController: NavController) {
-    ComposeAppTheme {
-        val viewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
+    val viewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
-        when (val tmpAccount = viewModel.balanceScreenState) {
-            BalanceScreenState.NoAccount -> BalanceNoAccount(navController)
-            is BalanceScreenState.HasAccount -> when (tmpAccount.accountViewItem.type) {
-                is AccountType.Cex -> {
-                    BalanceForAccountCex(navController, tmpAccount.accountViewItem)
-                }
-                else -> {
-                    BalanceForAccount(navController, tmpAccount.accountViewItem)
-                }
+    when (val tmpAccount = viewModel.balanceScreenState) {
+        BalanceScreenState.NoAccount -> BalanceNoAccount(navController)
+        is BalanceScreenState.HasAccount -> when (tmpAccount.accountViewItem.type) {
+            is AccountType.Cex -> {
+                BalanceForAccountCex(navController, tmpAccount.accountViewItem)
             }
-            else -> {}
+
+            else -> {
+                BalanceForAccount(navController, tmpAccount.accountViewItem)
+            }
         }
+
+        else -> {}
     }
 }

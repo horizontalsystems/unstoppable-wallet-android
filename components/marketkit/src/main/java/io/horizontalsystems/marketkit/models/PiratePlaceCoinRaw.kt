@@ -9,7 +9,7 @@ class PiratePlaceCoinRaw (
     val name: String,
     val symbol: String,
     @SerializedName("circulating_supply")
-    val circulatingSupply: Long,
+    val circulatingSupply: BigDecimal,
     @SerializedName("total_supply")
     val totalSupply: Long,
     @SerializedName("max_supply")
@@ -75,8 +75,11 @@ data class Price(
         val eur: BigDecimal,
         val gbp: BigDecimal,
         val hkd: BigDecimal,
+        val huf: BigDecimal,
         val ils: BigDecimal,
         val inr: BigDecimal,
+        val noc: BigDecimal,
+        val php: BigDecimal,
         val jpy: BigDecimal,
         val pln: BigDecimal,
         val rub: BigDecimal,
@@ -105,6 +108,7 @@ data class Links(
 
 data class FullyDilutedValuation(
         val aud: BigDecimal,
+        val ars: BigDecimal,
         val brl: BigDecimal,
         val btc: BigDecimal,
         val cad: BigDecimal,
@@ -114,8 +118,11 @@ data class FullyDilutedValuation(
         val eur: BigDecimal,
         val gbp: BigDecimal,
         val hkd: BigDecimal,
+        val huf: BigDecimal,
         val ils: BigDecimal,
         val inr: BigDecimal,
+        val noc: BigDecimal,
+        val php: BigDecimal,
         val jpy: BigDecimal,
         val pln: BigDecimal,
         val rub: BigDecimal,
@@ -127,6 +134,7 @@ data class FullyDilutedValuation(
 
 data class Ath(
         val aud: BigDecimal,
+        val ars: BigDecimal,
         val brl: BigDecimal,
         val btc: BigDecimal,
         val cad: BigDecimal,
@@ -136,8 +144,11 @@ data class Ath(
         val eur: BigDecimal,
         val gbp: BigDecimal,
         val hkd: BigDecimal,
+        val huf: BigDecimal,
         val ils: BigDecimal,
         val inr: BigDecimal,
+        val noc: BigDecimal,
+        val php: BigDecimal,
         val jpy: BigDecimal,
         val pln: BigDecimal,
         val rub: BigDecimal,
@@ -149,6 +160,7 @@ data class Ath(
 
 data class AthPercentage(
         val aud: BigDecimal,
+        val ars: BigDecimal,
         val brl: BigDecimal,
         val btc: BigDecimal,
         val cad: BigDecimal,
@@ -158,8 +170,11 @@ data class AthPercentage(
         val eur: BigDecimal,
         val gbp: BigDecimal,
         val hkd: BigDecimal,
+        val huf: BigDecimal,
         val ils: BigDecimal,
         val inr: BigDecimal,
+        val noc: BigDecimal,
+        val php: BigDecimal,
         val jpy: BigDecimal,
         val pln: BigDecimal,
         val rub: BigDecimal,
@@ -171,6 +186,7 @@ data class AthPercentage(
 
 data class HighLow(
         val aud: BigDecimal,
+        val ars: BigDecimal,
         val brl: BigDecimal,
         val btc: BigDecimal,
         val cad: BigDecimal,
@@ -180,8 +196,11 @@ data class HighLow(
         val eur: BigDecimal,
         val gbp: BigDecimal,
         val hkd: BigDecimal,
+        val huf: BigDecimal,
         val ils: BigDecimal,
         val inr: BigDecimal,
+        val noc: BigDecimal,
+        val php: BigDecimal,
         val jpy: BigDecimal,
         val pln: BigDecimal,
         val rub: BigDecimal,
@@ -210,6 +229,7 @@ data class CommunityData(
 
 data class Graphs(
         val aud: GraphUrls,
+        val ars: GraphUrls,
         val brl: GraphUrls,
         val btc: GraphUrls,
         val cad: GraphUrls,
@@ -219,8 +239,11 @@ data class Graphs(
         val eur: GraphUrls,
         val gbp: GraphUrls,
         val hkd: GraphUrls,
+        val huf: GraphUrls,
         val ils: GraphUrls,
         val inr: GraphUrls,
+        val noc: GraphUrls,
+        val php: GraphUrls,
         val jpy: GraphUrls,
         val pln: GraphUrls,
         val rub: GraphUrls,

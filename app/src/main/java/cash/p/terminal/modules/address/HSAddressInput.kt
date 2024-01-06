@@ -66,13 +66,13 @@ fun HSAddressInput(
     FormsInputAddress(
         modifier = modifier,
         value = viewModel.value,
-        hint = stringResource(id = R.string.Watch_Address_Hint),
+        hint = stringResource(id = R.string.Send_Hint_Address),
         state = viewModel.inputState,
         textPreprocessor = textPreprocessor,
         navController = navController,
         chooseContactEnable = viewModel.hasContacts(),
         blockchainType = viewModel.blockchainType,
     ) {
-        viewModel.parseAddress(it)
+        viewModel.parseText(it)
     }
 }

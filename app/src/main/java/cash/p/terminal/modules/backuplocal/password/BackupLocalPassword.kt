@@ -94,73 +94,71 @@ fun LocalBackupPasswordScreen(
         onFinish()
     }
 
-    ComposeAppTheme {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.LocalBackup_SetPassword),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.LocalBackup_SetPassword),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                }
+            )
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(
+                        rememberScrollState()
+                    )
+            ) {
+
+                InfoText(text = stringResource(R.string.LocalBackup_ProtextBackupWithPasswordInfo))
+                VSpacer(24.dp)
+                FormsInputPassword(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.Password),
+                    state = uiState.passphraseState,
+                    onValueChange = viewModel::onChangePassphrase,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    hide = hidePassphrase,
+                    onToggleHide = {
+                        hidePassphrase = !hidePassphrase
                     }
                 )
+                VSpacer(16.dp)
+                FormsInputPassword(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    hint = stringResource(R.string.ConfirmPassphrase),
+                    state = uiState.passphraseConfirmState,
+                    onValueChange = viewModel::onChangePassphraseConfirmation,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    hide = hidePassphrase,
+                    onToggleHide = {
+                        hidePassphrase = !hidePassphrase
+                    }
+                )
+                VSpacer(32.dp)
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(R.string.LocalBackup_DontForgetPasswordWarning)
+                )
+                VSpacer(32.dp)
+
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellowWithSpinner(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(
-                            rememberScrollState()
-                        )
-                ) {
-
-                    InfoText(text = stringResource(R.string.LocalBackup_ProtextBackupWithPasswordInfo))
-                    VSpacer(24.dp)
-                    FormsInputPassword(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        hint = stringResource(R.string.Password),
-                        state = uiState.passphraseState,
-                        onValueChange = viewModel::onChangePassphrase,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        hide = hidePassphrase,
-                        onToggleHide = {
-                            hidePassphrase = !hidePassphrase
-                        }
-                    )
-                    VSpacer(16.dp)
-                    FormsInputPassword(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        hint = stringResource(R.string.ConfirmPassphrase),
-                        state = uiState.passphraseConfirmState,
-                        onValueChange = viewModel::onChangePassphraseConfirmation,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        hide = hidePassphrase,
-                        onToggleHide = {
-                            hidePassphrase = !hidePassphrase
-                        }
-                    )
-                    VSpacer(32.dp)
-                    TextImportantWarning(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        text = stringResource(R.string.LocalBackup_DontForgetPasswordWarning)
-                    )
-                    VSpacer(32.dp)
-
-                }
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellowWithSpinner(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.LocalBackup_SaveAndBackup),
-                        showSpinner = uiState.showButtonSpinner,
-                        enabled = uiState.showButtonSpinner.not(),
-                        onClick = {
-                            viewModel.onSaveClick()
-                        },
-                    )
-                }
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.LocalBackup_SaveAndBackup),
+                    showSpinner = uiState.showButtonSpinner,
+                    enabled = uiState.showButtonSpinner.not(),
+                    onClick = {
+                        viewModel.onSaveClick()
+                    },
+                )
             }
         }
     }

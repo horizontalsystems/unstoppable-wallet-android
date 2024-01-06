@@ -138,50 +138,48 @@ private fun SwapMainScreen(
     val providerViewItems = viewModel.swapState.providerViewItems
     val focusManager = LocalFocusManager.current
 
-    ComposeAppTheme {
-        ModalBottomSheetLayout(
-            sheetState = modalBottomSheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                BottomSheetProviderSelector(
-                    items = providerViewItems,
-                    onSelect = { viewModel.setProvider(it) }
-                ) {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                    }
+    ModalBottomSheetLayout(
+        sheetState = modalBottomSheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            BottomSheetProviderSelector(
+                items = providerViewItems,
+                onSelect = { viewModel.setProvider(it) }
+            ) {
+                coroutineScope.launch {
+                    modalBottomSheetState.hide()
                 }
-            },
-        ) {
-            Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-                AppBar(
-                    title = stringResource(R.string.Swap),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf()
-                )
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
-                    TopMenu(
-                        viewModel = viewModel,
-                        navController = navController,
-                        showProviderSelector = {
-                            focusManager.clearFocus(true)
-                            coroutineScope.launch {
-                                modalBottomSheetState.show()
-                            }
+            }
+        },
+    ) {
+        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+            AppBar(
+                title = stringResource(R.string.Swap),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+                menuItems = listOf()
+            )
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                TopMenu(
+                    viewModel = viewModel,
+                    navController = navController,
+                    showProviderSelector = {
+                        focusManager.clearFocus(true)
+                        coroutineScope.launch {
+                            modalBottomSheetState.show()
                         }
-                    )
-                    SwapCards(
-                        navController = navController,
-                        viewModel = viewModel,
-                        allowanceViewModel = allowanceViewModel,
-                        focusManager = focusManager,
-                        swapEntryPointDestId = swapEntryPointDestId
-                    )
-                }
+                    }
+                )
+                SwapCards(
+                    navController = navController,
+                    viewModel = viewModel,
+                    allowanceViewModel = allowanceViewModel,
+                    focusManager = focusManager,
+                    swapEntryPointDestId = swapEntryPointDestId
+                )
             }
         }
     }
@@ -445,6 +443,7 @@ private fun TopMenu(
                             )
                         )
                     }
+
                     SwapMainModule.PancakeSwapV3Provider -> {
                         navController.slideFromBottom(
                             R.id.uniswapSettingsFragment,
@@ -456,6 +455,7 @@ private fun TopMenu(
                             )
                         )
                     }
+
                     else -> {
                         navController.slideFromBottom(
                             R.id.uniswapSettingsFragment,
@@ -575,6 +575,7 @@ private fun getPriceImpactColor(
         PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
         PriceImpactLevel.Warning,
         PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+
         else -> ComposeAppTheme.colors.grey
     }
 }
