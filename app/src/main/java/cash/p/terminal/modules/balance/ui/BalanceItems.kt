@@ -260,7 +260,7 @@ fun BalanceItems(
                             icon = R.drawable.ic_swap_24,
                             contentDescription = stringResource(R.string.Swap),
                             onClick = {
-                                navController.slideFromRight(R.id.swapTokenSelectFragment)
+                                navController.slideFromRight(R.id.swapXxx)
                             }
                         )
                     }
