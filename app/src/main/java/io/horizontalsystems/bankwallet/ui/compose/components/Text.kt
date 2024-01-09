@@ -9,6 +9,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
+fun headline1_grey(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.headline1,
+        color = ComposeAppTheme.colors.grey,
+    )
+}
+
+@Composable
 fun headline1_bran(
     text: String,
     modifier: Modifier = Modifier,
