@@ -16,6 +16,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import java.util.UUID
 
 class SwapXxxFragment : BaseComposeFragment() {
     @Composable
@@ -129,13 +131,9 @@ private fun Yyy(
         Column(modifier = Modifier.padding(it)) {
             VSpacer(height = 12.dp)
             SwapInput(
-                coinAmountHint = uiState.coinAmountHint,
-                currencyAmountHint = uiState.currencyAmountHint,
                 spendingCoinAmount = uiState.spendingCoinAmount,
-                spendingCurrencyAmount = uiState.spendingCurrencyAmount,
                 onSwitchPairs = onSwitchPairs,
                 receivingCoinAmount = uiState.receivingCoinAmount,
-                receivingCurrencyAmount = uiState.receivingCurrencyAmount,
                 onValueChange = onEnterAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
@@ -169,13 +167,9 @@ private fun Yyy(
 
 @Composable
 private fun SwapInput(
-    coinAmountHint: String,
-    currencyAmountHint: String,
     spendingCoinAmount: BigDecimal?,
-    spendingCurrencyAmount: String,
     onSwitchPairs: () -> Unit,
     receivingCoinAmount: BigDecimal?,
-    receivingCurrencyAmount: String,
     onValueChange: (BigDecimal?) -> Unit,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
@@ -192,19 +186,13 @@ private fun SwapInput(
                 .padding()
         ) {
             Xxx(
-                coinAmountHint = coinAmountHint,
-                currencyAmountHint = currencyAmountHint,
                 coinAmount = spendingCoinAmount,
-                currencyAmount = spendingCurrencyAmount,
                 onValueChange = onValueChange,
                 token = tokenFrom,
                 onClickCoin = onClickCoinFrom
             )
             Xxx(
-                coinAmountHint = coinAmountHint,
-                currencyAmountHint = currencyAmountHint,
                 coinAmount = receivingCoinAmount,
-                currencyAmount = receivingCurrencyAmount,
                 onValueChange = { },
                 enabled = false,
                 token = tokenTo,
@@ -226,27 +214,35 @@ private fun SwapInput(
 
 @Composable
 private fun Xxx(
-    coinAmountHint: String,
-    currencyAmountHint: String,
     coinAmount: BigDecimal?,
-    currencyAmount: String,
     onValueChange: (BigDecimal?) -> Unit,
     enabled: Boolean = true,
     token: Token?,
     onClickCoin: () -> Unit,
 ) {
+    val uuid = remember { UUID.randomUUID().toString() }
+    val fiatViewModel = viewModel<FiatViewModel>(key = uuid, factory = FiatViewModel.Factory())
+    val currencyAmount = fiatViewModel.fiatAmountString
+
+    LaunchedEffect(token) {
+        fiatViewModel.setCoin(token?.coin)
+    }
+    LaunchedEffect(coinAmount) {
+        fiatViewModel.setAmount(coinAmount)
+    }
+
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            AmountInput(coinAmount, coinAmountHint, onValueChange, enabled)
+            AmountInput(coinAmount, onValueChange, enabled)
             VSpacer(height = 3.dp)
-            if (currencyAmount.isNotBlank()) {
+            if (currencyAmount != null) {
                 body_grey(text = currencyAmount)
             } else {
-                body_grey50(text = currencyAmountHint)
+                body_grey50(text = fiatViewModel.currencyAmountHint)
             }
         }
         HSpacer(width = 8.dp)
@@ -282,7 +278,6 @@ private fun Xxx(
 @Composable
 private fun AmountInput(
     value: BigDecimal?,
-    hint: String,
     onValueChange: (BigDecimal?) -> Unit,
     enabled: Boolean,
 ) {
@@ -316,7 +311,7 @@ private fun AmountInput(
         cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
         decorationBox = { innerTextField ->
             if (text.isEmpty()) {
-                headline1_grey(text = hint)
+                headline1_grey(text = "0")
             }
             innerTextField()
         },
@@ -349,12 +344,8 @@ private fun AmountInput(
 fun ScreenPreview() {
     ComposeAppTheme(darkTheme = true) {
         val uiState = SwapXxxUiState(
-            coinAmountHint = "0",
-            currencyAmountHint = "$0",
             spendingCoinAmount = BigDecimal.ZERO,
-            spendingCurrencyAmount = "$123.30",
             receivingCoinAmount = BigDecimal(12),
-            receivingCurrencyAmount = "$123",
             tokenFrom = null,
             tokenTo = null,
             calculating = false,
