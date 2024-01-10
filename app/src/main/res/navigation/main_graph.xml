@@ -329,6 +329,9 @@
         android:id="@+id/swapXxx"
         android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapXxxFragment" />
     <fragment
+        android:id="@+id/swapXxxSelectProvider"
+        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapXxxSelectProviderFragment" />
+    <fragment
         android:id="@+id/sendConfirmation"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
     <fragment

@@ -1,11 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,6 +39,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -46,6 +50,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -54,6 +59,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -69,7 +75,10 @@ class SwapXxxFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapXxxScreen(navController: NavController) {
-    val viewModel = viewModel<SwapXxxViewModel>(factory = SwapXxxViewModel.Factory())
+    val viewModel = viewModel<SwapXxxViewModel>(
+        viewModelStoreOwner = navController.currentBackStackEntry!!,
+        factory = SwapXxxViewModel.Factory()
+    )
     val uiState = viewModel.uiState
 
     Yyy(
@@ -100,7 +109,10 @@ fun SwapXxxScreen(navController: NavController) {
             }
         },
         onSwitchPairs = viewModel::onSwitchPairs,
-        onEnterAmount = viewModel::onEnterAmount
+        onEnterAmount = viewModel::onEnterAmount,
+        onClickProvider = {
+            navController.slideFromBottom(R.id.swapXxxSelectProvider)
+        }
     )
 }
 
@@ -112,6 +124,7 @@ private fun Yyy(
     onClickCoinTo: () -> Unit,
     onSwitchPairs: () -> Unit,
     onEnterAmount: (BigDecimal?) -> Unit,
+    onClickProvider: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -133,13 +146,44 @@ private fun Yyy(
             SwapInput(
                 spendingCoinAmount = uiState.spendingCoinAmount,
                 onSwitchPairs = onSwitchPairs,
-                receivingCoinAmount = uiState.receivingCoinAmount,
+                receivingCoinAmount = uiState.selectedQuote?.quote?.amountOut,
                 onValueChange = onEnterAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
                 tokenFrom = uiState.tokenFrom,
                 tokenTo = uiState.tokenTo
             )
+
+            uiState.selectedQuote?.let { selectedQuote ->
+                val swapProvider = selectedQuote.provider
+                VSpacer(height = 12.dp)
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp)),
+                ) {
+                    Row(
+                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                    ) {
+                        subhead2_grey(text = stringResource(R.string.Swap_Provider))
+                        HFillSpacer(minWidth = 8.dp)
+                        Selector(
+                            icon = {
+                                Image(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(swapProvider.icon),
+                                    contentDescription = null
+                                )
+                            },
+                            text = {
+                                subhead1_leah(text = swapProvider.title)
+                            },
+                            onClickSelect = onClickProvider
+                        )
+                    }
+                }
+            }
 
             VSpacer(height = 24.dp)
             if (uiState.calculating) {
@@ -246,32 +290,49 @@ private fun Xxx(
             }
         }
         HSpacer(width = 8.dp)
-        Row(
-            modifier = Modifier.clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClickCoin,
-            ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CoinImage(
-                iconUrl = token?.coin?.imageUrl,
-                placeholder = token?.iconPlaceholder,
-                modifier = Modifier.size(32.dp)
-            )
-            HSpacer(width = 8.dp)
-            if (token != null) {
-                subhead1_leah(text = token.coin.code)
-            } else {
-                subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
-            }
-            HSpacer(width = 8.dp)
-            Icon(
-                painter = painterResource(R.drawable.ic_arrow_big_down_20),
-                contentDescription = "",
-                tint = ComposeAppTheme.colors.grey
-            )
-        }
+        Selector(
+            icon = {
+                CoinImage(
+                    iconUrl = token?.coin?.imageUrl,
+                    placeholder = token?.iconPlaceholder,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            text = {
+                if (token != null) {
+                    subhead1_leah(text = token.coin.code)
+                } else {
+                    subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
+                }
+            },
+            onClickSelect = onClickCoin
+        )
+    }
+}
+
+@Composable
+private fun Selector(
+    icon: @Composable() (RowScope.() -> Unit),
+    text: @Composable() (RowScope.() -> Unit),
+    onClickSelect: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = onClickSelect,
+        ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        icon.invoke(this)
+        HSpacer(width = 8.dp)
+        text.invoke(this)
+        HSpacer(width = 8.dp)
+        Icon(
+            painter = painterResource(R.drawable.ic_arrow_big_down_20),
+            contentDescription = "",
+            tint = ComposeAppTheme.colors.grey
+        )
     }
 }
 
@@ -345,11 +406,13 @@ fun ScreenPreview() {
     ComposeAppTheme(darkTheme = true) {
         val uiState = SwapXxxUiState(
             spendingCoinAmount = BigDecimal.ZERO,
-            receivingCoinAmount = BigDecimal(12),
             tokenFrom = null,
             tokenTo = null,
             calculating = false,
-            swapEnabled = false
+            swapEnabled = false,
+            quotes = listOf(),
+            bestQuote = null,
+            selectedQuote = null
         )
         Yyy(
             uiState = uiState,
@@ -358,6 +421,8 @@ fun ScreenPreview() {
             onClickCoinTo = { /*TODO*/ },
             onSwitchPairs = { /*TODO*/ },
             onEnterAmount = {}
-        )
+        ) {
+
+        }
     }
 }
