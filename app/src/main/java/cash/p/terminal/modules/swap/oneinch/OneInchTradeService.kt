@@ -7,6 +7,7 @@ import cash.p.terminal.modules.swap.SwapMainModule.ExactType
 import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
+import cash.p.terminal.modules.swap.SwapQuote
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
@@ -15,6 +16,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class OneInchTradeService(
@@ -80,6 +82,12 @@ class OneInchTradeService(
             }, { error ->
                 state = SwapResultState.NotReady(listOf(error))
             })
+    }
+
+    override suspend fun fetchQuote(tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal): SwapQuote {
+        val quote = oneInchKitHelper.getQuoteAsync(tokenFrom, tokenTo, amountFrom).await()
+        val amountTo = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        return SwapQuote(amountTo)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

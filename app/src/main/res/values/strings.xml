@@ -616,6 +616,7 @@
     <!--Swap-->
 
     <string name="Swap">Swap</string>
+    <string name="Swap_BestPrice">Best Price</string>
     <string name="Swap_FromAmountTitle">You Pay</string>
     <string name="Swap_ToAmountTitle">You Get</string>
     <string name="Swap_AmountHint" translatable="false">0</string>
@@ -648,6 +649,7 @@
     <string name="Swap_MaximumPaid">Maximum Amount</string>
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <string name="Swap_PoweredBy">Powered by</string>
+    <string name="Swap_Provider">Provider</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
