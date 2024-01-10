@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
@@ -15,6 +16,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class OneInchTradeService(
@@ -80,6 +82,12 @@ class OneInchTradeService(
             }, { error ->
                 state = SwapResultState.NotReady(listOf(error))
             })
+    }
+
+    override suspend fun fetchQuote(tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal): SwapQuote {
+        val quote = oneInchKitHelper.getQuoteAsync(tokenFrom, tokenTo, amountFrom).await()
+        val amountTo = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        return SwapQuote(amountTo)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData.UniswapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.IUniswapTradeService
@@ -78,6 +79,18 @@ class UniswapV3TradeService(
         uniswapTokenTo = uniswapToken(tokenTo)
         syncTradeData(exactType, amountFrom, amountTo, tokenFrom, tokenTo)
 //        state = SwapResultState.NotReady(listOf(error))
+    }
+
+    override suspend fun fetchQuote(tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal): SwapQuote {
+        val uniswapTokenFrom = uniswapToken(tokenFrom)
+        val uniswapTokenTo = uniswapToken(tokenTo)
+        val tradeDataV3 = uniswapV3Kit.bestTradeExactIn(
+            uniswapTokenFrom,
+            uniswapTokenTo,
+            amountFrom,
+            tradeOptions.tradeOptions
+        )
+        return SwapQuote(tradeDataV3.tokenAmountOut.decimalAmount!!)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

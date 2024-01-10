@@ -7,26 +7,30 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SwapXxxViewModel : ViewModel() {
+class SwapXxxViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
     private var spendingCoinAmount: BigDecimal? = null
-    private var receivingCoinAmount: BigDecimal? = null
     private var tokenFrom: Token? = null
     private var tokenTo: Token? = null
     private var calculating = false
+    private var quotes: List<SwapProviderQuote> = listOf()
+    private var bestQuote: SwapProviderQuote? = null
+    private var selectedQuote: SwapProviderQuote? = null
 
     var uiState: SwapXxxUiState by mutableStateOf(
         SwapXxxUiState(
             spendingCoinAmount = spendingCoinAmount,
-            receivingCoinAmount = receivingCoinAmount,
             tokenFrom = tokenFrom,
             tokenTo = tokenTo,
             calculating = calculating,
             swapEnabled = isSwapEnabled(),
+            quotes = quotes,
+            bestQuote = bestQuote,
+            selectedQuote = selectedQuote,
         )
     )
         private set
@@ -35,27 +39,20 @@ class SwapXxxViewModel : ViewModel() {
 
     fun onEnterAmount(v: BigDecimal?) {
         spendingCoinAmount = v
-        receivingCoinAmount = null
-        emitState()
 
-        runCalculation()
+        runQuotation()
     }
 
     fun onSelectTokenFrom(token: Token) {
         tokenFrom = token
-        receivingCoinAmount = null
-        emitState()
 
-        runCalculation()
+        runQuotation()
     }
 
     fun onSelectTokenTo(token: Token) {
         tokenTo = token
 
-        receivingCoinAmount = null
-        emitState()
-
-        runCalculation()
+        runQuotation()
     }
 
     fun onSwitchPairs() {
@@ -64,45 +61,55 @@ class SwapXxxViewModel : ViewModel() {
         tokenFrom = tokenTo
         tokenTo = tmpTokenFrom
 
-        spendingCoinAmount = receivingCoinAmount
-        receivingCoinAmount = null
-        emitState()
+        spendingCoinAmount = selectedQuote?.quote?.amountOut
 
-        runCalculation()
+        runQuotation()
+    }
+
+    fun onSelectQuote(quote: SwapProviderQuote) {
+        selectedQuote = quote
+
+        emitState()
     }
 
     private fun emitState() {
         viewModelScope.launch {
             uiState = SwapXxxUiState(
                 spendingCoinAmount = spendingCoinAmount,
-                receivingCoinAmount = receivingCoinAmount,
                 tokenFrom = tokenFrom,
                 tokenTo = tokenTo,
                 calculating = calculating,
                 swapEnabled = isSwapEnabled(),
+                quotes = quotes,
+                bestQuote = bestQuote,
+                selectedQuote = selectedQuote,
             )
         }
     }
 
-    private fun isSwapEnabled() = receivingCoinAmount != null
+    private fun isSwapEnabled() = selectedQuote != null
 
-    private fun runCalculation() {
+    private fun runQuotation() {
+        quotes = listOf()
+        bestQuote = null
+        selectedQuote = null
+        calculating = false
+        emitState()
+
         calculatingJob?.cancel()
 
         val spendingCoinAmount = spendingCoinAmount
         val tokenFrom = tokenFrom
         val tokenTo = tokenTo
 
-        if (spendingCoinAmount == null || tokenFrom == null || tokenTo == null) {
-            calculating = false
-            emitState()
-        } else {
-            calculatingJob = viewModelScope.launch {
+        if (spendingCoinAmount != null && spendingCoinAmount > BigDecimal.ZERO && tokenFrom != null && tokenTo != null) {
+            calculatingJob = viewModelScope.launch(Dispatchers.Default) {
                 calculating = true
                 emitState()
 
-                delay(1000)
-                receivingCoinAmount = spendingCoinAmount.multiply(BigDecimal.TEN)
+                quotes = swapProvidersManager.getQuotes(tokenFrom, tokenTo, spendingCoinAmount)
+                bestQuote = quotes.maxByOrNull { it.quote.amountOut }
+                selectedQuote = bestQuote
                 calculating = false
                 emitState()
             }
@@ -112,16 +119,18 @@ class SwapXxxViewModel : ViewModel() {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapXxxViewModel() as T
+            return SwapXxxViewModel(SwapProvidersManager()) as T
         }
     }
 }
 
 data class SwapXxxUiState(
     val spendingCoinAmount: BigDecimal?,
-    val receivingCoinAmount: BigDecimal?,
     val tokenFrom: Token?,
     val tokenTo: Token?,
     val calculating: Boolean,
     val swapEnabled: Boolean,
+    val quotes: List<SwapProviderQuote>,
+    val bestQuote: SwapProviderQuote?,
+    val selectedQuote: SwapProviderQuote?,
 )

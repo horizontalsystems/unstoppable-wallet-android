@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData.UniswapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
+import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -21,6 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class UniswapV2TradeService(
@@ -81,6 +83,12 @@ class UniswapV2TradeService(
             }, { error ->
                 state = SwapResultState.NotReady(listOf(error))
             })
+    }
+
+    override suspend fun fetchQuote(tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal): SwapQuote {
+        val swapData = swapDataSingle(tokenFrom, tokenTo).await()
+        val tradeData = uniswapKit.bestTradeExactIn(swapData, amountFrom, tradeOptions.tradeOptions)
+        return SwapQuote(tradeData.amountOut!!)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
