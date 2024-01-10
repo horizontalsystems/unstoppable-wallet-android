@@ -97,8 +97,8 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.solscanApiKey)
     }
 
-    val trongridApiKey by lazy {
-        Translator.getString(R.string.trongridApiKey)
+    val trongridApiKeys: List<String> by lazy {
+        Translator.getString(R.string.trongridApiKeys).split(",")
     }
 
     val udnApiKey by lazy {
