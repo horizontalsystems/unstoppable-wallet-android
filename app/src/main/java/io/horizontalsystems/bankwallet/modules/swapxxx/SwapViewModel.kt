@@ -12,7 +12,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SwapXxxViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
+class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
     private var spendingCoinAmount: BigDecimal? = null
     private var tokenFrom: Token? = null
     private var tokenTo: Token? = null
@@ -21,8 +21,8 @@ class SwapXxxViewModel(private val swapProvidersManager: SwapProvidersManager) :
     private var bestQuote: SwapProviderQuote? = null
     private var selectedQuote: SwapProviderQuote? = null
 
-    var uiState: SwapXxxUiState by mutableStateOf(
-        SwapXxxUiState(
+    var uiState: SwapUiState by mutableStateOf(
+        SwapUiState(
             spendingCoinAmount = spendingCoinAmount,
             tokenFrom = tokenFrom,
             tokenTo = tokenTo,
@@ -74,7 +74,7 @@ class SwapXxxViewModel(private val swapProvidersManager: SwapProvidersManager) :
 
     private fun emitState() {
         viewModelScope.launch {
-            uiState = SwapXxxUiState(
+            uiState = SwapUiState(
                 spendingCoinAmount = spendingCoinAmount,
                 tokenFrom = tokenFrom,
                 tokenTo = tokenTo,
@@ -119,12 +119,12 @@ class SwapXxxViewModel(private val swapProvidersManager: SwapProvidersManager) :
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapXxxViewModel(SwapProvidersManager()) as T
+            return SwapViewModel(SwapProvidersManager()) as T
         }
     }
 }
 
-data class SwapXxxUiState(
+data class SwapUiState(
     val spendingCoinAmount: BigDecimal?,
     val tokenFrom: Token?,
     val tokenTo: Token?,

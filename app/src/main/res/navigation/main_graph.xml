@@ -324,10 +324,10 @@
         android:name="cash.p.terminal.modules.swaptokenselect.SwapTokenSelectFragment" />
     <fragment
         android:id="@+id/swapXxx"
-        android:name="cash.p.terminal.modules.swapxxx.SwapXxxFragment" />
+        android:name="cash.p.terminal.modules.swapxxx.SwapFragment" />
     <fragment
-        android:id="@+id/swapXxxSelectProvider"
-        android:name="cash.p.terminal.modules.swapxxx.SwapXxxSelectProviderFragment" />
+        android:id="@+id/swapSelectProvider"
+        android:name="cash.p.terminal.modules.swapxxx.SwapSelectProviderFragment" />
     <fragment
         android:id="@+id/sendConfirmation"
         android:name="cash.p.terminal.modules.send.SendConfirmationFragment" />

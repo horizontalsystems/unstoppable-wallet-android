@@ -66,22 +66,22 @@ import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.UUID
 
-class SwapXxxFragment : BaseComposeFragment() {
+class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapXxxScreen(navController)
+        SwapScreen(navController)
     }
 }
 
 @Composable
-fun SwapXxxScreen(navController: NavController) {
-    val viewModel = viewModel<SwapXxxViewModel>(
+fun SwapScreen(navController: NavController) {
+    val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = navController.currentBackStackEntry!!,
-        factory = SwapXxxViewModel.Factory()
+        factory = SwapViewModel.Factory()
     )
     val uiState = viewModel.uiState
 
-    Yyy(
+    SwapScreenInner(
         uiState = uiState,
         onClickClose = navController::popBackStack,
         onClickCoinFrom = {
@@ -111,14 +111,14 @@ fun SwapXxxScreen(navController: NavController) {
         onSwitchPairs = viewModel::onSwitchPairs,
         onEnterAmount = viewModel::onEnterAmount,
         onClickProvider = {
-            navController.slideFromBottom(R.id.swapXxxSelectProvider)
+            navController.slideFromBottom(R.id.swapSelectProvider)
         }
     )
 }
 
 @Composable
-private fun Yyy(
-    uiState: SwapXxxUiState,
+private fun SwapScreenInner(
+    uiState: SwapUiState,
     onClickClose: () -> Unit,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
@@ -229,13 +229,13 @@ private fun SwapInput(
                 .background(ComposeAppTheme.colors.lawrence)
                 .padding()
         ) {
-            Xxx(
+            SwapCoinInput(
                 coinAmount = spendingCoinAmount,
                 onValueChange = onValueChange,
                 token = tokenFrom,
                 onClickCoin = onClickCoinFrom
             )
-            Xxx(
+            SwapCoinInput(
                 coinAmount = receivingCoinAmount,
                 onValueChange = { },
                 enabled = false,
@@ -257,7 +257,7 @@ private fun SwapInput(
 }
 
 @Composable
-private fun Xxx(
+private fun SwapCoinInput(
     coinAmount: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
     enabled: Boolean = true,
@@ -404,7 +404,7 @@ private fun AmountInput(
 @Composable
 fun ScreenPreview() {
     ComposeAppTheme(darkTheme = true) {
-        val uiState = SwapXxxUiState(
+        val uiState = SwapUiState(
             spendingCoinAmount = BigDecimal.ZERO,
             tokenFrom = null,
             tokenTo = null,
@@ -414,7 +414,7 @@ fun ScreenPreview() {
             bestQuote = null,
             selectedQuote = null
         )
-        Yyy(
+        SwapScreenInner(
             uiState = uiState,
             onClickClose = { /*TODO*/ },
             onClickCoinFrom = { /*TODO*/ },
