@@ -32,8 +32,8 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
-import cash.p.terminal.modules.fee.HSFeeInputRaw
-import cash.p.terminal.modules.fee.HSFeeInputRawWithViewState
+import cash.p.terminal.modules.fee.HSFeeRaw
+import cash.p.terminal.modules.fee.HSFeeRawWithViewState
 import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.send.MemoCell
 import cash.p.terminal.modules.send.SendResult
@@ -203,7 +203,7 @@ fun SendTronConfirmationScreen(
 
                 val bottomSectionItems = buildList<@Composable () -> Unit> {
                     add {
-                        HSFeeInputRawWithViewState(
+                        HSFeeRawWithViewState(
                             title = stringResource(R.string.FeeInfo_TronFee_Title),
                             info = stringResource(R.string.FeeInfo_TronFee_Description),
                             coinCode = feeCoin.code,
@@ -218,7 +218,7 @@ fun SendTronConfirmationScreen(
 
                     activationFee?.let {
                         add {
-                            HSFeeInputRaw(
+                            HSFeeRaw(
                                 title = stringResource(R.string.FeeInfo_TronActivationFee_Title),
                                 info = stringResource(R.string.FeeInfo_TronActivationFee_Description),
                                 coinCode = feeCoin.code,

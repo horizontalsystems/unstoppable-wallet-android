@@ -1,18 +1,21 @@
 package cash.p.terminal.modules.send.bitcoin
 
 import cash.p.terminal.core.ISendBitcoinAdapter
+import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.entities.Address
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
 class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
-    private val _feeFlow = MutableStateFlow<BigDecimal?>(null)
-    val feeFlow = _feeFlow.asStateFlow()
+    private val _feeDataFlow = MutableStateFlow<BitcoinFeeInfo?>(null)
+    val feeDataFlow = _feeDataFlow.asStateFlow()
 
-    private var fee: BigDecimal? = null
+    private var feeData: BitcoinFeeInfo? = null
+    private var customUnspentOutputs: List<UnspentOutputInfo>? = null
 
     private var amount: BigDecimal? = null
     private var validAddress: Address? = null
@@ -24,15 +27,15 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
         val tmpAmount = amount
         val tmpFeeRate = feeRate
 
-        fee = when {
+        feeData = when {
             tmpAmount == null -> null
             tmpFeeRate == null -> null
-            else -> adapter.fee(tmpAmount, tmpFeeRate, validAddress?.hex, pluginData)
+            else -> adapter.sendInfo(tmpAmount, tmpFeeRate, validAddress?.hex, customUnspentOutputs, pluginData)
         }
     }
 
     private fun emitState() {
-        _feeFlow.update { fee }
+        _feeDataFlow.update { feeData }
     }
 
     fun setAmount(amount: BigDecimal?) {
@@ -59,6 +62,12 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
     fun setFeeRate(feeRate: Int?) {
         this.feeRate = feeRate
 
+        refreshFee()
+        emitState()
+    }
+
+    fun setCustomUnspentOutputs(customUnspentOutputs: List<UnspentOutputInfo>?) {
+        this.customUnspentOutputs = customUnspentOutputs
         refreshFee()
         emitState()
     }

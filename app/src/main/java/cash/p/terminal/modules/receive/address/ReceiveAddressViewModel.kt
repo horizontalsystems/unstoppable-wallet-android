@@ -102,7 +102,7 @@ class ReceiveAddressViewModel(
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
             address = adapter.receiveAddress
-            usedAddresses = adapter.usedAddresses
+            usedAddresses = adapter.usedAddresses(false)
             uri = getUri()
             accountActive = adapter.isAccountActive
             mainNet = adapter.isMainNet

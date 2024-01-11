@@ -19,11 +19,14 @@ import cash.p.terminal.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.bitcoincore.models.Address
 import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
 import io.horizontalsystems.bitcoincore.models.TransactionFilterType
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
 import io.horizontalsystems.bitcoincore.models.TransactionStatus
 import io.horizontalsystems.bitcoincore.models.TransactionType
+import io.horizontalsystems.bitcoincore.storage.UnspentOutput
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
@@ -210,13 +213,28 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun send(amount: BigDecimal, address: String, feeRate: Int, pluginData: Map<Byte, IPluginData>?, transactionSorting: TransactionDataSortMode?, logger: AppLogger): Single<Unit> {
+    fun send(
+        amount: BigDecimal,
+        address: String,
+        feeRate: Int,
+        unspentOutputs: List<UnspentOutputInfo>?,
+        pluginData: Map<Byte, IPluginData>?,
+        transactionSorting: TransactionDataSortMode?,
+        logger: AppLogger
+    ): Single<Unit> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
                 logger.info("call btc-kit.send")
-                kit.send(address, (amount * satoshisInBitcoin).toLong(), true, feeRate, sortingType, pluginData
-                        ?: mapOf())
+                kit.send(
+                    address = address,
+                    value = (amount * satoshisInBitcoin).toLong(),
+                    senderPay = true,
+                    feeRate = feeRate,
+                    sortType = sortingType,
+                    unspentOutputs = unspentOutputs,
+                    pluginData = pluginData ?: mapOf()
+                )
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {
                 emitter.onError(ex)
@@ -224,9 +242,14 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun availableBalance(feeRate: Int, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal {
+    fun availableBalance(
+        feeRate: Int,
+        address: String?,
+        unspentOutputs: List<UnspentOutputInfo>?,
+        pluginData: Map<Byte, IPluginData>?
+    ): BigDecimal {
         return try {
-            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate, pluginData
+            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate, unspentOutputs, pluginData
                     ?: mapOf())
             satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
         } catch (e: Exception) {
@@ -242,12 +265,30 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun fee(amount: BigDecimal, feeRate: Int, address: String?, pluginData: Map<Byte, IPluginData>?): BigDecimal? {
+    fun sendInfo(
+        amount: BigDecimal,
+        feeRate: Int,
+        address: String?,
+        unspentOutputs: List<UnspentOutputInfo>?,
+        pluginData: Map<Byte, IPluginData>?
+    ): BitcoinFeeInfo? {
         return try {
             val satoshiAmount = (amount * satoshisInBitcoin).toLong()
-            val fee = kit.fee(satoshiAmount, address, senderPay = true, feeRate = feeRate, pluginData = pluginData
-                    ?: mapOf())
-            satoshiToBTC(fee, RoundingMode.CEILING)
+            kit.sendInfo(
+                value = satoshiAmount,
+                address = address,
+                senderPay = true,
+                feeRate = feeRate,
+                unspentOutputs = unspentOutputs,
+                pluginData = pluginData ?: mapOf()
+            ).let {
+                BitcoinFeeInfo(
+                    unspentOutputs = it.unspentOutputs,
+                    fee = satoshiToBTC(it.fee),
+                    changeValue = satoshiToBTC(it.changeValue),
+                    changeAddress = it.changeAddress
+                )
+            }
         } catch (e: Exception) {
             null
         }
@@ -359,3 +400,10 @@ abstract class BitcoinBaseAdapter(
     }
 
 }
+
+data class BitcoinFeeInfo(
+    val unspentOutputs: List<UnspentOutput>,
+    val fee: BigDecimal,
+    val changeValue: BigDecimal?,
+    val changeAddress: Address?
+)

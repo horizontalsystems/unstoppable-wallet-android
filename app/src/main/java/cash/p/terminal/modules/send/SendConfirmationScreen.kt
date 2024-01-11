@@ -27,7 +27,7 @@ import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.contacts.model.Contact
-import cash.p.terminal.modules.fee.HSFeeInputRaw
+import cash.p.terminal.modules.fee.HSFeeRaw
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
@@ -186,7 +186,7 @@ fun SendConfirmationScreen(
 
                 val bottomSectionItems = buildList<@Composable () -> Unit> {
                     add {
-                        HSFeeInputRaw(
+                        HSFeeRaw(
                             coinCode = feeCoin.code,
                             coinDecimal = feeCoinMaxAllowedDecimals,
                             fee = fee,

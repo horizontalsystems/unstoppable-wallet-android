@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.TransactionDataSortMode
@@ -13,16 +14,19 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 class SendBtcAdvancedSettingsViewModel(
     val blockchainType: BlockchainType,
     private val btcBlockchainManager: BtcBlockchainManager,
+    private val localStorage: ILocalStorage,
 ) : ViewModel() {
 
     private var sortMode = btcBlockchainManager.transactionSortMode(blockchainType)
     private val sortOptions: List<SortModeViewItem>
         get() = getTransactionSortModeViewItems()
+    private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
 
     var uiState by mutableStateOf(
         SendBtcAdvancedSettingsModule.UiState(
             transactionSortOptions = sortOptions,
-            transactionSortTitle = Translator.getString(sortMode.titleShort)
+            transactionSortTitle = Translator.getString(sortMode.titleShort),
+            utxoExpertModeEnabled = utxoExpertModeEnabled
         )
     )
 
@@ -32,10 +36,17 @@ class SendBtcAdvancedSettingsViewModel(
         syncState()
     }
 
+    fun setUtxoExpertMode(enabled: Boolean) {
+        utxoExpertModeEnabled = enabled
+        localStorage.utxoExpertModeEnabled = enabled
+        syncState()
+    }
+
     private fun syncState() {
         uiState = SendBtcAdvancedSettingsModule.UiState(
             transactionSortOptions = sortOptions,
-            transactionSortTitle = Translator.getString(sortMode.titleShort)
+            transactionSortTitle = Translator.getString(sortMode.titleShort),
+            utxoExpertModeEnabled = utxoExpertModeEnabled
         )
     }
 

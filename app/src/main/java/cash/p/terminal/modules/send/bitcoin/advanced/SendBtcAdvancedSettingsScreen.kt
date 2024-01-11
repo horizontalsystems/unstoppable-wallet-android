@@ -1,11 +1,25 @@
 package cash.p.terminal.modules.send.bitcoin.advanced
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -20,13 +34,25 @@ import cash.p.terminal.core.HSCaution
 import cash.p.terminal.entities.TransactionDataSortMode
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
-import cash.p.terminal.modules.fee.HSFeeInputRaw
+import cash.p.terminal.modules.fee.HSFeeRaw
 import cash.p.terminal.modules.hodler.HSHodlerInput
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
 import cash.p.terminal.modules.send.bitcoin.TransactionInputsSortInfoPage
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.TextImportantError
+import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -96,7 +122,7 @@ fun SendBtcAdvancedSettingsScreen(
                     Spacer(modifier = Modifier.height(12.dp))
                     CellUniversalLawrenceSection(
                         listOf {
-                            HSFeeInputRaw(
+                            HSFeeRaw(
                                 coinCode = wallet.coin.code,
                                 coinDecimal = sendBitcoinViewModel.coinMaxAllowedDecimals,
                                 fee = sendUiState.fee,
@@ -159,6 +185,19 @@ fun SendBtcAdvancedSettingsScreen(
                         )
                     }
 
+                    Spacer(Modifier.height(32.dp))
+                    CellUniversalLawrenceSection(
+                        listOf {
+                            UtxoSwitch(
+                                enabled = viewModel.uiState.utxoExpertModeEnabled,
+                                onChange = { viewModel.setUtxoExpertMode(it) }
+                            )
+                        }
+                    )
+                    InfoText(
+                        text = stringResource(R.string.Send_Utxo_Description),
+                    )
+
                     feeRateCaution?.let {
                         FeeRateCaution(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
@@ -170,6 +209,29 @@ fun SendBtcAdvancedSettingsScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun UtxoSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
+    RowUniversal(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = { onChange.invoke(!enabled) }
+        ),
+    ) {
+        body_leah(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.Send_UtxoExpertMode),
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        HsSwitch(
+            modifier = Modifier.padding(end = 16.dp),
+            checked = enabled,
+            onCheckedChange = { onChange.invoke(it) }
+        )
+        Spacer(modifier = Modifier.width(16.dp))
     }
 }
 

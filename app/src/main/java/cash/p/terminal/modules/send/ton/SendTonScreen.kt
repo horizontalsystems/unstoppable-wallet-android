@@ -22,7 +22,7 @@ import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
-import cash.p.terminal.modules.fee.HSFeeInput
+import cash.p.terminal.modules.fee.HSFee
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
@@ -111,7 +111,7 @@ fun SendTonScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            HSFeeInput(
+            HSFee(
                 coinCode = viewModel.feeToken.coin.code,
                 coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
                 fee = fee,
