@@ -29,6 +29,7 @@ object ReceiveModule {
         val viewState: ViewState,
         val address: String,
         val usedAddresses: List<UsedAddress>,
+        val usedChangeAddresses: List<UsedAddress>,
         val uri: String,
         val networkName: String,
         val watchAccount: Boolean,

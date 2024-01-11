@@ -33,6 +33,7 @@ class ReceiveAddressViewModel(
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
     private var usedAddresses: List<UsedAddress> = listOf()
+    private var usedChangeAddresses: List<UsedAddress> = listOf()
     private var uri = ""
     private var amount: BigDecimal? = null
     private var accountActive = true
@@ -46,6 +47,7 @@ class ReceiveAddressViewModel(
             viewState = viewState,
             address = address,
             usedAddresses = usedAddresses,
+            usedChangeAddresses = usedChangeAddresses,
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,
@@ -106,6 +108,7 @@ class ReceiveAddressViewModel(
         if (adapter != null) {
             address = adapter.receiveAddress
             usedAddresses = adapter.usedAddresses(false)
+            usedChangeAddresses = adapter.usedAddresses(true)
             uri = getUri()
             accountActive = adapter.isAccountActive
             mainNet = adapter.isMainNet
@@ -138,6 +141,7 @@ class ReceiveAddressViewModel(
             viewState = viewState,
             address = address,
             usedAddresses = usedAddresses,
+            usedChangeAddresses = usedChangeAddresses,
             uri = uri,
             networkName = networkName,
             watchAccount = watchAccount,

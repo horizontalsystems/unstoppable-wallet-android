@@ -377,6 +377,8 @@
     <string name="Balance_Receive_AddressMemoAlert">Provide required Memo (Tag) and send only network-compatible tokens. Others will be lost.</string>
     <string name="Balance_Receive_UsedAddresses">Used Addresses</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
+    <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
+    <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>

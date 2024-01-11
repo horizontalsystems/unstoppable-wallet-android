@@ -109,7 +109,7 @@ fun ReceiveAddressScreen(
     setAmount: (BigDecimal?) -> Unit,
     onErrorClick: () -> Unit = {},
     onShareClick: (String) -> Unit,
-    showUsedAddresses: (List<UsedAddress>) -> Unit,
+    showUsedAddresses: (List<UsedAddress>, List<UsedAddress>) -> Unit,
     onBackPress: () -> Unit,
     closeModule: () -> Unit,
 ) {
@@ -301,7 +301,7 @@ fun ReceiveAddressScreen(
                                             RowUniversal(
                                                 modifier = Modifier.height(48.dp),
                                                 onClick = {
-                                                    showUsedAddresses.invoke(uiState.usedAddresses)
+                                                    showUsedAddresses.invoke(uiState.usedAddresses, uiState.usedChangeAddresses)
                                                 }
                                             ) {
                                                 subhead2_grey(
