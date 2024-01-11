@@ -60,6 +60,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -163,24 +164,43 @@ private fun SwapScreenInner(
                         .clip(RoundedCornerShape(12.dp))
                         .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp)),
                 ) {
-                    Row(
-                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        subhead2_grey(text = stringResource(R.string.Swap_Provider))
-                        HFillSpacer(minWidth = 8.dp)
-                        Selector(
-                            icon = {
-                                Image(
-                                    modifier = Modifier.size(24.dp),
-                                    painter = painterResource(swapProvider.icon),
-                                    contentDescription = null
+                    QuoteInfoRow(
+                        title = {
+                            subhead2_grey(text = stringResource(R.string.Swap_Provider))
+                        },
+                        value = {
+                            Selector(
+                                icon = {
+                                    Image(
+                                        modifier = Modifier.size(24.dp),
+                                        painter = painterResource(swapProvider.icon),
+                                        contentDescription = null
+                                    )
+                                },
+                                text = {
+                                    subhead1_leah(text = swapProvider.title)
+                                },
+                                onClickSelect = onClickProvider
+                            )
+                        }
+                    )
+
+                    uiState.prices?.let { (price, priceInverted) ->
+                        var showRegularPrice by remember { mutableStateOf(true) }
+
+                        QuoteInfoRow(
+                            title = {
+                                subhead2_grey(text = stringResource(R.string.Swap_Price))
+                            },
+                            value = {
+                                subhead2_leah(
+                                    modifier = Modifier
+                                        .clickable {
+                                            showRegularPrice = !showRegularPrice
+                                        },
+                                    text = if (showRegularPrice) price else priceInverted
                                 )
-                            },
-                            text = {
-                                subhead1_leah(text = swapProvider.title)
-                            },
-                            onClickSelect = onClickProvider
+                            }
                         )
                     }
                 }
@@ -207,6 +227,21 @@ private fun SwapScreenInner(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun QuoteInfoRow(
+    title: @Composable() (RowScope.() -> Unit),
+    value: @Composable() (RowScope.() -> Unit),
+) {
+    Row(
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        title.invoke(this)
+        HFillSpacer(minWidth = 8.dp)
+        value.invoke(this)
     }
 }
 
