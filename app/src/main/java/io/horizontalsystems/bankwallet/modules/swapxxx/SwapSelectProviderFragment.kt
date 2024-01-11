@@ -39,23 +39,23 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import java.math.BigDecimal
 
-class SwapXxxSelectProviderFragment : BaseComposeFragment() {
+class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapXxxSelectProviderScreen(navController)
+        SwapSelectProviderScreen(navController)
     }
 }
 
 @Composable
-fun SwapXxxSelectProviderScreen(navController: NavController) {
-    val viewModel = viewModel<SwapXxxViewModel>(
+fun SwapSelectProviderScreen(navController: NavController) {
+    val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = navController.previousBackStackEntry!!,
-        factory = SwapXxxViewModel.Factory()
+        factory = SwapViewModel.Factory()
     )
 
     val uiState = viewModel.uiState
 
-    SwapXxxSelectProviderScreenInner(
+    SwapSelectProviderScreenInner(
         onClickClose = navController::popBackStack,
         quotes = uiState.quotes,
         bestQuote = uiState.bestQuote,
@@ -67,7 +67,7 @@ fun SwapXxxSelectProviderScreen(navController: NavController) {
 }
 
 @Composable
-private fun SwapXxxSelectProviderScreenInner(
+private fun SwapSelectProviderScreenInner(
     onClickClose: () -> Unit,
     quotes: List<SwapProviderQuote>,
     bestQuote: SwapProviderQuote?,
@@ -157,9 +157,9 @@ private fun SwapXxxSelectProviderScreenInner(
 
 @Preview
 @Composable
-private fun SwapXxxSelectProviderScreenPreview() {
+private fun SwapSelectProviderScreenPreview() {
     ComposeAppTheme(darkTheme = false) {
-        SwapXxxSelectProviderScreenInner(
+        SwapSelectProviderScreenInner(
             onClickClose = {},
             quotes = listOf(
                 SwapProviderQuote(
