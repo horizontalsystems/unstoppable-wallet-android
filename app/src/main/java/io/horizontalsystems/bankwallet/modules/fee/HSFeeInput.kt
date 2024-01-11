@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawren
 import java.math.BigDecimal
 
 @Composable
-fun HSFeeInput(
+fun HSFee(
     coinCode: String,
     coinDecimal: Int,
     fee: BigDecimal?,
@@ -27,7 +27,7 @@ fun HSFeeInput(
 ) {
     CellUniversalLawrenceSection(
         listOf {
-            HSFeeInputRaw(
+            HSFeeRaw(
                 coinCode = coinCode,
                 coinDecimal = coinDecimal,
                 fee = fee,
@@ -39,7 +39,7 @@ fun HSFeeInput(
 }
 
 @Composable
-fun HSFeeInputRaw(
+fun HSFeeRaw(
     title: String = stringResource(R.string.Send_Fee),
     info: String = stringResource(R.string.Send_Fee_Info),
     coinCode: String,
@@ -66,7 +66,7 @@ fun HSFeeInputRaw(
 }
 
 @Composable
-fun HSFeeInputRawWithViewState(
+fun HSFeeRawWithViewState(
     title: String = stringResource(R.string.Send_Fee),
     info: String = stringResource(R.string.Send_Fee_Info),
     coinCode: String,
