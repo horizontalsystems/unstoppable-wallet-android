@@ -88,8 +88,8 @@ fun CexDepositScreen(
                             type = "text/plain"
                         })
                     },
-                    showUsedAddresses = { usedAddresses ->
-                        viewModel.usedAddressesParams = UsedAddressesParams(cexAsset.name, usedAddresses)
+                    showUsedAddresses = { usedAddresses, usedChangeAddresses ->
+                        viewModel.usedAddressesParams = UsedAddressesParams(cexAsset.name, usedAddresses, usedChangeAddresses)
                         navController.navigate(USED_ADDRESS_SCREEN)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController),

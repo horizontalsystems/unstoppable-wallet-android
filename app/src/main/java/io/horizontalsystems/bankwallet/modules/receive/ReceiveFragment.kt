@@ -100,8 +100,8 @@ fun ReceiveScreen(
                             type = "text/plain"
                         })
                     },
-                    showUsedAddresses = { usedAddresses ->
-                        viewModel.usedAddressesParams = UsedAddressesParams(walletNonNull.coin.name, usedAddresses)
+                    showUsedAddresses = { usedAddresses, usedChangeAddresses ->
+                        viewModel.usedAddressesParams = UsedAddressesParams(walletNonNull.coin.name, usedAddresses, usedChangeAddresses)
                         navController.navigate(USED_ADDRESSES_SCREEN)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController),
