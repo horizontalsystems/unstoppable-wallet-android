@@ -1,14 +1,21 @@
 package io.horizontalsystems.bankwallet.modules.receive.ui
 
+import androidx.annotation.StringRes
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +33,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
@@ -35,14 +44,25 @@ import io.horizontalsystems.core.helpers.HudHelper
 
 data class UsedAddressesParams(
     val coinName: String,
-    val usedAddresses: List<UsedAddress>
+    val usedAddresses: List<UsedAddress>,
+    val usedChangeAddresses: List<UsedAddress>
 )
 
+enum class UsedAddressTab(@StringRes val titleResId: Int) {
+    ReceiveAddress(R.string.Balance_Receive_ReceiveAddresses),
+    ChangeAddress(R.string.Balance_Receive_ChangeAddresses);
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UsedAddressScreen(
     params: UsedAddressesParams,
     onBackPress: () -> Unit
 ) {
+    val tabs = UsedAddressTab.values()
+    var selectedTab by remember { mutableStateOf(UsedAddressTab.ReceiveAddress) }
+    val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { tabs.size }
+
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
@@ -51,7 +71,6 @@ fun UsedAddressScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onBackPress)
                 }
-
             )
         }
     ) {
@@ -64,20 +83,49 @@ fun UsedAddressScreen(
         ) {
 
             InfoText(text = stringResource(id = R.string.Balance_Receive_UsedAddressesDescriptoin, params.coinName))
-            Spacer(Modifier.height(12.dp))
 
-            CellUniversalLawrenceSection(
-                buildList {
-                    for (item in params.usedAddresses)
-                        add {
-                            TransactionInfoAddressCell(index = item.index.toString(), address = item.address, explorerUrl = item.explorerUrl)
-                        }
+            VSpacer(12.dp)
+
+            LaunchedEffect(key1 = selectedTab, block = {
+                pagerState.scrollToPage(selectedTab.ordinal)
+            })
+            val tabItems = tabs.map {
+                TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
+            }
+            Tabs(tabItems, onClick = { selectedTab = it })
+
+            VSpacer(12.dp)
+
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false
+            ) { page ->
+                when (tabs[page]) {
+                    UsedAddressTab.ReceiveAddress -> AddressList(params.usedAddresses)
+
+                    UsedAddressTab.ChangeAddress -> AddressList(params.usedChangeAddresses)
                 }
-            )
+            }
 
             VSpacer(24.dp)
         }
     }
+}
+
+@Composable
+private fun AddressList(usedAddresses: List<UsedAddress>) {
+    CellUniversalLawrenceSection(
+        buildList {
+            for (item in usedAddresses)
+                add {
+                    TransactionInfoAddressCell(
+                        index = item.index.plus(1).toString(),
+                        address = item.address,
+                        explorerUrl = item.explorerUrl
+                    )
+                }
+        }
+    )
 }
 
 @Composable
