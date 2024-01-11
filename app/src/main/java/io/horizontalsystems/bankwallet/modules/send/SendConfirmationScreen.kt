@@ -27,7 +27,7 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
+import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
@@ -186,7 +186,7 @@ fun SendConfirmationScreen(
 
                 val bottomSectionItems = buildList<@Composable () -> Unit> {
                     add {
-                        HSFeeInputRaw(
+                        HSFeeRaw(
                             coinCode = feeCoin.code,
                             coinDecimal = feeCoinMaxAllowedDecimals,
                             fee = fee,

@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,25 +34,32 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeInputRaw
+import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import java.math.BigDecimal
 
 
 const val SendBtcPage = "send_btc"
 const val SendBtcAdvancedSettingsPage = "send_btc_advanced_settings"
 const val TransactionInputsSortInfoPage = "transaction_input_sort_info_settings"
+const val UtxoExpertModePage = "utxo_expert_mode_page"
 
 @Composable
 fun SendBitcoinNavHost(
@@ -65,7 +75,7 @@ fun SendBitcoinNavHost(
         navController = navController,
         startDestination = SendBtcPage,
     ) {
-        composable(SendBtcPage) {
+        composable(SendBtcPage) { entry ->
             SendBitcoinScreen(
                 title,
                 fragmentNavController,
@@ -85,6 +95,22 @@ fun SendBitcoinNavHost(
             )
         }
         composablePopup(TransactionInputsSortInfoPage) { BtcTransactionInputSortInfoScreen { navController.popBackStack() } }
+        composablePage(UtxoExpertModePage) { entry ->
+            UtxoExpertModeScreen(
+                adapter = viewModel.adapter,
+                token = viewModel.wallet.token,
+                address = viewModel.address,
+                value = viewModel.amount,
+                feeRate = viewModel.feeRate,
+                customUnspentOutputs = viewModel.customUnspentOutputs,
+                updateUnspentOutputs = {
+                    viewModel.updateCustomUnspentOutputs(it)
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
     }
 }
 
@@ -115,6 +141,12 @@ fun SendBitcoinScreen(
         factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
+
+    DisposableLifecycleCallbacks(
+        onResume = {
+            viewModel.onResume()
+        },
+    )
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
@@ -174,7 +206,7 @@ fun SendBitcoinScreen(
                     Spacer(modifier = Modifier.height(12.dp))
                     HSAddressInput(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        initial = prefilledData?.address?.let{ Address(it) },
+                        initial = prefilledData?.address?.let { Address(it) },
                         tokenQuery = wallet.token.tokenQuery,
                         coinCode = wallet.coin.code,
                         error = addressError,
@@ -187,15 +219,27 @@ fun SendBitcoinScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
                 CellUniversalLawrenceSection(
-                    listOf {
-                        HSFeeInputRaw(
-                            coinCode = wallet.coin.code,
-                            coinDecimal = viewModel.coinMaxAllowedDecimals,
-                            fee = fee,
-                            amountInputType = amountInputType,
-                            rate = rate,
-                            navController = fragmentNavController
-                        )
+                    buildList {
+                        uiState.utxoData?.let { utxoData ->
+                            add {
+                                UtxoCell(
+                                    utxoData = utxoData,
+                                    onClick = {
+                                        composeNavController.navigate(UtxoExpertModePage)
+                                    }
+                                )
+                            }
+                        }
+                        add {
+                            HSFeeRaw(
+                                coinCode = wallet.coin.code,
+                                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                                fee = fee,
+                                amountInputType = amountInputType,
+                                rate = rate,
+                                navController = fragmentNavController
+                            )
+                        }
                     }
                 )
 
@@ -218,6 +262,52 @@ fun SendBitcoinScreen(
                         )
                     },
                     enabled = proceedEnabled
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun UtxoCell(
+    utxoData: SendBitcoinModule.UtxoData,
+    onClick: () -> Unit
+) {
+    RowUniversal(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        onClick = onClick
+    ) {
+        subhead2_grey(
+            text = stringResource(R.string.Send_Utxos),
+            modifier = Modifier.weight(1f)
+        )
+        subhead2_leah(text = utxoData.value)
+        HSpacer(8.dp)
+        when (utxoData.type) {
+            SendBitcoinModule.UtxoType.Auto -> {
+                Icon(
+                    painter = painterResource(R.drawable.ic_edit_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
+
+            SendBitcoinModule.UtxoType.Manual -> {
+                Icon(
+                    painter = painterResource(R.drawable.ic_edit_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.jacob
+                )
+            }
+
+            null -> {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey
                 )
             }
         }

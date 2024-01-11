@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import android.os.Parcelable
 import com.google.gson.JsonObject
+import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.Bep2TokenInfoService
@@ -37,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -115,6 +117,7 @@ interface ILocalStorage {
     var personalSupportEnabled: Boolean
     var hideSuspiciousTransactions: Boolean
     var pinRandomized: Boolean
+    var utxoExpertModeEnabled: Boolean
 
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
@@ -289,8 +292,9 @@ interface IReceiveAdapter {
     val isAccountActive: Boolean
         get() = true
 
-    val usedAddresses: List<UsedAddress>
-        get() = listOf()
+    fun usedAddresses(change: Boolean): List<UsedAddress> {
+        return listOf()
+    }
 }
 
 @Parcelize
@@ -301,27 +305,31 @@ data class UsedAddress(
 ): Parcelable
 
 interface ISendBitcoinAdapter {
+    val unspentOutputs: List<UnspentOutputInfo>
     val balanceData: BalanceData
     val blockchainType: BlockchainType
     fun availableBalance(
         feeRate: Int,
         address: String?,
+        unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal
 
     fun minimumSendAmount(address: String?): BigDecimal?
-    fun fee(
+    fun sendInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
+        unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
-    ): BigDecimal?
+    ): BitcoinFeeInfo?
 
     fun validate(address: String, pluginData: Map<Byte, IPluginData>?)
     fun send(
         amount: BigDecimal,
         address: String,
         feeRate: Int,
+        unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
         logger: AppLogger

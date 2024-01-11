@@ -22,7 +22,7 @@ import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeInput
+import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
@@ -120,7 +120,7 @@ fun SendZCashScreen(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            HSFeeInput(
+            HSFee(
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
                 fee = fee,

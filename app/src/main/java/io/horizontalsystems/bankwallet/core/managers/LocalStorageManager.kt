@@ -81,6 +81,7 @@ class LocalStorageManager(
     private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
     private val HIDE_SUSPICIOUS_TX = "hide_suspicious_tx"
     private val PIN_RANDOMIZED = "pin_randomized"
+    private val UTXO_EXPERT_MODE = "utxo_expert_mode"
 
     private val gson by lazy { Gson() }
 
@@ -497,6 +498,12 @@ class LocalStorageManager(
         } ?: AutoLockInterval.AFTER_1_MIN
         set(value) {
             preferences.edit().putString(APP_AUTO_LOCK_INTERVAL, value.raw).apply()
+        }
+
+    override var utxoExpertModeEnabled: Boolean
+        get() = preferences.getBoolean(UTXO_EXPERT_MODE, false)
+        set(value) {
+            preferences.edit().putBoolean(UTXO_EXPERT_MODE, value).apply()
         }
 
     private fun getSwapProviderKey(blockchainType: BlockchainType): String {

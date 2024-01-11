@@ -399,6 +399,11 @@
     <string name="Send_Button_Max">Max</string>
     <string name="Send_Advanced">Advanced</string>
     <string name="Send_Hodler_Description">TimeLock works only for sending to BIP44 addresses (starting with 1)</string>
+    <string name="Send_Utxos" translatable="false">UTxOs</string>
+    <string name="Send_UtxoExpertMode">UTxO Expert Mode</string>
+    <string name="Send_Utxo_Description">Manually select UTxO to spend the funds in the balance</string>
+    <string name="Send_Utxo_SendTo">Send To</string>
+    <string name="Send_Utxo_Change">Change</string>
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_Domain">Domain</string>
