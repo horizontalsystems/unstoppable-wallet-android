@@ -10,10 +10,12 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
+    private val quoteLifetime = 30000L
     private var spendingCoinAmount: BigDecimal? = null
     private var tokenFrom: Token? = null
     private var tokenTo: Token? = null
@@ -32,6 +34,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
             quotes = quotes,
             bestQuote = bestQuote,
             selectedQuote = selectedQuote,
+            quoteLifetime = quoteLifetime
         )
     )
         private set
@@ -84,8 +87,13 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 quotes = quotes,
                 bestQuote = bestQuote,
                 selectedQuote = selectedQuote,
+                quoteLifetime = quoteLifetime
             )
         }
+    }
+
+    private fun onQuoteExpired() {
+        runQuotation()
     }
 
     private fun isSwapEnabled() = selectedQuote != null
@@ -113,6 +121,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 selectedQuote = bestQuote
                 calculating = false
                 emitState()
+
+                delay(quoteLifetime)
+                onQuoteExpired()
             }
         }
     }
@@ -134,6 +145,7 @@ data class SwapUiState(
     val quotes: List<SwapProviderQuote>,
     val bestQuote: SwapProviderQuote?,
     val selectedQuote: SwapProviderQuote?,
+    val quoteLifetime: Long
 ) {
     val prices: Pair<String, String>?
         get() {
