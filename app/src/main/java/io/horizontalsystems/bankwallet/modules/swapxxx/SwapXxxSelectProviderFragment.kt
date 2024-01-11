@@ -2,13 +2,12 @@ package io.horizontalsystems.bankwallet.modules.swapxxx
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,11 +17,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -30,10 +32,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_green50
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import java.math.BigDecimal
 
 class SwapXxxSelectProviderFragment : BaseComposeFragment() {
     @Composable
@@ -86,17 +90,21 @@ private fun SwapXxxSelectProviderScreenInner(
     ) {
         LazyColumn(
             modifier = Modifier.padding(it),
-            contentPadding = PaddingValues(top = 12.dp, start = 16.dp, end = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
-            items(quotes) { quote ->
+            item {
+                VSpacer(height = 12.dp)
+            }
+            itemsIndexed(quotes) { i, quote ->
                 val borderColor = if (quote == selectedQuote) {
                     ComposeAppTheme.colors.yellow50
                 } else {
                     ComposeAppTheme.colors.steel20
                 }
+
                 RowUniversal(
                     modifier = Modifier
+                        .padding(top = if (i == 0) 0.dp else 8.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                         .padding(horizontal = 16.dp),
@@ -130,6 +138,42 @@ private fun SwapXxxSelectProviderScreenInner(
                     }
                 }
             }
+
+            item {
+                VSpacer(height = 24.dp)
+            }
+
+            item {
+                TextImportantWarning(text = stringResource(R.string.Swap_SelectSwapProvider_FeeInfo))
+            }
+
+            item {
+                VSpacer(height = 32.dp)
+            }
+
         }
+    }
+}
+
+@Preview
+@Composable
+private fun SwapXxxSelectProviderScreenPreview() {
+    ComposeAppTheme(darkTheme = false) {
+        SwapXxxSelectProviderScreenInner(
+            onClickClose = {},
+            quotes = listOf(
+                SwapProviderQuote(
+                    SwapMainModule.OneInchProvider,
+                    SwapQuote(BigDecimal.TEN)
+                ),
+                SwapProviderQuote(
+                    SwapMainModule.UniswapV3Provider,
+                    SwapQuote(BigDecimal("10.12"))
+                ),
+            ),
+            bestQuote = null,
+            selectedQuote = null,
+            onSelectQuote = {}
+        )
     }
 }
