@@ -107,8 +107,8 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 calculating = true
                 emitState()
 
-                quotes = swapProvidersManager.getQuotes(tokenFrom, tokenTo, spendingCoinAmount)
-                bestQuote = quotes.maxByOrNull { it.quote.amountOut }
+                quotes = swapProvidersManager.getQuotes(tokenFrom, tokenTo, spendingCoinAmount).sortedByDescending { it.quote.amountOut }
+                bestQuote = quotes.firstOrNull()
                 selectedQuote = bestQuote
                 calculating = false
                 emitState()

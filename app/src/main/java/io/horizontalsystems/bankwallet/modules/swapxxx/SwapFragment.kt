@@ -164,7 +164,8 @@ private fun SwapScreenInner(
                         .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp)),
                 ) {
                     Row(
-                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         subhead2_grey(text = stringResource(R.string.Swap_Provider))
                         HFillSpacer(minWidth = 8.dp)
