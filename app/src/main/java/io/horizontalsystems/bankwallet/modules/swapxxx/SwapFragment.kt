@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -152,7 +151,7 @@ private fun SwapScreenInner(
             SwapInput(
                 amountIn = uiState.amountIn,
                 onSwitchPairs = onSwitchPairs,
-                amountOut = uiState.selectedQuote?.quote?.amountOut,
+                amountOut = uiState.amountOut,
                 onValueChange = onEnterAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
@@ -161,8 +160,7 @@ private fun SwapScreenInner(
             )
 
             var showRegularPrice by remember { mutableStateOf(true) }
-            uiState.selectedQuote?.let { selectedQuote ->
-                val swapProvider = selectedQuote.provider
+            uiState.selectedProvider?.let { swapProvider ->
                 VSpacer(height = 12.dp)
                 Column(
                     modifier = Modifier
@@ -443,32 +441,4 @@ private fun AmountInput(
             innerTextField()
         },
     )
-}
-
-@Preview
-@Composable
-fun ScreenPreview() {
-    ComposeAppTheme(darkTheme = true) {
-        val uiState = SwapUiState(
-            amountIn = BigDecimal.ZERO,
-            tokenIn = null,
-            tokenOut = null,
-            calculating = false,
-            swapEnabled = false,
-            quotes = listOf(),
-            bestQuote = null,
-            selectedQuote = null,
-            quoteLifetime = 3000
-        )
-        SwapScreenInner(
-            uiState = uiState,
-            onClickClose = { /*TODO*/ },
-            onClickCoinFrom = { /*TODO*/ },
-            onClickCoinTo = { /*TODO*/ },
-            onSwitchPairs = { /*TODO*/ },
-            onEnterAmount = {}
-        ) {
-
-        }
-    }
 }
