@@ -84,10 +84,10 @@ class OneInchTradeService(
             })
     }
 
-    override suspend fun fetchQuote(tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal): SwapQuote {
-        val quote = oneInchKitHelper.getQuoteAsync(tokenFrom, tokenTo, amountFrom).await()
-        val amountTo = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuote(amountTo)
+    override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        val quote = oneInchKitHelper.getQuoteAsync(tokenIn, tokenOut, amountIn).await()
+        val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        return SwapQuote(amountOut)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

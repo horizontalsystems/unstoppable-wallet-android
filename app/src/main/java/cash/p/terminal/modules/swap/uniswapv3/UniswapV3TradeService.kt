@@ -81,13 +81,13 @@ class UniswapV3TradeService(
 //        state = SwapResultState.NotReady(listOf(error))
     }
 
-    override suspend fun fetchQuote(tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal): SwapQuote {
-        val uniswapTokenFrom = uniswapToken(tokenFrom)
-        val uniswapTokenTo = uniswapToken(tokenTo)
+    override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        val uniswapTokenFrom = uniswapToken(tokenIn)
+        val uniswapTokenTo = uniswapToken(tokenOut)
         val tradeDataV3 = uniswapV3Kit.bestTradeExactIn(
             uniswapTokenFrom,
             uniswapTokenTo,
-            amountFrom,
+            amountIn,
             tradeOptions.tradeOptions
         )
         return SwapQuote(tradeDataV3.tokenAmountOut.decimalAmount!!)

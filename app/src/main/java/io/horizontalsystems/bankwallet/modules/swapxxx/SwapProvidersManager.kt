@@ -39,29 +39,23 @@ class SwapProvidersManager {
     private val uniswapV3TradeService1 = UniswapV3TradeService(pancakeSwapV3Kit)
     private val uniswapV2TradeService = UniswapV2TradeService(uniswapKit)
 
-    suspend fun getQuotes(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountFrom: BigDecimal,
-    ): List<SwapProviderQuote> {
-        return coroutineScope {
-            val providers = allProviders.filter {
-                it.supports(tokenIn, tokenOut)
-            }
-            providers
-                .map { provider ->
-                    async {
-                        try {
-                            val quote = getTradeService(provider).fetchQuote(tokenIn, tokenOut, amountFrom)
-                            SwapProviderQuote(provider, quote)
-                        } catch (e: Throwable) {
-                            null
-                        }
+    suspend fun getQuotes(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal) = coroutineScope {
+        val providers = allProviders.filter {
+            it.supports(tokenIn, tokenOut)
+        }
+        providers
+            .map { provider ->
+                async {
+                    try {
+                        val quote = getTradeService(provider).fetchQuote(tokenIn, tokenOut, amountIn)
+                        SwapProviderQuote(provider, quote)
+                    } catch (e: Throwable) {
+                        null
                     }
                 }
-                .awaitAll()
-                .filterNotNull()
-        }
+            }
+            .awaitAll()
+            .filterNotNull()
     }
 
     private fun getTradeService(provider: SwapMainModule.ISwapProvider): SwapMainModule.ISwapTradeService = when (provider) {
