@@ -127,9 +127,9 @@ object SwapMainModule {
         )
 
         suspend fun fetchQuote(
-            tokenFrom: Token,
-            tokenTo: Token,
-            amountFrom: BigDecimal,
+            tokenIn: Token,
+            tokenOut: Token,
+            amountIn: BigDecimal,
         ) : SwapQuote
 
         fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?)
