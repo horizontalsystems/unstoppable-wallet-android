@@ -59,7 +59,7 @@ fun SwapSelectProviderScreen(navController: NavController) {
         onClickClose = navController::popBackStack,
         quotes = uiState.quotes,
         bestQuote = uiState.bestQuote,
-        selectedQuote = uiState.selectedQuote,
+        selectedProviderId = uiState.selectedProvider?.id,
     ) {
         viewModel.onSelectQuote(it)
         navController.popBackStack()
@@ -71,7 +71,7 @@ private fun SwapSelectProviderScreenInner(
     onClickClose: () -> Unit,
     quotes: List<SwapProviderQuote>,
     bestQuote: SwapProviderQuote?,
-    selectedQuote: SwapProviderQuote?,
+    selectedProviderId: String?,
     onSelectQuote: (SwapProviderQuote) -> Unit
 ) {
     Scaffold(
@@ -96,7 +96,7 @@ private fun SwapSelectProviderScreenInner(
                 VSpacer(height = 12.dp)
             }
             itemsIndexed(quotes) { i, quote ->
-                val borderColor = if (quote == selectedQuote) {
+                val borderColor = if (quote.provider.id == selectedProviderId) {
                     ComposeAppTheme.colors.yellow50
                 } else {
                     ComposeAppTheme.colors.steel20
@@ -172,7 +172,7 @@ private fun SwapSelectProviderScreenPreview() {
                 ),
             ),
             bestQuote = null,
-            selectedQuote = null,
+            selectedProviderId = SwapMainModule.OneInchProvider.id,
             onSelectQuote = {}
         )
     }

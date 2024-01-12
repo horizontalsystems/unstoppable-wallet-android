@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -23,7 +24,8 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private var calculating = false
     private var quotes: List<SwapProviderQuote> = listOf()
     private var bestQuote: SwapProviderQuote? = null
-    private var selectedQuote: SwapProviderQuote? = null
+    private var selectedProvider: SwapMainModule.ISwapProvider? = null
+    private var amountOut: BigDecimal? = null
 
     var uiState: SwapUiState by mutableStateOf(
         SwapUiState(
@@ -34,8 +36,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
             swapEnabled = isSwapEnabled(),
             quotes = quotes,
             bestQuote = bestQuote,
-            selectedQuote = selectedQuote,
-            quoteLifetime = quoteLifetime
+            selectedProvider = selectedProvider,
+            quoteLifetime = quoteLifetime,
+            amountOut = amountOut,
         )
     )
         private set
@@ -66,13 +69,14 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
         tokenIn = tokenOut
         tokenOut = tmpTokenIn
 
-        amountIn = selectedQuote?.quote?.amountOut
+        amountIn = amountOut
 
         runQuotation()
     }
 
     fun onSelectQuote(quote: SwapProviderQuote) {
-        selectedQuote = quote
+        selectedProvider = quote.provider
+        amountOut = quote.quote.amountOut
 
         emitState()
     }
@@ -87,8 +91,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 swapEnabled = isSwapEnabled(),
                 quotes = quotes,
                 bestQuote = bestQuote,
-                selectedQuote = selectedQuote,
-                quoteLifetime = quoteLifetime
+                selectedProvider = selectedProvider,
+                quoteLifetime = quoteLifetime,
+                amountOut = amountOut
             )
         }
     }
@@ -97,12 +102,13 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
         runQuotation()
     }
 
-    private fun isSwapEnabled() = selectedQuote != null
+    private fun isSwapEnabled() = amountOut != null
 
     private fun runQuotation() {
         quotes = listOf()
         bestQuote = null
-        selectedQuote = null
+        selectedProvider = null
+        amountOut = null
         calculating = false
         emitState()
 
@@ -119,7 +125,8 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
 
                 quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
                 bestQuote = quotes.firstOrNull()
-                selectedQuote = bestQuote
+                selectedProvider = bestQuote?.provider
+                amountOut = bestQuote?.quote?.amountOut
                 calculating = false
                 emitState()
 
@@ -145,13 +152,14 @@ data class SwapUiState(
     val swapEnabled: Boolean,
     val quotes: List<SwapProviderQuote>,
     val bestQuote: SwapProviderQuote?,
-    val selectedQuote: SwapProviderQuote?,
-    val quoteLifetime: Long
+    val selectedProvider: SwapMainModule.ISwapProvider?,
+    val quoteLifetime: Long,
+    val amountOut: BigDecimal?
 ) {
     val prices: Pair<String, String>?
         get() {
             val amountIn = amountIn ?: return null
-            val amountOut = selectedQuote?.quote?.amountOut ?: return null
+            val amountOut = amountOut ?: return null
             val tokenIn = tokenIn ?: return null
             val tokenOut = tokenOut ?: return null
 
