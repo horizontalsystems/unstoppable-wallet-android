@@ -119,6 +119,8 @@ interface ILocalStorage {
     var pinRandomized: Boolean
     var utxoExpertModeEnabled: Boolean
 
+    val utxoExpertModeEnabledFlow: StateFlow<Boolean>
+
     fun getSwapProviderId(blockchainType: BlockchainType): String?
     fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
 
@@ -316,7 +318,7 @@ interface ISendBitcoinAdapter {
     ): BigDecimal
 
     fun minimumSendAmount(address: String?): BigDecimal?
-    fun sendInfo(
+    fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,

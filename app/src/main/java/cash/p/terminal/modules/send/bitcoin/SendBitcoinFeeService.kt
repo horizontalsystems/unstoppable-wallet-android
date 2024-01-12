@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
 class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
-    private val _feeDataFlow = MutableStateFlow<BitcoinFeeInfo?>(null)
-    val feeDataFlow = _feeDataFlow.asStateFlow()
+    private val _bitcoinFeeInfoFlow = MutableStateFlow<BitcoinFeeInfo?>(null)
+    val bitcoinFeeInfoFlow = _bitcoinFeeInfoFlow.asStateFlow()
 
-    private var feeData: BitcoinFeeInfo? = null
+    private var bitcoinFeeInfo: BitcoinFeeInfo? = null
     private var customUnspentOutputs: List<UnspentOutputInfo>? = null
 
     private var amount: BigDecimal? = null
@@ -23,52 +23,52 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
 
     private var feeRate: Int? = null
 
-    private fun refreshFee() {
+    private fun refreshFeeInfo() {
         val tmpAmount = amount
         val tmpFeeRate = feeRate
 
-        feeData = when {
+        bitcoinFeeInfo = when {
             tmpAmount == null -> null
             tmpFeeRate == null -> null
-            else -> adapter.sendInfo(tmpAmount, tmpFeeRate, validAddress?.hex, customUnspentOutputs, pluginData)
+            else -> adapter.bitcoinFeeInfo(tmpAmount, tmpFeeRate, validAddress?.hex, customUnspentOutputs, pluginData)
         }
     }
 
     private fun emitState() {
-        _feeDataFlow.update { feeData }
+        _bitcoinFeeInfoFlow.update { bitcoinFeeInfo }
     }
 
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
 
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 
     fun setValidAddress(validAddress: Address?) {
         this.validAddress = validAddress
 
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 
     fun setPluginData(pluginData: Map<Byte, IPluginData>?) {
         this.pluginData = pluginData
 
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 
     fun setFeeRate(feeRate: Int?) {
         this.feeRate = feeRate
 
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 
     fun setCustomUnspentOutputs(customUnspentOutputs: List<UnspentOutputInfo>?) {
         this.customUnspentOutputs = customUnspentOutputs
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 

@@ -14,8 +14,7 @@ import kotlinx.coroutines.withContext
 class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
     val feeRateChangeable = feeRateProvider.feeRateChangeable
 
-    var feeRate: Int? = null
-        private set
+    private var feeRate: Int? = null
     private var feeRateCaution: HSCaution? = null
     private var canBeSend = false
 

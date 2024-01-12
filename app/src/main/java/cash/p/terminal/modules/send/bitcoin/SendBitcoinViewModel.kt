@@ -44,9 +44,6 @@ class SendBitcoinViewModel(
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
 ) : ViewModel() {
-    val address by addressService::address
-    val amount by amountService::amount
-    val feeRate by feeRateService::feeRate
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -60,7 +57,7 @@ class SendBitcoinViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var pluginState = pluginService.stateFlow.value
-    private var fee: BigDecimal? = feeService.feeDataFlow.value?.fee
+    private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
     private var utxoData = SendBitcoinModule.UtxoData()
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
@@ -73,7 +70,9 @@ class SendBitcoinViewModel(
     var uiState by mutableStateOf(
         SendBitcoinUiState(
             availableBalance = amountState.availableBalance,
+            amount = amountState.amount,
             feeRate = feeRateState.feeRate,
+            address = addressState.validAddress,
             fee = fee,
             lockTimeInterval = pluginState.lockTimeInterval,
             addressError = addressState.addressError,
@@ -102,11 +101,15 @@ class SendBitcoinViewModel(
         pluginService.stateFlow.collectWith(viewModelScope) {
             handleUpdatedPluginState(it)
         }
-        feeService.feeDataFlow.collectWith(viewModelScope) {
-            handleUpdatedFeeData(it)
+        feeService.bitcoinFeeInfoFlow.collectWith(viewModelScope) {
+            handleUpdatedFeeInfo(it)
         }
         xRateService.getRateFlow(wallet.coin.uid).collectWith(viewModelScope) {
             coinRate = it
+        }
+        localStorage.utxoExpertModeEnabledFlow.collectWith(viewModelScope) { enabled ->
+            utxoExpertModeEnabled = enabled
+            emitState()
         }
 
         viewModelScope.launch {
@@ -117,7 +120,9 @@ class SendBitcoinViewModel(
     private fun emitState() {
         val newUiState = SendBitcoinUiState(
             availableBalance = amountState.availableBalance,
+            amount = amountState.amount,
             feeRate = feeRateState.feeRate,
+            address = addressState.validAddress,
             fee = fee,
             lockTimeInterval = pluginState.lockTimeInterval,
             addressError = addressState.addressError,
@@ -177,10 +182,6 @@ class SendBitcoinViewModel(
         emitState()
     }
 
-    fun onResume() {
-        emitState()
-    }
-
     private fun updateUtxoData(usedUtxosSize: Int) {
         utxoData = SendBitcoinModule.UtxoData(
             type = if (customUnspentOutputs == null) SendBitcoinModule.UtxoType.Auto else SendBitcoinModule.UtxoType.Manual,
@@ -224,7 +225,7 @@ class SendBitcoinViewModel(
         emitState()
     }
 
-    private fun handleUpdatedFeeData(info: BitcoinFeeInfo?) {
+    private fun handleUpdatedFeeInfo(info: BitcoinFeeInfo?) {
         fee = info?.fee
         if (info == null && customUnspentOutputs == null) {
             utxoData = SendBitcoinModule.UtxoData()
@@ -293,8 +294,10 @@ class SendBitcoinViewModel(
 
 data class SendBitcoinUiState(
     val availableBalance: BigDecimal?,
+    val amount: BigDecimal?,
     val fee: BigDecimal?,
     val feeRate: Int?,
+    val address: Address?,
     val lockTimeInterval: LockTimeInterval?,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,

@@ -16,8 +16,7 @@ class SendBitcoinAmountService(
     private val coinCode: String,
     private val amountValidator: AmountValidator
 ) {
-    var amount: BigDecimal? = null
-        private set
+    private var amount: BigDecimal? = null
     private var customUnspentOutputs: List<UnspentOutputInfo>? = null
     private var amountCaution: HSCaution? = null
 

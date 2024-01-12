@@ -42,7 +42,6 @@ import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScre
 import cash.p.terminal.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -99,9 +98,9 @@ fun SendBitcoinNavHost(
             UtxoExpertModeScreen(
                 adapter = viewModel.adapter,
                 token = viewModel.wallet.token,
-                address = viewModel.address,
-                value = viewModel.amount,
-                feeRate = viewModel.feeRate,
+                address = viewModel.uiState.address,
+                value = viewModel.uiState.amount,
+                feeRate = viewModel.uiState.feeRate,
                 customUnspentOutputs = viewModel.customUnspentOutputs,
                 updateUnspentOutputs = {
                     viewModel.updateCustomUnspentOutputs(it)
@@ -141,12 +140,6 @@ fun SendBitcoinScreen(
         factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
-
-    DisposableLifecycleCallbacks(
-        onResume = {
-            viewModel.onResume()
-        },
-    )
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }

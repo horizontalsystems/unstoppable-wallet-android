@@ -83,6 +83,9 @@ class LocalStorageManager(
     private val PIN_RANDOMIZED = "pin_randomized"
     private val UTXO_EXPERT_MODE = "utxo_expert_mode"
 
+    private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
+    override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
+
     private val gson by lazy { Gson() }
 
     override var chartIndicatorsEnabled: Boolean
@@ -504,6 +507,9 @@ class LocalStorageManager(
         get() = preferences.getBoolean(UTXO_EXPERT_MODE, false)
         set(value) {
             preferences.edit().putBoolean(UTXO_EXPERT_MODE, value).apply()
+            _utxoExpertModeEnabledFlow.update {
+                value
+            }
         }
 
     private fun getSwapProviderKey(blockchainType: BlockchainType): String {
