@@ -85,9 +85,9 @@ class UniswapV2TradeService(
             })
     }
 
-    override suspend fun fetchQuote(tokenFrom: Token, tokenTo: Token, amountFrom: BigDecimal): SwapQuote {
-        val swapData = swapDataSingle(tokenFrom, tokenTo).await()
-        val tradeData = uniswapKit.bestTradeExactIn(swapData, amountFrom, tradeOptions.tradeOptions)
+    override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        val swapData = swapDataSingle(tokenIn, tokenOut).await()
+        val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions.tradeOptions)
         return SwapQuote(tradeData.amountOut!!)
     }
 
