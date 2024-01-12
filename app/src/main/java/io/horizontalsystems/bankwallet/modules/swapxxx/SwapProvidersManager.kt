@@ -40,19 +40,19 @@ class SwapProvidersManager {
     private val uniswapV2TradeService = UniswapV2TradeService(uniswapKit)
 
     suspend fun getQuotes(
-        tokenFrom: Token,
-        tokenTo: Token,
+        tokenIn: Token,
+        tokenOut: Token,
         amountFrom: BigDecimal,
     ): List<SwapProviderQuote> {
         return coroutineScope {
             val providers = allProviders.filter {
-                it.supports(tokenFrom, tokenTo)
+                it.supports(tokenIn, tokenOut)
             }
             providers
                 .map { provider ->
                     async {
                         try {
-                            val quote = getTradeService(provider).fetchQuote(tokenFrom, tokenTo, amountFrom)
+                            val quote = getTradeService(provider).fetchQuote(tokenIn, tokenOut, amountFrom)
                             SwapProviderQuote(provider, quote)
                         } catch (e: Throwable) {
                             null
