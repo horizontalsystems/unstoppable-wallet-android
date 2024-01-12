@@ -13,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
     private val quoteLifetime = 30000L
@@ -156,12 +157,12 @@ data class SwapUiState(
 
             val numberFormatter = App.numberFormatter
 
-            val price = amountOut.div(amountIn).stripTrailingZeros()
+            val price = amountOut.divide(amountIn, tokenTo.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
             val from = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenFrom.coin.code, 0)
             val to = numberFormatter.formatCoinShort(price, tokenTo.coin.code, tokenTo.decimals)
             val priceStr = "$from = $to"
 
-            val priceInverted = amountIn.div(amountOut).stripTrailingZeros()
+            val priceInverted = amountIn.divide(amountOut, tokenFrom.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
             val fromInverted = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenTo.coin.code, 0)
             val toInverted = numberFormatter.formatCoinShort(priceInverted, tokenFrom.coin.code, tokenFrom.decimals)
             val priceInvertedStr = "$fromInverted = $toInverted"
