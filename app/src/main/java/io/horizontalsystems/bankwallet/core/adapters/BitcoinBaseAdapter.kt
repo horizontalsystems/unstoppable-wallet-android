@@ -265,7 +265,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun sendInfo(
+    fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,

@@ -91,19 +91,20 @@ class UtxoExpertModeViewModel(
 
     private fun updateFee() {
         val feeRateNonNull = feeRate ?: return
-        val sendInfo = adapter.sendInfo(
+        val bitcoinFeeInfo = adapter.bitcoinFeeInfo(
             amount = value,
             feeRate = feeRateNonNull,
             address = address?.hex,
             unspentOutputs = customOutputs,
             pluginData = null,
         )
-        val fee = sendInfo?.fee
+        val fee = bitcoinFeeInfo?.fee
         if (fee == null) {
             feeInfo = feeInfo.copy(
                 value = null,
                 subValue = null,
             )
+            changeInfo = null
             return
         }
         feeInfo = feeInfo.copy(
@@ -112,10 +113,10 @@ class UtxoExpertModeViewModel(
                 rate.copy(value = fee.times(rate.value)).getFormattedFull()
             } ?: "",
         )
-        changeInfo = if (sendInfo.changeAddress != null && sendInfo.changeValue != null) {
-            val value = sendInfo.changeValue
+        changeInfo = if (bitcoinFeeInfo.changeAddress != null && bitcoinFeeInfo.changeValue != null) {
+            val value = bitcoinFeeInfo.changeValue
             UtxoExpertModeModule.InfoItem(
-                subTitle = sendInfo.changeAddress.stringValue.shorten(),
+                subTitle = bitcoinFeeInfo.changeAddress.stringValue.shorten(),
                 value = App.numberFormatter.formatCoinFull(value, token.coin.code, token.decimals),
                 subValue = coinRate?.let { rate ->
                     rate.copy(value = value.times(rate.value)).getFormattedFull()
