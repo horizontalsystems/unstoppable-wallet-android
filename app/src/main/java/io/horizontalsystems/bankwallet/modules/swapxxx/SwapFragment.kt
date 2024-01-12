@@ -99,7 +99,7 @@ fun SwapScreen(navController: NavController) {
                 R.id.selectSwapCoinDialog,
                 dex
             ) {
-                viewModel.onSelectTokenFrom(it.token)
+                viewModel.onSelectTokenIn(it.token)
             }
         },
         onClickCoinTo = {
@@ -111,7 +111,7 @@ fun SwapScreen(navController: NavController) {
                 R.id.selectSwapCoinDialog,
                 dex
             ) {
-                viewModel.onSelectTokenTo(it.token)
+                viewModel.onSelectTokenOut(it.token)
             }
         },
         onSwitchPairs = viewModel::onSwitchPairs,
@@ -150,14 +150,14 @@ private fun SwapScreenInner(
         Column(modifier = Modifier.padding(it)) {
             VSpacer(height = 12.dp)
             SwapInput(
-                spendingCoinAmount = uiState.spendingCoinAmount,
+                amountIn = uiState.amountIn,
                 onSwitchPairs = onSwitchPairs,
-                receivingCoinAmount = uiState.selectedQuote?.quote?.amountOut,
+                amountOut = uiState.selectedQuote?.quote?.amountOut,
                 onValueChange = onEnterAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
-                tokenFrom = uiState.tokenFrom,
-                tokenTo = uiState.tokenTo
+                tokenIn = uiState.tokenIn,
+                tokenOut = uiState.tokenOut
             )
 
             var showRegularPrice by remember { mutableStateOf(true) }
@@ -277,14 +277,14 @@ private fun QuoteInfoRow(
 
 @Composable
 private fun SwapInput(
-    spendingCoinAmount: BigDecimal?,
+    amountIn: BigDecimal?,
     onSwitchPairs: () -> Unit,
-    receivingCoinAmount: BigDecimal?,
+    amountOut: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
-    tokenFrom: Token?,
-    tokenTo: Token?,
+    tokenIn: Token?,
+    tokenOut: Token?,
 ) {
     Box {
         Column(
@@ -296,16 +296,16 @@ private fun SwapInput(
                 .padding()
         ) {
             SwapCoinInput(
-                coinAmount = spendingCoinAmount,
+                coinAmount = amountIn,
                 onValueChange = onValueChange,
-                token = tokenFrom,
+                token = tokenIn,
                 onClickCoin = onClickCoinFrom
             )
             SwapCoinInput(
-                coinAmount = receivingCoinAmount,
+                coinAmount = amountOut,
                 onValueChange = { },
                 enabled = false,
-                token = tokenTo,
+                token = tokenOut,
                 onClickCoin = onClickCoinTo
             )
         }
@@ -445,35 +445,14 @@ private fun AmountInput(
     )
 }
 
-//@Preview
-//@Composable
-//fun SwapInputPreview() {
-//    ComposeAppTheme(darkTheme = true) {
-//        SwapInput(
-//            coinAmountHint = "0",
-//            currencyAmountHint = "$0",
-//            spendingCoinAmount = BigDecimal.ZERO,
-//            spendingCurrencyAmount = "$123.30",
-//            onSwitchPairs = {},
-//            receivingCoinAmount = BigDecimal(12),
-//            receivingCurrencyAmount = "$123",
-//            onValueChange = {},
-//            onClickCoinFrom = {},
-//            onClickCoinTo = {},
-//            tokenFrom = null,
-//            tokenTo = null
-//        )
-//    }
-//}
-
 @Preview
 @Composable
 fun ScreenPreview() {
     ComposeAppTheme(darkTheme = true) {
         val uiState = SwapUiState(
-            spendingCoinAmount = BigDecimal.ZERO,
-            tokenFrom = null,
-            tokenTo = null,
+            amountIn = BigDecimal.ZERO,
+            tokenIn = null,
+            tokenOut = null,
             calculating = false,
             swapEnabled = false,
             quotes = listOf(),

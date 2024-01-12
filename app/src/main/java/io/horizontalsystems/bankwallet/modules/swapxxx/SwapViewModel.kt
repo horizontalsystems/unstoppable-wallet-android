@@ -17,9 +17,9 @@ import java.math.RoundingMode
 
 class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
     private val quoteLifetime = 30000L
-    private var spendingCoinAmount: BigDecimal? = null
-    private var tokenFrom: Token? = null
-    private var tokenTo: Token? = null
+    private var amountIn: BigDecimal? = null
+    private var tokenIn: Token? = null
+    private var tokenOut: Token? = null
     private var calculating = false
     private var quotes: List<SwapProviderQuote> = listOf()
     private var bestQuote: SwapProviderQuote? = null
@@ -27,9 +27,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
 
     var uiState: SwapUiState by mutableStateOf(
         SwapUiState(
-            spendingCoinAmount = spendingCoinAmount,
-            tokenFrom = tokenFrom,
-            tokenTo = tokenTo,
+            amountIn = amountIn,
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
             calculating = calculating,
             swapEnabled = isSwapEnabled(),
             quotes = quotes,
@@ -43,30 +43,30 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private var calculatingJob: Job? = null
 
     fun onEnterAmount(v: BigDecimal?) {
-        spendingCoinAmount = v
+        amountIn = v
 
         runQuotation()
     }
 
-    fun onSelectTokenFrom(token: Token) {
-        tokenFrom = token
+    fun onSelectTokenIn(token: Token) {
+        tokenIn = token
 
         runQuotation()
     }
 
-    fun onSelectTokenTo(token: Token) {
-        tokenTo = token
+    fun onSelectTokenOut(token: Token) {
+        tokenOut = token
 
         runQuotation()
     }
 
     fun onSwitchPairs() {
-        val tmpTokenFrom = tokenFrom
+        val tmpTokenIn = tokenIn
 
-        tokenFrom = tokenTo
-        tokenTo = tmpTokenFrom
+        tokenIn = tokenOut
+        tokenOut = tmpTokenIn
 
-        spendingCoinAmount = selectedQuote?.quote?.amountOut
+        amountIn = selectedQuote?.quote?.amountOut
 
         runQuotation()
     }
@@ -80,9 +80,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private fun emitState() {
         viewModelScope.launch {
             uiState = SwapUiState(
-                spendingCoinAmount = spendingCoinAmount,
-                tokenFrom = tokenFrom,
-                tokenTo = tokenTo,
+                amountIn = amountIn,
+                tokenIn = tokenIn,
+                tokenOut = tokenOut,
                 calculating = calculating,
                 swapEnabled = isSwapEnabled(),
                 quotes = quotes,
@@ -108,16 +108,16 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
 
         calculatingJob?.cancel()
 
-        val spendingCoinAmount = spendingCoinAmount
-        val tokenFrom = tokenFrom
-        val tokenTo = tokenTo
+        val amountIn = amountIn
+        val tokenIn = tokenIn
+        val tokenOut = tokenOut
 
-        if (spendingCoinAmount != null && spendingCoinAmount > BigDecimal.ZERO && tokenFrom != null && tokenTo != null) {
+        if (amountIn != null && amountIn > BigDecimal.ZERO && tokenIn != null && tokenOut != null) {
             calculatingJob = viewModelScope.launch(Dispatchers.Default) {
                 calculating = true
                 emitState()
 
-                quotes = swapProvidersManager.getQuotes(tokenFrom, tokenTo, spendingCoinAmount).sortedByDescending { it.quote.amountOut }
+                quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
                 bestQuote = quotes.firstOrNull()
                 selectedQuote = bestQuote
                 calculating = false
@@ -138,9 +138,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
 }
 
 data class SwapUiState(
-    val spendingCoinAmount: BigDecimal?,
-    val tokenFrom: Token?,
-    val tokenTo: Token?,
+    val amountIn: BigDecimal?,
+    val tokenIn: Token?,
+    val tokenOut: Token?,
     val calculating: Boolean,
     val swapEnabled: Boolean,
     val quotes: List<SwapProviderQuote>,
@@ -150,21 +150,21 @@ data class SwapUiState(
 ) {
     val prices: Pair<String, String>?
         get() {
-            val amountIn = spendingCoinAmount ?: return null
+            val amountIn = amountIn ?: return null
             val amountOut = selectedQuote?.quote?.amountOut ?: return null
-            val tokenFrom = tokenFrom ?: return null
-            val tokenTo = tokenTo ?: return null
+            val tokenIn = tokenIn ?: return null
+            val tokenOut = tokenOut ?: return null
 
             val numberFormatter = App.numberFormatter
 
-            val price = amountOut.divide(amountIn, tokenTo.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
-            val from = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenFrom.coin.code, 0)
-            val to = numberFormatter.formatCoinShort(price, tokenTo.coin.code, tokenTo.decimals)
+            val price = amountOut.divide(amountIn, tokenOut.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+            val from = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenIn.coin.code, 0)
+            val to = numberFormatter.formatCoinShort(price, tokenOut.coin.code, tokenOut.decimals)
             val priceStr = "$from = $to"
 
-            val priceInverted = amountIn.divide(amountOut, tokenFrom.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
-            val fromInverted = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenTo.coin.code, 0)
-            val toInverted = numberFormatter.formatCoinShort(priceInverted, tokenFrom.coin.code, tokenFrom.decimals)
+            val priceInverted = amountIn.divide(amountOut, tokenIn.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+            val fromInverted = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenOut.coin.code, 0)
+            val toInverted = numberFormatter.formatCoinShort(priceInverted, tokenIn.coin.code, tokenIn.decimals)
             val priceInvertedStr = "$fromInverted = $toInverted"
 
             return Pair(priceStr, priceInvertedStr)
