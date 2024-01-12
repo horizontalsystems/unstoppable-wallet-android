@@ -42,7 +42,6 @@ import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.SendBtcAdva
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -99,9 +98,9 @@ fun SendBitcoinNavHost(
             UtxoExpertModeScreen(
                 adapter = viewModel.adapter,
                 token = viewModel.wallet.token,
-                address = viewModel.address,
-                value = viewModel.amount,
-                feeRate = viewModel.feeRate,
+                address = viewModel.uiState.address,
+                value = viewModel.uiState.amount,
+                feeRate = viewModel.uiState.feeRate,
                 customUnspentOutputs = viewModel.customUnspentOutputs,
                 updateUnspentOutputs = {
                     viewModel.updateCustomUnspentOutputs(it)
@@ -141,12 +140,6 @@ fun SendBitcoinScreen(
         factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
-
-    DisposableLifecycleCallbacks(
-        onResume = {
-            viewModel.onResume()
-        },
-    )
 
     ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
