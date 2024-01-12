@@ -495,8 +495,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         }
     }
 
-    override fun getWorkManagerConfiguration(): WorkConfiguration {
-        return if (BuildConfig.DEBUG) {
+    override val workManagerConfiguration: androidx.work.Configuration
+        get() = if (BuildConfig.DEBUG) {
             WorkConfiguration.Builder()
                 .setMinimumLoggingLevel(Log.DEBUG)
                 .build()
@@ -505,7 +505,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 .setMinimumLoggingLevel(Log.ERROR)
                 .build()
         }
-    }
 
     override fun localizedContext(): Context {
         return localeAwareContext(this)
