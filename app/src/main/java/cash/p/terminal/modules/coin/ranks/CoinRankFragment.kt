@@ -4,15 +4,27 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -26,14 +38,29 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.captionSB_grey
+import cash.p.terminal.ui.compose.components.subhead2_grey
 
 class CoinRankFragment : BaseComposeFragment() {
 
@@ -93,7 +120,7 @@ private fun CoinRankScreen(
                 )
             )
         )
-        Crossfade(uiState.viewState) { viewItemState ->
+        Crossfade(uiState.viewState, label = "") { viewItemState ->
             when (viewItemState) {
                 ViewState.Loading -> {
                     Loading()
@@ -130,7 +157,7 @@ private fun CoinRankScreen(
                                 HeaderSorting {
                                     ButtonSecondaryCircle(
                                         modifier = Modifier.padding(start = 16.dp),
-                                        icon = if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                                        icon = if (uiState.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
                                         onClick = { viewModel.toggleSortType() }
                                     )
                                     Spacer(Modifier.weight(1f))

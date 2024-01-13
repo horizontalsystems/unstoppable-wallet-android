@@ -158,7 +158,7 @@ class MetricsPageFragment : BaseComposeFragment() {
             ButtonSecondaryCircle(
                 modifier = Modifier
                     .padding(start = 16.dp),
-                icon = if (menu.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                icon = if (menu.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
                 onClick = { onToggleSortType() }
             )
             Spacer(Modifier.weight(1f))

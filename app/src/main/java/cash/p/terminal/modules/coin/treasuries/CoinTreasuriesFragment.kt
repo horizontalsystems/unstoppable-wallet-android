@@ -163,7 +163,7 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
             }
             ButtonSecondaryCircle(
                 modifier = Modifier.padding(end = 16.dp),
-                icon = if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                icon = if (sortDescending) R.drawable.ic_sort_h2l_20 else R.drawable.ic_sort_l2h_20,
                 onClick = { onToggleSortType() }
             )
         }
