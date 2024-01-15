@@ -2,8 +2,8 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.modules.swap.scaleUp
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
@@ -13,11 +13,8 @@ import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Single
 import java.math.BigDecimal
 
-class OneInchKitHelper(
-    evmKit: EthereumKit,
-    apiKey: String
-) {
-    private val oneInchKit = OneInchKit.getInstance(evmKit, apiKey)
+class OneInchKitHelper(apiKey: String) {
+    private val oneInchKit = OneInchKit.getInstance(apiKey)
 
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
@@ -29,14 +26,19 @@ class OneInchKitHelper(
     }
 
     val smartContractAddress: Address
-        get() = oneInchKit.routerAddress
+        get() {
+            TODO()
+//            return oneInchKit.routerAddress(chain)
+        }
 
     fun getQuoteAsync(
+        chain: Chain,
         fromToken: Token,
         toToken: Token,
         fromAmount: BigDecimal
     ): Single<Quote> {
         return oneInchKit.getQuoteAsync(
+            chain = chain,
             fromToken = getTokenAddress(fromToken),
             toToken = getTokenAddress(toToken),
             amount = fromAmount.scaleUp(fromToken.decimals)
@@ -46,6 +48,8 @@ class OneInchKitHelper(
     }
 
     fun getSwapAsync(
+        chain: Chain,
+        receiveAddress: Address,
         fromToken: Token,
         toToken: Token,
         fromAmount: BigDecimal,
@@ -54,6 +58,8 @@ class OneInchKitHelper(
         gasPrice: GasPrice? = null
     ): Single<Swap> {
         return oneInchKit.getSwapAsync(
+            chain = chain,
+            receiveAddress = receiveAddress,
             fromToken = getTokenAddress(fromToken),
             toToken = getTokenAddress(toToken),
             amount = fromAmount.scaleUp(fromToken.decimals),

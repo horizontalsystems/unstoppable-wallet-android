@@ -25,7 +25,7 @@ object OneInchConfirmationModule {
     class Factory(val blockchainType: BlockchainType, private val oneInchSwapParameters: OneInchSwapParameters) : ViewModelProvider.Factory {
 
         private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
-        private val oneInchKitHelper by lazy { OneInchKitHelper(evmKitWrapper.evmKit, App.appConfigProvider.oneInchApiKey) }
+        private val oneInchKitHelper by lazy { OneInchKitHelper(App.appConfigProvider.oneInchApiKey) }
         private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
         private val gasPriceService: IEvmGasPriceService by lazy {
             val evmKit = evmKitWrapper.evmKit
