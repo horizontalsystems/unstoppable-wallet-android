@@ -23,7 +23,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private var tokenOut: Token? = null
     private var calculating = false
     private var quotes: List<SwapProviderQuote> = listOf()
-    private var selectedProvider: SwapMainModule.ISwapProvider? = null
+    private var preferredProvider: SwapMainModule.ISwapProvider? = null
     private var quote: SwapProviderQuote? = null
 
     var uiState: SwapUiState by mutableStateOf(
@@ -34,7 +34,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
             calculating = calculating,
             swapEnabled = isSwapEnabled(),
             quotes = quotes,
-            selectedProvider = selectedProvider,
+            preferredProvider = preferredProvider,
             quoteLifetime = quoteLifetime,
             quote = quote
         )
@@ -45,21 +45,21 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
 
     fun onEnterAmount(v: BigDecimal?) {
         amountIn = v
-        selectedProvider = null
+        preferredProvider = null
 
         runQuotation()
     }
 
     fun onSelectTokenIn(token: Token) {
         tokenIn = token
-        selectedProvider = null
+        preferredProvider = null
 
         runQuotation()
     }
 
     fun onSelectTokenOut(token: Token) {
         tokenOut = token
-        selectedProvider = null
+        preferredProvider = null
 
         runQuotation()
     }
@@ -76,7 +76,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     }
 
     fun onSelectQuote(quote: SwapProviderQuote) {
-        selectedProvider = quote.provider
+        preferredProvider = quote.provider
         this.quote = quote
 
         emitState()
@@ -91,7 +91,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 calculating = calculating,
                 swapEnabled = isSwapEnabled(),
                 quotes = quotes,
-                selectedProvider = selectedProvider,
+                preferredProvider = preferredProvider,
                 quoteLifetime = quoteLifetime,
                 quote = quote
             )
@@ -117,11 +117,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 emitState()
 
                 quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
-                quote = if (selectedProvider != null) {
-                    quotes.find { it.provider == selectedProvider }
-                } else {
-                    quotes.firstOrNull()
-                }
+                quote = preferredProvider
+                    ?.let { provider -> quotes.find { it.provider == provider } }
+                    ?: quotes.firstOrNull()
 
                 calculating = false
                 emitState()
@@ -153,7 +151,7 @@ data class SwapUiState(
     val calculating: Boolean,
     val swapEnabled: Boolean,
     val quotes: List<SwapProviderQuote>,
-    val selectedProvider: SwapMainModule.ISwapProvider?,
+    val preferredProvider: SwapMainModule.ISwapProvider?,
     val quoteLifetime: Long,
     val quote: SwapProviderQuote?
 ) {
