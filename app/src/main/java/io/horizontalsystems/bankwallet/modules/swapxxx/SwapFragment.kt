@@ -80,8 +80,9 @@ class SwapFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapScreen(navController: NavController) {
+    val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = navController.currentBackStackEntry!!,
+        viewModelStoreOwner = currentBackStackEntry!!,
         factory = SwapViewModel.Factory()
     )
     val uiState = viewModel.uiState
