@@ -14,9 +14,8 @@ import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.balance.BalanceSortType
 import cash.p.terminal.modules.balance.BalanceViewType
 import cash.p.terminal.modules.main.MainModule
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketModule
-import cash.p.terminal.modules.market.SortingField
+import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.Period
 import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.theme.ThemeType
@@ -70,8 +69,8 @@ class LocalStorageManager(
     private val LAUNCH_PAGE = "launch_page"
     private val APP_ICON = "app_icon"
     private val MAIN_TAB = "main_tab"
-    private val MARKET_FAVORITES_SORTING_FIELD = "market_favorites_sorting_field"
-    private val MARKET_FAVORITES_MARKET_FIELD = "market_favorites_market_field"
+    private val MARKET_FAVORITES_SORT_DESCENDING = "market_favorites_sort_descending"
+    private val MARKET_FAVORITES_TIME_DURATION = "market_favorites_time_duration"
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
@@ -429,20 +428,18 @@ class LocalStorageManager(
             preferences.edit().putString(MAIN_TAB, value?.name).apply()
         }
 
-    override var marketFavoritesSortingField: SortingField?
-        get() = preferences.getString(MARKET_FAVORITES_SORTING_FIELD, null)?.let {
-            SortingField.fromString(it)
-        }
+    override var marketFavoritesSortDescending: Boolean
+        get() = preferences.getBoolean(MARKET_FAVORITES_SORT_DESCENDING, true)
         set(value) {
-            preferences.edit().putString(MARKET_FAVORITES_SORTING_FIELD, value?.name).apply()
+            preferences.edit().putBoolean(MARKET_FAVORITES_SORT_DESCENDING, value).apply()
         }
 
-    override var marketFavoritesMarketField: MarketField?
-        get() = preferences.getString(MARKET_FAVORITES_MARKET_FIELD, null)?.let {
-            MarketField.fromString(it)
+    override var marketFavoritesPeriod: Period?
+        get() = preferences.getString(MARKET_FAVORITES_TIME_DURATION, null)?.let {
+            Period.valueOf(it)
         }
         set(value) {
-            preferences.edit().putString(MARKET_FAVORITES_MARKET_FIELD, value?.name).apply()
+            preferences.edit().putString(MARKET_FAVORITES_TIME_DURATION, value?.name).apply()
         }
 
     override var relaunchBySettingChange: Boolean

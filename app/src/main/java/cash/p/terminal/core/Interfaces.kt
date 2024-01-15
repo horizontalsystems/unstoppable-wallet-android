@@ -26,10 +26,9 @@ import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.balance.BalanceSortType
 import cash.p.terminal.modules.balance.BalanceViewType
 import cash.p.terminal.modules.main.MainModule
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketModule
-import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.Value
+import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.Period
 import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.settings.security.tor.TorStatus
@@ -108,8 +107,8 @@ interface ILocalStorage {
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
     var mainTab: MainModule.MainNavigation?
-    var marketFavoritesSortingField: SortingField?
-    var marketFavoritesMarketField: MarketField?
+    var marketFavoritesSortDescending: Boolean
+    var marketFavoritesPeriod: Period?
     var relaunchBySettingChange: Boolean
     var marketsTabEnabled: Boolean
     val marketsTabEnabledFlow: StateFlow<Boolean>
