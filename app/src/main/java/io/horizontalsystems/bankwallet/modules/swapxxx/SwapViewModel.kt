@@ -45,18 +45,21 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
 
     fun onEnterAmount(v: BigDecimal?) {
         amountIn = v
+        selectedProvider = null
 
         runQuotation()
     }
 
     fun onSelectTokenIn(token: Token) {
         tokenIn = token
+        selectedProvider = null
 
         runQuotation()
     }
 
     fun onSelectTokenOut(token: Token) {
         tokenOut = token
+        selectedProvider = null
 
         runQuotation()
     }
