@@ -23,9 +23,8 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private var tokenOut: Token? = null
     private var calculating = false
     private var quotes: List<SwapProviderQuote> = listOf()
-    private var bestQuote: SwapProviderQuote? = null
     private var selectedProvider: SwapMainModule.ISwapProvider? = null
-    private var amountOut: BigDecimal? = null
+    private var quote: SwapProviderQuote? = null
 
     var uiState: SwapUiState by mutableStateOf(
         SwapUiState(
@@ -35,10 +34,9 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
             calculating = calculating,
             swapEnabled = isSwapEnabled(),
             quotes = quotes,
-            bestQuote = bestQuote,
             selectedProvider = selectedProvider,
             quoteLifetime = quoteLifetime,
-            amountOut = amountOut,
+            quote = quote
         )
     )
         private set
@@ -69,14 +67,14 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
         tokenIn = tokenOut
         tokenOut = tmpTokenIn
 
-        amountIn = amountOut
+        amountIn = quote?.quote?.amountOut
 
         runQuotation()
     }
 
     fun onSelectQuote(quote: SwapProviderQuote) {
         selectedProvider = quote.provider
-        amountOut = quote.quote.amountOut
+        this.quote = quote
 
         emitState()
     }
@@ -90,26 +88,18 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 calculating = calculating,
                 swapEnabled = isSwapEnabled(),
                 quotes = quotes,
-                bestQuote = bestQuote,
                 selectedProvider = selectedProvider,
                 quoteLifetime = quoteLifetime,
-                amountOut = amountOut
+                quote = quote
             )
         }
     }
 
-    private fun onQuoteExpired() {
-        runQuotation()
-    }
-
-    private fun isSwapEnabled() = amountOut != null
+    private fun isSwapEnabled() = quote != null
 
     private fun runQuotation() {
         quotes = listOf()
-        bestQuote = null
-        selectedProvider = null
-        amountOut = null
-        calculating = false
+        quote = null
         emitState()
 
         calculatingJob?.cancel()
@@ -124,15 +114,24 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 emitState()
 
                 quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
-                bestQuote = quotes.firstOrNull()
-                selectedProvider = bestQuote?.provider
-                amountOut = bestQuote?.quote?.amountOut
+                quote = if (selectedProvider != null) {
+                    quotes.find { it.provider == selectedProvider }
+                } else {
+                    quotes.firstOrNull()
+                }
+
                 calculating = false
                 emitState()
 
-                delay(quoteLifetime)
-                onQuoteExpired()
+                scheduleReQuote()
             }
+        }
+    }
+
+    private fun scheduleReQuote() {
+        viewModelScope.launch {
+            delay(quoteLifetime)
+            runQuotation()
         }
     }
 
@@ -151,15 +150,14 @@ data class SwapUiState(
     val calculating: Boolean,
     val swapEnabled: Boolean,
     val quotes: List<SwapProviderQuote>,
-    val bestQuote: SwapProviderQuote?,
     val selectedProvider: SwapMainModule.ISwapProvider?,
     val quoteLifetime: Long,
-    val amountOut: BigDecimal?
+    val quote: SwapProviderQuote?
 ) {
     val prices: Pair<String, String>?
         get() {
             val amountIn = amountIn ?: return null
-            val amountOut = amountOut ?: return null
+            val amountOut = quote?.quote?.amountOut ?: return null
             val tokenIn = tokenIn ?: return null
             val tokenOut = tokenOut ?: return null
 
