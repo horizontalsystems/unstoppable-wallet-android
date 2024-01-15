@@ -151,7 +151,7 @@ private fun SwapScreenInner(
             SwapInput(
                 amountIn = uiState.amountIn,
                 onSwitchPairs = onSwitchPairs,
-                amountOut = uiState.amountOut,
+                amountOut = uiState.quote?.quote?.amountOut,
                 onValueChange = onEnterAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
@@ -160,7 +160,7 @@ private fun SwapScreenInner(
             )
 
             var showRegularPrice by remember { mutableStateOf(true) }
-            uiState.selectedProvider?.let { swapProvider ->
+            uiState.quote?.provider?.let { swapProvider ->
                 VSpacer(height = 12.dp)
                 Column(
                     modifier = Modifier

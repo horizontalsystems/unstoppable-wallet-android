@@ -58,7 +58,6 @@ fun SwapSelectProviderScreen(navController: NavController) {
     SwapSelectProviderScreenInner(
         onClickClose = navController::popBackStack,
         quotes = uiState.quotes,
-        bestQuote = uiState.bestQuote,
         selectedProviderId = uiState.selectedProvider?.id,
     ) {
         viewModel.onSelectQuote(it)
@@ -70,7 +69,6 @@ fun SwapSelectProviderScreen(navController: NavController) {
 private fun SwapSelectProviderScreenInner(
     onClickClose: () -> Unit,
     quotes: List<SwapProviderQuote>,
-    bestQuote: SwapProviderQuote?,
     selectedProviderId: String?,
     onSelectQuote: (SwapProviderQuote) -> Unit
 ) {
@@ -122,7 +120,7 @@ private fun SwapSelectProviderScreenInner(
                             text = provider.title,
                             textAlign = TextAlign.End
                         )
-                        if (bestQuote == quote) {
+                        if (i == 0) {
                             VSpacer(height = 1.dp)
                             subhead2_green50(
                                 text = stringResource(R.string.Swap_BestPrice),
@@ -171,7 +169,6 @@ private fun SwapSelectProviderScreenPreview() {
                     SwapQuote(BigDecimal("10.12"))
                 ),
             ),
-            bestQuote = null,
             selectedProviderId = SwapMainModule.OneInchProvider.id,
             onSelectQuote = {}
         )
