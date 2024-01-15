@@ -117,6 +117,10 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 emitState()
 
                 quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
+                if (preferredProvider != null && quotes.none { it.provider == preferredProvider}) {
+                    preferredProvider = null
+                }
+
                 quote = preferredProvider
                     ?.let { provider -> quotes.find { it.provider == provider } }
                     ?: quotes.firstOrNull()
