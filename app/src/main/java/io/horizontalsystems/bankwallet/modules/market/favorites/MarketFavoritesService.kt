@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.Observable
@@ -25,18 +24,24 @@ class MarketFavoritesService(
     val marketItemsObservable: Observable<DataState<List<MarketItemWrapper>>>
         get() = marketItemsSubject
 
-    val sortingFieldTypes = SortingField.values().toList()
-    var sortingField: SortingField = menuService.sortingField
+    var sortDescending: Boolean = menuService.sortDescending
         set(value) {
             field = value
-            menuService.sortingField = value
-            rebuildItems()
+            menuService.sortDescending = value
+            fetch()
         }
 
-    private fun fetch(forceRefresh: Boolean) {
+    var period: MarketFavoritesModule.Period = menuService.period
+        set(value) {
+            field = value
+            menuService.period = value
+            fetch()
+        }
+
+    private fun fetch() {
         favoritesDisposable?.dispose()
 
-        repository.get(sortingField, currencyManager.baseCurrency, forceRefresh)
+        repository.get(sortDescending, period, currencyManager.baseCurrency)
             .subscribeIO({ marketItems ->
                 marketItemsSubject.onNext(DataState.Success(marketItems.map {
                     MarketItemWrapper(it, true)
@@ -48,34 +53,26 @@ class MarketFavoritesService(
             }
     }
 
-    private fun rebuildItems() {
-        fetch(false)
-    }
-
-    private fun forceRefresh() {
-        fetch(true)
-    }
-
     fun removeFavorite(uid: String) {
         repository.removeFavorite(uid)
     }
 
     fun refresh() {
-        forceRefresh()
+        fetch()
     }
 
     fun start() {
         backgroundManager.registerListener(this)
 
         currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO { forceRefresh() }
+            .subscribeIO { fetch() }
             .let { currencyManagerDisposable = it }
 
         repository.dataUpdatedObservable
-            .subscribeIO { forceRefresh() }
+            .subscribeIO { fetch() }
             .let { repositoryDisposable = it }
 
-        forceRefresh()
+        fetch()
     }
 
     fun stop() {
@@ -85,6 +82,6 @@ class MarketFavoritesService(
     }
 
     override fun willEnterForeground() {
-        forceRefresh()
+        fetch()
     }
 }

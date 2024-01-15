@@ -8,17 +8,16 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.Period
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsRepository
 import kotlinx.coroutines.rx2.await
-import java.math.BigDecimal
 
 class MarketWidgetRepository(
     private val marketKit: MarketKitWrapper,
@@ -40,7 +39,7 @@ class MarketWidgetRepository(
     suspend fun getMarketItems(marketWidgetType: MarketWidgetType): List<MarketWidgetItem> =
         when (marketWidgetType) {
             MarketWidgetType.Watchlist -> {
-                getWatchlist()
+                getWatchlist(favoritesMenuService.sortDescending, favoritesMenuService.period)
             }
             MarketWidgetType.TopGainers -> {
                 getTopGainers()
@@ -72,8 +71,6 @@ class MarketWidgetRepository(
                     2
                 ),
                 diff = item.changeDiff,
-                marketCap = null,
-                volume = null,
                 blockchainTypeUid = null,
                 imageRemoteUrl = item.platform.iconUrl
             )
@@ -97,9 +94,7 @@ class MarketWidgetRepository(
                 subtitle = it.floorPrice,
                 label = it.order.toString(),
                 value = it.volume,
-                marketCap = null,
                 diff = it.volumeDiff,
-                volume = null,
                 blockchainTypeUid = it.blockchainType.uid,
                 imageRemoteUrl = it.imageUrl ?: ""
             )
@@ -116,45 +111,30 @@ class MarketWidgetRepository(
             .sort(SortingField.TopGainers)
             .subList(0, Integer.min(marketItems.size, itemsLimit))
 
-        return sortedMarketItems.map { marketWidgetItem(it, MarketField.PriceDiff) }
+        return sortedMarketItems.map { marketWidgetItem(it) }
     }
 
-    private suspend fun getWatchlist(): List<MarketWidgetItem> {
+    private suspend fun getWatchlist(sortDescending: Boolean, period: Period): List<MarketWidgetItem> {
         val favoriteCoins = favoritesManager.getAll()
         var marketItems = listOf<MarketItem>()
 
         if (favoriteCoins.isNotEmpty()) {
             val favoriteCoinUids = favoriteCoins.map { it.coinUid }
+            val sortingField = if(sortDescending) SortingField.TopGainers else SortingField.TopLosers
             marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code, "widget")
                 .await()
                 .map { marketInfo ->
-                    MarketItem.createFromCoinMarket(marketInfo, currency)
+                    MarketItem.createFromCoinMarket(marketInfo, currency, period)
                 }
-                .sort(favoritesMenuService.sortingField)
+                .sort(sortingField)
         }
 
-        return marketItems.map { marketWidgetItem(it, favoritesMenuService.marketField) }
+        return marketItems.map { marketWidgetItem(it) }
     }
 
     private fun marketWidgetItem(
         marketItem: MarketItem,
-        marketField: MarketField,
     ): MarketWidgetItem {
-        var marketCap: String? = null
-        var volume: String? = null
-        var diff: BigDecimal? = null
-
-        when (marketField) {
-            MarketField.MarketCap -> {
-                marketCap = App.numberFormatter.formatFiatShort(marketItem.marketCap.value, marketItem.marketCap.currency.symbol, 2)
-            }
-            MarketField.Volume -> {
-                volume = App.numberFormatter.formatFiatShort(marketItem.volume.value, marketItem.volume.currency.symbol, 2)
-            }
-            MarketField.PriceDiff -> {
-                diff = marketItem.diff
-            }
-        }
 
         return MarketWidgetItem(
             uid = marketItem.fullCoin.coin.uid,
@@ -165,9 +145,7 @@ class MarketWidgetRepository(
                 marketItem.rate.value,
                 marketItem.rate.currency.symbol
             ),
-            marketCap = marketCap,
-            volume = volume,
-            diff = diff,
+            diff = marketItem.diff,
             blockchainTypeUid = null,
             imageRemoteUrl = marketItem.fullCoin.coin.imageUrl
         )

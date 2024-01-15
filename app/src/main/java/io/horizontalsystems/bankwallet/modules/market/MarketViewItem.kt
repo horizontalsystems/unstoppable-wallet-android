@@ -41,6 +41,22 @@ data class MarketViewItem(
     companion object {
         fun create(
             marketItem: MarketItem,
+            favorited: Boolean = false
+        ): MarketViewItem {
+            return MarketViewItem(
+                marketItem.fullCoin,
+                App.numberFormatter.formatFiatFull(
+                    marketItem.rate.value,
+                    marketItem.rate.currency.symbol
+                ),
+                MarketDataValue.Diff(marketItem.diff),
+                marketItem.rank?.toString(),
+                favorited
+            )
+        }
+
+        fun create(
+            marketItem: MarketItem,
             marketField: MarketField,
             favorited: Boolean = false
         ): MarketViewItem {

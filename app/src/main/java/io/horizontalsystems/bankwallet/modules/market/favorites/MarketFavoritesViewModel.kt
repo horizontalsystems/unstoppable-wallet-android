@@ -6,11 +6,9 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.SelectorDialogState
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.Period
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.ViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
@@ -19,25 +17,19 @@ import kotlinx.coroutines.launch
 
 class MarketFavoritesViewModel(
     private val service: MarketFavoritesService,
-    private val menuService: MarketFavoritesMenuService
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-
-    private val marketFieldTypes = MarketField.values().toList()
-    private var marketField: MarketField by menuService::marketField
     private var marketItemsWrapper: List<MarketItemWrapper> = listOf()
-
-    private val marketFieldSelect: Select<MarketField>
-        get() = Select(marketField, marketFieldTypes)
-
-    private val sortingFieldSelect: Select<SortingField>
-        get() = Select(service.sortingField, service.sortingFieldTypes)
+    private val timeDurationOptions: List<Period> = listOf(
+        Period.OneDay,
+        Period.SevenDay,
+        Period.ThirtyDay,
+    )
 
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val viewItemLiveData = MutableLiveData<ViewItem>()
-    val sortingFieldSelectorStateLiveData = MutableLiveData<SelectorDialogState>()
 
     init {
         service.marketItemsObservable
@@ -48,9 +40,11 @@ class MarketFavoritesViewModel(
                         marketItemsWrapper = state.data
                         syncViewItem()
                     }
+
                     is DataState.Error -> {
                         viewStateLiveData.postValue(ViewState.Error(state.error))
                     }
+
                     DataState.Loading -> {}
                 }
             }.let { disposables.add(it) }
@@ -70,10 +64,10 @@ class MarketFavoritesViewModel(
     private fun syncViewItem() {
         viewItemLiveData.postValue(
             ViewItem(
-                sortingFieldSelect,
-                marketFieldSelect,
-                marketItemsWrapper.map {
-                    MarketViewItem.create(it.marketItem, marketField, true)
+                sortingDescending = service.sortDescending,
+                periodSelect = Select(service.period, timeDurationOptions),
+                marketItems = marketItemsWrapper.map {
+                    MarketViewItem.create(it.marketItem, true)
                 }
             )
         )
@@ -87,23 +81,12 @@ class MarketFavoritesViewModel(
         refreshWithMinLoadingSpinnerPeriod()
     }
 
-    fun onClickSortingField() {
-        sortingFieldSelectorStateLiveData.postValue(SelectorDialogState.Opened(sortingFieldSelect))
+    fun onSortToggle() {
+        service.sortDescending = !service.sortDescending
     }
 
-    fun onSelectSortingField(sortingField: SortingField) {
-        service.sortingField = sortingField
-        sortingFieldSelectorStateLiveData.postValue(SelectorDialogState.Closed)
-    }
-
-    fun onSelectMarketField(marketField: MarketField) {
-        this.marketField = marketField
-
-        syncViewItem()
-    }
-
-    fun onSortingFieldDialogDismiss() {
-        sortingFieldSelectorStateLiveData.postValue(SelectorDialogState.Closed)
+    fun onSelectTimeDuration(period: Period) {
+        service.period = period
     }
 
     override fun onCleared() {
