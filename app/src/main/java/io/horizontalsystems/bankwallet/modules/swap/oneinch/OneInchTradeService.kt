@@ -1,9 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
-import io.horizontalsystems.bankwallet.core.subscribeIO
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
@@ -56,36 +55,14 @@ class OneInchTradeService(
         quoteDisposable = null
     }
 
-    override fun fetchSwapData(
-        tokenFrom: Token?,
-        tokenTo: Token?,
-        amountFrom: BigDecimal?,
-        amountTo: BigDecimal?,
-        exactType: ExactType
-    ) {
-        quoteDisposable?.dispose()
-        quoteDisposable = null
+    override suspend fun fetchQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal
+    ): SwapQuote {
+        val chain = App.evmBlockchainManager.getChain(tokenIn.blockchainType)
 
-        val fromToken = tokenFrom ?: return
-        val toToken = tokenTo ?: return
-
-        if (amountFrom == null || amountFrom.compareTo(BigDecimal.ZERO) == 0) {
-            state = SwapResultState.NotReady()
-            return
-        }
-
-        state = SwapResultState.Loading
-
-        quoteDisposable = oneInchKitHelper.getQuoteAsync(fromToken, toToken, amountFrom)
-            .subscribeIO({ quote ->
-                handle(quote, tokenFrom, tokenTo, amountFrom)
-            }, { error ->
-                state = SwapResultState.NotReady(listOf(error))
-            })
-    }
-
-    override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
-        val quote = oneInchKitHelper.getQuoteAsync(tokenIn, tokenOut, amountIn).await()
+        val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
         return SwapQuote(amountOut)
     }

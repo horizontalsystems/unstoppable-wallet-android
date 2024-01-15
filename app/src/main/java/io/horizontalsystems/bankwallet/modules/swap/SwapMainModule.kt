@@ -118,13 +118,6 @@ object SwapMainModule {
         val ttl: Long? get() = null
 
         fun stop()
-        fun fetchSwapData(
-            tokenFrom: Token?,
-            tokenTo: Token?,
-            amountFrom: BigDecimal?,
-            amountTo: BigDecimal?,
-            exactType: ExactType
-        )
 
         suspend fun fetchQuote(
             tokenIn: Token,
