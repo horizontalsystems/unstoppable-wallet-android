@@ -13,6 +13,8 @@ import cash.p.terminal.modules.evmfee.Transaction
 import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Swap
 import io.reactivex.Observable
@@ -90,7 +92,12 @@ class OneInchFeeService(
         gasPriceInfoDisposable?.dispose()
         retryDisposable?.dispose()
 
+        val chain: Chain = TODO()
+        val receiveAddress: Address = TODO()
+
         oneInchKitHelper.getSwapAsync(
+            chain = chain,
+            receiveAddress = receiveAddress,
             fromToken = parameters.tokenFrom,
             toToken = parameters.tokenTo,
             fromAmount = parameters.amountFrom,

@@ -7,8 +7,6 @@ import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
 import cash.p.terminal.modules.swap.oneinch.OneInchTradeService
 import cash.p.terminal.modules.swap.uniswap.UniswapV2TradeService
 import cash.p.terminal.modules.swap.uniswapv3.UniswapV3TradeService
-import io.horizontalsystems.ethereumkit.core.EthereumKit
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
@@ -19,12 +17,10 @@ import kotlinx.coroutines.coroutineScope
 import java.math.BigDecimal
 
 class SwapProvidersManager {
-    private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(BlockchainType.Ethereum).evmKitWrapper?.evmKit!! }
-    private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit, App.appConfigProvider.oneInchApiKey) }
-    private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
-    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.Uniswap) }
-    private val pancakeSwapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.PancakeSwap) }
-
+    private val oneIncKitHelper by lazy { OneInchKitHelper(App.appConfigProvider.oneInchApiKey) }
+    private val uniswapKit by lazy { UniswapKit.getInstance() }
+    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(DexType.Uniswap) }
+    private val pancakeSwapV3Kit by lazy { UniswapV3Kit.getInstance(DexType.PancakeSwap) }
 
     private val allProviders = listOf(
         SwapMainModule.OneInchProvider,

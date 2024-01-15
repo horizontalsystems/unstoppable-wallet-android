@@ -96,10 +96,10 @@ class SwapMainViewModel(
     private var tokenToState = toTokenService.state
 
     private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper?.evmKit!! }
-    private val oneIncKitHelper by lazy { OneInchKitHelper(evmKit, App.appConfigProvider.oneInchApiKey) }
-    private val uniswapKit by lazy { UniswapKit.getInstance(evmKit) }
-    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.Uniswap) }
-    private val pancakeSwapV3Kit by lazy { UniswapV3Kit.getInstance(evmKit, DexType.PancakeSwap) }
+    private val oneIncKitHelper by lazy { OneInchKitHelper(App.appConfigProvider.oneInchApiKey) }
+    private val uniswapKit by lazy { UniswapKit.getInstance() }
+    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(DexType.Uniswap) }
+    private val pancakeSwapV3Kit by lazy { UniswapV3Kit.getInstance(DexType.PancakeSwap) }
     private var tradeService: SwapMainModule.ISwapTradeService = getTradeService(dex.provider)
     private var tradeView: SwapMainModule.TradeViewX? = null
     private var tradePriceExpiration: Float? = null
@@ -213,12 +213,16 @@ class SwapMainViewModel(
         else -> UniswapV2TradeService(uniswapKit)
     }
 
-    private fun getSpenderAddress(provider: ISwapProvider) = when (provider) {
-        SwapMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
-        SwapMainModule.UniswapV3Provider -> uniswapV3Kit.routerAddress
-        SwapMainModule.PancakeSwapV3Provider -> pancakeSwapV3Kit.routerAddress
-        else -> uniswapKit.routerAddress
+    private fun getSpenderAddress(provider: ISwapProvider): io.horizontalsystems.ethereumkit.models.Address {
+        TODO()
     }
+
+//    private fun getSpenderAddress(provider: ISwapProvider) = when (provider) {
+//        SwapMainModule.OneInchProvider -> oneIncKitHelper.smartContractAddress
+//        SwapMainModule.UniswapV3Provider -> uniswapV3Kit.routerAddress
+//        SwapMainModule.PancakeSwapV3Provider -> pancakeSwapV3Kit.routerAddress
+//        else -> uniswapKit.routerAddress
+//    }
 
     private fun syncUiState() {
         swapState = SwapMainModule.SwapState(
@@ -345,7 +349,8 @@ class SwapMainViewModel(
     }
 
     private fun resyncSwapData() {
-        tradeService.fetchSwapData(fromTokenService.token, toTokenService.token, amountFrom, amountTo, exactType)
+        TODO()
+//        tradeService.fetchSwapData(fromTokenService.token, toTokenService.token, amountFrom, amountTo, exactType)
     }
 
     private fun syncButtonsState() {

@@ -1,9 +1,8 @@
 package cash.p.terminal.modules.swap.oneinch
 
-import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.SwapMainModule.ExactType
 import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
@@ -56,36 +55,14 @@ class OneInchTradeService(
         quoteDisposable = null
     }
 
-    override fun fetchSwapData(
-        tokenFrom: Token?,
-        tokenTo: Token?,
-        amountFrom: BigDecimal?,
-        amountTo: BigDecimal?,
-        exactType: ExactType
-    ) {
-        quoteDisposable?.dispose()
-        quoteDisposable = null
+    override suspend fun fetchQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal
+    ): SwapQuote {
+        val chain = App.evmBlockchainManager.getChain(tokenIn.blockchainType)
 
-        val fromToken = tokenFrom ?: return
-        val toToken = tokenTo ?: return
-
-        if (amountFrom == null || amountFrom.compareTo(BigDecimal.ZERO) == 0) {
-            state = SwapResultState.NotReady()
-            return
-        }
-
-        state = SwapResultState.Loading
-
-        quoteDisposable = oneInchKitHelper.getQuoteAsync(fromToken, toToken, amountFrom)
-            .subscribeIO({ quote ->
-                handle(quote, tokenFrom, tokenTo, amountFrom)
-            }, { error ->
-                state = SwapResultState.NotReady(listOf(error))
-            })
-    }
-
-    override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
-        val quote = oneInchKitHelper.getQuoteAsync(tokenIn, tokenOut, amountIn).await()
+        val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
         return SwapQuote(amountOut)
     }
