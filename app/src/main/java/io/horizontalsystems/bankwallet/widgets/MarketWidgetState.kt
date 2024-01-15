@@ -43,8 +43,6 @@ data class MarketWidgetItem(
     val label: String,
 
     val value: String,
-    val marketCap: String?,
-    val volume: String?,
     val diff: BigDecimal?,
     val blockchainTypeUid: String?,
 
@@ -52,7 +50,7 @@ data class MarketWidgetItem(
     val imageLocalPath: String? = null
 ) {
     override fun toString(): String {
-        return "( title: $title, subtitle: $subtitle, label: $label, value: $value, marketCap: $marketCap, volume: $volume, diff: $diff, imageRemoteUrl: $imageRemoteUrl, imageLocalPath: $imageLocalPath )"
+        return "( title: $title, subtitle: $subtitle, label: $label, value: $value, diff: $diff, imageRemoteUrl: $imageRemoteUrl, imageLocalPath: $imageLocalPath )"
     }
 }
 
