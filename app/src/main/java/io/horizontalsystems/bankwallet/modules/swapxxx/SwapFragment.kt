@@ -45,6 +45,7 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -107,6 +108,9 @@ fun SwapScreen(navController: NavController) {
         onEnterAmount = viewModel::onEnterAmount,
         onClickProvider = {
             navController.slideFromBottom(R.id.swapSelectProvider)
+        },
+        onClickNext = {
+            navController.slideFromRight(R.id.swapConfirm)
         }
     )
 }
@@ -120,6 +124,7 @@ private fun SwapScreenInner(
     onSwitchPairs: () -> Unit,
     onEnterAmount: (BigDecimal?) -> Unit,
     onClickProvider: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -264,7 +269,7 @@ private fun SwapScreenInner(
                         .fillMaxWidth(),
                     title = stringResource(R.string.Swap_Proceed),
                     enabled = uiState.swapEnabled,
-                    onClick = { /*TODO*/ }
+                    onClick = onClickNext
                 )
             }
         }

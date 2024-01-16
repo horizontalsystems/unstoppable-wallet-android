@@ -329,6 +329,9 @@
         android:id="@+id/swapSelectProvider"
         android:name="cash.p.terminal.modules.swapxxx.SwapSelectProviderFragment" />
     <fragment
+        android:id="@+id/swapConfirm"
+        android:name="cash.p.terminal.modules.swapxxx.SwapConfirmFragment" />
+    <fragment
         android:id="@+id/sendConfirmation"
         android:name="cash.p.terminal.modules.send.SendConfirmationFragment" />
     <fragment

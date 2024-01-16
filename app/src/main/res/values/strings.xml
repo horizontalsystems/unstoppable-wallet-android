@@ -657,6 +657,7 @@
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <string name="Swap_SwapRouteNotFound">Route not found</string>
+    <string name="Swap_Confirm_Title">Confirm</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>
