@@ -24,6 +24,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private var calculating = false
     private var quotes: List<SwapProviderQuote> = listOf()
     private var preferredProvider: SwapMainModule.ISwapProvider? = null
+    private var error: Throwable? = null
     private var quote: SwapProviderQuote? = null
 
     var uiState: SwapUiState by mutableStateOf(
@@ -36,7 +37,8 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
             quotes = quotes,
             preferredProvider = preferredProvider,
             quoteLifetime = quoteLifetime,
-            quote = quote
+            quote = quote,
+            error = error
         )
     )
         private set
@@ -93,7 +95,8 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 quotes = quotes,
                 preferredProvider = preferredProvider,
                 quoteLifetime = quoteLifetime,
-                quote = quote
+                quote = quote,
+                error = error
             )
         }
     }
@@ -103,6 +106,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private fun runQuotation() {
         quotes = listOf()
         quote = null
+        error = null
         emitState()
 
         calculatingJob?.cancel()
@@ -121,9 +125,13 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                     preferredProvider = null
                 }
 
-                quote = preferredProvider
-                    ?.let { provider -> quotes.find { it.provider == provider } }
-                    ?: quotes.firstOrNull()
+                if (quotes.isEmpty()) {
+                    error = SwapRouteNotFound()
+                } else {
+                    quote = preferredProvider
+                        ?.let { provider -> quotes.find { it.provider == provider } }
+                        ?: quotes.firstOrNull()
+                }
 
                 calculating = false
                 emitState()
@@ -157,7 +165,8 @@ data class SwapUiState(
     val quotes: List<SwapProviderQuote>,
     val preferredProvider: SwapMainModule.ISwapProvider?,
     val quoteLifetime: Long,
-    val quote: SwapProviderQuote?
+    val quote: SwapProviderQuote?,
+    val error: Throwable?
 ) {
     val prices: Pair<String, String>?
         get() {

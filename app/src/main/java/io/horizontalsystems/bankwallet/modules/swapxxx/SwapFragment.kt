@@ -65,6 +65,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.UUID
@@ -147,6 +148,29 @@ private fun SwapScreenInner(
                 tokenIn = uiState.tokenIn,
                 tokenOut = uiState.tokenOut
             )
+
+            uiState.error?.let { error ->
+                VSpacer(height = 12.dp)
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp)),
+                ) {
+                    QuoteInfoRow(
+                        title = {
+                            val errorText = if (error is SwapRouteNotFound) {
+                                stringResource(id = R.string.Swap_SwapRouteNotFound)
+                            } else {
+                                error.javaClass.simpleName
+                            }
+                            subhead2_lucian(text = errorText)
+                        },
+                        value = {
+                        }
+                    )
+                }
+            }
 
             var showRegularPrice by remember { mutableStateOf(true) }
             uiState.quote?.provider?.let { swapProvider ->
