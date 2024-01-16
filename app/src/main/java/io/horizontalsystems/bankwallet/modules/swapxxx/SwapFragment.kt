@@ -248,7 +248,7 @@ private fun SwapScreenInner(
             }
 
             VSpacer(height = 24.dp)
-            if (uiState.calculating) {
+            if (uiState.quoting) {
                 ButtonPrimaryYellowWithSpinner(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
