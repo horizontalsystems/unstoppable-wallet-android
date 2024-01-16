@@ -21,7 +21,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
     private var tokenOut: Token? = null
-    private var calculating = false
+    private var quoting = false
     private var quotes: List<SwapProviderQuote> = listOf()
     private var preferredProvider: SwapMainModule.ISwapProvider? = null
     private var error: Throwable? = null
@@ -32,7 +32,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
             amountIn = amountIn,
             tokenIn = tokenIn,
             tokenOut = tokenOut,
-            calculating = calculating,
+            quoting = quoting,
             swapEnabled = isSwapEnabled(),
             quotes = quotes,
             preferredProvider = preferredProvider,
@@ -43,7 +43,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     )
         private set
 
-    private var calculatingJob: Job? = null
+    private var quotingJob: Job? = null
 
     fun onEnterAmount(v: BigDecimal?) {
         amountIn = v
@@ -90,7 +90,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 amountIn = amountIn,
                 tokenIn = tokenIn,
                 tokenOut = tokenOut,
-                calculating = calculating,
+                quoting = quoting,
                 swapEnabled = isSwapEnabled(),
                 quotes = quotes,
                 preferredProvider = preferredProvider,
@@ -109,15 +109,15 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
         error = null
         emitState()
 
-        calculatingJob?.cancel()
+        quotingJob?.cancel()
 
         val amountIn = amountIn
         val tokenIn = tokenIn
         val tokenOut = tokenOut
 
         if (amountIn != null && amountIn > BigDecimal.ZERO && tokenIn != null && tokenOut != null) {
-            calculatingJob = viewModelScope.launch(Dispatchers.Default) {
-                calculating = true
+            quotingJob = viewModelScope.launch(Dispatchers.Default) {
+                quoting = true
                 emitState()
 
                 quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
@@ -133,7 +133,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                         ?: quotes.firstOrNull()
                 }
 
-                calculating = false
+                quoting = false
                 emitState()
 
                 scheduleReQuote()
@@ -160,7 +160,7 @@ data class SwapUiState(
     val amountIn: BigDecimal?,
     val tokenIn: Token?,
     val tokenOut: Token?,
-    val calculating: Boolean,
+    val quoting: Boolean,
     val swapEnabled: Boolean,
     val quotes: List<SwapProviderQuote>,
     val preferredProvider: SwapMainModule.ISwapProvider?,
