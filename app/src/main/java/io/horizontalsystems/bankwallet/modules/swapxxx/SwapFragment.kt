@@ -65,8 +65,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.UUID
@@ -87,30 +85,20 @@ fun SwapScreen(navController: NavController) {
     )
     val uiState = viewModel.uiState
 
+    val selectToken = { onResult: (SwapMainModule.CoinBalanceItem) -> Unit ->
+        navController.slideFromBottomForResult(R.id.selectSwapCoinDialog, onResult = onResult)
+    }
+
     SwapScreenInner(
         uiState = uiState,
         onClickClose = navController::popBackStack,
         onClickCoinFrom = {
-            val dex = SwapMainModule.Dex(
-                blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
-                provider = SwapMainModule.OneInchProvider
-            )
-            navController.slideFromBottomForResult<SwapMainModule.CoinBalanceItem>(
-                R.id.selectSwapCoinDialog,
-                dex
-            ) {
+            selectToken {
                 viewModel.onSelectTokenIn(it.token)
             }
         },
         onClickCoinTo = {
-            val dex = SwapMainModule.Dex(
-                blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
-                provider = SwapMainModule.OneInchProvider
-            )
-            navController.slideFromBottomForResult<SwapMainModule.CoinBalanceItem>(
-                R.id.selectSwapCoinDialog,
-                dex
-            ) {
+            selectToken {
                 viewModel.onSelectTokenOut(it.token)
             }
         },

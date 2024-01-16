@@ -3,22 +3,20 @@ package io.horizontalsystems.bankwallet.modules.swap.coinselect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
 
 object SelectSwapCoinModule {
 
-    class Factory(private val dex: SwapMainModule.Dex) : ViewModelProvider.Factory {
+    class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val coinProvider by lazy {
-                SwapCoinProvider(
-                    dex,
-                    App.walletManager,
-                    App.adapterManager,
-                    App.currencyManager,
-                    App.marketKit
-                )
-            }
+            val coinProvider = SwapCoinProvider(
+                App.walletManager,
+                App.adapterManager,
+                App.currencyManager,
+                App.marketKit,
+                FullCoinsProvider(App.marketKit, App.accountManager.activeAccount!!)
+            )
             return SelectSwapCoinViewModel(coinProvider) as T
         }
     }
