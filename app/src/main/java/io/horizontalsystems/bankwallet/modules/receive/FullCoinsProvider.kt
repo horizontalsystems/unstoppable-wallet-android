@@ -17,7 +17,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 
 class FullCoinsProvider(
     private val marketKit: MarketKitWrapper,
-    private val activeAccount: Account
+    val activeAccount: Account
 ) {
     private var activeWallets = listOf<Wallet>()
     private var predefinedTokens = listOf<Token>()

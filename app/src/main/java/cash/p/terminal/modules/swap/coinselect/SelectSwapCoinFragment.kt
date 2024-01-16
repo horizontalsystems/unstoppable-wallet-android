@@ -4,7 +4,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -16,30 +21,32 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.*
-import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.core.App
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.badge
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.core.setNavigationResult
+import cash.p.terminal.ui.compose.components.B2
+import cash.p.terminal.ui.compose.components.Badge
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.D1
+import cash.p.terminal.ui.compose.components.MultitextM1
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.SearchBar
+import cash.p.terminal.ui.compose.components.SectionUniversalItem
 
 class SelectSwapCoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val dex = arguments?.parcelable<SwapMainModule.Dex>(dexKey)
-        val requestId = arguments?.getLong(requestIdKey)
-        if (dex == null || requestId == null) {
-            navController.popBackStack()
-        } else {
-            SelectSwapCoinDialogScreen(
-                navController = navController,
-                dex = dex,
-                onClickItem = {
-                    closeWithResult(it, requestId, navController)
-                }
-            )
+        SelectSwapCoinDialogScreen(navController) {
+            navController.setNavigationResultX(it)
+            Handler(Looper.getMainLooper()).postDelayed({
+                navController.popBackStack()
+            }, 100)
         }
     }
 
@@ -69,10 +76,9 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
 @Composable
 fun SelectSwapCoinDialogScreen(
     navController: NavController,
-    dex: SwapMainModule.Dex,
     onClickItem: (CoinBalanceItem) -> Unit
 ) {
-    val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory(dex))
+    val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory())
     val coinItems = viewModel.coinItems
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
@@ -103,7 +109,14 @@ fun SelectSwapCoinDialogScreen(
                         )
                         Spacer(modifier = Modifier.size(16.dp))
                         MultitextM1(
-                            title = { B2(text = coinItem.token.coin.name) },
+                            title = {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    B2(text = coinItem.token.coin.name)
+                                    coinItem.token.badge?.let {
+                                        Badge(text = it)
+                                    }
+                                }
+                            },
                             subtitle = { D1(text = coinItem.token.coin.code) }
                         )
                         Spacer(modifier = Modifier.weight(1f))
