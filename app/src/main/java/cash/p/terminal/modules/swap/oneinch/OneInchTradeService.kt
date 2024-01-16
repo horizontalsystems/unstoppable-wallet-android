@@ -18,9 +18,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-class OneInchTradeService(
-    private val oneInchKitHelper: OneInchKitHelper
-) : SwapMainModule.ISwapTradeService {
+class OneInchTradeService : SwapMainModule.ISwapTradeService {
+    private val oneInchKitHelper by lazy { OneInchKitHelper(App.appConfigProvider.oneInchApiKey) }
 
     private var quoteDisposable: Disposable? = null
 

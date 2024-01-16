@@ -14,6 +14,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
+import io.horizontalsystems.uniswapkit.models.DexType
 import io.horizontalsystems.uniswapkit.models.TradeOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,9 +25,8 @@ import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 import io.horizontalsystems.uniswapkit.models.Token as UniswapToken
 
-class UniswapV3TradeService(
-    private val uniswapV3Kit: UniswapV3Kit
-) : IUniswapTradeService {
+class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService {
+    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var tradeDataJob: Job? = null
