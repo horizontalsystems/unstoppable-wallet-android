@@ -45,6 +45,7 @@ import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -107,6 +108,9 @@ fun SwapScreen(navController: NavController) {
         onEnterAmount = viewModel::onEnterAmount,
         onClickProvider = {
             navController.slideFromBottom(R.id.swapSelectProvider)
+        },
+        onClickNext = {
+            navController.slideFromRight(R.id.swapConfirm)
         }
     )
 }
@@ -120,6 +124,7 @@ private fun SwapScreenInner(
     onSwitchPairs: () -> Unit,
     onEnterAmount: (BigDecimal?) -> Unit,
     onClickProvider: () -> Unit,
+    onClickNext: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -264,7 +269,7 @@ private fun SwapScreenInner(
                         .fillMaxWidth(),
                     title = stringResource(R.string.Swap_Proceed),
                     enabled = uiState.swapEnabled,
-                    onClick = { /*TODO*/ }
+                    onClick = onClickNext
                 )
             }
         }
