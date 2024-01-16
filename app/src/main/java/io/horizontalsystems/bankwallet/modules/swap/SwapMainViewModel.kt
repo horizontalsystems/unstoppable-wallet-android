@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -34,19 +33,15 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultSta
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceState
-import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.IUniswapTradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapV2TradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswapv3.UniswapV3TradeService
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
-import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.uniswapkit.UniswapKit
-import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.horizontalsystems.uniswapkit.models.DexType
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
@@ -95,11 +90,6 @@ class SwapMainViewModel(
     private var tokenFromState = fromTokenService.state
     private var tokenToState = toTokenService.state
 
-    private val evmKit: EthereumKit by lazy { App.evmBlockchainManager.getEvmKitManager(dex.blockchainType).evmKitWrapper?.evmKit!! }
-    private val oneIncKitHelper by lazy { OneInchKitHelper(App.appConfigProvider.oneInchApiKey) }
-    private val uniswapKit by lazy { UniswapKit.getInstance() }
-    private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(DexType.Uniswap) }
-    private val pancakeSwapV3Kit by lazy { UniswapV3Kit.getInstance(DexType.PancakeSwap) }
     private var tradeService: SwapMainModule.ISwapTradeService = getTradeService(dex.provider)
     private var tradeView: SwapMainModule.TradeViewX? = null
     private var tradePriceExpiration: Float? = null
@@ -207,10 +197,10 @@ class SwapMainViewModel(
     }
 
     private fun getTradeService(provider: ISwapProvider): SwapMainModule.ISwapTradeService = when (provider) {
-        SwapMainModule.OneInchProvider -> OneInchTradeService(oneIncKitHelper)
-        SwapMainModule.UniswapV3Provider -> UniswapV3TradeService(uniswapV3Kit)
-        SwapMainModule.PancakeSwapV3Provider -> UniswapV3TradeService(pancakeSwapV3Kit)
-        else -> UniswapV2TradeService(uniswapKit)
+        SwapMainModule.OneInchProvider -> OneInchTradeService()
+        SwapMainModule.UniswapV3Provider -> UniswapV3TradeService(DexType.Uniswap)
+        SwapMainModule.PancakeSwapV3Provider -> UniswapV3TradeService(DexType.PancakeSwap)
+        else -> UniswapV2TradeService()
     }
 
     private fun getSpenderAddress(provider: ISwapProvider): io.horizontalsystems.ethereumkit.models.Address {
