@@ -23,9 +23,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-class UniswapV2TradeService(
-    private val uniswapKit: UniswapKit
-) : IUniswapTradeService {
+class UniswapV2TradeService : IUniswapTradeService {
+    private val uniswapKit by lazy { UniswapKit.getInstance() }
 
     private var swapDataDisposable: Disposable? = null
     private var swapData: SwapData? = null
