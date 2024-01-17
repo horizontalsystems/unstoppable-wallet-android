@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowan
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapV2TradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswapv3.UniswapV3TradeService
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataField
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
@@ -457,5 +458,6 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
 }
 
 data class SwapQuote(
-    val amountOut: BigDecimal
+    val amountOut: BigDecimal,
+    val fields: List<SwapDataField>
 )
