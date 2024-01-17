@@ -18,6 +18,7 @@ import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
 import cash.p.terminal.modules.swap.oneinch.OneInchTradeService
 import cash.p.terminal.modules.swap.uniswap.UniswapV2TradeService
 import cash.p.terminal.modules.swap.uniswapv3.UniswapV3TradeService
+import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
@@ -465,5 +466,6 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
 }
 
 data class SwapQuote(
-    val amountOut: BigDecimal
+    val amountOut: BigDecimal,
+    val fields: List<SwapDataField>
 )

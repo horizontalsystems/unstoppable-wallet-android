@@ -7,6 +7,7 @@ import cash.p.terminal.modules.swap.SwapQuote
 import cash.p.terminal.modules.swap.UniversalSwapTradeData
 import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
 import cash.p.terminal.modules.swap.uniswap.IUniswapTradeService
+import cash.p.terminal.modules.swapxxx.ui.PriceField
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -80,7 +81,8 @@ class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService
             amountIn,
             tradeOptions.tradeOptions
         )
-        return SwapQuote(tradeDataV3.tokenAmountOut.decimalAmount!!)
+        val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
+        return SwapQuote(amountOut, listOf(PriceField(tokenIn, tokenOut, amountIn, amountOut)))
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
