@@ -104,22 +104,24 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private fun isSwapEnabled() = quote != null
 
     private fun runQuotation() {
+        quotingJob?.cancel()
+
         quotes = listOf()
         quote = null
         error = null
-        emitState()
-
-        quotingJob?.cancel()
 
         val amountIn = amountIn
         val tokenIn = tokenIn
         val tokenOut = tokenOut
 
-        if (amountIn != null && amountIn > BigDecimal.ZERO && tokenIn != null && tokenOut != null) {
-            quotingJob = viewModelScope.launch(Dispatchers.Default) {
-                quoting = true
-                emitState()
+        if (amountIn == null || amountIn <= BigDecimal.ZERO || tokenIn == null || tokenOut == null) {
+            quoting = false
+            emitState()
+        } else {
+            quoting = true
+            emitState()
 
+            quotingJob = viewModelScope.launch(Dispatchers.Default) {
                 quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
                 if (preferredProvider != null && quotes.none { it.provider == preferredProvider}) {
                     preferredProvider = null
