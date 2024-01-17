@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +13,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.math.RoundingMode
 
 class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
     private val quoteLifetime = 30000L
@@ -169,26 +167,4 @@ data class SwapUiState(
     val quoteLifetime: Long,
     val quote: SwapProviderQuote?,
     val error: Throwable?
-) {
-    val prices: Pair<String, String>?
-        get() {
-            val amountIn = amountIn ?: return null
-            val amountOut = quote?.quote?.amountOut ?: return null
-            val tokenIn = tokenIn ?: return null
-            val tokenOut = tokenOut ?: return null
-
-            val numberFormatter = App.numberFormatter
-
-            val price = amountOut.divide(amountIn, tokenOut.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
-            val from = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenIn.coin.code, 0)
-            val to = numberFormatter.formatCoinShort(price, tokenOut.coin.code, tokenOut.decimals)
-            val priceStr = "$from = $to"
-
-            val priceInverted = amountIn.divide(amountOut, tokenIn.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
-            val fromInverted = numberFormatter.formatCoinShort(BigDecimal.ONE, tokenOut.coin.code, 0)
-            val toInverted = numberFormatter.formatCoinShort(priceInverted, tokenIn.coin.code, tokenIn.decimals)
-            val priceInvertedStr = "$fromInverted = $toInverted"
-
-            return Pair(priceStr, priceInvertedStr)
-        }
-}
+)

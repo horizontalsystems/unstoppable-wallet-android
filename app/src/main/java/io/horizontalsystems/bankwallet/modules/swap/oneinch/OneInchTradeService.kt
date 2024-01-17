@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultSta
 import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.PriceField
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.oneinchkit.Quote
 import io.reactivex.disposables.Disposable
@@ -63,7 +64,7 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
 
         val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuote(amountOut)
+        return SwapQuote(amountOut, listOf(PriceField(tokenIn, tokenOut, amountIn, amountOut)))
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

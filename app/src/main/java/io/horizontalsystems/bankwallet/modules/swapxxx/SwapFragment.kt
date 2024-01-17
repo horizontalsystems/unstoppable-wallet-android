@@ -1,8 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -31,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -65,7 +60,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -178,7 +172,10 @@ private fun SwapScreenInner(
             }
 
             var showRegularPrice by remember { mutableStateOf(true) }
-            uiState.quote?.provider?.let { swapProvider ->
+            uiState.quote?.let { quote ->
+                val swapProvider = quote.provider
+                val fields = quote.quote.fields
+
                 VSpacer(height = 12.dp)
                 Column(
                     modifier = Modifier
@@ -207,47 +204,8 @@ private fun SwapScreenInner(
                         }
                     )
 
-                    uiState.prices?.let { (price, priceInverted) ->
-                        QuoteInfoRow(
-                            title = {
-                                subhead2_grey(text = stringResource(R.string.Swap_Price))
-                            },
-                            value = {
-                                subhead2_leah(
-                                    modifier = Modifier
-                                        .clickable {
-                                            showRegularPrice = !showRegularPrice
-                                        },
-                                    text = if (showRegularPrice) price else priceInverted
-                                )
-                                HSpacer(width = 8.dp)
-                                Box(modifier = Modifier.size(14.5.dp)) {
-                                    val progress = remember { Animatable(1f) }
-                                    LaunchedEffect(uiState) {
-                                        progress.animateTo(
-                                            targetValue = 0f,
-                                            animationSpec = tween(uiState.quoteLifetime.toInt(), easing = LinearEasing),
-                                        )
-                                    }
-
-                                    CircularProgressIndicator(
-                                        progress = 1f,
-                                        modifier = Modifier.size(14.5.dp),
-                                        color = ComposeAppTheme.colors.steel20,
-                                        strokeWidth = 1.5.dp
-                                    )
-                                    CircularProgressIndicator(
-                                        progress = progress.value,
-                                        modifier = Modifier
-                                            .size(14.5.dp)
-                                            .scale(scaleX = -1f, scaleY = 1f),
-                                        color = ComposeAppTheme.colors.jacob,
-                                        strokeWidth = 1.5.dp
-                                    )
-                                }
-
-                            }
-                        )
+                    fields.forEach {
+                        it.GetContent()
                     }
                 }
             }
@@ -277,7 +235,7 @@ private fun SwapScreenInner(
 }
 
 @Composable
-private fun QuoteInfoRow(
+fun QuoteInfoRow(
     title: @Composable() (RowScope.() -> Unit),
     value: @Composable() (RowScope.() -> Unit),
 ) {
