@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +17,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : ViewModel() {
+class SwapViewModel(
+    private val swapProvidersManager: SwapProvidersManager,
+    private val adapterManager: IAdapterManager
+) : ViewModel() {
     private val quoteLifetime = 30000L
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
@@ -24,6 +30,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     private var preferredProvider: SwapMainModule.ISwapProvider? = null
     private var error: Throwable? = null
     private var quote: SwapProviderQuote? = null
+    private var availableBalance: BigDecimal? = null
 
     var uiState: SwapUiState by mutableStateOf(
         SwapUiState(
@@ -36,7 +43,8 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
             preferredProvider = preferredProvider,
             quoteLifetime = quoteLifetime,
             quote = quote,
-            error = error
+            error = error,
+            availableBalance = availableBalance
         )
     )
         private set
@@ -52,6 +60,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
 
     fun onSelectTokenIn(token: Token) {
         tokenIn = token
+        refreshAvailableBalance()
         preferredProvider = null
 
         runQuotation()
@@ -68,6 +77,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
         val tmpTokenIn = tokenIn
 
         tokenIn = tokenOut
+        refreshAvailableBalance()
         tokenOut = tmpTokenIn
 
         amountIn = quote?.quote?.amountOut
@@ -94,12 +104,19 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
                 preferredProvider = preferredProvider,
                 quoteLifetime = quoteLifetime,
                 quote = quote,
-                error = error
+                error = error,
+                availableBalance = availableBalance
             )
         }
     }
 
     private fun isSwapEnabled() = quote != null
+
+    private fun refreshAvailableBalance() {
+        availableBalance = tokenIn?.let {
+            (adapterManager.getAdapterForToken(it) as? IBalanceAdapter)?.balanceData?.available
+        }
+    }
 
     private fun runQuotation() {
         quotingJob?.cancel()
@@ -151,7 +168,7 @@ class SwapViewModel(private val swapProvidersManager: SwapProvidersManager) : Vi
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SwapViewModel(SwapProvidersManager()) as T
+            return SwapViewModel(SwapProvidersManager(), App.adapterManager) as T
         }
     }
 }
@@ -166,5 +183,6 @@ data class SwapUiState(
     val preferredProvider: SwapMainModule.ISwapProvider?,
     val quoteLifetime: Long,
     val quote: SwapProviderQuote?,
-    val error: Throwable?
+    val error: Throwable?,
+    val availableBalance: BigDecimal?
 )
