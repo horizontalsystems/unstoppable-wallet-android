@@ -121,6 +121,7 @@ class TransactionInfoViewItemFactory(
                     TonTransactionRecord.Type.Unknown -> {
                     }
                 }
+                addMemoItem(transaction.memo, miscItemsSection)
             }
             is EvmIncomingTransactionRecord ->
                 itemSections.add(

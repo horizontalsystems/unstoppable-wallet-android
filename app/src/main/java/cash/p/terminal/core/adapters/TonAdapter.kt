@@ -184,6 +184,7 @@ class TonAdapter(
             source = wallet.transactionSource,
             mainValue = TransactionValue.CoinValue(wallet.token, value),
             fee = fee?.let { TransactionValue.CoinValue(wallet.token, it) },
+            memo = transaction.memo,
             type = type,
             transfers = transaction.transfers.map { createTransferRecprd(it) }
         )
@@ -240,8 +241,8 @@ class TonAdapter(
     override val availableBalance: BigDecimal
         get() = balance
 
-    override suspend fun send(amount: BigDecimal, address: String) {
-        tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString())
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
+        tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString(), memo)
     }
 
     override suspend fun estimateFee(): BigDecimal {
@@ -261,6 +262,7 @@ class TonTransactionRecord(
     source: TransactionSource,
     override val mainValue: TransactionValue,
     val fee: TransactionValue?,
+    val memo: String?,
     val type: Type,
     val transfers: List<TonTransfer>
 ) : TransactionRecord(

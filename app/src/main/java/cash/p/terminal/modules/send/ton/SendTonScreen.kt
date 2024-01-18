@@ -1,8 +1,6 @@
 package cash.p.terminal.modules.send.ton
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,11 +21,13 @@ import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.fee.HSFee
+import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.VSpacer
 import java.math.BigDecimal
 
 @Composable
@@ -75,7 +75,7 @@ fun SendTonScreen(
                 rate = viewModel.coinRate
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            VSpacer(12.dp)
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
@@ -96,7 +96,7 @@ fun SendTonScreen(
             )
 
             if (uiState.showAddressInput) {
-                Spacer(modifier = Modifier.height(12.dp))
+                VSpacer(12.dp)
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     initial = prefilledData?.address?.let { Address(it) },
@@ -110,7 +110,12 @@ fun SendTonScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            VSpacer(12.dp)
+            HSMemoInput(maxLength = 120) {
+                viewModel.onEnterMemo(it)
+            }
+
+            VSpacer(12.dp)
             HSFee(
                 coinCode = viewModel.feeToken.coin.code,
                 coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
