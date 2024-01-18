@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.ton
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,11 +21,13 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
+import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import java.math.BigDecimal
 
 @Composable
@@ -75,7 +75,7 @@ fun SendTonScreen(
                 rate = viewModel.coinRate
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            VSpacer(12.dp)
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
@@ -96,7 +96,7 @@ fun SendTonScreen(
             )
 
             if (uiState.showAddressInput) {
-                Spacer(modifier = Modifier.height(12.dp))
+                VSpacer(12.dp)
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     initial = prefilledData?.address?.let { Address(it) },
@@ -110,7 +110,12 @@ fun SendTonScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            VSpacer(12.dp)
+            HSMemoInput(maxLength = 120) {
+                viewModel.onEnterMemo(it)
+            }
+
+            VSpacer(12.dp)
             HSFee(
                 coinCode = viewModel.feeToken.coin.code,
                 coinDecimal = viewModel.feeTokenMaxAllowedDecimals,

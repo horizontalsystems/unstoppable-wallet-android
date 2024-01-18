@@ -46,6 +46,7 @@ class SendTonViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
+    private var memo: String? = null
 
     var uiState by mutableStateOf(
         SendTonUiState(
@@ -110,7 +111,8 @@ class SendTonViewModel(
             address = address,
             contact = contact,
             coin = wallet.coin,
-            feeCoin = feeToken.coin
+            feeCoin = feeToken.coin,
+            memo = memo,
         )
     }
 
@@ -122,12 +124,16 @@ class SendTonViewModel(
         }
     }
 
+    fun onEnterMemo(memo: String) {
+        this.memo = memo.ifBlank { null }
+    }
+
     private suspend fun send() = withContext(Dispatchers.IO) {
         try {
             sendResult = SendResult.Sending
             logger.info("sending tx")
 
-            adapter.send(amountState.amount!!, addressState.tonAddress!!)
+            adapter.send(amountState.amount!!, addressState.tonAddress!!, memo)
 
             sendResult = SendResult.Sent
             logger.info("success")
@@ -173,6 +179,7 @@ class SendTonViewModel(
             fee = feeState.fee,
         )
     }
+
 }
 
 data class SendTonUiState(
