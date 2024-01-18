@@ -131,8 +131,11 @@ private fun SwapSelectProviderScreenInner(
                     HFillSpacer(minWidth = 8.dp)
                     Column(horizontalAlignment = Alignment.End) {
                         subhead2_leah(text = quote.quote.amountOut.toPlainString())
-                        VSpacer(height = 1.dp)
-                        subhead2_grey(text = "Fee")
+                        quote.quote.fee?.let { fee ->
+                            VSpacer(height = 1.dp)
+                            val formattedFee = fee.secondary?.getFormatted() ?: fee.primary.getFormatted()
+                            subhead2_grey(text = stringResource(id = R.string.Swap_Fee) + ": " + formattedFee)
+                        }
                     }
                 }
             }

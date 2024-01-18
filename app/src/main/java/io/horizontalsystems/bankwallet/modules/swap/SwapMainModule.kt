@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.fiat.AmountTypeSwitchService
 import io.horizontalsystems.bankwallet.core.fiat.FiatService
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
@@ -459,5 +460,6 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
 
 data class SwapQuote(
     val amountOut: BigDecimal,
-    val fields: List<SwapDataField>
+    val fields: List<SwapDataField>,
+    val fee: SendModule.AmountData? = null,
 )
