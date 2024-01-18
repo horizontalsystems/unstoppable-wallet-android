@@ -213,6 +213,7 @@ private fun SwapScreenInner(
                         .padding(vertical = 2.dp),
                 ) {
                     ProviderField(swapProvider, onClickProvider)
+                    AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
                     PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, quote.amountOut)
                     quote.fields.forEach {
                         it.GetContent()
@@ -220,6 +221,20 @@ private fun SwapScreenInner(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
+    if (tokenIn != null && availableBalance != null) {
+        QuoteInfoRow(
+            title = {
+                subhead2_grey(text = stringResource(R.string.Swap_AvailableBalance))
+            },
+            value = {
+                subhead2_leah(text = CoinValue(tokenIn, availableBalance).getFormattedFull())
+            }
+        )
     }
 }
 
