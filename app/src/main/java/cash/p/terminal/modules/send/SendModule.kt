@@ -10,7 +10,7 @@ import java.math.BigDecimal
 
 object SendModule {
 
-    data class AmountData(val primary: AmountInfo, val secondary: AmountInfo?)
+    data class AmountData(val primary: AmountInfo.CoinValueInfo, val secondary: AmountInfo.CurrencyValueInfo?)
 
     sealed class AmountInfo {
         abstract val approximate: Boolean

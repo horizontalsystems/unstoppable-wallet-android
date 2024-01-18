@@ -12,6 +12,7 @@ import cash.p.terminal.core.fiat.AmountTypeSwitchService
 import cash.p.terminal.core.fiat.FiatService
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
+import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
@@ -467,5 +468,6 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
 
 data class SwapQuote(
     val amountOut: BigDecimal,
-    val fields: List<SwapDataField>
+    val fields: List<SwapDataField>,
+    val fee: SendModule.AmountData? = null,
 )
