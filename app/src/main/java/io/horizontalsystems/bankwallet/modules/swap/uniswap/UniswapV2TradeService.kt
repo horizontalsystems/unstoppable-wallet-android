@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultSta
 import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
-import io.horizontalsystems.bankwallet.modules.swapxxx.ui.PriceField
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -64,7 +63,7 @@ class UniswapV2TradeService : IUniswapTradeService {
         val swapData = swapDataSingle(tokenIn, tokenOut).await()
         val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions.tradeOptions)
         val amountOut = tradeData.amountOut!!
-        return SwapQuote(amountOut, listOf(PriceField(tokenIn, tokenOut, amountIn, amountOut)))
+        return SwapQuote(amountOut, listOf())
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

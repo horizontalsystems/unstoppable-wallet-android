@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,6 +42,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -51,6 +53,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -60,9 +63,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.UUID
 
 class SwapFragment : BaseComposeFragment() {
@@ -148,6 +153,30 @@ private fun SwapScreenInner(
                 tokenOut = uiState.tokenOut
             )
 
+            VSpacer(height = 12.dp)
+
+            if (uiState.quoting) {
+                ButtonPrimaryYellowWithSpinner(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Alert_Loading),
+                    enabled = false,
+                    onClick = { /*TODO*/ }
+                )
+            } else {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(R.string.Swap_Proceed),
+                    enabled = uiState.swapEnabled,
+                    onClick = onClickNext
+                )
+            }
+
+            VSpacer(height = 12.dp)
+
             uiState.error?.let { error ->
                 VSpacer(height = 12.dp)
                 Column(
@@ -171,66 +200,96 @@ private fun SwapScreenInner(
                 }
             }
 
-            var showRegularPrice by remember { mutableStateOf(true) }
-            uiState.quote?.let { quote ->
-                val swapProvider = quote.provider
-                val fields = quote.quote.fields
+            uiState.quote?.let { swapProviderQuote ->
+                val swapProvider = swapProviderQuote.provider
+                val quote = swapProviderQuote.quote
 
                 VSpacer(height = 12.dp)
                 Column(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp)),
+                        .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+                        .padding(vertical = 2.dp),
                 ) {
-                    QuoteInfoRow(
-                        title = {
-                            subhead2_grey(text = stringResource(R.string.Swap_Provider))
-                        },
-                        value = {
-                            Selector(
-                                icon = {
-                                    Image(
-                                        modifier = Modifier.size(24.dp),
-                                        painter = painterResource(swapProvider.icon),
-                                        contentDescription = null
-                                    )
-                                },
-                                text = {
-                                    subhead1_leah(text = swapProvider.title)
-                                },
-                                onClickSelect = onClickProvider
-                            )
-                        }
-                    )
-
-                    fields.forEach {
+                    ProviderField(swapProvider, onClickProvider)
+                    PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, quote.amountOut)
+                    quote.fields.forEach {
                         it.GetContent()
                     }
                 }
             }
+        }
+    }
+}
 
-            VSpacer(height = 24.dp)
-            if (uiState.quoting) {
-                ButtonPrimaryYellowWithSpinner(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(R.string.Alert_Loading),
-                    enabled = false,
-                    onClick = { /*TODO*/ }
+@Composable
+private fun ProviderField(
+    swapProvider: SwapMainModule.ISwapProvider,
+    onClickProvider: () -> Unit,
+) {
+    HSRow(
+        modifier = Modifier
+            .height(40.dp)
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        borderBottom = true,
+    ) {
+        Selector(
+            icon = {
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(swapProvider.icon),
+                    contentDescription = null
                 )
-            } else {
-                ButtonPrimaryYellow(
+            },
+            text = {
+                subhead1_leah(text = swapProvider.title)
+            },
+            onClickSelect = onClickProvider
+        )
+        HFillSpacer(minWidth = 8.dp)
+        Icon(
+            painter = painterResource(R.drawable.ic_manage_2),
+            contentDescription = "",
+            tint = ComposeAppTheme.colors.grey
+        )
+    }
+}
+
+@Composable
+private fun PriceField(tokenIn: Token?, tokenOut: Token?, amountIn: BigDecimal?, amountOut: BigDecimal) {
+    var showRegularPrice by remember { mutableStateOf(true) }
+    if (tokenIn != null && tokenOut != null && amountIn != null) {
+        val price = amountOut.divide(amountIn, tokenOut.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+        val priceInv = BigDecimal.ONE.divide(price, tokenIn.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+
+        val priceStr = "${CoinValue(tokenIn, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenOut, price).getFormattedFull()}"
+        val priceInvStr = "${CoinValue(tokenOut, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenIn, priceInv).getFormattedFull()}"
+        QuoteInfoRow(
+            title = {
+                subhead2_grey(text = stringResource(R.string.Swap_Price))
+            },
+            value = {
+                subhead2_leah(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(R.string.Swap_Proceed),
-                    enabled = uiState.swapEnabled,
-                    onClick = onClickNext
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {
+                                showRegularPrice = !showRegularPrice
+                            }
+                        ),
+                    text = if (showRegularPrice) priceStr else priceInvStr
+                )
+                HSpacer(width = 8.dp)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
+                    contentDescription = "invert price",
+                    tint = ComposeAppTheme.colors.grey
                 )
             }
-        }
+        )
     }
 }
 

@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.IUniswapTradeService
-import io.horizontalsystems.bankwallet.modules.swapxxx.ui.PriceField
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -82,7 +81,7 @@ class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService
             tradeOptions.tradeOptions
         )
         val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
-        return SwapQuote(amountOut, listOf(PriceField(tokenIn, tokenOut, amountIn, amountOut)))
+        return SwapQuote(amountOut, listOf())
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
