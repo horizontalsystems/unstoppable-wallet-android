@@ -330,7 +330,7 @@
         android:name="cash.p.terminal.modules.swapxxx.SwapSelectProviderFragment" />
     <fragment
         android:id="@+id/swapProviderSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapProviderSettingsFragment" />
+        android:name="cash.p.terminal.modules.swapxxx.SwapProviderSettingsFragment" />
     <fragment
         android:id="@+id/swapConfirm"
         android:name="cash.p.terminal.modules.swapxxx.SwapConfirmFragment" />

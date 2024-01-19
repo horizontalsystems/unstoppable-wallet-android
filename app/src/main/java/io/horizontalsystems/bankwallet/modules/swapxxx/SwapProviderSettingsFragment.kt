@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package cash.p.terminal.modules.swapxxx
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -10,14 +10,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import cash.p.terminal.R
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.VSpacer
 
 class SwapProviderSettingsFragment : BaseComposeFragment() {
     @Composable
