@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
+import io.horizontalsystems.ethereumkit.models.Address as EthereumKitAddress
 
 class UniswapV2TradeService : IUniswapTradeService {
     private val uniswapKit by lazy { UniswapKit.getInstance() }
@@ -183,22 +184,13 @@ class UniswapV2TradeService : IUniswapTradeService {
     }
 
     @Throws
-    private fun uniswapToken(token: Token?, chain: Chain): io.horizontalsystems.uniswapkit.models.Token {
-        return when (val tokenType = token?.type) {
-            TokenType.Native -> when (token.blockchainType) {
-                BlockchainType.Ethereum,
-                BlockchainType.BinanceSmartChain,
-                BlockchainType.Polygon,
-                BlockchainType.Optimism,
-                BlockchainType.ArbitrumOne -> uniswapKit.etherToken(chain)
-                else -> throw Exception("Invalid coin for swap: $token")
-            }
-            is TokenType.Eip20 -> uniswapKit.token(
-                io.horizontalsystems.ethereumkit.models.Address(
-                    tokenType.address
-                ), token.decimals)
-            else -> throw Exception("Invalid coin for swap: $token")
+    private fun uniswapToken(token: Token?, chain: Chain) = when (val tokenType = token?.type) {
+        TokenType.Native -> uniswapKit.etherToken(chain)
+        is TokenType.Eip20 -> {
+            uniswapKit.token(EthereumKitAddress(tokenType.address), token.decimals)
         }
+
+        else -> throw Exception("Invalid coin for swap: $token")
     }
 
     private fun TokenType.isWeth(chain: Chain): Boolean {
