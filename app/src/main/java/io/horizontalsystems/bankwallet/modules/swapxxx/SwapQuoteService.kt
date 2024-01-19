@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
-import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
@@ -14,10 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SwapQuoteService(
-    private val swapProvidersManager: SwapProvidersManager,
-    private val adapterManager: IAdapterManager
-) {
+class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
     private val quoteLifetime = 30000L
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
@@ -27,7 +22,6 @@ class SwapQuoteService(
     private var preferredProvider: SwapMainModule.ISwapProvider? = null
     private var error: Throwable? = null
     private var quote: SwapProviderQuote? = null
-    private var availableBalance: BigDecimal? = null
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -40,7 +34,6 @@ class SwapQuoteService(
             quoteLifetime = quoteLifetime,
             quote = quote,
             error = error,
-            availableBalance = availableBalance
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -58,7 +51,6 @@ class SwapQuoteService(
 
     fun setTokenIn(token: Token) {
         tokenIn = token
-        refreshAvailableBalance()
         preferredProvider = null
 
         runQuotation()
@@ -75,7 +67,6 @@ class SwapQuoteService(
         val tmpTokenIn = tokenIn
 
         tokenIn = tokenOut
-        refreshAvailableBalance()
         tokenOut = tmpTokenIn
 
         amountIn = quote?.quote?.amountOut
@@ -102,14 +93,7 @@ class SwapQuoteService(
                 quoteLifetime = quoteLifetime,
                 quote = quote,
                 error = error,
-                availableBalance = availableBalance
             )
-        }
-    }
-
-    private fun refreshAvailableBalance() {
-        availableBalance = tokenIn?.let {
-            (adapterManager.getAdapterForToken(it) as? IBalanceAdapter)?.balanceData?.available
         }
     }
 
@@ -171,6 +155,5 @@ class SwapQuoteService(
         val quoteLifetime: Long,
         val quote: SwapProviderQuote?,
         val error: Throwable?,
-        val availableBalance: BigDecimal?
     )
 }

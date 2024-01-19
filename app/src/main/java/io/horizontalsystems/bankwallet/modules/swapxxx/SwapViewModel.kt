@@ -9,95 +9,108 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SwapViewModel(
-    private val swapQuoteService: SwapQuoteService
+    private val quoteService: SwapQuoteService,
+    private val balanceService: TokenBalanceService
 ) : ViewModel() {
 
-    private var swapQuoteState = swapQuoteService.stateFlow.value
+    private var quoteState = quoteService.stateFlow.value
+    private var availableBalance = balanceService.balanceFlow.value
 
     var uiState: SwapUiState by mutableStateOf(
         SwapUiState(
-            amountIn = swapQuoteState.amountIn,
-            tokenIn = swapQuoteState.tokenIn,
-            tokenOut = swapQuoteState.tokenOut,
-            quoting = swapQuoteState.quoting,
+            amountIn = quoteState.amountIn,
+            tokenIn = quoteState.tokenIn,
+            tokenOut = quoteState.tokenOut,
+            quoting = quoteState.quoting,
             swapEnabled = isSwapEnabled(),
-            quotes = swapQuoteState.quotes,
-            preferredProvider = swapQuoteState.preferredProvider,
-            quoteLifetime = swapQuoteState.quoteLifetime,
-            quote = swapQuoteState.quote,
-            error = swapQuoteState.error,
-            availableBalance = swapQuoteState.availableBalance
+            quotes = quoteState.quotes,
+            preferredProvider = quoteState.preferredProvider,
+            quoteLifetime = quoteState.quoteLifetime,
+            quote = quoteState.quote,
+            error = quoteState.error,
+            availableBalance = availableBalance
         )
     )
         private set
 
-    private var quotingJob: Job? = null
-    private var scheduleReQuoteJob: Job? = null
-
     init {
         viewModelScope.launch {
-            swapQuoteService.stateFlow.collect {
-                handleUpdatedSwapQuoteState(it)
+            quoteService.stateFlow.collect {
+                handleUpdatedQuoteState(it)
+            }
+        }
+        viewModelScope.launch {
+            balanceService.balanceFlow.collect {
+                handleUpdatedBalance(it)
             }
         }
     }
 
-    private fun handleUpdatedSwapQuoteState(swapQuoteState: SwapQuoteService.State) {
-        this.swapQuoteState = swapQuoteState
+    private fun handleUpdatedBalance(balance: BigDecimal?) {
+        this.availableBalance = balance
+
+        emitState()
+    }
+
+    private fun handleUpdatedQuoteState(quoteState: SwapQuoteService.State) {
+        this.quoteState = quoteState
+
+        balanceService.setToken(quoteState.tokenIn)
 
         emitState()
     }
 
     fun onEnterAmount(v: BigDecimal?) {
-        swapQuoteService.setAmount(v)
+        quoteService.setAmount(v)
     }
 
     fun onSelectTokenIn(token: Token) {
-        swapQuoteService.setTokenIn(token)
+        quoteService.setTokenIn(token)
     }
 
     fun onSelectTokenOut(token: Token) {
-        swapQuoteService.setTokenOut(token)
+        quoteService.setTokenOut(token)
     }
 
     fun onSwitchPairs() {
-        swapQuoteService.switchPairs()
+        quoteService.switchPairs()
     }
 
     fun onSelectQuote(quote: SwapProviderQuote) {
-        swapQuoteService.selectQuote(quote)
+        quoteService.selectQuote(quote)
     }
 
     private fun emitState() {
         viewModelScope.launch {
             uiState = SwapUiState(
-                amountIn = swapQuoteState.amountIn,
-                tokenIn = swapQuoteState.tokenIn,
-                tokenOut = swapQuoteState.tokenOut,
-                quoting = swapQuoteState.quoting,
+                amountIn = quoteState.amountIn,
+                tokenIn = quoteState.tokenIn,
+                tokenOut = quoteState.tokenOut,
+                quoting = quoteState.quoting,
                 swapEnabled = isSwapEnabled(),
-                quotes = swapQuoteState.quotes,
-                preferredProvider = swapQuoteState.preferredProvider,
-                quoteLifetime = swapQuoteState.quoteLifetime,
-                quote = swapQuoteState.quote,
-                error = swapQuoteState.error,
-                availableBalance = swapQuoteState.availableBalance
+                quotes = quoteState.quotes,
+                preferredProvider = quoteState.preferredProvider,
+                quoteLifetime = quoteState.quoteLifetime,
+                quote = quoteState.quote,
+                error = quoteState.error,
+                availableBalance = availableBalance
             )
         }
     }
 
-    private fun isSwapEnabled() = swapQuoteState.quote != null
+    private fun isSwapEnabled() = quoteState.quote != null
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val swapQuoteService = SwapQuoteService(SwapProvidersManager(), App.adapterManager)
-            return SwapViewModel(swapQuoteService) as T
+            val swapQuoteService = SwapQuoteService(SwapProvidersManager())
+            val tokenBalanceService = TokenBalanceService(App.adapterManager)
+
+            return SwapViewModel(swapQuoteService, tokenBalanceService) as T
         }
     }
 }
