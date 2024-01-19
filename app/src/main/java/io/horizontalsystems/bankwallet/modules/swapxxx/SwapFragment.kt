@@ -108,6 +108,9 @@ fun SwapScreen(navController: NavController) {
         onClickProvider = {
             navController.slideFromBottom(R.id.swapSelectProvider)
         },
+        onClickProviderSettings = {
+            navController.slideFromRight(R.id.swapProviderSettings)
+        },
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)
         }
@@ -123,6 +126,7 @@ private fun SwapScreenInner(
     onSwitchPairs: () -> Unit,
     onEnterAmount: (BigDecimal?) -> Unit,
     onClickProvider: () -> Unit,
+    onClickProviderSettings: () -> Unit,
     onClickNext: () -> Unit,
 ) {
     Scaffold(
@@ -212,7 +216,7 @@ private fun SwapScreenInner(
                         .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
                         .padding(vertical = 2.dp),
                 ) {
-                    ProviderField(swapProvider, onClickProvider)
+                    ProviderField(swapProvider, onClickProvider, onClickProviderSettings)
                     AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
                     PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, quote.amountOut)
                     quote.fields.forEach {
@@ -242,6 +246,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 private fun ProviderField(
     swapProvider: SwapMainModule.ISwapProvider,
     onClickProvider: () -> Unit,
+    onClickProviderSettings: () -> Unit,
 ) {
     HSRow(
         modifier = Modifier
@@ -265,6 +270,9 @@ private fun ProviderField(
         )
         HFillSpacer(minWidth = 8.dp)
         Icon(
+            modifier = Modifier.clickable(
+                onClick = onClickProviderSettings
+            ),
             painter = painterResource(R.drawable.ic_manage_2),
             contentDescription = "",
             tint = ComposeAppTheme.colors.grey
