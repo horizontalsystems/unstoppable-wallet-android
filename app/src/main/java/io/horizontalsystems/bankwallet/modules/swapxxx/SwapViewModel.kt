@@ -50,6 +50,7 @@ class SwapViewModel(
         private set
 
     private var quotingJob: Job? = null
+    private var scheduleReQuoteJob: Job? = null
 
     fun onEnterAmount(v: BigDecimal?) {
         amountIn = v
@@ -120,6 +121,7 @@ class SwapViewModel(
 
     private fun runQuotation() {
         quotingJob?.cancel()
+        scheduleReQuoteJob?.cancel()
 
         quotes = listOf()
         quote = null
@@ -159,7 +161,7 @@ class SwapViewModel(
     }
 
     private fun scheduleReQuote() {
-        viewModelScope.launch {
+        scheduleReQuoteJob = viewModelScope.launch {
             delay(quoteLifetime)
             runQuotation()
         }
