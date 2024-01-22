@@ -461,5 +461,5 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
 data class SwapQuote(
     val amountOut: BigDecimal,
     val fields: List<SwapDataField>,
-    val fee: SendModule.AmountData? = null,
+    val fee: SendModule.AmountData?,
 )

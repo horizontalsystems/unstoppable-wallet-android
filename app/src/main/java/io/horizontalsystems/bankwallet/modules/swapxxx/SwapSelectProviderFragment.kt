@@ -165,11 +165,11 @@ private fun SwapSelectProviderScreenPreview() {
             quotes = listOf(
                 SwapProviderQuote(
                     SwapMainModule.OneInchProvider,
-                    SwapQuote(BigDecimal.TEN, listOf())
+                    SwapQuote(BigDecimal.TEN, listOf(), null)
                 ),
                 SwapProviderQuote(
                     SwapMainModule.UniswapV3Provider,
-                    SwapQuote(BigDecimal("10.12"), listOf())
+                    SwapQuote(BigDecimal("10.12"), listOf(), null)
                 ),
             ),
             preferredProviderId = SwapMainModule.OneInchProvider.id,
