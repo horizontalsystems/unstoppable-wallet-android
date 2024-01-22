@@ -1,7 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataField
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -27,7 +28,12 @@ class SwapProvidersManager {
                 async {
                     try {
                         val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn)
-                        SwapProviderQuote(provider, quote)
+                        SwapProviderQuote(
+                            provider,
+                            quote.amountOut,
+                            quote.fee,
+                            quote.fields
+                        )
                     } catch (e: Throwable) {
                         null
                     }
@@ -40,5 +46,7 @@ class SwapProvidersManager {
 
 data class SwapProviderQuote(
     val provider: SwapMainModule.ISwapProvider,
-    val quote: SwapQuote
+    val amountOut: BigDecimal,
+    val fee: SendModule.AmountData?,
+    val fields: List<SwapDataField>
 )

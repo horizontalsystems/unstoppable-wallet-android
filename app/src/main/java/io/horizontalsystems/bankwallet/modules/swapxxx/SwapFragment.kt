@@ -149,7 +149,7 @@ private fun SwapScreenInner(
             SwapInput(
                 amountIn = uiState.amountIn,
                 onSwitchPairs = onSwitchPairs,
-                amountOut = uiState.quote?.quote?.amountOut,
+                amountOut = uiState.quote?.amountOut,
                 onValueChange = onEnterAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
@@ -204,10 +204,7 @@ private fun SwapScreenInner(
                 }
             }
 
-            uiState.quote?.let { swapProviderQuote ->
-                val swapProvider = swapProviderQuote.provider
-                val quote = swapProviderQuote.quote
-
+            uiState.quote?.let { quote ->
                 VSpacer(height = 12.dp)
                 Column(
                     modifier = Modifier
@@ -216,7 +213,7 @@ private fun SwapScreenInner(
                         .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
                         .padding(vertical = 2.dp),
                 ) {
-                    ProviderField(swapProvider, onClickProvider, onClickProviderSettings)
+                    ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
                     AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
                     PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, quote.amountOut)
                     quote.fields.forEach {
