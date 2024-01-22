@@ -69,7 +69,7 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
         tokenIn = tokenOut
         tokenOut = tmpTokenIn
 
-        amountIn = quote?.quote?.amountOut
+        amountIn = quote?.amountOut
 
         runQuotation()
     }
@@ -117,7 +117,7 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
             emitState()
 
             quotingJob = coroutineScope.launch {
-                quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.quote.amountOut }
+                quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.amountOut }
                 if (preferredProvider != null && quotes.none { it.provider == preferredProvider}) {
                     preferredProvider = null
                 }

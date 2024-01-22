@@ -24,7 +24,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -37,7 +36,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_green50
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import java.math.BigDecimal
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
@@ -130,8 +128,8 @@ private fun SwapSelectProviderScreenInner(
                     }
                     HFillSpacer(minWidth = 8.dp)
                     Column(horizontalAlignment = Alignment.End) {
-                        subhead2_leah(text = quote.quote.amountOut.toPlainString())
-                        quote.quote.fee?.let { fee ->
+                        subhead2_leah(text = quote.amountOut.toPlainString())
+                        quote.fee?.let { fee ->
                             VSpacer(height = 1.dp)
                             val formattedFee = fee.secondary?.getFormatted() ?: fee.primary.getFormatted()
                             subhead2_grey(text = stringResource(id = R.string.Swap_Fee) + ": " + formattedFee)
@@ -163,14 +161,18 @@ private fun SwapSelectProviderScreenPreview() {
         SwapSelectProviderScreenInner(
             onClickClose = {},
             quotes = listOf(
-                SwapProviderQuote(
-                    SwapMainModule.OneInchProvider,
-                    SwapQuote(BigDecimal.TEN, listOf(), null)
-                ),
-                SwapProviderQuote(
-                    SwapMainModule.UniswapV3Provider,
-                    SwapQuote(BigDecimal("10.12"), listOf(), null)
-                ),
+//                SwapProviderQuote(
+//                    SwapMainModule.OneInchProvider,
+//                    quote.amountOut,
+//                    quote.fee,
+//                    quote.fields
+//                ),
+//                SwapProviderQuote(
+//                    SwapMainModule.UniswapV3Provider,
+//                    quote.amountOut,
+//                    quote.fee,
+//                    quote.fields
+//                ),
             ),
             preferredProviderId = SwapMainModule.OneInchProvider.id,
             onSelectQuote = {}
