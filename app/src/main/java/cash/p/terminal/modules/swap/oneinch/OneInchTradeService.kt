@@ -63,7 +63,7 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
 
         val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuote(amountOut, listOf())
+        return SwapQuote(amountOut, listOf(), null)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
