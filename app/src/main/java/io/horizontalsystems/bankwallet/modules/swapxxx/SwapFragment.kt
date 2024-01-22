@@ -215,7 +215,7 @@ private fun SwapScreenInner(
                 ) {
                     ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
                     AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
-                    PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, quote.amountOut)
+                    PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
                     quote.fields.forEach {
                         it.GetContent()
                     }
@@ -278,39 +278,37 @@ private fun ProviderField(
 }
 
 @Composable
-private fun PriceField(tokenIn: Token?, tokenOut: Token?, amountIn: BigDecimal?, amountOut: BigDecimal) {
+private fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal) {
     var showRegularPrice by remember { mutableStateOf(true) }
-    if (tokenIn != null && tokenOut != null && amountIn != null) {
-        val price = amountOut.divide(amountIn, tokenOut.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
-        val priceInv = BigDecimal.ONE.divide(price, tokenIn.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+    val price = amountOut.divide(amountIn, tokenOut.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+    val priceInv = BigDecimal.ONE.divide(price, tokenIn.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
 
-        val priceStr = "${CoinValue(tokenIn, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenOut, price).getFormattedFull()}"
-        val priceInvStr = "${CoinValue(tokenOut, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenIn, priceInv).getFormattedFull()}"
-        QuoteInfoRow(
-            title = {
-                subhead2_grey(text = stringResource(R.string.Swap_Price))
-            },
-            value = {
-                subhead2_leah(
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = {
-                                showRegularPrice = !showRegularPrice
-                            }
-                        ),
-                    text = if (showRegularPrice) priceStr else priceInvStr
-                )
-                HSpacer(width = 8.dp)
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
-                    contentDescription = "invert price",
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
-        )
-    }
+    val priceStr = "${CoinValue(tokenIn, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenOut, price).getFormattedFull()}"
+    val priceInvStr = "${CoinValue(tokenOut, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenIn, priceInv).getFormattedFull()}"
+    QuoteInfoRow(
+        title = {
+            subhead2_grey(text = stringResource(R.string.Swap_Price))
+        },
+        value = {
+            subhead2_leah(
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = {
+                            showRegularPrice = !showRegularPrice
+                        }
+                    ),
+                text = if (showRegularPrice) priceStr else priceInvStr
+            )
+            HSpacer(width = 8.dp)
+            Icon(
+                painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
+                contentDescription = "invert price",
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+    )
 }
 
 @Composable
