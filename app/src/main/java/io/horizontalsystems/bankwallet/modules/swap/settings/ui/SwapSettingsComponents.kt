@@ -2,12 +2,20 @@ package io.horizontalsystems.bankwallet.modules.swap.settings.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
@@ -26,7 +35,12 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewMod
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
@@ -81,21 +95,40 @@ fun RecipientAddress(
 ) {
     val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
     App.marketKit.token(tokenQuery)?.let { token ->
+        RecipientAddress(
+            blockchainType = blockchainType,
+            navController = navController,
+            initial = recipientAddressViewModel.initialAddress,
+            onError = {
+                recipientAddressViewModel.updateError(it)
+            }
+        ) {
+            recipientAddressViewModel.onChangeAddress(it)
+        }
+    }
+}
+
+@Composable
+fun RecipientAddress(
+    blockchainType: BlockchainType,
+    navController: NavController,
+    initial: Address?,
+    onError: (Throwable?) -> Unit,
+    onValueChange: (Address?) -> Unit,
+) {
+    val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
+    App.marketKit.token(tokenQuery)?.let { token ->
         HeaderText(
             text = stringResource(R.string.SwapSettings_RecipientAddressTitle)
         )
         HSAddressInput(
             modifier = Modifier.padding(horizontal = 16.dp),
-            initial = recipientAddressViewModel.initialAddress,
+            initial = initial,
             tokenQuery = token.tokenQuery,
             coinCode = token.coin.code,
             navController = navController,
-            onError = {
-                recipientAddressViewModel.updateError(it)
-            },
-            onValueChange = {
-                recipientAddressViewModel.onChangeAddress(it)
-            },
+            onError = onError,
+            onValueChange = onValueChange,
         )
         InfoText(
             text = stringResource(R.string.SwapSettings_RecipientAddressDescription),
