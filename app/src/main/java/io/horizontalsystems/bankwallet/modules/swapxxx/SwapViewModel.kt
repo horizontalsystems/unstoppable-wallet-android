@@ -14,7 +14,8 @@ import java.math.BigDecimal
 
 class SwapViewModel(
     private val quoteService: SwapQuoteService,
-    private val balanceService: TokenBalanceService
+    private val balanceService: TokenBalanceService,
+    private val settingsService: SwapSettingsService
 ) : ViewModel() {
 
     private var quoteState = quoteService.stateFlow.value
@@ -104,18 +105,31 @@ class SwapViewModel(
 
     private fun isSwapEnabled() = quoteState.quote != null
 
-    private var settings = mutableMapOf<String, Any?>()
+
+    var saveSettingsEnabled by mutableStateOf(settingsService.saveEnabledFlow.value)
+
+    init {
+        viewModelScope.launch {
+            settingsService.saveEnabledFlow.collect {
+                saveSettingsEnabled = it
+            }
+        }
+    }
 
     fun getSettingValue(settingId: String): Any? {
-        return settings[settingId]
+        return settingsService.getSettingValue(settingId)
     }
 
     fun onSettingError(id: String, error: Throwable?) {
-//        TODO("Not yet implemented")
+        settingsService.onSettingError(id, error)
     }
 
     fun onSettingEnter(id: String, value: Any?) {
-        settings[id] = value
+        settingsService.setSetting(id, value)
+    }
+
+    fun saveSettings() {
+        settingsService.save()
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -124,7 +138,9 @@ class SwapViewModel(
             val swapQuoteService = SwapQuoteService(SwapProvidersManager())
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
 
-            return SwapViewModel(swapQuoteService, tokenBalanceService) as T
+            val swapSettingsService = SwapSettingsService()
+
+            return SwapViewModel(swapQuoteService, tokenBalanceService, swapSettingsService) as T
         }
     }
 }

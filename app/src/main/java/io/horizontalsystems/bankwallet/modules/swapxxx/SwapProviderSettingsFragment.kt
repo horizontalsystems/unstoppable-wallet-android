@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.swapxxx
 
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +17,7 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
@@ -78,6 +80,20 @@ fun SwapProviderSettingsScreen(navController: NavController) {
                         }
                     )
                 }
+            }
+
+            item {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(id = R.string.SwapSettings_Apply),
+                    enabled = viewModel.saveSettingsEnabled,
+                    onClick = {
+                        viewModel.saveSettings()
+                        navController.popBackStack()
+                    }
+                )
             }
         }
     }
