@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
 import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -78,6 +80,20 @@ fun SwapProviderSettingsScreen(navController: NavController) {
                         }
                     )
                 }
+            }
+
+            item {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(id = R.string.SwapSettings_Apply),
+                    enabled = viewModel.saveSettingsEnabled,
+                    onClick = {
+                        viewModel.saveSettings()
+                        navController.popBackStack()
+                    }
+                )
             }
         }
     }
