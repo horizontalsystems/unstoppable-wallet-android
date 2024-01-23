@@ -1,8 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
-import androidx.compose.foundation.layout.PaddingValues
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,32 +35,19 @@ fun SwapProviderSettingsScreen(navController: NavController) {
         factory = SwapViewModel.Factory()
     )
 
-    viewModel.uiState
-
-    SwapProviderSettingsScreenInner(
-        onClickClose = navController::popBackStack,
-        onClickReset = {
-
-        }
-    )
-}
-
-@Composable
-fun SwapProviderSettingsScreenInner(
-    onClickClose: () -> Unit,
-    onClickReset: () -> Unit,
-) {
     Scaffold(
         topBar = {
             AppBar(
                 title = stringResource(R.string.SwapSettings_Title),
                 navigationIcon = {
-                    HsBackButton(onClick = onClickClose)
+                    HsBackButton(onClick = { navController.popBackStack() })
                 },
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Button_Reset),
-                        onClick = onClickReset
+                        onClick = {
+
+                        }
                     )
                 ),
             )
@@ -68,14 +56,29 @@ fun SwapProviderSettingsScreenInner(
     ) {
         LazyColumn(
             modifier = Modifier.padding(it),
-            contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
             item {
                 VSpacer(height = 12.dp)
             }
 
+            viewModel.uiState.quote?.swapQuote?.let { swapQuote ->
+                items(swapQuote.getSettingFields()) { settingField ->
+                    val settingId = settingField.id
 
-
+                    settingField.GetContent(
+                        navController = navController,
+                        initial = viewModel.getSettingValue(settingId),
+                        onError = {
+                            viewModel.onSettingError(settingId, it)
+                            Log.e("AAA", "address error: $it")
+                        },
+                        onValueChange = {
+                            viewModel.onSettingEnter(settingId, it)
+                            Log.e("AAA", "Address: $it")
+                        }
+                    )
+                }
+            }
         }
     }
 }

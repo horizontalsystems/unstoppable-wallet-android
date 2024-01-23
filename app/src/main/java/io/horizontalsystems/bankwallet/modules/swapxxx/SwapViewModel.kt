@@ -104,6 +104,20 @@ class SwapViewModel(
 
     private fun isSwapEnabled() = quoteState.quote != null
 
+    private var settings = mutableMapOf<String, Any?>()
+
+    fun getSettingValue(settingId: String): Any? {
+        return settings[settingId]
+    }
+
+    fun onSettingError(id: String, error: Throwable?) {
+//        TODO("Not yet implemented")
+    }
+
+    fun onSettingEnter(id: String, value: Any?) {
+        settings[id] = value
+    }
+
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

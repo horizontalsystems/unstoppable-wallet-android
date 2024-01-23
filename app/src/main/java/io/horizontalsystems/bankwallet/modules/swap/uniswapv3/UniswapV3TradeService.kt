@@ -2,8 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swap.uniswapv3
 
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.EvmBlockchainHelper
+import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
+import io.horizontalsystems.bankwallet.modules.swap.SwapQuoteUniswapV3
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.IUniswapTradeService
@@ -63,8 +64,9 @@ class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal
-    ): SwapQuote {
-        val evmBlockchainHelper = EvmBlockchainHelper(tokenIn.blockchainType)
+    ): ISwapQuote {
+        val blockchainType = tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
         val chain = evmBlockchainHelper.chain
 
@@ -94,7 +96,7 @@ class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService
             }
         }
 
-        return SwapQuote(amountOut, fields, feeAmountData)
+        return SwapQuoteUniswapV3(amountOut, fields, feeAmountData, blockchainType)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

@@ -1,8 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.swap
 
 import android.os.Parcelable
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Warning
@@ -15,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceServi
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapAllowanceViewModel
 import io.horizontalsystems.bankwallet.modules.swap.allowance.SwapPendingAllowanceService
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
+import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapV2TradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswapv3.UniswapV3TradeService
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataField
@@ -129,7 +132,7 @@ object SwapMainModule {
             tokenIn: Token,
             tokenOut: Token,
             amountIn: BigDecimal,
-        ) : SwapQuote
+        ) : ISwapQuote
 
         fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?)
     }
@@ -250,7 +253,7 @@ object SwapMainModule {
         }
 
         fun supports(blockchainType: BlockchainType): Boolean
-        suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote
+        suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote
     }
 
     @Parcelize
@@ -266,7 +269,7 @@ object SwapMainModule {
             return blockchainType == BlockchainType.Ethereum
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
             return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
@@ -289,7 +292,7 @@ object SwapMainModule {
             else -> false
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
             return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
@@ -307,7 +310,7 @@ object SwapMainModule {
             return blockchainType == BlockchainType.BinanceSmartChain
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
             return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
@@ -327,7 +330,7 @@ object SwapMainModule {
             else -> false
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
             return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
@@ -354,7 +357,7 @@ object SwapMainModule {
             else -> false
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
             return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
@@ -372,7 +375,7 @@ object SwapMainModule {
             return blockchainType == BlockchainType.Polygon
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): SwapQuote {
+        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
             return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
@@ -458,8 +461,73 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
     }
 }
 
-data class SwapQuote(
-    val amountOut: BigDecimal,
-    val fields: List<SwapDataField>,
-    val fee: SendModule.AmountData?,
-)
+interface SwapSettingField {
+    val id: String
+
+    @Composable
+    fun GetContent(
+        navController: NavController,
+        initial: Any?,
+        onError: (Throwable?) -> Unit,
+        onValueChange: (Any?) -> Unit
+    )
+}
+
+data class SwapSettingFieldRecipient(val blockchainType: BlockchainType) : SwapSettingField {
+    override val id = "recipient"
+
+    @Composable
+    override fun GetContent(
+        navController: NavController,
+        initial: Any?,
+        onError: (Throwable?) -> Unit,
+        onValueChange: (Any?) -> Unit
+    ) {
+        RecipientAddress(
+            blockchainType = blockchainType,
+            navController = navController,
+            initial = initial as? Address,
+            onError = onError,
+            onValueChange = onValueChange
+        )
+    }
+}
+
+interface ISwapQuote {
+    fun getSettingFields() : List<SwapSettingField>
+
+    val amountOut: BigDecimal
+    val fields: List<SwapDataField>
+    val fee: SendModule.AmountData?
+}
+
+class SwapQuoteUniswap(
+    override val amountOut: BigDecimal,
+    override val fields: List<SwapDataField>,
+    override val fee: SendModule.AmountData?,
+) : ISwapQuote {
+    override fun getSettingFields(): List<SwapSettingField> {
+        TODO("Not yet implemented")
+    }
+}
+
+class SwapQuoteUniswapV3(
+    override val amountOut: BigDecimal,
+    override val fields: List<SwapDataField>,
+    override val fee: SendModule.AmountData?,
+    private val blockchainType: BlockchainType,
+) : ISwapQuote {
+    override fun getSettingFields(): List<SwapSettingField> {
+        return listOf(SwapSettingFieldRecipient(blockchainType))
+    }
+}
+
+class SwapQuoteOneInch(
+    override val amountOut: BigDecimal,
+    override val fields: List<SwapDataField>,
+    override val fee: SendModule.AmountData?,
+) : ISwapQuote {
+    override fun getSettingFields(): List<SwapSettingField> {
+        TODO("Not yet implemented")
+    }
+}
