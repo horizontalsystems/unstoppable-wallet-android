@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuote
+import io.horizontalsystems.bankwallet.modules.swap.SwapQuoteOneInch
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
@@ -58,12 +59,12 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal
-    ): SwapQuote {
+    ): ISwapQuote {
         val chain = App.evmBlockchainManager.getChain(tokenIn.blockchainType)
 
         val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuote(amountOut, listOf(), null)
+        return SwapQuoteOneInch(amountOut, listOf(), null)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
