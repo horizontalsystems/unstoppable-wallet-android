@@ -2,11 +2,12 @@ package cash.p.terminal.modules.swap.oneinch
 
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
+import cash.p.terminal.modules.swap.ISwapQuote
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
-import cash.p.terminal.modules.swap.SwapQuote
+import cash.p.terminal.modules.swap.SwapQuoteOneInch
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
@@ -58,12 +59,12 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal
-    ): SwapQuote {
+    ): ISwapQuote {
         val chain = App.evmBlockchainManager.getChain(tokenIn.blockchainType)
 
         val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuote(amountOut, listOf(), null)
+        return SwapQuoteOneInch(amountOut, listOf(), null)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

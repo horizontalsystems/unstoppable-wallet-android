@@ -2,8 +2,9 @@ package cash.p.terminal.modules.swap.uniswap
 
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.swap.EvmBlockchainHelper
+import cash.p.terminal.modules.swap.ISwapQuote
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
-import cash.p.terminal.modules.swap.SwapQuote
+import cash.p.terminal.modules.swap.SwapQuoteUniswap
 import cash.p.terminal.modules.swap.UniversalSwapTradeData
 import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
@@ -60,7 +61,7 @@ class UniswapV2TradeService : IUniswapTradeService {
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,
-    ): SwapQuote {
+    ): ISwapQuote {
         val evmBlockchainHelper = EvmBlockchainHelper(tokenIn.blockchainType)
 
         val swapData = swapDataSingle(tokenIn, tokenOut, evmBlockchainHelper).await()
@@ -82,7 +83,7 @@ class UniswapV2TradeService : IUniswapTradeService {
             }
         }
 
-        return SwapQuote(tradeData.amountOut!!, fields, feeAmountData)
+        return SwapQuoteUniswap(tradeData.amountOut!!, fields, feeAmountData)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
