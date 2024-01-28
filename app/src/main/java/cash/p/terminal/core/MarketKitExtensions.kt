@@ -366,11 +366,13 @@ val Coin.imageUrl: String
         var pirateOld: String = "piratecash-old"
         var cosa: String = "cosanta"
         var cosantaOld: String = "cosanta-old"
+        var wdash: String = "wdash"
         val coinURL = when (uid) {
             pirate -> "https://p.cash/logo.png"
             cosa -> "https://cosanta.net/logo.png"
             pirateOld -> "https://p.cash/old_pirate.png"
             cosantaOld -> "https://p.cash/old_cosanta.png"
+            wdash -> "https://wdash.org/logo.png"
             else -> "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
         }
         return coinURL
