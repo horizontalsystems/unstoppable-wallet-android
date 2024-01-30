@@ -31,6 +31,7 @@ fun TopPairsBoardView(
     MarketsSectionHeader(
         title = R.string.Market_Overview_TopPairs,
         icon = painterResource(R.drawable.ic_pairs_24),
+        onClick = onClickSeeAll
     )
 
     Column(
