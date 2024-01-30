@@ -6,7 +6,7 @@ buildscript {
         min_sdk_version = 27
         lifecycle_version = '2.7.0'
 
-        compose_version = '1.5.3'
+        compose_version = '1.6.0'
         kotlin_version = '1.8.0'
         material_version = "1.11.0"
         appcompat_version = "1.6.1"
