@@ -136,7 +136,7 @@ class Typography internal constructor(
 
 }
 
-fun ColoredTextStyle(textStyle: TextStyle, color: Color, textAlign: TextAlign? = null): TextStyle {
+fun ColoredTextStyle(textStyle: TextStyle, color: Color, textAlign: TextAlign = TextAlign.Unspecified): TextStyle {
     return TextStyle(
         color = color,
         fontWeight = textStyle.fontWeight,
