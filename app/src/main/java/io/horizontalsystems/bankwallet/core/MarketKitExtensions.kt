@@ -435,6 +435,7 @@ val HsPointTimePeriod.title: Int
         HsPointTimePeriod.Hour8 ->R.string.Coin_Analytics_Period_8h
         HsPointTimePeriod.Day1 -> R.string.Coin_Analytics_Period_1d
         HsPointTimePeriod.Week1 -> R.string.Coin_Analytics_Period_1w
+        HsPointTimePeriod.Month1 -> R.string.Coin_Analytics_Period_1m
     }
 
 val TokenType.Derivation.purpose: HDWallet.Purpose
