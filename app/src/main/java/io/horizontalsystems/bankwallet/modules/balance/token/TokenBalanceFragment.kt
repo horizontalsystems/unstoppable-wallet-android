@@ -20,7 +20,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
         val wallet = navController.getInput<Wallet>()
         if (wallet == null) {
             Toast.makeText(App.instance, "Wallet is Null", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
+            navController.popBackStack(R.id.tokenBalanceFragment, true)
             return
         }
         val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
