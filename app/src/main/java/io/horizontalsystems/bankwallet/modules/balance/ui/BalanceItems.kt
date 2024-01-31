@@ -199,9 +199,10 @@ fun BalanceItems(
                             }
                         )
                         HSpacer(8.dp)
-                        ButtonPrimaryCircle(
+                        ButtonPrimaryYellowWithIcon(
+                            modifier = Modifier.weight(1f),
                             icon = R.drawable.ic_arrow_down_left_24,
-                            contentDescription = stringResource(R.string.Balance_Receive),
+                            title = stringResource(R.string.Balance_Receive),
                             onClick = {
                                 when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
@@ -222,7 +223,7 @@ fun BalanceItems(
 
                                     null -> Unit
                                 }
-                            },
+                            }
                         )
                         HSpacer(8.dp)
                         ButtonPrimaryCircle(
