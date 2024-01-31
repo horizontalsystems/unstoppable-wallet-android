@@ -1403,6 +1403,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_TimeDuration_Year5">5Y</string>
     <string name="CoinPage_TimeDuration_All">All</string>
 
     <string name="CoinPage_Markets">Markets</string>
@@ -1636,6 +1637,7 @@
     <string name="Coin_Analytics_Period_8h">8 hours</string>
     <string name="Coin_Analytics_Period_1d">1 day</string>
     <string name="Coin_Analytics_Period_1w">1 week</string>
+    <string name="Coin_Analytics_Period_1m">1 month</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">Strong Buy</string>
     <string name="Coin_Analytics_Indicators_StrongSell">Strong Sell</string>
     <string name="Coin_Analytics_Indicators_Sell">Sell</string>
