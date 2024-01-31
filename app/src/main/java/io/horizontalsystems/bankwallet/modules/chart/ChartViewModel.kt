@@ -260,4 +260,5 @@ val HsTimePeriod.stringResId: Int
         HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
         HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
         HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
+        HsTimePeriod.Year5 -> R.string.CoinPage_TimeDuration_Year5
     }
