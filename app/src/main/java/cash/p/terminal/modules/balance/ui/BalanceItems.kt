@@ -229,7 +229,7 @@ fun BalanceItems(
                             }
                         )
                         HSpacer(8.dp)
-                        ButtonPrimaryYellowWithIcon(
+                        ButtonPrimaryDefaultWithIcon(
                             modifier = Modifier.weight(1f),
                             icon = R.drawable.ic_arrow_down_left_24,
                             title = stringResource(R.string.Balance_Receive),
