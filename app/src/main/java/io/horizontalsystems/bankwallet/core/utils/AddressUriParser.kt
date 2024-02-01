@@ -38,7 +38,12 @@ class AddressUriParser(private val blockchainType: BlockchainType?, private val 
     }
 
     override fun parse(addressUri: String): AddressUriResult {
-        val uri = URI(addressUri)
+        val uri = try {
+            URI(addressUri)
+        } catch (e: Throwable) {
+            null
+        } ?: return AddressUriResult.WrongUri
+
         val schemeSpecificPart = uri.schemeSpecificPart
 
         val pathEndIndex = schemeSpecificPart.indexOf('?').let { if (it != -1) it else schemeSpecificPart.length }
