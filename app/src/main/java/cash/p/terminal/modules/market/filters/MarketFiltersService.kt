@@ -9,12 +9,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Single
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.rx2.await
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 
@@ -73,10 +68,6 @@ class MarketFiltersService(
 
     var filterPriceCloseToAtl: Boolean = false
 
-    private val _numberOfItems =
-        MutableSharedFlow<Result<Int>?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    val numberOfItems = _numberOfItems.asSharedFlow()
-
     private var cache: List<MarketInfo>? = null
 
     override fun fetchAsync(): Single<List<MarketItem>> {
@@ -94,13 +85,8 @@ class MarketFiltersService(
         cache = null
     }
 
-    suspend fun refresh() = withContext(Dispatchers.IO) {
-        try {
-            val items = getTopMarketList().await()
-            _numberOfItems.tryEmit(Result.success(items.size))
-        } catch (error: Exception) {
-            _numberOfItems.tryEmit(Result.failure(error))
-        }
+    suspend fun fetchNumberOfItems(): Int {
+        return getTopMarketList().await().size
     }
 
     private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
@@ -164,7 +150,7 @@ class MarketFiltersService(
         if (value == null) return false
         val coinMarket = marketInfo(coinUid) ?: return false
 
-        return coinMarket.priceChangeValue(filterPeriod) ?: BigDecimal.ZERO < value
+        return (coinMarket.priceChangeValue(filterPeriod) ?: BigDecimal.ZERO) < value
     }
 
     private fun closeToAllTime(value: BigDecimal?): Boolean {
