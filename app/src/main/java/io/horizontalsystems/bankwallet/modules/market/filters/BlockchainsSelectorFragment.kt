@@ -71,6 +71,7 @@ private fun FilterByBlockchainsScreen(
     viewModel: MarketFiltersViewModel,
     navController: NavController
 ) {
+    val uiState = viewModel.uiState
     Column(
         modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
     ) {
@@ -86,10 +87,10 @@ private fun FilterByBlockchainsScreen(
             Spacer(Modifier.height(12.dp))
             HSSectionRounded {
                 AnyCell(
-                    checked = viewModel.selectedBlockchains.isEmpty(),
+                    checked = uiState.selectedBlockchains.isEmpty(),
                     onClick = { viewModel.anyBlockchains() }
                 )
-                viewModel.blockchainOptions.forEach { item ->
+                uiState.blockchainOptions.forEach { item ->
                     BlockchainCell(
                         item = item,
                         onCheck = { viewModel.onBlockchainCheck(it) },
