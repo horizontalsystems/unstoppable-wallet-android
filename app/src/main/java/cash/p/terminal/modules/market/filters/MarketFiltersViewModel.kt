@@ -15,44 +15,54 @@ import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
 class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
+    private var coinListSet = FilterViewItemWrapper(
+        Translator.getString(CoinList.Top250.titleResId),
+        CoinList.Top250,
+    )
+    private var period = FilterViewItemWrapper(
+        Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
+        TimePeriod.TimePeriod_1D,
+    )
+    private var marketCap = rangeEmpty
+    private var volume = rangeEmpty
+    private var priceChange = FilterViewItemWrapper.getAny<PriceChange>()
+    private var outperformedBtcOn = false
+    private var outperformedEthOn = false
+    private var outperformedBnbOn = false
+    private var priceCloseToAth = false
+    private var priceCloseToAtl = false
+    private var selectedBlockchainsValue: String? = null
+    private var selectedBlockchains = listOf<Blockchain>()
+    private var blockchainOptions = listOf<BlockchainViewItem>()
+    private var showSpinner = false
+    private var buttonEnabled = false
+    private var buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults)
+    private var errorMessage: TranslatableString? = null
 
-    var coinListSet by mutableStateOf(
-        FilterViewItemWrapper(
-            Translator.getString(CoinList.Top250.titleResId),
-            CoinList.Top250,
+    var uiState by mutableStateOf(
+        MarketFiltersUiState(
+            coinListSet = coinListSet,
+            period = period,
+            marketCap = marketCap,
+            volume = volume,
+            priceChange = priceChange,
+            outperformedBtcOn = outperformedBtcOn,
+            outperformedEthOn = outperformedEthOn,
+            outperformedBnbOn = outperformedBnbOn,
+            priceCloseToAth = priceCloseToAth,
+            priceCloseToAtl = priceCloseToAtl,
+            selectedBlockchainsValue = selectedBlockchainsValue,
+            selectedBlockchains = selectedBlockchains,
+            blockchainOptions = blockchainOptions,
+            showSpinner = showSpinner,
+            buttonEnabled = buttonEnabled,
+            buttonTitle = buttonTitle,
+            errorMessage = errorMessage,
         )
     )
         private set
 
-    var period by mutableStateOf(
-        FilterViewItemWrapper(
-            Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
-            TimePeriod.TimePeriod_1D,
-        )
-    )
-        private set
-
-    var marketCap by mutableStateOf(rangeEmpty)
-        private set
-    var volume by mutableStateOf(rangeEmpty)
-        private set
-    var priceChange by mutableStateOf<FilterViewItemWrapper<PriceChange?>>(FilterViewItemWrapper.getAny())
-        private set
-    var outperformedBtcOn by mutableStateOf(false)
-        private set
-    var outperformedEthOn by mutableStateOf(false)
-        private set
-    var outperformedBnbOn by mutableStateOf(false)
-        private set
-    var priceCloseToAth by mutableStateOf(false)
-        private set
-    var priceCloseToAtl by mutableStateOf(false)
-        private set
-    var selectedBlockchainsValue by mutableStateOf<String?>(null)
-        private set
-
-    var selectedBlockchains by mutableStateOf(listOf<Blockchain>())
-        private set
+    private var result: Result<Int>? = null
 
     val coinListsViewItemOptions = CoinList.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
@@ -66,23 +76,6 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         listOf(FilterViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
             FilterViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it)
         }
-
-    var blockchainOptions by mutableStateOf<List<BlockchainViewItem>>(emptyList())
-        private set
-
-    var showSpinner by mutableStateOf(false)
-        private set
-
-    var buttonEnabled by mutableStateOf(false)
-        private set
-
-    var buttonTitle by mutableStateOf(Translator.getString(R.string.Market_Filter_ShowResults))
-        private set
-
-    var errorMessage by mutableStateOf<TranslatableString?>(null)
-        private set
-
-    private var result: Result<Int>? = null
 
     init {
         service.numberOfItems.collectWith(viewModelScope) {
@@ -106,6 +99,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         buttonEnabled = result?.getOrNull()?.let { it > 0 } ?: false
 
         errorMessage = result?.exceptionOrNull()?.let { convertErrorMessage(it) }
+
+        emitState()
     }
 
     fun reset() {
@@ -236,8 +231,34 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
 
     private fun refresh() {
         showSpinner = true
+        emitState()
+
         viewModelScope.launch {
             service.refresh()
+        }
+    }
+
+    private fun emitState() {
+        viewModelScope.launch {
+            uiState = MarketFiltersUiState(
+                coinListSet = coinListSet,
+                period = period,
+                marketCap = marketCap,
+                volume = volume,
+                priceChange = priceChange,
+                outperformedBtcOn = outperformedBtcOn,
+                outperformedEthOn = outperformedEthOn,
+                outperformedBnbOn = outperformedBnbOn,
+                priceCloseToAth = priceCloseToAth,
+                priceCloseToAtl = priceCloseToAtl,
+                selectedBlockchainsValue = selectedBlockchainsValue,
+                selectedBlockchains = selectedBlockchains,
+                blockchainOptions = blockchainOptions,
+                showSpinner = showSpinner,
+                buttonEnabled = buttonEnabled,
+                buttonTitle = buttonTitle,
+                errorMessage = errorMessage,
+            )
         }
     }
 
@@ -262,3 +283,23 @@ fun getRanges(currencyCode: String): List<FilterViewItemWrapper<Range?>> {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
     }
 }
+
+data class MarketFiltersUiState(
+    val coinListSet: FilterViewItemWrapper<CoinList>,
+    val period: FilterViewItemWrapper<TimePeriod>,
+    val marketCap: FilterViewItemWrapper<Range?>,
+    val volume: FilterViewItemWrapper<Range?>,
+    val priceChange: FilterViewItemWrapper<PriceChange?>,
+    val outperformedBtcOn: Boolean,
+    val outperformedEthOn: Boolean,
+    val outperformedBnbOn: Boolean,
+    val priceCloseToAth: Boolean,
+    val priceCloseToAtl: Boolean,
+    val selectedBlockchainsValue: String?,
+    val selectedBlockchains: List<Blockchain>,
+    val blockchainOptions: List<BlockchainViewItem>,
+    val showSpinner: Boolean,
+    val buttonEnabled: Boolean,
+    val buttonTitle: String,
+    val errorMessage: TranslatableString?
+)

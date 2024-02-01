@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -95,7 +96,7 @@ class MarketFiltersService(
 
     suspend fun refresh() = withContext(Dispatchers.IO) {
         try {
-            val items = getTopMarketList().blockingGet()
+            val items = getTopMarketList().await()
             _numberOfItems.tryEmit(Result.success(items.size))
         } catch (error: Exception) {
             _numberOfItems.tryEmit(Result.failure(error))

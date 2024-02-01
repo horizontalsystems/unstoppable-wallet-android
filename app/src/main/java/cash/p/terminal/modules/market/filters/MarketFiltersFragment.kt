@@ -4,11 +4,27 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Surface
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -26,7 +42,19 @@ import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.market.filters.MarketFiltersModule.FilterDropdown.*
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
+import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.body_grey
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.body_lucian
+import cash.p.terminal.ui.compose.components.body_remus
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -54,7 +82,8 @@ private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
     navController: NavController,
 ) {
-    val errorMessage = viewModel.errorMessage
+    val uiState = viewModel.uiState
+    val errorMessage = uiState.errorMessage
     val coroutineScope = rememberCoroutineScope()
 
     var bottomSheetType by remember { mutableStateOf(CoinSet) }
@@ -114,14 +143,14 @@ private fun AdvancedSearchScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        title = viewModel.buttonTitle,
+                        title = uiState.buttonTitle,
                         onClick = {
                             navController.slideFromRight(
                                 R.id.marketAdvancedSearchResultsFragment
                             )
                         },
-                        showSpinner = viewModel.showSpinner,
-                        enabled = viewModel.buttonEnabled,
+                        showSpinner = uiState.showSpinner,
+                        enabled = uiState.buttonEnabled,
                     )
                 }
             }
@@ -139,13 +168,14 @@ private fun BottomSheetContent(
     viewModel: MarketFiltersViewModel,
     onClose: () -> Unit,
 ) {
+    val uiState = viewModel.uiState
     when (bottomSheetType) {
         CoinSet -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_ChooseSet,
                 headerIcon = R.drawable.ic_circle_coin_24,
                 items = viewModel.coinListsViewItemOptions,
-                selectedItem = viewModel.coinListSet,
+                selectedItem = uiState.coinListSet,
                 onSelect = {
                     viewModel.updateCoinList(it)
                 },
@@ -158,7 +188,7 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_MarketCap,
                 headerIcon = R.drawable.ic_usd_24,
                 items = viewModel.marketCapViewItemOptions,
-                selectedItem = viewModel.marketCap,
+                selectedItem = uiState.marketCap,
                 onSelect = {
                     viewModel.updateMarketCap(it)
                 },
@@ -171,7 +201,7 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_Volume24h,
                 headerIcon = R.drawable.ic_chart_24,
                 items = viewModel.volumeViewItemOptions,
-                selectedItem = viewModel.volume,
+                selectedItem = uiState.volume,
                 onSelect = {
                     viewModel.updateVolume(it)
                 },
@@ -184,7 +214,7 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_PriceChange,
                 headerIcon = R.drawable.icon_24_markets,
                 items = viewModel.priceChangeViewItemOptions,
-                selectedItem = viewModel.priceChange,
+                selectedItem = uiState.priceChange,
                 onSelect = {
                     viewModel.updatePriceChange(it)
                 },
@@ -197,7 +227,7 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_PricePeriod,
                 headerIcon = R.drawable.ic_circle_clock_24,
                 items = viewModel.periodViewItemOptions,
-                selectedItem = viewModel.period,
+                selectedItem = uiState.period,
                 onSelect = {
                     viewModel.updatePeriod(it)
                 },
@@ -213,6 +243,7 @@ fun AdvancedSearchContent(
     onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
+    val uiState = viewModel.uiState
 
     Spacer(Modifier.height(12.dp))
 
@@ -220,7 +251,7 @@ fun AdvancedSearchContent(
         listOf {
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_ChooseSet,
-                value = viewModel.coinListSet.title,
+                value = uiState.coinListSet.title,
                 onDropdownClick = { showBottomSheet(CoinSet) }
             )
         }
@@ -233,13 +264,13 @@ fun AdvancedSearchContent(
         listOf({
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_MarketCap,
-                value = viewModel.marketCap.title,
+                value = uiState.marketCap.title,
                 onDropdownClick = { showBottomSheet(MarketCap) }
             )
         }, {
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_Volume,
-                value = viewModel.volume.title,
+                value = uiState.volume.title,
                 onDropdownClick = { showBottomSheet(TradingVolume) }
             )
         })
@@ -252,7 +283,7 @@ fun AdvancedSearchContent(
         listOf {
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_Blockchains,
-                value = viewModel.selectedBlockchainsValue,
+                value = uiState.selectedBlockchainsValue,
                 onDropdownClick = onFilterByBlockchainsClick
             )
         }
@@ -265,44 +296,44 @@ fun AdvancedSearchContent(
         listOf({
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_PriceChange,
-                value = viewModel.priceChange.title,
-                valueColor = viewModel.priceChange.item?.color ?: TextColor.Grey,
+                value = uiState.priceChange.title,
+                valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
                 onDropdownClick = { showBottomSheet(PriceChange) }
             )
         }, {
             AdvancedSearchDropdown(
                 title = R.string.Market_Filter_PricePeriod,
-                value = viewModel.period.title,
+                value = uiState.period.title,
                 onDropdownClick = { showBottomSheet(PricePeriod) }
             )
         }, {
             AdvancedSearchSwitch(
                 title = R.string.Market_Filter_OutperformedBtc,
-                enabled = viewModel.outperformedBtcOn,
+                enabled = uiState.outperformedBtcOn,
                 onChecked = { viewModel.updateOutperformedBtcOn(it) }
             )
         }, {
             AdvancedSearchSwitch(
                 title = R.string.Market_Filter_OutperformedEth,
-                enabled = viewModel.outperformedEthOn,
+                enabled = uiState.outperformedEthOn,
                 onChecked = { viewModel.updateOutperformedEthOn(it) }
             )
         }, {
             AdvancedSearchSwitch(
                 title = R.string.Market_Filter_OutperformedBnb,
-                enabled = viewModel.outperformedBnbOn,
+                enabled = uiState.outperformedBnbOn,
                 onChecked = { viewModel.updateOutperformedBnbOn(it) }
             )
         }, {
             AdvancedSearchSwitch(
                 title = R.string.Market_Filter_PriceCloseToAth,
-                enabled = viewModel.priceCloseToAth,
+                enabled = uiState.priceCloseToAth,
                 onChecked = { viewModel.updateOutperformedAthOn(it) }
             )
         }, {
             AdvancedSearchSwitch(
                 title = R.string.Market_Filter_PriceCloseToAtl,
-                enabled = viewModel.priceCloseToAtl,
+                enabled = uiState.priceCloseToAtl,
                 onChecked = { viewModel.updateOutperformedAtlOn(it) }
             )
         })
