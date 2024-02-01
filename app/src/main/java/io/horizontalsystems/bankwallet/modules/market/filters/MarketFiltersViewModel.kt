@@ -5,12 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.BlockchainViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -62,7 +65,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     )
         private set
 
-    private var result: Result<Int>? = null
+    private var fetchDataJob: Job? = null
 
     val coinListsViewItemOptions = CoinList.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
@@ -78,29 +81,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         }
 
     init {
-        service.numberOfItems.collectWith(viewModelScope) {
-            result = it
-            sync()
-        }
-
         updateSelectedBlockchains()
         refresh()
-    }
-
-    private fun sync() {
-        showSpinner = false
-
-        buttonTitle = result?.getOrNull()?.let {
-            Translator.getString(R.string.Market_Filter_ShowResults_Counter, it)
-        } ?: result?.exceptionOrNull()?.let {
-            Translator.getString(R.string.Market_Filter_ShowResults)
-        } ?: ""
-
-        buttonEnabled = result?.getOrNull()?.let { it > 0 } ?: false
-
-        errorMessage = result?.exceptionOrNull()?.let { convertErrorMessage(it) }
-
-        emitState()
     }
 
     fun reset() {
@@ -230,11 +212,30 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     }
 
     private fun refresh() {
+        fetchDataJob?.cancel()
         showSpinner = true
+        buttonEnabled = false
         emitState()
 
-        viewModelScope.launch {
-            service.refresh()
+        fetchDataJob = viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val numberOfItems = service.fetchNumberOfItems()
+
+                buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults_Counter, numberOfItems)
+                buttonEnabled = numberOfItems > 0
+                errorMessage = null
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults)
+                buttonEnabled = false
+                errorMessage = convertErrorMessage(e)
+            }
+
+            showSpinner = false
+
+            ensureActive()
+            emitState()
         }
     }
 
