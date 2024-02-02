@@ -17,7 +17,6 @@ class MarketFiltersService(
     private val marketKit: MarketKitWrapper,
     private val baseCurrency: Currency
 ) : IMarketListFetcher {
-
     private val blockchainTypes = listOf(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
@@ -38,37 +37,22 @@ class MarketFiltersService(
         BlockchainType.Unsupported("tomochain"),
         BlockchainType.Unsupported("xdai"),
     )
+    private var cache: List<MarketInfo>? = null
 
     val blockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
+    val currencyCode = baseCurrency.code
 
-    val currencyCode: String
-        get() = baseCurrency.code
-
-    private val allTimeDeltaPercent = BigDecimal.TEN
-
-    var coinCount: Int = CoinList.Top250.itemsCount
-
+    var coinCount = CoinList.Top250.itemsCount
     var filterMarketCap: Pair<Long?, Long?>? = null
-
     var filterVolume: Pair<Long?, Long?>? = null
-
-    var filterPeriod: TimePeriod = TimePeriod.TimePeriod_1D
-
+    var filterPeriod = TimePeriod.TimePeriod_1D
     var filterPriceChange: Pair<Long?, Long?>? = null
-
-    var filterBlockchains: List<Blockchain> = listOf()
-
-    var filterOutperformedBtcOn: Boolean = false
-
-    var filterOutperformedEthOn: Boolean = false
-
-    var filterOutperformedBnbOn: Boolean = false
-
-    var filterPriceCloseToAth: Boolean = false
-
-    var filterPriceCloseToAtl: Boolean = false
-
-    private var cache: List<MarketInfo>? = null
+    var filterBlockchains = listOf<Blockchain>()
+    var filterOutperformedBtcOn = false
+    var filterOutperformedEthOn = false
+    var filterOutperformedBnbOn = false
+    var filterPriceCloseToAth = false
+    var filterPriceCloseToAtl = false
 
     override fun fetchAsync(): Single<List<MarketItem>> {
         return getTopMarketList()
@@ -154,9 +138,7 @@ class MarketFiltersService(
     }
 
     private fun closeToAllTime(value: BigDecimal?): Boolean {
-        value ?: return false
-
-        return value.abs() < allTimeDeltaPercent
+        return value != null && value.abs() < BigDecimal.TEN
     }
 
     private fun inBlockchain(tokens: List<Token>): Boolean {
