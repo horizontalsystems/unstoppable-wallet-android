@@ -34,6 +34,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     private var outperformedBnbOn = false
     private var priceCloseToAth = false
     private var priceCloseToAtl = false
+    private var listedOnTopExchangesOn = false
+    private var solidCexOn = false
+    private var solidDexOn = false
+    private var goodDistributionOn = false
     private var selectedBlockchainsValue: String? = null
     private var selectedBlockchains = listOf<Blockchain>()
     private var blockchainOptions = listOf<BlockchainViewItem>()
@@ -61,6 +65,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
             buttonEnabled = buttonEnabled,
             buttonTitle = buttonTitle,
             errorMessage = errorMessage,
+            listedOnTopExchangesOn = listedOnTopExchangesOn,
+            solidCexOn = solidCexOn,
+            solidDexOn = solidDexOn,
+            goodDistributionOn = goodDistributionOn,
         )
     )
         private set
@@ -104,6 +112,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         outperformedBnbOn = false
         priceCloseToAth = false
         priceCloseToAtl = false
+        listedOnTopExchangesOn = false
+        solidCexOn = false
+        solidDexOn = false
+        goodDistributionOn = false
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
         reloadData()
@@ -161,6 +173,26 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         reloadData()
     }
 
+    fun updateListedOnTopExchangesOn(checked: Boolean) {
+        listedOnTopExchangesOn = checked
+        reloadData()
+    }
+
+    fun updateSolidCexOn(checked: Boolean) {
+        solidCexOn = checked
+        reloadData()
+    }
+
+    fun updateSolidDexOn(checked: Boolean) {
+        solidDexOn = checked
+        reloadData()
+    }
+
+    fun updateGoodDistributionOn(checked: Boolean) {
+        goodDistributionOn = checked
+        reloadData()
+    }
+
     fun anyBlockchains() {
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
@@ -198,6 +230,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
                 service.filterOutperformedBtcOn = outperformedBtcOn
                 service.filterOutperformedEthOn = outperformedEthOn
                 service.filterOutperformedBnbOn = outperformedBnbOn
+                service.filterListedOnTopExchanges = listedOnTopExchangesOn
+                service.filterSolidCex = solidCexOn
+                service.filterSolidDex = solidDexOn
+                service.filterGoodDistribution = goodDistributionOn
                 service.filterPriceCloseToAth = priceCloseToAth
                 service.filterPriceCloseToAtl = priceCloseToAtl
                 service.filterBlockchains = selectedBlockchains
@@ -242,6 +278,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
                 buttonEnabled = buttonEnabled,
                 buttonTitle = buttonTitle,
                 errorMessage = errorMessage,
+                listedOnTopExchangesOn = listedOnTopExchangesOn,
+                solidCexOn = solidCexOn,
+                solidDexOn = solidDexOn,
+                goodDistributionOn = goodDistributionOn,
             )
         }
     }
@@ -285,5 +325,9 @@ data class MarketFiltersUiState(
     val showSpinner: Boolean,
     val buttonEnabled: Boolean,
     val buttonTitle: String,
-    val errorMessage: TranslatableString?
+    val errorMessage: TranslatableString?,
+    val listedOnTopExchangesOn: Boolean,
+    val solidCexOn: Boolean,
+    val solidDexOn: Boolean,
+    val goodDistributionOn: Boolean
 )
