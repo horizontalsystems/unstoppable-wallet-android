@@ -267,8 +267,11 @@
     <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listed on Top Exchanges</string>
     <string name="Market_Filter_SolidCex">Good Cex Volume</string>
+    <string name="Market_Filter_SolidCex_Description">Overall Score is Good or Excellent</string>
     <string name="Market_Filter_SolidDex">Good Dex Volume</string>
+    <string name="Market_Filter_SolidDex_Description">Overall Score is Good or Excellent</string>
     <string name="Market_Filter_GoodDistribution">Good Distribution</string>
+    <string name="Market_Filter_GoodDistribution_Description">Overall Score is Good or Excellent</string>
 
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
