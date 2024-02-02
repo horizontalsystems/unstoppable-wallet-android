@@ -106,21 +106,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         priceCloseToAtl = false
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
-        resetService()
         refresh()
-    }
-
-    private fun resetService() {
-        service.filterMarketCap = marketCap.item?.values
-        service.filterVolume = volume.item?.values
-        service.filterPeriod = period.item
-        service.filterPriceChange = priceChange.item?.values
-        service.filterOutperformedBtcOn = outperformedBtcOn
-        service.filterOutperformedEthOn = outperformedEthOn
-        service.filterOutperformedBnbOn = outperformedBnbOn
-        service.filterPriceCloseToAth = priceCloseToAth
-        service.filterPriceCloseToAtl = priceCloseToAtl
-        service.filterBlockchains = selectedBlockchains
     }
 
     fun updateCoinList(value: FilterViewItemWrapper<CoinList>) {
@@ -132,86 +118,83 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
 
     fun updateMarketCap(value: FilterViewItemWrapper<Range?>) {
         marketCap = value
-        service.filterMarketCap = value.item?.values
         refresh()
     }
 
     fun updateVolume(value: FilterViewItemWrapper<Range?>) {
         volume = value
-        service.filterVolume = value.item?.values
         refresh()
     }
 
     fun updatePeriod(value: FilterViewItemWrapper<TimePeriod>) {
         period = value
-        service.filterPeriod = value.item
         refresh()
     }
 
     fun updatePriceChange(value: FilterViewItemWrapper<PriceChange?>) {
         priceChange = value
-        service.filterPriceChange = value.item?.values
-        refresh()
-    }
-
-    fun onBlockchainCheck(blockchain: Blockchain) {
-        selectedBlockchains = selectedBlockchains.toMutableList()
-            .also {
-                it.add(blockchain)
-            }
-        updateSelectedBlockchains()
-    }
-
-    fun onBlockchainUncheck(blockchain: Blockchain) {
-        selectedBlockchains = selectedBlockchains.toMutableList()
-            .also {
-                it.remove(blockchain)
-            }
-        updateSelectedBlockchains()
-    }
-
-    fun updateListBySelectedBlockchains() {
-        service.filterBlockchains = selectedBlockchains
         refresh()
     }
 
     fun updateOutperformedBtcOn(checked: Boolean) {
         outperformedBtcOn = checked
-        service.filterOutperformedBtcOn = checked
         refresh()
     }
 
     fun updateOutperformedEthOn(checked: Boolean) {
         outperformedEthOn = checked
-        service.filterOutperformedEthOn = checked
         refresh()
     }
 
     fun updateOutperformedBnbOn(checked: Boolean) {
         outperformedBnbOn = checked
-        service.filterOutperformedBnbOn = checked
         refresh()
     }
 
     fun updateOutperformedAthOn(checked: Boolean) {
         priceCloseToAth = checked
-        service.filterPriceCloseToAth = checked
         refresh()
     }
 
     fun updateOutperformedAtlOn(checked: Boolean) {
         priceCloseToAtl = checked
-        service.filterPriceCloseToAtl = checked
         refresh()
     }
 
     fun anyBlockchains() {
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
+        emitState()
+    }
+
+    fun onBlockchainCheck(blockchain: Blockchain) {
+        selectedBlockchains += blockchain
+        updateSelectedBlockchains()
+        emitState()
+    }
+
+    fun onBlockchainUncheck(blockchain: Blockchain) {
+        selectedBlockchains -= blockchain
+        updateSelectedBlockchains()
+        emitState()
+    }
+
+    fun updateListBySelectedBlockchains() {
         refresh()
     }
 
     private fun refresh() {
+        service.filterMarketCap = marketCap.item?.values
+        service.filterVolume = volume.item?.values
+        service.filterPeriod = period.item
+        service.filterPriceChange = priceChange.item?.values
+        service.filterOutperformedBtcOn = outperformedBtcOn
+        service.filterOutperformedEthOn = outperformedEthOn
+        service.filterOutperformedBnbOn = outperformedBnbOn
+        service.filterPriceCloseToAth = priceCloseToAth
+        service.filterPriceCloseToAtl = priceCloseToAtl
+        service.filterBlockchains = selectedBlockchains
+
         fetchDataJob?.cancel()
         showSpinner = true
         buttonEnabled = false
