@@ -65,7 +65,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     )
         private set
 
-    private var fetchDataJob: Job? = null
+    private var reloadDataJob: Job? = null
 
     val coinListsViewItemOptions = CoinList.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
@@ -82,7 +82,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
 
     init {
         updateSelectedBlockchains()
-        refresh()
+        reloadData()
     }
 
     fun reset() {
@@ -106,59 +106,59 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         priceCloseToAtl = false
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
-        refresh()
+        reloadData()
     }
 
     fun updateCoinList(value: FilterViewItemWrapper<CoinList>) {
         coinListSet = value
         service.coinCount = value.item.itemsCount
         service.clearCache()
-        refresh()
+        reloadData()
     }
 
     fun updateMarketCap(value: FilterViewItemWrapper<Range?>) {
         marketCap = value
-        refresh()
+        reloadData()
     }
 
     fun updateVolume(value: FilterViewItemWrapper<Range?>) {
         volume = value
-        refresh()
+        reloadData()
     }
 
     fun updatePeriod(value: FilterViewItemWrapper<TimePeriod>) {
         period = value
-        refresh()
+        reloadData()
     }
 
     fun updatePriceChange(value: FilterViewItemWrapper<PriceChange?>) {
         priceChange = value
-        refresh()
+        reloadData()
     }
 
     fun updateOutperformedBtcOn(checked: Boolean) {
         outperformedBtcOn = checked
-        refresh()
+        reloadData()
     }
 
     fun updateOutperformedEthOn(checked: Boolean) {
         outperformedEthOn = checked
-        refresh()
+        reloadData()
     }
 
     fun updateOutperformedBnbOn(checked: Boolean) {
         outperformedBnbOn = checked
-        refresh()
+        reloadData()
     }
 
     fun updateOutperformedAthOn(checked: Boolean) {
         priceCloseToAth = checked
-        refresh()
+        reloadData()
     }
 
     fun updateOutperformedAtlOn(checked: Boolean) {
         priceCloseToAtl = checked
-        refresh()
+        reloadData()
     }
 
     fun anyBlockchains() {
@@ -180,10 +180,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     }
 
     fun updateListBySelectedBlockchains() {
-        refresh()
+        reloadData()
     }
 
-    private fun refresh() {
+    private fun reloadData() {
         service.filterMarketCap = marketCap.item?.values
         service.filterVolume = volume.item?.values
         service.filterPeriod = period.item
@@ -195,12 +195,12 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         service.filterPriceCloseToAtl = priceCloseToAtl
         service.filterBlockchains = selectedBlockchains
 
-        fetchDataJob?.cancel()
+        reloadDataJob?.cancel()
         showSpinner = true
         buttonEnabled = false
         emitState()
 
-        fetchDataJob = viewModelScope.launch(Dispatchers.Default) {
+        reloadDataJob = viewModelScope.launch(Dispatchers.Default) {
             try {
                 val numberOfItems = service.fetchNumberOfItems()
 
