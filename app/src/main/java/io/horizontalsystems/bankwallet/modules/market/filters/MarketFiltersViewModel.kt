@@ -184,17 +184,6 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     }
 
     private fun reloadData() {
-        service.filterMarketCap = marketCap.item?.values
-        service.filterVolume = volume.item?.values
-        service.filterPeriod = period.item
-        service.filterPriceChange = priceChange.item?.values
-        service.filterOutperformedBtcOn = outperformedBtcOn
-        service.filterOutperformedEthOn = outperformedEthOn
-        service.filterOutperformedBnbOn = outperformedBnbOn
-        service.filterPriceCloseToAth = priceCloseToAth
-        service.filterPriceCloseToAtl = priceCloseToAtl
-        service.filterBlockchains = selectedBlockchains
-
         reloadDataJob?.cancel()
         showSpinner = true
         buttonEnabled = false
@@ -202,6 +191,17 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
 
         reloadDataJob = viewModelScope.launch(Dispatchers.Default) {
             try {
+                service.filterMarketCap = marketCap.item?.values
+                service.filterVolume = volume.item?.values
+                service.filterPeriod = period.item
+                service.filterPriceChange = priceChange.item?.values
+                service.filterOutperformedBtcOn = outperformedBtcOn
+                service.filterOutperformedEthOn = outperformedEthOn
+                service.filterOutperformedBnbOn = outperformedBnbOn
+                service.filterPriceCloseToAth = priceCloseToAth
+                service.filterPriceCloseToAtl = priceCloseToAtl
+                service.filterBlockchains = selectedBlockchains
+
                 val numberOfItems = service.fetchNumberOfItems()
 
                 buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults_Counter, numberOfItems)
