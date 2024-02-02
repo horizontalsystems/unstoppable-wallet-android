@@ -53,6 +53,10 @@ class MarketFiltersService(
     var filterOutperformedBnbOn = false
     var filterPriceCloseToAth = false
     var filterPriceCloseToAtl = false
+    var filterListedOnTopExchanges = false
+    var filterSolidCex = false
+    var filterSolidDex = false
+    var filterGoodDistribution = false
 
     override fun fetchAsync(): Single<List<MarketItem>> {
         return getTopMarketList()
@@ -99,14 +103,18 @@ class MarketFiltersService(
         val priceChangeValue = marketInfo.priceChangeValue(filterPeriod) ?: return false
 
         return filterByRange(filterMarketCap, marketCap.toLong())
-                && filterByRange(filterVolume, totalVolume.toLong())
-                && inBlockchain(marketInfo.fullCoin.tokens)
-                && filterByRange(filterPriceChange, priceChangeValue.toLong())
-                && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
-                && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
-                && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
-                && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
-                && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
+            && filterByRange(filterVolume, totalVolume.toLong())
+            && inBlockchain(marketInfo.fullCoin.tokens)
+            && filterByRange(filterPriceChange, priceChangeValue.toLong())
+            && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
+            && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
+            && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
+            && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
+            && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
+            && (!filterListedOnTopExchanges || marketInfo.listedOnTopExchanges == true)
+            && (!filterSolidCex || marketInfo.solidCex == true)
+            && (!filterSolidDex || marketInfo.solidDex == true)
+            && (!filterGoodDistribution || marketInfo.goodDistribution == true)
     }
 
     private fun filterByRange(filter: Pair<Long?, Long?>?, value: Long?): Boolean {
