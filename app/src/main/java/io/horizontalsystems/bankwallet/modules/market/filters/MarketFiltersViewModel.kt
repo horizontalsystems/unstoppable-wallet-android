@@ -89,7 +89,9 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         }
 
     init {
+        showSpinner = true
         updateSelectedBlockchains()
+        emitState()
         reloadData()
     }
 
@@ -118,6 +120,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         goodDistributionOn = false
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
+        emitState()
         reloadData()
     }
 
@@ -125,71 +128,86 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         coinListSet = value
         service.coinCount = value.item.itemsCount
         service.clearCache()
+        showSpinner = true
+        emitState()
         reloadData()
     }
 
     fun updateMarketCap(value: FilterViewItemWrapper<Range?>) {
         marketCap = value
+        emitState()
         reloadData()
     }
 
     fun updateVolume(value: FilterViewItemWrapper<Range?>) {
         volume = value
+        emitState()
         reloadData()
     }
 
     fun updatePeriod(value: FilterViewItemWrapper<TimePeriod>) {
         period = value
+        emitState()
         reloadData()
     }
 
     fun updatePriceChange(value: FilterViewItemWrapper<PriceChange?>) {
         priceChange = value
+        emitState()
         reloadData()
     }
 
     fun updateOutperformedBtcOn(checked: Boolean) {
         outperformedBtcOn = checked
+        emitState()
         reloadData()
     }
 
     fun updateOutperformedEthOn(checked: Boolean) {
         outperformedEthOn = checked
+        emitState()
         reloadData()
     }
 
     fun updateOutperformedBnbOn(checked: Boolean) {
         outperformedBnbOn = checked
+        emitState()
         reloadData()
     }
 
     fun updateOutperformedAthOn(checked: Boolean) {
         priceCloseToAth = checked
+        emitState()
         reloadData()
     }
 
     fun updateOutperformedAtlOn(checked: Boolean) {
         priceCloseToAtl = checked
+        emitState()
         reloadData()
     }
 
     fun updateListedOnTopExchangesOn(checked: Boolean) {
         listedOnTopExchangesOn = checked
+        emitState()
         reloadData()
     }
 
     fun updateSolidCexOn(checked: Boolean) {
         solidCexOn = checked
+        emitState()
         reloadData()
     }
 
     fun updateSolidDexOn(checked: Boolean) {
         solidDexOn = checked
+        emitState()
         reloadData()
     }
 
     fun updateGoodDistributionOn(checked: Boolean) {
         goodDistributionOn = checked
+        emitState()
         reloadData()
     }
 
@@ -212,15 +230,12 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     }
 
     fun updateListBySelectedBlockchains() {
+        emitState()
         reloadData()
     }
 
     private fun reloadData() {
         reloadDataJob?.cancel()
-        showSpinner = true
-        buttonEnabled = false
-        emitState()
-
         reloadDataJob = viewModelScope.launch(Dispatchers.Default) {
             try {
                 service.filterMarketCap = marketCap.item?.values
