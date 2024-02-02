@@ -273,7 +273,32 @@ fun AdvancedSearchContent(
                 value = uiState.volume.title,
                 onDropdownClick = { showBottomSheet(TradingVolume) }
             )
-        })
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_ListedOnTopExchanges,
+                enabled = uiState.listedOnTopExchangesOn,
+                onChecked = { viewModel.updateListedOnTopExchangesOn(it) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_SolidCex,
+                enabled = uiState.solidCexOn,
+                onChecked = { viewModel.updateSolidCexOn(it) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_SolidDex,
+                enabled = uiState.solidDexOn,
+                onChecked = { viewModel.updateSolidDexOn(it) }
+            )
+        }, {
+            AdvancedSearchSwitch(
+                title = R.string.Market_Filter_GoodDistribution,
+                enabled = uiState.goodDistributionOn,
+                onChecked = { viewModel.updateGoodDistributionOn(it) }
+            )
+        }
+        )
     )
 
     Spacer(Modifier.height(24.dp))
