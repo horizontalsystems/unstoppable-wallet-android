@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.addtoken.blockchainselector
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,10 +25,10 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellBorderedRowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellBlockchainChecked
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.marketkit.models.Blockchain
 
 const val BlockchainSelectorResult = "blockchain_selector_result_key"
@@ -39,36 +39,38 @@ fun AddTokenBlockchainSelectorScreen(
     selectedBlockchain: Blockchain,
     navController: NavController,
 ) {
-    val menuItems = emptyList<MenuItem>()
     var selectedItem = selectedBlockchain
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = stringResource(R.string.Market_Filter_Blockchains),
-            navigationIcon = {
-                HsBackButton(onClick = { navController.popBackStack() })
-            },
-            menuItems = menuItems
-        )
-
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Market_Filter_Blockchains),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+            )
+        },
+        backgroundColor = ComposeAppTheme.colors.tyler
+    ) {
         Column(
-            Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
-            HSSectionRounded {
+            SectionUniversalLawrence {
                 blockchains.forEachIndexed { index, item ->
-                    BlockchainCell(
-                        item = item,
-                        selected = selectedItem == item,
-                        onCheck = {
-                            selectedItem = item
-                            navController.previousBackStackEntry
-                                ?.savedStateHandle
-                                ?.set(BlockchainSelectorResult, listOf(item))
-                            navController.popBackStack()
-                        },
-                        borderTop = index != 0
-                    )
+                    CellBlockchainChecked(
+                        borderTop = index != 0,
+                        blockchain = item,
+                        checked = selectedItem == item,
+                    ) {
+                        selectedItem = item
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set(BlockchainSelectorResult, listOf(item))
+                        navController.popBackStack()
+                    }
                 }
             }
             Spacer(Modifier.height(32.dp))
