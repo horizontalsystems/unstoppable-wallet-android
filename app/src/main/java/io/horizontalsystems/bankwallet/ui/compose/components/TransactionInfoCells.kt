@@ -362,6 +362,26 @@ fun TransactionInfoCancelCell(
     }
 }
 
+@Composable
+fun TransactionInfoRbfCell(
+    rbfEnabled: Boolean
+) {
+    RowUniversal {
+        subhead2_grey(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.Send_Rbf),
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        val enabledText = if (rbfEnabled) {
+            stringResource(R.string.Send_RbfEnabled)
+        } else {
+            stringResource(R.string.Send_RbfDisabled)
+        }
+        subhead1_leah(text = enabledText)
+        Spacer(modifier = Modifier.width(16.dp))
+    }
+}
+
 
 @Composable
 fun TransactionInfoTransactionHashCell(transactionHash: String) {

@@ -21,12 +21,14 @@ class SendBtcAdvancedSettingsViewModel(
     private val sortOptions: List<SortModeViewItem>
         get() = getTransactionSortModeViewItems()
     private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
+    private var rbfEnabled = localStorage.rbfEnabled
 
     var uiState by mutableStateOf(
         SendBtcAdvancedSettingsModule.UiState(
             transactionSortOptions = sortOptions,
             transactionSortTitle = Translator.getString(sortMode.titleShort),
-            utxoExpertModeEnabled = utxoExpertModeEnabled
+            utxoExpertModeEnabled = utxoExpertModeEnabled,
+            rbfEnabled = rbfEnabled,
         )
     )
 
@@ -42,11 +44,18 @@ class SendBtcAdvancedSettingsViewModel(
         syncState()
     }
 
+    fun setRbfEnabled(enabled: Boolean) {
+        rbfEnabled = enabled
+        localStorage.rbfEnabled = enabled
+        syncState()
+    }
+
     private fun syncState() {
         uiState = SendBtcAdvancedSettingsModule.UiState(
             transactionSortOptions = sortOptions,
             transactionSortTitle = Translator.getString(sortMode.titleShort),
-            utxoExpertModeEnabled = utxoExpertModeEnabled
+            utxoExpertModeEnabled = utxoExpertModeEnabled,
+            rbfEnabled = rbfEnabled
         )
     }
 
@@ -61,5 +70,6 @@ class SendBtcAdvancedSettingsViewModel(
 
     fun reset() {
         setTransactionMode(TransactionDataSortMode.Shuffle)
+        setRbfEnabled(true)
     }
 }

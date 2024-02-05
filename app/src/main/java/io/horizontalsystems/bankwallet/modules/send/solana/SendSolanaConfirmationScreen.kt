@@ -49,6 +49,7 @@ fun SendSolanaConfirmationScreen(
         fee = confirmationData.fee,
         lockTimeInterval = confirmationData.lockTimeInterval,
         memo = confirmationData.memo,
+        rbfEnabled = confirmationData.rbfEnabled,
         onClickSend = sendViewModel::onClickSend,
         sendEntryPointDestId = sendEntryPointDestId
     )
