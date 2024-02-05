@@ -55,7 +55,7 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
         quoteDisposable = null
     }
 
-    override suspend fun fetchQuote(
+    suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal
@@ -64,7 +64,7 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
 
         val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuoteOneInch(amountOut, listOf(), null)
+        return SwapQuoteOneInch(amountOut, listOf(), null, tokenIn.blockchainType)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

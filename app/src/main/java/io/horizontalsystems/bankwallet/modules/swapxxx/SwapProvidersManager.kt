@@ -2,7 +2,13 @@ package io.horizontalsystems.bankwallet.modules.swapxxx
 
 import android.util.Log
 import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.OneInchProvider
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.PancakeSwapProvider
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.PancakeSwapV3Provider
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.QuickSwapProvider
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.UniswapProvider
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.UniswapV3Provider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -11,12 +17,12 @@ import java.math.BigDecimal
 
 class SwapProvidersManager {
     private val allProviders = listOf(
-        SwapMainModule.OneInchProvider,
-        SwapMainModule.PancakeSwapProvider,
-        SwapMainModule.PancakeSwapV3Provider,
-        SwapMainModule.QuickSwapProvider,
-        SwapMainModule.UniswapProvider,
-        SwapMainModule.UniswapV3Provider,
+        OneInchProvider,
+        PancakeSwapProvider,
+        PancakeSwapV3Provider,
+        QuickSwapProvider,
+        UniswapProvider,
+        UniswapV3Provider,
     )
 
     suspend fun getQuotes(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal) = coroutineScope {
@@ -47,7 +53,7 @@ class SwapProvidersManager {
 }
 
 data class SwapProviderQuote(
-    val provider: SwapMainModule.ISwapProvider,
+    val provider: ISwapXxxProvider,
     val tokenIn: Token,
     val tokenOut: Token,
     val amountIn: BigDecimal,

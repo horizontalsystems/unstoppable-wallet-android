@@ -44,6 +44,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -241,7 +242,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 
 @Composable
 private fun ProviderField(
-    swapProvider: SwapMainModule.ISwapProvider,
+    swapProvider: ISwapXxxProvider,
     onClickProvider: () -> Unit,
     onClickProviderSettings: () -> Unit,
 ) {
