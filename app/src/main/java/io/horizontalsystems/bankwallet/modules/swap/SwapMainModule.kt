@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.util.*
 import kotlin.math.absoluteValue
 
 object SwapMainModule {
@@ -118,6 +119,13 @@ object SwapMainModule {
         val ttl: Long? get() = null
 
         fun stop()
+        fun fetchSwapData(
+            tokenFrom: Token?,
+            tokenTo: Token?,
+            amountFrom: BigDecimal?,
+            amountTo: BigDecimal?,
+            exactType: ExactType
+        )
 
         fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?)
     }
@@ -230,12 +238,6 @@ object SwapMainModule {
         val title: String
         val url: String
         val supportsExactOut: Boolean
-        val icon: Int
-
-        fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-            return tokenFrom.blockchainType == tokenTo.blockchainType &&
-                supports(tokenFrom.blockchainType)
-        }
 
         fun supports(blockchainType: BlockchainType): Boolean
     }
@@ -246,12 +248,10 @@ object SwapMainModule {
         override val title get() = "Uniswap"
         override val url get() = "https://uniswap.org/"
         override val supportsExactOut get() = true
-        override val icon: Int get() = R.drawable.uniswap
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Ethereum
         }
-
     }
 
     @Parcelize
@@ -260,7 +260,6 @@ object SwapMainModule {
         override val title get() = "Uniswap V3"
         override val url get() = "https://uniswap.org/"
         override val supportsExactOut get() = true
-        override val icon: Int get() = R.drawable.uniswap_v3
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
@@ -278,7 +277,6 @@ object SwapMainModule {
         override val title get() = "PancakeSwap"
         override val url get() = "https://pancakeswap.finance/"
         override val supportsExactOut get() = true
-        override val icon: Int get() = R.drawable.pancake
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.BinanceSmartChain
@@ -291,7 +289,6 @@ object SwapMainModule {
         override val title get() = "PancakeSwap V3"
         override val url get() = "https://pancakeswap.finance/"
         override val supportsExactOut get() = true
-        override val icon: Int get() = R.drawable.pancake_v3
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.BinanceSmartChain,
@@ -306,7 +303,6 @@ object SwapMainModule {
         override val title get() = "1inch"
         override val url get() = "https://app.1inch.io/"
         override val supportsExactOut get() = false
-        override val icon: Int get() = R.drawable.oneinch
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
@@ -328,7 +324,6 @@ object SwapMainModule {
         override val title get() = "QuickSwap"
         override val url get() = "https://quickswap.exchange/"
         override val supportsExactOut get() = true
-        override val icon: Int get() = R.drawable.quickswap
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Polygon
