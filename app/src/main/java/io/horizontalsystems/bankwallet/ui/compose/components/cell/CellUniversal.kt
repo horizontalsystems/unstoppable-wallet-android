@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.ui.compose.components
+package io.horizontalsystems.bankwallet.ui.compose.components.cell
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
