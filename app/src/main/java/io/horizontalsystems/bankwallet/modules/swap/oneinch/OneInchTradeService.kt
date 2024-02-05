@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.swap.oneinch
 
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.OneInchSwapParameters
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuoteOneInch
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
@@ -16,12 +13,9 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class OneInchTradeService : SwapMainModule.ISwapTradeService {
-    private val oneInchKitHelper by lazy { OneInchKitHelper(App.appConfigProvider.oneInchApiKey) }
-
     private var quoteDisposable: Disposable? = null
 
     override var state: SwapResultState = SwapResultState.NotReady()
@@ -53,18 +47,6 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
     private fun clearDisposables() {
         quoteDisposable?.dispose()
         quoteDisposable = null
-    }
-
-    suspend fun fetchQuote(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal
-    ): ISwapQuote {
-        val chain = App.evmBlockchainManager.getChain(tokenIn.blockchainType)
-
-        val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
-        val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuoteOneInch(amountOut, listOf(), null, tokenIn.blockchainType)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {

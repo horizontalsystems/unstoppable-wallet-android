@@ -1,14 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.swap.uniswap
 
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.EvmBlockchainHelper
-import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuoteUniswap
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
-import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataField
-import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
@@ -16,14 +11,11 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
 import io.horizontalsystems.uniswapkit.models.TradeOptions
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
-import io.horizontalsystems.ethereumkit.models.Address as EthereumKitAddress
 
 class UniswapV2TradeService : IUniswapTradeService {
     private val uniswapKit by lazy { UniswapKit.getInstance() }
@@ -57,35 +49,6 @@ class UniswapV2TradeService : IUniswapTradeService {
         clearDisposables()
     }
 
-    suspend fun fetchQuote(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal,
-    ): ISwapQuote {
-        val evmBlockchainHelper = EvmBlockchainHelper(tokenIn.blockchainType)
-
-        val swapData = swapDataSingle(tokenIn, tokenOut, evmBlockchainHelper).await()
-        val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions.tradeOptions)
-        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
-            uniswapKit.transactionData(
-                receiveAddress,
-                evmBlockchainHelper.chain,
-                tradeData
-            )
-        }
-        val feeAmountData = transactionData?.let {
-            evmBlockchainHelper.getFeeAmountData(it)
-        }
-
-        val fields = buildList<SwapDataField> {
-            feeAmountData?.let {
-                add(SwapFeeField(feeAmountData))
-            }
-        }
-
-        return SwapQuoteUniswap(tradeData.amountOut!!, fields, feeAmountData)
-    }
-
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
         tradeOptions = SwapTradeOptions(
             slippage ?: TradeOptions.defaultAllowedSlippage,
@@ -103,35 +66,6 @@ class UniswapV2TradeService : IUniswapTradeService {
     private fun clearDisposables() {
         swapDataDisposable?.dispose()
         swapDataDisposable = null
-    }
-
-    private fun swapDataSingle(
-        tokenIn: Token,
-        tokenOut: Token,
-        evmBlockchainHelper: EvmBlockchainHelper
-    ): Single<SwapData> {
-        return try {
-            val chain = evmBlockchainHelper.chain
-
-            uniswapKit.swapData(
-                evmBlockchainHelper.getRpcSourceHttp(),
-                chain,
-                uniswapToken(tokenIn, chain),
-                uniswapToken(tokenOut, chain)
-            )
-        } catch (error: Throwable) {
-            Single.error(error)
-        }
-    }
-
-    @Throws
-    private fun uniswapToken(token: Token?, chain: Chain) = when (val tokenType = token?.type) {
-        TokenType.Native -> uniswapKit.etherToken(chain)
-        is TokenType.Eip20 -> {
-            uniswapKit.token(EthereumKitAddress(tokenType.address), token.decimals)
-        }
-
-        else -> throw Exception("Invalid coin for swap: $token")
     }
 
     private fun TokenType.isWeth(chain: Chain): Boolean {
