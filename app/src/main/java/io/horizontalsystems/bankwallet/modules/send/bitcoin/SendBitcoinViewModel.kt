@@ -249,7 +249,8 @@ class SendBitcoinViewModel(
             contact = contact,
             coin = wallet.token.coin,
             feeCoin = wallet.token.coin,
-            lockTimeInterval = pluginState.lockTimeInterval
+            lockTimeInterval = pluginState.lockTimeInterval,
+            rbfEnabled = localStorage.rbfEnabled
         )
     }
 
@@ -273,6 +274,7 @@ class SendBitcoinViewModel(
                 customUnspentOutputs,
                 pluginState.pluginData,
                 btcBlockchainManager.transactionSortMode(adapter.blockchainType),
+                localStorage.rbfEnabled,
                 logger
             ).blockingGet()
 

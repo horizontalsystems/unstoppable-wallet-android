@@ -198,6 +198,18 @@ fun SendBtcAdvancedSettingsScreen(
                         text = stringResource(R.string.Send_Utxo_Description),
                     )
 
+                    Spacer(Modifier.height(32.dp))
+                    CellUniversalLawrenceSection {
+                        RbfSwitch(
+                            enabled = viewModel.uiState.rbfEnabled,
+                            onChange = { viewModel.setRbfEnabled(it) }
+                        )
+                    }
+
+                    InfoText(
+                        text = stringResource(R.string.Send_Rbf_Description),
+                    )
+
                     feeRateCaution?.let {
                         FeeRateCaution(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
@@ -224,6 +236,29 @@ fun UtxoSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
         body_leah(
             modifier = Modifier.padding(horizontal = 16.dp),
             text = stringResource(R.string.Send_UtxoExpertMode),
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        HsSwitch(
+            modifier = Modifier.padding(end = 16.dp),
+            checked = enabled,
+            onCheckedChange = { onChange.invoke(it) }
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+    }
+}
+
+@Composable
+fun RbfSwitch(enabled: Boolean, onChange: (Boolean) -> Unit) {
+    RowUniversal(
+        modifier = Modifier.clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = { onChange.invoke(!enabled) }
+        ),
+    ) {
+        body_leah(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.Send_Rbf),
         )
         Spacer(modifier = Modifier.weight(1f))
         HsSwitch(

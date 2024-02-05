@@ -40,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
+import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoRbfCell
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1Italic_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -71,6 +72,7 @@ fun SendConfirmationScreen(
     fee: BigDecimal,
     lockTimeInterval: LockTimeInterval?,
     memo: String?,
+    rbfEnabled: Boolean?,
     onClickSend: () -> Unit,
     sendEntryPointDestId: Int
 ) {
@@ -176,6 +178,12 @@ fun SendConfirmationScreen(
                     if (lockTimeInterval != null) {
                         add {
                             HSHodler(lockTimeInterval = lockTimeInterval)
+                        }
+                    }
+
+                    if (rbfEnabled == false) {
+                        add {
+                            TransactionInfoRbfCell(rbfEnabled)
                         }
                     }
                 }

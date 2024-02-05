@@ -81,6 +81,7 @@ class LocalStorageManager(
     private val HIDE_SUSPICIOUS_TX = "hide_suspicious_tx"
     private val PIN_RANDOMIZED = "pin_randomized"
     private val UTXO_EXPERT_MODE = "utxo_expert_mode"
+    private val RBF_ENABLED = "rbf_enabled"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -507,6 +508,12 @@ class LocalStorageManager(
             _utxoExpertModeEnabledFlow.update {
                 value
             }
+        }
+
+    override var rbfEnabled: Boolean
+        get() = preferences.getBoolean(RBF_ENABLED, true)
+        set(value) {
+            preferences.edit().putBoolean(RBF_ENABLED, value).apply()
         }
 
     private fun getSwapProviderKey(blockchainType: BlockchainType): String {

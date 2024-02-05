@@ -220,6 +220,7 @@ abstract class BitcoinBaseAdapter(
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
+        rbfEnabled: Boolean,
         logger: AppLogger
     ): Single<Unit> {
         val sortingType = getTransactionSortingType(transactionSorting)
@@ -233,7 +234,8 @@ abstract class BitcoinBaseAdapter(
                     feeRate = feeRate,
                     sortType = sortingType,
                     unspentOutputs = unspentOutputs,
-                    pluginData = pluginData ?: mapOf()
+                    pluginData = pluginData ?: mapOf(),
+                    rbfEnabled = rbfEnabled
                 )
                 emitter.onSuccess(Unit)
             } catch (ex: Exception) {

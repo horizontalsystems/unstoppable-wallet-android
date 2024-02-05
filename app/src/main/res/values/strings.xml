@@ -413,6 +413,10 @@
     <string name="Send_Utxo_Description">Manually select UTxO to spend the funds in the balance</string>
     <string name="Send_Utxo_SendTo">Send To</string>
     <string name="Send_Utxo_Change">Change</string>
+    <string name="Send_Rbf">Replace by Fee</string>
+    <string name="Send_Rbf_Description">This option allows you to resend a stuck transaction by increasing the amount of the fee.</string>
+    <string name="Send_RbfEnabled">Enabled</string>
+    <string name="Send_RbfDisabled">Disabled</string>
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_Domain">Domain</string>
