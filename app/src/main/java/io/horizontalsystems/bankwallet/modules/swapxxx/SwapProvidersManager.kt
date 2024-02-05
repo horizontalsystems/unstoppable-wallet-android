@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.OneInchProvider
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.PancakeSwapProvider

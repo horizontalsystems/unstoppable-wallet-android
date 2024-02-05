@@ -1,9 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx.providers
 
-import io.horizontalsystems.bankwallet.modules.swap.EvmBlockchainHelper
-import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuoteUniswap
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
+import io.horizontalsystems.bankwallet.modules.swapxxx.EvmBlockchainHelper
+import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
+import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteUniswap
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataField
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Address
