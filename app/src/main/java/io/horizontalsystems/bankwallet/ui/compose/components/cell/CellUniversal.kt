@@ -1,4 +1,5 @@
-package cash.p.terminal.ui.compose.components
+package cash.p.terminal.ui.compose.components.cell
+>>>>>>>> 6d35dad87 (Apply new CellUniversal in AddTokenBlockchainSelectorScreen):app/src/main/java/cash.p.terminal/ui/compose/components/cell/CellUniversal.kt
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
