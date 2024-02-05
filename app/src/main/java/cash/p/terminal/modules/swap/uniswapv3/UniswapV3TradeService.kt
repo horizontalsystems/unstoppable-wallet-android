@@ -1,18 +1,12 @@
 package cash.p.terminal.modules.swap.uniswapv3
 
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.swap.EvmBlockchainHelper
-import cash.p.terminal.modules.swap.ISwapQuote
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
-import cash.p.terminal.modules.swap.SwapQuoteUniswapV3
 import cash.p.terminal.modules.swap.UniversalSwapTradeData
 import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
 import cash.p.terminal.modules.swap.uniswap.IUniswapTradeService
-import cash.p.terminal.modules.swapxxx.ui.SwapDataField
-import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
@@ -60,45 +54,6 @@ class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService
 
     override fun stop() = Unit
 
-    suspend fun fetchQuote(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal
-    ): ISwapQuote {
-        val blockchainType = tokenIn.blockchainType
-        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
-
-        val chain = evmBlockchainHelper.chain
-
-        val uniswapTokenFrom = uniswapToken(tokenIn, chain)
-        val uniswapTokenTo = uniswapToken(tokenOut, chain)
-
-        val tradeDataV3 = uniswapV3Kit.bestTradeExactIn(
-            evmBlockchainHelper.getRpcSourceHttp(),
-            chain,
-            uniswapTokenFrom,
-            uniswapTokenTo,
-            amountIn,
-            tradeOptions.tradeOptions
-        )
-        val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
-
-        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
-            uniswapV3Kit.transactionData(receiveAddress, chain, tradeDataV3)
-        }
-        val feeAmountData = transactionData?.let {
-            evmBlockchainHelper.getFeeAmountData(transactionData)
-        }
-
-        val fields = buildList<SwapDataField> {
-            feeAmountData?.let {
-                add(SwapFeeField(feeAmountData))
-            }
-        }
-
-        return SwapQuoteUniswapV3(amountOut, fields, feeAmountData, blockchainType)
-    }
-
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
         tradeOptions = SwapTradeOptions(
             slippage ?: TradeOptions.defaultAllowedSlippage,
@@ -111,23 +66,6 @@ class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService
     override fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
         TODO()
 //        return uniswapV3Kit.transactionData(tradeData.getTradeDataV3())
-    }
-
-    @Throws
-    private fun uniswapToken(token: Token?, chain: Chain) = when (val tokenType = token?.type) {
-        TokenType.Native -> when (token.blockchainType) {
-            BlockchainType.Ethereum,
-            BlockchainType.BinanceSmartChain,
-            BlockchainType.Polygon,
-            BlockchainType.Optimism,
-            BlockchainType.ArbitrumOne -> uniswapV3Kit.etherToken(chain)
-            else -> throw Exception("Invalid coin for swap: $token")
-        }
-        is TokenType.Eip20 -> uniswapV3Kit.token(
-            io.horizontalsystems.ethereumkit.models.Address(
-                tokenType.address
-            ), token.decimals)
-        else -> throw Exception("Invalid coin for swap: $token")
     }
 
     private fun TokenType.isWeth(chain: Chain): Boolean =

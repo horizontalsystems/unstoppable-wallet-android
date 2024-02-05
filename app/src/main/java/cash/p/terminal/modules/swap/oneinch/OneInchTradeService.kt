@@ -1,13 +1,10 @@
 package cash.p.terminal.modules.swap.oneinch
 
-import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.swap.ISwapQuote
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
-import cash.p.terminal.modules.swap.SwapQuoteOneInch
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule
 import cash.p.terminal.modules.swap.settings.oneinch.OneInchSwapSettingsModule.OneInchSwapSettings
 import io.horizontalsystems.marketkit.models.Token
@@ -16,12 +13,9 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class OneInchTradeService : SwapMainModule.ISwapTradeService {
-    private val oneInchKitHelper by lazy { OneInchKitHelper(App.appConfigProvider.oneInchApiKey) }
-
     private var quoteDisposable: Disposable? = null
 
     override var state: SwapResultState = SwapResultState.NotReady()
@@ -53,18 +47,6 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
     private fun clearDisposables() {
         quoteDisposable?.dispose()
         quoteDisposable = null
-    }
-
-    suspend fun fetchQuote(
-        tokenIn: Token,
-        tokenOut: Token,
-        amountIn: BigDecimal
-    ): ISwapQuote {
-        val chain = App.evmBlockchainManager.getChain(tokenIn.blockchainType)
-
-        val quote = oneInchKitHelper.getQuoteAsync(chain, tokenIn, tokenOut, amountIn).await()
-        val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuoteOneInch(amountOut, listOf(), null, tokenIn.blockchainType)
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
