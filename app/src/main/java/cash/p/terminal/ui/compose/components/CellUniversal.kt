@@ -1,6 +1,7 @@
 package cash.p.terminal.ui.compose.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ fun CellUniversal(
     borderTop: Boolean = true,
     paddingVertical: Dp = 12.dp,
     paddingHorizontal: Dp = 16.dp,
+    onClick: (() -> Unit)? = null,
     content: @Composable() (RowScope.() -> Unit),
 ) {
     Box {
@@ -36,8 +38,16 @@ fun CellUniversal(
             )
         }
 
+        val modifierClickable = if (onClick != null) {
+            Modifier.clickable(onClick = onClick)
+        } else {
+            Modifier
+        }
+
         Row(
-            modifier = Modifier.padding(vertical = paddingVertical, horizontal = paddingHorizontal),
+            modifier = Modifier
+                .then(modifierClickable)
+                .padding(vertical = paddingVertical, horizontal = paddingHorizontal),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
             content = content
