@@ -2,10 +2,8 @@ package cash.p.terminal.modules.swap
 
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.Warning
@@ -13,12 +11,9 @@ import cash.p.terminal.core.fiat.AmountTypeSwitchService
 import cash.p.terminal.core.fiat.FiatService
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
-import cash.p.terminal.modules.swap.settings.ui.RecipientAddress
-import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
@@ -425,77 +420,5 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
         unscaledValue() * BigInteger.TEN.pow(exponent)
     } else {
         unscaledValue() / BigInteger.TEN.pow(exponent.absoluteValue)
-    }
-}
-
-interface SwapSettingField {
-    val id: String
-
-    @Composable
-    fun GetContent(
-        navController: NavController,
-        initial: Any?,
-        onError: (Throwable?) -> Unit,
-        onValueChange: (Any?) -> Unit
-    )
-}
-
-data class SwapSettingFieldRecipient(val blockchainType: BlockchainType) : SwapSettingField {
-    override val id = "recipient"
-
-    @Composable
-    override fun GetContent(
-        navController: NavController,
-        initial: Any?,
-        onError: (Throwable?) -> Unit,
-        onValueChange: (Any?) -> Unit
-    ) {
-        RecipientAddress(
-            blockchainType = blockchainType,
-            navController = navController,
-            initial = initial as? Address,
-            onError = onError,
-            onValueChange = onValueChange
-        )
-    }
-}
-
-interface ISwapQuote {
-    fun getSettingFields() : List<SwapSettingField>
-
-    val amountOut: BigDecimal
-    val fields: List<SwapDataField>
-    val fee: SendModule.AmountData?
-}
-
-class SwapQuoteUniswap(
-    override val amountOut: BigDecimal,
-    override val fields: List<SwapDataField>,
-    override val fee: SendModule.AmountData?,
-) : ISwapQuote {
-    override fun getSettingFields(): List<SwapSettingField> {
-        TODO("Not yet implemented")
-    }
-}
-
-class SwapQuoteUniswapV3(
-    override val amountOut: BigDecimal,
-    override val fields: List<SwapDataField>,
-    override val fee: SendModule.AmountData?,
-    private val blockchainType: BlockchainType,
-) : ISwapQuote {
-    override fun getSettingFields(): List<SwapSettingField> {
-        return listOf(SwapSettingFieldRecipient(blockchainType))
-    }
-}
-
-class SwapQuoteOneInch(
-    override val amountOut: BigDecimal,
-    override val fields: List<SwapDataField>,
-    override val fee: SendModule.AmountData?,
-    private val blockchainType: BlockchainType,
-) : ISwapQuote {
-    override fun getSettingFields(): List<SwapSettingField> {
-        return listOf(SwapSettingFieldRecipient(blockchainType))
     }
 }

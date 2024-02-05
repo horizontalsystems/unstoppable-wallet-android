@@ -1,4 +1,5 @@
-package cash.p.terminal.modules.swap
+package cash.p.terminal.modules.swapxxx
+>>>>>>>> b890ba0e9 (Restructure classes):app/src/main/java/cash.p.terminal/modules/swapxxx/EvmBlockchainHelper.kt
 
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory

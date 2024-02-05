@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.swapxxx
 
 import android.util.Log
-import cash.p.terminal.modules.swap.ISwapQuote
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.modules.swapxxx.providers.OneInchProvider
 import cash.p.terminal.modules.swapxxx.providers.PancakeSwapProvider

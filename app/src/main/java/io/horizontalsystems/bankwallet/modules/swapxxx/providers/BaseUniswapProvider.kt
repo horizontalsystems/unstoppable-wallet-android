@@ -1,9 +1,9 @@
 package cash.p.terminal.modules.swapxxx.providers
 
-import cash.p.terminal.modules.swap.EvmBlockchainHelper
-import cash.p.terminal.modules.swap.ISwapQuote
-import cash.p.terminal.modules.swap.SwapQuoteUniswap
 import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
+import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
+import cash.p.terminal.modules.swapxxx.ISwapQuote
+import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Address

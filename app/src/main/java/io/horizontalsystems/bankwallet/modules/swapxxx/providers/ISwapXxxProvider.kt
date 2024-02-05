@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.swapxxx.providers
 
-import cash.p.terminal.modules.swap.ISwapQuote
+import cash.p.terminal.modules.swapxxx.ISwapQuote
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal

@@ -2,9 +2,9 @@ package cash.p.terminal.modules.swapxxx.providers
 
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.swap.ISwapQuote
-import cash.p.terminal.modules.swap.SwapQuoteOneInch
 import cash.p.terminal.modules.swap.oneinch.OneInchKitHelper
+import cash.p.terminal.modules.swapxxx.ISwapQuote
+import cash.p.terminal.modules.swapxxx.SwapQuoteOneInch
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.rx2.await
