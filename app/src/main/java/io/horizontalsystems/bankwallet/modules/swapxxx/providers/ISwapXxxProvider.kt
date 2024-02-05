@@ -1,6 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx.providers
 
-import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
+import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal

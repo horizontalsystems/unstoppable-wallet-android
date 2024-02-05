@@ -2,9 +2,9 @@ package io.horizontalsystems.bankwallet.modules.swapxxx.providers
 
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.swap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.swap.SwapQuoteOneInch
 import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
+import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
+import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteOneInch
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.rx2.await
