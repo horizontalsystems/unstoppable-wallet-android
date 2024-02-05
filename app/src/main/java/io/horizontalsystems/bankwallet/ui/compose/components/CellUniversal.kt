@@ -21,8 +21,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @Composable
 fun CellUniversal(
-    borderTop: Boolean = false,
-    borderBottom: Boolean = false,
+    borderTop: Boolean = true,
     paddingVertical: Dp = 12.dp,
     paddingHorizontal: Dp = 16.dp,
     content: @Composable() (RowScope.() -> Unit),
@@ -33,14 +32,6 @@ fun CellUniversal(
                 thickness = 1.dp,
                 color = ComposeAppTheme.colors.steel10,
                 modifier = Modifier.align(Alignment.TopCenter)
-            )
-        }
-
-        if (borderBottom) {
-            Divider(
-                thickness = 1.dp,
-                color = ComposeAppTheme.colors.steel10,
-                modifier = Modifier.align(Alignment.BottomCenter)
             )
         }
 

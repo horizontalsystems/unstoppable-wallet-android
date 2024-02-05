@@ -254,6 +254,7 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_ChooseSet,
             value = uiState.coinListSet.title,
+            borderTop = false,
             onDropdownClick = { showBottomSheet(CoinSet) }
         )
     }
@@ -264,39 +265,35 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_MarketCap,
             value = uiState.marketCap.title,
+            borderTop = false,
             onDropdownClick = { showBottomSheet(MarketCap) }
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_Volume,
             value = uiState.volume.title,
-            borderTop = true,
             onDropdownClick = { showBottomSheet(TradingVolume) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_ListedOnTopExchanges,
             enabled = uiState.listedOnTopExchangesOn,
-            borderTop = true,
             onChecked = { viewModel.updateListedOnTopExchangesOn(it) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_SolidCex,
             subtitle = R.string.Market_Filter_SolidCex_Description,
             enabled = uiState.solidCexOn,
-            borderTop = true,
             onChecked = { viewModel.updateSolidCexOn(it) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_SolidDex,
             subtitle = R.string.Market_Filter_SolidDex_Description,
             enabled = uiState.solidDexOn,
-            borderTop = true,
             onChecked = { viewModel.updateSolidDexOn(it) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_GoodDistribution,
             subtitle = R.string.Market_Filter_GoodDistribution_Description,
             enabled = uiState.goodDistributionOn,
-            borderTop = true,
             onChecked = { viewModel.updateGoodDistributionOn(it) }
         )
     }
@@ -323,37 +320,31 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PricePeriod,
             value = uiState.period.title,
-            borderTop = true,
             onDropdownClick = { showBottomSheet(PricePeriod) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedBtc,
             enabled = uiState.outperformedBtcOn,
-            borderTop = true,
             onChecked = { viewModel.updateOutperformedBtcOn(it) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedEth,
             enabled = uiState.outperformedEthOn,
-            borderTop = true,
             onChecked = { viewModel.updateOutperformedEthOn(it) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedBnb,
             enabled = uiState.outperformedBnbOn,
-            borderTop = true,
             onChecked = { viewModel.updateOutperformedBnbOn(it) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_PriceCloseToAth,
             enabled = uiState.priceCloseToAth,
-            borderTop = true,
             onChecked = { viewModel.updateOutperformedAthOn(it) }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_PriceCloseToAtl,
             enabled = uiState.priceCloseToAtl,
-            borderTop = true,
             onChecked = { viewModel.updateOutperformedAtlOn(it) }
         )
     }
@@ -365,7 +356,7 @@ private fun AdvancedSearchDropdown(
     @StringRes title: Int,
     value: String?,
     valueColor: TextColor = TextColor.Leah,
-    borderTop: Boolean = false,
+    borderTop: Boolean = true,
     onDropdownClick: () -> Unit,
 ) {
     CellUniversal(borderTop = borderTop) {
