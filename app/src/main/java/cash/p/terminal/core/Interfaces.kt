@@ -117,6 +117,7 @@ interface ILocalStorage {
     var hideSuspiciousTransactions: Boolean
     var pinRandomized: Boolean
     var utxoExpertModeEnabled: Boolean
+    var rbfEnabled: Boolean
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
 
@@ -333,6 +334,7 @@ interface ISendBitcoinAdapter {
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
         transactionSorting: TransactionDataSortMode?,
+        rbfEnabled: Boolean,
         logger: AppLogger
     ): Single<Unit>
 }
