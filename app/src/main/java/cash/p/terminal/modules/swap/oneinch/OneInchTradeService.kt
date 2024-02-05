@@ -1,7 +1,9 @@
 package cash.p.terminal.modules.swap.oneinch
 
+import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapMainModule.ExactType
 import cash.p.terminal.modules.swap.SwapMainModule.OneInchSwapParameters
 import cash.p.terminal.modules.swap.SwapMainModule.SwapData
 import cash.p.terminal.modules.swap.SwapMainModule.SwapResultState
@@ -15,7 +17,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-class OneInchTradeService : SwapMainModule.ISwapTradeService {
+class OneInchTradeService(
+    private val oneInchKitHelper: OneInchKitHelper
+) : SwapMainModule.ISwapTradeService {
+
     private var quoteDisposable: Disposable? = null
 
     override var state: SwapResultState = SwapResultState.NotReady()
@@ -47,6 +52,34 @@ class OneInchTradeService : SwapMainModule.ISwapTradeService {
     private fun clearDisposables() {
         quoteDisposable?.dispose()
         quoteDisposable = null
+    }
+
+    override fun fetchSwapData(
+        tokenFrom: Token?,
+        tokenTo: Token?,
+        amountFrom: BigDecimal?,
+        amountTo: BigDecimal?,
+        exactType: ExactType
+    ) {
+        quoteDisposable?.dispose()
+        quoteDisposable = null
+
+        val fromToken = tokenFrom ?: return
+        val toToken = tokenTo ?: return
+
+        if (amountFrom == null || amountFrom.compareTo(BigDecimal.ZERO) == 0) {
+            state = SwapResultState.NotReady()
+            return
+        }
+
+        state = SwapResultState.Loading
+
+        quoteDisposable = oneInchKitHelper.getQuoteAsync(fromToken, toToken, amountFrom)
+            .subscribeIO({ quote ->
+                handle(quote, tokenFrom, tokenTo, amountFrom)
+            }, { error ->
+                state = SwapResultState.NotReady(listOf(error))
+            })
     }
 
     override fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?) {
