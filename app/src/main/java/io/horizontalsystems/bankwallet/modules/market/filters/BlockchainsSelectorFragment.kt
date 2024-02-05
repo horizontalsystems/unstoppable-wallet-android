@@ -3,17 +3,13 @@ package io.horizontalsystems.bankwallet.modules.market.filters
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -29,9 +25,10 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellBorderedRowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.HSSectionRounded
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.core.findNavController
@@ -72,20 +69,26 @@ private fun FilterByBlockchainsScreen(
     navController: NavController
 ) {
     val uiState = viewModel.uiState
-    Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Market_Filter_Blockchains),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                }
+            )
+        },
+        backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
-        AppBar(
-            title = stringResource(R.string.Market_Filter_Blockchains),
-            navigationIcon = {
-                HsBackButton(onClick = { navController.popBackStack() })
-            }
-        )
         Column(
-            Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
         ) {
-            Spacer(Modifier.height(12.dp))
-            HSSectionRounded {
+            VSpacer(height = 12.dp)
+
+            SectionUniversalLawrence {
                 AnyCell(
                     checked = uiState.selectedBlockchains.isEmpty(),
                     onClick = { viewModel.anyBlockchains() }
@@ -98,7 +101,8 @@ private fun FilterByBlockchainsScreen(
                     )
                 }
             }
-            Spacer(Modifier.height(32.dp))
+
+            VSpacer(height = 32.dp)
         }
     }
 }
@@ -109,18 +113,14 @@ private fun BlockchainCell(
     onCheck: (Blockchain) -> Unit,
     onUncheck: (Blockchain) -> Unit,
 ) {
-    CellBorderedRowUniversal(
-        borderTop = true,
-        modifier = Modifier
-            .clickable {
-                if (item.checked) {
-                    onUncheck(item.blockchain)
-                } else {
-                    onCheck(item.blockchain)
-                }
+    CellUniversal(
+        onClick = {
+            if (item.checked) {
+                onUncheck(item.blockchain)
+            } else {
+                onCheck(item.blockchain)
             }
-            .fillMaxWidth(),
-        backgroundColor = ComposeAppTheme.colors.lawrence
+        }
     ) {
         Image(
             painter = rememberAsyncImagePainter(
@@ -153,11 +153,9 @@ private fun AnyCell(
     checked: Boolean,
     onClick: () -> Unit
 ) {
-    CellBorderedRowUniversal(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        backgroundColor = ComposeAppTheme.colors.lawrence
+    CellUniversal(
+        borderTop = false,
+        onClick = onClick
     ) {
         body_grey(
             modifier = Modifier
