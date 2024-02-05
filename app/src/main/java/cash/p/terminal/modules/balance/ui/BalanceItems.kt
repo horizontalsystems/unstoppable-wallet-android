@@ -60,6 +60,7 @@ import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaultWithIcon
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
