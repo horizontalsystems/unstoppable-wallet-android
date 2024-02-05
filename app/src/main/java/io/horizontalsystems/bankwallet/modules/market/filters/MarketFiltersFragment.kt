@@ -359,7 +359,10 @@ private fun AdvancedSearchDropdown(
     borderTop: Boolean = true,
     onDropdownClick: () -> Unit,
 ) {
-    CellUniversal(borderTop = borderTop) {
+    CellUniversal(
+        borderTop = borderTop,
+        onClick = onDropdownClick
+    ) {
         body_leah(
             text = stringResource(title),
             maxLines = 1,
@@ -380,7 +383,10 @@ private fun AdvancedSearchSwitch(
     borderTop: Boolean = false,
     onChecked: (Boolean) -> Unit,
 ) {
-    CellUniversal(borderTop = borderTop) {
+    CellUniversal(
+        borderTop = borderTop,
+        onClick = { onChecked(!enabled) }
+    ) {
         Column {
             body_leah(
                 text = stringResource(title),
