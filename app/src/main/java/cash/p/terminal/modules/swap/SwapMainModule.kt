@@ -17,10 +17,7 @@ import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
-import cash.p.terminal.modules.swap.oneinch.OneInchTradeService
 import cash.p.terminal.modules.swap.settings.ui.RecipientAddress
-import cash.p.terminal.modules.swap.uniswap.UniswapV2TradeService
-import cash.p.terminal.modules.swap.uniswapv3.UniswapV3TradeService
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
@@ -29,7 +26,6 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.uniswapkit.models.DexType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -133,12 +129,6 @@ object SwapMainModule {
         val ttl: Long? get() = null
 
         fun stop()
-
-        suspend fun fetchQuote(
-            tokenIn: Token,
-            tokenOut: Token,
-            amountIn: BigDecimal,
-        ) : ISwapQuote
 
         fun updateSwapSettings(recipient: Address?, slippage: BigDecimal?, ttl: Long?)
     }
@@ -260,7 +250,6 @@ object SwapMainModule {
         }
 
         fun supports(blockchainType: BlockchainType): Boolean
-        suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote
     }
 
     @Parcelize
@@ -270,15 +259,11 @@ object SwapMainModule {
         override val url get() = "https://uniswap.org/"
         override val supportsExactOut get() = true
         override val icon: Int get() = R.drawable.uniswap
-        private val service get() = UniswapV2TradeService()
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Ethereum
         }
 
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
-            return service.fetchQuote(tokenIn, tokenOut, amountIn)
-        }
     }
 
     @Parcelize
@@ -288,7 +273,6 @@ object SwapMainModule {
         override val url get() = "https://uniswap.org/"
         override val supportsExactOut get() = true
         override val icon: Int get() = R.drawable.uniswap_v3
-        private val service get() = UniswapV3TradeService(DexType.Uniswap)
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
@@ -297,10 +281,6 @@ object SwapMainModule {
             BlockchainType.Polygon,
             BlockchainType.BinanceSmartChain -> true
             else -> false
-        }
-
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
-            return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
 
@@ -311,14 +291,9 @@ object SwapMainModule {
         override val url get() = "https://pancakeswap.finance/"
         override val supportsExactOut get() = true
         override val icon: Int get() = R.drawable.pancake
-        private val service get() = UniswapV2TradeService()
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.BinanceSmartChain
-        }
-
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
-            return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
 
@@ -329,16 +304,11 @@ object SwapMainModule {
         override val url get() = "https://pancakeswap.finance/"
         override val supportsExactOut get() = true
         override val icon: Int get() = R.drawable.pancake_v3
-        private val service get() = UniswapV3TradeService(DexType.PancakeSwap)
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.BinanceSmartChain,
             BlockchainType.Ethereum -> true
             else -> false
-        }
-
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
-            return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
 
@@ -349,7 +319,6 @@ object SwapMainModule {
         override val url get() = "https://app.1inch.io/"
         override val supportsExactOut get() = false
         override val icon: Int get() = R.drawable.oneinch
-        private val service get() = OneInchTradeService()
 
         override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
@@ -363,10 +332,6 @@ object SwapMainModule {
 
             else -> false
         }
-
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
-            return service.fetchQuote(tokenIn, tokenOut, amountIn)
-        }
     }
 
     @Parcelize
@@ -376,14 +341,9 @@ object SwapMainModule {
         override val url get() = "https://quickswap.exchange/"
         override val supportsExactOut get() = true
         override val icon: Int get() = R.drawable.quickswap
-        private val service get() = UniswapV2TradeService()
 
         override fun supports(blockchainType: BlockchainType): Boolean {
             return blockchainType == BlockchainType.Polygon
-        }
-
-        override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
-            return service.fetchQuote(tokenIn, tokenOut, amountIn)
         }
     }
 
@@ -533,8 +493,9 @@ class SwapQuoteOneInch(
     override val amountOut: BigDecimal,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
+    private val blockchainType: BlockchainType,
 ) : ISwapQuote {
     override fun getSettingFields(): List<SwapSettingField> {
-        TODO("Not yet implemented")
+        return listOf(SwapSettingFieldRecipient(blockchainType))
     }
 }

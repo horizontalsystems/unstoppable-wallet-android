@@ -57,7 +57,7 @@ class UniswapV2TradeService : IUniswapTradeService {
         clearDisposables()
     }
 
-    override suspend fun fetchQuote(
+    suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal,

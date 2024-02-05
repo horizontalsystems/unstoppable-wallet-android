@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -152,7 +152,7 @@ data class SwapUiState(
     val quoting: Boolean,
     val swapEnabled: Boolean,
     val quotes: List<SwapProviderQuote>,
-    val preferredProvider: SwapMainModule.ISwapProvider?,
+    val preferredProvider: ISwapXxxProvider?,
     val quoteLifetime: Long,
     val quote: SwapProviderQuote?,
     val error: Throwable?,

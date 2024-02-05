@@ -44,6 +44,7 @@ import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -241,7 +242,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 
 @Composable
 private fun ProviderField(
-    swapProvider: SwapMainModule.ISwapProvider,
+    swapProvider: ISwapXxxProvider,
     onClickProvider: () -> Unit,
     onClickProviderSettings: () -> Unit,
 ) {

@@ -60,7 +60,7 @@ class UniswapV3TradeService(private val dexType: DexType) : IUniswapTradeService
 
     override fun stop() = Unit
 
-    override suspend fun fetchQuote(
+    suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
         amountIn: BigDecimal

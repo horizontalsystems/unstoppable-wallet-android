@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.swapxxx
 
-import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
     private var tokenOut: Token? = null
     private var quoting = false
     private var quotes: List<SwapProviderQuote> = listOf()
-    private var preferredProvider: SwapMainModule.ISwapProvider? = null
+    private var preferredProvider: ISwapXxxProvider? = null
     private var error: Throwable? = null
     private var quote: SwapProviderQuote? = null
 
@@ -151,7 +151,7 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
         val tokenOut: Token?,
         val quoting: Boolean,
         val quotes: List<SwapProviderQuote>,
-        val preferredProvider: SwapMainModule.ISwapProvider?,
+        val preferredProvider: ISwapXxxProvider?,
         val quoteLifetime: Long,
         val quote: SwapProviderQuote?,
         val error: Throwable?,
