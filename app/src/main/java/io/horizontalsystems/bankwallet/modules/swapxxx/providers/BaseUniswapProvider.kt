@@ -4,6 +4,7 @@ import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldRecipient
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldSlippage
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Address
@@ -28,9 +29,13 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
     ): ISwapQuote {
         val blockchainType = tokenIn.blockchainType
 
-        val fieldRecipient = SwapSettingFieldRecipient(blockchainType, settings)
+        val defaultSlippage = TradeOptions.defaultAllowedSlippage
+        val fieldSlippage = SwapSettingFieldSlippage(settings, defaultSlippage)
+        val fieldRecipient = SwapSettingFieldRecipient(settings, blockchainType)
+
         val tradeOptions = TradeOptions(
-            recipient = fieldRecipient.getEthereumKitAddress()
+            allowedSlippagePercent = fieldSlippage.value ?: defaultSlippage,
+            recipient = fieldRecipient.getEthereumKitAddress(),
         )
 
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
@@ -57,7 +62,7 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
             tradeData.amountOut!!,
             fields,
             feeAmountData,
-            listOf(fieldRecipient)
+            listOf(fieldRecipient, fieldSlippage)
         )
     }
 
