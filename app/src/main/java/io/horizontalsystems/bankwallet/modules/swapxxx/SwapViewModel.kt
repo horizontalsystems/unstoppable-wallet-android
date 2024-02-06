@@ -116,10 +116,6 @@ class SwapViewModel(
         }
     }
 
-    fun getSettingValue(settingId: String): Any? {
-        return settingsService.getSettingValue(settingId)
-    }
-
     fun onSettingError(id: String, error: Throwable?) {
         settingsService.onSettingError(id, error)
     }
@@ -130,6 +126,7 @@ class SwapViewModel(
 
     fun saveSettings() {
         settingsService.save()
+        quoteService.setSwapSettings(settingsService.getSettings())
     }
 
     class Factory : ViewModelProvider.Factory {

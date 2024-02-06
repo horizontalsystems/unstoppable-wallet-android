@@ -17,7 +17,12 @@ import java.math.BigDecimal
 abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
-    final override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
+    final override suspend fun fetchQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        settings: Map<String, Any?>
+    ): ISwapQuote {
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
