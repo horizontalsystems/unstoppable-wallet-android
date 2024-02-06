@@ -38,6 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MultitextM1
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
 class SelectSwapCoinFragment : BaseComposeFragment() {
 
@@ -139,6 +140,9 @@ fun SelectSwapCoinDialogScreen(
                         )
                     }
                 }
+            }
+            item {
+                VSpacer(height = 32.dp)
             }
         }
     }
