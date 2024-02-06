@@ -17,10 +17,9 @@ class SwapQuoteUniswap(
     override val amountOut: BigDecimal,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
+    private val settingFields: List<SwapSettingField>,
 ) : ISwapQuote {
-    override fun getSettingFields(): List<SwapSettingField> {
-        TODO("Not yet implemented")
-    }
+    override fun getSettingFields() = settingFields
 }
 
 class SwapQuoteUniswapV3(
@@ -30,7 +29,8 @@ class SwapQuoteUniswapV3(
     private val blockchainType: BlockchainType,
 ) : ISwapQuote {
     override fun getSettingFields(): List<SwapSettingField> {
-        return listOf(SwapSettingFieldRecipient(blockchainType))
+        TODO()
+//        return listOf(SwapSettingFieldRecipient(blockchainType))
     }
 }
 
@@ -41,6 +41,7 @@ class SwapQuoteOneInch(
     private val blockchainType: BlockchainType,
 ) : ISwapQuote {
     override fun getSettingFields(): List<SwapSettingField> {
-        return listOf(SwapSettingFieldRecipient(blockchainType))
+        TODO()
+//        return listOf(SwapSettingFieldRecipient(blockchainType))
     }
 }

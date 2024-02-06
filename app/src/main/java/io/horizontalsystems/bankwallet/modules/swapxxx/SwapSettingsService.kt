@@ -15,10 +15,6 @@ class SwapSettingsService {
     val saveEnabledFlow: StateFlow<Boolean>
         get() = _saveEnabledFlow.asStateFlow()
 
-    fun getSettingValue(settingId: String): Any? {
-        return settings[settingId]
-    }
-
     fun setSetting(id: String, value: Any?) {
         if (settings[id] == value) {
             modifiedSettings.remove(id)
@@ -55,4 +51,6 @@ class SwapSettingsService {
     private fun isSaveEnabled(): Boolean {
         return errors.isEmpty() && modifiedSettings.isNotEmpty()
     }
+
+    fun getSettings() = settings
 }
