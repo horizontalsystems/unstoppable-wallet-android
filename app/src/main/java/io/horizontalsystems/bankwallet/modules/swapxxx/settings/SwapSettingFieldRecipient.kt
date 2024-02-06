@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 data class SwapSettingFieldRecipient(
-    val blockchainType: BlockchainType,
-    val settings: Map<String, Any?>
+    val settings: Map<String, Any?>,
+    val blockchainType: BlockchainType
 ) : ISwapSettingField {
     override val id = "recipient"
 
