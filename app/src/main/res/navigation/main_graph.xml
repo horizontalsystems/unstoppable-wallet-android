@@ -353,6 +353,9 @@
         android:id="@+id/selectSwapCoinDialog"
         android:name="cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment" />
     <fragment
+        android:id="@+id/swapSelectCoinFragment"
+        android:name="cash.p.terminal.modules.swapxxx.SwapSelectCoinFragment" />
+    <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="cash.p.terminal.modules.balance.token.TokenBalanceFragment" />
     <fragment

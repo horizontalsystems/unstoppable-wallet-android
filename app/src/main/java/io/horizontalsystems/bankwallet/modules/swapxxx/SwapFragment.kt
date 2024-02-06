@@ -43,7 +43,6 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -87,8 +86,8 @@ fun SwapScreen(navController: NavController) {
     )
     val uiState = viewModel.uiState
 
-    val selectToken = { onResult: (SwapMainModule.CoinBalanceItem) -> Unit ->
-        navController.slideFromBottomForResult(R.id.selectSwapCoinDialog, onResult = onResult)
+    val selectToken = { onResult: (Token) -> Unit ->
+        navController.slideFromBottomForResult(R.id.swapSelectCoinFragment, onResult = onResult)
     }
 
     SwapScreenInner(
@@ -96,12 +95,12 @@ fun SwapScreen(navController: NavController) {
         onClickClose = navController::popBackStack,
         onClickCoinFrom = {
             selectToken {
-                viewModel.onSelectTokenIn(it.token)
+                viewModel.onSelectTokenIn(it)
             }
         },
         onClickCoinTo = {
             selectToken {
-                viewModel.onSelectTokenOut(it.token)
+                viewModel.onSelectTokenOut(it)
             }
         },
         onSwitchPairs = viewModel::onSwitchPairs,

@@ -4,7 +4,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -16,11 +21,24 @@ import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.App
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.badge
+import cash.p.terminal.core.getInput
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.B2
+import cash.p.terminal.ui.compose.components.Badge
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.D1
+import cash.p.terminal.ui.compose.components.MultitextM1
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.SearchBar
+import cash.p.terminal.ui.compose.components.SectionUniversalItem
 
 class SelectSwapCoinFragment : BaseComposeFragment() {
 
@@ -30,16 +48,21 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
         if (dex == null) {
             navController.popBackStack()
         } else {
-            SelectSwapCoinDialogScreen(
-                navController = navController,
-                dex = dex,
-                onClickItem = {
-                    navController.setNavigationResultX(it)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        navController.popBackStack()
-                    }, 100)
-                }
+            val viewModel = viewModel<SelectSwapCoinViewModel>(
+                factory = SelectSwapCoinModule.Factory(
+                    dex
+                )
             )
+            SelectSwapCoinDialogScreen(
+                coinBalanceItems = viewModel.coinItems,
+                onSearchTextChanged = viewModel::onEnterQuery,
+                onClose = navController::popBackStack
+            ) {
+                navController.setNavigationResultX(it)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    navController.popBackStack()
+                }, 100)
+            }
         }
     }
 
@@ -68,25 +91,21 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SelectSwapCoinDialogScreen(
-    navController: NavController,
-    dex: SwapMainModule.Dex,
+    coinBalanceItems: List<CoinBalanceItem>,
+    onSearchTextChanged: (String) -> Unit,
+    onClose: () -> Unit,
     onClickItem: (CoinBalanceItem) -> Unit
 ) {
-    val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory(dex))
-    val coinItems = viewModel.coinItems
-
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         SearchBar(
             title = stringResource(R.string.Select_Coins),
             searchHintText = stringResource(R.string.ManageCoins_Search),
-            onClose = { navController.popBackStack() },
-            onSearchTextChanged = {
-                viewModel.onEnterQuery(it)
-            }
+            onClose = onClose,
+            onSearchTextChanged = onSearchTextChanged
         )
 
         LazyColumn {
-            items(coinItems) { coinItem ->
+            items(coinBalanceItems) { coinItem ->
                 SectionUniversalItem(borderTop = true) {
                     RowUniversal(
                         modifier = Modifier
@@ -103,14 +122,25 @@ fun SelectSwapCoinDialogScreen(
                         )
                         Spacer(modifier = Modifier.size(16.dp))
                         MultitextM1(
-                            title = { B2(text = coinItem.token.coin.name) },
+                            title = {
+                                Row {
+                                    B2(text = coinItem.token.coin.name)
+                                    coinItem.token.badge?.let {
+                                        Badge(text = it)
+                                    }
+                                }
+                            },
                             subtitle = { D1(text = coinItem.token.coin.code) }
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         MultitextM1(
                             title = {
                                 coinItem.balance?.let {
-                                    App.numberFormatter.formatCoinFull(it, coinItem.token.coin.code, 8)
+                                    App.numberFormatter.formatCoinFull(
+                                        it,
+                                        coinItem.token.coin.code,
+                                        8
+                                    )
                                 }?.let {
                                     B2(text = it)
                                 }
