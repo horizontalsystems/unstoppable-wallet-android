@@ -109,7 +109,7 @@ fun SwapScreen(navController: NavController) {
             navController.slideFromBottom(R.id.swapSelectProvider)
         },
         onClickProviderSettings = {
-            navController.slideFromRight(R.id.swapProviderSettings)
+            navController.slideFromRight(R.id.swapSettings)
         },
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)

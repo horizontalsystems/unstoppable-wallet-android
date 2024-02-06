@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swapxxx
+package cash.p.terminal.modules.swapxxx.settings
 
 import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow

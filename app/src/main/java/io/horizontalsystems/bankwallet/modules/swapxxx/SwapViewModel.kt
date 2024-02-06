@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingsService
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal

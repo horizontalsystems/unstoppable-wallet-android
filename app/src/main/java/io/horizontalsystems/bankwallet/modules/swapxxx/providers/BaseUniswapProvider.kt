@@ -3,7 +3,7 @@ package cash.p.terminal.modules.swapxxx.providers
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
-import cash.p.terminal.modules.swapxxx.SwapSettingFieldRecipient
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldRecipient
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Address

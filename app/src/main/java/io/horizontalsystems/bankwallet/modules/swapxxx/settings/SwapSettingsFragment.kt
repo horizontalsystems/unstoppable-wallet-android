@@ -1,4 +1,4 @@
-package cash.p.terminal.modules.swapxxx
+package cash.p.terminal.modules.swapxxx.settings
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.modules.swapxxx.SwapViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -21,16 +22,15 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 
-class SwapProviderSettingsFragment : BaseComposeFragment() {
+class SwapSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         SwapProviderSettingsScreen(navController)
     }
-
 }
 
-private @Composable
-fun SwapProviderSettingsScreen(navController: NavController) {
+@Composable
+private fun SwapProviderSettingsScreen(navController: NavController) {
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = navController.previousBackStackEntry!!,
         factory = SwapViewModel.Factory()

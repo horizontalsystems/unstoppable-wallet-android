@@ -1,12 +1,13 @@
 package cash.p.terminal.modules.swapxxx
 
 import cash.p.terminal.modules.send.SendModule
+import cash.p.terminal.modules.swapxxx.settings.ISwapSettingField
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
 interface ISwapQuote {
-    fun getSettingFields() : List<SwapSettingField>
+    fun getSettingFields() : List<ISwapSettingField>
 
     val amountOut: BigDecimal
     val fields: List<SwapDataField>
@@ -17,7 +18,7 @@ class SwapQuoteUniswap(
     override val amountOut: BigDecimal,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
-    private val settingFields: List<SwapSettingField>,
+    private val settingFields: List<ISwapSettingField>,
 ) : ISwapQuote {
     override fun getSettingFields() = settingFields
 }
@@ -28,7 +29,7 @@ class SwapQuoteUniswapV3(
     override val fee: SendModule.AmountData?,
     private val blockchainType: BlockchainType,
 ) : ISwapQuote {
-    override fun getSettingFields(): List<SwapSettingField> {
+    override fun getSettingFields(): List<ISwapSettingField> {
         TODO()
 //        return listOf(SwapSettingFieldRecipient(blockchainType))
     }
@@ -40,7 +41,7 @@ class SwapQuoteOneInch(
     override val fee: SendModule.AmountData?,
     private val blockchainType: BlockchainType,
 ) : ISwapQuote {
-    override fun getSettingFields(): List<SwapSettingField> {
+    override fun getSettingFields(): List<ISwapSettingField> {
         TODO()
 //        return listOf(SwapSettingFieldRecipient(blockchainType))
     }
