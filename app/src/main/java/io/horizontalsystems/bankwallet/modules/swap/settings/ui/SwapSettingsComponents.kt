@@ -49,18 +49,34 @@ import io.horizontalsystems.marketkit.models.TokenType
 fun SlippageAmount(
     slippageViewModel: SwapSlippageViewModel
 ) {
+    SlippageAmount(
+        slippageViewModel.inputFieldPlaceholder,
+        slippageViewModel.initialValue,
+        slippageViewModel.inputButtons,
+        slippageViewModel.errorState?.error
+    ) {
+        slippageViewModel.onChangeText(it)
+    }
+}
+
+@Composable
+fun SlippageAmount(
+    hint: String?,
+    initial: String?,
+    buttons: List<InputButton>,
+    error: Throwable?,
+    onValueChange: (String) -> Unit
+) {
     HeaderText(
         text = stringResource(R.string.SwapSettings_SlippageTitle)
     )
     InputWithButtons(
         modifier = Modifier.padding(horizontal = 16.dp),
-        hint = slippageViewModel.inputFieldPlaceholder,
-        initial = slippageViewModel.initialValue,
-        buttons = slippageViewModel.inputButtons,
-        state = slippageViewModel.errorState,
-        onValueChange = {
-            slippageViewModel.onChangeText(it)
-        }
+        hint = hint,
+        initial = initial,
+        buttons = buttons,
+        state = error?.let { DataState.Error(it) },
+        onValueChange = onValueChange
     )
     InfoText(
         text = stringResource(R.string.SwapSettings_SlippageDescription),
