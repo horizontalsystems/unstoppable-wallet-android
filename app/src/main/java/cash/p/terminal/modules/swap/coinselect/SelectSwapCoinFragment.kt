@@ -39,6 +39,7 @@ import cash.p.terminal.ui.compose.components.MultitextM1
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SectionUniversalItem
+import cash.p.terminal.ui.compose.components.VSpacer
 
 class SelectSwapCoinFragment : BaseComposeFragment() {
 
@@ -161,6 +162,9 @@ fun SelectSwapCoinDialogScreen(
                         )
                     }
                 }
+            }
+            item {
+                VSpacer(height = 32.dp)
             }
         }
     }
