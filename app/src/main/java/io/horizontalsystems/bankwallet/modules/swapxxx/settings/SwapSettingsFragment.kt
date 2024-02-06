@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package io.horizontalsystems.bankwallet.modules.swapxxx.settings
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.swapxxx.SwapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -21,16 +22,15 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
-class SwapProviderSettingsFragment : BaseComposeFragment() {
+class SwapSettingsFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
         SwapProviderSettingsScreen(navController)
     }
-
 }
 
-private @Composable
-fun SwapProviderSettingsScreen(navController: NavController) {
+@Composable
+private fun SwapProviderSettingsScreen(navController: NavController) {
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = navController.previousBackStackEntry!!,
         factory = SwapViewModel.Factory()

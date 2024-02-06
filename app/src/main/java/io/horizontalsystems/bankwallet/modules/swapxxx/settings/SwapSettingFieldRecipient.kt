@@ -1,27 +1,15 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package io.horizontalsystems.bankwallet.modules.swapxxx.settings
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.ethereumkit.models.Address as EthereumKitAddress
-
-interface SwapSettingField {
-    val id: String
-
-    @Composable
-    fun GetContent(
-        navController: NavController,
-        onError: (Throwable?) -> Unit,
-        onValueChange: (Any?) -> Unit
-    )
-}
 
 data class SwapSettingFieldRecipient(
     val blockchainType: BlockchainType,
     val settings: Map<String, Any?>
-) : SwapSettingField {
+) : ISwapSettingField {
     override val id = "recipient"
 
     val value = settings[id] as? Address
@@ -41,11 +29,11 @@ data class SwapSettingFieldRecipient(
         )
     }
 
-    fun getEthereumKitAddress(): EthereumKitAddress? {
+    fun getEthereumKitAddress(): io.horizontalsystems.ethereumkit.models.Address? {
         val hex = value?.hex ?: return null
 
         return try {
-            EthereumKitAddress(hex)
+            io.horizontalsystems.ethereumkit.models.Address(hex)
         } catch (err: Exception) {
             null
         }
