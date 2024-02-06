@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.swapxxx
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -69,14 +68,11 @@ fun SwapProviderSettingsScreen(navController: NavController) {
 
                     settingField.GetContent(
                         navController = navController,
-                        initial = viewModel.getSettingValue(settingId),
                         onError = {
                             viewModel.onSettingError(settingId, it)
-                            Log.e("AAA", "address error: $it")
                         },
                         onValueChange = {
                             viewModel.onSettingEnter(settingId, it)
-                            Log.e("AAA", "Address: $it")
                         }
                     )
                 }

@@ -1,9 +1,9 @@
 package cash.p.terminal.modules.swapxxx.providers
 
-import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
+import cash.p.terminal.modules.swapxxx.SwapSettingFieldRecipient
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Address
@@ -12,6 +12,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.SwapData
+import io.horizontalsystems.uniswapkit.models.TradeOptions
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
@@ -19,11 +20,22 @@ import java.math.BigDecimal
 abstract class BaseUniswapProvider : ISwapXxxProvider {
     private val uniswapKit by lazy { UniswapKit.getInstance() }
 
-    final override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
-        val evmBlockchainHelper = EvmBlockchainHelper(tokenIn.blockchainType)
+    final override suspend fun fetchQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        settings: Map<String, Any?>
+    ): ISwapQuote {
+        val blockchainType = tokenIn.blockchainType
 
+        val fieldRecipient = SwapSettingFieldRecipient(blockchainType, settings)
+        val tradeOptions = TradeOptions(
+            recipient = fieldRecipient.getEthereumKitAddress()
+        )
+
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
         val swapData = swapDataSingle(tokenIn, tokenOut, evmBlockchainHelper).await()
-        val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, SwapTradeOptions().tradeOptions)
+        val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions)
         val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
             uniswapKit.transactionData(
                 receiveAddress,
@@ -41,7 +53,12 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
             }
         }
 
-        return SwapQuoteUniswap(tradeData.amountOut!!, fields, feeAmountData)
+        return SwapQuoteUniswap(
+            tradeData.amountOut!!,
+            fields,
+            feeAmountData,
+            listOf(fieldRecipient)
+        )
     }
 
     private fun swapDataSingle(

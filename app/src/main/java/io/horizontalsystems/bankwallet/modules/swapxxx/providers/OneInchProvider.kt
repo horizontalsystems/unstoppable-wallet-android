@@ -40,7 +40,12 @@ object OneInchProvider : ISwapXxxProvider {
         else -> false
     }
 
-    override suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote {
+    override suspend fun fetchQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        settings: Map<String, Any?>
+    ): ISwapQuote {
         val evmBlockchainHelper = EvmBlockchainHelper(tokenIn.blockchainType)
 
         val quote = oneInchKit.getQuoteAsync(

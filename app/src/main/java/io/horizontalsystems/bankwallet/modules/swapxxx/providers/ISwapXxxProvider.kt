@@ -17,5 +17,10 @@ interface ISwapXxxProvider {
     }
 
     fun supports(blockchainType: BlockchainType): Boolean
-    suspend fun fetchQuote(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal): ISwapQuote
+    suspend fun fetchQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        settings: Map<String, Any?>
+    ): ISwapQuote
 }

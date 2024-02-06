@@ -24,7 +24,12 @@ class SwapProvidersManager {
         UniswapV3Provider,
     )
 
-    suspend fun getQuotes(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal) = coroutineScope {
+    suspend fun getQuotes(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        settings: Map<String, Any?>
+    ) = coroutineScope {
         val providers = allProviders.filter {
             it.supports(tokenIn, tokenOut)
         }
@@ -32,7 +37,7 @@ class SwapProvidersManager {
             .map { provider ->
                 async {
                     try {
-                        val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn)
+                        val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
                         SwapProviderQuote(
                             provider = provider,
                             tokenIn = tokenIn,

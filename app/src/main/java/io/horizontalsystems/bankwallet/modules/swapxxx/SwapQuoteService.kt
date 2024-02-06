@@ -41,6 +41,7 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
     private var quotingJob: Job? = null
     private var scheduleReQuoteJob: Job? = null
+    private var settings: Map<String, Any?> = mapOf()
 
     fun setAmount(v: BigDecimal?) {
         amountIn = v
@@ -117,7 +118,7 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
             emitState()
 
             quotingJob = coroutineScope.launch {
-                quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn).sortedByDescending { it.amountOut }
+                quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn, settings).sortedByDescending { it.amountOut }
                 if (preferredProvider != null && quotes.none { it.provider == preferredProvider}) {
                     preferredProvider = null
                 }
@@ -143,6 +144,11 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
             delay(quoteLifetime)
             runQuotation()
         }
+    }
+
+    fun setSwapSettings(settings: Map<String, Any?>) {
+        this.settings = settings
+        runQuotation()
     }
 
     data class State(
