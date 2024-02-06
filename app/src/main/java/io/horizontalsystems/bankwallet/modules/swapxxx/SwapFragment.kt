@@ -43,7 +43,6 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -87,8 +86,8 @@ fun SwapScreen(navController: NavController) {
     )
     val uiState = viewModel.uiState
 
-    val selectToken = { onResult: (SwapMainModule.CoinBalanceItem) -> Unit ->
-        navController.slideFromBottomForResult(R.id.selectSwapCoinDialog, onResult = onResult)
+    val selectToken = { onResult: (Token) -> Unit ->
+        navController.slideFromBottomForResult(R.id.swapSelectCoinFragment, onResult = onResult)
     }
 
     SwapScreenInner(
@@ -96,12 +95,12 @@ fun SwapScreen(navController: NavController) {
         onClickClose = navController::popBackStack,
         onClickCoinFrom = {
             selectToken {
-                viewModel.onSelectTokenIn(it.token)
+                viewModel.onSelectTokenIn(it)
             }
         },
         onClickCoinTo = {
             selectToken {
-                viewModel.onSelectTokenOut(it.token)
+                viewModel.onSelectTokenOut(it)
             }
         },
         onSwitchPairs = viewModel::onSwitchPairs,

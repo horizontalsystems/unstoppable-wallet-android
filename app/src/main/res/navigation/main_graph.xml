@@ -356,6 +356,9 @@
         android:id="@+id/selectSwapCoinDialog"
         android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment" />
     <fragment
+        android:id="@+id/swapSelectCoinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapSelectCoinFragment" />
+    <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment" />
     <fragment
