@@ -58,7 +58,6 @@
     <string name="Button_TryAgain">Veuillez Réessayer</string>
     <string name="Button_Share">Partager</string>
     <string name="Button_Apply">Appliquer</string>
-    <string name="Button_SetAmount">Définir le montant</string>
     <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
     <string name="Error">Erreur</string>
@@ -156,8 +155,6 @@
     <string name="Market_Field_PriceDiff">Prix</string>
     <string name="Market_Title">Marchés</string>
     <string name="Market_Search">Chercher</string>
-    <string name="Market_Search_Sections_RecentTitle">RÉCENTS</string>
-    <string name="Market_Search_Sections_PopularTitle">POPULAIRE</string>
     <string name="Market_FilterSection_MarketParameters">PARAMÈTRES DE MARCHÉ</string>
     <string name="Market_FilterSection_PriceParameters">PARAMÈTRES DE PRIX</string>
     <string name="Market_FilterSection_NetworkParameters">PARAMETRES DU RÉSEAU</string>
@@ -185,7 +182,6 @@
     <string name="Market_Category_TopCoins_Description">Top des coins par cap de marché</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">Meilleurs secteurs</string>
-    <string name="Market_Overview_Sectors">Secteurs</string>
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Meilleures plateformes</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">Meilleures plateformes blockchain</string>
@@ -304,21 +300,15 @@
     <string name="Balance_NetworkSelectDescription">Choisissez le réseau pour recevoir une adresse.</string>
     <string name="Balance_ReceiveAddressHint">Votre adresse pour le dépôt %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Adresse de la montre de %s</string>
+    <string name="Balance_ReceiveWarningText">Envoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
     <string name="Balance_Receive_AddressFormatDescription">Choisissez un format pour fournir une adresse à recevoir.</string>
     <string name="Balance_Receive_AddressFormat">Format de l\'adresse</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Le format d\'adresse en espèces est préféré pour recevoir Bitcoin Cash (BCH) en raison de son expérience utilisateur améliorée et de sa compatibilité. Cependant, les deux formats d\'adresse peuvent être utilisés de façon interchangeable pour recevoir le BCH, quel que soit le format de l\'adresse de l\'expéditeur.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Le format Native SegWit est préféré dans Bitcoin pour améliorer le débit et la sécurité. Tous les formats d\'adresse (Taproot, SegWit, Legacy) peuvent être utilisés de manière interchangeable pour recevoir BTC quel que soit le format d\'adresse de l\'expéditeur, permettant des transactions transparentes entre différents types de pièces.</string>
     <string name="Balance_Receive_Account">Compte</string>
     <string name="Balance_Receive_NotActive">Non actif</string>
-    <string name="Balance_Receive_Amount">Montant</string>
-    <string name="Balance_Receive_SetAmount">Définir le montant</string>
-    <string name="Balance_Receive_AddressType">Type d\'adresse</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
-    <string name="Balance_Receive_Memo">Mémo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
-    <string name="Balance_Receive_WatchAddressAlert">Cette adresse est l\'adresse du compte surveillé. N\'envoyer que des jetons compatibles avec le réseau.</string>
-    <string name="Balance_Receive_AddressAlert">Seuls les jetons compatibles avec le réseau seront conservés. Les autres seront perdus.</string>
-    <string name="Balance_Receive_AddressMemoAlert">Fournissez le Mémo requis (Tag) et envoyez uniquement des jetons compatibles avec le réseau. D\'autres seront perdus.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <string name="SendNft_Error_NotEnoughtBalance">Solde insuffisant</string>
@@ -395,9 +385,9 @@
     <string name="FeeSettings_GasPrice_Info">Les frais pour effectuer des transactions sur le réseau sont mesurés en unités de gas. Le prix du gas est le montant qu\'un utilisateur est prêt à dépenser par unité de gas. Le prix du gas est élevé lorsque le réseau est encombré, et faible lorsqu\'il est inactif. Souvent, une transaction reste en suspens pendant une période prolongée si le montant du gas est insuffisant.</string>
     <string name="FeeSettings_BaseFee">Frais de base</string>
     <string name="FeeSettings_BaseFee_Info">Le protocole réseau détermine le prix de base par gaz pour chaque bloc, appelé tarif de base. Il varie selon le niveau d\'utilisation du réseau de bloc en bloc. Il peut augmenter ou diminuer de 12,5 % au maximum dans le prochain bloc, ce qui rend les frais plus prévisibles. La valeur affichée ici est le taux de frais de base du bloc actuel.</string>
-    <string name="FeeSettings_MaxFee">Taux de frais max</string>
+    <string name="FeeSettings_MaxFee">Taux de frais max (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">Cela correspond au montant maximal du prix auquel l\'utilisateur achète le gaz. Ce prix doit couvrir le taux minimal des frais de transaction du réseau, il doit aussi devenir la priorité avec laquelle une transaction sera traitée. L\'origine de l\'estimation de la valeur, indiquée ici, se trouve dans une analyse, selon laquelle la valeur serait calculée en ajoutant le taux minimal des frais de transaction du bloc successif à la priorité de l\'utilisateur avec la quelle une transaction sera traitée. Le taux actuel des frais de transaction à payer, sera revu à la baisse et ajusté automatiquement. La fixation du taux du prix en dessous du taux plancher actuel, serait, d\'une part, un soulagement parce qu\'elle limiterait les frais à payer, d\'autre part, il faut compter avec un temps de confirmation moyen plus long des transactions, voire un blocage de la transaction.</string>
-    <string name="FeeSettings_MaxMinerTips">Frais de priorité max</string>
+    <string name="FeeSettings_MaxMinerTips">Frais de priorité max (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Les utilisateurs paient des frais de priorité pour encourager une transaction à être confirmée plus rapidement. Ils sont parfois appelés conseils. Le taux de frais de priorité max est le prix supplémentaire maximum par gaz que l\'utilisateur est prêt à payer en plus du taux de frais de base. La valeur montrée ici est suggérée en fonction des conditions de réseau prévues. Les frais de priorité réels seront normalement inférieurs. Le fait de le définir à zéro peut entraîner un long délai d\'attente pour la confirmation de la transaction, car il est placé à la fin de la file d\'attente des transactions en attente de tous les utilisateurs.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Risqué</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">La transaction risque de rester en attente pendant un certain temps ou d\'échouer complètement.</string>
@@ -610,8 +600,7 @@
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited">%s illimité</string>
     <string name="Transactions_All">Tout</string>
-    <string name="Transactions_Filter_Blockchain">Blockchain</string>
-    <string name="Transactions_Filter_Coin">Pièce</string>
+    <string name="Transactions_Filter_Blockchain">Filtrer par blockchain</string>
     <string name="Transactions_Filter_AllBlockchains">Toutes les blockchains</string>
     <string name="Transactions_Filter_AllCoins">Toutes les pièces</string>
     <string name="Transactions_Filter_ChooseCoin">Choisir la pièce</string>
@@ -624,6 +613,7 @@
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
     <string name="Transactions_Multiple">Multiples</string>
     <string name="Transactions_Filter">Filtre</string>
+    <string name="Transactions_Coins">Pièces</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Masquer les transactions suspectes</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Masquer les transactions entrantes avec des montants infimes en stablecoins, cela résout partiellement les problèmes d\'attaques de poisoning d\'adresse.</string>
     <!--Transaction Info-->
@@ -727,7 +717,6 @@
     <string name="Settings_DonateWith">Donnez avec</string>
     <string name="Settings_Donate_GetAddress">Adresse du don</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
-    <string name="Settings_Donate_OrSelectCoinToDonate">Ou sélectionnez une pièce à faire un don</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
@@ -756,7 +745,6 @@
     <string name="BackupManager_RestoreBackup">Restaurer la sauvegarde</string>
     <string name="BackupManager_CreateBackup">Créer une nouvelle sauvegarde</string>
     <string name="BackupManager_BаckupFile">Fichier de sauvegarde</string>
-    <string name="BackupManager_Wallets">WALLETS</string>
     <string name="BackupManager_Other">AUTRE</string>
     <string name="BackupManager_Restore">Restaurer</string>
     <string name="BackupManager_BackupFileContents">Liste des contenus dans le fichier de sauvegarde.</string>
@@ -819,10 +807,10 @@
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
-    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rapide, sans privé</string>
-    <string name="SettingsSecurity_SyncModeHybridDescription">Slower, pas de privé</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Rapide, Privé, Centralisé</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Ralentissement, privé</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Restauration décentralisée</string>
     <string name="SetDuressPin_Title">Code Duress</string>
     <string name="SetDuressPin_Description">Définir un code d\'accès pour le mode Duress</string>
     <string name="EditDuressPin_Title">Modifier le code de détresse</string>
@@ -936,7 +924,7 @@
     <string name="ManageAccounts_WatchAddress">Adresse à suivre</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">À partir du fichier</string>
-    <string name="ImportWallet_BackupFile_Description">Importez un fichier de sauvegarde depuis votre dossier local.</string>
+    <string name="ImportWallet_BackupFile_Description">Importer depuis un fichier de sauvegarde.</string>
     <string name="ImportWallet_RecoveryPhrase">Voir la phase de récupération</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Importer à l\'aide de la phrase de récupération ou de la clé privée.</string>
     <string name="ImportWallet_ExchangeWallet">depuis Exchange Wallet</string>
@@ -951,11 +939,19 @@
     <string name="ImportBackupFile_EnterPassword_Description">Entrez le mot de passe de sauvegarde pour importer votre portefeuille.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Mot de passe invalide</string>
     <string name="ImportBackupFile_BackupPassword">Mot de passe de sauvegarde</string>
-    <string name="Watch_Address_Hint">Entrez votre EVM, TRON, TON ou adresse publique (Bitcoin, Litecoin, Bitcoin Cash) ou votre compte xPubKey.</string>
+    <string name="Watch_Address_Hint">Adresse ou domaine</string>
+    <string name="Watch_XPubKey_Hint">Entrez Account Extended Public Key</string>
+    <string name="Watch_Address_Description">Disponible uniquement pour Ethereum et autres blockchains EVM prises en charge.</string>
     <string name="Watch_Address_Watch">Suivi</string>
     <string name="Watch_Select_Blockchains">Choisir la blockchain</string>
     <string name="Watch_Select_Coins">Crypto Monnaie</string>
-    <string name="Watch_Error_InvalidAddressFormat">Le format de l\'adresse n\'est pas pris en charge</string>
+    <string name="Watch_By">Par</string>
+    <string name="Watch_WatchBy">Regarder par</string>
+    <string name="Watch_TypeEvmAddress">Adresse EVM</string>
+    <string name="Watch_TypeSolanaAddress">Adresse Solana</string>
+    <string name="Watch_TypeTronAddress">Adresse du Tron</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">xPubKey invalide</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Nom</string>
     <string name="ManageAccount_Save">Sauvegarder</string>
@@ -1107,6 +1103,7 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (recommendé)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
     <!-- Tor -->
@@ -1236,9 +1233,6 @@
     <string name="CoinPage_SignalSmoothing">Lissage du signal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicateurs disponibles uniquement pour les utilisateurs Premium Unstoppable Wallet.</string>
     <string name="CoinPage_AiGeneratedText">Ceci est une description générée par intelligence artificielle basée sur le matériel de référence fourni pour la cryptomonnaie donnée. Elle peut contenir des erreurs.</string>
-    <string name="CoinPage_MarketsLabel_Verified">VÉRIFIÉ</string>
-    <string name="CoinPage_MarketsVerifiedMenu_Verified">Vérifié</string>
-    <string name="CoinPage_MarketsVerifiedMenu_All">Tout</string>
     <string name="CoinAnalytics_CexVolume_Info1">Volume total des échanges pour le jeton sur les principales plateformes d\'échange centralisées au cours d\'une période de 30 jours.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Graphique montrant la variation du volume quotidien de trading du jeton sur les principales plateformes d\'échange centralisées sur une période d\'un an.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Classement du jeton en fonction du volume de négociation sur les principales bourses centralisées au cours d\'une période de 30 jours.</string>
@@ -1264,7 +1258,6 @@
     <string name="CoinAnalytics_TransactionCount_Info5">Le nombre total de jetons transférés sur la blockchain sur la période de 30 jours.</string>
     <string name="CoinAnalytics_Holders_Info1">Nombre total d\'adresses uniques détenant le jeton sur différentes blockchains.</string>
     <string name="CoinAnalytics_Holders_Info2">Top 10 des portefeuilles détenant le jeton sur chaque blockchain.</string>
-    <string name="CoinAnalytics_Holders_TrackedBlockchains">Tracked blockchains: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
     <string name="CoinAnalytics_ProjectTVL_Info1">Total-Value-Locked (ou Acsets Under Management) dans les contrats intelligents du projet.</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">Graphique montrant la variation valeur totale verrouillée dans les contrats intelligents du projet sur une période de 1 an.</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">Rang du token en fonction de la valeur totale verrouillée actuelle.</string>
@@ -1527,7 +1520,6 @@
     <string name="CexDeposit_AddressDescription">Votre adresse pour le dépôt %s</string>
     <string name="CexDeposit_DepositWarning">Envoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
     <string name="CexDeposit_MemoWarning">Mémo (tag) est requis ou vous perdrez vos pièces.\n\nEnvoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
-    <string name="CexDeposit_Important">Important</string>
     <string name="CexDeposit_MemoAlertText">A la fois un mémo (tag) et l\'adresse sont nécessaires pour s\'assurer que les actifs sont reçus. Sinon, vos fonds seront perdus.</string>
     <string name="Cex_Error_FailedToConnectApiKey">Impossible de connecter votre clé API</string>
     <!--Cex Withdraw Module-->
