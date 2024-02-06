@@ -146,7 +146,6 @@
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <string name="Balance_NoCoinsAlert">شما سکه اضافه ای ندارید.\nسکه هایی را که استفاده می کنید اضافه کنید</string>
     <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
-    <string name="Balance_Receive_Amount">مقدار</string>
     <!--Send NFT-->
     <string name="SendNft_Title">ارسال</string>
     <!--Send-->
@@ -550,6 +549,7 @@
     <!-- Import Wallet -->
     <string name="ImportWallet_WatchAddress">مشاهده آدرس</string>
     <!-- Import Backup File -->
+    <string name="Watch_Address_Hint">آدرس یا دامنه</string>
     <string name="Watch_Address_Watch">مشاهده</string>
     <string name="Watch_Select_Blockchains">انتخاب زنجیره های بلوکی</string>
     <string name="Watch_Select_Coins">سکه ها را انتخاب کنید</string>
@@ -655,6 +655,7 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">آدرس نقد (توصیه شده)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">رایج قبل از ۲۰۱۸</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">رایج بعد از ۲۰۱۸</string>
     <!-- Tor -->
