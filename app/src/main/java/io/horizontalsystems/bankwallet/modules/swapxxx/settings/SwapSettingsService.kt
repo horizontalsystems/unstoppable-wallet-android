@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package io.horizontalsystems.bankwallet.modules.swapxxx.settings
 
 import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow

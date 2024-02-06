@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swapxxx.providers
 import io.horizontalsystems.bankwallet.modules.swapxxx.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteUniswap
-import io.horizontalsystems.bankwallet.modules.swapxxx.SwapSettingFieldRecipient
+import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingFieldRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataField
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Address
