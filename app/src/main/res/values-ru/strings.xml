@@ -58,7 +58,6 @@
     <string name="Button_TryAgain">Попробовать ещё раз</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Apply">Применить</string>
-    <string name="Button_SetAmount">Установить сумму</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -158,8 +157,6 @@
     <string name="Market_Field_PriceDiff">Цена</string>
     <string name="Market_Title">Рынки</string>
     <string name="Market_Search">Поиск</string>
-    <string name="Market_Search_Sections_RecentTitle">Недавние</string>
-    <string name="Market_Search_Sections_PopularTitle">ПОПУЛЯРНЫЕ</string>
     <string name="Market_FilterSection_MarketParameters">ПАРАМЕТРЫ РЫНКА</string>
     <string name="Market_FilterSection_PriceParameters">ПАРАМЕТРЫ ЦЕНЫ</string>
     <string name="Market_FilterSection_NetworkParameters">ПАРАМЕТРЫ СЕТИ</string>
@@ -187,7 +184,6 @@
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">Лучшие секторы</string>
-    <string name="Market_Overview_Sectors">Секторы</string>
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Лучшие платформы</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">Лучшие блокчейн-платформы</string>
@@ -306,19 +302,15 @@
     <string name="Balance_NetworkSelectDescription">Выберите сеть для получения адреса.</string>
     <string name="Balance_ReceiveAddressHint">Ваш адрес для депозита %s</string>
     <string name="Balance_ReceiveWatchAddressHint">Отслеживаемый адрес %s</string>
+    <string name="Balance_ReceiveWarningText">Отправка только %s на этот адрес. Отправка других типов токенов на этот адрес приведет к их окончательной потере.</string>
     <string name="Balance_Receive_AddressFormatDescription">Выберите формат для предоставления адреса для получения.</string>
     <string name="Balance_Receive_AddressFormat">Формат адреса</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">Формат Cash Address предпочтителен для получения Bitcoin Cash (BCH) из-за улучшенного пользовательского опыта и совместимости. Однако, оба формата адреса могут использоваться взаимозаменяемо для получения BCH, независимо от формата адреса отправителя.</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Формат Native SegWit предпочтителен в Биткойне для повышения пропускной способности и безопасности. Все форматы адресов (Taproot, SegWit, Legacy) могут использоваться взаимозаменяемо для получения BTC независимо от формата адреса отправителя, что обеспечивает бесперебойные транзакции между различными типами монет.</string>
     <string name="Balance_Receive_Account">Аккаунт</string>
     <string name="Balance_Receive_NotActive">Не активен</string>
-    <string name="Balance_Receive_Amount">Сумма</string>
-    <string name="Balance_Receive_SetAmount">Установить сумму</string>
-    <string name="Balance_Receive_AddressType">Тип адреса</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
-    <string name="Balance_Receive_Memo">Memo(Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
-    <string name="Balance_Receive_AddressMemoAlert">Укажите необходимое мемо (тэг) и отправьте только токены, совместимые с сетью. Другие токены будут потеряны.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <string name="SendNft_Error_NotEnoughtBalance">Недостаточно средств</string>
@@ -395,9 +387,9 @@
     <string name="FeeSettings_GasPrice_Info">Комиссия за сетевую транзакцию измеряется в единицах газа. Цена газа – это сумма, которую пользователь готов заплатить за единицу газа. Когда сеть занята, цены на газ повышаются, а во время простоя они наоборот снижаются. Слишком низкая цена газа зачастую является основанием для длительного сохранения отложенного статуса транзакции.</string>
     <string name="FeeSettings_BaseFee">Базовая комиссия</string>
     <string name="FeeSettings_BaseFee_Info">Сетевой протокол определяет базовую стоимость газа для каждого блока, которая называется базовая ставка комиссии. Он варьирует в зависимости от уровня загрузки сети от блока к блоку. В следующем блоке он может увеличиться или уменьшиться не более чем на 12.5%, что делает взимаемый тариф более предсказуемым. Здесь отражена базовая ставка комиссии текущего блока.</string>
-    <string name="FeeSettings_MaxFee">Макс.ставка комиссии</string>
+    <string name="FeeSettings_MaxFee">Макс. ставка комиссии (Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">Это максимальная общая цена газа, которую пользователь готов заплатить. Она должна покрывать базовую тарифную ставку сети и максимальный приоритетный тариф. Указанное здесь значение предлагается на основе оценки суммы базовой тарифной ставки следующего блока и максимального приоритетного тарифа, выбранного пользователем. Фактический размер платёжного тарифа обычно меньше. Снижение настройки текущего базового тарифа ограничит оплачиваемую сумму тарифа, но приведет к удлинению периода ожидания подтверждения транзакции или даже к ее подвисанию.</string>
-    <string name="FeeSettings_MaxMinerTips">Макс. приоритет. комиссия</string>
+    <string name="FeeSettings_MaxMinerTips">Макс. приоритетная комиссия (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">Пользователи платят приоритетную комиссию, в целях ускорения процесса подтверждения транзакции. Иногда эти тарифы называются чаевыми. Максимальный размер приоритетного сбора - это максимальная дополнительная цена за газ, которую пользователь готов оплатить поверх базовой ставки комиссии. Приведенная здесь стоимость определяется исходя из прогнозируемых сетевых условий. Фактический размер приоритетного тарифа будет меньше. Обнуление этого тарифа может привести к удлинению периода ожидания подтверждения транзакции ввиду её размещения в конце очереди незавершенных транзакций ото всех пользователей.</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">Риски</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">Обработка транзакции может отложиться на некоторое время, или транзакцию могут полностью отклонить.</string>
@@ -610,8 +602,7 @@
     <string name="Transactions_From">от %s</string>
     <string name="Transaction_Unlimited">неограниченно %s</string>
     <string name="Transactions_All">Все</string>
-    <string name="Transactions_Filter_Blockchain">Блокчейн</string>
-    <string name="Transactions_Filter_Coin">Монета</string>
+    <string name="Transactions_Filter_Blockchain">Фильтр по блокчейну</string>
     <string name="Transactions_Filter_AllBlockchains">Все блокчейны</string>
     <string name="Transactions_Filter_AllCoins">Все токены</string>
     <string name="Transactions_Filter_ChooseCoin">Выберите токен</string>
@@ -710,7 +701,7 @@
     <string name="Settings_Appearance">Оформление</string>
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
-    <string name="Settings_AutoLock">Автоблокировка</string>
+    <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
@@ -724,10 +715,9 @@
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_DonateToken">Пожертвовать %s</string>
-    <string name="Settings_DonateWith">Пожертвовать с помощью</string>
-    <string name="Settings_Donate_GetAddress">Адрес для пожертвований</string>
+    <string name="Settings_DonateWith">Поддержи нас</string>
+    <string name="Settings_Donate_GetAddress">Получить адрес</string>
     <string name="Settings_Donate_Addresses">Адреса</string>
-    <string name="Settings_Donate_OrSelectCoinToDonate">Или выберите монету для пожертвования</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Немедленно</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 минута</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 минут</string>
@@ -742,7 +732,7 @@
     <string name="Appearance_BalanceValue">ЗНАЧЕНИЕ БАЛАНСА</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_MarketsTab">Вкладка рынки</string>
-    <string name="Appearance_BalanceAutoHide">Автоматическое скрытие баланса</string>
+    <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения, независимо от предыдущих настроек.</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
@@ -752,8 +742,8 @@
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Настройки блокчейна</string>
     <!-- Backup Manager -->
-    <string name="BackupManager_Title">Менеджер резерв. копирования</string>
-    <string name="BackupManager_RestoreBackup">Восстановить резервную копию</string>
+    <string name="BackupManager_Title">Резерв.копирование</string>
+    <string name="BackupManager_RestoreBackup">Восстановить резерв. копию</string>
     <string name="BackupManager_CreateBackup">Создать новую резерв. копию</string>
     <string name="BackupManager_BаckupFile">Файл резервной копии</string>
     <string name="BackupManager_Wallets">КОШЕЛЬКИ</string>
@@ -789,8 +779,10 @@
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">После смены источника кошелек должен будет снова синхронизироваться.</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька с транзакциями.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">После изменения источника восстановления, кошелек должен будет повторно синхронизироваться с блокчейном.</string>
+    <string name="BtcBlockchainSettings_RestoreSource">Источник восстановления</string>
+    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька. Восстановление из блокчейна занимает значительно больше времени.</string>
+    <string name="BtcBlockchainSettings_RestoreSourceDescription">Этот параметр актуален только при восстановлении существующего кошелька. Это процесс получения истории транзакций для данной монеты, чтобы приложение кошелька могло отображать предыдущие транзакции и определять последний баланс. Это должно произойти только один раз при восстановлении пользователем ранее созданного кошелька. На данный момент у такого мобильного кошелька, как Unstoppable, есть два возможных способа для реализации этого вопроса: \n\n1. С сервера API: существует предопределенный сторонний сервер, на котором размещается вся цепочка блоков, происходит обработка всех данных и их подготовка к быстрому предоставлению. Это быстрый метод, однако он предполагает потенциальное отслеживание IP-адресов и запрашиваемых данных. Этот вариант рекомендуется использовать из-за скорости получения данных (5-10 минут). Он сопряжен с минимальными рисками. Если пользователь восстанавливает данные со своего собственного сервера, то нет никакой угрозы конфиденциальности.\n\n2. Из блокчейна: в этом случае приложение пытается восстановить данные напрямую из p2p-сети узлов блокчейна. Приложение пингует многие из этих узлов и запрашивает у них данные. Потенциально эти узлы могут отслеживать IP-адрес пользователя и сделанные запросы, однако во время восстановления данных приложение может переключаться между узлами. В любое время в сети находится около 10 000 биткойн-узлов. Это медленный вариант обработки данных, она может занять 2-3 часа и приложение должно быть открыто во время их восстановления.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Вводы/Выводы</string>
     <string name="BtcBlockchainSettings_TransactionSettings">Настройки транзакций</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">Вводы / выводы транзакций</string>
@@ -819,7 +811,10 @@
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Быстрый, Конфиденциальный, Централизованный</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Децентрализованное восстановление</string>
     <string name="SetDuressPin_Title">Duress код</string>
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
@@ -918,7 +913,7 @@
     <string name="ManageCoins_BchTypeDescription">Существует 2 формата адресов, которые кошельки Bitcoin Cash могут использовать для приема входящих платежей:\n\n- TYPE 0 (более старый)\n- TYPE 145 (более новый)\n\nХотя кошелек Unstoppable поддерживает оба формата, рекомендуется использовать кошелек Bitcoin Cash, работающий в формате TYPE 145.</string>
     <string name="ManageCoins_ContractAddress">АДРЕС КОНТРАКТА</string>
     <!-- Experimental Feature -->
-    <string name="ExperimentalFeatures_Title">Функции</string>
+    <string name="ExperimentalFeatures_Title">Экспериментальные функции</string>
     <string name="ExperimentalFeatures_Description">Функции ниже являются экспериментальными. Несмотря на то, что мы детально их протестировали, используя наши собственные криптосредства, мы не можем гарантировать, что они всегда будут работать так, как предусмотрено.</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Позволяет отправлять биткойны, которые могут быть потрачены только после указанной даты.\n\nПолучатель такой транзакции должен использовать версию 0.10 приложения Unstoppable Wallet или же более новую версию с форматом адреса BIP44 для Bitcoin.\n\nТолько кошелек Unstoppable может правильно распознать и обработать такие транзакции в сети Bitcoin, и позволить получателю тратить эти биткойны по истечении периода блокировки.\n\nЕсли вы HODLer (долгосрочный инвестор), то вы можете использовать эту функцию для удержания своих биткойнов, отправив их себе. \n\nТак как это экспериментальная функция, максимальная сумма транзакции ограничена 0,5 BTC.</string>
@@ -931,7 +926,7 @@
     <string name="ManageAccounts_WatchAddress">Просмотр кошелька</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">Резервный файл</string>
-    <string name="ImportWallet_BackupFile_Description">Импортируйте файл резервной копии из локальной папки.</string>
+    <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
     <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
     <string name="ImportWallet_ExchangeWallet">с exchange кошелька</string>
@@ -946,11 +941,19 @@
     <string name="ImportBackupFile_EnterPassword_Description">Введите пароль резервной копии для импорта вашего кошелька.</string>
     <string name="ImportBackupFile_Error_InvalidPassword">Неверный пароль</string>
     <string name="ImportBackupFile_BackupPassword">Пароль для резервной копии</string>
-    <string name="Watch_Address_Hint">Введите ваш EVM, TRON, TON или публичный адрес (Bitcoin, Litecoin, Bitcoin Cash) или Account xPubKey.</string>
+    <string name="Watch_Address_Hint">Адрес или домен</string>
+    <string name="Watch_XPubKey_Hint">Введите Account Extended Public Key</string>
+    <string name="Watch_Address_Description">Доступно только для Ethereum и других поддерживаемых EVM блокчейнов.</string>
     <string name="Watch_Address_Watch">Смотреть</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
-    <string name="Watch_Error_InvalidAddressFormat">Формат адреса не поддерживается</string>
+    <string name="Watch_By">По</string>
+    <string name="Watch_WatchBy">Смотреть</string>
+    <string name="Watch_TypeEvmAddress">EVM адрес</string>
+    <string name="Watch_TypeSolanaAddress">Solana адрес</string>
+    <string name="Watch_TypeTronAddress">Tron адрес</string>
+    <string name="Watch_TypeXPubKey">xPubKey аккаунта</string>
+    <string name="Watch_Error_InvalidXPubKey">Неправильный xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
     <string name="ManageAccount_Save">Сохранить</string>
@@ -1102,6 +1105,7 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Источник восстановления</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">После вступления данного изменения в силу кошелек должен будет повторно синхронизироваться с блокчейном %s.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Связь</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">CashAddress (рекомендуется)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">до 2018 года</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">после 2018 года</string>
     <!-- Tor -->
@@ -1231,9 +1235,6 @@
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей Unstoppable кошелька.</string>
     <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
-    <string name="CoinPage_MarketsLabel_Verified">ПОДТВЕРЖДЕННЫЙ</string>
-    <string name="CoinPage_MarketsVerifiedMenu_Verified">Подтверждено</string>
-    <string name="CoinPage_MarketsVerifiedMenu_All">Все</string>
     <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
     <string name="CoinAnalytics_CexVolume_Info2">График, показывающий колебания дневного объема торговли токеном на ведущих централизованных биржах за 1 год.</string>
     <string name="CoinAnalytics_CexVolume_Info3">Рейтинг токена основан на объеме торговли на ведущих централизованных биржах за 30-дневный период.</string>

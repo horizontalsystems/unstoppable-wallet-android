@@ -58,7 +58,6 @@
     <string name="Button_TryAgain">再试一次</string>
     <string name="Button_Share">分享</string>
     <string name="Button_Apply">应用</string>
-    <string name="Button_SetAmount">设定金额</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
@@ -156,8 +155,6 @@
     <string name="Market_Field_PriceDiff">价格</string>
     <string name="Market_Title">市场</string>
     <string name="Market_Search">查询</string>
-    <string name="Market_Search_Sections_RecentTitle">过去的</string>
-    <string name="Market_Search_Sections_PopularTitle">热门</string>
     <string name="Market_FilterSection_MarketParameters">市场参数</string>
     <string name="Market_FilterSection_PriceParameters">价格参数</string>
     <string name="Market_FilterSection_NetworkParameters">网络参数</string>
@@ -185,7 +182,6 @@
     <string name="Market_Category_TopCoins_Description">币种排名描述</string>
     <!--Market Overview-->
     <string name="Market_Overview_TopSectors">前列行业</string>
-    <string name="Market_Overview_Sectors">行业</string>
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">前列平台</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">顶级区块链平台</string>
@@ -304,21 +300,15 @@
     <string name="Balance_NetworkSelectDescription">选择要接收地址的网络。</string>
     <string name="Balance_ReceiveAddressHint">您存放 %s 的地址</string>
     <string name="Balance_ReceiveWatchAddressHint">观看 %s 的地址</string>
+    <string name="Balance_ReceiveWarningText">只发送 %s 到此地址。向此地址发送其他类型的令牌将导致其最终丢失。</string>
     <string name="Balance_Receive_AddressFormatDescription">选择要接收的地址的格式。</string>
     <string name="Balance_Receive_AddressFormat">地址格式</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">现金地址格式更适合接收比特币现金(BCH)，因为它提高了用户体验和兼容性。 然而，无论发件人的地址格式如何，两种地址格式都可以互换地用于接收BCCH。</string>
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">本机SegWit格式是比特币中为了改进输送和安全性而偏爱的。 所有地址格式 (Taproot, SegWit, Legacy) 可以互换使用来接收BTC ，而不论发送者的地址格式。 启用跨越不同种类的无缝交易。</string>
     <string name="Balance_Receive_Account">账户</string>
     <string name="Balance_Receive_NotActive">不活动</string>
-    <string name="Balance_Receive_Amount">金额</string>
-    <string name="Balance_Receive_SetAmount">设定金额</string>
-    <string name="Balance_Receive_AddressType">地址类型</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
-    <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
-    <string name="Balance_Receive_WatchAddressAlert">此地址是监视帐户的地址。仅发送网络兼容的令牌。</string>
-    <string name="Balance_Receive_AddressAlert">仅支持与网络兼容的代币，其他将会丧失。</string>
-    <string name="Balance_Receive_AddressMemoAlert">提供必需的备忘录（标签），并仅发送兼容网络的代币。其他将会丢失。</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <string name="SendNft_Error_NotEnoughtBalance">余额不足</string>
@@ -395,9 +385,9 @@
     <string name="FeeSettings_GasPrice_Info">网上交易费用将按燃料单位计量。燃料价格是用户愿意按单位消费的金额。 当网络忙碌时，燃料价格就高，空闲时价格就低。 燃料价格不足常常是交易被长期搁置的一个原因。</string>
     <string name="FeeSettings_BaseFee">基础费用</string>
     <string name="FeeSettings_BaseFee_Info">网络协议将决定每一个区块的每一燃料（gas）的基础价格，称为基础费率。它根据不同区块的网络利用水平而变化。它可能会在下一个区块中增加或减少不多于12.5%，使得费用更具有可预测性。这里显示的值为当前区块的基础费率。</string>
-    <string name="FeeSettings_MaxFee">最大费率</string>
+    <string name="FeeSettings_MaxFee">最大收费率(Gwei)</string>
     <string name="FeeSettings_MaxFee_Info">这是用户愿意支付的每一燃料（gas）的最高总价。它必须涵盖网络的基础费率和最高优先费率。这里显示的值是基于下一个区块的基础费率加上用户选择的最大优先费率的估计值。实际支付的费率通常会较低。如果将此设置为低于当前的基础费率，将限制所支付的费用，但会导致更长的交易确认等待时间，甚至导致交易被冻结。</string>
-    <string name="FeeSettings_MaxMinerTips">最高优先费用</string>
+    <string name="FeeSettings_MaxMinerTips">最高优先费 (Gwei)</string>
     <string name="FeeSettings_MaxMinerTips_Info">用户支付优先费用以激励交易更快地得到确认。这些费用有时被称为小费。最高优先费率是用户在基础费率基础上愿意支付的每一燃料（gas）的最高额外价格。这里显示的值是基于预测的网络条件的建议值。实际的优先费用通常会更低。将此设置为零可能会导致交易确认的等待时间很长，因为它被放置在所有用户的待定交易队列的末尾。</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy_Title">有风险</string>
     <string name="FeeSettings_RiskOfGettingStuckLegacy">交易可能会在一段时间内仍然处于待处理状态或完全失败。</string>
@@ -610,8 +600,7 @@
     <string name="Transactions_From">发送人%s</string>
     <string name="Transaction_Unlimited">无限%s</string>
     <string name="Transactions_All">所有</string>
-    <string name="Transactions_Filter_Blockchain">Blockchain</string>
-    <string name="Transactions_Filter_Coin">硬币</string>
+    <string name="Transactions_Filter_Blockchain">按区块链过滤</string>
     <string name="Transactions_Filter_AllBlockchains">所有Blockchains</string>
     <string name="Transactions_Filter_AllCoins">所有硬币</string>
     <string name="Transactions_Filter_ChooseCoin">选择代币</string>
@@ -725,9 +714,7 @@
     <string name="Settings_Donate">捐助</string>
     <string name="Settings_DonateToken">捐赠%s</string>
     <string name="Settings_DonateWith">捐赠方式</string>
-    <string name="Settings_Donate_GetAddress">捐款地址</string>
     <string name="Settings_Donate_Addresses">地址</string>
-    <string name="Settings_Donate_OrSelectCoinToDonate">或选择一种币进行捐赠</string>
     <string name="SettingsSecurity_AutoLock_Immediate">即时的</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 分钟</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 分钟</string>
@@ -789,13 +776,10 @@
     <string name="AddEvmSyncSource_Warning_UrlExists">此网址的 RPC 源已存在</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">输入的URL无效。有效网址必须具有以下方案之一： http，https，ws，wss</string>
     <!--Btc Blockchain Settings -->
-    <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">在更改源后，钱包将必须重新同步自己。</string>
-    <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">通过交易为恢复钱包选择数据源。</string>
     <string name="BtcBlockchainSettings_InputsOutputs">输入/输出</string>
     <string name="BtcBlockchainSettings_TransactionSettings">交易设置</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputs">交易输入 / 输出</string>
     <string name="BtcBlockchainSettings_TransactionInputsOutputsSettingsDescription">通过改变交易结构的方式使您的BTC、LTC、BCH交易更难被追踪。</string>
-    <string name="BtcBlockchainSettings_TransactionInputsOutputsDescription">大多数比特币交易，以及比特币现金、Dash和莱特币等加密货币的交易，都会产生两种输出。一种输出是发送给接收者的数量，另一个是返回给发送者的找零输出。大多数钱包构造交易的方式使第三方很容易理解哪些输出发送给了接收方，哪些是返回给发送方的找零。当返回给发送方的输出稍后用于未来的交易时，这两个交易之间的连接就变得明显了。\n\nUnstoppable钱包实施了一些措施，让人们更难弄清楚哪些输出流向了哪里。\n\n对于Unstoppable用户有两种选项可用：\n\n1. 随机变换：每一交易的交易输出顺序均实现了随机化。有时候便令可能是第一个输出，有时可能是第二个。如果用户信任应用的开发者，那么可以考虑这一推荐选项。\n\n2. 确定性：有一个共同商定的交易输出顺序标准（称为BIP69）。在开源钱包中，该标准确保钱包用户不需要信任应用程序开发者如何实现输出顺序。由于这个标准非常新，还没有太多钱包对其进行了实现。因此，有可能可以看到在一个区块链上的一个交易是否是从使用或不使用该标准的钱包上发送。</string>
     <!--Info screen-->
     <string name="Info_Title">信息</string>
     <!--Setting_Security-->
@@ -819,10 +803,9 @@
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
-    <string name="SettingsSecurity_SyncModeBlockchairDescription">快速，不私密</string>
-    <string name="SettingsSecurity_SyncModeHybridDescription">慢，无隐私</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">快速、私密、中心化</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">慢，私密</string>
     <string name="SetDuressPin_Title">密码错误</string>
     <string name="SetDuressPin_Description">设置口令模式密码</string>
     <string name="EditDuressPin_Title">编辑货币密码</string>
@@ -934,7 +917,7 @@
     <string name="ManageAccounts_WatchAddress">观察地址</string>
     <!-- Import Wallet -->
     <string name="ImportWallet_BackupFile">从文件</string>
-    <string name="ImportWallet_BackupFile_Description">从本地文件夹导入备份文件。</string>
+    <string name="ImportWallet_BackupFile_Description">从备份文件导入.</string>
     <string name="ImportWallet_RecoveryPhrase">恢复短语</string>
     <string name="ImportWallet_RecoveryPhrase_Description">使用恢复短语或私钥导入。</string>
     <string name="ImportWallet_ExchangeWallet">来自Exchange 钱包</string>
@@ -949,11 +932,19 @@
     <string name="ImportBackupFile_EnterPassword_Description">输入备份密码以导入您的钱包。</string>
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
-    <string name="Watch_Address_Hint">输入您的EVM, TRON, TON或公共地址 (Bitcoin, Litecoin, 比特币现金) 或账户 xPubkey 。</string>
+    <string name="Watch_Address_Hint">地址或域名</string>
+    <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
+    <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
     <string name="Watch_Address_Watch">观察</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
-    <string name="Watch_Error_InvalidAddressFormat">不支持的地址格式</string>
+    <string name="Watch_By">由</string>
+    <string name="Watch_WatchBy">观看者</string>
+    <string name="Watch_TypeEvmAddress">EVM 地址</string>
+    <string name="Watch_TypeSolanaAddress">Solana 地址</string>
+    <string name="Watch_TypeTronAddress">Tron 地址</string>
+    <string name="Watch_TypeXPubKey">Account xPubKey</string>
+    <string name="Watch_Error_InvalidXPubKey">无效的 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
@@ -1105,6 +1096,7 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
+    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">资金地址（推荐）</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018年之前常用</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
     <!-- Tor -->
@@ -1234,26 +1226,19 @@
     <string name="CoinPage_SignalSmoothing">信号平滑化</string>
     <string name="CoinPage_IndicatorsAlertText">指标仅适用于不可阻止的钱包高级用户。</string>
     <string name="CoinPage_AiGeneratedText">这是一个基于给定的加密货币所提供的参考材料生成的 AI 描述。它可能包含错误。</string>
-    <string name="CoinPage_MarketsLabel_Verified">验证</string>
-    <string name="CoinPage_MarketsVerifiedMenu_Verified">已验证</string>
-    <string name="CoinPage_MarketsVerifiedMenu_All">所有</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">图表显示了过去一年内该代币在主要中心化交易所的日交易量变化。</string>
     <string name="CoinAnalytics_CexVolume_Info3">代币的排名基于过去30天内在主要中心化交易所的交易量。</string>
     <string name="CoinAnalytics_CexVolume_Info4">根据中心化交易所24小时/7天/1个月间隔的交易量排名的所有代币列表。</string>
-    <string name="CoinAnalytics_DexVolume_Info1">30天内最大的分散交易的交易总交易量。</string>
     <string name="CoinAnalytics_DexVolume_Info2">图表显示了过去一年内该代币在主要去中心化交易所的日交易量变化。</string>
-    <string name="CoinAnalytics_DexVolume_Info3">Token的等级基于30天内主要分散交易的交易量。</string>
     <string name="CoinAnalytics_DexVolume_Info4">根据去中心化交易所24小时/7天/1个月间隔的交易量排名的所有代币列表。</string>
     <string name="CoinAnalytics_DexVolume_TrackedDexes">正在追踪的DEX：</string>
     <string name="CoinAnalytics_DexLiquidity_Info1">该代币在主要去中心化交易所当前可用的总流动性。</string>
     <string name="CoinAnalytics_DexLiquidity_Info2">图表显示了过去一年内该代币在主要去中心化交易所可用流动性的变化。</string>
     <string name="CoinAnalytics_DexLiquidity_Info3">根据在主要去中心化交易所的代币可用流动性排名的所有代币列表。</string>
     <string name="CoinAnalytics_DexLiquidity_TrackedDexes">正在追踪的DEX：</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info1">24小时内独特的每日活动地址总数。</string>
     <string name="CoinAnalytics_ActiveAddresses_Info2">图表显示了过去一年内每日活跃地址数量的变化。</string>
     <string name="CoinAnalytics_ActiveAddresses_Info3">过去30天内与代币进行交易的独特区块链地址的总数。</string>
-    <string name="CoinAnalytics_ActiveAddresses_Info4">代币等级基于使用代币30天交易的有效钱包数量。</string>
     <string name="CoinAnalytics_ActiveAddresses_Info5">根据24小时/7天/1个月时间段内与代币进行交易的每日活跃地址数量排名的所有代币列表。</string>
     <string name="CoinAnalytics_TransactionCount_Info1">Total number of unique blockchain transactions with tokens over a 30-day period.</string>
     <string name="CoinAnalytics_TransactionCount_Info2">显示1年周期的交易计数变化的图表。</string>
@@ -1263,7 +1248,6 @@
     <string name="CoinAnalytics_Holders_Info1">在各种区块链上持有代币的唯一地址的总数。</string>
     <string name="CoinAnalytics_Holders_Info2">在每一个区块链上持有代币的前10大钱包。</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">已追踪区块链：以太坊、币安智能链、Optimism、Arbitrum、Celo、Cronos、Avalanche、Fantom、Polygon</string>
-    <string name="CoinAnalytics_ProjectTVL_Info1">项目智能合同中的总价值锁定(或正在管理中的资产)。</string>
     <string name="CoinAnalytics_ProjectTVL_Info2">图表显示了过去一年内项目智能合约中锁定总价值的变化。</string>
     <string name="CoinAnalytics_ProjectTVL_Info3">代币的排名基于当前的锁定总价值。</string>
     <string name="CoinAnalytics_ProjectTVL_Info4">基于当前锁定总价值排名的所有代币的列表。</string>
