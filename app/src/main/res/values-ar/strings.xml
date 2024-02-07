@@ -114,6 +114,7 @@
     <string name="SendNft_Title">إرسال</string>
     <!--Send-->
     <string name="Send_Advanced">إعدادات متقدمة</string>
+    <string name="Send_Utxo_Change">تغيير</string>
     <string name="Send_Confirmation_Title">تأكيد</string>
     <string name="Send_Confirmation_Send_Button">إرسال</string>
     <string name="Send_DialogProceed">التالي</string>
