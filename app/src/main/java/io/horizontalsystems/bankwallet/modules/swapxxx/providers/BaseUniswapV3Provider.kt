@@ -70,6 +70,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
 
         return SwapQuoteUniswapV3(
             amountOut,
+            tradeDataV3.priceImpact,
             fields,
             feeAmountData,
             listOf(fieldRecipient, fieldSlippage, fieldDeadline)

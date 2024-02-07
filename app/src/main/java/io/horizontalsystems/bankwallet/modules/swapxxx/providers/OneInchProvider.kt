@@ -64,7 +64,13 @@ object OneInchProvider : ISwapXxxProvider {
         }.await()
 
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuoteOneInch(amountOut, listOf(), null, listOf(fieldRecipient, fieldSlippage))
+        return SwapQuoteOneInch(
+            amountOut,
+            null,
+            listOf(),
+            null,
+            listOf(fieldRecipient, fieldSlippage)
+        )
     }
 
     private fun getTokenAddress(token: Token) = when (val tokenType = token.type) {

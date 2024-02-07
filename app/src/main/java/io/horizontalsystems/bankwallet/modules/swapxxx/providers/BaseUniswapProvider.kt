@@ -62,6 +62,7 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
 
         return SwapQuoteUniswap(
             tradeData.amountOut!!,
+            tradeData.priceImpact,
             fields,
             feeAmountData,
             listOf(fieldRecipient, fieldSlippage, fieldDeadline)

@@ -19,6 +19,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -43,6 +45,7 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
+import cash.p.terminal.modules.swap.getPriceImpactColor
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -219,6 +222,9 @@ private fun SwapScreenInner(
                     quote.fields.forEach {
                         it.GetContent()
                     }
+                    quote.priceImpact?.let {
+                        PriceImpactField(it)
+                    }
                 }
             }
         }
@@ -237,6 +243,47 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
             }
         )
     }
+}
+
+@Composable
+private fun PriceImpactField(priceImpact: BigDecimal) {
+    val viewItem = PriceImpactViewHelper.getPriceImpactViewItem(priceImpact)
+
+    val infoTitle = stringResource(id = R.string.SwapInfo_PriceImpactTitle)
+    val infoText = stringResource(id = R.string.SwapInfo_PriceImpactDescription)
+
+    QuoteInfoRow(
+        title = {
+            subhead2_grey(text = stringResource(R.string.Swap_PriceImpact))
+
+            Image(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .clickable(
+                        onClick = {
+//                            navController.slideFromBottom(
+//                                R.id.feeSettingsInfoDialog,
+//                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
+//                            )
+                        },
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    )
+                ,
+                painter = painterResource(id = R.drawable.ic_info_20),
+                contentDescription = ""
+            )
+        },
+        value = {
+            Text(
+                text = viewItem.value,
+                style = ComposeAppTheme.typography.subhead2,
+                color = getPriceImpactColor(viewItem.level),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    )
 }
 
 @Composable
