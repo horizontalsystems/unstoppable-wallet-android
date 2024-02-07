@@ -70,7 +70,6 @@
     <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
     <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">资产解绑</string>
     <string name="Intro_Wallet_Screen2Description">请勿绑定您自己，也不要让别人对您这样做.</string>
     <string name="Intro_Wallet_Screen3Title">进入无国界</string>
@@ -132,7 +131,6 @@
     <string name="Restore_PrivateKey_InvalidKey">错误密钥</string>
     <string name="Select_Coins">选择货币</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
-    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">%s 生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
@@ -171,9 +169,7 @@
     <string name="Market_TvlDeFi">DeFi锁定</string>
     <string name="Market_DeFiCap">DeFi市值</string>
     <string name="Market_SeeAll">更多</string>
-    <string name="Market_PoweredByApi">Powered By CoinGeko API</string>
     <string name="Market_PoweredByHorizontalApi">水平API支持</string>
-    <string name="Market_PoweredByDefiLlamaApi">Powered By DefiLlama API</string>
     <string name="Market_Tab_Overview">行情</string>
     <string name="Market_Tab_Posts">发现</string>
     <string name="Market_Tab_Watchlist">关注</string>
@@ -277,7 +273,6 @@
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">正在同步...</string>
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_AddCoins">添加代币</string>
     <string name="Balance_AddCoin">添加代币</string>
@@ -300,7 +295,6 @@
     <string name="Balance_NetworkSelectDescription">选择要接收地址的网络。</string>
     <string name="Balance_ReceiveAddressHint">您存放 %s 的地址</string>
     <string name="Balance_ReceiveWatchAddressHint">观看 %s 的地址</string>
-    <string name="Balance_ReceiveWarningText">只发送 %s 到此地址。向此地址发送其他类型的令牌将导致其最终丢失。</string>
     <string name="Balance_Receive_AddressFormatDescription">选择要接收的地址的格式。</string>
     <string name="Balance_Receive_AddressFormat">地址格式</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">现金地址格式更适合接收比特币现金(BCH)，因为它提高了用户体验和兼容性。 然而，无论发件人的地址格式如何，两种地址格式都可以互换地用于接收BCCH。</string>
@@ -321,6 +315,7 @@
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Advanced">高级</string>
     <string name="Send_Hodler_Description">时间锁（TimeLock）只适用于发送到BIP44地址（从1开始)</string>
+    <string name="Send_Utxo_Change">更改</string>
     <string name="Send_Confirmation_Title">确认</string>
     <string name="Send_Confirmation_Domain">域名</string>
     <string name="Send_Confirmation_YouSend">您发送</string>
@@ -601,6 +596,7 @@
     <string name="Transaction_Unlimited">无限%s</string>
     <string name="Transactions_All">所有</string>
     <string name="Transactions_Filter_Blockchain">按区块链过滤</string>
+    <string name="Transactions_Filter_Coin">硬币</string>
     <string name="Transactions_Filter_AllBlockchains">所有Blockchains</string>
     <string name="Transactions_Filter_AllCoins">所有硬币</string>
     <string name="Transactions_Filter_ChooseCoin">选择代币</string>
@@ -704,7 +700,6 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>
     <string name="Settings_PersonalSupport_Account">账户</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">已申请</string>
     <string name="Settings_PersonalSupport_Request">请求</string>
     <string name="Settings_PersonalSupport_NewRequest">新建请求</string>
@@ -769,7 +764,6 @@
     <string name="EvmNetwork_Added">已添加</string>
     <string name="EvmNetwork_SyncMode">同步模式</string>
     <!--Add RPC Source-->
-    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">添加 RPC 源</string>
     <string name="AddEvmSyncSource_Name">名称</string>
     <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
@@ -799,13 +793,11 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
-    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">快速、私密、中心化</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
+    <string name="SettingsSecurity_SyncModeBlockchain">按区块链过滤</string>
     <string name="SetDuressPin_Title">密码错误</string>
     <string name="SetDuressPin_Description">设置口令模式密码</string>
     <string name="EditDuressPin_Title">编辑货币密码</string>
@@ -838,7 +830,6 @@
     <string name="SettingsTerms_Bugs">这个应用程序的代码可能会出现未发现的软件问题，可能导致应用程序故障。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系我们</string>
     <!--Setting_Notifications-->
@@ -933,18 +924,9 @@
     <string name="ImportBackupFile_Error_InvalidPassword">无效密码</string>
     <string name="ImportBackupFile_BackupPassword">备份密码</string>
     <string name="Watch_Address_Hint">地址或域名</string>
-    <string name="Watch_XPubKey_Hint">輸入 Account Extended Public Key</string>
-    <string name="Watch_Address_Description">仅供以太坊和其他支持 EVM 区块链使用。</string>
     <string name="Watch_Address_Watch">观察</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
-    <string name="Watch_By">由</string>
-    <string name="Watch_WatchBy">观看者</string>
-    <string name="Watch_TypeEvmAddress">EVM 地址</string>
-    <string name="Watch_TypeSolanaAddress">Solana 地址</string>
-    <string name="Watch_TypeTronAddress">Tron 地址</string>
-    <string name="Watch_TypeXPubKey">Account xPubKey</string>
-    <string name="Watch_Error_InvalidXPubKey">无效的 xPubKey</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
@@ -1017,7 +999,6 @@
     <string name="EvmPrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。请不要与任何人分享。</string>
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
     <!-- Private Keys -->
@@ -1025,7 +1006,6 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">授予对基于加密货币的EVM的完全控制，即在相应钱包内的以太坊、币安智能链等。</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">授予对相应钱包上的资产的完全控制。</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
     <!-- Public Keys -->
@@ -1074,15 +1054,13 @@
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_CoinCode">代币代码</string>
     <string name="AddToken_Decimals">小数</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">焦炭类型</string>
     <string name="AddToken_AlreadyAdded">已经加入</string>
     <string name="AddToken_AddressOrSymbol">智能合约地址</string>
     <string name="AddToken_ChooseToken">选择代币</string>
-    <string name="AddToken_Blockchain">Blockchain</string>
+    <string name="AddToken_Blockchain">按区块链过滤</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidContractAddress">请输入正确的合约地址</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
     <string name="AddEvmToken_Bep2NotFound">找不到 BEP2 符号</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">在 %s 区块链中找不到合同地址</string>
     <!-- Address Format Settings List -->
@@ -1096,7 +1074,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">恢复参数</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">此更改后，钱包将必须与 %s 区块链重新同步。</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">通信</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">资金地址（推荐）</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">2018年之前常用</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">2018年之后常用</string>
     <!-- Tor -->
@@ -1158,7 +1135,6 @@
     <string name="CoinPage_Categories">分类</string>
     <string name="CoinPage_Contracts">合约</string>
     <string name="CoinPage_Blockchains">区块链</string>
-    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">代币平台选择</string>
     <string name="CoinPage_Links">链接</string>
     <string name="CoinPage_Guide">指南</string>
@@ -1226,6 +1202,8 @@
     <string name="CoinPage_SignalSmoothing">信号平滑化</string>
     <string name="CoinPage_IndicatorsAlertText">指标仅适用于不可阻止的钱包高级用户。</string>
     <string name="CoinPage_AiGeneratedText">这是一个基于给定的加密货币所提供的参考材料生成的 AI 描述。它可能包含错误。</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">已验证</string>
+    <string name="CoinPage_MarketsVerifiedMenu_All">所有</string>
     <string name="CoinAnalytics_CexVolume_Info1">Total trading volume for the token on leading centralized exchanges over 30-day period.</string>
     <string name="CoinAnalytics_CexVolume_Info2">图表显示了过去一年内该代币在主要中心化交易所的日交易量变化。</string>
     <string name="CoinAnalytics_CexVolume_Info3">代币的排名基于过去30天内在主要中心化交易所的交易量。</string>
@@ -1317,6 +1295,7 @@
     <string name="Coin_Analytics_Period_8h">8 小时</string>
     <string name="Coin_Analytics_Period_1d">1天</string>
     <string name="Coin_Analytics_Period_1w">1周</string>
+    <string name="Coin_Analytics_Period_1m">1月</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">强烈建议买入</string>
     <string name="Coin_Analytics_Indicators_StrongSell">强烈建议卖出</string>
     <string name="Coin_Analytics_Indicators_Sell">出售</string>
@@ -1379,7 +1358,6 @@
     <string name="NftCollection_AveragePrice">全部时间平均值</string>
     <string name="NftCollection_ItemsCount">%d条新闻</string>
     <string name="NftCollection_TodaysSales">今天的卖家</string>
-    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s 每NFT</string>
     <string name="NftCollection_Royalty">荣耀</string>
     <string name="NftCollection_InceptionDate">起始日期</string>
@@ -1416,7 +1394,6 @@
     <string name="ReleaseNotes_FollowUs">关注我们</string>
     <string name="CoinPage_Chart_Locked">锁住</string>
     <string name="ProUsersInfo_Title">专业用户</string>
-    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">附加令牌信息</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
