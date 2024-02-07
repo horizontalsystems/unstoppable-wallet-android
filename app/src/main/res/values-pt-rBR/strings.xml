@@ -317,7 +317,6 @@
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
     <string name="Balance_Receive_WatchAddressAlert">Esse endereço é o endereço da conta observada. Envie apenas tokens compatíveis com a rede.</string>
-    <string name="Balance_Receive_AddressAlert">Apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
     <string name="Balance_Receive_AddressMemoAlert">Forneça o Memo necessário (Tag) e envie apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>

@@ -113,16 +113,11 @@ class DepositAddressViewModel(
         return items
     }
 
-    private fun getAlertText(hasMemo: Boolean): ReceiveModule.AlertText {
-        return when {
-            hasMemo -> ReceiveModule.AlertText.Critical(
-                Translator.getString(R.string.Balance_Receive_AddressMemoAlert)
-            )
-
-            else -> ReceiveModule.AlertText.Normal(
-                Translator.getString(R.string.Balance_Receive_AddressAlert)
-            )
-        }
+    private fun getAlertText(hasMemo: Boolean): ReceiveModule.AlertText? {
+        return if (hasMemo) ReceiveModule.AlertText.Critical(
+            Translator.getString(R.string.Balance_Receive_AddressMemoAlert)
+        )
+        else null
     }
 
     fun onErrorClick() {
