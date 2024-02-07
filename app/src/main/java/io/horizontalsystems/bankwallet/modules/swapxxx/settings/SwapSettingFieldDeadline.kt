@@ -20,6 +20,8 @@ data class SwapSettingFieldDeadline(
 
     val value = settings[id] as? Long
 
+    fun valueOrDefault() = value ?: defaultTtl
+
     @Composable
     override fun GetContent(
         navController: NavController,

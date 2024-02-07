@@ -35,8 +35,8 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
         val fieldDeadline = SwapSettingFieldDeadline(settings, TradeOptions.defaultTtl)
 
         val tradeOptions = TradeOptions(
-            allowedSlippagePercent = fieldSlippage.value ?: TradeOptions.defaultAllowedSlippage,
-            ttl = fieldDeadline.value ?: TradeOptions.defaultTtl,
+            allowedSlippagePercent = fieldSlippage.valueOrDefault(),
+            ttl = fieldDeadline.valueOrDefault(),
             recipient = fieldRecipient.getEthereumKitAddress(),
         )
 
