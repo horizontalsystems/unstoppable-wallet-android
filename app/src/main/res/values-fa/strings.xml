@@ -154,6 +154,7 @@
     <string name="Send_Fee">هزينه</string>
     <string name="Send_Button_Paste">چسباندن</string>
     <string name="Send_Button_Max">حداکثر</string>
+    <string name="Send_Utxo_Change">تغییر</string>
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_Domain">دامنه</string>
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
@@ -655,7 +656,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">آدرس نقد (توصیه شده)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">رایج قبل از ۲۰۱۸</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">رایج بعد از ۲۰۱۸</string>
     <!-- Tor -->
@@ -682,6 +682,7 @@
     <string name="CoinPage_Performance_Month"> 1Month </string>
     <string name="Coin_Analytics_Details">جزئیات</string>
     <string name="Coin_Analytics_Period_1h">۱ ساعت</string>
+    <string name="Coin_Analytics_Period_1m">۱ ماه</string>
     <string name="ActivateSubscription_Address">آدرس</string>
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
     <string name="Nfts_PriceType_Days_30">30 دی اوت</string>
