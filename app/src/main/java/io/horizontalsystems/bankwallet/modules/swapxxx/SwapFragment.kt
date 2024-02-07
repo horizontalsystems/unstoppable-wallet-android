@@ -45,6 +45,7 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
+import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.getPriceImpactColor
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.ui.compose.ColoredTextStyle
@@ -222,9 +223,7 @@ private fun SwapScreenInner(
                     quote.fields.forEach {
                         it.GetContent()
                     }
-                    quote.priceImpact?.let {
-                        PriceImpactField(it)
-                    }
+                    PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel)
                 }
             }
         }
@@ -246,8 +245,11 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 }
 
 @Composable
-private fun PriceImpactField(priceImpact: BigDecimal) {
-    val viewItem = PriceImpactViewHelper.getPriceImpactViewItem(priceImpact)
+private fun PriceImpactField(
+    priceImpact: BigDecimal?,
+    priceImpactLevel: SwapMainModule.PriceImpactLevel?
+) {
+    if (priceImpact == null || priceImpactLevel == null) return
 
     val infoTitle = stringResource(id = R.string.SwapInfo_PriceImpactTitle)
     val infoText = stringResource(id = R.string.SwapInfo_PriceImpactDescription)
@@ -276,9 +278,9 @@ private fun PriceImpactField(priceImpact: BigDecimal) {
         },
         value = {
             Text(
-                text = viewItem.value,
+                text = stringResource(R.string.Swap_Percent, priceImpact * BigDecimal.valueOf(-1)),
                 style = ComposeAppTheme.typography.subhead2,
-                color = getPriceImpactColor(viewItem.level),
+                color = getPriceImpactColor(priceImpactLevel),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
