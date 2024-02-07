@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swapxxx.SwapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -53,6 +54,21 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                 ),
             )
         },
+        bottomBar = {
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(id = R.string.SwapSettings_Apply),
+                    enabled = viewModel.saveSettingsEnabled,
+                    onClick = {
+                        viewModel.saveSettings()
+                        navController.popBackStack()
+                    }
+                )
+            }
+        },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         LazyColumn(
@@ -79,17 +95,6 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
             }
 
             item {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(id = R.string.SwapSettings_Apply),
-                    enabled = viewModel.saveSettingsEnabled,
-                    onClick = {
-                        viewModel.saveSettings()
-                        navController.popBackStack()
-                    }
-                )
             }
         }
     }
