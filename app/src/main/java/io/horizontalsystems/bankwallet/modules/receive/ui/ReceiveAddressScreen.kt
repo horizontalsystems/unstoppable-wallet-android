@@ -175,7 +175,9 @@ fun ReceiveAddressScreen(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                 ) {
                                     VSpacer(12.dp)
-                                    WarningTextView(uiState.alertText)
+                                    uiState.alertText?.let {
+                                        WarningTextView(it)
+                                    }
                                     VSpacer(12.dp)
                                     Column(
                                         modifier = Modifier

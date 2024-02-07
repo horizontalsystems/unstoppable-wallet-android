@@ -35,7 +35,7 @@ object ReceiveModule {
         val watchAccount: Boolean,
         val additionalItems: List<AdditionalData>,
         val amount: BigDecimal?,
-        val alertText: AlertText,
+        val alertText: AlertText?,
     )
 
     sealed class AlertText {

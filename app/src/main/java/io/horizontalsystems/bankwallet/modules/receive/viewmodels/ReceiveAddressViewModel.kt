@@ -40,7 +40,7 @@ class ReceiveAddressViewModel(
     private var networkName = ""
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
-    private var alertText: ReceiveModule.AlertText = getAlertText(watchAccount)
+    private var alertText: ReceiveModule.AlertText? = getAlertText(watchAccount)
 
     var uiState by mutableStateOf(
         ReceiveModule.UiState(
@@ -92,15 +92,11 @@ class ReceiveAddressViewModel(
         syncState()
     }
 
-    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText {
-        return when {
-            watchAccount -> ReceiveModule.AlertText.Normal(
-                Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
-            )
-            else -> ReceiveModule.AlertText.Normal(
-                Translator.getString(R.string.Balance_Receive_AddressAlert)
-            )
-        }
+    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? {
+        return if (watchAccount) ReceiveModule.AlertText.Normal(
+            Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
+        )
+        else null
     }
 
     private fun setData() {
