@@ -1133,6 +1133,7 @@
     <string name="Coin_Analytics_Period_1h">1 saat</string>
     <string name="Coin_Analytics_Period_1m">1 ay</string>
     <string name="Coin_Analytics_Indicators_NoData">Veri Yok</string>
+    <string name="CoinAnalytics_CountItems">%d adet</string>
     <string name="ActivateSubscription_Wallet">Cüzdanı</string>
     <string name="ActivateSubscription_Address">Adres</string>
     <string name="ActivateSubscription_MessageToSign">İmza için mesaj</string>
