@@ -1310,6 +1310,7 @@
     <string name="Coin_Analytics_Indicators_Buy">매수</string>
     <string name="Coin_Analytics_Indicators_Neutral">보통</string>
     <string name="Coin_Analytics_Indicators_NoData">데이터 없음</string>
+    <string name="CoinAnalytics_CountItems">%d 아이템</string>
     <string name="ActivateSubscription_Title">활성화</string>
     <string name="ActivateSubscription_Wallet">지갑</string>
     <string name="ActivateSubscription_Address">주소</string>
