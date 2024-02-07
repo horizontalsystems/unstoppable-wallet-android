@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.HSCaution
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingsService
 import io.horizontalsystems.marketkit.models.Token
@@ -16,11 +18,13 @@ import java.math.BigDecimal
 class SwapViewModel(
     private val quoteService: SwapQuoteService,
     private val balanceService: TokenBalanceService,
-    private val settingsService: SwapSettingsService
+    private val settingsService: SwapSettingsService,
+    private val priceImpactService: PriceImpactService
 ) : ViewModel() {
 
     private var quoteState = quoteService.stateFlow.value
     private var availableBalance = balanceService.balanceFlow.value
+    private var priceImpactState = priceImpactService.stateFlow.value
 
     var uiState: SwapUiState by mutableStateOf(
         SwapUiState(
@@ -34,7 +38,10 @@ class SwapViewModel(
             quoteLifetime = quoteState.quoteLifetime,
             quote = quoteState.quote,
             error = quoteState.error,
-            availableBalance = availableBalance
+            availableBalance = availableBalance,
+            priceImpact = priceImpactState.priceImpact,
+            priceImpactLevel = priceImpactState.priceImpactLevel,
+            priceImpactCaution = priceImpactState.priceImpactCaution,
         )
     )
         private set
@@ -50,6 +57,11 @@ class SwapViewModel(
                 handleUpdatedBalance(it)
             }
         }
+        viewModelScope.launch {
+            priceImpactService.stateFlow.collect {
+                handleUpdatedPriceImpactState(it)
+            }
+        }
     }
 
     private fun handleUpdatedBalance(balance: BigDecimal?) {
@@ -62,6 +74,13 @@ class SwapViewModel(
         this.quoteState = quoteState
 
         balanceService.setToken(quoteState.tokenIn)
+        priceImpactService.setPriceImpact(quoteState.quote?.priceImpact, quoteState.quote?.provider?.title)
+
+        emitState()
+    }
+
+    private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
+        this.priceImpactState = priceImpactState
 
         emitState()
     }
@@ -99,7 +118,10 @@ class SwapViewModel(
                 quoteLifetime = quoteState.quoteLifetime,
                 quote = quoteState.quote,
                 error = quoteState.error,
-                availableBalance = availableBalance
+                availableBalance = availableBalance,
+                priceImpact = priceImpactState.priceImpact,
+                priceImpactLevel = priceImpactState.priceImpactLevel,
+                priceImpactCaution = priceImpactState.priceImpactCaution
             )
         }
     }
@@ -135,10 +157,11 @@ class SwapViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = SwapQuoteService(SwapProvidersManager())
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
+            val priceImpactService = PriceImpactService()
 
             val swapSettingsService = SwapSettingsService()
 
-            return SwapViewModel(swapQuoteService, tokenBalanceService, swapSettingsService) as T
+            return SwapViewModel(swapQuoteService, tokenBalanceService, swapSettingsService, priceImpactService) as T
         }
     }
 }
@@ -154,5 +177,8 @@ data class SwapUiState(
     val quoteLifetime: Long,
     val quote: SwapProviderQuote?,
     val error: Throwable?,
-    val availableBalance: BigDecimal?
+    val availableBalance: BigDecimal?,
+    val priceImpact: BigDecimal?,
+    val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    val priceImpactCaution: HSCaution?
 )
