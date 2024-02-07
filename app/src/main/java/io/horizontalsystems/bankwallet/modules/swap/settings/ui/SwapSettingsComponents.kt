@@ -85,18 +85,34 @@ fun SlippageAmount(
 
 @Composable
 fun TransactionDeadlineInput(deadlineViewModel: SwapDeadlineViewModel) {
+    TransactionDeadlineInput(
+        deadlineViewModel.inputFieldPlaceholder,
+        deadlineViewModel.initialValue,
+        deadlineViewModel.inputButtons,
+        deadlineViewModel.errorState?.error
+    ) {
+        deadlineViewModel.onChangeText(it)
+    }
+}
+
+@Composable
+fun TransactionDeadlineInput(
+    hint: String,
+    initial: String?,
+    buttons: List<InputButton>,
+    error: Throwable?,
+    onValueChange: (String) -> Unit,
+) {
     HeaderText(
         text = stringResource(R.string.SwapSettings_DeadlineTitle)
     )
     InputWithButtons(
         modifier = Modifier.padding(horizontal = 16.dp),
-        hint = deadlineViewModel.inputFieldPlaceholder,
-        initial = deadlineViewModel.initialValue,
-        buttons = deadlineViewModel.inputButtons,
-        state = deadlineViewModel.errorState,
-        onValueChange = {
-            deadlineViewModel.onChangeText(it)
-        }
+        hint = hint,
+        initial = initial,
+        buttons = buttons,
+        state = error?.let { DataState.Error(it) },
+        onValueChange = onValueChange
     )
     InfoText(
         text = stringResource(R.string.SwapSettings_DeadlineDescription),
