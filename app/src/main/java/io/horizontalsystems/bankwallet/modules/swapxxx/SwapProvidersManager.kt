@@ -66,4 +66,5 @@ data class SwapProviderQuote(
     val amountOut by swapQuote::amountOut
     val fee by swapQuote::fee
     val fields by swapQuote::fields
+    val priceImpact by swapQuote::priceImpact
 }

@@ -7,6 +7,7 @@ import java.math.BigDecimal
 
 interface ISwapQuote {
     val amountOut: BigDecimal
+    val priceImpact: BigDecimal?
     val fields: List<SwapDataField>
     val fee: SendModule.AmountData?
     val settingFields: List<ISwapSettingField>
@@ -14,6 +15,7 @@ interface ISwapQuote {
 
 class SwapQuoteUniswap(
     override val amountOut: BigDecimal,
+    override val priceImpact: BigDecimal?,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
     override val settingFields: List<ISwapSettingField>,
@@ -21,6 +23,7 @@ class SwapQuoteUniswap(
 
 class SwapQuoteUniswapV3(
     override val amountOut: BigDecimal,
+    override val priceImpact: BigDecimal?,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
     override val settingFields: List<ISwapSettingField>,
@@ -28,6 +31,7 @@ class SwapQuoteUniswapV3(
 
 class SwapQuoteOneInch(
     override val amountOut: BigDecimal,
+    override val priceImpact: BigDecimal?,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
     override val settingFields: List<ISwapSettingField>,
