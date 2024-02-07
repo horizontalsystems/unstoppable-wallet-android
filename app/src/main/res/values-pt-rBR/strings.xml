@@ -1287,6 +1287,7 @@
     <string name="Coin_Analytics_Indicators_Buy">Comprar</string>
     <string name="Coin_Analytics_Indicators_Neutral">Neutra</string>
     <string name="Coin_Analytics_Indicators_NoData">Sem dados</string>
+    <string name="CoinAnalytics_CountItems">%d Itens</string>
     <string name="ActivateSubscription_Title">Ativar</string>
     <string name="ActivateSubscription_Wallet">Carteira</string>
     <string name="ActivateSubscription_Address">Endereço</string>
