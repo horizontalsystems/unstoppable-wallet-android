@@ -79,10 +79,10 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
             }
 
             viewModel.uiState.quote?.swapQuote?.let { swapQuote ->
-                items(swapQuote.settingFields) { settingField ->
-                    val settingId = settingField.id
+                items(swapQuote.settings) { setting ->
+                    val settingId = setting.id
 
-                    settingField.GetContent(
+                    setting.GetContent(
                         navController = navController,
                         onError = {
                             viewModel.onSettingError(settingId, it)

@@ -3,7 +3,7 @@ package cash.p.terminal.modules.swapxxx.settings
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
-interface ISwapSettingField {
+interface ISwapSetting {
     val id: String
 
     @Composable

@@ -7,8 +7,8 @@ import cash.p.terminal.modules.swap.scaleUp
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteOneInch
-import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldRecipient
-import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldSlippage
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -51,8 +51,8 @@ object OneInchProvider : ISwapXxxProvider {
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
-        val fieldRecipient = SwapSettingFieldRecipient(settings, blockchainType)
-        val fieldSlippage = SwapSettingFieldSlippage(settings, BigDecimal("1"))
+        val settingRecipient = SwapSettingRecipient(settings, blockchainType)
+        val settingSlippage = SwapSettingSlippage(settings, BigDecimal("1"))
 
         val quote = oneInchKit.getQuoteAsync(
             chain = evmBlockchainHelper.chain,
@@ -69,7 +69,7 @@ object OneInchProvider : ISwapXxxProvider {
             null,
             listOf(),
             null,
-            listOf(fieldRecipient, fieldSlippage)
+            listOf(settingRecipient, settingSlippage)
         )
     }
 

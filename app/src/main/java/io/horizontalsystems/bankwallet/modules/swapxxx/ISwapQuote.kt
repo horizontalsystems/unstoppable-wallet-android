@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.swapxxx
 
 import cash.p.terminal.modules.send.SendModule
-import cash.p.terminal.modules.swapxxx.settings.ISwapSettingField
+import cash.p.terminal.modules.swapxxx.settings.ISwapSetting
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import java.math.BigDecimal
 
@@ -10,7 +10,7 @@ interface ISwapQuote {
     val priceImpact: BigDecimal?
     val fields: List<SwapDataField>
     val fee: SendModule.AmountData?
-    val settingFields: List<ISwapSettingField>
+    val settings: List<ISwapSetting>
 }
 
 class SwapQuoteUniswap(
@@ -18,7 +18,7 @@ class SwapQuoteUniswap(
     override val priceImpact: BigDecimal?,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
-    override val settingFields: List<ISwapSettingField>,
+    override val settings: List<ISwapSetting>,
 ) : ISwapQuote
 
 class SwapQuoteUniswapV3(
@@ -26,7 +26,7 @@ class SwapQuoteUniswapV3(
     override val priceImpact: BigDecimal?,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
-    override val settingFields: List<ISwapSettingField>,
+    override val settings: List<ISwapSetting>,
 ) : ISwapQuote
 
 class SwapQuoteOneInch(
@@ -34,5 +34,5 @@ class SwapQuoteOneInch(
     override val priceImpact: BigDecimal?,
     override val fields: List<SwapDataField>,
     override val fee: SendModule.AmountData?,
-    override val settingFields: List<ISwapSettingField>,
+    override val settings: List<ISwapSetting>,
 ) : ISwapQuote

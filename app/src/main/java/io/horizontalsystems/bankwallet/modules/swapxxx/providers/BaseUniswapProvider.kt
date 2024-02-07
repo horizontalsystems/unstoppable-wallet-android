@@ -3,9 +3,9 @@ package cash.p.terminal.modules.swapxxx.providers
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
-import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldDeadline
-import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldRecipient
-import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldSlippage
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Address
@@ -30,14 +30,14 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
     ): ISwapQuote {
         val blockchainType = tokenIn.blockchainType
 
-        val fieldRecipient = SwapSettingFieldRecipient(settings, blockchainType)
-        val fieldSlippage = SwapSettingFieldSlippage(settings, TradeOptions.defaultAllowedSlippage)
-        val fieldDeadline = SwapSettingFieldDeadline(settings, TradeOptions.defaultTtl)
+        val settingRecipient = SwapSettingRecipient(settings, blockchainType)
+        val settingSlippage = SwapSettingSlippage(settings, TradeOptions.defaultAllowedSlippage)
+        val settingDeadline = SwapSettingDeadline(settings, TradeOptions.defaultTtl)
 
         val tradeOptions = TradeOptions(
-            allowedSlippagePercent = fieldSlippage.valueOrDefault(),
-            ttl = fieldDeadline.valueOrDefault(),
-            recipient = fieldRecipient.getEthereumKitAddress(),
+            allowedSlippagePercent = settingSlippage.valueOrDefault(),
+            ttl = settingDeadline.valueOrDefault(),
+            recipient = settingRecipient.getEthereumKitAddress(),
         )
 
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
@@ -65,7 +65,7 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
             tradeData.priceImpact,
             fields,
             feeAmountData,
-            listOf(fieldRecipient, fieldSlippage, fieldDeadline)
+            listOf(settingRecipient, settingSlippage, settingDeadline)
         )
     }
 

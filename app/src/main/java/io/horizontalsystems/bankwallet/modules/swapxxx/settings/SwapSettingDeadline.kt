@@ -12,10 +12,10 @@ import cash.p.terminal.modules.swap.settings.ui.TransactionDeadlineInput
 import io.reactivex.subjects.PublishSubject
 import java.util.Optional
 
-data class SwapSettingFieldDeadline(
+data class SwapSettingDeadline(
     val settings: Map<String, Any?>,
     val defaultTtl: Long,
-) : ISwapSettingField {
+) : ISwapSetting {
     override val id = "deadline"
 
     val value = settings[id] as? Long
