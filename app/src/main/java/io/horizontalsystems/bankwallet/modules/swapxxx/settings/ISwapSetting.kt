@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.swapxxx.settings
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 
-interface ISwapSettingField {
+interface ISwapSetting {
     val id: String
 
     @Composable

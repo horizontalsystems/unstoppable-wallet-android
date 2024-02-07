@@ -12,10 +12,10 @@ import io.horizontalsystems.bankwallet.modules.swap.settings.ui.TransactionDeadl
 import io.reactivex.subjects.PublishSubject
 import java.util.Optional
 
-data class SwapSettingFieldDeadline(
+data class SwapSettingDeadline(
     val settings: Map<String, Any?>,
     val defaultTtl: Long,
-) : ISwapSettingField {
+) : ISwapSetting {
     override val id = "deadline"
 
     val value = settings[id] as? Long

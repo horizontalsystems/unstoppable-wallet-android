@@ -6,10 +6,10 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-data class SwapSettingFieldRecipient(
+data class SwapSettingRecipient(
     val settings: Map<String, Any?>,
     val blockchainType: BlockchainType
-) : ISwapSettingField {
+) : ISwapSetting {
     override val id = "recipient"
 
     val value = settings[id] as? Address

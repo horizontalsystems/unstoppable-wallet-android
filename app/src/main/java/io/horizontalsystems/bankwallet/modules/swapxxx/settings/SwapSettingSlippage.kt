@@ -13,10 +13,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarn
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 
-data class SwapSettingFieldSlippage(
+data class SwapSettingSlippage(
     val settings: Map<String, Any?>,
     val defaultSlippage: BigDecimal
-) : ISwapSettingField {
+) : ISwapSetting {
     override val id = "slippage"
 
     val value = settings[id] as? BigDecimal
