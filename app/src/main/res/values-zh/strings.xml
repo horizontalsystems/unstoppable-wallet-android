@@ -1302,6 +1302,7 @@
     <string name="Coin_Analytics_Indicators_Buy">购买</string>
     <string name="Coin_Analytics_Indicators_Neutral">中性</string>
     <string name="Coin_Analytics_Indicators_NoData">无数据</string>
+    <string name="CoinAnalytics_CountItems">%d条新闻</string>
     <string name="ActivateSubscription_Title">激活</string>
     <string name="ActivateSubscription_Wallet">钱包</string>
     <string name="ActivateSubscription_Address">地址</string>
