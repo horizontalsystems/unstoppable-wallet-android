@@ -21,6 +21,8 @@ data class SwapSettingFieldSlippage(
 
     val value = settings[id] as? BigDecimal
 
+    fun valueOrDefault() = value ?: defaultSlippage
+
     @Composable
     override fun GetContent(
         navController: NavController,
