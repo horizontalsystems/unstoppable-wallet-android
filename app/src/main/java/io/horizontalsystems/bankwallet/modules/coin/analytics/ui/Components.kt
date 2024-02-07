@@ -103,6 +103,7 @@ fun AnalyticsContentNumber(
 fun AnalyticsFooterCell(
     title: BoxItem,
     value: BoxItem?,
+    showRightArrow: Boolean,
     showTopDivider: Boolean = true,
     cellAction: CoinAnalyticsModule.ActionType?,
     onActionClick: (CoinAnalyticsModule.ActionType) -> Unit
@@ -134,7 +135,7 @@ fun AnalyticsFooterCell(
             )
         }
 
-        if (cellAction != null) {
+        if (showRightArrow) {
             HSpacer(8.dp)
             Image(
                 painter = painterResource(id = R.drawable.ic_arrow_right),
@@ -340,18 +341,21 @@ private fun Preview_HoldersBlockLocked() {
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Blockchain 1")),
                     value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)),
+                    showRightArrow = true,
                     cellAction = CoinAnalyticsModule.ActionType.Preview,
                     onActionClick = {}
                 )
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Blockchain 2")),
                     value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)),
+                    showRightArrow = true,
                     cellAction = CoinAnalyticsModule.ActionType.Preview,
                     onActionClick = {}
                 )
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Blockchain 3")),
                     value = BoxItem.Value(stringResource(R.string.CoinAnalytics_ThreeDots)),
+                    showRightArrow = true,
                     cellAction = CoinAnalyticsModule.ActionType.Preview,
                     onActionClick = {}
                 )
@@ -383,6 +387,7 @@ private fun Preview_AnalyticsBarChartDisabled() {
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("30-Day Rank")),
                     value = BoxItem.Value("•••"),
+                    showRightArrow = true,
                     cellAction = CoinAnalyticsModule.ActionType.Preview,
                     onActionClick = {}
                 )
@@ -417,6 +422,7 @@ private fun Preview_AnalyticsLineChartDisabled() {
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("30-Day Rank")),
                     value = BoxItem.Value("#19"),
+                    showRightArrow = true,
                     cellAction = CoinAnalyticsModule.ActionType.Preview,
                     onActionClick = {}
                 )
@@ -456,12 +462,14 @@ private fun Preview_HoldersBlock() {
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Chain 1")),
                     value = BoxItem.Value("•••"),
+                    showRightArrow = true,
                     cellAction = CoinAnalyticsModule.ActionType.Preview,
                     onActionClick = {}
                 )
                 AnalyticsFooterCell(
                     title = BoxItem.Title(TranslatableString.PlainString("Chain 2")),
                     value = BoxItem.Value("•••"),
+                    showRightArrow = true,
                     cellAction = CoinAnalyticsModule.ActionType.Preview,
                     onActionClick = {}
                 )
@@ -497,6 +505,7 @@ private fun Preview_AnalyticsRatingScale() {
                         CoinAnalyticsModule.ActionType.OpenOverallScoreInfo(ScoreCategory.CexScoreCategory)
                     ),
                     value = BoxItem.OverallScoreValue(OverallScore.Fair),
+                    showRightArrow = false,
                     cellAction = null,
                     onActionClick = {}
                 )

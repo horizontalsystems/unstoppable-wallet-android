@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.core.NoAuthTokenException
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.marketkit.models.Analytics
@@ -16,9 +15,9 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.TokenType
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.rx2.await
 
 class CoinAnalyticsService(
     val fullCoin: FullCoin,
@@ -28,11 +27,9 @@ class CoinAnalyticsService(
     private val subscriptionManager: SubscriptionManager,
     private val accountManager: IAccountManager,
 ) {
-    private val disposables = CompositeDisposable()
 
-    private val stateSubject = BehaviorSubject.create<DataState<AnalyticData>>()
-    val stateObservable: Observable<DataState<AnalyticData>>
-        get() = stateSubject
+    private val _stateFlow = MutableStateFlow<DataState<AnalyticData>>(DataState.Loading)
+    val stateFlow: Flow<DataState<AnalyticData>> = _stateFlow
 
     val currency: Currency
         get() = currencyManager.baseCurrency
@@ -51,6 +48,10 @@ class CoinAnalyticsService(
         }
     }
 
+    fun blockchain(uid: String): Blockchain? {
+        return marketKit.blockchain(uid)
+    }
+
     fun blockchains(uids: List<String>): List<Blockchain> {
         return marketKit.blockchains(uids)
     }
@@ -61,32 +62,28 @@ class CoinAnalyticsService(
         }
     }
 
-    fun refresh() {
+    suspend fun refresh() {
         fetch()
     }
 
-    fun stop() {
-        disposables.clear()
-    }
-
-    private fun fetch() {
+    private suspend fun fetch() {
         if (!subscriptionManager.hasSubscription()) {
             preview()
         } else {
-            stateSubject.onNext(DataState.Loading)
+            _stateFlow.emit(DataState.Loading)
 
-            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code, apiTag)
-                .subscribeIO({ item ->
-                    stateSubject.onNext(DataState.Success(AnalyticData(analytics = item)))
-                }, {
-                    handleError(it)
-                }).let {
-                    disposables.add(it)
-                }
+            try {
+                marketKit.analyticsSingle(fullCoin.coin.uid, currency.code, apiTag).await()
+                    .let {
+                        _stateFlow.emit(DataState.Success(AnalyticData(analytics = it)))
+                    }
+            } catch (error: Throwable) {
+                handleError(error)
+            }
         }
     }
 
-    private fun handleError(error: Throwable) {
+    private suspend fun handleError(error: Throwable) {
         when (error) {
             is NoAuthTokenException,
             is InvalidAuthTokenException -> {
@@ -94,24 +91,24 @@ class CoinAnalyticsService(
             }
 
             else -> {
-                stateSubject.onNext(DataState.Error(error))
+                _stateFlow.emit(DataState.Error(error))
             }
         }
     }
 
-    private fun preview() {
+    private suspend fun preview() {
         val addresses = accountManager.accounts.mapNotNull {
             it.type.evmAddress(App.evmBlockchainManager.getChain(BlockchainType.Ethereum))?.hex
         }
 
-        marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses, apiTag)
-            .subscribeIO({ item ->
-                stateSubject.onNext(DataState.Success(AnalyticData(analyticsPreview = item)))
-            }, {
-                stateSubject.onNext(DataState.Error(it))
-            }).let {
-                disposables.add(it)
-            }
+        try {
+            marketKit.analyticsPreviewSingle(fullCoin.coin.uid, addresses, apiTag).await()
+                .let {
+                    _stateFlow.emit(DataState.Success(AnalyticData(analyticsPreview = it)))
+                }
+        } catch (error: Throwable) {
+            _stateFlow.emit(DataState.Error(error))
+        }
     }
 
     data class AnalyticData(

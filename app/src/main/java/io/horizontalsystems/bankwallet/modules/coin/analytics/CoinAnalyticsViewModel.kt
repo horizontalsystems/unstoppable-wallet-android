@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.brandColor
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -27,11 +26,14 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModul
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.BoxItem.TitleWithInfo
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.BoxItem.Value
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ChartViewItem
-import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.FooterItem
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.FooterType.DetectorFooterItem
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.FooterType.FooterItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.PreviewBlockViewItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.PreviewChartType
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
+import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueItemParcelable
+import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueParcelable
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorData
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorService
@@ -45,16 +47,17 @@ import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.AnalyticsPreview
+import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.util.Locale
 
 class CoinAnalyticsViewModel(
     private val service: CoinAnalyticsService,
@@ -63,8 +66,6 @@ class CoinAnalyticsViewModel(
     private val numberFormatter: IAppNumberFormatter,
     private val code: String
 ) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
 
     private val currency = service.currency
     val coin: Coin
@@ -81,9 +82,9 @@ class CoinAnalyticsViewModel(
         private set
 
     init {
-        service.stateObservable
-            .subscribeIO { state ->
-                when (state) {
+        viewModelScope.launch(Dispatchers.IO) {
+            service.stateFlow.collect {
+                when (it) {
                     is DataState.Loading -> {
                         viewState = ViewState.Loading
                         syncState()
@@ -91,22 +92,20 @@ class CoinAnalyticsViewModel(
 
                     is DataState.Success -> {
                         viewState = ViewState.Success
-                        cachedAnalyticData = state.data
-                        analyticsViewItem = viewItem(state.data)
+                        cachedAnalyticData = it.data
+                        analyticsViewItem = viewItem(it.data)
                         syncState()
                     }
 
                     is DataState.Error -> {
-                        viewState = ViewState.Error(state.error)
+                        viewState = ViewState.Error(it.error)
                         syncState()
                     }
                 }
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             service.start()
         }
 
@@ -114,8 +113,8 @@ class CoinAnalyticsViewModel(
     }
 
     fun refresh() {
-        service.refresh()
         viewModelScope.launch {
+            service.refresh()
             isRefreshing = true
             syncState()
             delay(1000)
@@ -124,13 +123,11 @@ class CoinAnalyticsViewModel(
         }
     }
 
-    override fun onCleared() {
-        disposables.clear()
-    }
-
     fun onPeriodChange(period: HsPointTimePeriod) {
         techIndicatorPeriod = period
-        syncState()
+        viewModelScope.launch {
+            syncState()
+        }
         fetchTechnicalIndicators()
     }
 
@@ -153,16 +150,15 @@ class CoinAnalyticsViewModel(
             DataState.Loading -> {}
             null -> {}
         }
-        withContext(Dispatchers.Main) {
-            cachedAnalyticData?.let {
-                analyticsViewItem = viewItem(it)
-            }
-            syncState()
+
+        cachedAnalyticData?.let {
+            analyticsViewItem = viewItem(it)
         }
+        syncState()
     }
 
-    private fun syncState() {
-        viewModelScope.launch {
+    private suspend fun syncState() {
+        withContext(Dispatchers.Main) {
             uiState = CoinAnalyticsModule.UiState(
                 viewState = viewState,
                 viewItem = analyticsViewItem,
@@ -495,6 +491,56 @@ class CoinAnalyticsViewModel(
                     )
                 )
             }
+
+            analytics.issues?.let { issues ->
+                val detectorFooterItems = mutableListOf<DetectorFooterItem>()
+
+                issues.forEach { blockchainIssues ->
+                    val blockchain = service.blockchain(blockchainIssues.blockchain)
+                    val blockchainTitle = blockchain?.name
+                        ?: blockchainIssues.blockchain.replaceFirstChar { it.uppercase(Locale.getDefault()) }
+                    val icon = blockchain?.type?.imageUrl?.let {
+                            ImageSource.Remote(it, R.drawable.coin_placeholder)
+                        } ?: ImageSource.Local(R.drawable.coin_placeholder)
+                    detectorFooterItems.add(
+                        DetectorFooterItem(
+                            title = IconTitle(
+                                icon,
+                                TranslatableString.PlainString(blockchainTitle)
+                            ),
+                            value = Value(Translator.getString(R.string.CoinAnalytics_CountItems, blockchainIssues.issues.size)),
+                            action = ActionType.OpenDetectorsDetails(
+                                title = blockchainTitle,
+                                issues = blockchainIssues.issues.map {
+                                    IssueParcelable(
+                                        issue = it.issue,
+                                        title = it.title,
+                                        description = it.description,
+                                        issues = it.issues?.map { issueItem ->
+                                            IssueItemParcelable(
+                                                impact = issueItem.impact,
+                                                confidence = issueItem.confidence,
+                                                description = issueItem.description
+                                            )
+                                        }
+                                    )
+                                }
+                            ),
+                            issues = getIssueSnippet(blockchainIssues.issues)
+                        )
+                    )
+                }
+                blocks.add(
+                    BlockViewItem(
+                        title = R.string.CoinAnalytics_SmartContractAnalysis,
+                        info = null,
+                        analyticChart = null,
+                        footerItems = detectorFooterItems,
+                        sectionDescription = Translator.getString(R.string.CoinAnalytics_PoweredByDeFi)
+                    )
+                )
+            }
+
             if (service.auditAddresses.isNotEmpty()) {
                 footerItems.add(
                     FooterItem(
@@ -516,6 +562,55 @@ class CoinAnalyticsViewModel(
         }
 
         return blocks
+    }
+
+    private fun getIssueSnippet(issues: List<BlockchainIssues.Issue>): List<CoinAnalyticsModule.IssueSnippet> {
+        var high = 0
+        var medium = 0
+        var low = 0
+        issues.forEach { issue ->
+            issue.issues?.forEach { issueItem ->
+                when (issueItem.impact) {
+                    "Critical" -> high++
+                    "High" -> medium++
+                    "Low" -> low++
+                }
+            }
+        }
+        val snippets = mutableListOf<CoinAnalyticsModule.IssueSnippet>()
+        if (high > 0) {
+            snippets.add(
+                issueSnippet(high, CoinAnalyticsModule.IssueType.High)
+            )
+        }
+        if (medium > 0) {
+            snippets.add(
+                issueSnippet(medium, CoinAnalyticsModule.IssueType.Medium)
+            )
+        }
+        if (low > 0) {
+            snippets.add(
+                issueSnippet(low, CoinAnalyticsModule.IssueType.Attention)
+            )
+        }
+
+        return snippets
+    }
+
+    private fun issueSnippet(
+        count: Int,
+        type: CoinAnalyticsModule.IssueType
+    ): CoinAnalyticsModule.IssueSnippet {
+        val title = when (type) {
+            CoinAnalyticsModule.IssueType.High -> R.string.CoinAnalytics_HighRiskItems
+            CoinAnalyticsModule.IssueType.Medium -> R.string.CoinAnalytics_MediumRiskItems
+            CoinAnalyticsModule.IssueType.Attention -> R.string.CoinAnalytics_AttentionRequired
+        }
+        return CoinAnalyticsModule.IssueSnippet(
+            title = title,
+            count = count.toString(),
+            type = type
+        )
     }
 
     private fun getRatingFooterItem(ratingString: String?, scoreCategory: ScoreCategory): FooterItem? {
