@@ -1,9 +1,11 @@
 package cash.p.terminal.modules.swapxxx.providers
 
-import cash.p.terminal.modules.swap.settings.uniswap.SwapTradeOptions
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswapV3
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldDeadline
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldRecipient
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldSlippage
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -12,6 +14,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.horizontalsystems.uniswapkit.models.DexType
+import io.horizontalsystems.uniswapkit.models.TradeOptions
 import java.math.BigDecimal
 
 abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
@@ -24,6 +27,17 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
         settings: Map<String, Any?>
     ): ISwapQuote {
         val blockchainType = tokenIn.blockchainType
+
+        val fieldRecipient = SwapSettingFieldRecipient(settings, blockchainType)
+        val fieldSlippage = SwapSettingFieldSlippage(settings, TradeOptions.defaultAllowedSlippage)
+        val fieldDeadline = SwapSettingFieldDeadline(settings, TradeOptions.defaultTtl)
+
+        val tradeOptions = TradeOptions(
+            allowedSlippagePercent = fieldSlippage.valueOrDefault(),
+            ttl = fieldDeadline.valueOrDefault(),
+            recipient = fieldRecipient.getEthereumKitAddress(),
+        )
+
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
         val chain = evmBlockchainHelper.chain
@@ -37,7 +51,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
             uniswapTokenFrom,
             uniswapTokenTo,
             amountIn,
-            SwapTradeOptions().tradeOptions
+            tradeOptions
         )
         val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
 
@@ -54,7 +68,12 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
             }
         }
 
-        return SwapQuoteUniswapV3(amountOut, fields, feeAmountData, blockchainType)
+        return SwapQuoteUniswapV3(
+            amountOut,
+            fields,
+            feeAmountData,
+            listOf(fieldRecipient, fieldSlippage, fieldDeadline)
+        )
     }
 
     @Throws

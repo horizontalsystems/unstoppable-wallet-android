@@ -7,6 +7,8 @@ import cash.p.terminal.modules.swap.scaleUp
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteOneInch
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldRecipient
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -46,7 +48,11 @@ object OneInchProvider : ISwapXxxProvider {
         amountIn: BigDecimal,
         settings: Map<String, Any?>
     ): ISwapQuote {
-        val evmBlockchainHelper = EvmBlockchainHelper(tokenIn.blockchainType)
+        val blockchainType = tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+
+        val fieldRecipient = SwapSettingFieldRecipient(settings, blockchainType)
+        val fieldSlippage = SwapSettingFieldSlippage(settings, BigDecimal("1"))
 
         val quote = oneInchKit.getQuoteAsync(
             chain = evmBlockchainHelper.chain,
@@ -58,7 +64,7 @@ object OneInchProvider : ISwapXxxProvider {
         }.await()
 
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
-        return SwapQuoteOneInch(amountOut, listOf(), null, tokenIn.blockchainType)
+        return SwapQuoteOneInch(amountOut, listOf(), null, listOf(fieldRecipient, fieldSlippage))
     }
 
     private fun getTokenAddress(token: Token) = when (val tokenType = token.type) {
