@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swapxxx.SwapViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -53,6 +54,21 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                 ),
             )
         },
+        bottomBar = {
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                    title = stringResource(id = R.string.SwapSettings_Apply),
+                    enabled = viewModel.saveSettingsEnabled,
+                    onClick = {
+                        viewModel.saveSettings()
+                        navController.popBackStack()
+                    }
+                )
+            }
+        },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         LazyColumn(
@@ -79,17 +95,6 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
             }
 
             item {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(id = R.string.SwapSettings_Apply),
-                    enabled = viewModel.saveSettingsEnabled,
-                    onClick = {
-                        viewModel.saveSettings()
-                        navController.popBackStack()
-                    }
-                )
             }
         }
     }
