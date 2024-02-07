@@ -1,11 +1,13 @@
 package cash.p.terminal.modules.coin.analytics
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.coin.detectors.IssueParcelable
 import cash.p.terminal.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
 import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorData
 import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorService
@@ -58,17 +60,37 @@ object CoinAnalyticsModule {
         val value: String? = null,
         val valuePeriod: String? = null,
         val analyticChart: ChartViewItem?,
-        val footerItems: List<FooterItem>,
+        val footerItems: List<FooterType>,
         val sectionTitle: Int? = null,
         val sectionDescription: String? = null,
         val showFooterDivider: Boolean = true,
     )
 
-    data class FooterItem(
-        val title: BoxItem,
-        val value: BoxItem? = null,
-        val action: ActionType? = null
+
+    sealed class FooterType {
+        class FooterItem(
+            val title: BoxItem,
+            val value: BoxItem? = null,
+            val action: ActionType? = null
+        ) : FooterType()
+
+        class DetectorFooterItem(
+            val title: BoxItem,
+            val value: BoxItem? = null,
+            val action: ActionType? = null,
+            val issues: List<IssueSnippet>
+        ) : FooterType()
+    }
+
+    class IssueSnippet(
+        @StringRes val title: Int,
+        val count: String,
+        val type: IssueType
     )
+
+    enum class IssueType {
+        High, Medium, Attention
+    }
 
     data class ChartViewItem(
         val analyticChart: AnalyticChart,
@@ -124,7 +146,7 @@ object CoinAnalyticsModule {
         val title: Int?,
         val info: AnalyticInfo?,
         val chartType: PreviewChartType?,
-        val footerItems: List<FooterItem>,
+        val footerItems: List<FooterType>,
         val sectionTitle: Int? = null,
         val showValueDots: Boolean = true,
         val showFooterDivider: Boolean = true,
@@ -184,6 +206,7 @@ object CoinAnalyticsModule {
         class OpenTreasuries(val coin: Coin) : ActionType()
         class OpenAudits(val auditAddresses: List<String>) : ActionType()
         class OpenTokenHolders(val coin: Coin, val blockchain: Blockchain) : ActionType()
+        class OpenDetectorsDetails(val issues: List<IssueParcelable>, val title: String) : ActionType()
     }
 
     fun zigzagPlaceholderAnalyticChart(isMovementChart: Boolean): AnalyticChart {
