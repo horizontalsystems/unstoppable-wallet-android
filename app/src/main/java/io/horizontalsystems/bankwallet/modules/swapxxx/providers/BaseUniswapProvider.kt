@@ -3,6 +3,7 @@ package cash.p.terminal.modules.swapxxx.providers
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
+import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingFieldSlippage
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
@@ -29,12 +30,13 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
     ): ISwapQuote {
         val blockchainType = tokenIn.blockchainType
 
-        val defaultSlippage = TradeOptions.defaultAllowedSlippage
-        val fieldSlippage = SwapSettingFieldSlippage(settings, defaultSlippage)
         val fieldRecipient = SwapSettingFieldRecipient(settings, blockchainType)
+        val fieldSlippage = SwapSettingFieldSlippage(settings, TradeOptions.defaultAllowedSlippage)
+        val fieldDeadline = SwapSettingFieldDeadline(settings, TradeOptions.defaultTtl)
 
         val tradeOptions = TradeOptions(
-            allowedSlippagePercent = fieldSlippage.value ?: defaultSlippage,
+            allowedSlippagePercent = fieldSlippage.value ?: TradeOptions.defaultAllowedSlippage,
+            ttl = fieldDeadline.value ?: TradeOptions.defaultTtl,
             recipient = fieldRecipient.getEthereumKitAddress(),
         )
 
@@ -62,7 +64,7 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
             tradeData.amountOut!!,
             fields,
             feeAmountData,
-            listOf(fieldRecipient, fieldSlippage)
+            listOf(fieldRecipient, fieldSlippage, fieldDeadline)
         )
     }
 
