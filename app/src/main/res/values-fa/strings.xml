@@ -683,6 +683,7 @@
     <string name="Coin_Analytics_Details">جزئیات</string>
     <string name="Coin_Analytics_Period_1h">۱ ساعت</string>
     <string name="Coin_Analytics_Period_1m">۱ ماه</string>
+    <string name="CoinAnalytics_CountItems">%d مورد</string>
     <string name="ActivateSubscription_Address">آدرس</string>
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
     <string name="Nfts_PriceType_Days_30">30 دی اوت</string>
