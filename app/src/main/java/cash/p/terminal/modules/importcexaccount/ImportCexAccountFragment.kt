@@ -14,7 +14,7 @@ import cash.p.terminal.modules.info.ErrorDisplayDialogFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.core.helpers.HudHelper
 
-class ImportCexAccountFragment : BaseComposeFragment() {
+class ImportCexAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

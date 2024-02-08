@@ -18,7 +18,7 @@ import cash.p.terminal.modules.restoreaccount.restoremnemonic.RestorePhrase
 import cash.p.terminal.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 
-class RestoreAccountFragment : BaseComposeFragment() {
+class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
