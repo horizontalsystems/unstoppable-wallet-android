@@ -6,8 +6,8 @@ import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
-import cash.p.terminal.modules.swapxxx.ui.SwapDataField
-import cash.p.terminal.modules.swapxxx.ui.SwapFeeField
+import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldFee
+import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.Token
@@ -54,9 +54,12 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
             evmBlockchainHelper.getFeeAmountData(it)
         }
 
-        val fields = buildList<SwapDataField> {
+        val fields = buildList {
             feeAmountData?.let {
-                add(SwapFeeField(feeAmountData))
+                add(SwapDataFieldFee(it))
+            }
+            settingSlippage.value?.let {
+                add(SwapDataFieldSlippage(it))
             }
         }
 

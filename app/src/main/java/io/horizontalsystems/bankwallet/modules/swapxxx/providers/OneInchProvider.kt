@@ -9,6 +9,7 @@ import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteOneInch
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
+import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -64,10 +65,16 @@ object OneInchProvider : ISwapXxxProvider {
         }.await()
 
         val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        val fields = buildList {
+            settingSlippage.value?.let {
+                add(SwapDataFieldSlippage(it))
+            }
+        }
+
         return SwapQuoteOneInch(
             amountOut,
             null,
-            listOf(),
+            fields,
             null,
             listOf(settingRecipient, settingSlippage)
         )

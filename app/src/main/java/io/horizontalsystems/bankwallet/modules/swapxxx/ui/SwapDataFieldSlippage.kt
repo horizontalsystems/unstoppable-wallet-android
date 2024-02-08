@@ -3,22 +3,21 @@ package cash.p.terminal.modules.swapxxx.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import cash.p.terminal.R
-import cash.p.terminal.modules.send.SendModule
+import cash.p.terminal.core.App
 import cash.p.terminal.modules.swapxxx.QuoteInfoRow
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_leah
+import java.math.BigDecimal
 
-data class SwapFeeField(val feeAmountData: SendModule.AmountData) : SwapDataField {
+data class SwapDataFieldSlippage(val slippage: BigDecimal) : SwapDataField {
     @Composable
     override fun GetContent() {
         QuoteInfoRow(
             title = {
-                subhead2_grey(text = stringResource(R.string.Swap_Fee))
+                subhead2_grey(text = stringResource(R.string.Swap_Slippage))
             },
             value = {
-                val text =
-                    feeAmountData.secondary?.getFormatted() ?: feeAmountData.primary.getFormatted()
-                subhead2_leah(text = text)
+                subhead2_leah(text = App.numberFormatter.format(slippage, 0, 2, suffix = "%"))
             }
         )
     }
