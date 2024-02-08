@@ -53,7 +53,6 @@
     <string name="Button_Submit">قدِّم</string>
     <string name="Button_TryAgain">حاول مرة أخرى</string>
     <string name="Error">خطأ</string>
-    <string name="NotAvailable">غير متوفر</string>
     <string name="Any">أي واحد</string>
     <string name="SyncError">خطأ في المزامنة. حاول مرة أخرى</string>
     <string name="PercentTitle">نسبة مئوية</string>
@@ -143,8 +142,6 @@
     <!--Uniswap Info -->
     <!--Deposit-->
     <!--Transactions-->
-    <string name="Transactions_Send">إرسال</string>
-    <string name="Transactions_Approve">قبول</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Cancel">إلغاء</string>
     <!-- Transaction Info Options -->
