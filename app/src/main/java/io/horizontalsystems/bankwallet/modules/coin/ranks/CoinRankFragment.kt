@@ -38,7 +38,9 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -164,7 +166,7 @@ private fun CoinRankScreen(
                                     }
                                 }
                             }
-                            coinRankList(viewItems)
+                            coinRankList(viewItems, navController)
                         }
                     }
                 }
@@ -174,7 +176,8 @@ private fun CoinRankScreen(
 }
 
 private fun LazyListScope.coinRankList(
-    items: List<CoinRankModule.RankViewItem>
+    items: List<CoinRankModule.RankViewItem>,
+    navController: NavController
 ) {
     item {
         Divider(
@@ -184,11 +187,15 @@ private fun LazyListScope.coinRankList(
     }
     items(items) { item ->
         CoinRankCell(
-            item.rank,
-            item.title,
-            item.subTitle,
-            item.iconUrl,
-            item.value
+            rank = item.rank,
+            name = item.title,
+            subtitle = item.subTitle,
+            iconUrl = item.iconUrl,
+            value = item.value,
+            onClick = {
+                val arguments = CoinFragment.Input(item.coinUid, "coin_rank")
+                navController.slideFromRight(R.id.coinFragment, arguments)
+            }
         )
     }
     item {
@@ -203,9 +210,12 @@ private fun CoinRankCell(
     subtitle: String,
     iconUrl: String?,
     value: String? = null,
+    onClick: () -> Unit = {}
 ) {
     Column {
-        RowUniversal {
+        RowUniversal(
+            onClick = onClick,
+        ) {
             captionSB_grey(
                 modifier = Modifier.width(56.dp),
                 textAlign = TextAlign.Center,
