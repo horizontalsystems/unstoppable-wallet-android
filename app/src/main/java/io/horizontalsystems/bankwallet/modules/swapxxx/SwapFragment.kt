@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
@@ -148,7 +150,11 @@ private fun SwapScreenInner(
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ) {
             VSpacer(height = 12.dp)
             SwapInput(
                 amountIn = uiState.amountIn,
@@ -226,6 +232,8 @@ private fun SwapScreenInner(
                     PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel)
                 }
             }
+
+            VSpacer(height = 32.dp)
         }
     }
 }
