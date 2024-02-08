@@ -58,7 +58,6 @@
     <string name="Button_Share">공유</string>
     <string name="Button_Apply">적용</string>
     <string name="Error">오류</string>
-    <string name="NotAvailable">해당 없음 </string>
     <string name="Any">어떤</string>
     <string name="SyncError">동기화 오류입니다. 다시 시도하십시오</string>
     <string name="PercentTitle">퍼센트율</string>
@@ -506,7 +505,6 @@
     <string name="Swap_MaxFee">최대 수수료</string>
     <string name="Swap_Fee">수수료</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
-    <string name="Swap_ErrorBalanceNotAvailable">균형 N/A</string>
     <string name="Swap_ErrorNoLiquidity">이 토큰을 스왑할 수 없습니다</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">이 서비스는 래핑/언래핑을 허용하지 않습니다. 대신 1inch 를 사용하십시오.</string>
     <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
@@ -580,14 +578,10 @@
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
     <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
-    <string name="Transactions_Receive">수신</string>
+    <string name="Transactions_Receive">수령됨</string>
     <string name="Transactions_Completed">완료</string>
     <string name="Transactions_Processing">처리 중</string>
-    <string name="Transactions_Send">전송</string>
-    <string name="Transactions_Burn">번</string>
-    <string name="Transactions_Mint">민트</string>
-    <string name="Transactions_Approve">승인</string>
-    <string name="Transactions_Swap">스왑</string>
+    <string name="Transactions_Send">전송됨</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_ContractCall">계약 콜</string>
     <string name="Transactions_ExternalContractCall">외부 콜</string>
@@ -806,7 +800,6 @@
     <string name="SettingsSecurity_SyncModeBlockchairDescription">빠르고 비공개, 중앙집중화</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 필터링</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">탈중앙화 복원</string>
     <string name="SetDuressPin_Title">긴급 상황 비밀번호</string>
     <string name="SetDuressPin_Description">긴급 상황 모드용 비밀번호를 설정하세요</string>
     <string name="EditDuressPin_Title">긴급 상황 비밀번호 편집</string>
