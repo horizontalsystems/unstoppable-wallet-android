@@ -61,7 +61,6 @@
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
-    <string name="NotAvailable">不可用</string>
     <string name="Any">任何</string>
     <string name="SyncError">同步错误。请再试一次</string>
     <string name="PercentTitle">百分比</string>
@@ -505,7 +504,6 @@
     <string name="Swap_MaxFee">最大手续费</string>
     <string name="Swap_Fee">费用</string>
     <string name="Swap_ErrorInsufficientBalance">余额不足</string>
-    <string name="Swap_ErrorBalanceNotAvailable">余额 N/A</string>
     <string name="Swap_ErrorNoLiquidity">订单深度不足</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">此服务不允许包装/拆包。请使用1英寸代替。</string>
     <string name="Swap_ErrorHighPriceImpact">高价格影响</string>
@@ -579,14 +577,10 @@
     <string name="Transactions_EmptyList">您还没有任何待定或成功的交易</string>
     <string name="Transactions_WaitForSync">请等待同步结束。</string>
     <string name="Transactions_Pending">待处理</string>
-    <string name="Transactions_Receive">接收</string>
+    <string name="Transactions_Receive">已收到</string>
     <string name="Transactions_Completed">已完成</string>
     <string name="Transactions_Processing">正在处理</string>
-    <string name="Transactions_Send">发送​​</string>
-    <string name="Transactions_Burn">燃烧</string>
-    <string name="Transactions_Mint">薄荷绿</string>
-    <string name="Transactions_Approve">批准请求</string>
-    <string name="Transactions_Swap">互兑交易</string>
+    <string name="Transactions_Send">已发送</string>
     <string name="Transactions_Failed">失败</string>
     <string name="Transactions_ContractCall">合约调用</string>
     <string name="Transactions_ExternalContractCall">外部呼叫</string>
