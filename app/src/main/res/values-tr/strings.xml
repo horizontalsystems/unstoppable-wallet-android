@@ -445,7 +445,6 @@
     <string name="Swap_MaxFee">Maksimum Ücret</string>
     <string name="Swap_Fee">Masraf</string>
     <string name="Swap_ErrorInsufficientBalance">Yetersiz bakiye</string>
-    <string name="Swap_ErrorBalanceNotAvailable">Bakiye N/A</string>
     <string name="Swap_ErrorNoLiquidity">Bu token swap edilemez</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Bu hizmet wrapping/unwrapping yapmaya izin vermiyor. Bunun yerine 1 inç kullanın.</string>
     <string name="Swap_ErrorHighPriceImpact">Yüksek fiyat etkisi</string>
@@ -518,12 +517,10 @@
     <string name="Transactions_EmptyList">Henüz herhangi bir bekleyen veya geçmiş işlem yok</string>
     <string name="Transactions_WaitForSync">Lütfen güncellemenin bitmesini bekleyin.</string>
     <string name="Transactions_Pending">Devam ediyor</string>
-    <string name="Transactions_Receive">Al</string>
+    <string name="Transactions_Receive">Alındı</string>
     <string name="Transactions_Completed">Tamamlandı</string>
     <string name="Transactions_Processing">İşleniyor</string>
-    <string name="Transactions_Send">Gönder</string>
-    <string name="Transactions_Approve">Onayla</string>
-    <string name="Transactions_Swap">Takas</string>
+    <string name="Transactions_Send">Gönderildi</string>
     <string name="Transactions_Failed">Başarısız</string>
     <string name="Transactions_ContractCall">Sözleşme Çağrısı</string>
     <string name="Transactions_ExternalContractCall">Harici Çağrı</string>
