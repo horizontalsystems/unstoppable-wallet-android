@@ -56,7 +56,6 @@
     <string name="Error_OutOfRange">Es muss mindestens %1$s enthalten und darf maximal %2$s Zeichen lang sein</string>
     <string name="Error_NotInteger">Die von Dir angegebenen Zahlen sind nicht richtig</string>
     <string name="Error">Fehler</string>
-    <string name="NotAvailable">k. A.</string>
     <string name="Any">Beliebig</string>
     <string name="SyncError">Sync-Fehler. Versuchen Sie es erneut</string>
     <string name="PercentTitle">Prozent</string>
@@ -459,7 +458,6 @@
     <string name="Swap_MaxFee">Max Gebühr</string>
     <string name="Swap_Fee">Gebühr</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
-    <string name="Swap_ErrorBalanceNotAvailable">Saldo N/A</string>
     <string name="Swap_ErrorNoLiquidity">Diese Token sind nicht tauschbar</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Dieser Service erlaubt keine Verpackung/Auspackung. Verwenden Sie stattdessen 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Hohe Preisauswirkung</string>
@@ -528,12 +526,10 @@
     <string name="Transactions_EmptyList">Sie haben noch keine offenen oder früheren Transaktionen</string>
     <string name="Transactions_WaitForSync">Bitte warten bis die Synchronisation abgeschlossen ist.</string>
     <string name="Transactions_Pending">Anstehend</string>
-    <string name="Transactions_Receive">Empfangen</string>
+    <string name="Transactions_Receive">Erhalten</string>
     <string name="Transactions_Completed">Abgeschlossen</string>
     <string name="Transactions_Processing">In Bearbeitung</string>
-    <string name="Transactions_Send">Senden</string>
-    <string name="Transactions_Approve">Bestätigen</string>
-    <string name="Transactions_Swap">Tauschen</string>
+    <string name="Transactions_Send">Gesendet</string>
     <string name="Transactions_Failed">Fehlgeschlagen</string>
     <string name="Transactions_ContractCall">Vertragsaufruf</string>
     <string name="Transactions_ExternalContractCall">Externe Anrufe</string>
@@ -736,7 +732,6 @@
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Schnell, privat, zentralisiert</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Nach Blockchain filtern</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Dezentrale Wiederherstellung</string>
     <string name="SetDuressPin_Title">Duress Code</string>
     <string name="SetDuressPin_Description">Code für Duress Modus festlegen</string>
     <string name="EditDuressPin_Title">Duress Code bearbeiten</string>
