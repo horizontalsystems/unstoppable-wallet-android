@@ -309,7 +309,7 @@ class MainViewModel(
                 when {
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
-                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it, "widget_click"))
+                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it, "widget"))
                         }
                     }
 

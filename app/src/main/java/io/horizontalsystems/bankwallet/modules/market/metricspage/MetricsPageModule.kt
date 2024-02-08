@@ -18,7 +18,7 @@ object MetricsPageModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(private val metricsType: MetricsType) : ViewModelProvider.Factory {
         private val globalMarketRepository by lazy {
-            GlobalMarketRepository(App.marketKit, "market_metrics")
+            GlobalMarketRepository(App.marketKit, "market_global_metrics_${metricsType.name}")
         }
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

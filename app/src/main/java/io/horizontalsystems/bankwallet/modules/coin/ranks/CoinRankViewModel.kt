@@ -104,6 +104,7 @@ class CoinRankViewModel(
                 val topItems = items.sortedByDescending { it.value }.take(itemsToShow)
                 val viewItems = topItems.mapIndexed { index, item ->
                     CoinRankModule.RankViewItem(
+                        item.coin.uid,
                         (index + 1).toString(),
                         item.coin.code,
                         item.coin.name,
