@@ -39,7 +39,9 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -173,7 +175,7 @@ private fun CoinRankScreen(
                                     }
                                 }
                             }
-                            coinRankList(viewItems)
+                            coinRankList(viewItems, navController)
                         }
                     }
                 }
@@ -183,7 +185,8 @@ private fun CoinRankScreen(
 }
 
 private fun LazyListScope.coinRankList(
-    items: List<CoinRankModule.RankViewItem>
+    items: List<CoinRankModule.RankViewItem>,
+    navController: NavController
 ) {
     item {
         Divider(
@@ -193,11 +196,15 @@ private fun LazyListScope.coinRankList(
     }
     items(items) { item ->
         CoinRankCell(
-            item.rank,
-            item.title,
-            item.subTitle,
-            item.iconUrl,
-            item.value
+            rank = item.rank,
+            name = item.title,
+            subtitle = item.subTitle,
+            iconUrl = item.iconUrl,
+            value = item.value,
+            onClick = {
+                val arguments = CoinFragment.Input(item.coinUid, "coin_rank")
+                navController.slideFromRight(R.id.coinFragment, arguments)
+            }
         )
     }
     item {
@@ -212,9 +219,12 @@ private fun CoinRankCell(
     subtitle: String,
     iconUrl: String?,
     value: String? = null,
+    onClick: () -> Unit = {}
 ) {
     Column {
-        RowUniversal {
+        RowUniversal(
+            onClick = onClick,
+        ) {
             captionSB_grey(
                 modifier = Modifier.width(56.dp),
                 textAlign = TextAlign.Center,

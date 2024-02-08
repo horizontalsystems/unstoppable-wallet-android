@@ -94,7 +94,7 @@ private fun SearchResultsScreen(
                                 viewModel.onRemoveFavorite(uid)
                             },
                             onCoinClick = { coinUid ->
-                                val arguments = CoinFragment.prepareParams(coinUid, "market_advanced_search")
+                                val arguments = CoinFragment.Input(coinUid, "market_advanced_search_results")
                                 navController.slideFromRight(R.id.coinFragment, arguments)
                             },
                             preItems = {

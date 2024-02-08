@@ -56,7 +56,7 @@ class MarketTopCoinsFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.prepareParams(coinUid, "market_top_coins")
+        val arguments = CoinFragment.Input(coinUid, "market_overview_top_coins")
 
         navController.slideFromRight(R.id.coinFragment, arguments)
     }
