@@ -6,8 +6,8 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteUniswapV3
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingDeadline
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataField
-import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapFeeField
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldFee
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -59,12 +59,15 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
             uniswapV3Kit.transactionData(receiveAddress, chain, tradeDataV3)
         }
         val feeAmountData = transactionData?.let {
-            evmBlockchainHelper.getFeeAmountData(transactionData)
+            evmBlockchainHelper.getFeeAmountData(it)
         }
 
-        val fields = buildList<SwapDataField> {
+        val fields = buildList {
             feeAmountData?.let {
-                add(SwapFeeField(feeAmountData))
+                add(SwapDataFieldFee(it))
+            }
+            settingSlippage.value?.let {
+                add(SwapDataFieldSlippage(it))
             }
         }
 
