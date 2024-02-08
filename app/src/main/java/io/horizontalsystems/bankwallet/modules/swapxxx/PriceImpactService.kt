@@ -28,33 +28,37 @@ class PriceImpactService {
     val stateFlow = _stateFlow.asStateFlow()
 
     fun setPriceImpact(priceImpact: BigDecimal?, providerTitle: String?) {
-        this.priceImpact = priceImpact
+        if (priceImpact == null || priceImpact < normalPriceImpact) {
+            this.priceImpact = null
+            priceImpactLevel = null
+            priceImpactCaution = null
+        } else {
+            this.priceImpact = priceImpact
 
-        priceImpactLevel = when {
-            priceImpact == null -> null
-            priceImpact >= BigDecimal.ZERO && priceImpact < normalPriceImpact -> SwapMainModule.PriceImpactLevel.Negligible
-            priceImpact >= normalPriceImpact && priceImpact < warningPriceImpact -> SwapMainModule.PriceImpactLevel.Normal
-            priceImpact >= warningPriceImpact && priceImpact < forbiddenPriceImpact -> SwapMainModule.PriceImpactLevel.Warning
-            else -> SwapMainModule.PriceImpactLevel.Forbidden
-        }
+            priceImpactLevel = when {
+                priceImpact < warningPriceImpact -> SwapMainModule.PriceImpactLevel.Normal
+                priceImpact < forbiddenPriceImpact -> SwapMainModule.PriceImpactLevel.Warning
+                else -> SwapMainModule.PriceImpactLevel.Forbidden
+            }
 
-        priceImpactCaution = when (priceImpactLevel) {
-            SwapMainModule.PriceImpactLevel.Forbidden -> {
-                HSCaution(
-                    s = TranslatableString.ResString(R.string.Swap_PriceImpact),
-                    type = HSCaution.Type.Error,
-                    description = TranslatableString.ResString(R.string.Swap_PriceImpactTooHigh, providerTitle ?: "")
-                )
-            }
-            SwapMainModule.PriceImpactLevel.Warning -> {
-                HSCaution(
-                    s = TranslatableString.ResString(R.string.Swap_PriceImpact),
-                    type = HSCaution.Type.Warning,
-                    description = TranslatableString.ResString(R.string.Swap_PriceImpactWarning)
-                )
-            }
-            else -> {
-                null
+            priceImpactCaution = when (priceImpactLevel) {
+                SwapMainModule.PriceImpactLevel.Forbidden -> {
+                    HSCaution(
+                        s = TranslatableString.ResString(R.string.Swap_PriceImpact),
+                        type = HSCaution.Type.Error,
+                        description = TranslatableString.ResString(R.string.Swap_PriceImpactTooHigh, providerTitle ?: "")
+                    )
+                }
+                SwapMainModule.PriceImpactLevel.Warning -> {
+                    HSCaution(
+                        s = TranslatableString.ResString(R.string.Swap_PriceImpact),
+                        type = HSCaution.Type.Warning,
+                        description = TranslatableString.ResString(R.string.Swap_PriceImpactWarning)
+                    )
+                }
+                else -> {
+                    null
+                }
             }
         }
 
