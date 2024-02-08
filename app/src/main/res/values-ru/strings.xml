@@ -60,7 +60,6 @@
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
-    <string name="NotAvailable">Нет данных</string>
     <string name="Any">Любые</string>
     <string name="SyncError">Ошибка синхронизации. Повторите попытку</string>
     <string name="PercentTitle">Процент</string>
@@ -510,7 +509,6 @@
     <string name="Swap_MaxFee">Макс. комиссия</string>
     <string name="Swap_Fee">Комиссия</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
-    <string name="Swap_ErrorBalanceNotAvailable">Баланс N/А</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
@@ -588,10 +586,6 @@
     <string name="Transactions_Completed">Завершено</string>
     <string name="Transactions_Processing">В процессе</string>
     <string name="Transactions_Send">Отправлено</string>
-    <string name="Transactions_Burn">Сжигание</string>
-    <string name="Transactions_Mint">Минт</string>
-    <string name="Transactions_Approve">Разрешение</string>
-    <string name="Transactions_Swap">Обмен</string>
     <string name="Transactions_Failed">Не удалось</string>
     <string name="Transactions_ContractCall">Вызов контракта</string>
     <string name="Transactions_ExternalContractCall">Внешний вызов</string>
@@ -808,7 +802,6 @@
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Быстрый, Конфиденциальный, Централизованный</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Децентрализованное восстановление</string>
     <string name="SetDuressPin_Title">Duress код</string>
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
