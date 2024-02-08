@@ -149,16 +149,11 @@ fun TransactionAmountCell(
     coinUid: String?,
     navController: NavController
 ) {
-    val clickable = coinUid?.let {
-        Modifier.clickable {
-            navController.slideFromRight(R.id.coinFragment, CoinFragment.prepareParams(it, "transaction_info"))
-        }
-    } ?: Modifier
-
     RowUniversal(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .then(clickable)
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = coinUid?.let {
+            { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it, "transaction_info")) }
+        }
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
