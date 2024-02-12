@@ -321,6 +321,9 @@
         android:id="@+id/swapSettings"
         android:name="io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingsFragment" />
     <fragment
+        android:id="@+id/swapTransactionSettings"
+        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapTransactionSettingsFragment" />
+    <fragment
         android:id="@+id/swapConfirm"
         android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapConfirmFragment" />
     <fragment
