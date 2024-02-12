@@ -499,6 +499,7 @@
     <string name="Swap_Balance">Доступный баланс</string>
     <string name="Swap_Allowance">Разрешение</string>
     <string name="Swap_Price">Цена</string>
+    <string name="Swap_AvailableBalance">Доступный баланс</string>
     <string name="Swap_SellPrice">Цена продажи</string>
     <string name="Swap_BuyPrice">Цена покупки</string>
     <string name="Swap_PriceImpact">Отклонение от рын. цены</string>
@@ -522,10 +523,12 @@
     <string name="Swap_MinimumGot">Гарантированная сумма</string>
     <string name="Swap_PoweredBy">При поддержке</string>
     <string name="Swap_SelectSwapProvider_Title">Смена провайдера</string>
+    <string name="Swap_SelectSwapProvider_FeeInfo">Комиссия за услугу обмена на платформе обычно 0.3% или 0.6%</string>
     <string name="Swap_AmountEstimated">(прим.)</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_AmountTypeCoin">Монета</string>
+    <string name="Swap_Confirm_Title">Подтвердить</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_Service">Сервис</string>
