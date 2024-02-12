@@ -273,6 +273,7 @@
     <string name="Swap_TokenSelectorTitle">انتخاب</string>
     <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
+    <string name="Swap_AvailableBalance">موجودی در دسترس</string>
     <string name="Swap_SellPrice">قیمت فروش</string>
     <string name="Swap_BuyPrice">خرید قیمت</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
@@ -294,6 +295,7 @@
     <string name="Swap_AmountEstimated">(تخمینی)</string>
     <string name="Swap_AmountMin">(دقیقه)</string>
     <string name="Swap_AmountMax">(حداکثر)</string>
+    <string name="Swap_Confirm_Title">تاييد</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Service">خدمات</string>
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
