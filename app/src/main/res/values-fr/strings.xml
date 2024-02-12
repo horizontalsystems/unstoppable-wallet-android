@@ -486,6 +486,7 @@
     <string name="Swap_Balance">Solde disponible</string>
     <string name="Swap_Allowance">Allocation</string>
     <string name="Swap_Price">Prix</string>
+    <string name="Swap_AvailableBalance">Solde disponible</string>
     <string name="Swap_SellPrice">Prix de vente</string>
     <string name="Swap_BuyPrice">Prix d\'achat</string>
     <string name="Swap_PriceImpact">Impact prix</string>
@@ -509,8 +510,10 @@
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
     <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
+    <string name="Swap_SelectSwapProvider_FeeInfo">Des frais de service pour l\'action de swap sur la plateforme sont typiques de 0,3% ou 0,6%</string>
     <string name="Swap_AmountMin">(montant minimal)</string>
     <string name="Swap_AmountTypeCoin">Pièce</string>
+    <string name="Swap_Confirm_Title">Confirmer</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
