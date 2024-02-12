@@ -435,6 +435,7 @@
     <string name="Swap_Balance">Kullanılabilir bakiye</string>
     <string name="Swap_Allowance">Ödenek</string>
     <string name="Swap_Price">Fiyat</string>
+    <string name="Swap_AvailableBalance">Mevcut Bakiye</string>
     <string name="Swap_SellPrice">Satış Fiyatı</string>
     <string name="Swap_BuyPrice">Alış Fiyatı</string>
     <string name="Swap_PriceImpact">Fiyat Etkisi</string>
@@ -458,9 +459,11 @@
     <string name="Swap_MinimumGot">Garantili Tutar</string>
     <string name="Swap_PoweredBy">İle çalışır</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Sağlayıcısı</string>
+    <string name="Swap_SelectSwapProvider_FeeInfo">Platformdaki takas işlemi için bir hizmet ücreti genellikle %0,3 veya %0,6\'dır</string>
     <string name="Swap_AmountEstimated">(tah)</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
+    <string name="Swap_Confirm_Title">Onayla</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Ayarları</string>
     <string name="SwapSettings_Service">Hizmet</string>
