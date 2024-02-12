@@ -135,6 +135,7 @@
     <!--Swap-->
     <string name="Swap_Proceed">التالي</string>
     <string name="Swap_Approve">قبول</string>
+    <string name="Swap_Confirm_Title">تأكيد</string>
     <!-- Swap Settings -->
     <!-- Swap Confirmation -->
     <!--Approve-->
