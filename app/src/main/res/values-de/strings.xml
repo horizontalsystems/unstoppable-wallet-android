@@ -448,6 +448,7 @@
     <string name="Swap_Balance">Verfügbares Guthaben</string>
     <string name="Swap_Allowance">Vergütung</string>
     <string name="Swap_Price">Preis</string>
+    <string name="Swap_AvailableBalance">Verfügbares Guthaben</string>
     <string name="Swap_SellPrice">Verkaufspreis</string>
     <string name="Swap_BuyPrice">Kaufpreis</string>
     <string name="Swap_PriceImpact">Preisauswirkungen</string>
@@ -470,7 +471,9 @@
     <string name="Swap_MinimumGot">Garantierter Betrag</string>
     <string name="Swap_PoweredBy">Betrieben durch</string>
     <string name="Swap_SelectSwapProvider_Title">Provider tauschen</string>
+    <string name="Swap_SelectSwapProvider_FeeInfo">Eine Service-Gebühr für die Swap-Aktion auf der Plattform typischerweise entweder 0,3% oder 0,6%</string>
     <string name="Swap_AmountMin">(Min.)</string>
+    <string name="Swap_Confirm_Title">Bestätigen</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap-Einstellungen</string>
     <string name="SwapSettings_Service">Dienst</string>
