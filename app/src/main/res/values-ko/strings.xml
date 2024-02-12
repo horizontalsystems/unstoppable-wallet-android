@@ -495,6 +495,7 @@
     <string name="Swap_Balance">사용 가능한 잔액</string>
     <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
+    <string name="Swap_AvailableBalance">사용 가능한 잔액</string>
     <string name="Swap_SellPrice">매도 가격</string>
     <string name="Swap_BuyPrice">구매 가격</string>
     <string name="Swap_PriceImpact">가격 영향</string>
@@ -518,10 +519,12 @@
     <string name="Swap_MinimumGot">보증 금액</string>
     <string name="Swap_PoweredBy">제공</string>
     <string name="Swap_SelectSwapProvider_Title">공급자 스왑</string>
+    <string name="Swap_SelectSwapProvider_FeeInfo">플랫폼에서 스왑 작업에 대한 서비스 수수료는 일반적으로 0.3% 또는 0.6%입니다.</string>
     <string name="Swap_AmountEstimated">(추정)</string>
     <string name="Swap_AmountMin">(분)</string>
     <string name="Swap_AmountMax">(최대)</string>
     <string name="Swap_AmountTypeCoin">코인</string>
+    <string name="Swap_Confirm_Title">확인</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">스왑 설정</string>
     <string name="SwapSettings_Service">서비스</string>
