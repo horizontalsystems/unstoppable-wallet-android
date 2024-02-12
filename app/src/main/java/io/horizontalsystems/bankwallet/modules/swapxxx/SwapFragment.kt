@@ -61,6 +61,7 @@ import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSRow
 import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_grey
@@ -117,6 +118,9 @@ fun SwapScreen(navController: NavController) {
         onClickProviderSettings = {
             navController.slideFromRight(R.id.swapSettings)
         },
+        onClickTransactionSettings = {
+            navController.slideFromRight(R.id.swapTransactionSettings)
+        },
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)
         }
@@ -132,6 +136,7 @@ private fun SwapScreenInner(
     onSwitchPairs: () -> Unit,
     onEnterAmount: (BigDecimal?) -> Unit,
     onClickProvider: () -> Unit,
+    onClickTransactionSettings: () -> Unit,
     onClickProviderSettings: () -> Unit,
     onClickNext: () -> Unit,
 ) {
@@ -139,11 +144,14 @@ private fun SwapScreenInner(
         topBar = {
             AppBar(
                 title = stringResource(R.string.Swap),
+                navigationIcon = {
+                    HsBackButton(onClick = onClickClose)
+                },
                 menuItems = listOf(
                     MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onClickClose
+                        title = TranslatableString.ResString(R.string.Settings_Title),
+                        icon = R.drawable.ic_manage_2_24,
+                        onClick = onClickTransactionSettings
                     )
                 ),
             )
