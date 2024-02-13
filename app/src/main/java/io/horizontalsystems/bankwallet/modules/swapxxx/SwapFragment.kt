@@ -66,6 +66,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
@@ -74,7 +75,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.UUID
 
 class SwapFragment : BaseComposeFragment() {
@@ -345,11 +345,8 @@ private fun ProviderField(
 @Composable
 private fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal) {
     var showRegularPrice by remember { mutableStateOf(true) }
-    val price = amountOut.divide(amountIn, tokenOut.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
-    val priceInv = BigDecimal.ONE.divide(price, tokenIn.decimals, RoundingMode.HALF_EVEN).stripTrailingZeros()
+    val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 
-    val priceStr = "${CoinValue(tokenIn, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenOut, price).getFormattedFull()}"
-    val priceInvStr = "${CoinValue(tokenOut, BigDecimal.ONE).getFormattedFull()} = ${CoinValue(tokenIn, priceInv).getFormattedFull()}"
     QuoteInfoRow(
         title = {
             subhead2_grey(text = stringResource(R.string.Swap_Price))
@@ -364,7 +361,7 @@ private fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, am
                             showRegularPrice = !showRegularPrice
                         }
                     ),
-                text = if (showRegularPrice) priceStr else priceInvStr
+                text = if (showRegularPrice) swapPriceUIHelper.priceStr else swapPriceUIHelper.priceInvStr
             )
             HSpacer(width = 8.dp)
             Icon(
@@ -381,10 +378,7 @@ fun QuoteInfoRow(
     title: @Composable() (RowScope.() -> Unit),
     value: @Composable() (RowScope.() -> Unit),
 ) {
-    Row(
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    CellUniversal(borderTop = false) {
         title.invoke(this)
         HFillSpacer(minWidth = 8.dp)
         value.invoke(this)
