@@ -53,7 +53,6 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
             amountIn,
             tradeOptions
         )
-        val amountOut = tradeDataV3.tokenAmountOut.decimalAmount!!
 
         val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
             uniswapV3Kit.transactionData(receiveAddress, chain, tradeDataV3)
@@ -72,8 +71,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
         }
 
         return SwapQuoteUniswapV3(
-            amountOut,
-            tradeDataV3.priceImpact,
+            tradeDataV3,
             fields,
             feeAmountData,
             listOf(settingRecipient, settingSlippage, settingDeadline)
