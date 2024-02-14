@@ -79,9 +79,16 @@ fun SwapConfirmScreen(navController: NavController) {
                 val swapPriceUIHelper = SwapPriceUIHelper(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
                 SwapInfoRow(false, stringResource(id = R.string.Swap_Price), swapPriceUIHelper.priceStr)
             }
-            VSpacer(height = 16.dp)
-            SectionUniversalLawrence {
-                SwapInfoRow(false, stringResource(id = R.string.FeeSettings_NetworkFee), "")
+            quote.fee?.let { fee ->
+                VSpacer(height = 16.dp)
+                SectionUniversalLawrence {
+                    SwapInfoRow(
+                        borderTop = false,
+                        title = stringResource(id = R.string.FeeSettings_NetworkFee),
+                        value = fee.primary.getFormatted(),
+                        subvalue = fee.secondary?.getFormatted()
+                    )
+                }
             }
             VSpacer(height = 32.dp)
         }
@@ -89,11 +96,17 @@ fun SwapConfirmScreen(navController: NavController) {
 }
 
 @Composable
-private fun SwapInfoRow(borderTop: Boolean, title: String, value: String) {
+private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subvalue: String? = null) {
     CellUniversal(borderTop = borderTop) {
         subhead2_grey(text = title)
         HFillSpacer(minWidth = 8.dp)
-        subhead1_leah(text = value)
+        Column(horizontalAlignment = Alignment.End) {
+            subhead1_leah(text = value)
+            subvalue?.let {
+                VSpacer(height = 1.dp)
+                caption_grey(text = it)
+            }
+        }
     }
 }
 
