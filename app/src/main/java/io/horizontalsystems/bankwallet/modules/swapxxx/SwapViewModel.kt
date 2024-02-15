@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
-import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingsService
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -18,7 +17,6 @@ import java.math.BigDecimal
 class SwapViewModel(
     private val quoteService: SwapQuoteService,
     private val balanceService: TokenBalanceService,
-    private val settingsService: SwapSettingsService,
     private val priceImpactService: PriceImpactService
 ) : ViewModel() {
 
@@ -85,22 +83,6 @@ class SwapViewModel(
         emitState()
     }
 
-    fun onEnterAmount(v: BigDecimal?) {
-        quoteService.setAmount(v)
-    }
-
-    fun onSelectTokenIn(token: Token) {
-        quoteService.setTokenIn(token)
-    }
-
-    fun onSelectTokenOut(token: Token) {
-        quoteService.setTokenOut(token)
-    }
-
-    fun onSwitchPairs() {
-        quoteService.switchPairs()
-    }
-
     fun onSelectQuote(quote: SwapProviderQuote) {
         quoteService.selectQuote(quote)
     }
@@ -128,29 +110,11 @@ class SwapViewModel(
 
     private fun isSwapEnabled() = quoteState.quote != null
 
-
-    var saveSettingsEnabled by mutableStateOf(settingsService.saveEnabledFlow.value)
-
-    init {
-        viewModelScope.launch {
-            settingsService.saveEnabledFlow.collect {
-                saveSettingsEnabled = it
-            }
-        }
-    }
-
-    fun onSettingError(id: String, error: Throwable?) {
-        settingsService.onSettingError(id, error)
-    }
-
-    fun onSettingEnter(id: String, value: Any?) {
-        settingsService.setSetting(id, value)
-    }
-
-    fun saveSettings() {
-        settingsService.save()
-        quoteService.setSwapSettings(settingsService.getSettings())
-    }
+    fun onEnterAmount(v: BigDecimal?) = quoteService.setAmount(v)
+    fun onSelectTokenIn(token: Token) = quoteService.setTokenIn(token)
+    fun onSelectTokenOut(token: Token) = quoteService.setTokenOut(token)
+    fun onSwitchPairs() = quoteService.switchPairs()
+    fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -159,9 +123,7 @@ class SwapViewModel(
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
             val priceImpactService = PriceImpactService()
 
-            val swapSettingsService = SwapSettingsService()
-
-            return SwapViewModel(swapQuoteService, tokenBalanceService, swapSettingsService, priceImpactService) as T
+            return SwapViewModel(swapQuoteService, tokenBalanceService, priceImpactService) as T
         }
     }
 }
