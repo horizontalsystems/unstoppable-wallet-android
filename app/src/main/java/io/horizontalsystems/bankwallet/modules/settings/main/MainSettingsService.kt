@@ -9,13 +9,16 @@ import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainSettingsService(
     private val backupManager: IBackupManager,
@@ -24,12 +27,13 @@ class MainSettingsService(
     private val currencyManager: CurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
-    private val wc2SessionManager: WC2SessionManager,
+    private val wc2SessionManager: WCSessionManager,
     private val wc2Manager: WC2Manager,
     private val accountManager: IAccountManager,
     private val appConfigProvider: AppConfigProvider
 ) {
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     val appWebPageLink = appConfigProvider.appWebPageLink
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
     val backedUpObservable: Observable<Boolean> get() = backedUpSubject
@@ -83,9 +87,11 @@ class MainSettingsService(
             backedUpSubject.onNext(it)
         })
 
-        disposables.add(wc2SessionManager.sessionsObservable.subscribe {
-            walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
-        })
+        coroutineScope.launch {
+            wc2SessionManager.sessionsFlow.collect{
+                walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
+            }
+        }
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
             baseCurrencySubject.onNext(currencyManager.baseCurrency)

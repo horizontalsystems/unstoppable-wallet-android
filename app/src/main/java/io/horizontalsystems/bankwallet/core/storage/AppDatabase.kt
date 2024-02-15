@@ -18,7 +18,7 @@ import io.horizontalsystems.bankwallet.modules.pin.core.Pin
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
-import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectV2Session
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
 
 @Database(version = 58, exportSchema = false, entities = [

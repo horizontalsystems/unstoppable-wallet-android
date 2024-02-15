@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.walletconnect.web3.wallet.client.Wallet.Params.*
+import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -21,8 +23,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +38,6 @@ class BalanceViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
-    private val wc2Service: WC2Service,
     private val wC2Manager: WC2Manager,
     private val addressHandlerFactory: AddressHandlerFactory,
 ) : ViewModel(), ITotalBalance by totalBalance {
@@ -61,7 +61,8 @@ class BalanceViewModel(
     )
         private set
 
-    val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
+    val sortTypes =
+        listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     var sortType by service::sortType
 
     var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
@@ -125,7 +126,8 @@ class BalanceViewModel(
 
     private fun headerNote(): HeaderNote {
         val account = service.account ?: return HeaderNote.None
-        val nonRecommendedDismissed = localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id)
+        val nonRecommendedDismissed =
+            localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id)
 
         return account.headerNote(nonRecommendedDismissed)
     }
@@ -228,7 +230,8 @@ class BalanceViewModel(
             val abstractUriParse = AddressUriParser(null, null)
             return when (val result = abstractUriParse.parse(text)) {
                 is AddressUriResult.Uri -> {
-                    if (BlockchainType.supported.map { it.uriScheme }.contains(result.addressUri.scheme))
+                    if (BlockchainType.supported.map { it.uriScheme }
+                            .contains(result.addressUri.scheme))
                         result.addressUri
                     else
                         null
@@ -291,14 +294,14 @@ class BalanceViewModel(
     }
 
     private fun handleWalletConnectUri(scannedText: String) {
-        wc2Service.pair(
-            uri = scannedText,
+        Web3Wallet.pair(Pair(scannedText.trim()),
             onSuccess = {
                 connectionResult = null
             },
             onError = {
                 connectionResult = WalletConnectListViewModel.ConnectionResult.Error
-            })
+            }
+        )
     }
 
     fun onSendOpened() {

@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.Status
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.Status
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 @Composable
 fun BlockchainCell(
     title: String,
-    value: String,
+    value: String?,
 ) {
     RowUniversal(
         modifier = Modifier
@@ -36,7 +36,9 @@ fun BlockchainCell(
         subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         Spacer(Modifier.width(8.dp))
-        subhead1_leah(text = value)
+        value?.let {
+            subhead1_leah(text = it)
+        }
     }
 }
 

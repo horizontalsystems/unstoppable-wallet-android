@@ -6,25 +6,20 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.walletconnect.android.Core
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 
-class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
+class WCPairingsViewModel : ViewModel() {
 
-    private var pairings = listOf<PairingViewItem>()
-    private var closeScreen = false
+    private val pairings: List<PairingViewItem>
+        get() = WCDelegate.getPairings().map { getPairingViewItem(it) }
 
     var uiState by mutableStateOf(
         WCPairingsUiState(
             pairings = pairings,
-            closeScreen = closeScreen,
+            closeScreen = pairings.isEmpty(),
         )
     )
         private set
-
-    init {
-        updatePairings()
-    }
 
     private fun getPairingViewItem(pairing: Core.Model.Pairing): PairingViewItem {
         val metaData = pairing.peerAppMetaData
@@ -40,37 +35,24 @@ class WCPairingsViewModel(private val wc2Service: WC2Service) : ViewModel() {
     private fun emitState() {
         uiState = WCPairingsUiState(
             pairings = pairings,
-            closeScreen = closeScreen
+            closeScreen = pairings.isEmpty()
         )
     }
 
     fun delete(pairing: PairingViewItem) {
-        wc2Service.deletePairing(pairing.topic)
-
-        updatePairings()
+        WCDelegate.deletePairing(topic = pairing.topic)
+        emitState()
     }
 
     fun deleteAll() {
-        wc2Service.deleteAllPairings()
-
-        updatePairings()
-    }
-
-    private fun updatePairings() {
-        pairings = wc2Service.getPairings()
-            .map {
-                getPairingViewItem(it)
-            }
-
-        closeScreen = pairings.isEmpty()
-
+        WCDelegate.deleteAllPairings()
         emitState()
     }
 
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WCPairingsViewModel(App.wc2Service) as T
+            return WCPairingsViewModel() as T
         }
     }
 }

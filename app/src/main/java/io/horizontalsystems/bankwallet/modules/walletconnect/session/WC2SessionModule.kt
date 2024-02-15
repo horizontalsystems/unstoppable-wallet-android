@@ -1,12 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.session.v2
+package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2RequestViewItem
-import io.horizontalsystems.ethereumkit.models.Chain
 import kotlinx.parcelize.Parcelize
 
 object WC2SessionModule {
@@ -17,12 +16,9 @@ object WC2SessionModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return WC2SessionViewModel(
-                App.wc2Service,
-                App.wc2Manager,
                 App.wc2SessionManager,
-                App.accountManager,
                 App.connectivityManager,
-                App.evmBlockchainManager,
+                App.accountManager.activeAccount,
                 sessionTopic,
             ) as T
         }
@@ -63,10 +59,11 @@ data class WCBlockchain(
     fun getAccount() = "$chainNamespace:$chainId:$address"
 }
 
-data class WCAccountData(
-    val eip: String,
-    val chain: Chain,
-    val address: String?
+data class WC2RequestViewItem(
+    val requestId: Long,
+    val title: String,
+    val subtitle: String,
+    val request: Wallet.Model.SessionRequest
 )
 
 data class WC2SessionUiState(
@@ -76,7 +73,6 @@ data class WC2SessionUiState(
     val buttonStates: WCSessionButtonStates?,
     val hint: Int?,
     val showError: String?,
-    val blockchains: List<BlockchainViewItem>,
     val status: Status?,
     val pendingRequests: List<WC2RequestViewItem>
 )
@@ -87,12 +83,6 @@ enum class Status(val value: Int) {
     CONNECTING(R.string.WalletConnect_Status_Connecting)
 }
 
-data class BlockchainViewItem(
-    val chainId: Int,
-    val name: String,
-    val address: String,
-)
-
 data class PeerMetaItem(
     val name: String,
     val url: String,
@@ -100,3 +90,11 @@ data class PeerMetaItem(
     val icon: String?,
     val accountName: String?,
 )
+
+sealed class WC2SessionServiceState {
+    object Idle : WC2SessionServiceState()
+    class Invalid(val error: Throwable) : WC2SessionServiceState()
+    object WaitingForApproveSession : WC2SessionServiceState()
+    object Ready : WC2SessionServiceState()
+    object Killed : WC2SessionServiceState()
+}

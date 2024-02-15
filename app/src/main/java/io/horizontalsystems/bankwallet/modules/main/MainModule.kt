@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
 import kotlinx.parcelize.Parcelize
 
 object MainModule {

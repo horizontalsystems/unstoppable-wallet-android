@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect.entity
+package io.horizontalsystems.bankwallet.modules.walletconnect.storage
 
 import androidx.room.Entity
 

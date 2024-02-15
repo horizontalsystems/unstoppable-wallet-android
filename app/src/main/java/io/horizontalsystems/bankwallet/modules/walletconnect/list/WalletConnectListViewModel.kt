@@ -5,70 +5,94 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.walletconnect.sign.client.Sign
+import com.walletconnect.android.CoreClient
+import com.walletconnect.web3.wallet.client.Wallet
+import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule.Section
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Parser
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
-import io.reactivex.disposables.CompositeDisposable
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class WalletConnectListViewModel(
-    private val wC2SessionManager: WC2SessionManager,
+    private val wcSessionManager: WCSessionManager,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val wc2Service: WC2Service
 ) : ViewModel() {
     enum class ConnectionResult {
         Success, Error
     }
+
+    private var pendingRequestCountMap = mutableMapOf<String, Int>()
+    private var pairingsNumber = 0
+    private var showError: String? = null
+    private var _refreshFlow: MutableSharedFlow<Unit> =
+        MutableSharedFlow(replay = 0, extraBufferCapacity = 1, BufferOverflow.DROP_OLDEST)
+    private var refreshFlow: SharedFlow<Unit> = _refreshFlow.asSharedFlow()
+    private val uiStateFlow = merge(WCDelegate.walletEvents, refreshFlow).map {
+        getUiState()
+    }
+
+    val uiState: StateFlow<WalletConnectListUiState> =
+        uiStateFlow.stateIn(viewModelScope, SharingStarted.Eagerly, getUiState())
 
     var connectionResult by mutableStateOf<ConnectionResult?>(null)
         private set
 
     var initialConnectionPrompted = false
 
-    private var v2SectionItem: Section? = null
-    private var pairingsNumber = wc2Service.getPairings().size
-    private val emptyScreen: Boolean
-        get() = v2SectionItem == null && pairingsNumber == 0
-
-    var uiState by mutableStateOf(
-        WalletConnectListUiState(
-            v2SectionItem = v2SectionItem,
-            pairingsNumber = pairingsNumber,
-            emptyScreen = emptyScreen,
-        )
-    )
-        private set
-
-    private val disposables = CompositeDisposable()
-
     init {
-        wC2SessionManager.sessionsObservable
-            .subscribeIO {
-                syncV2(it)
-                emitState()
-            }
-            .let { disposables.add(it) }
+        syncPairingCount()
+        syncPendingRequestsCountMap()
 
         viewModelScope.launch {
-            wC2SessionManager.pendingRequestCountFlow
-                .collect {
-                    syncV2(wC2SessionManager.sessions)
-                    emitState()
-                }
+            WCDelegate.pendingRequestEvents.collect {
+                syncPendingRequestsCountMap()
+            }
+        }
+        viewModelScope.launch {
+            WCDelegate.pairingEvents.collect {
+                syncPairingCount()
+            }
         }
 
-        syncV2(wC2SessionManager.sessions)
-        emitState()
+        viewModelScope.launch {
+            WCDelegate.walletEvents.collect {
+                syncPairingCount()
+            }
+        }
+    }
+
+    fun refreshList() {
+        _refreshFlow.tryEmit(Unit)
     }
 
     fun setConnectionUri(uri: String) {
+        if (uri.contains("requestId")) {
+            //wc also creates deeplinks for Pending Request
+            //we should ignore these deeplinks
+            return
+        }
         connectionResult = when (WalletConnectListModule.getVersionFromUri(uri)) {
             2 -> {
-                wc2Service.pair(uri)
+                Web3Wallet.pair(
+                    Wallet.Params.Pair(uri.trim()),
+                    onSuccess = {
+                        connectionResult = null
+                    },
+                    onError = {
+                        connectionResult = ConnectionResult.Error
+                    }
+                )
                 null
             }
 
@@ -76,63 +100,83 @@ class WalletConnectListViewModel(
         }
     }
 
-    private fun emitState() {
-        uiState = WalletConnectListUiState(
-            v2SectionItem = v2SectionItem,
-            pairingsNumber = pairingsNumber,
-            emptyScreen = emptyScreen
+    fun onDelete(topic: String) {
+        WCDelegate.deleteSession(
+            topic = topic,
+            onSuccess = {
+                _refreshFlow.tryEmit(Unit)
+            },
+            onError = {
+                showError = it.message
+                _refreshFlow.tryEmit(Unit)
+            }
         )
     }
 
-    override fun onCleared() {
-        disposables.clear()
+    fun onRouteHandled() {
+        connectionResult = null
     }
 
-    fun refreshPairingsNumber() {
-        pairingsNumber = wc2Service.getPairings().size
-        emitState()
+    fun errorShown() {
+        showError = null
+        _refreshFlow.tryEmit(Unit)
     }
 
-    private fun syncV2(sessions: List<Sign.Model.Session>) {
-        if (sessions.isEmpty()) {
-            v2SectionItem = null
-            return
-        }
+    private fun getUiState(): WalletConnectListUiState {
+        return WalletConnectListUiState(
+            sessionViewItems = getSessions(wcSessionManager.sessions),
+            pairingsNumber = pairingsNumber,
+        )
+    }
 
+    private fun getSessions(sessions: List<Wallet.Model.Session>): List<WalletConnectListModule.SessionViewItem> {
         val sessionItems = sessions.map { session ->
             WalletConnectListModule.SessionViewItem(
-                sessionId = session.topic,
+                sessionTopic = session.topic,
                 title = session.metaData?.name ?: "",
                 subtitle = getSubtitle(session.namespaces.values.map { it.accounts }.flatten()),
                 url = session.metaData?.url ?: "",
                 imageUrl = session.metaData?.icons?.lastOrNull(),
-                pendingRequestsCount = wc2Service.pendingRequests(session.topic).size,
+                pendingRequestsCount = pendingRequestCountMap[session.topic] ?: 0,
             )
         }
+        return sessionItems
+    }
 
-        v2SectionItem = Section(WalletConnectListModule.Version.Version2, sessionItems)
+    private fun syncPairingCount() {
+        viewModelScope.launch(Dispatchers.IO) {
+            pairingsNumber = getPairingCount()
+            _refreshFlow.tryEmit(Unit)
+        }
+    }
+
+    private fun syncPendingRequestsCountMap() {
+        viewModelScope.launch(Dispatchers.IO) {
+            wcSessionManager.sessions.forEach { session ->
+                val pendingRequests = Web3Wallet.getPendingListOfSessionRequests(session.topic)
+                pendingRequestCountMap[session.topic] = pendingRequests.size
+            }
+            _refreshFlow.tryEmit(Unit)
+        }
+    }
+
+    private fun getPairingCount(): Int {
+        return CoreClient.Pairing.getPairings().size
     }
 
     private fun getSubtitle(chains: List<String>): String {
         val chainNames = chains.mapNotNull { chain ->
-            WC2Parser.getChainId(chain)?.let { chainId ->
+            WCUtils.getChainData(chain)?.chain?.id?.let { chainId ->
                 evmBlockchainManager.getBlockchain(chainId)?.name
             }
         }
         return chainNames.joinToString(", ")
     }
 
-    fun onDeleteV2(sessionId: String) {
-        wC2SessionManager.deleteSession(sessionId)
-    }
-
-    fun onHandleRoute() {
-        connectionResult = null
-    }
 }
 
 data class WalletConnectListUiState(
-    val v2SectionItem: Section?,
-    val pairingsNumber: Int,
-    val emptyScreen: Boolean
+    val sessionViewItems: List<WalletConnectListModule.SessionViewItem> = emptyList(),
+    val pairingsNumber: Int = 0,
+    val showError: String? = null,
 )

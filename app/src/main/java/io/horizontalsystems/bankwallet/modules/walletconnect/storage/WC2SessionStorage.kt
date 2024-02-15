@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.storage
 
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
-import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectV2Session
 
 class WC2SessionStorage(appDatabase: AppDatabase) {
 

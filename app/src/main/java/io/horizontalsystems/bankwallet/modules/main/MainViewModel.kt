@@ -24,8 +24,8 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -39,7 +39,7 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val localStorage: ILocalStorage,
-    wc2SessionManager: WC2SessionManager,
+    wc2SessionManager: WCSessionManager,
     private val wc2Manager: WC2Manager,
     deepLink: Uri?
 ) : ViewModel() {
@@ -335,7 +335,7 @@ class MainViewModel(
             deeplinkString.startsWith("wc:") -> {
                 wcSupportState = wc2Manager.getWalletConnectSupportState()
                 if (wcSupportState == WC2Manager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wallet_connect_graph, WCListFragment.Input(deeplinkString))
+                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
                     tab = MainNavigation.Settings
                 }
             }
