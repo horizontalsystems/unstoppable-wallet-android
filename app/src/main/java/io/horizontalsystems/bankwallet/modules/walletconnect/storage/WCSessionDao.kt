@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface WC2SessionDao {
+interface WCSessionDao {
 
     @Query("SELECT * FROM WalletConnectV2Session")
     fun getAll(): List<WalletConnectV2Session>

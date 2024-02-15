@@ -49,11 +49,11 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class WC2SessionFragment : BaseComposeFragment() {
+class WCSessionFragment : BaseComposeFragment() {
 
-    private val viewModel by viewModels<WC2SessionViewModel> {
-        val input = arguments?.getInputX<WC2SessionModule.Input>()
-        WC2SessionModule.Factory(input?.sessionTopic)
+    private val viewModel by viewModels<WCSessionViewModel> {
+        val input = arguments?.getInputX<WCSessionModule.Input>()
+        WCSessionModule.Factory(input?.sessionTopic)
     }
 
     @Composable
@@ -82,7 +82,7 @@ class WC2SessionFragment : BaseComposeFragment() {
 @Composable
 fun WCSessionPage(
     navController: NavController,
-    viewModel: WC2SessionViewModel,
+    viewModel: WCSessionViewModel,
 ) {
     val uiState = viewModel.uiState
 
@@ -109,7 +109,7 @@ fun WCSessionPage(
 @Composable
 private fun ColumnScope.WCSessionListContent(
     navController: NavController,
-    viewModel: WC2SessionViewModel
+    viewModel: WCSessionViewModel
 ) {
     val uiState = viewModel.uiState
 
@@ -191,7 +191,7 @@ private fun ColumnScope.WCSessionListContent(
 
 @Composable
 private fun ActionButtons(
-    viewModel: WC2SessionViewModel,
+    viewModel: WCSessionViewModel,
     buttonsStates: WCSessionButtonStates
 ) {
     Column(Modifier.padding(horizontal = 24.dp)) {
@@ -235,8 +235,8 @@ private fun ActionButtons(
 
 @Composable
 fun RequestCell(
-    viewItem: WC2RequestViewItem,
-    onRequestClick: (WC2RequestViewItem) -> Unit,
+    viewItem: WCRequestViewItem,
+    onRequestClick: (WCRequestViewItem) -> Unit,
 ) {
     RowUniversal(
         modifier = Modifier

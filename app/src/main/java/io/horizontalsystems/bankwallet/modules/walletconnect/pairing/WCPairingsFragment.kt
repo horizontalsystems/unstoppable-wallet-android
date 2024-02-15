@@ -38,7 +38,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
-class WC2PairingsFragment : BaseComposeFragment() {
+class WCPairingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {

@@ -27,7 +27,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransac
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.ui.BlockchainCell
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WC2EthereumTransaction
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCEthereumTransaction
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -58,7 +58,7 @@ class WCRequestFragment : BaseComposeFragment() {
                         try {
                             val ethTransaction = Gson().fromJson(
                                 sessionRequestUI.param,
-                                WC2EthereumTransaction::class.java
+                                WCEthereumTransaction::class.java
                             )
                             ethTransaction.getWCTransaction()
                         } catch (e: Throwable) {

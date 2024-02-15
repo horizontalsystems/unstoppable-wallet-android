@@ -86,7 +86,7 @@ fun WCSessionList(
                         modifier = Modifier
                             .fillMaxSize()
                             .clickable {
-                                navController.slideFromRight(R.id.wc2PairingsFragment)
+                                navController.slideFromRight(R.id.wcPairingsFragment)
                             }
                             .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically

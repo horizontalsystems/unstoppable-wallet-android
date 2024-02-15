@@ -47,7 +47,7 @@ import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -139,15 +139,15 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
                                     when (val state = viewModel.getWalletConnectSupportState()) {
-                                        WC2Manager.SupportState.Supported -> {
+                                        WCManager.SupportState.Supported -> {
                                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
                                         }
 
-                                        WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                                        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                                         }
 
-                                        is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                                        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                                             navController.slideFromBottom(
                                                 R.id.backupRequiredDialog,
@@ -155,7 +155,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                             )
                                         }
 
-                                        is WC2Manager.SupportState.NotSupported -> {
+                                        is WCManager.SupportState.NotSupported -> {
                                             navController.slideFromBottom(
                                                 R.id.wcAccountTypeNotSupportedDialog,
                                                 WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)

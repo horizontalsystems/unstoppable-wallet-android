@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.walletconnect
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.entities.Account
 
-class WC2Manager(
+class WCManager(
     private val accountManager: IAccountManager,
 ) {
     sealed class SupportState {

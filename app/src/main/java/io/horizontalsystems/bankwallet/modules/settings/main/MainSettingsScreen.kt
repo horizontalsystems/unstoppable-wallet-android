@@ -41,7 +41,7 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequi
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
@@ -147,20 +147,20 @@ private fun SettingSections(
                 counterBadge = (wcCounter as? CounterType.PendingRequestCounter)?.number?.toString(),
                 onClick = {
                     when (val state = viewModel.getWalletConnectSupportState()) {
-                        WC2Manager.SupportState.Supported -> {
+                        WCManager.SupportState.Supported -> {
                             navController.slideFromRight(R.id.wcListFragment)
                         }
-                        WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                         }
-                        is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                             navController.slideFromBottom(
                                 R.id.backupRequiredDialog,
                                 BackupRequiredDialog.Input(state.account, text)
                             )
                         }
-                        is WC2Manager.SupportState.NotSupported -> {
+                        is WCManager.SupportState.NotSupported -> {
                             navController.slideFromBottom(
                                 R.id.wcAccountTypeNotSupportedDialog,
                                 WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)

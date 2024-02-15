@@ -27,7 +27,7 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WC2SessionModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -48,8 +48,8 @@ fun WCSessionCell(
             .background(ComposeAppTheme.colors.lawrence)
             .clickable {
                 navController.slideFromBottom(
-                    R.id.wc2SessionFragment,
-                    WC2SessionModule.Input(session.sessionTopic)
+                    R.id.wcSessionFragment,
+                    WCSessionModule.Input(session.sessionTopic)
                 )
             },
         contentAlignment = Alignment.Center

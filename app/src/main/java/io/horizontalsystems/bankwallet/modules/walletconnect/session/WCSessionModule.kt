@@ -8,15 +8,15 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import kotlinx.parcelize.Parcelize
 
-object WC2SessionModule {
+object WCSessionModule {
 
     class Factory(
         private val sessionTopic: String?,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return WC2SessionViewModel(
-                App.wc2SessionManager,
+            return WCSessionViewModel(
+                App.wcSessionManager,
                 App.connectivityManager,
                 App.accountManager.activeAccount,
                 sessionTopic,
@@ -59,14 +59,14 @@ data class WCBlockchain(
     fun getAccount() = "$chainNamespace:$chainId:$address"
 }
 
-data class WC2RequestViewItem(
+data class WCRequestViewItem(
     val requestId: Long,
     val title: String,
     val subtitle: String,
     val request: Wallet.Model.SessionRequest
 )
 
-data class WC2SessionUiState(
+data class WCSessionUiState(
     val peerMeta: PeerMetaItem?,
     val closeEnabled: Boolean,
     val connecting: Boolean,
@@ -74,7 +74,7 @@ data class WC2SessionUiState(
     val hint: Int?,
     val showError: String?,
     val status: Status?,
-    val pendingRequests: List<WC2RequestViewItem>
+    val pendingRequests: List<WCRequestViewItem>
 )
 
 enum class Status(val value: Int) {
@@ -91,10 +91,10 @@ data class PeerMetaItem(
     val accountName: String?,
 )
 
-sealed class WC2SessionServiceState {
-    object Idle : WC2SessionServiceState()
-    class Invalid(val error: Throwable) : WC2SessionServiceState()
-    object WaitingForApproveSession : WC2SessionServiceState()
-    object Ready : WC2SessionServiceState()
-    object Killed : WC2SessionServiceState()
+sealed class WCSessionServiceState {
+    object Idle : WCSessionServiceState()
+    class Invalid(val error: Throwable) : WCSessionServiceState()
+    object WaitingForApproveSession : WCSessionServiceState()
+    object Ready : WCSessionServiceState()
+    object Killed : WCSessionServiceState()
 }

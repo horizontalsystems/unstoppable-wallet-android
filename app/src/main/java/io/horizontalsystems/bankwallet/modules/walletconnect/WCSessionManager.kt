@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
-import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionStorage
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class WCSessionManager(
     private val accountManager: IAccountManager,
-    private val storage: WC2SessionStorage,
+    private val storage: WCSessionStorage,
 ) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)

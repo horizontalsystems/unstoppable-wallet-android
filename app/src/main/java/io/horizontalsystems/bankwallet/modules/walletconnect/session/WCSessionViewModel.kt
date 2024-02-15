@@ -12,10 +12,10 @@ import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WC2SessionServiceState.Invalid
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WC2SessionServiceState.Killed
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WC2SessionServiceState.Ready
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WC2SessionServiceState.WaitingForApproveSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Invalid
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Killed
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableAccount
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
@@ -32,7 +32,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class WC2SessionViewModel(
+class WCSessionViewModel(
     private val sessionManager: WCSessionManager,
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
@@ -49,10 +49,10 @@ class WC2SessionViewModel(
     private var hint: Int? = null
     private var showError: String? = null
     private var status: Status? = null
-    private var pendingRequests = listOf<WC2RequestViewItem>()
+    private var pendingRequests = listOf<WCRequestViewItem>()
 
     var uiState by mutableStateOf(
-        WC2SessionUiState(
+        WCSessionUiState(
             peerMeta = peerMeta,
             closeEnabled = closeEnabled,
             connecting = connecting,
@@ -65,7 +65,7 @@ class WC2SessionViewModel(
     )
         private set
 
-    private var sessionServiceState: WC2SessionServiceState = WC2SessionServiceState.Idle
+    private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
         set(value) {
             field = value
 
@@ -129,7 +129,7 @@ class WC2SessionViewModel(
                                     )
                                 }
 
-                                this@WC2SessionViewModel.session = session
+                                this@WCSessionViewModel.session = session
                                 sessionServiceState = Ready
                             }
 
@@ -195,9 +195,9 @@ class WC2SessionViewModel(
         }
     }
 
-    private fun getPendingRequestViewItems(topic: String): List<WC2RequestViewItem> {
+    private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
         return Web3Wallet.getPendingListOfSessionRequests(topic).map { request ->
-            WC2RequestViewItem(
+            WCRequestViewItem(
                 requestId = request.request.id,
                 title = title(request.request.method),
                 subtitle = request.chainId?.let { WCUtils.getChainData(it) }?.chain?.name ?: "",
@@ -215,7 +215,7 @@ class WC2SessionViewModel(
     }
 
     private fun sync(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connection: Boolean?
     ) {
         if (state == Killed) {
@@ -235,7 +235,7 @@ class WC2SessionViewModel(
     }
 
     private fun emitState() {
-        uiState = WC2SessionUiState(
+        uiState = WCSessionUiState(
             peerMeta = peerMeta,
             closeEnabled = closeEnabled,
             connecting = connecting,
@@ -362,7 +362,7 @@ class WC2SessionViewModel(
     }
 
     private fun setButtons(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connection: Boolean?
     ) {
         buttonStates = WCSessionButtonStates(
@@ -373,7 +373,7 @@ class WC2SessionViewModel(
         )
     }
 
-    private fun getCancelButtonState(state: WC2SessionServiceState): WCButtonState {
+    private fun getCancelButtonState(state: WCSessionServiceState): WCButtonState {
         return if (state != Ready) {
             WCButtonState.Enabled
         } else {
@@ -382,7 +382,7 @@ class WC2SessionViewModel(
     }
 
     private fun getConnectButtonState(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connectionState: Boolean?
     ): WCButtonState {
         return when {
@@ -392,7 +392,7 @@ class WC2SessionViewModel(
     }
 
     private fun getDisconnectButtonState(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connectionState: Boolean?
     ): WCButtonState {
         return when {
@@ -402,7 +402,7 @@ class WC2SessionViewModel(
     }
 
     private fun getRemoveButtonState(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connectionState: Boolean?
     ): WCButtonState {
         return when {
@@ -413,7 +413,7 @@ class WC2SessionViewModel(
     }
 
     private fun setError(
-        state: WC2SessionServiceState
+        state: WCSessionServiceState
     ) {
         val error: String? = when (state) {
             is Invalid -> state.error.message ?: state.error::class.java.simpleName
@@ -423,7 +423,7 @@ class WC2SessionViewModel(
         showError = error
     }
 
-    private fun getHint(connection: Boolean?, state: WC2SessionServiceState): Int? {
+    private fun getHint(connection: Boolean?, state: WCSessionServiceState): Int? {
         when {
             connection == false
                     && (state == WaitingForApproveSession || state is Ready) -> {

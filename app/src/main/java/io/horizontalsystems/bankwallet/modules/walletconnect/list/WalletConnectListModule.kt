@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 
 object WalletConnectListModule {
@@ -12,7 +11,7 @@ object WalletConnectListModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             return WalletConnectListViewModel(
-                App.wc2SessionManager,
+                App.wcSessionManager,
                 App.evmBlockchainManager,
             ) as T
         }
