@@ -17,7 +17,8 @@ import java.math.BigDecimal
 class SwapViewModel(
     private val quoteService: SwapQuoteService,
     private val balanceService: TokenBalanceService,
-    private val priceImpactService: PriceImpactService
+    private val priceImpactService: PriceImpactService,
+    private val quoteExpirationService: SwapQuoteExpirationService
 ) : ViewModel() {
 
     private var quoteState = quoteService.stateFlow.value
@@ -60,6 +61,11 @@ class SwapViewModel(
                 handleUpdatedPriceImpactState(it)
             }
         }
+        viewModelScope.launch {
+            quoteExpirationService.quoteExpiredFlow.collect {
+                handleUpdatedQuoteExpiredState(it)
+            }
+        }
     }
 
     private fun handleUpdatedBalance(balance: BigDecimal?) {
@@ -73,8 +79,15 @@ class SwapViewModel(
 
         balanceService.setToken(quoteState.tokenIn)
         priceImpactService.setPriceImpact(quoteState.quote?.priceImpact, quoteState.quote?.provider?.title)
+        quoteExpirationService.setQuote(quoteState.quote)
 
         emitState()
+    }
+
+    private fun handleUpdatedQuoteExpiredState(quoteExpired: Boolean) {
+        if (quoteExpired) {
+            quoteService.reQuote()
+        }
     }
 
     private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
@@ -123,7 +136,12 @@ class SwapViewModel(
             val tokenBalanceService = TokenBalanceService(App.adapterManager)
             val priceImpactService = PriceImpactService()
 
-            return SwapViewModel(swapQuoteService, tokenBalanceService, priceImpactService) as T
+            return SwapViewModel(
+                swapQuoteService,
+                tokenBalanceService,
+                priceImpactService,
+                SwapQuoteExpirationService()
+            ) as T
         }
     }
 }
