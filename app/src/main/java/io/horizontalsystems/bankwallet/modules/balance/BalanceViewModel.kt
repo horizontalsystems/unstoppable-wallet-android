@@ -23,7 +23,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +38,7 @@ class BalanceViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
-    private val wC2Manager: WC2Manager,
+    private val wCManager: WCManager,
     private val addressHandlerFactory: AddressHandlerFactory,
 ) : ViewModel(), ITotalBalance by totalBalance {
 
@@ -212,8 +212,8 @@ class BalanceViewModel(
         }
     }
 
-    fun getWalletConnectSupportState(): WC2Manager.SupportState {
-        return wC2Manager.getWalletConnectSupportState()
+    fun getWalletConnectSupportState(): WCManager.SupportState {
+        return wCManager.getWalletConnectSupportState()
     }
 
     fun handleScannedData(scannedText: String) {

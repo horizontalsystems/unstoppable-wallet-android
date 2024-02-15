@@ -24,7 +24,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
-import io.horizontalsystems.bankwallet.modules.walletconnect.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.disposables.CompositeDisposable
@@ -39,13 +39,13 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val localStorage: ILocalStorage,
-    wc2SessionManager: WCSessionManager,
-    private val wc2Manager: WC2Manager,
+    wcSessionManager: WCSessionManager,
+    private val wcManager: WCManager,
     deepLink: Uri?
 ) : ViewModel() {
 
     private val disposables = CompositeDisposable()
-    private var wc2PendingRequestsCount = 0
+    private var wcPendingRequestsCount = 0
     private var marketsTabEnabled = localStorage.marketsTabEnabledFlow.value
     private var transactionsEnabled = isTransactionsTabEnabled()
     private var settingsBadge: MainModule.BadgeType? = null
@@ -87,7 +87,7 @@ class MainViewModel(
     private var contentHidden = pinComponent.isLocked
     private var showWhatsNew = false
     private var activeWallet = accountManager.activeAccount
-    private var wcSupportState: WC2Manager.SupportState? = null
+    private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
 
     val wallets: List<Account>
@@ -121,8 +121,8 @@ class MainViewModel(
             updateSettingsBadge()
         }
 
-        wc2SessionManager.pendingRequestCountFlow.collectWith(viewModelScope) {
-            wc2PendingRequestsCount = it
+        wcSessionManager.pendingRequestCountFlow.collectWith(viewModelScope) {
+            wcPendingRequestsCount = it
             updateSettingsBadge()
         }
 
@@ -333,8 +333,8 @@ class MainViewModel(
             }
 
             deeplinkString.startsWith("wc:") -> {
-                wcSupportState = wc2Manager.getWalletConnectSupportState()
-                if (wcSupportState == WC2Manager.SupportState.Supported) {
+                wcSupportState = wcManager.getWalletConnectSupportState()
+                if (wcSupportState == WCManager.SupportState.Supported) {
                     deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
                     tab = MainNavigation.Settings
                 }
@@ -367,8 +367,8 @@ class MainViewModel(
         val showDotBadge =
             !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
 
-        settingsBadge = if (wc2PendingRequestsCount > 0) {
-            MainModule.BadgeType.BadgeNumber(wc2PendingRequestsCount)
+        settingsBadge = if (wcPendingRequestsCount > 0) {
+            MainModule.BadgeType.BadgeNumber(wcPendingRequestsCount)
         } else if (showDotBadge) {
             MainModule.BadgeType.BadgeDot
         } else {

@@ -398,8 +398,8 @@
 
     <!--Wallet Connect-->
     <fragment
-        android:id="@+id/wc2SessionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WC2SessionFragment"/>
+        android:id="@+id/wcSessionFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionFragment"/>
     <fragment
         android:id="@+id/wcRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
@@ -407,8 +407,8 @@
         android:id="@+id/wcListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment"/>
     <fragment
-        android:id="@+id/wc2PairingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.WC2PairingsFragment"/>
+        android:id="@+id/wcPairingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.WCPairingsFragment"/>
     <dialog
         android:id="@+id/wcErrorNoAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />

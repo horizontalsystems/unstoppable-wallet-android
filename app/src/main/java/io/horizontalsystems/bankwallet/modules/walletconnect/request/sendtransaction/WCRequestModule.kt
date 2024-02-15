@@ -195,7 +195,7 @@ data class WalletConnectTransaction(
     val data: ByteArray
 )
 
-data class WC2EthereumTransaction(
+data class WCEthereumTransaction(
     val from: String,
     val to: String?,
     val nonce: String?,

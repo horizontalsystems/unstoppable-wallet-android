@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import android.util.Log
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.web3.wallet.client.Wallet
@@ -186,7 +185,6 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
     ) {
         Web3Wallet.disconnectSession(Wallet.Params.SessionDisconnect(topic),
             onSuccess = {
-                Log.e("TAG", "deleteSession: ", )
                 scope.launch {
                     _walletEvents.emit(Wallet.Model.SessionDelete.Success(it.sessionTopic, ""))
                 }
