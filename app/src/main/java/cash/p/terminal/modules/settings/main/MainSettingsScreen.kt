@@ -42,7 +42,7 @@ import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
+import cash.p.terminal.modules.walletconnect.WC2Manager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.BadgeCount
@@ -149,7 +149,7 @@ private fun SettingSections(
                 onClick = {
                     when (val state = viewModel.getWalletConnectSupportState()) {
                         WC2Manager.SupportState.Supported -> {
-                            navController.slideFromRight(R.id.wallet_connect_graph)
+                            navController.slideFromRight(R.id.wcListFragment)
                         }
                         WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)

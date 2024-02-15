@@ -1,10 +1,9 @@
-package cash.p.terminal.modules.walletconnect.request.sendtransaction.ui
+package cash.p.terminal.modules.walletconnect.request.sendtransaction
+>>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/request/sendtransaction/WCSendEthScreen.kt
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -26,7 +25,6 @@ import cash.p.terminal.modules.fee.FeeCell
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.sendevmtransaction.ViewItem
-import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
 import cash.p.terminal.modules.walletconnect.request.ui.AmountCell
 import cash.p.terminal.modules.walletconnect.request.ui.AmountMultiCell
 import cash.p.terminal.modules.walletconnect.request.ui.SubheadCell
@@ -43,9 +41,11 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
+import cash.p.terminal.ui.compose.components.VSpacer
+>>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/request/sendtransaction/WCSendEthScreen.kt
 
 @Composable
-fun SendEthRequestScreen(
+fun WCSendEthRequestScreen(
     navController: NavController,
     viewModel: WCSendEthereumTransactionRequestViewModel,
     sendEvmTransactionViewModel: SendEvmTransactionViewModel,
@@ -54,6 +54,7 @@ fun SendEthRequestScreen(
     parentNavGraphId: Int,
     close: () -> Unit,
 ) {
+
     val transactionInfoItems by sendEvmTransactionViewModel.viewItemsLiveData.observeAsState()
     val approveEnabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
     val cautions by sendEvmTransactionViewModel.cautionsLiveData.observeAsState()
@@ -88,7 +89,7 @@ fun SendEthRequestScreen(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            Spacer(Modifier.height(12.dp))
+            VSpacer(12.dp)
             transactionInfoItems?.let { sections ->
                 sections.forEach { section ->
                     CellUniversalLawrenceSection(section.viewItems) { item ->
@@ -142,7 +143,7 @@ fun SendEthRequestScreen(
                             }
                         }
                     }
-                    Spacer(Modifier.height(12.dp))
+                    VSpacer(12.dp)
                 }
             }
 
@@ -162,7 +163,7 @@ fun SendEthRequestScreen(
                 Cautions(it)
             }
 
-            Spacer(Modifier.height(24.dp))
+            VSpacer(24.dp)
         }
         Column(Modifier.padding(horizontal = 24.dp)) {
             ButtonPrimaryYellow(
@@ -174,7 +175,7 @@ fun SendEthRequestScreen(
                     sendEvmTransactionViewModel.send(logger)
                 }
             )
-            Spacer(Modifier.height(16.dp))
+            VSpacer(16.dp)
             ButtonPrimaryDefault(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Reject),
@@ -183,7 +184,7 @@ fun SendEthRequestScreen(
                     close()
                 }
             )
-            Spacer(Modifier.height(32.dp))
+            VSpacer(32.dp)
         }
 
     }

@@ -13,7 +13,7 @@ import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 import cash.p.terminal.modules.swap.SwapMainModule.PriceImpactViewItem
-import cash.p.terminal.modules.walletconnect.request.WCRequestChain
+import cash.p.terminal.modules.walletconnect.request.WCChainData
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.Token
@@ -68,7 +68,7 @@ data class SendEvmData(
     @Parcelize
     data class WalletConnectInfo(
         val dAppName: String?,
-        val chain: WCRequestChain?
+        val chain: WCChainData?
     ) : Parcelable
 
     @Parcelize

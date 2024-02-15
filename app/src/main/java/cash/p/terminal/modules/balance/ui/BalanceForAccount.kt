@@ -47,7 +47,7 @@ import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
+import cash.p.terminal.modules.walletconnect.WC2Manager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar

@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
+import cash.p.terminal.modules.walletconnect.WC2Manager
 import kotlinx.parcelize.Parcelize
 
 object MainModule {

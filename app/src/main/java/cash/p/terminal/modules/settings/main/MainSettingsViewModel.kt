@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
+import cash.p.terminal.modules.walletconnect.WC2Manager
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 

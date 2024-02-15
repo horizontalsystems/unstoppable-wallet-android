@@ -291,7 +291,7 @@ dependencies {
 
     // WalletConnect V2
     implementation(platform("com.walletconnect:android-bom:1.15.0"))
-    implementation 'com.walletconnect:sign'
+    implementation 'com.walletconnect:web3wallet'
     implementation 'com.walletconnect:android-core'
 
     // Unstoppable Domains

@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
 
 @Dao
 interface WC2SessionDao {

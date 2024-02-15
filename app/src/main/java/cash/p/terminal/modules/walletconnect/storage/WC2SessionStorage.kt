@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.walletconnect.storage
 
 import cash.p.terminal.core.storage.AppDatabase
-import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
 
 class WC2SessionStorage(appDatabase: AppDatabase) {
 

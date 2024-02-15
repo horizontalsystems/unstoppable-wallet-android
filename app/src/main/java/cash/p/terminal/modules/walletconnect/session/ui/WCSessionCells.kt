@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.modules.walletconnect.session.v2.Status
+import cash.p.terminal.modules.walletconnect.session.Status
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
@@ -26,7 +26,7 @@ import cash.p.terminal.ui.compose.components.subhead2_grey
 @Composable
 fun BlockchainCell(
     title: String,
-    value: String,
+    value: String?,
 ) {
     RowUniversal(
         modifier = Modifier
@@ -36,7 +36,9 @@ fun BlockchainCell(
         subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         Spacer(Modifier.width(8.dp))
-        subhead1_leah(text = value)
+        value?.let {
+            subhead1_leah(text = it)
+        }
     }
 }
 

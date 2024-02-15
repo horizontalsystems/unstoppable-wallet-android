@@ -18,7 +18,7 @@ import cash.p.terminal.modules.pin.core.Pin
 import cash.p.terminal.modules.pin.core.PinDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
-import cash.p.terminal.modules.walletconnect.entity.WalletConnectV2Session
+import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
 
 @Database(version = 58, exportSchema = false, entities = [

@@ -15,8 +15,8 @@ import coil.decode.SvgDecoder
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
-import com.walletconnect.sign.client.Sign
-import com.walletconnect.sign.client.SignClient
+import com.walletconnect.web3.wallet.client.Wallet
+import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
@@ -101,9 +101,8 @@ import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
-import cash.p.terminal.modules.walletconnect.version2.WC2Service
-import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
+import cash.p.terminal.modules.walletconnect.WC2Manager
+import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.widgets.MarketWidgetManager
 import cash.p.terminal.widgets.MarketWidgetRepository
 import cash.p.terminal.widgets.MarketWidgetWorker
@@ -164,8 +163,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
-        lateinit var wc2Service: WC2Service
-        lateinit var wc2SessionManager: WC2SessionManager
+        lateinit var wc2SessionManager: WCSessionManager
         lateinit var wc2Manager: WC2Manager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
@@ -368,7 +366,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
-        wc2Manager = WC2Manager(accountManager, evmBlockchainManager)
+        wc2Manager = WC2Manager(accountManager)
 
         termsManager = TermsManager(localStorage)
 
@@ -396,8 +394,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         initializeWalletConnectV2(appConfig)
 
-        wc2Service = WC2Service()
-        wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
+        wc2SessionManager = WCSessionManager(accountManager, WC2SessionStorage(appDatabase))
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
@@ -477,9 +474,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             },
         )
 
-        val init = Sign.Params.Init(core = CoreClient)
-        SignClient.initialize(init) { error ->
-            Log.w("AAA", "error", error.throwable)
+        Web3Wallet.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
+            Log.e("AAA", "error", error.throwable)
         }
     }
 

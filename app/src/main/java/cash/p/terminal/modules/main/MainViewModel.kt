@@ -15,17 +15,17 @@ import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.ReleaseNotesManager
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.main.MainModule.MainNavigation
-import cash.p.terminal.modules.market.platform.MarketPlatformFragment
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.modules.nft.collection.NftCollectionFragment
 import cash.p.terminal.modules.walletconnect.list.WCListFragment
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
-import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
+import cash.p.terminal.modules.walletconnect.WC2Manager
+import cash.p.terminal.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -39,7 +39,7 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val localStorage: ILocalStorage,
-    wc2SessionManager: WC2SessionManager,
+    wc2SessionManager: WCSessionManager,
     private val wc2Manager: WC2Manager,
     deepLink: Uri?
 ) : ViewModel() {
@@ -334,7 +334,7 @@ class MainViewModel(
             deeplinkString.startsWith("wc:") -> {
                 wcSupportState = wc2Manager.getWalletConnectSupportState()
                 if (wcSupportState == WC2Manager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wallet_connect_graph, WCListFragment.prepareParams(deeplinkString))
+                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
                     tab = MainNavigation.Settings
                 }
             }

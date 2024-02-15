@@ -1,4 +1,5 @@
-package cash.p.terminal.modules.walletconnect.session.v2
+package cash.p.terminal.modules.walletconnect.session
+>>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionFragment.kt
 
 import android.os.Bundle
 import android.view.View
@@ -23,17 +24,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInputX
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.walletconnect.request.WC2RequestFragment
 import cash.p.terminal.modules.walletconnect.session.ui.StatusCell
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
-import cash.p.terminal.modules.walletconnect.session.v2.WC2SessionModule.SESSION_TOPIC_KEY
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -43,8 +44,10 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.helpers.TextHelper
+>>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionFragment.kt
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -163,12 +166,11 @@ private fun ColumnScope.WCSessionListContent(
         val pendingRequests = uiState.pendingRequests
         if (pendingRequests.isNotEmpty()) {
             HeaderText(text = stringResource(R.string.WalletConnect_PendingRequests))
-            CellUniversalLawrenceSection(pendingRequests) { request ->
-                RequestCell(viewItem = request) {
-                    navController.slideFromBottom(
-                        R.id.wc2RequestFragment,
-                        WC2RequestFragment.prepareParams(it.requestId)
-                    )
+            CellUniversalLawrenceSection(pendingRequests) { item ->
+                RequestCell(viewItem = item) {
+                    viewModel.setRequestToOpen(item.request)
+                    navController.slideFromBottom(R.id.wcRequestFragment)
+>>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionFragment.kt
                 }
             }
             Spacer(Modifier.height(32.dp))
@@ -218,7 +220,7 @@ private fun ActionButtons(
             ButtonPrimaryDefault(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Cancel),
-                onClick = { viewModel.cancel() }
+                onClick = { viewModel.rejectProposal() }
             )
         }
         if (buttonsStates.remove.visible) {
@@ -230,5 +232,40 @@ private fun ActionButtons(
             )
         }
         Spacer(Modifier.height(32.dp))
+    }
+}
+
+@Composable
+fun RequestCell(
+    viewItem: WC2RequestViewItem,
+    onRequestClick: (WC2RequestViewItem) -> Unit,
+) {
+    RowUniversal(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        onClick = { onRequestClick.invoke(viewItem) }
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = viewItem.title,
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.leah,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            Text(
+                text = viewItem.subtitle,
+                style = ComposeAppTheme.typography.subhead2,
+                color = ComposeAppTheme.colors.grey,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Image(
+            modifier = Modifier.padding(start = 5.dp),
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null,
+        )
     }
 }

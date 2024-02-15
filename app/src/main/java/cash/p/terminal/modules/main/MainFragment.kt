@@ -57,7 +57,7 @@ import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsScreen
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager.SupportState
+import cash.p.terminal.modules.walletconnect.WC2Manager.SupportState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.HsBottomNavigation
