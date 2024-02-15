@@ -1,16 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction
 
 import androidx.lifecycle.ViewModel
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.core.toHexString
 
-class WCSendEthereumTransactionRequestViewModel(
-        private val service: WCRequestModule.RequestAction
-) : ViewModel() {
+class WCSendEthereumTransactionRequestViewModel: ViewModel() {
 
     fun approve(transactionHash: ByteArray) {
-        service.approve(transactionHash)
+        WCDelegate.sessionRequestEvent?.let { sessionRequest ->
+            WCDelegate.respondPendingRequest(sessionRequest.request.id, sessionRequest.topic, transactionHash.toHexString())
+        }
     }
 
     fun reject() {
-        service.reject()
+        WCDelegate.sessionRequestEvent?.let { sessionRequest ->
+            WCDelegate.rejectRequest(sessionRequest.topic, sessionRequest.request.id)
+        }
     }
 }
