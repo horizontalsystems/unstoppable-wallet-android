@@ -67,4 +67,7 @@ data class SwapProviderQuote(
     val fee by swapQuote::fee
     val fields by swapQuote::fields
     val priceImpact by swapQuote::priceImpact
+
+    val createdAt = System.currentTimeMillis()
+    val expireAt = createdAt + 30000L
 }

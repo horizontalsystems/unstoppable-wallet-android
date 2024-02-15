@@ -5,7 +5,6 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -40,7 +39,6 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
 
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
     private var quotingJob: Job? = null
-    private var scheduleReQuoteJob: Job? = null
     private var settings: Map<String, Any?> = mapOf()
 
     fun setAmount(v: BigDecimal?) {
@@ -82,6 +80,10 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
         emitState()
     }
 
+    fun reQuote() {
+        runQuotation()
+    }
+
     private fun emitState() {
         _stateFlow.update {
             State(
@@ -100,7 +102,6 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
 
     private fun runQuotation() {
         quotingJob?.cancel()
-        scheduleReQuoteJob?.cancel()
 
         quotes = listOf()
         quote = null
@@ -133,16 +134,7 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
 
                 quoting = false
                 emitState()
-
-                scheduleReQuote()
             }
-        }
-    }
-
-    private fun scheduleReQuote() {
-        scheduleReQuoteJob = coroutineScope.launch {
-            delay(quoteLifetime)
-            runQuotation()
         }
     }
 
