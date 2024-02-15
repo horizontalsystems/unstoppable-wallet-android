@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.main
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -53,7 +52,7 @@ class MainActivity : BaseActivity() {
             .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
             .onEach { event ->
                 when (event) {
-                    is SignEvent.SessionProposal -> navController.slideFromBottom(R.id.wc2SessionFragment)
+                    is SignEvent.SessionProposal -> navController.slideFromBottom(R.id.wcSessionFragment)
                     is SignEvent.SessionRequest -> {
                         navController.slideFromBottom(R.id.wcRequestFragment,)
                     }

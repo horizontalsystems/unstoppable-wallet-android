@@ -27,7 +27,7 @@ import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCRequestMo
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
 import cash.p.terminal.modules.walletconnect.request.ui.TitleTypedValueCell
 import cash.p.terminal.modules.walletconnect.session.ui.BlockchainCell
-import cash.p.terminal.modules.walletconnect.request.sendtransaction.WC2EthereumTransaction
+import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCEthereumTransaction
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -58,7 +58,7 @@ class WCRequestFragment : BaseComposeFragment() {
                         try {
                             val ethTransaction = Gson().fromJson(
                                 sessionRequestUI.param,
-                                WC2EthereumTransaction::class.java
+                                WCEthereumTransaction::class.java
                             )
                             ethTransaction.getWCTransaction()
                         } catch (e: Throwable) {

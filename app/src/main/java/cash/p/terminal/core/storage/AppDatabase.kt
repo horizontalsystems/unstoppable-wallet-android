@@ -19,7 +19,7 @@ import cash.p.terminal.modules.pin.core.PinDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
-import cash.p.terminal.modules.walletconnect.storage.WC2SessionDao
+import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
 
 @Database(version = 58, exportSchema = false, entities = [
     EnabledWallet::class,
@@ -59,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
-    abstract fun wc2SessionDao(): WC2SessionDao
+    abstract fun wcSessionDao(): WCSessionDao
     abstract fun nftDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao
     abstract fun evmAddressLabelDao(): EvmAddressLabelDao

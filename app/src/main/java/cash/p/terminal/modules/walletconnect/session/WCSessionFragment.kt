@@ -51,10 +51,12 @@ import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
-class WC2SessionFragment : BaseComposeFragment() {
+class WCSessionFragment : BaseComposeFragment() {
 
-    private val viewModel by viewModels<WC2SessionViewModel> {
-        WC2SessionModule.Factory(arguments?.getString(SESSION_TOPIC_KEY))
+    private val viewModel by viewModels<WCSessionViewModel> {
+        val input = arguments?.getInputX<WCSessionModule.Input>()
+        WCSessionModule.Factory(input?.sessionTopic)
+>>>>>>>> b314ca824 (Rename prefix `wc2` to `wc` for WalletConnect classes):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WCSessionFragment.kt
     }
 
     @Composable
@@ -83,7 +85,7 @@ class WC2SessionFragment : BaseComposeFragment() {
 @Composable
 fun WCSessionPage(
     navController: NavController,
-    viewModel: WC2SessionViewModel,
+    viewModel: WCSessionViewModel,
 ) {
     val uiState = viewModel.uiState
 
@@ -110,7 +112,7 @@ fun WCSessionPage(
 @Composable
 private fun ColumnScope.WCSessionListContent(
     navController: NavController,
-    viewModel: WC2SessionViewModel
+    viewModel: WCSessionViewModel
 ) {
     val uiState = viewModel.uiState
 
@@ -193,7 +195,7 @@ private fun ColumnScope.WCSessionListContent(
 
 @Composable
 private fun ActionButtons(
-    viewModel: WC2SessionViewModel,
+    viewModel: WCSessionViewModel,
     buttonsStates: WCSessionButtonStates
 ) {
     Column(Modifier.padding(horizontal = 24.dp)) {
@@ -237,8 +239,8 @@ private fun ActionButtons(
 
 @Composable
 fun RequestCell(
-    viewItem: WC2RequestViewItem,
-    onRequestClick: (WC2RequestViewItem) -> Unit,
+    viewItem: WCRequestViewItem,
+    onRequestClick: (WCRequestViewItem) -> Unit,
 ) {
     RowUniversal(
         modifier = Modifier

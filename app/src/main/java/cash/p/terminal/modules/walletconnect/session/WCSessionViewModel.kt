@@ -12,10 +12,10 @@ import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.modules.walletconnect.session.WC2SessionServiceState.Invalid
-import cash.p.terminal.modules.walletconnect.session.WC2SessionServiceState.Killed
-import cash.p.terminal.modules.walletconnect.session.WC2SessionServiceState.Ready
-import cash.p.terminal.modules.walletconnect.session.WC2SessionServiceState.WaitingForApproveSession
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Invalid
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Killed
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Ready
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableAccount
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
@@ -23,6 +23,7 @@ import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.R
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.UnsupportedChainId
 import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.WCUtils
+>>>>>>>> b314ca824 (Rename prefix `wc2` to `wc` for WalletConnect classes):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WCSessionViewModel.kt
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
@@ -32,7 +33,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class WC2SessionViewModel(
+class WCSessionViewModel(
     private val sessionManager: WCSessionManager,
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
@@ -49,10 +50,10 @@ class WC2SessionViewModel(
     private var hint: Int? = null
     private var showError: String? = null
     private var status: Status? = null
-    private var pendingRequests = listOf<WC2RequestViewItem>()
+    private var pendingRequests = listOf<WCRequestViewItem>()
 
     var uiState by mutableStateOf(
-        WC2SessionUiState(
+        WCSessionUiState(
             peerMeta = peerMeta,
             closeEnabled = closeEnabled,
             connecting = connecting,
@@ -65,7 +66,7 @@ class WC2SessionViewModel(
     )
         private set
 
-    private var sessionServiceState: WC2SessionServiceState = WC2SessionServiceState.Idle
+    private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
         set(value) {
             field = value
 
@@ -129,7 +130,7 @@ class WC2SessionViewModel(
                                     )
                                 }
 
-                                this@WC2SessionViewModel.session = session
+                                this@WCSessionViewModel.session = session
                                 sessionServiceState = Ready
                             }
 
@@ -195,9 +196,9 @@ class WC2SessionViewModel(
         }
     }
 
-    private fun getPendingRequestViewItems(topic: String): List<WC2RequestViewItem> {
+    private fun getPendingRequestViewItems(topic: String): List<WCRequestViewItem> {
         return Web3Wallet.getPendingListOfSessionRequests(topic).map { request ->
-            WC2RequestViewItem(
+            WCRequestViewItem(
                 requestId = request.request.id,
                 title = title(request.request.method),
                 subtitle = request.chainId?.let { WCUtils.getChainData(it) }?.chain?.name ?: "",
@@ -215,7 +216,7 @@ class WC2SessionViewModel(
     }
 
     private fun sync(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connection: Boolean?
     ) {
         if (state == Killed) {
@@ -235,7 +236,7 @@ class WC2SessionViewModel(
     }
 
     private fun emitState() {
-        uiState = WC2SessionUiState(
+        uiState = WCSessionUiState(
             peerMeta = peerMeta,
             closeEnabled = closeEnabled,
             connecting = connecting,
@@ -362,7 +363,7 @@ class WC2SessionViewModel(
     }
 
     private fun setButtons(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connection: Boolean?
     ) {
         buttonStates = WCSessionButtonStates(
@@ -373,7 +374,7 @@ class WC2SessionViewModel(
         )
     }
 
-    private fun getCancelButtonState(state: WC2SessionServiceState): WCButtonState {
+    private fun getCancelButtonState(state: WCSessionServiceState): WCButtonState {
         return if (state != Ready) {
             WCButtonState.Enabled
         } else {
@@ -382,7 +383,7 @@ class WC2SessionViewModel(
     }
 
     private fun getConnectButtonState(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connectionState: Boolean?
     ): WCButtonState {
         return when {
@@ -392,7 +393,7 @@ class WC2SessionViewModel(
     }
 
     private fun getDisconnectButtonState(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connectionState: Boolean?
     ): WCButtonState {
         return when {
@@ -402,7 +403,7 @@ class WC2SessionViewModel(
     }
 
     private fun getRemoveButtonState(
-        state: WC2SessionServiceState,
+        state: WCSessionServiceState,
         connectionState: Boolean?
     ): WCButtonState {
         return when {
@@ -413,7 +414,7 @@ class WC2SessionViewModel(
     }
 
     private fun setError(
-        state: WC2SessionServiceState
+        state: WCSessionServiceState
     ) {
         val error: String? = when (state) {
             is Invalid -> state.error.message ?: state.error::class.java.simpleName
@@ -423,7 +424,7 @@ class WC2SessionViewModel(
         showError = error
     }
 
-    private fun getHint(connection: Boolean?, state: WC2SessionServiceState): Int? {
+    private fun getHint(connection: Boolean?, state: WCSessionServiceState): Int? {
         when {
             connection == false
                     && (state == WaitingForApproveSession || state is Ready) -> {

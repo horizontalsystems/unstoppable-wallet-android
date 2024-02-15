@@ -35,7 +35,7 @@ object BalanceModule {
                 App.balanceViewTypeManager,
                 TotalBalance(totalService, App.balanceHiddenManager),
                 App.localStorage,
-                App.wc2Manager,
+                App.wcManager,
                 AddressHandlerFactory(App.appConfigProvider.udnApiKey),
             ) as T
         }

@@ -16,8 +16,8 @@ object MainSettingsModule {
                 App.currencyManager,
                 App.termsManager,
                 App.pinComponent,
-                App.wc2SessionManager,
-                App.wc2Manager,
+                App.wcSessionManager,
+                App.wcManager,
                 App.accountManager,
                 App.appConfigProvider,
             )

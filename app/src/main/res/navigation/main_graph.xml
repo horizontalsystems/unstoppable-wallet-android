@@ -395,8 +395,8 @@
 
     <!--Wallet Connect-->
     <fragment
-        android:id="@+id/wc2SessionFragment"
-        android:name="cash.p.terminal.modules.walletconnect.session.WC2SessionFragment"/>
+        android:id="@+id/wcSessionFragment"
+        android:name="cash.p.terminal.modules.walletconnect.session.WCSessionFragment"/>
     <fragment
         android:id="@+id/wcRequestFragment"
         android:name="cash.p.terminal.modules.walletconnect.request.WCRequestFragment"/>
@@ -404,8 +404,8 @@
         android:id="@+id/wcListFragment"
         android:name="cash.p.terminal.modules.walletconnect.list.WCListFragment"/>
     <fragment
-        android:id="@+id/wc2PairingsFragment"
-        android:name="cash.p.terminal.modules.walletconnect.pairing.WC2PairingsFragment"/>
+        android:id="@+id/wcPairingsFragment"
+        android:name="cash.p.terminal.modules.walletconnect.pairing.WCPairingsFragment"/>
     <dialog
         android:id="@+id/wcErrorNoAccountFragment"
         android:name="cash.p.terminal.modules.walletconnect.WCErrorNoAccountFragment" />

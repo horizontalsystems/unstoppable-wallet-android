@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
-import cash.p.terminal.modules.walletconnect.WC2Manager
+import cash.p.terminal.modules.walletconnect.WCManager
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
@@ -26,7 +26,7 @@ class MainSettingsViewModel(
     val appWebPageLink by service::appWebPageLink
 
     private var wcSessionsCount = service.walletConnectSessionCount
-    private var wc2PendingRequestCount = 0
+    private var wcPendingRequestCount = 0
 
     init {
         viewModelScope.launch {
@@ -56,7 +56,7 @@ class MainSettingsViewModel(
 
         viewModelScope.launch {
             service.pendingRequestCountFlow.collect {
-                wc2PendingRequestCount = it
+                wcPendingRequestCount = it
                 syncCounter()
             }
         }
@@ -74,13 +74,13 @@ class MainSettingsViewModel(
         disposables.clear()
     }
 
-    fun getWalletConnectSupportState(): WC2Manager.SupportState {
+    fun getWalletConnectSupportState(): WCManager.SupportState {
         return service.getWalletConnectSupportState()
     }
 
     private fun syncCounter() {
-        if (wc2PendingRequestCount > 0) {
-            wcCounterLiveData.postValue(CounterType.PendingRequestCounter(wc2PendingRequestCount))
+        if (wcPendingRequestCount > 0) {
+            wcCounterLiveData.postValue(CounterType.PendingRequestCounter(wcPendingRequestCount))
         } else if (wcSessionsCount > 0) {
             wcCounterLiveData.postValue(CounterType.SessionCounter(wcSessionsCount))
         } else {

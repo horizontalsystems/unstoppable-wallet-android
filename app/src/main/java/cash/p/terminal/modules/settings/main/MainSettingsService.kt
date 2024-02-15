@@ -9,7 +9,7 @@ import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.walletconnect.WC2Manager
+import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
@@ -27,8 +27,8 @@ class MainSettingsService(
     private val currencyManager: CurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
-    private val wc2SessionManager: WCSessionManager,
-    private val wc2Manager: WC2Manager,
+    private val wcSessionManager: WCSessionManager,
+    private val wcManager: WCManager,
     private val accountManager: IAccountManager,
     private val appConfigProvider: AppConfigProvider
 ) {
@@ -68,10 +68,10 @@ class MainSettingsService(
     val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 
-    val pendingRequestCountFlow by wc2SessionManager::pendingRequestCountFlow
+    val pendingRequestCountFlow by wcSessionManager::pendingRequestCountFlow
 
     val walletConnectSessionCount: Int
-        get() = wc2SessionManager.sessions.count()
+        get() = wcSessionManager.sessions.count()
 
     val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName
@@ -88,7 +88,7 @@ class MainSettingsService(
         })
 
         coroutineScope.launch {
-            wc2SessionManager.sessionsFlow.collect{
+            wcSessionManager.sessionsFlow.collect{
                 walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
             }
         }
@@ -106,7 +106,7 @@ class MainSettingsService(
         disposables.clear()
     }
 
-    fun getWalletConnectSupportState(): WC2Manager.SupportState {
-        return wc2Manager.getWalletConnectSupportState()
+    fun getWalletConnectSupportState(): WCManager.SupportState {
+        return wcManager.getWalletConnectSupportState()
     }
 }

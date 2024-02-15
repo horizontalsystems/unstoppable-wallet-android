@@ -6,8 +6,7 @@ import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
-import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/WCSessionManager.kt
+import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class WCSessionManager(
     private val accountManager: IAccountManager,
-    private val storage: WC2SessionStorage,
+    private val storage: WCSessionStorage,
 ) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)

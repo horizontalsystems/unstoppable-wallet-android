@@ -3,7 +3,7 @@ package cash.p.terminal.modules.walletconnect
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.entities.Account
 
-class WC2Manager(
+class WCManager(
     private val accountManager: IAccountManager,
 ) {
     sealed class SupportState {

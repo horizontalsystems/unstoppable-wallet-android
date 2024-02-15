@@ -27,7 +27,7 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
-import cash.p.terminal.modules.walletconnect.session.WC2SessionModule
+import cash.p.terminal.modules.walletconnect.session.WCSessionModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.BadgeCount
 import cash.p.terminal.ui.compose.components.body_leah
@@ -48,8 +48,8 @@ fun WCSessionCell(
             .background(ComposeAppTheme.colors.lawrence)
             .clickable {
                 navController.slideFromBottom(
-                    R.id.wc2SessionFragment,
-                    WC2SessionModule.Input(session.sessionTopic)
+                    R.id.wcSessionFragment,
+                    WCSessionModule.Input(session.sessionTopic)
                 )
             },
         contentAlignment = Alignment.Center

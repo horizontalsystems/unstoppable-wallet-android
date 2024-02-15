@@ -100,8 +100,8 @@ import cash.p.terminal.modules.settings.appearance.AppIconService
 import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
-import cash.p.terminal.modules.walletconnect.storage.WC2SessionStorage
-import cash.p.terminal.modules.walletconnect.WC2Manager
+import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
+import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.widgets.MarketWidgetManager
 import cash.p.terminal.widgets.MarketWidgetRepository
@@ -163,8 +163,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
-        lateinit var wc2SessionManager: WCSessionManager
-        lateinit var wc2Manager: WC2Manager
+        lateinit var wcSessionManager: WCSessionManager
+        lateinit var wcManager: WCManager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
@@ -366,7 +366,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
-        wc2Manager = WC2Manager(accountManager)
+        wcManager = WCManager(accountManager)
 
         termsManager = TermsManager(localStorage)
 
@@ -394,7 +394,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         initializeWalletConnectV2(appConfig)
 
-        wc2SessionManager = WCSessionManager(accountManager, WC2SessionStorage(appDatabase))
+        wcSessionManager = WCSessionManager(accountManager, WCSessionStorage(appDatabase))
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
