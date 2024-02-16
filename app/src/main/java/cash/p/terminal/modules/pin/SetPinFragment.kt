@@ -11,7 +11,7 @@ import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.pin.ui.PinSet
 import kotlinx.parcelize.Parcelize
 
-class SetPinFragment : BaseComposeFragment() {
+class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

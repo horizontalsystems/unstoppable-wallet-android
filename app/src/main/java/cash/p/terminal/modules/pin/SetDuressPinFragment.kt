@@ -15,7 +15,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.parcelable
 import kotlinx.parcelize.Parcelize
 
-class SetDuressPinFragment : BaseComposeFragment() {
+class SetDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
