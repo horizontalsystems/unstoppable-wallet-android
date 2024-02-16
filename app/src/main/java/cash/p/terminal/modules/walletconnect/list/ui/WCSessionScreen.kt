@@ -84,10 +84,6 @@ fun WCSessionsScreen(
     LaunchedEffect(Unit) {
         if (deepLinkUri != null) {
             viewModel.setConnectionUri(deepLinkUri)
-        } else if (!viewModel.initialConnectionPrompted && uiState.sessionViewItems.isEmpty()) {
-            delay(300)
-            viewModel.initialConnectionPrompted = true
-            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
         }
     }
 

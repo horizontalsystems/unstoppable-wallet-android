@@ -48,8 +48,6 @@ class WalletConnectListViewModel(
     var connectionResult by mutableStateOf<ConnectionResult?>(null)
         private set
 
-    var initialConnectionPrompted = false
-
     init {
         syncPairingCount()
         syncPendingRequestsCountMap()
