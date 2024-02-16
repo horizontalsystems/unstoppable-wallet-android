@@ -129,6 +129,9 @@ class SwapViewModel(
     fun onSwitchPairs() = quoteService.switchPairs()
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
 
+    fun getCurrentQuote() = quoteState.quote
+    fun getSettings() = quoteService.getSwapSettings()
+
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

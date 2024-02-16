@@ -143,6 +143,8 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
         runQuotation()
     }
 
+    fun getSwapSettings() = settings
+
     data class State(
         val amountIn: BigDecimal?,
         val tokenIn: Token?,
