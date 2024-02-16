@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
@@ -235,4 +236,6 @@ object CoinAnalyticsModule {
 
         return if (isMovementChart) AnalyticChart.Line(chartData) else AnalyticChart.Bars(chartData)
     }
+
+    data class BlockchainAndIssues(val blockchain: Blockchain, val issues: BlockchainIssues)
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsModule.IssueViewItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -14,8 +15,8 @@ class DetectorsViewModel(
     private val detectors: List<IssueParcelable>
 ) : ViewModel() {
 
-    var coreIssues = emptyList<IssueParcelable>()
-    var generalIssues = emptyList<IssueParcelable>()
+    var coreIssues = emptyList<IssueViewItem>()
+    var generalIssues = emptyList<IssueViewItem>()
     var uiState by mutableStateOf(
         DetectorsModule.UiState(
             title,
@@ -43,10 +44,35 @@ class DetectorsViewModel(
                 sync()
             }
         }
-
     }
 
-    fun sync() {
+    fun toggleExpandGeneral(id: Int) {
+        generalIssues = generalIssues.map {
+            if (it.id == id) {
+                it.copy(expanded = !it.expanded)
+            } else {
+                it
+            }
+        }
+        uiState = uiState.copy(
+            generalIssues = generalIssues
+        )
+    }
+
+    fun toggleExpandCore(id: Int) {
+        coreIssues = coreIssues.map {
+            if (it.id == id) {
+                it.copy(expanded = !it.expanded)
+            } else {
+                it
+            }
+        }
+        uiState = uiState.copy(
+            coreIssues = coreIssues
+        )
+    }
+
+    private fun sync() {
         uiState = DetectorsModule.UiState(
             title,
             coreIssues,
@@ -54,7 +80,7 @@ class DetectorsViewModel(
         )
     }
 
-    private fun sortIssuesByImpact(issues: List<IssueParcelable>): List<IssueParcelable> {
+    private fun sortIssuesByImpact(issues: List<IssueParcelable>): List<IssueViewItem> {
         return issues.sortedWith(compareByDescending { issue ->
             issue.issues?.getOrNull(0)?.impact?.let { impact ->
                 when (impact) {
@@ -65,7 +91,7 @@ class DetectorsViewModel(
                     else -> 1
                 }
             } ?: 0
-        })
+        }).map { IssueViewItem(it.description.hashCode(), it) }
     }
 
 }

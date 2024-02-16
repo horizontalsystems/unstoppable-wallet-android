@@ -10,14 +10,13 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Divider
@@ -32,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -112,15 +110,18 @@ private fun DetectorsScreen(
             }
             Tabs(tabItems, onClick = { selectedTab = it })
 
-            VSpacer(12.dp)
-
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = false
             ) { page ->
                 when (tabs[page]) {
-                    DetectorsTab.Token -> IssueList(uiState.coreIssues)
-                    DetectorsTab.General -> IssueList(uiState.generalIssues)
+                    DetectorsTab.Token -> IssueList(uiState.coreIssues) { id ->
+                        viewModel.toggleExpandCore(id)
+                    }
+
+                    DetectorsTab.General -> IssueList(uiState.generalIssues) { id ->
+                        viewModel.toggleExpandGeneral(id)
+                    }
                 }
             }
         }
@@ -128,27 +129,41 @@ private fun DetectorsScreen(
 }
 
 @Composable
-fun IssueList(issues: List<IssueParcelable>) {
+fun IssueList(
+    issues: List<DetectorsModule.IssueViewItem>,
+    toggleExpand: (Int) -> Unit = {}
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(issues) { issue ->
+        item {
+            VSpacer(12.dp)
+        }
+        itemsIndexed(issues) { index, issue ->
+            if (index > 0) {
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                )
+            }
             DetectorCell(
-                issue = issue,
-            )
+                issueViewItem = issue,
+            ) {
+                toggleExpand(it)
+            }
         }
     }
 }
 
 @Composable
 fun DetectorCell(
-    issue: IssueParcelable,
+    issueViewItem: DetectorsModule.IssueViewItem,
+    toggleExpand: (Int) -> Unit
 ) {
-    var isExpanded by remember { mutableStateOf(false) }
+    val issue = issueViewItem.issue
     val issues = issue.issues ?: emptyList()
-    var iconResource = R.drawable.ic_info_20
-    var iconTint = ComposeAppTheme.colors.laguna
+    var iconResource = R.drawable.ic_check_24
+    var iconTint = ComposeAppTheme.colors.leah
 
     issues.firstOrNull()?.let {
         when (it.impact) {
@@ -167,6 +182,14 @@ fun DetectorCell(
                 iconTint = ComposeAppTheme.colors.remus
             }
 
+            "Informational",
+            "Optimization" -> {
+                if (issues.isNotEmpty()) {
+                    iconResource = R.drawable.ic_warning_24
+                    iconTint = ComposeAppTheme.colors.laguna
+                }
+            }
+
             else -> {}
         }
     }
@@ -176,7 +199,7 @@ fun DetectorCell(
             interactionSource = remember { MutableInteractionSource() },
             indication = null
         ) {
-            isExpanded = !isExpanded
+            toggleExpand.invoke(issueViewItem.id)
         }
     ) {
         RowUniversal(
@@ -210,7 +233,7 @@ fun DetectorCell(
             }
 
             if (issues.isNotEmpty()) {
-                val painter = if (isExpanded) {
+                val painter = if (issueViewItem.expanded) {
                     painterResource(R.drawable.ic_arrow_big_up_20)
                 } else {
                     painterResource(R.drawable.ic_arrow_big_down_20)
@@ -233,7 +256,7 @@ fun DetectorCell(
         }
 
         AnimatedVisibility(
-            visible = isExpanded,
+            visible = issueViewItem.expanded,
             enter = fadeIn() + expandVertically(),
             exit = fadeOut() + shrinkVertically()
         ) {
@@ -252,40 +275,5 @@ fun DetectorCell(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun Preview_DetectorCell_EmptyBody() {
-    ComposeAppTheme {
-        DetectorCell(
-            issue = IssueParcelable(
-                issue = "general",
-                title = "Minting",
-                description = "The token",
-                issues = listOf(
-                    IssueItemParcelable(
-                        impact = "impact",
-                        confidence = "confidence",
-                        description = "Long description of the issue"
-                    )
-                )
-            ),
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun Preview_DetectorCell() {
-    ComposeAppTheme {
-        DetectorCell(
-            issue = IssueParcelable(
-                issue = "general",
-                title = "Minting",
-                description = "The token"
-            ),
-        )
     }
 }
