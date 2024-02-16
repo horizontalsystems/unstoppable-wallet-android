@@ -158,7 +158,10 @@ class ManageWalletsService(
     private fun updateSortedItems(token: Token, enable: Boolean) {
         items = items.map { item ->
             if (item.token == token) {
-                item.copy(enabled = enable)
+                item.copy(
+                    enabled = enable,
+                    hasInfo = hasInfo(token, enable)
+                )
             } else {
                 item
             }
