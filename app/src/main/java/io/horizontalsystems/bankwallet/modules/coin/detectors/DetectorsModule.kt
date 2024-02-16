@@ -20,14 +20,20 @@ object DetectorsModule {
 
     data class UiState(
         val title: String,
-        val coreIssues: List<IssueParcelable>,
-        val generalIssues: List<IssueParcelable>
+        val coreIssues: List<IssueViewItem>,
+        val generalIssues: List<IssueViewItem>
     )
 
     enum class DetectorsTab(@StringRes val titleResId: Int) {
         Token(R.string.Detectors_TokenDetectors),
         General(R.string.Detectors_GeneralDetectors);
     }
+
+    data class IssueViewItem(
+        val id: Int,
+        val issue: IssueParcelable,
+        val expanded: Boolean = false
+    )
 }
 
 @Parcelize

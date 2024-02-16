@@ -45,9 +45,9 @@ import cash.p.terminal.ui.compose.components.StackBarSlice
 import cash.p.terminal.ui.compose.components.StackedBarChart
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead1Italic_jacob
-import cash.p.terminal.ui.compose.components.subhead1Italic_lucian
-import cash.p.terminal.ui.compose.components.subhead1Italic_remus
+import cash.p.terminal.ui.compose.components.subhead1_jacob
+import cash.p.terminal.ui.compose.components.subhead1_lucian
+import cash.p.terminal.ui.compose.components.subhead1_remus
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
@@ -268,15 +268,15 @@ private fun FooterCell(
                             )
                             when (snippet.type) {
                                 CoinAnalyticsModule.IssueType.High -> {
-                                    subhead1Italic_lucian(text = snippet.count)
+                                    subhead1_lucian(text = snippet.count)
                                 }
 
                                 CoinAnalyticsModule.IssueType.Medium -> {
-                                    subhead1Italic_jacob(text = snippet.count)
+                                    subhead1_jacob(text = snippet.count)
                                 }
 
                                 CoinAnalyticsModule.IssueType.Attention -> {
-                                    subhead1Italic_remus(text = snippet.count)
+                                    subhead1_remus(text = snippet.count)
                                 }
                             }
                         }

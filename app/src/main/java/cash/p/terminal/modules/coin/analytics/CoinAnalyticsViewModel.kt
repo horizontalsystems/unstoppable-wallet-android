@@ -10,6 +10,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.IAppNumberFormatter
 import cash.p.terminal.core.brandColor
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.order
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
@@ -57,7 +58,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.util.Locale
 
 class CoinAnalyticsViewModel(
     private val service: CoinAnalyticsService,
@@ -495,13 +495,16 @@ class CoinAnalyticsViewModel(
             analytics.issues?.let { issues ->
                 val detectorFooterItems = mutableListOf<DetectorFooterItem>()
 
-                issues.forEach { blockchainIssues ->
-                    val blockchain = service.blockchain(blockchainIssues.blockchain)
-                    val blockchainTitle = blockchain?.name
-                        ?: blockchainIssues.blockchain.replaceFirstChar { it.uppercase(Locale.getDefault()) }
-                    val icon = blockchain?.type?.imageUrl?.let {
-                            ImageSource.Remote(it, R.drawable.coin_placeholder)
-                        } ?: ImageSource.Local(R.drawable.coin_placeholder)
+                val sortedList =  issues.mapNotNull {
+                    val blockchain = service.blockchain(it.blockchain) ?: return@mapNotNull null
+                    CoinAnalyticsModule.BlockchainAndIssues(blockchain, it)
+                }.sortedBy { it.blockchain.type.order }
+
+                sortedList.forEach { blockchainAndIssues ->
+                    val blockchain = blockchainAndIssues.blockchain
+                    val blockchainTitle = blockchain.name
+                    val icon = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.coin_placeholder)
+                    val blockchainIssues = blockchainAndIssues.issues
                     detectorFooterItems.add(
                         DetectorFooterItem(
                             title = IconTitle(
@@ -520,7 +523,7 @@ class CoinAnalyticsViewModel(
                                             IssueItemParcelable(
                                                 impact = issueItem.impact,
                                                 confidence = issueItem.confidence,
-                                                description = issueItem.description
+                                                description = issueItem.description.trim()
                                             )
                                         }
                                     )
@@ -573,7 +576,9 @@ class CoinAnalyticsViewModel(
                 when (issueItem.impact) {
                     "Critical" -> high++
                     "High" -> medium++
-                    "Low" -> low++
+                    "Low",
+                    "Informational",
+                    "Optimization" -> low++
                 }
             }
         }
