@@ -3,18 +3,22 @@ package io.horizontalsystems.bankwallet.modules.swapxxx
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class SwapQuoteExpirationService {
     private var quote: SwapProviderQuote? = null
 
-    private val _quoteExpiredFlow = MutableStateFlow(false)
-    val quoteExpiredFlow = _quoteExpiredFlow.asStateFlow()
+    private val _quoteExpiredFlow = MutableSharedFlow<Boolean>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    val quoteExpiredFlow = _quoteExpiredFlow.asSharedFlow()
 
     private var coroutineScope = CoroutineScope(Dispatchers.Default)
     private var scheduleExpireQuoteJob: Job? = null
@@ -29,10 +33,7 @@ class SwapQuoteExpirationService {
 
     private fun emitState() {
         val expireAt = quote?.expireAt
-
-        _quoteExpiredFlow.update {
-            expireAt != null && expireAt <= System.currentTimeMillis()
-        }
+        _quoteExpiredFlow.tryEmit(expireAt != null && expireAt <= System.currentTimeMillis())
     }
 
     private fun scheduleExpireQuote() {
