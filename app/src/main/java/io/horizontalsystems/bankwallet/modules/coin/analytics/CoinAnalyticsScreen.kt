@@ -45,9 +45,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.bankwallet.ui.compose.components.StackedBarChart
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1Italic_jacob
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1Italic_lucian
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1Italic_remus
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
@@ -267,15 +267,15 @@ private fun FooterCell(
                             )
                             when (snippet.type) {
                                 CoinAnalyticsModule.IssueType.High -> {
-                                    subhead1Italic_lucian(text = snippet.count)
+                                    subhead1_lucian(text = snippet.count)
                                 }
 
                                 CoinAnalyticsModule.IssueType.Medium -> {
-                                    subhead1Italic_jacob(text = snippet.count)
+                                    subhead1_jacob(text = snippet.count)
                                 }
 
                                 CoinAnalyticsModule.IssueType.Attention -> {
-                                    subhead1Italic_remus(text = snippet.count)
+                                    subhead1_remus(text = snippet.count)
                                 }
                             }
                         }
