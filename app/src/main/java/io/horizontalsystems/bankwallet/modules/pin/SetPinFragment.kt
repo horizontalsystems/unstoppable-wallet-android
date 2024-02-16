@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import kotlinx.parcelize.Parcelize
 
-class SetPinFragment : BaseComposeFragment() {
+class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

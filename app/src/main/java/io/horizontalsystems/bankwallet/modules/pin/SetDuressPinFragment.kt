@@ -13,7 +13,7 @@ import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
-class SetDuressPinFragment : BaseComposeFragment() {
+class SetDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
