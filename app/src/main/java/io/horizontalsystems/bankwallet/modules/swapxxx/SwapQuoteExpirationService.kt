@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package cash.p.terminal.modules.swapxxx
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

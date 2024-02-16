@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.swapxxx
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -20,8 +21,10 @@ import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.CoinValue
+import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSpacer
@@ -61,6 +64,19 @@ fun SwapConfirmScreen(navController: NavController) {
                     HsBackButton(onClick = navController::popBackStack)
                 },
             )
+        },
+        bottomBar = {
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.Button_Confirm),
+                    onClick = {
+//                        viewModel.onConfirm()
+                    },
+                )
+            }
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
