@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -48,13 +49,18 @@ class SwapConfirmFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapConfirmScreen(navController: NavController) {
-    val viewModel = viewModel<SwapViewModel>(
+    val swapViewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = navController.previousBackStackEntry!!,
         factory = SwapViewModel.Factory()
     )
 
+    val currentQuote = remember { swapViewModel.getCurrentQuote() } ?: return
+    val settings = remember { swapViewModel.getSettings() }
+
+    val viewModel = viewModel<SwapConfirmViewModel>(initializer = SwapConfirmViewModel.init(currentQuote, settings))
+
     val uiState = viewModel.uiState
-    val quote = uiState.quote ?: return
+    val quote = uiState.quote
 
     Scaffold(
         topBar = {
@@ -67,15 +73,43 @@ fun SwapConfirmScreen(navController: NavController) {
         },
         bottomBar = {
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Button_Confirm),
-                    onClick = {
-//                        viewModel.onConfirm()
-                    },
-                )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    if (uiState.refreshing) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = stringResource(R.string.Alert_Loading),
+                            enabled = false,
+                            onClick = { },
+                        )
+                        VSpacer(height = 12.dp)
+                        subhead1_leah(text = "Quote expired")
+                    } else if (uiState.expired) {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = stringResource(R.string.Button_Refresh),
+                            onClick = {
+                                viewModel.refresh()
+                            },
+                        )
+                        VSpacer(height = 12.dp)
+                        subhead1_leah(text = "Quote expired")
+                    } else {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = stringResource(R.string.Button_Confirm),
+                            onClick = {
+                            },
+                        )
+                        VSpacer(height = 12.dp)
+                        subhead1_leah(text = "Quote expires in: ${uiState.expiresIn / 1000} seconds")
+                    }
+                }
             }
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
