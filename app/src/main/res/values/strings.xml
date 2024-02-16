@@ -33,6 +33,7 @@
     <string name="Button_Add">Add</string>
     <string name="Button_Approve">Approve</string>
     <string name="Button_Confirm">Confirm</string>
+    <string name="Button_Refresh">Refresh</string>
     <string name="Button_Connect">Connect</string>
     <string name="Button_Reject">Reject</string>
     <string name="Button_Disconnect">Disconnect</string>
