@@ -20,6 +20,7 @@ object AppStatusModule {
                 App.binanceKitManager,
                 App.tronKitManager,
                 App.solanaKitManager,
+                App.btcBlockchainManager,
             )
             return viewModel as T
         }

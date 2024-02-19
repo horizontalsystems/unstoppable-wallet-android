@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
 import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
+import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
@@ -36,6 +37,7 @@ class AppStatusViewModel(
     private val binanceKitManager: BinanceKitManager,
     private val tronKitManager: TronKitManager,
     private val solanaKitManager: SolanaKitManager,
+    private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModel() {
 
     private var blockViewItems: List<AppStatusModule.BlockData> = emptyList()
@@ -179,8 +181,12 @@ class AppStatusViewModel(
             .sortedBy { it.token.coin.name }
             .forEach { wallet ->
                 (adapterManager.getAdapterForWallet(wallet) as? BitcoinBaseAdapter)?.let { adapter ->
-                    val statusTitle = "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}"
-                    blockchainStatus[statusTitle] = adapter.statusInfo
+                    val statusTitle =
+                        "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}"
+                    val restoreMode = btcBlockchainManager.restoreMode(wallet.token.blockchainType)
+                    val statusInfo = mutableMapOf<String, Any>("Sync Mode" to restoreMode.name)
+                    statusInfo.putAll(adapter.statusInfo)
+                    blockchainStatus[statusTitle] = statusInfo
                 }
             }
 
@@ -230,11 +236,17 @@ class AppStatusViewModel(
                 val wallet = it
                 val title = if (blocks.isEmpty()) "Blockchain Status" else null
                 val block = when (val adapter = adapterManager.getAdapterForWallet(wallet)) {
-                    is BitcoinBaseAdapter -> getBlockchainInfoBlock(
-                        title,
-                        "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}",
-                        adapter.statusInfo
-                    )
+                    is BitcoinBaseAdapter -> {
+                        val restoreMode =
+                            btcBlockchainManager.restoreMode(wallet.token.blockchainType)
+                        val statusInfo = mutableMapOf<String, Any>("Sync Mode" to restoreMode.name)
+                        statusInfo.putAll(adapter.statusInfo)
+                        getBlockchainInfoBlock(
+                            title,
+                            "${wallet.token.coin.name}${wallet.badge?.let { "-$it" } ?: ""}",
+                            statusInfo
+                        )
+                    }
 
                     else -> null
                 }
