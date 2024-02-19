@@ -95,31 +95,27 @@ val TokenQuery.protocolType: String?
     get() = when (tokenType) {
         is TokenType.Native -> {
             when (blockchainType) {
-                BlockchainType.Optimism -> "Optimism"
-                BlockchainType.ArbitrumOne -> "Arbitrum"
+                BlockchainType.Ethereum,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Tron,
+                BlockchainType.Ton -> null
+
                 BlockchainType.BinanceChain -> "BEP2"
-                BlockchainType.Gnosis -> "Gnosis"
-                BlockchainType.Fantom -> "Fantom"
-                else -> null
+                else -> blockchainType.title
             }
         }
+
         is TokenType.Eip20 -> {
             when (blockchainType) {
                 BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Tron -> "TRC20"
-                BlockchainType.Polygon -> "Polygon"
-                BlockchainType.Avalanche -> "Avalanche"
-                BlockchainType.Optimism -> "Optimism"
-                BlockchainType.ArbitrumOne -> "Arbitrum"
-                BlockchainType.Gnosis -> "Gnosis"
-                BlockchainType.Fantom -> "Fantom"
-                else -> null
+                else -> blockchainType.title
             }
         }
+
         is TokenType.Bep2 -> "BEP2"
-        is TokenType.Spl -> "Solana"
-        else -> null
+        else -> blockchainType.title
     }
 
 val TokenQuery.Companion.customCoinPrefix: String
