@@ -80,7 +80,6 @@ android {
             resValue "string", "arbiscanApiKey", "Z43JN5434XVNA5D73UGPWKF26G5D9MGDPZ"
             resValue "string", "gnosisscanApiKey", "V2J8YU15ZX9S1W3GTUV2HXM11TP2TUBRW4"
             resValue "string", "ftmscanApiKey", "57YQ2GIRAZNV6M5HIJYYG3XQGGNIPVV8MF"
-            resValue "string", "defiyieldProviderApiKey", "bc3a9319-b115-4673-ace9-03228c11d026"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json"
@@ -122,7 +121,6 @@ android {
             resValue "string", "arbiscanApiKey", "4QWW522BV13BJCZMXH1JIB2ESJ7MZTSJYI"
             resValue "string", "gnosisscanApiKey", "KEXFAQKDUENZ5U9CW3ZKYJEJ84ZIHH9QTY"
             resValue "string", "ftmscanApiKey", "JAWRPW27KEMVXMJJ9UKY63CVPH3X5V9SMP"
-            resValue "string", "defiyieldProviderApiKey", "bc3a9319-b115-4673-ace9-03228c11d026"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.3/src/faq.json"
@@ -280,7 +278,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:ethereum-kit-android:1af93417'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
-    implementation 'com.github.horizontalsystems:market-kit-android:3406619'
+    implementation 'com.github.horizontalsystems:market-kit-android:2efec77'
     implementation 'com.github.horizontalsystems:solana-kit-android:6401968'
     implementation 'com.github.horizontalsystems:tron-kit-android:f2f7c9a'
     // Zcash SDK

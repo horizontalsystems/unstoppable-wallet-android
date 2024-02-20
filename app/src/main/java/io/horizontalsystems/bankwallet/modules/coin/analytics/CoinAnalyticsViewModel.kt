@@ -33,6 +33,7 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModul
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.PreviewChartType
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule
 import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueItemParcelable
 import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueParcelable
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
@@ -462,7 +463,7 @@ class CoinAnalyticsViewModel(
                 )
             )
         }
-        if (analytics.reports != null || analytics.fundsInvested != null || analytics.treasuries != null || service.auditAddresses.isNotEmpty()) {
+        if (analytics.reports != null || analytics.fundsInvested != null || analytics.treasuries != null || analytics.audits != null) {
             val footerItems = mutableListOf<FooterItem>()
             analytics.reports?.let { reportsCount ->
                 footerItems.add(
@@ -544,14 +545,24 @@ class CoinAnalyticsViewModel(
                 )
             }
 
-            if (service.auditAddresses.isNotEmpty()) {
+            analytics.audits?.let { audits ->
+                val auditsParcelable = audits.map{
+                    CoinAuditsModule.AuditParcelable(
+                        date = it.date,
+                        name = it.name,
+                        auditUrl = it.auditUrl,
+                        techIssues = it.techIssues,
+                        partnerName = it.partnerName
+                    )
+                }
                 footerItems.add(
                     FooterItem(
                         title = Title(ResString(R.string.Coin_Analytics_Audits)),
-                        action = ActionType.OpenAudits(service.auditAddresses)
+                        action = ActionType.OpenAudits(auditsParcelable)
                     )
                 )
             }
+
             blocks.add(
                 BlockViewItem(
                     title = null,
@@ -936,7 +947,7 @@ class CoinAnalyticsViewModel(
                 )
             }
         }
-        if (analyticsPreview.reports || analyticsPreview.fundsInvested || analyticsPreview.treasuries || service.auditAddresses.isNotEmpty()) {
+        if (analyticsPreview.reports || analyticsPreview.fundsInvested || analyticsPreview.treasuries) {
             val footerItems = mutableListOf<FooterItem>()
             if (analyticsPreview.reports) {
                 footerItems.add(
@@ -961,15 +972,6 @@ class CoinAnalyticsViewModel(
                     FooterItem(
                         title = Title(ResString(R.string.CoinAnalytics_Treasuries)),
                         value = BoxItem.Dots,
-                        action = ActionType.Preview
-                    )
-                )
-            }
-            if (service.auditAddresses.isNotEmpty()) {
-                footerItems.add(
-                    FooterItem(
-                        title = Title(ResString(R.string.Coin_Analytics_Audits)),
-                        value = null,
                         action = ActionType.Preview
                     )
                 )
