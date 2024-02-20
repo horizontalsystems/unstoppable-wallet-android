@@ -35,9 +35,6 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val cryptoCompareApiKey by lazy {
         Translator.getString(R.string.cryptoCompareApiKey)
     }
-    val defiyieldProviderApiKey by lazy {
-        Translator.getString(R.string.defiyieldProviderApiKey)
-    }
     val infuraProjectId by lazy {
         Translator.getString(R.string.infuraProjectId)
     }

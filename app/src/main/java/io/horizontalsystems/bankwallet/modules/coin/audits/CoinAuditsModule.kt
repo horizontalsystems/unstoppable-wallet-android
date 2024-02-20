@@ -1,28 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.coin.audits
 
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.AuditReport
-import java.util.*
+import kotlinx.parcelize.Parcelize
 import javax.annotation.concurrent.Immutable
 
 object CoinAuditsModule {
     @Suppress("UNCHECKED_CAST")
-    class Factory(private val addresses: List<String>) : ViewModelProvider.Factory {
+    class Factory(private val audits: List<AuditParcelable>) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = CoinAuditsService(addresses, App.marketKit)
-            return CoinAuditsViewModel(service) as T
+            return CoinAuditsViewModel(audits) as T
         }
     }
-
-    data class AuditorItem(
-        val name: String,
-        val logoUrl: String,
-        val reports: List<AuditReport>,
-        val latestDate: Date?
-    )
 
     @Immutable
     data class AuditorViewItem(
@@ -38,4 +29,17 @@ object CoinAuditsModule {
         val issues: TranslatableString,
         val reportUrl: String?
     )
+
+    data class UiState(
+        val auditors: List<AuditorViewItem>
+    )
+
+    @Parcelize
+    data class AuditParcelable(
+        val date: String,
+        val name: String,
+        val auditUrl: String,
+        val techIssues: Int,
+        val partnerName: String
+    ) : Parcelable
 }

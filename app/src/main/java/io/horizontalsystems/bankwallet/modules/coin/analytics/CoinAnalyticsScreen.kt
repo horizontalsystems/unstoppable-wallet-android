@@ -361,7 +361,7 @@ private fun handleActionClick(
         }
 
         is CoinAnalyticsModule.ActionType.OpenAudits -> {
-            val arguments = CoinAuditsFragment.Input(action.auditAddresses)
+            val arguments = CoinAuditsFragment.Input(action.audits)
             navController.slideFromRight(R.id.coinAuditsFragment, arguments)
         }
 

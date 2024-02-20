@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule
 import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueParcelable
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
 import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorData
@@ -205,7 +206,7 @@ object CoinAnalyticsModule {
         class OpenReports(val coinUid: String) : ActionType()
         class OpenInvestors(val coinUid: String) : ActionType()
         class OpenTreasuries(val coin: Coin) : ActionType()
-        class OpenAudits(val auditAddresses: List<String>) : ActionType()
+        class OpenAudits(val audits: List<CoinAuditsModule.AuditParcelable>) : ActionType()
         class OpenTokenHolders(val coin: Coin, val blockchain: Blockchain) : ActionType()
         class OpenDetectorsDetails(val issues: List<IssueParcelable>, val title: String) : ActionType()
     }

@@ -1,91 +1,65 @@
 package io.horizontalsystems.bankwallet.modules.coin.audits
 
-import androidx.lifecycle.MutableLiveData
+import android.annotation.SuppressLint
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditViewItem
-import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditorItem
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule.AuditorViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 
+@SuppressLint("SimpleDateFormat")
 class CoinAuditsViewModel(
-    private val service: CoinAuditsService
+    audits: List<CoinAuditsModule.AuditParcelable>
 ) : ViewModel() {
-    private val disposables = CompositeDisposable()
 
-    val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
-    val isRefreshingLiveData = MutableLiveData<Boolean>()
-    val viewItemsLiveData = MutableLiveData<List<AuditorViewItem>>()
+    var uiState by mutableStateOf(CoinAuditsModule.UiState(emptyList()))
 
     init {
-        service.stateObservable
-            .subscribeIO({ state ->
-                when (state) {
-                    is DataState.Success -> {
-                        viewStateLiveData.postValue(ViewState.Success)
-
-                        sync(state.data)
-                    }
-                    is DataState.Error -> {
-                        viewStateLiveData.postValue(ViewState.Error(state.error))
-                    }
-                    DataState.Loading -> {}
-                }
-            }, {
-                viewStateLiveData.postValue(ViewState.Error(it))
-            }).let {
-                disposables.add(it)
+        viewModelScope.launch(Dispatchers.IO) {
+            val viewItems = CoinAuditsModule.UiState(auditorViewItems(audits))
+            withContext(Dispatchers.Main) {
+                uiState = viewItems
             }
-
-        service.start()
-    }
-
-    fun refresh() {
-        refreshWithMinLoadingSpinnerPeriod()
-    }
-
-    fun onErrorClick() {
-        refreshWithMinLoadingSpinnerPeriod()
-    }
-
-    override fun onCleared() {
-        disposables.clear()
-        service.stop()
-    }
-
-    private fun sync(auditors: List<AuditorItem>) {
-        viewItemsLiveData.postValue(auditors.map { viewItem(it) })
-    }
-
-    private fun viewItem(auditor: AuditorItem): AuditorViewItem {
-        return AuditorViewItem(
-            name = auditor.name,
-            logoUrl = auditor.logoUrl,
-            auditViewItems = auditor.reports.map { report ->
-                AuditViewItem(
-                    date = report.date?.let { DateHelper.formatDate(it, "MMM dd, yyyy") },
-                    name = report.name,
-                    issues = TranslatableString.ResString(R.string.CoinPage_Audits_Issues, report.issues),
-                    reportUrl = report.link
-                )
-            }
-        )
-    }
-
-    private fun refreshWithMinLoadingSpinnerPeriod() {
-        service.refresh()
-        viewModelScope.launch {
-            isRefreshingLiveData.postValue(true)
-            delay(1000)
-            isRefreshingLiveData.postValue(false)
         }
     }
+
+    private fun auditorViewItems(audits: List<CoinAuditsModule.AuditParcelable>): List<AuditorViewItem> {
+        val groupedByAuditor = audits.groupBy { it.partnerName }
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+        val auditorViewItems = mutableListOf<AuditorViewItem>()
+        groupedByAuditor.forEach { (auditor, reports) ->
+            auditorViewItems.add(
+                AuditorViewItem(
+                    name = auditor,
+                    logoUrl = logoUrl(auditor),
+                    auditViewItems = reports.map { report ->
+                        AuditViewItem(
+                            date = formatter.parse(report.date)?.let { date ->
+                                DateHelper.formatDate(date, "MMM dd, yyyy")
+                            },
+                            name = report.name,
+                            issues = TranslatableString.ResString(
+                                R.string.CoinPage_Audits_Issues,
+                                report.techIssues
+                            ),
+                            reportUrl = report.auditUrl
+                        )
+                    }
+                ))
+        }
+        return auditorViewItems
+    }
+
+    private fun logoUrl(name: String): String =
+        "https://cdn.blocksdecoded.com/auditor-icons/$name@3x.png"
+
 }
