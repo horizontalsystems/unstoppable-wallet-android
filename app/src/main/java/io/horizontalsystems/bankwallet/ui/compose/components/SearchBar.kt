@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 
 @ExperimentalAnimationApi
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     title: String,
@@ -84,7 +83,11 @@ fun SearchBar(
                         showClearButton = it.isNotEmpty()
                     },
                     placeholder = {
-                        body_grey50(text = searchHintText)
+                        body_grey50(
+                            text = searchHintText,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     },
                     textStyle = ComposeAppTheme.typography.body,
                     colors = TextFieldDefaults.textFieldColors(
