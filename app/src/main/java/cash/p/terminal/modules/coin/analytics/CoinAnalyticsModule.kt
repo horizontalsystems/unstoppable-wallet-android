@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.coin.audits.CoinAuditsModule
 import cash.p.terminal.modules.coin.detectors.IssueParcelable
 import cash.p.terminal.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
 import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorData
@@ -205,7 +206,7 @@ object CoinAnalyticsModule {
         class OpenReports(val coinUid: String) : ActionType()
         class OpenInvestors(val coinUid: String) : ActionType()
         class OpenTreasuries(val coin: Coin) : ActionType()
-        class OpenAudits(val auditAddresses: List<String>) : ActionType()
+        class OpenAudits(val audits: List<CoinAuditsModule.AuditParcelable>) : ActionType()
         class OpenTokenHolders(val coin: Coin, val blockchain: Blockchain) : ActionType()
         class OpenDetectorsDetails(val issues: List<IssueParcelable>, val title: String) : ActionType()
     }

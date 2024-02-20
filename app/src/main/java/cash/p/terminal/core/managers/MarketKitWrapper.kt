@@ -26,7 +26,6 @@ class MarketKitWrapper(
     hsApiBaseUrl: String,
     hsApiKey: String,
     cryptoCompareApiKey: String? = null,
-    defiYieldApiKey: String? = null,
     appConfigProvider: AppConfigProvider,
     private val subscriptionManager: SubscriptionManager
 ) {
@@ -35,7 +34,6 @@ class MarketKitWrapper(
         hsApiBaseUrl = hsApiBaseUrl,
         hsApiKey = hsApiKey,
         cryptoCompareApiKey = cryptoCompareApiKey,
-        defiYieldApiKey = defiYieldApiKey,
         appVersion = appConfigProvider.appVersion,
         appId = appConfigProvider.appId
     )
@@ -171,8 +169,6 @@ class MarketKitWrapper(
     fun investmentsSingle(coinUid: String) = marketKit.investmentsSingle(coinUid)
 
     fun coinReportsSingle(coinUid: String) = marketKit.coinReportsSingle(coinUid)
-
-    fun auditReportsSingle(addresses: List<String>) = marketKit.auditReportsSingle(addresses)
 
     // Pro Details
 

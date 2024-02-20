@@ -14,7 +14,6 @@ import io.horizontalsystems.marketkit.models.AnalyticsPreview
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.rx2.await
@@ -33,20 +32,6 @@ class CoinAnalyticsService(
 
     val currency: Currency
         get() = currencyManager.baseCurrency
-
-    val auditAddresses: List<String> by lazy {
-        fullCoin.tokens.mapNotNull { token ->
-            val tokenQuery = token.tokenQuery
-            when (val tokenType = tokenQuery.tokenType) {
-                is TokenType.Eip20 -> when (tokenQuery.blockchainType) {
-                    BlockchainType.Ethereum -> tokenType.address
-                    BlockchainType.BinanceSmartChain -> tokenType.address
-                    else -> null
-                }
-                else -> null
-            }
-        }
-    }
 
     fun blockchain(uid: String): Blockchain? {
         return marketKit.blockchain(uid)
