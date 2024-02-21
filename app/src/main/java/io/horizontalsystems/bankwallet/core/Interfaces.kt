@@ -291,8 +291,9 @@ interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
 
-    val isAccountActive: Boolean
-        get() = true
+    suspend fun isAddressActive(address: String): Boolean {
+        return true
+    }
 
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
