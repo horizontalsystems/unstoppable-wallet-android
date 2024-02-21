@@ -28,14 +28,18 @@ abstract class BaseTronAdapter(
 
     // IReceiveAdapter
 
-    override val isAccountActive: Boolean
-        get() = tronKit.isAccountActive
+    override suspend fun isAddressActive(address: String): Boolean {
+        val tronAddress = Address.fromBase58(address)
+        return tronKit.isAccountActive(tronAddress)
+    }
 
     override val receiveAddress: String
         get() = tronKit.address.base58
 
     override val isMainNet: Boolean
         get() = tronKit.network == Network.Mainnet
+
+    // ISendTronAdapter
 
     suspend fun isAddressActive(address: Address): Boolean = withContext(Dispatchers.IO) {
         tronKit.isAccountActive(address)
