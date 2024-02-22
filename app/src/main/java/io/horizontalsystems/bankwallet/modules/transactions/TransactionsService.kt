@@ -111,6 +111,27 @@ class TransactionsService(
                 handleContactsUpdate()
             }
         }
+
+        coroutineScope.launch {
+            transactionFilterService.stateFlow.collect {
+                handleUpdatedTransactionFilterState(it)
+            }
+        }
+    }
+
+    private fun handleUpdatedTransactionFilterState(state: TransactionFilterService.State) {
+        transactionRecordRepository.set(
+            state.transactionWallets.filterNotNull(),
+            state.selectedWallet,
+            state.selectedTransactionType,
+            state.selectedBlockchain
+        )
+
+        walletsSubject.onNext(Pair(state.transactionWallets, state.selectedWallet))
+        typesSubject.onNext(Pair(state.transactionTypes, state.selectedTransactionType))
+        blockchainSubject.onNext(Pair(state.blockchains, state.selectedBlockchain))
+
+        transactionSyncStateRepository.setTransactionWallets(state.transactionWallets.filterNotNull())
     }
 
     @Synchronized
@@ -250,20 +271,6 @@ class TransactionsService(
     @Synchronized
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
         transactionFilterService.setWallets(wallets)
-
-        val transactionWallets = transactionFilterService.getTransactionWallets()
-
-        transactionSyncStateRepository.setTransactionWallets(transactionWallets.filterNotNull())
-        transactionRecordRepository.setWallets(
-            transactionWallets.filterNotNull(),
-            transactionFilterService.selectedWallet,
-            transactionFilterService.selectedTransactionType,
-            transactionFilterService.selectedBlockchain,
-        )
-
-        walletsSubject.onNext(Pair(transactionWallets, transactionFilterService.selectedWallet))
-        typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), transactionFilterService.selectedTransactionType))
-        blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), transactionFilterService.selectedBlockchain))
     }
 
     override fun clear() {
@@ -283,33 +290,19 @@ class TransactionsService(
 
     fun setFilterType(f: FilterTransactionType) {
         executorService.submit {
-            typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), f))
             transactionFilterService.setSelectedTransactionType(f)
-            transactionRecordRepository.setTransactionType(f)
         }
     }
 
     fun setFilterBlockchain(blockchain: Blockchain?) {
         executorService.submit {
-            blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), blockchain))
             transactionFilterService.setSelectedBlockchain(blockchain)
-
-            val selectedWallet = transactionFilterService.selectedWallet
-            walletsSubject.onNext(Pair(transactionFilterService.getTransactionWallets(), selectedWallet))
-
-            transactionRecordRepository.setWalletAndBlockchain(selectedWallet, blockchain)
         }
     }
 
     fun setFilterCoin(w: TransactionWallet?) {
         executorService.submit {
-            walletsSubject.onNext(Pair(transactionFilterService.getTransactionWallets(), w))
             transactionFilterService.setSelectedWallet(w)
-
-            val selectedBlockchain = transactionFilterService.selectedBlockchain
-            blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), selectedBlockchain))
-
-            transactionRecordRepository.setWalletAndBlockchain(w, selectedBlockchain)
         }
     }
 
@@ -323,22 +316,6 @@ class TransactionsService(
     fun resetFilters() {
         executorService.submit {
             transactionFilterService.reset()
-
-            val transactionType = transactionFilterService.selectedTransactionType
-            val blockchain = transactionFilterService.selectedBlockchain
-            val wallet = transactionFilterService.selectedWallet
-            val transactionWallets = transactionFilterService.getTransactionWallets()
-
-            typesSubject.onNext(Pair(transactionFilterService.getFilterTypes(), transactionType))
-            blockchainSubject.onNext(Pair(transactionFilterService.getBlockchains(), blockchain))
-            walletsSubject.onNext(Pair(transactionWallets, wallet))
-
-            transactionRecordRepository.setWallets(
-                transactionWallets.filterNotNull(),
-                wallet,
-                transactionType,
-                blockchain,
-            )
         }
     }
 

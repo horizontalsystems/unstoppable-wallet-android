@@ -6,25 +6,55 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.UUID
 
 class TransactionFilterService(
     private val spamManager: SpamManager,
 ) {
-    private var transactionWallets: List<TransactionWallet?> = listOf(null)
-    var selectedWallet: TransactionWallet? = null
-        private set
-    var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
-        private set
-    var selectedBlockchain: Blockchain? = null
-        private set
-
     private val _resetEnabled = MutableStateFlow(false)
     val resetEnabled = _resetEnabled.asStateFlow()
     val filterHideSuspiciousTx = spamManager.hideSuspiciousTx
 
     private var blockchains: List<Blockchain?> = listOf(null)
+    private var selectedBlockchain: Blockchain? = null
+    private var transactionWallets: List<TransactionWallet?> = listOf(null)
+    private var selectedWallet: TransactionWallet? = null
+    private val transactionTypes = FilterTransactionType.values().toList()
+    private var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
+    private var uniqueId = UUID.randomUUID().toString()
+
+    private val _stateFlow = MutableStateFlow(
+        State(
+            blockchains = blockchains,
+            selectedBlockchain = selectedBlockchain,
+            transactionWallets = transactionWallets,
+            selectedWallet = selectedWallet,
+            transactionTypes = transactionTypes,
+            selectedTransactionType = selectedTransactionType,
+            resetEnabled = resetEnabled(),
+            uniqueId = uniqueId
+        )
+    )
+    val stateFlow get() = _stateFlow.asStateFlow()
+
+    private fun emitState() {
+        _stateFlow.update {
+            State(
+                blockchains = blockchains,
+                selectedBlockchain = selectedBlockchain,
+                transactionWallets = transactionWallets,
+                selectedWallet = selectedWallet,
+                transactionTypes = transactionTypes,
+                selectedTransactionType = selectedTransactionType,
+                resetEnabled = resetEnabled(),
+                uniqueId = uniqueId
+            )
+        }
+    }
 
     fun setWallets(wallets: List<Wallet>) {
+        uniqueId = UUID.randomUUID().toString()
+
         transactionWallets = listOf(null) + wallets.sortedBy { it.coin.code }.map {
             TransactionWallet(it.token, it.transactionSource, it.badge)
         }
@@ -45,39 +75,27 @@ class TransactionFilterService(
             selectedBlockchain = null
         }
 
-        emitResetEnabled()
-    }
-
-    fun getTransactionWallets(): List<TransactionWallet?> {
-        return transactionWallets
-    }
-
-    fun getFilterTypes(): List<FilterTransactionType> {
-        return FilterTransactionType.values().toList()
-    }
-
-    fun getBlockchains(): List<Blockchain?> {
-        return blockchains
+        emitState()
     }
 
     fun setSelectedWallet(wallet: TransactionWallet?) {
         selectedWallet = wallet
         selectedBlockchain = selectedWallet?.source?.blockchain
 
-        emitResetEnabled()
+        emitState()
     }
 
     fun setSelectedBlockchain(blockchain: Blockchain?) {
         selectedBlockchain = blockchain
         selectedWallet = null
 
-        emitResetEnabled()
+        emitState()
     }
 
     fun setSelectedTransactionType(type: FilterTransactionType) {
         selectedTransactionType = type
 
-        emitResetEnabled()
+        emitState()
     }
 
     fun reset() {
@@ -85,19 +103,28 @@ class TransactionFilterService(
         selectedWallet = null
         selectedBlockchain = null
 
-        emitResetEnabled()
+        emitState()
     }
 
-    private fun emitResetEnabled() {
-        _resetEnabled.update {
-            selectedWallet != null
-                || selectedBlockchain != null
-                || selectedTransactionType != FilterTransactionType.All
-        }
+    private fun resetEnabled(): Boolean {
+        return selectedWallet != null
+            || selectedBlockchain != null
+            || selectedTransactionType != FilterTransactionType.All
     }
 
     fun setFilterHideSuspiciousTx(hide: Boolean) {
         spamManager.updateFilterHideSuspiciousTx(hide)
     }
+
+    data class State(
+        val blockchains: List<Blockchain?>,
+        val selectedBlockchain: Blockchain?,
+        val transactionWallets: List<TransactionWallet?>,
+        val selectedWallet: TransactionWallet?,
+        val transactionTypes: List<FilterTransactionType>,
+        val selectedTransactionType: FilterTransactionType,
+        val resetEnabled: Boolean,
+        val uniqueId: String,
+    )
 
 }
