@@ -95,7 +95,7 @@ class TokenTransactionsService(
         val transactionWallet = TransactionWallet(wallet.token, wallet.transactionSource, wallet.badge)
 
         transactionSyncStateRepository.setTransactionWallets(listOf(transactionWallet))
-        transactionRecordRepository.setWallets(
+        transactionRecordRepository.set(
             listOf(transactionWallet),
             transactionWallet,
             FilterTransactionType.All,

@@ -8,14 +8,12 @@ import io.reactivex.Observable
 interface ITransactionRecordRepository : Clearable {
     val itemsObservable: Observable<List<TransactionRecord>>
 
-    fun setWallets(
+    fun set(
         transactionWallets: List<TransactionWallet>,
         wallet: TransactionWallet?,
         transactionType: FilterTransactionType,
         blockchain: Blockchain?
     )
-    fun setWalletAndBlockchain(transactionWallet: TransactionWallet?, blockchain: Blockchain?)
-    fun setTransactionType(transactionType: FilterTransactionType)
     fun loadNext()
     fun reload()
 }
