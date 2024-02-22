@@ -7,12 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
+import cash.p.terminal.core.managers.SpamManager
+import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -29,59 +33,66 @@ import java.util.Date
 class TransactionsViewModel(
     private val service: TransactionsService,
     private val transactionViewItem2Factory: TransactionViewItemFactory,
-    private val balanceHiddenManager: BalanceHiddenManager
+    private val balanceHiddenManager: BalanceHiddenManager,
+    private val transactionAdapterManager: TransactionAdapterManager,
+    private val walletManager: IWalletManager,
+    private val transactionFilterService: TransactionFilterService,
+    private val spamManager: SpamManager
 ) : ViewModel() {
 
     var tmpItemToShow: TransactionItem? = null
 
     val syncingLiveData = MutableLiveData<Boolean>()
-    val filterResetEnabled by service::filterResetEnabled
+    val filterResetEnabled = MutableLiveData<Boolean>()
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet?>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
     val viewState = MutableLiveData<ViewState>(ViewState.Loading)
-    var filterHideSuspiciousTx by mutableStateOf(service.filterHideSuspiciousTx)
+    var filterHideSuspiciousTx by mutableStateOf(spamManager.hideSuspiciousTx)
 
     private val disposables = CompositeDisposable()
 
     init {
+        handleUpdatedWallets(walletManager.activeWallets)
+
+        transactionAdapterManager.adaptersReadyObservable
+            .subscribeIO {
+                handleUpdatedWallets(walletManager.activeWallets)
+            }
+            .let {
+                disposables.add(it)
+            }
+
+        viewModelScope.launch {
+            transactionFilterService.stateFlow.collect { state ->
+                service.setTransactionFilter(state)
+
+                filterResetEnabled.postValue(state.resetEnabled)
+
+                val types = state.transactionTypes
+                val selectedType = state.selectedTransactionType
+                val filterTypes = types.map { Filter(it, it == selectedType) }
+                filterTypesLiveData.postValue(filterTypes)
+
+                val blockchains = state.blockchains
+                val selectedBlockchain = state.selectedBlockchain
+                val filterBlockchains = blockchains.map { Filter(it, it == selectedBlockchain) }
+                filterBlockchainsLiveData.postValue(filterBlockchains)
+
+                val wallets = state.transactionWallets
+                val selectedWallet = state.selectedWallet
+
+                val filterCoins = wallets.map {
+                    Filter(it, it == selectedWallet)
+                }
+                filterCoinsLiveData.postValue(filterCoins)
+            }
+        }
+
         service.syncingObservable
             .subscribeIO {
                 syncingLiveData.postValue(it)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        service.typesObservable
-            .subscribeIO { (types, selectedType) ->
-                val filterTypes = types.map {
-                    Filter(it, it == selectedType)
-                }
-                filterTypesLiveData.postValue(filterTypes)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        service.blockchainObservable
-            .subscribeIO { (blockchains, selectedType) ->
-                val filterBlockchains = blockchains.map {
-                    Filter(it, it == selectedType)
-                }
-                filterBlockchainsLiveData.postValue(filterBlockchains)
-            }
-            .let {
-                disposables.add(it)
-            }
-
-        service.walletsObservable
-            .subscribeIO { (wallets, selected) ->
-                val filterCoins = wallets.map {
-                    Filter(it, it == selected)
-                }
-                filterCoinsLiveData.postValue(filterCoins)
             }
             .let {
                 disposables.add(it)
@@ -108,20 +119,24 @@ class TransactionsViewModel(
         }
     }
 
+    private fun handleUpdatedWallets(wallets: List<Wallet>) {
+        transactionFilterService.setWallets(wallets)
+    }
+
     fun setFilterTransactionType(filterType: FilterTransactionType) {
-        service.setFilterType(filterType)
+        transactionFilterService.setSelectedTransactionType(filterType)
     }
 
     fun setFilterCoin(w: TransactionWallet?) {
-        service.setFilterCoin(w)
+        transactionFilterService.setSelectedWallet(w)
     }
 
     fun onEnterFilterBlockchain(filterBlockchain: Filter<Blockchain?>) {
-        service.setFilterBlockchain(filterBlockchain.item)
+        transactionFilterService.setSelectedBlockchain(filterBlockchain.item)
     }
 
     fun resetFilters() {
-        service.resetFilters()
+        transactionFilterService.reset()
     }
 
     fun onBottomReached() {
@@ -140,7 +155,10 @@ class TransactionsViewModel(
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
 
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
-        service.updateFilterHideSuspiciousTx(checked)
+        spamManager.updateFilterHideSuspiciousTx(checked)
+
+        service.reload()
+
         filterHideSuspiciousTx = checked
     }
 

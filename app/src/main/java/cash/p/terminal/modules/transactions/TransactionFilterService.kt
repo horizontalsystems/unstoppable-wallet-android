@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.transactions
 
-import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,13 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.util.UUID
 
-class TransactionFilterService(
-    private val spamManager: SpamManager,
-) {
-    private val _resetEnabled = MutableStateFlow(false)
-    val resetEnabled = _resetEnabled.asStateFlow()
-    val filterHideSuspiciousTx = spamManager.hideSuspiciousTx
-
+class TransactionFilterService {
     private var blockchains: List<Blockchain?> = listOf(null)
     private var selectedBlockchain: Blockchain? = null
     private var transactionWallets: List<TransactionWallet?> = listOf(null)
@@ -110,10 +103,6 @@ class TransactionFilterService(
         return selectedWallet != null
             || selectedBlockchain != null
             || selectedTransactionType != FilterTransactionType.All
-    }
-
-    fun setFilterHideSuspiciousTx(hide: Boolean) {
-        spamManager.updateFilterHideSuspiciousTx(hide)
     }
 
     data class State(
