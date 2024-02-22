@@ -40,7 +40,7 @@ class TransactionsService(
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-    init {
+    fun start() {
         transactionRecordRepository.itemsObservable
             .subscribeIO {
                 handleUpdatedRecords(it)
