@@ -70,9 +70,9 @@ fun TransactionsScreen(
     val accountsViewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
-    val syncing by viewModel.syncingLiveData.observeAsState(false)
 
     val uiState = viewModel.uiState
+    val syncing = uiState.syncing
     val transactions = uiState.transactions
 
     Surface(color = ComposeAppTheme.colors.tyler) {
