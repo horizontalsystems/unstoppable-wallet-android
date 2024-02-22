@@ -42,7 +42,6 @@ class TransactionsViewModel(
 
     var tmpItemToShow: TransactionItem? = null
 
-    val syncingLiveData = MutableLiveData<Boolean>()
     val filterResetEnabled = MutableLiveData<Boolean>()
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet?>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
@@ -52,12 +51,14 @@ class TransactionsViewModel(
     private var transactionListId: String? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
     private var viewState: ViewState = ViewState.Loading
+    private var syncing = false
 
     var uiState by mutableStateOf(
         TransactionsUiState(
             transactions = transactions,
             viewState = viewState,
-            transactionListId = transactionListId
+            transactionListId = transactionListId,
+            syncing = syncing
         )
     )
         private set
@@ -112,7 +113,8 @@ class TransactionsViewModel(
 
         service.syncingObservable
             .subscribeIO {
-                syncingLiveData.postValue(it)
+                syncing = it
+                emitState()
             }
             .let {
                 disposables.add(it)
@@ -145,7 +147,8 @@ class TransactionsViewModel(
             uiState = TransactionsUiState(
                 transactions = transactions,
                 viewState = viewState,
-                transactionListId = transactionListId
+                transactionListId = transactionListId,
+                syncing = syncing
             )
         }
     }
