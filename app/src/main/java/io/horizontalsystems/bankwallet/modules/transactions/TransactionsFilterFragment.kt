@@ -13,7 +13,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -61,7 +60,7 @@ fun FilterScreen(
     navController: NavController,
     viewModel: TransactionsViewModel,
 ) {
-    val filterResetEnabled by viewModel.filterResetEnabled.collectAsState()
+    val filterResetEnabled by viewModel.filterResetEnabled.observeAsState(false)
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
     val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx

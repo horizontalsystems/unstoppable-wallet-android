@@ -1,19 +1,15 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
-import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
-import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.nftUids
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
-import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -29,28 +25,14 @@ class TransactionsService(
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
-    private val transactionAdapterManager: TransactionAdapterManager,
-    private val walletManager: IWalletManager,
-    private val transactionFilterService: TransactionFilterService,
     private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
 ) : Clearable {
-    val filterResetEnabled by transactionFilterService::resetEnabled
-    val filterHideSuspiciousTx by transactionFilterService::filterHideSuspiciousTx
 
     private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
     val syncingObservable get() = transactionSyncStateRepository.syncingObservable
-
-    private val blockchainSubject = BehaviorSubject.create<Pair<List<Blockchain?>, Blockchain?>>()
-    val blockchainObservable get() = blockchainSubject
-
-    private val typesSubject = BehaviorSubject.create<Pair<List<FilterTransactionType>, FilterTransactionType>>()
-    val typesObservable get() = typesSubject
-
-    private val walletsSubject = BehaviorSubject.create<Pair<List<TransactionWallet?>, TransactionWallet?>>()
-    val walletsObservable get() = walletsSubject
 
     private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
@@ -58,16 +40,6 @@ class TransactionsService(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     init {
-        handleUpdatedWallets(walletManager.activeWallets)
-
-        transactionAdapterManager.adaptersReadyObservable
-            .subscribeIO {
-                handleUpdatedWallets(walletManager.activeWallets)
-            }
-            .let {
-                disposables.add(it)
-            }
-
         transactionRecordRepository.itemsObservable
             .subscribeIO {
                 handleUpdatedRecords(it)
@@ -111,25 +83,15 @@ class TransactionsService(
                 handleContactsUpdate()
             }
         }
-
-        coroutineScope.launch {
-            transactionFilterService.stateFlow.collect {
-                handleUpdatedTransactionFilterState(it)
-            }
-        }
     }
 
-    private fun handleUpdatedTransactionFilterState(state: TransactionFilterService.State) {
+    fun setTransactionFilter(state: TransactionFilterService.State) {
         transactionRecordRepository.set(
             state.transactionWallets.filterNotNull(),
             state.selectedWallet,
             state.selectedTransactionType,
             state.selectedBlockchain
         )
-
-        walletsSubject.onNext(Pair(state.transactionWallets, state.selectedWallet))
-        typesSubject.onNext(Pair(state.transactionTypes, state.selectedTransactionType))
-        blockchainSubject.onNext(Pair(state.blockchains, state.selectedBlockchain))
 
         transactionSyncStateRepository.setTransactionWallets(state.transactionWallets.filterNotNull())
     }
@@ -268,11 +230,6 @@ class TransactionsService(
             ?.let { rate -> CurrencyValue(rate.currency, decimalValue * rate.value) }
     }
 
-    @Synchronized
-    private fun handleUpdatedWallets(wallets: List<Wallet>) {
-        transactionFilterService.setWallets(wallets)
-    }
-
     override fun clear() {
         disposables.clear()
 
@@ -288,34 +245,9 @@ class TransactionsService(
         itemsSubject.onNext(transactionItems)
     }
 
-    fun setFilterType(f: FilterTransactionType) {
+    fun reload() {
         executorService.submit {
-            transactionFilterService.setSelectedTransactionType(f)
-        }
-    }
-
-    fun setFilterBlockchain(blockchain: Blockchain?) {
-        executorService.submit {
-            transactionFilterService.setSelectedBlockchain(blockchain)
-        }
-    }
-
-    fun setFilterCoin(w: TransactionWallet?) {
-        executorService.submit {
-            transactionFilterService.setSelectedWallet(w)
-        }
-    }
-
-    fun updateFilterHideSuspiciousTx(hide: Boolean) {
-        executorService.submit {
-            transactionFilterService.setFilterHideSuspiciousTx(hide)
             transactionRecordRepository.reload()
-        }
-    }
-
-    fun resetFilters() {
-        executorService.submit {
-            transactionFilterService.reset()
         }
     }
 

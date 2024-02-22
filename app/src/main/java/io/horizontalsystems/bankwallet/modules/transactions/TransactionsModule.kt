@@ -7,27 +7,34 @@ import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
-import java.util.*
+import java.util.Date
 
 object TransactionsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val transactionsService = TransactionsService(
+                TransactionRecordRepository(App.transactionAdapterManager),
+                TransactionsRateRepository(App.currencyManager, App.marketKit),
+                TransactionSyncStateRepository(App.transactionAdapterManager),
+                App.contactsRepository,
+                NftMetadataService(App.nftMetadataManager),
+                App.spamManager
+            )
+            val transactionViewItemFactory = TransactionViewItemFactory(
+                App.evmLabelManager,
+                App.contactsRepository,
+                App.balanceHiddenManager
+            )
 
             return TransactionsViewModel(
-                TransactionsService(
-                    TransactionRecordRepository(App.transactionAdapterManager),
-                    TransactionsRateRepository(App.currencyManager, App.marketKit),
-                    TransactionSyncStateRepository(App.transactionAdapterManager),
-                    App.contactsRepository,
-                    App.transactionAdapterManager,
-                    App.walletManager,
-                    TransactionFilterService(App.spamManager),
-                    NftMetadataService(App.nftMetadataManager),
-                    App.spamManager
-                ),
-                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager),
-                App.balanceHiddenManager
+                transactionsService,
+                transactionViewItemFactory,
+                App.balanceHiddenManager,
+                App.transactionAdapterManager,
+                App.walletManager,
+                TransactionFilterService(),
+                App.spamManager
             ) as T
         }
     }
