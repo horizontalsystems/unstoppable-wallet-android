@@ -8,9 +8,10 @@ import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.concurrent.ConcurrentHashMap
 
 class TransactionAdapterManager(
@@ -19,8 +20,8 @@ class TransactionAdapterManager(
 ) {
     private val disposables = CompositeDisposable()
 
-    private val adaptersReadySubject = BehaviorSubject.create<Unit>()
-    val adaptersReadyObservable: Observable<Unit> get() = adaptersReadySubject
+    private val _adaptersReadyFlow = MutableStateFlow(mapOf<TransactionSource, ITransactionsAdapter>())
+    val adaptersReadyFlow get() = _adaptersReadyFlow.asStateFlow()
 
     private val adaptersMap = ConcurrentHashMap<TransactionSource, ITransactionsAdapter>()
 
@@ -76,7 +77,8 @@ class TransactionAdapterManager(
             adapterFactory.unlinkAdapter(it.key)
         }
 
-        adaptersReadySubject.onNext(Unit)
-
+        _adaptersReadyFlow.update {
+            this.adaptersMap
+        }
     }
 }

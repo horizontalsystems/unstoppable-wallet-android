@@ -47,24 +47,35 @@ class TransactionsViewModel(
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet?>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
-    val transactionList = MutableLiveData<Map<String, List<TransactionViewItem>>>()
-    val viewState = MutableLiveData<ViewState>(ViewState.Loading)
     var filterHideSuspiciousTx by mutableStateOf(spamManager.hideSuspiciousTx)
+
+    private var transactionListId: String? = null
+    private var transactions: Map<String, List<TransactionViewItem>>? = null
+    private var viewState: ViewState = ViewState.Loading
+
+    var uiState by mutableStateOf(
+        TransactionsUiState(
+            transactions = transactions,
+            viewState = viewState,
+            transactionListId = transactionListId
+        )
+    )
+        private set
 
     private val disposables = CompositeDisposable()
 
     init {
-        handleUpdatedWallets(walletManager.activeWallets)
+        viewModelScope.launch(Dispatchers.Default) {
+            service.start()
+        }
 
-        transactionAdapterManager.adaptersReadyObservable
-            .subscribeIO {
+        viewModelScope.launch(Dispatchers.Default) {
+            transactionAdapterManager.adaptersReadyFlow.collect {
                 handleUpdatedWallets(walletManager.activeWallets)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             transactionFilterService.stateFlow.collect { state ->
                 service.set(
                     state.transactionWallets.filterNotNull(),
@@ -92,6 +103,10 @@ class TransactionsViewModel(
                     Filter(it, it == selectedWallet)
                 }
                 filterCoinsLiveData.postValue(filterCoins)
+
+                transactionListId = state.selectedWallet?.hashCode().toString() +
+                    state.selectedTransactionType.name +
+                    state.selectedBlockchain?.uid
             }
         }
 
@@ -109,18 +124,29 @@ class TransactionsViewModel(
                     .map { transactionViewItem2Factory.convertToViewItemCached(it) }
                     .groupBy { it.formattedDate }
 
-                transactionList.postValue(viewItems)
-                viewState.postValue(ViewState.Success)
+                transactions = viewItems
+                viewState = ViewState.Success
+                emitState()
             }
             .let {
                 disposables.add(it)
             }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             balanceHiddenManager.balanceHiddenFlow.collect {
                 transactionViewItem2Factory.updateCache()
                 service.refreshList()
             }
+        }
+    }
+
+    private fun emitState() {
+        viewModelScope.launch {
+            uiState = TransactionsUiState(
+                transactions = transactions,
+                viewState = viewState,
+                transactionListId = transactionListId
+            )
         }
     }
 
