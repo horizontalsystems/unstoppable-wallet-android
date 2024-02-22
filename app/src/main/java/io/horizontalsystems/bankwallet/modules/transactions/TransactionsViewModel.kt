@@ -66,7 +66,12 @@ class TransactionsViewModel(
 
         viewModelScope.launch {
             transactionFilterService.stateFlow.collect { state ->
-                service.setTransactionFilter(state)
+                service.set(
+                    state.transactionWallets.filterNotNull(),
+                    state.selectedWallet,
+                    state.selectedTransactionType,
+                    state.selectedBlockchain
+                )
 
                 filterResetEnabled.postValue(state.resetEnabled)
 

@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.nftUids
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
+import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
@@ -85,15 +86,20 @@ class TransactionsService(
         }
     }
 
-    fun setTransactionFilter(state: TransactionFilterService.State) {
+    fun set(
+        transactionWallets: List<TransactionWallet>,
+        transactionWallet: TransactionWallet?,
+        filterTransactionType: FilterTransactionType,
+        blockchain: Blockchain?
+    ) {
         transactionRecordRepository.set(
-            state.transactionWallets.filterNotNull(),
-            state.selectedWallet,
-            state.selectedTransactionType,
-            state.selectedBlockchain
+            transactionWallets,
+            transactionWallet,
+            filterTransactionType,
+            blockchain
         )
 
-        transactionSyncStateRepository.setTransactionWallets(state.transactionWallets.filterNotNull())
+        transactionSyncStateRepository.setTransactionWallets(transactionWallets)
     }
 
     @Synchronized
