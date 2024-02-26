@@ -214,6 +214,15 @@ class TonAdapter(
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
+        address: String?,
+    ): Flowable<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlowable(token, transactionType)
+        else -> Flowable.empty()
+    }
+
+    private fun getTransactionRecordsFlowable(
+        token: Token?,
+        transactionType: FilterTransactionType,
     ): Flowable<List<TransactionRecord>> {
         val tonTransactionType = when (transactionType) {
             FilterTransactionType.All -> null

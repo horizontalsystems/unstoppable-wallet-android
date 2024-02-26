@@ -75,6 +75,15 @@ class TronTransactionsAdapter(
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ): Flowable<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlowable(token, transactionType)
+        else -> Flowable.empty()
+    }
+
+    private fun getTransactionRecordsFlowable(
+        token: Token?,
         transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>> {
         return tronKit.getFullTransactionsFlow(getFilters(token, transactionType)).asFlowable().map {
