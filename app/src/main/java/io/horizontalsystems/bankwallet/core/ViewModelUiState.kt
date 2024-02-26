@@ -11,7 +11,8 @@ abstract class ViewModelUiState<T> : ViewModel() {
         mutableStateOf(createState())
     }
 
-    val uiState by lazy { _uiState.value }
+    val uiState: T
+        get() = _uiState.value
 
     protected abstract fun createState() : T
 
