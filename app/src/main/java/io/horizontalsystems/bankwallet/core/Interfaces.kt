@@ -266,17 +266,9 @@ interface ITransactionsAdapter {
 
     fun getTransactionRecordsFlowable(
         token: Token?,
-        transactionType: FilterTransactionType
-    ): Flowable<List<TransactionRecord>>
-
-    fun getTransactionRecordsFlowable(
-        token: Token?,
         transactionType: FilterTransactionType,
         address: String?
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(token, transactionType)
-        else -> Flowable.empty()
-    }
+    ): Flowable<List<TransactionRecord>>
 
     fun getTransactionUrl(transactionHash: String): String
 }
