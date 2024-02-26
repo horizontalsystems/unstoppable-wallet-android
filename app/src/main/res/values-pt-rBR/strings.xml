@@ -128,6 +128,7 @@
     <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de restauração de carteira para usuários do Unstoppable que possuem uma carteira fora do padrão. Essas carteiras podem ter sido criadas na versão Unstoppable 0.27 - 0.28 usando uma frase de recuperação diferente do inglês e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será ser mostrado 0 após restaurar tal carteira na versão 0.29 ou superior. Esta página permitirá que você restaure o acesso à sua carteira não padrão. Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="Select_Coins">Escolher Moedas</string>
+    <string name="SelectContacts_All">Todas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
@@ -583,6 +584,7 @@
     <string name="Transaction_Unlimited">ilimitado %s</string>
     <string name="Transactions_All">Todas</string>
     <string name="Transactions_Filter_Coin">Moeda</string>
+    <string name="Transactions_Filter_Contacts">Contatos</string>
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
     <string name="Transactions_Filter_AllCoins">Todas as moedas</string>
     <string name="Transactions_Filter_ChooseCoin">Escolher Moedas</string>
