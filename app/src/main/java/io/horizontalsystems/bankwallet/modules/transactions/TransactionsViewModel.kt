@@ -4,10 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IWalletManager
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
@@ -39,7 +39,7 @@ class TransactionsViewModel(
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
     private val spamManager: SpamManager
-) : ViewModel() {
+) : ViewModelUiState<TransactionsUiState>() {
 
     var tmpItemToShow: TransactionItem? = null
 
@@ -54,16 +54,6 @@ class TransactionsViewModel(
     private var transactions: Map<String, List<TransactionViewItem>>? = null
     private var viewState: ViewState = ViewState.Loading
     private var syncing = false
-
-    var uiState by mutableStateOf(
-        TransactionsUiState(
-            transactions = transactions,
-            viewState = viewState,
-            transactionListId = transactionListId,
-            syncing = syncing
-        )
-    )
-        private set
 
     private val disposables = CompositeDisposable()
 
@@ -147,16 +137,12 @@ class TransactionsViewModel(
         }
     }
 
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = TransactionsUiState(
-                transactions = transactions,
-                viewState = viewState,
-                transactionListId = transactionListId,
-                syncing = syncing
-            )
-        }
-    }
+    override fun createState() = TransactionsUiState(
+        transactions = transactions,
+        viewState = viewState,
+        transactionListId = transactionListId,
+        syncing = syncing
+    )
 
     private fun handleUpdatedWallets(wallets: List<Wallet>) {
         transactionFilterService.setWallets(wallets)
