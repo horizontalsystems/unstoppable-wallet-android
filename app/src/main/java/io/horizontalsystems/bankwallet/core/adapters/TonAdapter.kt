@@ -31,6 +31,7 @@ import io.horizontalsystems.tonkit.Transfer
 import io.horizontalsystems.tonkit.transfers
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -137,6 +138,17 @@ class TonAdapter(
         get() = Flowable.empty()
 
     override fun getTransactionsAsync(
+        from: TransactionRecord?,
+        token: Token?,
+        limit: Int,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ) = when (address) {
+        null -> getTransactionsAsync(from, token, limit, transactionType)
+        else -> Single.just(listOf())
+    }
+
+    private fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
@@ -22,6 +23,7 @@ class TransactionRecordRepository(
 
     private var selectedWallet: TransactionWallet? = null
     private var selectedBlockchain: Blockchain? = null
+    private var contact: Contact? = null
 
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
@@ -92,6 +94,7 @@ class TransactionRecordRepository(
         wallet: TransactionWallet?,
         transactionType: FilterTransactionType,
         blockchain: Blockchain?,
+        contact: Contact?,
     ) {
         if (this.transactionWallets != transactionWallets || adaptersMap.isEmpty()) {
             this.transactionWallets = transactionWallets
@@ -104,7 +107,12 @@ class TransactionRecordRepository(
                 var adapter = currentAdapters.remove(transactionWallet)
                 if (adapter == null) {
                     adapterManager.getAdapter(transactionWallet.source)?.let {
-                        adapter = TransactionAdapterWrapper(it, transactionWallet, selectedFilterTransactionType)
+                        adapter = TransactionAdapterWrapper(
+                            it,
+                            transactionWallet,
+                            selectedFilterTransactionType,
+                            contact
+                        )
                     }
                 }
 
@@ -133,6 +141,14 @@ class TransactionRecordRepository(
 
             adaptersMap.forEach { (_, transactionAdapterWrapper) ->
                 transactionAdapterWrapper.setTransactionType(transactionType)
+            }
+            reload = true
+        }
+
+        if (this.contact != contact) {
+            this.contact = contact
+            adaptersMap.forEach { (_, transactionAdapterWrapper) ->
+                transactionAdapterWrapper.setContact(contact)
             }
             reload = true
         }

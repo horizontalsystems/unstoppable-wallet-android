@@ -52,10 +52,11 @@ class EvmTransactionsAdapter(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        address: String?,
     ): Single<List<TransactionRecord>> {
         return evmKit.getFullTransactionsAsync(
-            getFilters(token, transactionType),
+            getFilters(token, transactionType, address?.lowercase()),
             from?.transactionHash?.hexStringToByteArray(),
             limit
         ).map {
@@ -85,12 +86,16 @@ class EvmTransactionsAdapter(
         else -> ""
     }
 
-    private fun getFilters(token: Token?, filter: FilterTransactionType): List<List<String>> {
-        val filterCoin = token?.let {
-            coinTagName(it)
+    private fun getFilters(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String? = null,
+    ) = buildList {
+        token?.let {
+            add(listOf(coinTagName(it)))
         }
 
-        val filterTag = when (filter) {
+        val filterType = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> when {
                 token != null -> TransactionTag.tokenIncoming(coinTagName(token))
@@ -104,6 +109,12 @@ class EvmTransactionsAdapter(
             FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
         }
 
-        return listOfNotNull(filterCoin, filterTag).map { listOf(it) }
+        filterType?.let {
+            add(listOf(it))
+        }
+
+        if (!address.isNullOrBlank()) {
+            add(listOf("from_$address", "to_$address"))
+        }
     }
 }

@@ -44,10 +44,21 @@ class SolanaTransactionsAdapter(
         get() = kit.transactionsSyncStateFlow.map {}.asFlowable()
 
     override fun getTransactionsAsync(
-            from: TransactionRecord?,
-            token: Token?,
-            limit: Int,
-            transactionType: FilterTransactionType
+        from: TransactionRecord?,
+        token: Token?,
+        limit: Int,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ) = when (address) {
+        null -> getTransactionsAsync(from, token, limit, transactionType)
+        else -> Single.just(listOf())
+    }
+
+    private fun getTransactionsAsync(
+        from: TransactionRecord?,
+        token: Token?,
+        limit: Int,
+        transactionType: FilterTransactionType,
     ): Single<List<TransactionRecord>> {
         val incoming = when (transactionType) {
             FilterTransactionType.All -> null
