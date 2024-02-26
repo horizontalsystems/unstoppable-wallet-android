@@ -1,35 +1,32 @@
 package cash.p.terminal.modules.swapxxx
 
 import android.os.CountDownTimer
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SwapConfirmViewModel(private var quote: SwapProviderQuote, private val settings: Map<String, Any?>) : ViewModel() {
+class SwapConfirmViewModel(
+    private var quote: SwapProviderQuote,
+    private val settings: Map<String, Any?>,
+) : ViewModelUiState<SwapConfirmUiState>() {
     private var expiresIn = quote.expireAt - System.currentTimeMillis()
     private var expired = false
     private var refreshing = false
-
-    var uiState by mutableStateOf(
-        SwapConfirmUiState(
-            quote = quote,
-            expiresIn = expiresIn,
-            expired = expired,
-            refreshing = refreshing
-        )
-    )
-        private set
 
     private var expirationTimer: CountDownTimer? = null
 
     init {
         handleQuote(quote)
     }
+
+    override fun createState() = SwapConfirmUiState(
+        quote = quote,
+        expiresIn = expiresIn,
+        expired = expired,
+        refreshing = refreshing
+    )
 
     private fun runExpirationTimer(millisInFuture: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
         viewModelScope.launch {
@@ -51,17 +48,6 @@ class SwapConfirmViewModel(private var quote: SwapProviderQuote, private val set
             settings
         )
     )
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = SwapConfirmUiState(
-                quote = quote,
-                expiresIn = expiresIn,
-                expired = expired,
-                refreshing = refreshing
-            )
-        }
-    }
 
     private fun handleQuote(quote: SwapProviderQuote) {
         this.quote = quote
