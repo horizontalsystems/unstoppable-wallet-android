@@ -56,7 +56,7 @@ class BtcBlockchainManager(
         }
 
     fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): SyncMode {
-        if (accountOrigin == AccountOrigin.Created) {
+        if (accountOrigin == AccountOrigin.Created && blockchainType in blockchairSyncEnabledBlockchains) {
             return SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
         }
 
