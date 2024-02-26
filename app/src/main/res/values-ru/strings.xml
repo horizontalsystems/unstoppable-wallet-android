@@ -131,6 +131,7 @@
 \n\nЕсли вы являетесь затронутым пользователем, то баланс вашего кошелька будет отображаться как 0 после восстановления такого кошелька в версии 0.29 или выше.Эта страница позволит вам восстановить доступ к вашему нестандартному кошельку. После восстановления рекомендуется создать новый кошелек (который будет соответствовать стандарту) и перевести туда средства.</string>
     <string name="Restore_PrivateKey_InvalidKey">Неверный ключ</string>
     <string name="Select_Coins">Выберите токены</string>
+    <string name="SelectContacts_All">Все</string>
     <string name="Restore_BirthdayHeight">Блок создания</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Блок создания Zcash</string>
@@ -599,6 +600,7 @@
     <string name="Transactions_All">Все</string>
     <string name="Transactions_Filter_Blockchain">Фильтр по блокчейну</string>
     <string name="Transactions_Filter_Coin">Монета</string>
+    <string name="Transactions_Filter_Contacts">Контакты</string>
     <string name="Transactions_Filter_AllBlockchains">Все блокчейны</string>
     <string name="Transactions_Filter_AllCoins">Все токены</string>
     <string name="Transactions_Filter_ChooseCoin">Выберите токен</string>
