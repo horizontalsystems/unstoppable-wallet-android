@@ -20,6 +20,23 @@ import java.math.BigDecimal
 abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
+    override suspend fun swap(swapQuote: ISwapQuote) {
+        check(swapQuote is SwapQuoteUniswapV3)
+
+        val blockchainType = swapQuote.tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+        val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: return
+
+        val transactionData = swapQuote.transactionData ?: return
+
+//        try {
+//            val transaction = evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+////            logger.info("success")
+//        } catch (e: Throwable) {
+////            logger.warning("failed", error)
+//        }
+    }
+
     final override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
@@ -74,7 +91,11 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
             tradeDataV3,
             fields,
             feeAmountData,
-            listOf(settingRecipient, settingSlippage, settingDeadline)
+            listOf(settingRecipient, settingSlippage, settingDeadline),
+            tokenIn,
+            tokenOut,
+            amountIn,
+            transactionData
         )
     }
 
