@@ -66,9 +66,10 @@ class EvmTransactionsAdapter(
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        address: String?,
     ): Flowable<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType)).map {
+        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
@@ -89,7 +90,7 @@ class EvmTransactionsAdapter(
     private fun getFilters(
         token: Token?,
         transactionType: FilterTransactionType,
-        address: String? = null,
+        address: String?,
     ) = buildList {
         token?.let {
             add(listOf(coinTagName(it)))

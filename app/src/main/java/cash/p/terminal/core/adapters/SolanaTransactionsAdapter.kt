@@ -81,7 +81,16 @@ class SolanaTransactionsAdapter(
         }
     }
 
-    override fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ): Flowable<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlowable(token, transactionType)
+        else -> Flowable.empty()
+    }
+
+    private fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         val incoming: Boolean? = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> true
