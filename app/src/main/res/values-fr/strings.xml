@@ -129,6 +129,7 @@
     <string name="Restore_NonStandard_Description">Sur cette page, vous trouverez un mécanisme spécial de restauration de portefeuille pour les utilisateurs d\'Unstoppable dont le portefeuille n\'est pas standard. En général, de tels portefeuilles ont été créés dans la version 0.27 - 0.28 d\'Unstoppable en utilisant une liste de mots mnémoniques non-anglais et/ou un caractère spécial dans la phrase de passe du portefeuille (c\'est-à-dire un symbole diacritique).\n\nSi vous êtes un utilisateur concerné, le solde de votre portefeuille sera affiché à 0 après la restauration de ce portefeuille dans la version 0.29 ou supérieure. Grâce à cette page, vous pourrez restaurer l\'accès à votre portefeuille non-standard. Une fois la restauration effectuée, il est conseillé de créer un nouveau portefeuille (qui sera conforme aux normes) et d\'y transférer vos fonds.</string>
     <string name="Restore_PrivateKey_InvalidKey">Clé invalide</string>
     <string name="Select_Coins">Crypto Monnaie</string>
+    <string name="SelectContacts_All">Tout</string>
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
     <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire de Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Saisissez la hauteur de l\'anniversaire du portefeuille pour une synchronisation plus rapide.</string>
