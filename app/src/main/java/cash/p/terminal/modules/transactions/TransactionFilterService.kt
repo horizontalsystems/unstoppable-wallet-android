@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,7 @@ class TransactionFilterService {
     private var selectedWallet: TransactionWallet? = null
     private val transactionTypes = FilterTransactionType.values().toList()
     private var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
+    private var contact: Contact? = null
     private var uniqueId = UUID.randomUUID().toString()
 
     private val _stateFlow = MutableStateFlow(
@@ -25,7 +27,8 @@ class TransactionFilterService {
             transactionTypes = transactionTypes,
             selectedTransactionType = selectedTransactionType,
             resetEnabled = resetEnabled(),
-            uniqueId = uniqueId
+            uniqueId = uniqueId,
+            contact = contact
         )
     )
     val stateFlow get() = _stateFlow.asStateFlow()
@@ -40,7 +43,8 @@ class TransactionFilterService {
                 transactionTypes = transactionTypes,
                 selectedTransactionType = selectedTransactionType,
                 resetEnabled = resetEnabled(),
-                uniqueId = uniqueId
+                uniqueId = uniqueId,
+                contact = contact
             )
         }
     }
@@ -91,10 +95,17 @@ class TransactionFilterService {
         emitState()
     }
 
+    fun setContact(contact: Contact?) {
+        this.contact = contact
+
+        emitState()
+    }
+
     fun reset() {
         selectedTransactionType = FilterTransactionType.All
         selectedWallet = null
         selectedBlockchain = null
+        contact = null
 
         emitState()
     }
@@ -103,6 +114,7 @@ class TransactionFilterService {
         return selectedWallet != null
             || selectedBlockchain != null
             || selectedTransactionType != FilterTransactionType.All
+            || contact != null
     }
 
     data class State(
@@ -114,6 +126,7 @@ class TransactionFilterService {
         val selectedTransactionType: FilterTransactionType,
         val resetEnabled: Boolean,
         val uniqueId: String,
+        val contact: Contact?,
     )
 
 }

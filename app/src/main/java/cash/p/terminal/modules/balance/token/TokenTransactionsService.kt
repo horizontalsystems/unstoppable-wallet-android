@@ -99,6 +99,7 @@ class TokenTransactionsService(
             listOf(transactionWallet),
             transactionWallet,
             FilterTransactionType.All,
+            null,
             null
         )
     }

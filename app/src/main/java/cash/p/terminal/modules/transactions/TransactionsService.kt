@@ -10,6 +10,7 @@ import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -90,13 +91,15 @@ class TransactionsService(
         transactionWallets: List<TransactionWallet>,
         transactionWallet: TransactionWallet?,
         filterTransactionType: FilterTransactionType,
-        blockchain: Blockchain?
+        blockchain: Blockchain?,
+        contact: Contact?
     ) {
         transactionRecordRepository.set(
             transactionWallets,
             transactionWallet,
             filterTransactionType,
-            blockchain
+            blockchain,
+            contact
         )
 
         transactionSyncStateRepository.setTransactionWallets(transactionWallets)

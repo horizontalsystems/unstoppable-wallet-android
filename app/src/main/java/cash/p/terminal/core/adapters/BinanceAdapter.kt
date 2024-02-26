@@ -102,7 +102,18 @@ class BinanceAdapter(
         }
     }
 
-    override fun getTransactionsAsync(from: TransactionRecord?, token: Token?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
+    override fun getTransactionsAsync(
+        from: TransactionRecord?,
+        token: Token?,
+        limit: Int,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ) = when (address) {
+        null -> getTransactionsAsync(from, token, limit, transactionType)
+        else -> Single.just(listOf())
+    }
+
+    private fun getTransactionsAsync(from: TransactionRecord?, token: Token?, limit: Int, transactionType: FilterTransactionType): Single<List<TransactionRecord>> {
         return try {
             val filter = getBinanceTransactionTypeFilter(transactionType)
             binanceKit

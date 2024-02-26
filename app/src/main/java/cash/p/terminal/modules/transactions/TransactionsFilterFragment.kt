@@ -27,6 +27,8 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.slideFromRightForResult
+import cash.p.terminal.modules.contacts.SelectContactFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -64,6 +66,7 @@ fun FilterScreen(
     val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
     val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx
+    val filterContact by viewModel.filterContactLiveData.observeAsState()
 
     val filterCoin = filterCoins?.find { it.selected }?.item
     val coinCode = filterCoin?.token?.coin?.code
@@ -123,6 +126,24 @@ fun FilterScreen(
                             valueColor = if (filterBlockchain != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
                             onClick = {
                                 navController.slideFromRight(R.id.filterCoinFragment)
+                            }
+                        )
+                    }
+                )
+                VSpacer(32.dp)
+                CellSingleLineLawrenceSection(
+                    listOf {
+                        FilterDropdownCell(
+                            title = stringResource(R.string.Transactions_Filter_Contacts),
+                            value = filterContact?.name ?: stringResource(id = R.string.Transactions_Filter_AllContacts) ,
+                            valueColor = if (filterContact != null) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.grey,
+                            onClick = {
+                                navController.slideFromRightForResult<SelectContactFragment.Result>(
+                                    R.id.selectContact,
+                                    filterContact
+                                ) {
+                                    viewModel.onEnterContact(it.contact)
+                                }
                             }
                         )
                     }
