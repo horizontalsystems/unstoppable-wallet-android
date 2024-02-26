@@ -23,4 +23,8 @@ interface ISwapXxxProvider {
         amountIn: BigDecimal,
         settings: Map<String, Any?>
     ): ISwapQuote
+
+    suspend fun swap(swapQuote: ISwapQuote) {
+
+    }
 }

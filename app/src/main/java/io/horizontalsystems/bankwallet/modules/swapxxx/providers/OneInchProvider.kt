@@ -76,7 +76,10 @@ object OneInchProvider : ISwapXxxProvider {
             null,
             fields,
             null,
-            listOf(settingRecipient, settingSlippage)
+            listOf(settingRecipient, settingSlippage),
+            tokenIn,
+            tokenOut,
+            amountIn
         )
     }
 

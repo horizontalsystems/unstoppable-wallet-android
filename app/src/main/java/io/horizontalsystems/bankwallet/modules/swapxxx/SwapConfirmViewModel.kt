@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package cash.p.terminal.modules.swapxxx
 
 import android.os.CountDownTimer
 import androidx.compose.runtime.getValue
@@ -42,19 +42,15 @@ class SwapConfirmViewModel(private var quote: SwapProviderQuote, private val set
         }
     }
 
-    private suspend fun reFetchQuote(quote: SwapProviderQuote): SwapProviderQuote {
-        val tokenIn = quote.tokenIn
-        val tokenOut = quote.tokenOut
-        val amountIn = quote.amountIn
-
-        return SwapProviderQuote(
-            provider = quote.provider,
-            tokenIn = tokenIn,
-            tokenOut = tokenOut,
-            amountIn = amountIn,
-            swapQuote = quote.provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+    private suspend fun reFetchQuote(quote: SwapProviderQuote) = SwapProviderQuote(
+        provider = quote.provider,
+        swapQuote = quote.provider.fetchQuote(
+            quote.tokenIn,
+            quote.tokenOut,
+            quote.amountIn,
+            settings
         )
-    }
+    )
 
     private fun emitState() {
         viewModelScope.launch {
@@ -100,6 +96,12 @@ class SwapConfirmViewModel(private var quote: SwapProviderQuote, private val set
             refreshing = false
 
             handleQuote(newQuote)
+        }
+    }
+
+    fun swap() {
+        viewModelScope.launch {
+            quote.provider.swap(quote.swapQuote)
         }
     }
 

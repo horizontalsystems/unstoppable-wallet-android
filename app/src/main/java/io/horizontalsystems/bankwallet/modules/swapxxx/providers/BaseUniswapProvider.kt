@@ -68,7 +68,10 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
             tradeData.priceImpact,
             fields,
             feeAmountData,
-            listOf(settingRecipient, settingSlippage, settingDeadline)
+            listOf(settingRecipient, settingSlippage, settingDeadline),
+            tokenIn,
+            tokenOut,
+            amountIn
         )
     }
 

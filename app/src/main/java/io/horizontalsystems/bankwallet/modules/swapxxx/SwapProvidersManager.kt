@@ -40,9 +40,6 @@ class SwapProvidersManager {
                         val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
                         SwapProviderQuote(
                             provider = provider,
-                            tokenIn = tokenIn,
-                            tokenOut = tokenOut,
-                            amountIn = amountIn,
                             swapQuote = quote
                         )
                     } catch (e: Throwable) {
@@ -58,11 +55,11 @@ class SwapProvidersManager {
 
 data class SwapProviderQuote(
     val provider: ISwapXxxProvider,
-    val tokenIn: Token,
-    val tokenOut: Token,
-    val amountIn: BigDecimal,
     val swapQuote: ISwapQuote
 ) {
+    val tokenIn by swapQuote::tokenIn
+    val tokenOut by swapQuote::tokenOut
+    val amountIn by swapQuote::amountIn
     val amountOut by swapQuote::amountOut
     val fee by swapQuote::fee
     val fields by swapQuote::fields
