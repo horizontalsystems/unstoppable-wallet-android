@@ -104,6 +104,7 @@ fun SwapConfirmScreen(navController: NavController) {
                                 .padding(start = 16.dp, end = 16.dp),
                             title = stringResource(R.string.Button_Confirm),
                             onClick = {
+                                viewModel.swap()
                             },
                         )
                         VSpacer(height = 12.dp)

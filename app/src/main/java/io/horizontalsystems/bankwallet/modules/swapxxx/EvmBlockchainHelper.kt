@@ -17,9 +17,11 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.rx2.asFlow
 
 class EvmBlockchainHelper(private val blockchainType: BlockchainType) {
-    private val evmKit = App.evmBlockchainManager
+    val evmKitWrapper = App.evmBlockchainManager
         .getEvmKitManager(blockchainType)
-        .evmKitWrapper?.evmKit
+        .evmKitWrapper
+
+    private val evmKit = evmKitWrapper?.evmKit
 
     val baseToken by lazy { App.evmBlockchainManager.getBaseToken(blockchainType) }
     val receiveAddress by lazy { evmKit?.receiveAddress }
