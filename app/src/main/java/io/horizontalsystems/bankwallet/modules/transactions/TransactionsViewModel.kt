@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -46,6 +47,7 @@ class TransactionsViewModel(
     val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet?>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
+    val filterContactLiveData = MutableLiveData<Contact?>()
     var filterHideSuspiciousTx by mutableStateOf(spamManager.hideSuspiciousTx)
 
     private var transactionListId: String? = null
@@ -82,7 +84,8 @@ class TransactionsViewModel(
                     state.transactionWallets.filterNotNull(),
                     state.selectedWallet,
                     state.selectedTransactionType,
-                    state.selectedBlockchain
+                    state.selectedBlockchain,
+                    state.contact,
                 )
 
                 filterResetEnabled.postValue(state.resetEnabled)
@@ -104,6 +107,8 @@ class TransactionsViewModel(
                     Filter(it, it == selectedWallet)
                 }
                 filterCoinsLiveData.postValue(filterCoins)
+
+                filterContactLiveData.postValue(state.contact)
 
                 transactionListId = state.selectedWallet?.hashCode().toString() +
                     state.selectedTransactionType.name +
@@ -167,6 +172,10 @@ class TransactionsViewModel(
 
     fun onEnterFilterBlockchain(filterBlockchain: Filter<Blockchain?>) {
         transactionFilterService.setSelectedBlockchain(filterBlockchain.item)
+    }
+
+    fun onEnterContact(contact: Contact?) {
+        transactionFilterService.setContact(contact)
     }
 
     fun resetFilters() {
