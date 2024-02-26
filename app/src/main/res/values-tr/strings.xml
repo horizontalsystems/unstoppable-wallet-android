@@ -124,6 +124,7 @@
     <string name="Restore_NonStandard_Description">Bu sayfa, standart olmayan bir cüzdanı olan Unstoppable kullanıcıları için özel geri yükleme mekanizması sağlar. Genel olarak, bu tür cüzdanlar, İngilizce olmayan bir anımsatma kelimeleri listesi ve/veya cüzdan şifresinde özel bir karakter (yani aksan simgesi) kullanılarak Unstoppable 0.27 - 0.28 sürümünde oluşturulmuş olabilir.\n\n Bu durumdan etkilenen bir kullanıcıysanız, 0.29 sürümüne güncelledikten sonra cüzdan bakiyeniz 0 olarak görüntülenir. Bu sayfa, standart olmayan cüzdanınıza erişimi geri yüklemenizi sağlayacaktır. Geri yüklendikten sonra, yeni bir cüzdan oluşturmanız (standartlarla uyumlu) ve paranızı oraya taşımanız önerilir.</string>
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
+    <string name="SelectContacts_All">Hepsi</string>
     <string name="Restore_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Oluşturulma Günü Üst Sınırı</string>
@@ -533,6 +534,7 @@
     <string name="Transaction_Unlimited">sınırsız %s</string>
     <string name="Transactions_All">Hepsi</string>
     <string name="Transactions_Filter_Blockchain">Blok zincirine göre filtrele</string>
+    <string name="Transactions_Filter_Contacts">Kişiler</string>
     <string name="Transactions_Filter_AllBlockchains">Tüm Blok Zincirleri</string>
     <string name="Transactions_Filter_AllCoins">Tüm paralar</string>
     <string name="Transactions_Filter_ChooseCoin">Kripto Parayı Seç</string>
