@@ -126,6 +126,7 @@
 \n\nWenn Sie ein betroffener Benutzer sind, wird Ihr Wallet-Guthaben nach der Wiederherstellung eines solchen Wallets in Version 0.29 oder höher als 0 angezeigt.Auf dieser Seite können Sie den Zugriff auf Ihre nicht standardmäßige Brieftasche wiederherstellen. Nach der Wiederherstellung wird empfohlen, eine neue Brieftasche zu erstellen (die standardkonform ist) und Gelder dorthin zu verschieben.</string>
     <string name="Restore_PrivateKey_InvalidKey">Ungültiger Schlüssel</string>
     <string name="Select_Coins">Coins auswählen</string>
+    <string name="SelectContacts_All">Alle</string>
     <string name="Restore_BirthdayHeight">Geburtstagshöhe</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash Geburtstagshöhe</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Geben Sie die Geburtstagshöhe das Wallet für eine schnellere Synchronisierung ein.</string>
@@ -542,6 +543,7 @@
     <string name="Transaction_Unlimited">unbegrenzt %s</string>
     <string name="Transactions_All">Alle</string>
     <string name="Transactions_Filter_Blockchain">Nach Blockchain filtern</string>
+    <string name="Transactions_Filter_Contacts">Kontakte</string>
     <string name="Transactions_Filter_AllBlockchains">Alle Blockchains</string>
     <string name="Transactions_Filter_AllCoins">Alle Coins</string>
     <string name="Transactions_Filter_ChooseCoin">Coins auswählen</string>
