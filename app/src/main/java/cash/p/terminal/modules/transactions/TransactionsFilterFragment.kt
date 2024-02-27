@@ -140,7 +140,7 @@ fun FilterScreen(
                             onClick = {
                                 navController.slideFromRightForResult<SelectContactFragment.Result>(
                                     R.id.selectContact,
-                                    filterContact
+                                    SelectContactFragment.Input(filterContact, filterBlockchain?.type)
                                 ) {
                                     viewModel.onEnterContact(it.contact)
                                 }

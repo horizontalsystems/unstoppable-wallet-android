@@ -763,6 +763,7 @@
     <string name="Transactions_Filter">Filter</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Hide suspicious tx</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Hiding incoming transactions with the dust amount in stablecoins, this partially solves the  address poisoning attack problems.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">Contact filtering is supported on the following blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, and Tron. Below are the suitable contacts</string>
 
     <!--Transaction Info-->
 

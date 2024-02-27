@@ -1,26 +1,56 @@
 package cash.p.terminal.modules.contacts
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
+import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.modules.contacts.model.Contact
+import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SelectContactViewModel(
-    contactsRepository: ContactsRepository,
+    private val contactsRepository: ContactsRepository,
+    private val selected: Contact?,
+    private val blockchainType: BlockchainType?,
 ) : ViewModelUiState<SelectContactUiState>() {
-    private var items = listOf(null) + contactsRepository.contacts
+    private val supportedBlockchainTypes = EvmBlockchainManager.blockchainTypes + BlockchainType.Tron
+
+    private var items: List<Contact?>
+
+    init {
+        val contacts = fetchContacts()
+
+        items = when {
+            contacts.isNotEmpty() -> listOf(null) + contacts
+            else -> contacts
+        }
+        emitState()
+    }
+
+    private fun fetchContacts(): List<Contact> {
+        if (blockchainType != null && !supportedBlockchainTypes.contains(blockchainType)) {
+            return listOf()
+        }
+
+        return contactsRepository.getContactsFiltered(blockchainType).filter { contact ->
+            contact.addresses.any {
+                supportedBlockchainTypes.contains(it.blockchain.type)
+            }
+        }
+    }
 
     override fun createState() = SelectContactUiState(
-        items = items
+        items = items,
+        selected = selected
     )
 
-    class Factory : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SelectContactViewModel(App.contactsRepository) as T
+    companion object {
+        fun init(selected: Contact?, blockchainType: BlockchainType?): CreationExtras.() -> SelectContactViewModel = {
+            SelectContactViewModel(App.contactsRepository, selected, blockchainType)
         }
     }
 }
 
-data class SelectContactUiState(val items: List<Contact?>)
+data class SelectContactUiState(
+    val items: List<Contact?>,
+    val selected: Contact?,
+)
