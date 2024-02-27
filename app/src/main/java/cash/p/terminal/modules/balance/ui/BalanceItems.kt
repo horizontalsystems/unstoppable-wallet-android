@@ -60,8 +60,8 @@ import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaultWithIcon
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithIcon
+import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
 import cash.p.terminal.ui.compose.components.DoubleText
@@ -221,18 +221,16 @@ fun BalanceItems(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ButtonPrimaryYellowWithIcon(
+                        ButtonPrimaryYellow(
                             modifier = Modifier.weight(1f),
-                            icon = R.drawable.ic_arrow_up_right_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
                             }
                         )
                         HSpacer(8.dp)
-                        ButtonPrimaryDefaultWithIcon(
+                        ButtonPrimaryDefault(
                             modifier = Modifier.weight(1f),
-                            icon = R.drawable.ic_arrow_down_left_24,
                             title = stringResource(R.string.Balance_Receive),
                             onClick = {
                                 when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
