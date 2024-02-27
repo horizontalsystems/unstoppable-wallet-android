@@ -67,6 +67,11 @@ class WCSessionManager(
         }
     }
 
+    fun getCurrentSessionRequests(): List<Wallet.Model.SessionRequest> {
+        val accountId = accountManager.activeAccount?.id ?: return emptyList()
+        return requests(accountId)
+    }
+
     private fun syncSessions() {
         val accountId = accountManager.activeAccount?.id ?: return
 
