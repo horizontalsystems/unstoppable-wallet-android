@@ -280,7 +280,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     implementation 'com.github.horizontalsystems:market-kit-android:2efec77'
     implementation 'com.github.horizontalsystems:solana-kit-android:6401968'
-    implementation 'com.github.horizontalsystems:tron-kit-android:2e64640'
+    implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:2.0.1"
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
