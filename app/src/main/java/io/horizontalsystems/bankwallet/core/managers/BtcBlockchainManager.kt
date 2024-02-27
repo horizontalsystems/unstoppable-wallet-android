@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
@@ -12,7 +11,6 @@ import io.reactivex.subjects.PublishSubject
 
 class BtcBlockchainManager(
     private val storage: BlockchainSettingsStorage,
-    private val appConfigProvider: AppConfigProvider,
     marketKit: MarketKitWrapper,
 ) {
 
@@ -57,11 +55,11 @@ class BtcBlockchainManager(
 
     fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): SyncMode {
         if (accountOrigin == AccountOrigin.Created) {
-            return SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
+            return SyncMode.Blockchair()
         }
 
         return when (restoreMode(blockchainType)) {
-            BtcRestoreMode.Blockchair -> SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
+            BtcRestoreMode.Blockchair -> SyncMode.Blockchair()
             BtcRestoreMode.Hybrid -> SyncMode.Api()
             BtcRestoreMode.Blockchain -> SyncMode.Full()
         }
