@@ -60,8 +60,8 @@ import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFr
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaultWithIcon
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
@@ -221,18 +221,16 @@ fun BalanceItems(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ButtonPrimaryYellowWithIcon(
+                        ButtonPrimaryYellow(
                             modifier = Modifier.weight(1f),
-                            icon = R.drawable.ic_arrow_up_right_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
                             }
                         )
                         HSpacer(8.dp)
-                        ButtonPrimaryDefaultWithIcon(
+                        ButtonPrimaryDefault(
                             modifier = Modifier.weight(1f),
-                            icon = R.drawable.ic_arrow_down_left_24,
                             title = stringResource(R.string.Balance_Receive),
                             onClick = {
                                 when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
