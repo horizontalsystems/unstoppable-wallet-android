@@ -4,6 +4,7 @@ import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
+import io.horizontalsystems.bankwallet.core.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -93,10 +94,17 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         sessionRequest: Wallet.Model.SessionRequest,
         verifyContext: Wallet.Model.VerifyContext
     ) {
-        sessionRequestEvent = sessionRequest
+        sessionRequestEvent = null
+
+        val sessionRequestForAccount =
+            App.wcSessionManager.getCurrentSessionRequests().reversed().firstOrNull()
+                ?: return
+
+        sessionRequestEvent = sessionRequestForAccount
 
         scope.launch {
-            _walletEvents.emit(sessionRequest)
+            _walletEvents.emit(sessionRequestForAccount)
+            _pendingRequestEvents.emit(Unit)
         }
     }
 
@@ -201,7 +209,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         data: String,
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
-        ) {
+    ) {
         val response = Wallet.Params.SessionRequestResponse(
             sessionTopic = topic,
             jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcResult(requestId, data)
@@ -227,7 +235,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         requestId: Long,
         onSuccessResult: () -> Unit = {},
         onErrorResult: (Throwable) -> Unit = {},
-        ) {
+    ) {
         val result = Wallet.Params.SessionRequestResponse(
             sessionTopic = topic,
             jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcError(
