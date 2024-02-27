@@ -1,6 +1,5 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
 import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.BtcRestoreMode
@@ -12,7 +11,6 @@ import io.reactivex.subjects.PublishSubject
 
 class BtcBlockchainManager(
     private val storage: BlockchainSettingsStorage,
-    private val appConfigProvider: AppConfigProvider,
     marketKit: MarketKitWrapper,
 ) {
 
@@ -56,12 +54,12 @@ class BtcBlockchainManager(
         }
 
     fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): SyncMode {
-        if (accountOrigin == AccountOrigin.Created && blockchainType in blockchairSyncEnabledBlockchains) {
-            return SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
+        if (accountOrigin == AccountOrigin.Created) {
+            return SyncMode.Blockchair()
         }
 
         return when (restoreMode(blockchainType)) {
-            BtcRestoreMode.Blockchair -> SyncMode.Blockchair(appConfigProvider.blockchairApiKey)
+            BtcRestoreMode.Blockchair -> SyncMode.Blockchair()
             BtcRestoreMode.Hybrid -> SyncMode.Api()
             BtcRestoreMode.Blockchain -> SyncMode.Full()
         }

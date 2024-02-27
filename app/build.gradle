@@ -93,7 +93,6 @@ android {
             resValue "string", "trongridApiKeys", "33374494-8060-447e-8367-90c5efd4ed95"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
-            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
         }
 
         appcenterdebug {
@@ -134,7 +133,6 @@ android {
             resValue "string", "trongridApiKeys", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
-            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
         }
 
         appcenterrelease {
@@ -274,7 +272,7 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:ton-kit-kmm:90f9c77'
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:1cc8b7d'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:e7d223c'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:b8b9588'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
