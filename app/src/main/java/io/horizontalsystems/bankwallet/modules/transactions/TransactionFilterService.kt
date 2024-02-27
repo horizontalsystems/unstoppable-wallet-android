@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.contacts.SelectContactViewModel
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -86,6 +87,8 @@ class TransactionFilterService {
         selectedBlockchain = blockchain
         selectedWallet = null
 
+        refreshContact()
+
         emitState()
     }
 
@@ -115,6 +118,17 @@ class TransactionFilterService {
             || selectedBlockchain != null
             || selectedTransactionType != FilterTransactionType.All
             || contact != null
+    }
+
+    private fun refreshContact() {
+        val tmpBlockchain = selectedBlockchain ?: return
+        val tmpContact = contact ?: return
+
+        if (!SelectContactViewModel.supportedBlockchainTypes.contains(tmpBlockchain.type)) {
+            contact = null
+        } else if (tmpContact.addresses.none { it.blockchain.type == tmpBlockchain.type }) {
+            contact = null
+        }
     }
 
     data class State(
