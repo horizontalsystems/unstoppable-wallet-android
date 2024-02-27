@@ -24,10 +24,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 class SelectContactFragment : BaseComposeFragment() {
@@ -38,17 +41,17 @@ class SelectContactFragment : BaseComposeFragment() {
     }
 
     @Parcelize
+    data class Input(val selected: Contact?, val blockchainType: BlockchainType?) : Parcelable
+
+    @Parcelize
     data class Result(val contact: Contact?) : Parcelable
 
 }
 
 @Composable
-fun SelectContactScreen(navController: NavController, selected: Contact?) {
-
-    val viewModel = viewModel<SelectContactViewModel>(factory = SelectContactViewModel.Factory())
-
+fun SelectContactScreen(navController: NavController, input: SelectContactFragment.Input?) {
+    val viewModel = viewModel<SelectContactViewModel>(initializer = SelectContactViewModel.init(input?.selected, input?.blockchainType))
     val uiState = viewModel.uiState
-
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -64,15 +67,25 @@ fun SelectContactScreen(navController: NavController, selected: Contact?) {
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            LazyColumn {
-                items(uiState.items) { contact ->
-                    CellContact(contact, selected) {
-                        navController.setNavigationResultX(SelectContactFragment.Result(contact))
-                        navController.popBackStack()
+            if (uiState.items.isEmpty()) {
+                ListEmptyView(
+                    text = stringResource(R.string.Contacts_NoContacts),
+                    icon = R.drawable.ic_user_24
+                )
+            } else {
+                LazyColumn {
+                    item {
+                        InfoText(text = stringResource(id = R.string.Transactions_Filter_ChooseContact_Hint))
                     }
-                }
-                item {
-                    VSpacer(height = 32.dp)
+                    items(uiState.items) { contact ->
+                        CellContact(contact, uiState.selected) {
+                            navController.setNavigationResultX(SelectContactFragment.Result(contact))
+                            navController.popBackStack()
+                        }
+                    }
+                    item {
+                        VSpacer(height = 32.dp)
+                    }
                 }
             }
         }
@@ -90,7 +103,7 @@ private fun CellContact(
     ) {
         Icon(
             painter = if (contact == null) {
-                painterResource(id = R.drawable.ic_qr_scan_24px)
+                painterResource(id = R.drawable.icon_paper_contract_24)
             } else {
                 painterResource(id = R.drawable.ic_user_24)
             },
