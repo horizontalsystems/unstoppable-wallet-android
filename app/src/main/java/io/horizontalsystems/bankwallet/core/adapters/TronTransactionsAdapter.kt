@@ -10,6 +10,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.hexStringToByteArray
+import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.models.TransactionTag
 import io.horizontalsystems.tronkit.network.Network
 import io.reactivex.Flowable
@@ -128,8 +129,9 @@ class TronTransactionsAdapter(
             add(listOf(it))
         }
 
-        if (!address.isNullOrBlank()) {
-            add(listOf("from_$address", "to_$address"))
+        val addressHex = address?.let { Address.fromBase58(it).hex }?.lowercase()
+        if (!addressHex.isNullOrBlank()) {
+            add(listOf("from_$addressHex", "to_$addressHex"))
         }
     }
 }
