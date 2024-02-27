@@ -14,6 +14,7 @@ import io.horizontalsystems.tronkit.models.TransactionTag
 import io.horizontalsystems.tronkit.network.Network
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.rx2.rxSingle
 
@@ -51,25 +52,15 @@ class TronTransactionsAdapter(
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ) = when (address) {
-        null -> getTransactionsAsync(from, token, limit, transactionType)
-        else -> Single.just(listOf())
-    }
-
-    private fun getTransactionsAsync(
-        from: TransactionRecord?,
-        token: Token?,
-        limit: Int,
-        transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
         return rxSingle {
             tronKit.getFullTransactions(
-                getFilters(token, transactionType),
+                getFilters(token, transactionType, address),
                 from?.transactionHash?.hexStringToByteArray(),
                 limit
-            )
-        }.map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
+            ).map {
+                transactionConverter.transactionRecord(it)
+            }
         }
     }
 
@@ -77,18 +68,12 @@ class TronTransactionsAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(token, transactionType)
-        else -> Flowable.empty()
-    }
-
-    private fun getTransactionRecordsFlowable(
-        token: Token?,
-        transactionType: FilterTransactionType
     ): Flowable<List<TransactionRecord>> {
-        return tronKit.getFullTransactionsFlow(getFilters(token, transactionType)).asFlowable().map {
-            it.map { tx -> transactionConverter.transactionRecord(tx) }
-        }
+        return tronKit.getFullTransactionsFlow(getFilters(token, transactionType, address))
+            .map { transactions ->
+                transactions.map { transactionConverter.transactionRecord(it) }
+            }
+            .asFlowable()
     }
 
     private fun convertToAdapterState(syncState: TronKit.SyncState): AdapterState =
@@ -116,27 +101,35 @@ class TronTransactionsAdapter(
         else -> ""
     }
 
-    private fun getFilters(token: Token?, filter: FilterTransactionType): List<List<String>> {
-        val filterCoin = token?.let {
-            coinTagName(it)
+    private fun getFilters(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ) = buildList {
+        token?.let {
+            add(listOf(coinTagName(it)))
         }
 
-        val filterTag = when (filter) {
+        val filterType = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> when {
                 token != null -> incomingTag(token)
                 else -> TransactionTag.INCOMING
             }
-
             FilterTransactionType.Outgoing -> when {
                 token != null -> outgoingTag(token)
                 else -> TransactionTag.OUTGOING
             }
-
             FilterTransactionType.Swap -> TransactionTag.SWAP
             FilterTransactionType.Approve -> TransactionTag.TRC20_APPROVE
         }
 
-        return listOfNotNull(filterCoin, filterTag).map { listOf(it) }
+        filterType?.let {
+            add(listOf(it))
+        }
+
+        if (!address.isNullOrBlank()) {
+            add(listOf("from_$address", "to_$address"))
+        }
     }
 }
