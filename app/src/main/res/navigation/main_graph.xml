@@ -340,7 +340,7 @@
         android:name="cash.p.terminal.modules.contacts.ChooseContactFragment"/>
     <fragment
         android:id="@+id/selectContact"
-        android:name="cash.p.terminal.modules.contacts.SelectContactFragment"/>
+        android:name="cash.p.terminal.modules.transactions.SelectContactFragment"/>
     <fragment
         android:id="@+id/statusInfoDialog"
         android:name="cash.p.terminal.modules.info.TransactionStatusInfoFragment" />

@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.contacts.SelectContactViewModel
 import cash.p.terminal.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.coroutines.flow.MutableStateFlow
