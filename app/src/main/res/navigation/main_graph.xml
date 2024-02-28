@@ -343,7 +343,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.contacts.ChooseContactFragment"/>
     <fragment
         android:id="@+id/selectContact"
-        android:name="io.horizontalsystems.bankwallet.modules.contacts.SelectContactFragment"/>
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.SelectContactFragment"/>
     <fragment
         android:id="@+id/statusInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment" />
