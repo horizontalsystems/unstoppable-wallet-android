@@ -1,13 +1,12 @@
 package cash.p.terminal.modules.market.search
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -32,8 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,15 +45,14 @@ import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
-import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HeaderStick
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
+import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
-import cash.p.terminal.ui.compose.components.body_grey50
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -74,6 +69,7 @@ class MarketSearchFragment : BaseComposeFragment() {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavController) {
     val focusRequester = remember { FocusRequester() }
@@ -85,11 +81,14 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
     val uiState = viewModel.uiState
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        SearchView(
+        SearchBar(
+            title = stringResource(R.string.Market_Search),
+            searchHintText = stringResource(R.string.Market_Search),
+            searchOnlyMode = true,
+            searchModeInitial = true,
             focusRequester = focusRequester,
-            onSearchTextChange = { query -> viewModel.searchByQuery(query) },
-            leftIcon = R.drawable.ic_back,
-            onBackButtonClick = { navController.popBackStack() }
+            onClose = { navController.popBackStack() },
+            onSearchTextChanged = { query -> viewModel.searchByQuery(query) }
         )
 
         val itemSections = when (uiState.page) {
@@ -99,6 +98,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                     Optional.of(stringResource(R.string.Market_Search_Sections_PopularTitle)) to uiState.page.popular,
                 )
             }
+
             is MarketSearchViewModel.Page.SearchResults -> {
                 mapOf(
                     Optional.ofNullable<String>(null) to uiState.page.items
@@ -237,64 +237,6 @@ fun MarketSearchResults(
 }
 
 @Composable
-fun SearchView(
-    focusRequester: FocusRequester = remember { FocusRequester() },
-    onSearchTextChange: (String) -> Unit,
-    leftIcon: Int,
-    onBackButtonClick: () -> Unit,
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    var searchText by rememberSaveable { mutableStateOf("") }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = null
-            ) {
-                onBackButtonClick.invoke()
-            }
-        ) {
-            Icon(
-                painter = painterResource(id = leftIcon),
-                contentDescription = "back icon",
-                modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 16.dp)
-                    .size(24.dp),
-                tint = ComposeAppTheme.colors.jacob
-            )
-        }
-        BasicTextField(
-            value = searchText,
-            onValueChange = { value ->
-                searchText = value
-                onSearchTextChange(value)
-            },
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .weight(1f),
-            singleLine = true,
-            textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.leah,
-                textStyle = ComposeAppTheme.typography.body
-            ),
-            decorationBox = { innerTextField ->
-                if (searchText.isEmpty()) {
-                    body_grey50(stringResource(R.string.Market_Search_Hint))
-                }
-                innerTextField()
-            },
-            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
-        )
-    }
-}
-
-@Composable
 private fun MarketCoin(
     coinCode: String,
     coinName: String,
@@ -338,16 +280,5 @@ fun MarketCoinPreview() {
             R.drawable.coin_placeholder,
             {},
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SearchViewPreview() {
-    ComposeAppTheme {
-        SearchView(
-            onSearchTextChange = { },
-            leftIcon = R.drawable.ic_back
-        ) { }
     }
 }
