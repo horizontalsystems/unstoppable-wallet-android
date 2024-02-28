@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.contacts
+package io.horizontalsystems.bankwallet.modules.transactions
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
