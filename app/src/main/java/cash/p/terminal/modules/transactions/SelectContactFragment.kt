@@ -25,8 +25,8 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.InfoErrorMessageDefault
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.cell.CellUniversal
@@ -67,26 +67,27 @@ fun SelectContactScreen(navController: NavController, input: SelectContactFragme
             )
         }
     ) {
-        Column(modifier = Modifier.padding(it)) {
-            if (uiState.items.isEmpty()) {
-                ListEmptyView(
-                    text = stringResource(R.string.Contacts_NoContacts),
-                    icon = R.drawable.ic_user_24
+        if (uiState.items.isEmpty()) {
+            Column(modifier = Modifier.padding(it)) {
+                InfoText(text = stringResource(id = R.string.Transactions_Filter_ChooseContact_Hint))
+                InfoErrorMessageDefault(
+                    painter = painterResource(id = R.drawable.ic_user_24),
+                    text = stringResource(R.string.Transactions_Filter_ChooseContact_NoSuitableContact)
                 )
-            } else {
-                LazyColumn {
-                    item {
-                        InfoText(text = stringResource(id = R.string.Transactions_Filter_ChooseContact_Hint))
+            }
+        } else {
+            LazyColumn(modifier = Modifier.padding(it)) {
+                item {
+                    InfoText(text = stringResource(id = R.string.Transactions_Filter_ChooseContact_Hint))
+                }
+                items(uiState.items) { contact ->
+                    CellContact(contact, uiState.selected) {
+                        navController.setNavigationResultX(SelectContactFragment.Result(contact))
+                        navController.popBackStack()
                     }
-                    items(uiState.items) { contact ->
-                        CellContact(contact, uiState.selected) {
-                            navController.setNavigationResultX(SelectContactFragment.Result(contact))
-                            navController.popBackStack()
-                        }
-                    }
-                    item {
-                        VSpacer(height = 32.dp)
-                    }
+                }
+                item {
+                    VSpacer(height = 32.dp)
                 }
             }
         }
