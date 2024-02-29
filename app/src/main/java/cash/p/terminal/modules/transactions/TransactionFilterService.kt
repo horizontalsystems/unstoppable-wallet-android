@@ -79,6 +79,8 @@ class TransactionFilterService {
         selectedWallet = wallet
         selectedBlockchain = selectedWallet?.source?.blockchain
 
+        refreshContact()
+
         emitState()
     }
 
