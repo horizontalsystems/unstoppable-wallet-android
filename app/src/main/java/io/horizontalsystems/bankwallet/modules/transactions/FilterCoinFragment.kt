@@ -28,6 +28,7 @@ import androidx.navigation.navGraphViewModels
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -52,7 +53,7 @@ class FilterCoinFragment : BaseComposeFragment() {
 
 @Composable
 fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewModel) {
-    val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
+    val filterCoins by viewModel.filterTokensLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -72,7 +73,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .clickable {
-                                        viewModel.setFilterCoin(it.item)
+                                        viewModel.setFilterToken(it.item)
                                         navController.popBackStack()
                                     }
                                     .padding(horizontal = 16.dp),
@@ -93,7 +94,7 @@ fun FilterCoinScreen(navController: NavController, viewModel: TransactionsViewMo
                                     Column {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                             B2(text = token.coin.name)
-                                            it.item.badge?.let { badge ->
+                                            it.item.token.badge?.let { badge ->
                                                 Spacer(modifier = Modifier.width(6.dp))
                                                 Badge(text = badge)
                                             }

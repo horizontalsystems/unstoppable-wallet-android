@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -62,14 +63,14 @@ fun FilterScreen(
     viewModel: TransactionsViewModel,
 ) {
     val filterResetEnabled by viewModel.filterResetEnabled.observeAsState(false)
-    val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
+    val filterCoins by viewModel.filterTokensLiveData.observeAsState()
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
     val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx
     val filterContact by viewModel.filterContactLiveData.observeAsState()
 
     val filterCoin = filterCoins?.find { it.selected }?.item
     val coinCode = filterCoin?.token?.coin?.code
-    val badge = filterCoin?.badge
+    val badge = filterCoin?.token?.badge
     val selectedCoinFilterTitle = when {
         badge != null -> "$coinCode ($badge)"
         else -> coinCode
