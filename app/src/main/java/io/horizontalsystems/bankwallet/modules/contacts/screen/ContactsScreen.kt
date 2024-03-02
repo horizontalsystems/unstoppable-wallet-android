@@ -2,11 +2,11 @@ package io.horizontalsystems.bankwallet.modules.contacts.screen
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
@@ -14,10 +14,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
@@ -29,7 +26,6 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.contacts.viewmodel.ContactsViewModel
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
-import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.*
@@ -41,7 +37,7 @@ enum class ContactsScreenBottomSheetType {
     ReplaceAddressConfirmation, RestoreContactsConfirmation
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun ContactsScreen(
     viewModel: ContactsViewModel,
@@ -91,7 +87,6 @@ fun ContactsScreen(
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var selectedContact by remember { mutableStateOf<Contact?>(null) }
-    var searchMode by remember { mutableStateOf(uiState.searchMode) }
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
@@ -155,63 +150,10 @@ fun ContactsScreen(
                 .fillMaxSize()
                 .background(color = ComposeAppTheme.colors.tyler)
         ) {
-            AppBar(
-                title = {
-                    if (searchMode) {
-                        var searchText by remember { mutableStateOf(uiState.nameQuery ?: "") }
-                        val focusRequester = remember { FocusRequester() }
-
-                        BasicTextField(
-                            modifier = Modifier
-                                .focusRequester(focusRequester),
-                            value = searchText,
-                            onValueChange = { value ->
-                                searchText = value
-                                viewModel.onEnterQuery(value)
-                            },
-                            singleLine = true,
-                            textStyle = ColoredTextStyle(
-                                color = ComposeAppTheme.colors.leah,
-                                textStyle = ComposeAppTheme.typography.body
-                            ),
-                            decorationBox = { innerTextField ->
-                                if (searchText.isEmpty()) {
-                                    body_grey50(stringResource(R.string.Market_Search_Hint))
-                                }
-                                innerTextField()
-                            },
-                            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
-                        )
-                        SideEffect {
-                            focusRequester.requestFocus()
-                        }
-                    } else {
-                        title3_leah(text = stringResource(id = R.string.Contacts))
-                    }
-                },
-                navigationIcon = {
-                    HsBackButton {
-                        if (searchMode) {
-                            viewModel.onEnterQuery(null)
-                            searchMode = false
-                        } else {
-                            onNavigateToBack()
-                        }
-                    }
-                },
-                menuItems = if (searchMode) {
-                    listOf()
-                } else buildList {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Search),
-                            icon = R.drawable.icon_search,
-                            enabled = true,
-                            onClick = {
-                                searchMode = true
-                            }
-                        )
-                    )
+            SearchBar(
+                title = stringResource(R.string.Contacts),
+                searchHintText = stringResource(R.string.Market_Search_Hint),
+                menuItems = buildList {
                     if (uiState.showAddContact) {
                         add(
                             MenuItem(
@@ -227,6 +169,7 @@ fun ContactsScreen(
                             MenuItem(
                                 title = TranslatableString.ResString(R.string.Contacts_ActionMore),
                                 icon = R.drawable.ic_more2_20,
+                                tint = ComposeAppTheme.colors.jacob,
                                 enabled = true,
                                 onClick = {
                                     showMoreSelectorDialog = true
@@ -234,6 +177,10 @@ fun ContactsScreen(
                             )
                         )
                     }
+                },
+                onClose = onNavigateToBack,
+                onSearchTextChanged = { text ->
+                    viewModel.onEnterQuery(text)
                 }
             )
             if (uiState.contacts.isNotEmpty()) {
@@ -255,7 +202,7 @@ fun ContactsScreen(
                     Spacer(Modifier.height(32.dp))
                 }
             } else {
-                if (searchMode) {
+                if (uiState.searchMode) {
                     ListEmptyView(
                         text = stringResource(R.string.EmptyResults),
                         icon = R.drawable.ic_not_found

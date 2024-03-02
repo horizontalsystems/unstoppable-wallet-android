@@ -22,7 +22,7 @@ class ContactsViewModel(
     private val showAddContact = !readOnly
     private val showMoreOptions = !readOnly
 
-    private var nameQuery: String? = null
+    private var nameQuery: String = ""
     private val contacts: List<Contact>
         get() = repository.getContactsFiltered(nameQuery = nameQuery)
 
@@ -32,7 +32,15 @@ class ContactsViewModel(
     val backupFileName: String
         get() = "UW_Contacts_${System.currentTimeMillis() / 1000}.json"
 
-    var uiState by mutableStateOf(UiState(contacts, nameQuery, nameQuery != null, showAddContact, showMoreOptions))
+    var uiState by mutableStateOf(
+        UiState(
+            contacts = contacts,
+            nameQuery = nameQuery,
+            searchMode = nameQuery.isNotEmpty(),
+            showAddContact = showAddContact,
+            showMoreOptions = showMoreOptions
+        )
+    )
         private set
 
     init {
@@ -43,7 +51,7 @@ class ContactsViewModel(
         }
     }
 
-    fun onEnterQuery(query: String?) {
+    fun onEnterQuery(query: String) {
         nameQuery = query
         emitState()
     }
@@ -61,9 +69,11 @@ class ContactsViewModel(
     }
 
     fun replaceWarningMessage(contact: Contact): TranslatableString? {
-        val blockchainType = (mode as? Mode.AddAddressToExistingContact)?.blockchainType ?: return null
+        val blockchainType =
+            (mode as? Mode.AddAddressToExistingContact)?.blockchainType ?: return null
         val address = (mode as? Mode.AddAddressToExistingContact)?.address ?: return null
-        val oldAddress = contact.addresses.find { it.blockchain.type == blockchainType } ?: return null
+        val oldAddress =
+            contact.addresses.find { it.blockchain.type == blockchainType } ?: return null
 
         return TranslatableString.ResString(
             R.string.Contacts_AddAddress_ReplaceWarning,
@@ -74,7 +84,13 @@ class ContactsViewModel(
     }
 
     private fun emitState() {
-        uiState = UiState(contacts, nameQuery, nameQuery != null, showAddContact, showMoreOptions)
+        uiState = UiState(
+            contacts = contacts,
+            nameQuery = nameQuery,
+            searchMode = nameQuery.isNotEmpty(),
+            showAddContact = showAddContact,
+            showMoreOptions = showMoreOptions
+        )
     }
 
     data class UiState(
