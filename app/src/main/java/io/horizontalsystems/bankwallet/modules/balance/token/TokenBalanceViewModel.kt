@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -23,6 +24,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 
 class TokenBalanceViewModel(
     private val wallet: Wallet,
@@ -32,6 +34,7 @@ class TokenBalanceViewModel(
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
+    private val accountManager: IAccountManager
 ) : ViewModel() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -117,9 +120,13 @@ class TokenBalanceViewModel(
         emitUiState()
     }
 
-    fun getWalletForReceive(viewItem: BalanceViewItem) = when {
-        viewItem.wallet.account.isBackedUp || viewItem.wallet.account.isFileBackedUp -> viewItem.wallet
-        else -> throw BackupRequiredError(viewItem.wallet.account, viewItem.coinTitle)
+    @Throws(BackupRequiredError::class, IllegalStateException::class)
+    fun getWalletForReceive(): Wallet {
+        val account = accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
+        when {
+            account.hasAnyBackup -> return wallet
+            else -> throw BackupRequiredError(account, wallet.coin.name)
+        }
     }
 
     fun onBottomReached() {
