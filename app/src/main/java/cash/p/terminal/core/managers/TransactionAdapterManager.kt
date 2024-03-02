@@ -27,7 +27,7 @@ class TransactionAdapterManager(
         )
     val adaptersReadyFlow get() = _adaptersReadyFlow.asSharedFlow()
 
-    private val adaptersMap = ConcurrentHashMap<TransactionSource, ITransactionsAdapter>()
+    val adaptersMap = ConcurrentHashMap<TransactionSource, ITransactionsAdapter>()
 
     init {
         adapterManager.adaptersReadyObservable

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.ViewModelUiState
+import cash.p.terminal.core.badge
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
@@ -44,7 +45,7 @@ class TransactionsViewModel(
     var tmpItemToShow: TransactionItem? = null
 
     val filterResetEnabled = MutableLiveData<Boolean>()
-    val filterCoinsLiveData = MutableLiveData<List<Filter<TransactionWallet?>>>()
+    val filterTokensLiveData = MutableLiveData<List<Filter<FilterToken?>>>()
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val filterContactLiveData = MutableLiveData<Contact?>()
@@ -70,9 +71,17 @@ class TransactionsViewModel(
 
         viewModelScope.launch(Dispatchers.Default) {
             transactionFilterService.stateFlow.collect { state ->
+                val transactionWallets = state.filterTokens.map { filterToken ->
+                    filterToken?.let {
+                        TransactionWallet(it.token, it.source, it.token.badge)
+                    }
+                }
+                val selectedTransactionWallet = state.selectedToken?.let {
+                    TransactionWallet(it.token, it.source, it.token.badge)
+                }
                 service.set(
-                    state.transactionWallets.filterNotNull(),
-                    state.selectedWallet,
+                    transactionWallets.filterNotNull(),
+                    selectedTransactionWallet,
                     state.selectedTransactionType,
                     state.selectedBlockchain,
                     state.contact,
@@ -90,17 +99,14 @@ class TransactionsViewModel(
                 val filterBlockchains = blockchains.map { Filter(it, it == selectedBlockchain) }
                 filterBlockchainsLiveData.postValue(filterBlockchains)
 
-                val wallets = state.transactionWallets
-                val selectedWallet = state.selectedWallet
-
-                val filterCoins = wallets.map {
-                    Filter(it, it == selectedWallet)
+                val filterCoins = state.filterTokens.map {
+                    Filter(it, it == state.selectedToken)
                 }
-                filterCoinsLiveData.postValue(filterCoins)
+                filterTokensLiveData.postValue(filterCoins)
 
                 filterContactLiveData.postValue(state.contact)
 
-                transactionListId = state.selectedWallet?.hashCode().toString() +
+                transactionListId = selectedTransactionWallet.hashCode().toString() +
                     state.selectedTransactionType.name +
                     state.selectedBlockchain?.uid
             }
@@ -152,8 +158,8 @@ class TransactionsViewModel(
         transactionFilterService.setSelectedTransactionType(filterType)
     }
 
-    fun setFilterCoin(w: TransactionWallet?) {
-        transactionFilterService.setSelectedWallet(w)
+    fun setFilterToken(w: FilterToken?) {
+        transactionFilterService.setSelectedToken(w)
     }
 
     fun onEnterFilterBlockchain(filterBlockchain: Filter<Blockchain?>) {

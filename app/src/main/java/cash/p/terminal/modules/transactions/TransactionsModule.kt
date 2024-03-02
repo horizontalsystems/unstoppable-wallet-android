@@ -33,7 +33,7 @@ object TransactionsModule {
                 App.balanceHiddenManager,
                 App.transactionAdapterManager,
                 App.walletManager,
-                TransactionFilterService(),
+                TransactionFilterService(App.marketKit, App.transactionAdapterManager),
                 App.spamManager
             ) as T
         }
@@ -57,6 +57,11 @@ data class TransactionWallet(
     val token: Token?,
     val source: TransactionSource,
     val badge: String?
+)
+
+data class FilterToken(
+    val token: Token,
+    val source: TransactionSource,
 )
 
 data class TransactionSource(

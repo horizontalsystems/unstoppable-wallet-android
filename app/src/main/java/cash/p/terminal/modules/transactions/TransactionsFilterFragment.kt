@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.badge
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -62,14 +63,14 @@ fun FilterScreen(
     viewModel: TransactionsViewModel,
 ) {
     val filterResetEnabled by viewModel.filterResetEnabled.observeAsState(false)
-    val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
+    val filterCoins by viewModel.filterTokensLiveData.observeAsState()
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
     val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx
     val filterContact by viewModel.filterContactLiveData.observeAsState()
 
     val filterCoin = filterCoins?.find { it.selected }?.item
     val coinCode = filterCoin?.token?.coin?.code
-    val badge = filterCoin?.badge
+    val badge = filterCoin?.token?.badge
     val selectedCoinFilterTitle = when {
         badge != null -> "$coinCode ($badge)"
         else -> coinCode

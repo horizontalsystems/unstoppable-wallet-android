@@ -253,6 +253,7 @@ interface ITransactionsAdapter {
 
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
+    val additionalTokenQueries: List<TokenQuery> get() = listOf()
 
     fun getTransactionsAsync(
         from: TransactionRecord?,
