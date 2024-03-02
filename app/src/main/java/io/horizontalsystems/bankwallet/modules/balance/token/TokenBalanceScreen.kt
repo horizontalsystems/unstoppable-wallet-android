@@ -314,7 +314,7 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: TokenBalanceViewModel) {
     val onClickReceive = {
         try {
-            navController.slideFromRight(R.id.receiveFragment, viewModel.getWalletForReceive(viewItem))
+            navController.slideFromRight(R.id.receiveFragment, viewModel.getWalletForReceive())
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
