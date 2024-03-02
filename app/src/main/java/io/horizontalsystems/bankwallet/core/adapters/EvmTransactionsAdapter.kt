@@ -14,6 +14,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -47,6 +48,11 @@ class EvmTransactionsAdapter(
 
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = evmKit.transactionsSyncStateFlowable.map {}
+
+    override val additionalTokenQueries: List<TokenQuery>
+        get() = evmKit.getTagTokenContractAddresses().map { address ->
+            TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
+        }
 
     override fun getTransactionsAsync(
         from: TransactionRecord?,
