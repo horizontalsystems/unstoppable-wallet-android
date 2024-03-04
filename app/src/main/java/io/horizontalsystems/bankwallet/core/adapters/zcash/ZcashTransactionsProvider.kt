@@ -6,7 +6,6 @@ import cash.z.ecc.android.sdk.model.TransactionRecipient
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.flow.filterIsInstance
@@ -19,12 +18,8 @@ class ZcashTransactionsProvider(
     private val synchronizer: SdkSynchronizer
 ) {
 
-    private val transactions = mutableListOf<ZcashTransaction>()
+    private var transactions = listOf<ZcashTransaction>()
     private val newTransactionsSubject = PublishSubject.create<List<ZcashTransaction>>()
-
-    private fun getAllTransactionsSorted(): List<ZcashTransaction> {
-        return transactions.sortedDescending()
-    }
 
     @Synchronized
     fun onTransactions(transactionOverviews: List<TransactionOverview>) {
@@ -50,61 +45,70 @@ class ZcashTransactionsProvider(
                     ZcashTransaction(it, recipient, null)
                 }
                 newTransactionsSubject.onNext(newZcashTransactions)
-                transactions.addAll(newZcashTransactions)
+                transactions = (transactions + newZcashTransactions).sortedDescending()
             }
         }
     }
 
-    fun getNewTransactionsFlowable(transactionType: FilterTransactionType): Flowable<List<ZcashTransaction>> {
-        val observable = when (transactionType) {
-            FilterTransactionType.All -> newTransactionsSubject
-            FilterTransactionType.Incoming -> {
-                newTransactionsSubject
-                    .map { it.filter { it.isIncoming } }
-                    .filter { it.isNotEmpty() }
+    fun getNewTransactionsFlowable(transactionType: FilterTransactionType, address: String?): Flowable<List<ZcashTransaction>> {
+        val filters = getFilters(transactionType, address)
+
+        val observable = if (filters.isEmpty()) {
+            newTransactionsSubject
+        } else {
+            newTransactionsSubject.map { txs ->
+                txs.filter { tx ->
+                    filters.all { filter -> filter.invoke(tx) }
+                }
+            }.filter {
+                it.isNotEmpty()
             }
-            FilterTransactionType.Outgoing -> {
-                newTransactionsSubject
-                    .map { it.filter { !it.isIncoming } }
-                    .filter { it.isNotEmpty() }
-            }
-            FilterTransactionType.Swap,
-            FilterTransactionType.Approve -> Observable.empty()
         }
 
-        return observable.toFlowable(BackpressureStrategy.BUFFER)
+        return observable.toFlowable(BackpressureStrategy.LATEST)
+    }
+
+    private fun getFilters(
+        transactionType: FilterTransactionType,
+        address: String?,
+    ) = buildList<(ZcashTransaction) -> Boolean> {
+        when (transactionType) {
+            FilterTransactionType.All -> Unit
+            FilterTransactionType.Incoming -> add { it.isIncoming }
+            FilterTransactionType.Outgoing -> add { !it.isIncoming }
+            FilterTransactionType.Swap,
+            FilterTransactionType.Approve,
+            -> add { false }
+        }
+
+        if (address != null) {
+            add {
+                it.toAddress?.lowercase() == address.lowercase()
+            }
+        }
     }
 
     @Synchronized
     fun getTransactions(
         from: Triple<ByteArray, Long, Int>?,
         transactionType: FilterTransactionType,
+        address: String?,
         limit: Int,
-    ): Single<List<ZcashTransaction>> {
-        return when (transactionType) {
-            FilterTransactionType.All -> getTxsFiltered(from, limit, null)
-            FilterTransactionType.Incoming -> getTxsFiltered(from, limit, true)
-            FilterTransactionType.Outgoing -> getTxsFiltered(from, limit, false)
-            FilterTransactionType.Swap,
-            FilterTransactionType.Approve, -> Single.just(listOf())
-        }
-    }
+    ) = Single.create { emitter ->
+            try {
+                val filters = getFilters(transactionType, address)
+                val filtered = when {
+                    filters.isEmpty() -> transactions
+                    else -> transactions.filter { tx -> filters.all { it.invoke(tx) } }
+                }
 
-    private fun getTxsFiltered(from: Triple<ByteArray, Long, Int>?, limit: Int, incoming: Boolean?): Single<List<ZcashTransaction>> = Single.create { emitter ->
-        try {
-            val transactions = when (incoming) {
-                true -> getAllTransactionsSorted().filter { it.isIncoming }
-                false -> getAllTransactionsSorted().filter { !it.isIncoming }
-                null -> getAllTransactionsSorted()
+                val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
+                    filtered.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
+                } ?: 0
+
+                emitter.onSuccess(filtered.subList(fromIndex, min(filtered.size, fromIndex + limit)))
+            } catch (error: Throwable) {
+                emitter.onError(error)
             }
-
-            val fromIndex = from?.let { (transactionHash, timestamp, transactionIndex) ->
-                transactions.indexOfFirst { it.transactionHash.contentEquals(transactionHash) && it.timestamp == timestamp && it.transactionIndex == transactionIndex } + 1
-            } ?: 0
-
-            emitter.onSuccess(transactions.subList(fromIndex, min(transactions.size, fromIndex + limit)))
-        } catch (error: Throwable) {
-            emitter.onError(error)
         }
-    }
 }
