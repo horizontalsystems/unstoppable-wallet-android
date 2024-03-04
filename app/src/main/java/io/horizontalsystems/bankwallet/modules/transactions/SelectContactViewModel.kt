@@ -44,7 +44,10 @@ class SelectContactViewModel(
     )
 
     companion object {
-        val supportedBlockchainTypes = EvmBlockchainManager.blockchainTypes + BlockchainType.Tron
+        val supportedBlockchainTypes =
+            EvmBlockchainManager.blockchainTypes +
+                BlockchainType.Tron +
+                BlockchainType.Ton
 
         fun init(selected: Contact?, blockchainType: BlockchainType?): CreationExtras.() -> SelectContactViewModel = {
             SelectContactViewModel(App.contactsRepository, selected, blockchainType)
