@@ -1,13 +1,11 @@
 package cash.p.terminal.modules.swapxxx
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.marketkit.models.Token
@@ -19,31 +17,11 @@ class SwapViewModel(
     private val balanceService: TokenBalanceService,
     private val priceImpactService: PriceImpactService,
     private val quoteExpirationService: SwapQuoteExpirationService
-) : ViewModel() {
+) : ViewModelUiState<SwapUiState>() {
 
     private var quoteState = quoteService.stateFlow.value
     private var availableBalance = balanceService.balanceFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
-
-    var uiState: SwapUiState by mutableStateOf(
-        SwapUiState(
-            amountIn = quoteState.amountIn,
-            tokenIn = quoteState.tokenIn,
-            tokenOut = quoteState.tokenOut,
-            quoting = quoteState.quoting,
-            swapEnabled = isSwapEnabled(),
-            quotes = quoteState.quotes,
-            preferredProvider = quoteState.preferredProvider,
-            quoteLifetime = quoteState.quoteLifetime,
-            quote = quoteState.quote,
-            error = quoteState.error,
-            availableBalance = availableBalance,
-            priceImpact = priceImpactState.priceImpact,
-            priceImpactLevel = priceImpactState.priceImpactLevel,
-            priceImpactCaution = priceImpactState.priceImpactCaution,
-        )
-    )
-        private set
 
     init {
         viewModelScope.launch {
@@ -67,6 +45,23 @@ class SwapViewModel(
             }
         }
     }
+
+    override fun createState() = SwapUiState(
+        amountIn = quoteState.amountIn,
+        tokenIn = quoteState.tokenIn,
+        tokenOut = quoteState.tokenOut,
+        quoting = quoteState.quoting,
+        swapEnabled = isSwapEnabled(),
+        quotes = quoteState.quotes,
+        preferredProvider = quoteState.preferredProvider,
+        quoteLifetime = quoteState.quoteLifetime,
+        quote = quoteState.quote,
+        error = quoteState.error,
+        availableBalance = availableBalance,
+        priceImpact = priceImpactState.priceImpact,
+        priceImpactLevel = priceImpactState.priceImpactLevel,
+        priceImpactCaution = priceImpactState.priceImpactCaution
+    )
 
     private fun handleUpdatedBalance(balance: BigDecimal?) {
         this.availableBalance = balance
@@ -98,27 +93,6 @@ class SwapViewModel(
 
     fun onSelectQuote(quote: SwapProviderQuote) {
         quoteService.selectQuote(quote)
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = SwapUiState(
-                amountIn = quoteState.amountIn,
-                tokenIn = quoteState.tokenIn,
-                tokenOut = quoteState.tokenOut,
-                quoting = quoteState.quoting,
-                swapEnabled = isSwapEnabled(),
-                quotes = quoteState.quotes,
-                preferredProvider = quoteState.preferredProvider,
-                quoteLifetime = quoteState.quoteLifetime,
-                quote = quoteState.quote,
-                error = quoteState.error,
-                availableBalance = availableBalance,
-                priceImpact = priceImpactState.priceImpact,
-                priceImpactLevel = priceImpactState.priceImpactLevel,
-                priceImpactCaution = priceImpactState.priceImpactCaution
-            )
-        }
     }
 
     private fun isSwapEnabled() = quoteState.quote != null
