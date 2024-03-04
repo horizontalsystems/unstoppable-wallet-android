@@ -208,23 +208,12 @@ class ZcashAdapter(
         limit: Int,
         transactionType: FilterTransactionType,
         address: String?,
-    ) = when (address) {
-        null -> getTransactionsAsync(from, token, limit, transactionType)
-        else -> Single.just(listOf())
-    }
-
-    private fun getTransactionsAsync(
-        from: TransactionRecord?,
-        token: Token?,
-        limit: Int,
-        transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {
         val fromParams = from?.let {
             val transactionHash = it.transactionHash.fromHex().reversedArray()
             Triple(transactionHash, it.timestamp, it.transactionIndex)
         }
-
-        return transactionsProvider.getTransactions(fromParams, transactionType, limit)
+        return transactionsProvider.getTransactions(fromParams, transactionType, address, limit)
             .map { transactions ->
                 transactions.map {
                     getTransactionRecord(it)
@@ -236,15 +225,11 @@ class ZcashAdapter(
         token: Token?,
         transactionType: FilterTransactionType,
         address: String?,
-    ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(token, transactionType)
-        else -> Flowable.empty()
-    }
-
-    private fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
-        return transactionsProvider.getNewTransactionsFlowable(transactionType).map { transactions ->
-            transactions.map { getTransactionRecord(it) }
-        }
+    ): Flowable<List<TransactionRecord>> {
+        return transactionsProvider.getNewTransactionsFlowable(transactionType, address)
+            .map { transactions ->
+                transactions.map { getTransactionRecord(it) }
+            }
     }
 
     override fun getTransactionUrl(transactionHash: String): String =
