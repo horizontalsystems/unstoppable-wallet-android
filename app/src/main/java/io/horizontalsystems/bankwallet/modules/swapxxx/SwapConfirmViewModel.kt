@@ -3,7 +3,7 @@ package cash.p.terminal.modules.swapxxx
 import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import cash.p.terminal.core.ViewModelUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -6,7 +6,6 @@ import cash.p.terminal.modules.swapxxx.SwapQuoteUniswapV3
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
-import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldFee
 import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -27,7 +26,9 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
         val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: return
 
-        val transactionData = swapQuote.transactionData ?: return
+        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
+            uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
+        }
 
 //        try {
 //            val transaction = evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
@@ -71,17 +72,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
             tradeOptions
         )
 
-        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
-            uniswapV3Kit.transactionData(receiveAddress, chain, tradeDataV3)
-        }
-        val feeAmountData = transactionData?.let {
-            evmBlockchainHelper.getFeeAmountData(it)
-        }
-
         val fields = buildList {
-            feeAmountData?.let {
-                add(SwapDataFieldFee(it))
-            }
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }
@@ -90,12 +81,10 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
         return SwapQuoteUniswapV3(
             tradeDataV3,
             fields,
-            feeAmountData,
             listOf(settingRecipient, settingSlippage, settingDeadline),
             tokenIn,
             tokenOut,
-            amountIn,
-            transactionData
+            amountIn
         )
     }
 

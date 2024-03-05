@@ -130,17 +130,6 @@ fun SwapConfirmScreen(navController: NavController) {
                 val swapPriceUIHelper = SwapPriceUIHelper(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
                 SwapInfoRow(false, stringResource(id = R.string.Swap_Price), swapPriceUIHelper.priceStr)
             }
-            quote.fee?.let { fee ->
-                VSpacer(height = 16.dp)
-                SectionUniversalLawrence {
-                    SwapInfoRow(
-                        borderTop = false,
-                        title = stringResource(id = R.string.FeeSettings_NetworkFee),
-                        value = fee.primary.getFormatted(),
-                        subvalue = fee.secondary?.getFormatted()
-                    )
-                }
-            }
             VSpacer(height = 32.dp)
         }
     }

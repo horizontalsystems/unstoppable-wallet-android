@@ -8,6 +8,7 @@ import cash.p.terminal.modules.swapxxx.QuoteInfoRow
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_leah
 
+// todo: remove this class if it's unused
 data class SwapDataFieldFee(val feeAmountData: SendModule.AmountData) : SwapDataField {
     @Composable
     override fun GetContent() {
