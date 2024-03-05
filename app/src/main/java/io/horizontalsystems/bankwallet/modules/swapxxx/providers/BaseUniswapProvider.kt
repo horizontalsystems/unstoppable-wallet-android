@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteUniswap
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingDeadline
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldFee
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -43,21 +42,7 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
         val swapData = swapDataSingle(tokenIn, tokenOut, evmBlockchainHelper).await()
         val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions)
-        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
-            uniswapKit.transactionData(
-                receiveAddress,
-                evmBlockchainHelper.chain,
-                tradeData
-            )
-        }
-        val feeAmountData = transactionData?.let {
-            evmBlockchainHelper.getFeeAmountData(it)
-        }
-
         val fields = buildList {
-            feeAmountData?.let {
-                add(SwapDataFieldFee(it))
-            }
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }
@@ -67,7 +52,6 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
             tradeData.amountOut!!,
             tradeData.priceImpact,
             fields,
-            feeAmountData,
             listOf(settingRecipient, settingSlippage, settingDeadline),
             tokenIn,
             tokenOut,

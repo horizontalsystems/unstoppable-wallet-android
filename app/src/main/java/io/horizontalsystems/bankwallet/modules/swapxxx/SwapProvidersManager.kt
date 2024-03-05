@@ -61,7 +61,6 @@ data class SwapProviderQuote(
     val tokenOut by swapQuote::tokenOut
     val amountIn by swapQuote::amountIn
     val amountOut by swapQuote::amountOut
-    val fee by swapQuote::fee
     val fields by swapQuote::fields
     val priceImpact by swapQuote::priceImpact
 
