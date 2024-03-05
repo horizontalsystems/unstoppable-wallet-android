@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -34,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_green50
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
@@ -127,14 +125,7 @@ private fun SwapSelectProviderScreenInner(
                         }
                     }
                     HFillSpacer(minWidth = 8.dp)
-                    Column(horizontalAlignment = Alignment.End) {
-                        subhead2_leah(text = quote.amountOut.toPlainString())
-                        quote.fee?.let { fee ->
-                            VSpacer(height = 1.dp)
-                            val formattedFee = fee.secondary?.getFormatted() ?: fee.primary.getFormatted()
-                            subhead2_grey(text = stringResource(id = R.string.Swap_Fee) + ": " + formattedFee)
-                        }
-                    }
+                    subhead2_leah(text = quote.amountOut.toPlainString())
                 }
             }
 

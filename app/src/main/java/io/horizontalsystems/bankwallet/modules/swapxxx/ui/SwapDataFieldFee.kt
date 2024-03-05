@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.QuoteInfoRow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
+// todo: remove this class if it's unused
 data class SwapDataFieldFee(val feeAmountData: SendModule.AmountData) : SwapDataField {
     @Composable
     override fun GetContent() {
