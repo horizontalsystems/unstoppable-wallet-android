@@ -6,8 +6,9 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import java.math.RoundingMode
 
-class FiatService : ServiceState<BigDecimal?>() {
+class FiatService : ServiceState<FiatService.State>() {
     private var currency: Currency? = null
     private var token: Token? = null
     private var amount: BigDecimal? = null
@@ -15,7 +16,10 @@ class FiatService : ServiceState<BigDecimal?>() {
 
     private var fiatAmount: BigDecimal? = null
 
-    override fun createState() = fiatAmount
+    override fun createState() = State(
+        amount = amount,
+        fiatAmount = fiatAmount
+    )
 
     private fun refreshCoinPrice() {
         coinPrice = token?.let { token ->
@@ -29,6 +33,16 @@ class FiatService : ServiceState<BigDecimal?>() {
         fiatAmount = amount?.let { amount ->
             coinPrice?.let { coinPrice ->
                 amount * coinPrice.value
+            }
+        }
+    }
+
+    private fun refreshAmount() {
+        amount = fiatAmount?.let { fiatAmount ->
+            coinPrice?.let { coinPrice ->
+                token?.let { token ->
+                    fiatAmount.divide(coinPrice.value, token.decimals, RoundingMode.CEILING)
+                }
             }
         }
     }
@@ -63,4 +77,15 @@ class FiatService : ServiceState<BigDecimal?>() {
 
         emitState()
     }
+
+    fun setFiatAmount(fiatAmount: BigDecimal?) {
+        if (this.fiatAmount == fiatAmount) return
+
+        this.fiatAmount = fiatAmount
+        refreshAmount()
+
+        emitState()
+    }
+
+    data class State(val amount: BigDecimal?, val fiatAmount: BigDecimal?)
 }

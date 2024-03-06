@@ -54,13 +54,15 @@ class SwapViewModel(
         }
         viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
-                fiatAmountIn = it
+                fiatAmountIn = it.fiatAmount
+                quoteService.setAmount(it.amount)
+
                 emitState()
             }
         }
         viewModelScope.launch {
             fiatServiceOut.stateFlow.collect {
-                fiatAmountOut = it
+                fiatAmountOut = it.fiatAmount
                 emitState()
             }
         }
@@ -133,6 +135,7 @@ class SwapViewModel(
     fun onSelectTokenOut(token: Token) = quoteService.setTokenOut(token)
     fun onSwitchPairs() = quoteService.switchPairs()
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
+    fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
 
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()

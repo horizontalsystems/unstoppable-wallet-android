@@ -64,7 +64,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
@@ -111,6 +110,7 @@ fun SwapScreen(navController: NavController) {
         },
         onSwitchPairs = viewModel::onSwitchPairs,
         onEnterAmount = viewModel::onEnterAmount,
+        onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
             navController.slideFromBottom(R.id.swapSelectProvider)
         },
@@ -134,6 +134,7 @@ private fun SwapScreenInner(
     onClickCoinTo: () -> Unit,
     onSwitchPairs: () -> Unit,
     onEnterAmount: (BigDecimal?) -> Unit,
+    onEnterFiatAmount: (BigDecimal?) -> Unit,
     onClickProvider: () -> Unit,
     onClickTransactionSettings: () -> Unit,
     onClickProviderSettings: () -> Unit,
@@ -170,11 +171,12 @@ private fun SwapScreenInner(
                 amountOut = uiState.quote?.amountOut,
                 fiatAmountOut = uiState.fiatAmountOut,
                 onValueChange = onEnterAmount,
+                onFiatValueChange = onEnterFiatAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
                 tokenIn = uiState.tokenIn,
                 tokenOut = uiState.tokenOut,
-                currency = uiState.currency
+                currency = uiState.currency,
             )
 
             VSpacer(height = 12.dp)
@@ -395,6 +397,7 @@ private fun SwapInput(
     amountOut: BigDecimal?,
     fiatAmountOut: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
+    onFiatValueChange: (BigDecimal?) -> Unit,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
     tokenIn: Token?,
@@ -415,6 +418,7 @@ private fun SwapInput(
                 fiatAmount = fiatAmountIn,
                 currency = currency,
                 onValueChange = onValueChange,
+                onFiatValueChange = onFiatValueChange,
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom
             )
@@ -423,6 +427,7 @@ private fun SwapInput(
                 fiatAmount = fiatAmountOut,
                 currency = currency,
                 onValueChange = { },
+                onFiatValueChange = {},
                 enabled = false,
                 token = tokenOut,
                 onClickCoin = onClickCoinTo
@@ -447,6 +452,7 @@ private fun SwapCoinInput(
     fiatAmount: BigDecimal?,
     currency: Currency,
     onValueChange: (BigDecimal?) -> Unit,
+    onFiatValueChange: (BigDecimal?) -> Unit,
     enabled: Boolean = true,
     token: Token?,
     onClickCoin: () -> Unit,
@@ -459,11 +465,7 @@ private fun SwapCoinInput(
         Column(modifier = Modifier.weight(1f)) {
             AmountInput(coinAmount, onValueChange, enabled)
             VSpacer(height = 3.dp)
-            if (fiatAmount != null) {
-                body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
-            } else {
-                body_grey50(text = "${currency.symbol}0")
-            }
+            FiatAmountInput(fiatAmount, currency, onFiatValueChange, enabled)
         }
         HSpacer(width = 8.dp)
         Selector(
@@ -484,6 +486,50 @@ private fun SwapCoinInput(
             onClickSelect = onClickCoin
         )
     }
+}
+
+@Composable
+private fun FiatAmountInput(
+    value: BigDecimal?,
+    currency: Currency,
+    onValueChange: (BigDecimal?) -> Unit,
+    enabled: Boolean,
+) {
+    var text by remember(value) {
+        mutableStateOf(value?.toPlainString() ?: "")
+    }
+    BasicTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = text,
+        onValueChange = {
+            try {
+                val amount = if (it.isBlank()) {
+                    null
+                } else {
+                    it.toBigDecimal()
+                }
+                text = it
+                onValueChange.invoke(amount)
+            } catch (e: Exception) {
+
+            }
+        },
+        enabled = enabled,
+        textStyle = ColoredTextStyle(
+            color = ComposeAppTheme.colors.grey, textStyle = ComposeAppTheme.typography.body
+        ),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Decimal
+        ),
+        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+        decorationBox = { innerTextField ->
+            if (text.isEmpty()) {
+                body_grey50(text = "${currency.symbol}0")
+            }
+            innerTextField()
+        },
+    )
 }
 
 @Composable
