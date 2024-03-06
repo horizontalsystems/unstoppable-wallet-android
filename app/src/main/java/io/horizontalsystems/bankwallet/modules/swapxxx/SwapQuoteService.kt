@@ -1,17 +1,35 @@
 package cash.p.terminal.modules.swapxxx
 
+import android.util.Log
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
+import cash.p.terminal.modules.swapxxx.providers.OneInchProvider
+import cash.p.terminal.modules.swapxxx.providers.PancakeSwapProvider
+import cash.p.terminal.modules.swapxxx.providers.PancakeSwapV3Provider
+import cash.p.terminal.modules.swapxxx.providers.QuickSwapProvider
+import cash.p.terminal.modules.swapxxx.providers.UniswapProvider
+import cash.p.terminal.modules.swapxxx.providers.UniswapV3Provider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
+class SwapQuoteService {
+    private val allProviders = listOf(
+        OneInchProvider,
+        PancakeSwapProvider,
+        PancakeSwapV3Provider,
+        QuickSwapProvider,
+        UniswapProvider,
+        UniswapV3Provider,
+    )
+
     private val quoteLifetime = 30000L
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
@@ -119,7 +137,23 @@ class SwapQuoteService(private val swapProvidersManager: SwapProvidersManager) {
             emitState()
 
             quotingJob = coroutineScope.launch {
-                quotes = swapProvidersManager.getQuotes(tokenIn, tokenOut, amountIn, settings).sortedByDescending { it.amountOut }
+                val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
+                quotes = supportedProviders
+                    .map { provider ->
+                        async {
+                            try {
+                                val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+                                SwapProviderQuote(provider = provider, swapQuote = quote)
+                            } catch (e: Throwable) {
+                                Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
+                                null
+                            }
+                        }
+                    }
+                    .awaitAll()
+                    .filterNotNull()
+                    .sortedByDescending { it.amountOut }
+
                 if (preferredProvider != null && quotes.none { it.provider == preferredProvider}) {
                     preferredProvider = null
                 }
