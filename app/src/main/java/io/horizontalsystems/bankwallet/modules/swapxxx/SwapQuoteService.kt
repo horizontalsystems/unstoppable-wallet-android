@@ -60,6 +60,8 @@ class SwapQuoteService {
     private var settings: Map<String, Any?> = mapOf()
 
     fun setAmount(v: BigDecimal?) {
+        if (amountIn == v) return
+
         amountIn = v
         preferredProvider = null
 
