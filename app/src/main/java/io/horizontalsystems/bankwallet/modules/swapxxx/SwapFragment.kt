@@ -23,7 +23,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +46,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.getPriceImpactColor
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
@@ -75,7 +75,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
-import java.util.UUID
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
@@ -166,13 +165,16 @@ private fun SwapScreenInner(
             VSpacer(height = 12.dp)
             SwapInput(
                 amountIn = uiState.amountIn,
+                fiatAmountIn = uiState.fiatAmountIn,
                 onSwitchPairs = onSwitchPairs,
                 amountOut = uiState.quote?.amountOut,
+                fiatAmountOut = uiState.fiatAmountOut,
                 onValueChange = onEnterAmount,
                 onClickCoinFrom = onClickCoinFrom,
                 onClickCoinTo = onClickCoinTo,
                 tokenIn = uiState.tokenIn,
-                tokenOut = uiState.tokenOut
+                tokenOut = uiState.tokenOut,
+                currency = uiState.currency
             )
 
             VSpacer(height = 12.dp)
@@ -388,13 +390,16 @@ fun QuoteInfoRow(
 @Composable
 private fun SwapInput(
     amountIn: BigDecimal?,
+    fiatAmountIn: BigDecimal?,
     onSwitchPairs: () -> Unit,
     amountOut: BigDecimal?,
+    fiatAmountOut: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
     onClickCoinFrom: () -> Unit,
     onClickCoinTo: () -> Unit,
     tokenIn: Token?,
     tokenOut: Token?,
+    currency: Currency,
 ) {
     Box {
         Column(
@@ -407,12 +412,16 @@ private fun SwapInput(
         ) {
             SwapCoinInput(
                 coinAmount = amountIn,
+                fiatAmount = fiatAmountIn,
+                currency = currency,
                 onValueChange = onValueChange,
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom
             )
             SwapCoinInput(
                 coinAmount = amountOut,
+                fiatAmount = fiatAmountOut,
+                currency = currency,
                 onValueChange = { },
                 enabled = false,
                 token = tokenOut,
@@ -435,22 +444,13 @@ private fun SwapInput(
 @Composable
 private fun SwapCoinInput(
     coinAmount: BigDecimal?,
+    fiatAmount: BigDecimal?,
+    currency: Currency,
     onValueChange: (BigDecimal?) -> Unit,
     enabled: Boolean = true,
     token: Token?,
     onClickCoin: () -> Unit,
 ) {
-    val uuid = remember { UUID.randomUUID().toString() }
-    val fiatViewModel = viewModel<FiatViewModel>(key = uuid, factory = FiatViewModel.Factory())
-    val currencyAmount = fiatViewModel.fiatAmountString
-
-    LaunchedEffect(token) {
-        fiatViewModel.setCoin(token?.coin)
-    }
-    LaunchedEffect(coinAmount) {
-        fiatViewModel.setAmount(coinAmount)
-    }
-
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 20.dp),
@@ -459,10 +459,10 @@ private fun SwapCoinInput(
         Column(modifier = Modifier.weight(1f)) {
             AmountInput(coinAmount, onValueChange, enabled)
             VSpacer(height = 3.dp)
-            if (currencyAmount != null) {
-                body_grey(text = currencyAmount)
+            if (fiatAmount != null) {
+                body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
             } else {
-                body_grey50(text = fiatViewModel.currencyAmountHint)
+                body_grey50(text = "${currency.symbol}0")
             }
         }
         HSpacer(width = 8.dp)
