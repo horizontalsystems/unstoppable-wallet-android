@@ -17,6 +17,7 @@ class FiatService : ServiceState<FiatService.State>() {
     private var fiatAmount: BigDecimal? = null
 
     override fun createState() = State(
+        coinPrice = coinPrice,
         amount = amount,
         fiatAmount = fiatAmount
     )
@@ -87,5 +88,9 @@ class FiatService : ServiceState<FiatService.State>() {
         emitState()
     }
 
-    data class State(val amount: BigDecimal?, val fiatAmount: BigDecimal?)
+    data class State(
+        val amount: BigDecimal?,
+        val fiatAmount: BigDecimal?,
+        val coinPrice: CoinPrice?
+    )
 }

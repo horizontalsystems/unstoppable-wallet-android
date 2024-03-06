@@ -29,6 +29,7 @@ class SwapViewModel(
     private var priceImpactState = priceImpactService.stateFlow.value
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
+    private var fiatAmountInputEnabled = false
     private val currency = currencyManager.baseCurrency
 
     init {
@@ -54,6 +55,7 @@ class SwapViewModel(
         }
         viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
+                fiatAmountInputEnabled = it.coinPrice != null
                 fiatAmountIn = it.fiatAmount
                 quoteService.setAmount(it.amount)
 
@@ -88,7 +90,8 @@ class SwapViewModel(
         priceImpactCaution = priceImpactState.priceImpactCaution,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
-        currency = currency
+        currency = currency,
+        fiatAmountInputEnabled = fiatAmountInputEnabled
     )
 
     private fun handleUpdatedBalance(balance: BigDecimal?) {
@@ -177,5 +180,6 @@ data class SwapUiState(
     val priceImpactCaution: HSCaution?,
     val fiatAmountIn: BigDecimal?,
     val fiatAmountOut: BigDecimal?,
-    val currency: Currency
+    val currency: Currency,
+    val fiatAmountInputEnabled: Boolean
 )
