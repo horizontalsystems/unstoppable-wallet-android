@@ -18,22 +18,22 @@ class NftMetadataSyncer(
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     fun start() {
-        coroutineScope.launch {
-            nftAdapterManager.adaptersUpdatedFlow.collect { adaptersMap ->
-                launch {
-                    sync(adaptersMap)
-                }
-                launch {
-                    subscribeToAdapterRecords(adaptersMap)
-                }
-            }
-        }
+//        coroutineScope.launch {
+//            nftAdapterManager.adaptersUpdatedFlow.collect { adaptersMap ->
+//                launch {
+//                    sync(adaptersMap)
+//                }
+//                launch {
+//                    subscribeToAdapterRecords(adaptersMap)
+//                }
+//            }
+//        }
     }
 
     fun refresh() {
-        coroutineScope.launch {
-            sync(nftAdapterManager.adaptersUpdatedFlow.value, true)
-        }
+//        coroutineScope.launch {
+//            sync(nftAdapterManager.adaptersUpdatedFlow.value, true)
+//        }
     }
 
     private suspend fun subscribeToAdapterRecords(adaptersMap: Map<NftKey, INftAdapter>) = withContext(Dispatchers.IO) {

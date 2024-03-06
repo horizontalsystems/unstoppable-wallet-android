@@ -16,9 +16,9 @@ class NftMetadataService(
         nftMetadataManager.assetsBriefMetadata(nftUids).associateBy { it.nftUid }
 
     suspend fun fetch(nftUids: Set<NftUid>) {
-        val assetBriefMetadata = nftMetadataManager.fetchAssetsBriefMetadata(nftUids)
+        //val assetBriefMetadata = nftMetadataManager.fetchAssetsBriefMetadata(nftUids)
 
-        handle(assetBriefMetadata)
+        //handle(assetBriefMetadata)
     }
 
     private fun handle(assetsBriefMetadata: List<NftAssetBriefMetadata>) {
