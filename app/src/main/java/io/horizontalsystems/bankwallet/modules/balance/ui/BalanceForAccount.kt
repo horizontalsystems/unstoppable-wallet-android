@@ -123,15 +123,6 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     BalanceTitleRow(navController, accountViewItem.name)
                 },
                 menuItems = buildList {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Nfts_Title),
-                            icon = R.drawable.ic_nft_24,
-                            onClick = {
-                                navController.slideFromRight(R.id.nftsFragment)
-                            }
-                        )
-                    )
                     if (accountViewItem.type.supportsWalletConnect) {
                         add(
                             MenuItem(
