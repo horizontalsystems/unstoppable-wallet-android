@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.marketkit.models.Token
@@ -16,12 +18,18 @@ class SwapViewModel(
     private val quoteService: SwapQuoteService,
     private val balanceService: TokenBalanceService,
     private val priceImpactService: PriceImpactService,
-    private val quoteExpirationService: SwapQuoteExpirationService
+    private val quoteExpirationService: SwapQuoteExpirationService,
+    private val currencyManager: CurrencyManager,
+    private val fiatServiceIn: FiatService,
+    private val fiatServiceOut: FiatService
 ) : ViewModelUiState<SwapUiState>() {
 
     private var quoteState = quoteService.stateFlow.value
     private var availableBalance = balanceService.balanceFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
+    private var fiatAmountIn: BigDecimal? = null
+    private var fiatAmountOut: BigDecimal? = null
+    private val currency = currencyManager.baseCurrency
 
     init {
         viewModelScope.launch {
@@ -44,6 +52,21 @@ class SwapViewModel(
                 handleUpdatedQuoteExpiredState(it)
             }
         }
+        viewModelScope.launch {
+            fiatServiceIn.stateFlow.collect {
+                fiatAmountIn = it
+                emitState()
+            }
+        }
+        viewModelScope.launch {
+            fiatServiceOut.stateFlow.collect {
+                fiatAmountOut = it
+                emitState()
+            }
+        }
+
+        fiatServiceIn.setCurrency(currency)
+        fiatServiceOut.setCurrency(currency)
     }
 
     override fun createState() = SwapUiState(
@@ -60,7 +83,10 @@ class SwapViewModel(
         availableBalance = availableBalance,
         priceImpact = priceImpactState.priceImpact,
         priceImpactLevel = priceImpactState.priceImpactLevel,
-        priceImpactCaution = priceImpactState.priceImpactCaution
+        priceImpactCaution = priceImpactState.priceImpactCaution,
+        fiatAmountIn = fiatAmountIn,
+        fiatAmountOut = fiatAmountOut,
+        currency = currency
     )
 
     private fun handleUpdatedBalance(balance: BigDecimal?) {
@@ -75,6 +101,11 @@ class SwapViewModel(
         balanceService.setToken(quoteState.tokenIn)
         priceImpactService.setPriceImpact(quoteState.quote?.priceImpact, quoteState.quote?.provider?.title)
         quoteExpirationService.setQuote(quoteState.quote)
+
+        fiatServiceIn.setToken(quoteState.tokenIn)
+        fiatServiceIn.setAmount(quoteState.amountIn)
+        fiatServiceOut.setToken(quoteState.tokenOut)
+        fiatServiceOut.setAmount(quoteState.quote?.amountOut)
 
         emitState()
     }
@@ -117,7 +148,10 @@ class SwapViewModel(
                 swapQuoteService,
                 tokenBalanceService,
                 priceImpactService,
-                SwapQuoteExpirationService()
+                SwapQuoteExpirationService(),
+                App.currencyManager,
+                FiatService(),
+                FiatService(),
             ) as T
         }
     }
@@ -137,5 +171,8 @@ data class SwapUiState(
     val availableBalance: BigDecimal?,
     val priceImpact: BigDecimal?,
     val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
-    val priceImpactCaution: HSCaution?
+    val priceImpactCaution: HSCaution?,
+    val fiatAmountIn: BigDecimal?,
+    val fiatAmountOut: BigDecimal?,
+    val currency: Currency
 )
