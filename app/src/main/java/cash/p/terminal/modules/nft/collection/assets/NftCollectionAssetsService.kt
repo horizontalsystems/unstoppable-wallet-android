@@ -77,8 +77,8 @@ class NftCollectionAssetsService(
                 if (!initialLoad && paginationData == null) {
                     _items.update { it }
                 } else {
-                    val (assets, paginationData) = provider.collectionAssetsMetadata(blockchainType, collectionUid, paginationData)
-                    _items.update { handle(assets, paginationData) }
+//                    val (assets, paginationData) = provider.collectionAssetsMetadata(blockchainType, collectionUid, paginationData)
+//                    _items.update { handle(assets, paginationData) }
                 }
 
                 loading.set(false)
