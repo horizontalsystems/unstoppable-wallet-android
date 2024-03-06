@@ -167,6 +167,7 @@ private fun SwapScreenInner(
             SwapInput(
                 amountIn = uiState.amountIn,
                 fiatAmountIn = uiState.fiatAmountIn,
+                fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                 onSwitchPairs = onSwitchPairs,
                 amountOut = uiState.quote?.amountOut,
                 fiatAmountOut = uiState.fiatAmountOut,
@@ -393,6 +394,7 @@ fun QuoteInfoRow(
 private fun SwapInput(
     amountIn: BigDecimal?,
     fiatAmountIn: BigDecimal?,
+    fiatAmountInputEnabled: Boolean,
     onSwitchPairs: () -> Unit,
     amountOut: BigDecimal?,
     fiatAmountOut: BigDecimal?,
@@ -419,6 +421,8 @@ private fun SwapInput(
                 currency = currency,
                 onValueChange = onValueChange,
                 onFiatValueChange = onFiatValueChange,
+                enabled = true,
+                fiatAmountInputEnabled = fiatAmountInputEnabled,
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom
             )
@@ -429,6 +433,7 @@ private fun SwapInput(
                 onValueChange = { },
                 onFiatValueChange = {},
                 enabled = false,
+                fiatAmountInputEnabled = false,
                 token = tokenOut,
                 onClickCoin = onClickCoinTo
             )
@@ -453,7 +458,8 @@ private fun SwapCoinInput(
     currency: Currency,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
-    enabled: Boolean = true,
+    enabled: Boolean,
+    fiatAmountInputEnabled: Boolean,
     token: Token?,
     onClickCoin: () -> Unit,
 ) {
@@ -465,7 +471,7 @@ private fun SwapCoinInput(
         Column(modifier = Modifier.weight(1f)) {
             AmountInput(coinAmount, onValueChange, enabled)
             VSpacer(height = 3.dp)
-            FiatAmountInput(fiatAmount, currency, onFiatValueChange, enabled)
+            FiatAmountInput(fiatAmount, currency, onFiatValueChange, fiatAmountInputEnabled)
         }
         HSpacer(width = 8.dp)
         Selector(
