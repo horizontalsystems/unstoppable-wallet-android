@@ -64,7 +64,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
+import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
@@ -504,38 +504,41 @@ private fun FiatAmountInput(
     var text by remember(value) {
         mutableStateOf(value?.toPlainString() ?: "")
     }
-    BasicTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = text,
-        onValueChange = {
-            try {
-                val amount = if (it.isBlank()) {
-                    null
-                } else {
-                    it.toBigDecimal()
-                }
-                text = it
-                onValueChange.invoke(amount)
-            } catch (e: Exception) {
+    Row {
+        body_grey(text = currency.symbol)
+        BasicTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = text,
+            onValueChange = {
+                try {
+                    val amount = if (it.isBlank()) {
+                        null
+                    } else {
+                        it.toBigDecimal()
+                    }
+                    text = it
+                    onValueChange.invoke(amount)
+                } catch (e: Exception) {
 
-            }
-        },
-        enabled = enabled,
-        textStyle = ColoredTextStyle(
-            color = ComposeAppTheme.colors.grey, textStyle = ComposeAppTheme.typography.body
-        ),
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal
-        ),
-        cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
-        decorationBox = { innerTextField ->
-            if (text.isEmpty()) {
-                body_grey50(text = "${currency.symbol}0")
-            }
-            innerTextField()
-        },
-    )
+                }
+            },
+            enabled = enabled,
+            textStyle = ColoredTextStyle(
+                color = ComposeAppTheme.colors.grey, textStyle = ComposeAppTheme.typography.body
+            ),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal
+            ),
+            cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
+            decorationBox = { innerTextField ->
+                if (text.isEmpty()) {
+                    body_grey(text = "0")
+                }
+                innerTextField()
+            },
+        )
+    }
 }
 
 @Composable
