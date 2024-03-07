@@ -58,6 +58,7 @@ class SwapViewModel(
                 fiatAmountInputEnabled = it.coinPrice != null
                 fiatAmountIn = it.fiatAmount
                 quoteService.setAmount(it.amount)
+                priceImpactService.setFiatAmountIn(fiatAmountIn)
 
                 emitState()
             }
@@ -65,6 +66,9 @@ class SwapViewModel(
         viewModelScope.launch {
             fiatServiceOut.stateFlow.collect {
                 fiatAmountOut = it.fiatAmount
+
+                priceImpactService.setFiatAmountOut(fiatAmountOut)
+
                 emitState()
             }
         }
@@ -88,6 +92,8 @@ class SwapViewModel(
         priceImpact = priceImpactState.priceImpact,
         priceImpactLevel = priceImpactState.priceImpactLevel,
         priceImpactCaution = priceImpactState.priceImpactCaution,
+        fiatPriceImpact = priceImpactState.fiatPriceImpact,
+        fiatPriceImpactLevel = priceImpactState.fiatPriceImpactLevel,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
         currency = currency,
@@ -180,6 +186,8 @@ data class SwapUiState(
     val priceImpactCaution: HSCaution?,
     val fiatAmountIn: BigDecimal?,
     val fiatAmountOut: BigDecimal?,
+    val fiatPriceImpact: BigDecimal?,
     val currency: Currency,
-    val fiatAmountInputEnabled: Boolean
+    val fiatAmountInputEnabled: Boolean,
+    val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?
 )
