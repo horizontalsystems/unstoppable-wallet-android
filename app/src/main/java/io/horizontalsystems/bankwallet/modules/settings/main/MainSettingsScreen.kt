@@ -254,20 +254,6 @@ private fun SettingSections(
     CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
-                R.string.Settings_ExperimentalFeatures,
-                R.drawable.ic_experimental,
-                onClick = {
-                    navController.slideFromRight(R.id.experimentalFeaturesFragment)
-                }
-            )
-        }
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
                 R.string.SettingsAboutApp_Title,
                 R.drawable.ic_about_app_20,
                 showAlert = showAlertAboutApp,
