@@ -69,6 +69,8 @@ class SwapQuoteService {
     }
 
     fun setTokenIn(token: Token) {
+        if (tokenIn == token) return
+
         tokenIn = token
         preferredProvider = null
 
@@ -76,6 +78,8 @@ class SwapQuoteService {
     }
 
     fun setTokenOut(token: Token) {
+        if (tokenOut == token) return
+
         tokenOut = token
         preferredProvider = null
 
