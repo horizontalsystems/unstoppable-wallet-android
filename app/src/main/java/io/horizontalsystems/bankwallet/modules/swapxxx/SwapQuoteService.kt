@@ -100,43 +100,49 @@ class SwapQuoteService {
         val tokenIn = tokenIn
         val tokenOut = tokenOut
 
-        if (amountIn != null && amountIn > BigDecimal.ZERO && tokenIn != null && tokenOut != null) {
-            quoting = true
-            emitState()
+        if (tokenIn != null && tokenOut != null) {
+            val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
 
-            quotingJob = coroutineScope.launch {
-                val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
-                quotes = supportedProviders
-                    .map { provider ->
-                        async {
-                            try {
-                                val quote =
-                                    provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
-                                SwapProviderQuote(provider = provider, swapQuote = quote)
-                            } catch (e: Throwable) {
-                                Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
-                                null
+            if (supportedProviders.isEmpty()) {
+                error = NoSupportedSwapProvider()
+                emitState()
+            } else if (amountIn != null && amountIn > BigDecimal.ZERO) {
+                quoting = true
+                emitState()
+
+                quotingJob = coroutineScope.launch {
+                    quotes = supportedProviders
+                        .map { provider ->
+                            async {
+                                try {
+                                    val quote =
+                                        provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+                                    SwapProviderQuote(provider = provider, swapQuote = quote)
+                                } catch (e: Throwable) {
+                                    Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
+                                    null
+                                }
                             }
                         }
+                        .awaitAll()
+                        .filterNotNull()
+                        .sortedByDescending { it.amountOut }
+
+                    if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
+                        preferredProvider = null
                     }
-                    .awaitAll()
-                    .filterNotNull()
-                    .sortedByDescending { it.amountOut }
 
-                if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
-                    preferredProvider = null
+                    if (quotes.isEmpty()) {
+                        error = SwapRouteNotFound()
+                    } else {
+                        quote = preferredProvider
+                            ?.let { provider -> quotes.find { it.provider == provider } }
+                            ?: quotes.firstOrNull()
+                    }
+
+                    quoting = false
+                    emitState()
                 }
-
-                if (quotes.isEmpty()) {
-                    error = SwapRouteNotFound()
-                } else {
-                    quote = preferredProvider
-                        ?.let { provider -> quotes.find { it.provider == provider } }
-                        ?: quotes.firstOrNull()
-                }
-
-                quoting = false
-                emitState()
             }
         }
     }
