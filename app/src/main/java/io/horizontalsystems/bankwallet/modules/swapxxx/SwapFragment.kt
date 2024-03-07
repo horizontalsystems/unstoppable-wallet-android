@@ -65,6 +65,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -158,6 +159,8 @@ private fun SwapScreenInner(
                 onSwitchPairs = onSwitchPairs,
                 amountOut = uiState.quote?.amountOut,
                 fiatAmountOut = uiState.fiatAmountOut,
+                fiatPriceImpact = uiState.fiatPriceImpact,
+                fiatPriceImpactLevel = uiState.fiatPriceImpactLevel,
                 onValueChange = onEnterAmount,
                 onFiatValueChange = onEnterFiatAmount,
                 onClickCoinFrom = onClickCoinFrom,
@@ -286,7 +289,7 @@ private fun PriceImpactField(
         },
         value = {
             Text(
-                text = stringResource(R.string.Swap_Percent, priceImpact * BigDecimal.valueOf(-1)),
+                text = stringResource(R.string.Swap_Percent, (priceImpact * BigDecimal.valueOf(-1)).toPlainString()),
                 style = ComposeAppTheme.typography.subhead2,
                 color = getPriceImpactColor(priceImpactLevel),
                 maxLines = 1,
@@ -385,6 +388,8 @@ private fun SwapInput(
     onSwitchPairs: () -> Unit,
     amountOut: BigDecimal?,
     fiatAmountOut: BigDecimal?,
+    fiatPriceImpact: BigDecimal?,
+    fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
     onClickCoinFrom: () -> Unit,
@@ -402,7 +407,7 @@ private fun SwapInput(
                 .background(ComposeAppTheme.colors.lawrence)
                 .padding()
         ) {
-            SwapCoinInput(
+            SwapCoinInputIn(
                 coinAmount = amountIn,
                 fiatAmount = fiatAmountIn,
                 currency = currency,
@@ -413,14 +418,12 @@ private fun SwapInput(
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom
             )
-            SwapCoinInput(
+            SwapCoinInputTo(
                 coinAmount = amountOut,
                 fiatAmount = fiatAmountOut,
+                fiatPriceImpact = fiatPriceImpact,
+                fiatPriceImpactLevel = fiatPriceImpactLevel,
                 currency = currency,
-                onValueChange = { },
-                onFiatValueChange = {},
-                enabled = false,
-                fiatAmountInputEnabled = false,
                 token = tokenOut,
                 onClickCoin = onClickCoinTo
             )
@@ -439,7 +442,7 @@ private fun SwapInput(
 }
 
 @Composable
-private fun SwapCoinInput(
+private fun SwapCoinInputIn(
     coinAmount: BigDecimal?,
     fiatAmount: BigDecimal?,
     currency: Currency,
@@ -461,24 +464,77 @@ private fun SwapCoinInput(
             FiatAmountInput(fiatAmount, currency, onFiatValueChange, fiatAmountInputEnabled)
         }
         HSpacer(width = 8.dp)
-        Selector(
-            icon = {
-                CoinImage(
-                    iconUrl = token?.coin?.imageUrl,
-                    placeholder = token?.iconPlaceholder,
-                    modifier = Modifier.size(32.dp)
-                )
-            },
-            text = {
-                if (token != null) {
-                    subhead1_leah(text = token.coin.code)
-                } else {
-                    subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
-                }
-            },
-            onClickSelect = onClickCoin
-        )
+        CoinSelector(token, onClickCoin)
     }
+}
+
+@Composable
+private fun SwapCoinInputTo(
+    coinAmount: BigDecimal?,
+    fiatAmount: BigDecimal?,
+    fiatPriceImpact: BigDecimal?,
+    fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    currency: Currency,
+    token: Token?,
+    onClickCoin: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            if (coinAmount == null) {
+                headline1_grey(text = "0")
+            } else {
+                headline1_leah(text = coinAmount.toPlainString())
+            }
+            VSpacer(height = 3.dp)
+            if (fiatAmount == null) {
+                body_grey(text = "${currency.symbol}0")
+            } else {
+                Row {
+                    body_grey(text = "${currency.symbol}${fiatAmount.toPlainString()}")
+                    fiatPriceImpact?.let { diff ->
+                        HSpacer(width = 4.dp)
+                        Text(
+                            text = stringResource(R.string.Swap_FiatPriceImpact, diff.toPlainString()),
+                            style = ComposeAppTheme.typography.body,
+                            color = getPriceImpactColor(fiatPriceImpactLevel),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+            }
+        }
+        HSpacer(width = 8.dp)
+        CoinSelector(token, onClickCoin)
+    }
+}
+
+@Composable
+private fun CoinSelector(
+    token: Token?,
+    onClickCoin: () -> Unit,
+) {
+    Selector(
+        icon = {
+            CoinImage(
+                iconUrl = token?.coin?.imageUrl,
+                placeholder = token?.iconPlaceholder,
+                modifier = Modifier.size(32.dp)
+            )
+        },
+        text = {
+            if (token != null) {
+                subhead1_leah(text = token.coin.code)
+            } else {
+                subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
+            }
+        },
+        onClickSelect = onClickCoin
+    )
 }
 
 @Composable
