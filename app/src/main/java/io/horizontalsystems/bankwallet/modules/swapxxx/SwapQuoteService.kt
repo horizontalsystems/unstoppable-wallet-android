@@ -131,11 +131,10 @@ class SwapQuoteService {
             .map { provider ->
                 async {
                     try {
-                        val quote =
-                            provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+                        val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
                         SwapProviderQuote(provider = provider, swapQuote = quote)
                     } catch (e: Throwable) {
-                        Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
+                        Log.d("AAA", "fetchQuoteError: ${provider.id}", e)
                         null
                     }
                 }
