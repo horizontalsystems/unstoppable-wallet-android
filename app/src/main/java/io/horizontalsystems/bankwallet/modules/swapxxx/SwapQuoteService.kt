@@ -59,6 +59,88 @@ class SwapQuoteService {
     private var quotingJob: Job? = null
     private var settings: Map<String, Any?> = mapOf()
 
+    private fun emitState() {
+        _stateFlow.update {
+            State(
+                amountIn = amountIn,
+                tokenIn = tokenIn,
+                tokenOut = tokenOut,
+                quoting = quoting,
+                quotes = quotes,
+                preferredProvider = preferredProvider,
+                quoteLifetime = quoteLifetime,
+                quote = quote,
+                error = error,
+            )
+        }
+    }
+
+    private fun runQuotation() {
+        cancelCurrentQuotation()
+        resetOutput()
+
+        emitState()
+
+        fetchQuotes()
+    }
+
+    private fun cancelCurrentQuotation() {
+        quotingJob?.cancel()
+        quoting = false
+    }
+
+    private fun resetOutput() {
+        quotes = listOf()
+        quote = null
+        error = null
+    }
+
+    private fun fetchQuotes() {
+        val amountIn = amountIn
+        val tokenIn = tokenIn
+        val tokenOut = tokenOut
+
+        if (amountIn != null && amountIn > BigDecimal.ZERO && tokenIn != null && tokenOut != null) {
+            quoting = true
+            emitState()
+
+            quotingJob = coroutineScope.launch {
+                val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
+                quotes = supportedProviders
+                    .map { provider ->
+                        async {
+                            try {
+                                val quote =
+                                    provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+                                SwapProviderQuote(provider = provider, swapQuote = quote)
+                            } catch (e: Throwable) {
+                                Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
+                                null
+                            }
+                        }
+                    }
+                    .awaitAll()
+                    .filterNotNull()
+                    .sortedByDescending { it.amountOut }
+
+                if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
+                    preferredProvider = null
+                }
+
+                if (quotes.isEmpty()) {
+                    error = SwapRouteNotFound()
+                } else {
+                    quote = preferredProvider
+                        ?.let { provider -> quotes.find { it.provider == provider } }
+                        ?: quotes.firstOrNull()
+                }
+
+                quoting = false
+                emitState()
+            }
+        }
+    }
+
     fun setAmount(v: BigDecimal?) {
         if (amountIn == v) return
 
@@ -108,78 +190,9 @@ class SwapQuoteService {
         runQuotation()
     }
 
-    private fun emitState() {
-        _stateFlow.update {
-            State(
-                amountIn = amountIn,
-                tokenIn = tokenIn,
-                tokenOut = tokenOut,
-                quoting = quoting,
-                quotes = quotes,
-                preferredProvider = preferredProvider,
-                quoteLifetime = quoteLifetime,
-                quote = quote,
-                error = error,
-            )
-        }
-    }
-
-    private fun runQuotation() {
-        quotingJob?.cancel()
-
-        quotes = listOf()
-        quote = null
-        error = null
-
-        val amountIn = amountIn
-        val tokenIn = tokenIn
-        val tokenOut = tokenOut
-
-        if (amountIn == null || amountIn <= BigDecimal.ZERO || tokenIn == null || tokenOut == null) {
-            quoting = false
-            emitState()
-        } else {
-            quoting = true
-            emitState()
-
-            quotingJob = coroutineScope.launch {
-                val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
-                quotes = supportedProviders
-                    .map { provider ->
-                        async {
-                            try {
-                                val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
-                                SwapProviderQuote(provider = provider, swapQuote = quote)
-                            } catch (e: Throwable) {
-                                Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
-                                null
-                            }
-                        }
-                    }
-                    .awaitAll()
-                    .filterNotNull()
-                    .sortedByDescending { it.amountOut }
-
-                if (preferredProvider != null && quotes.none { it.provider == preferredProvider}) {
-                    preferredProvider = null
-                }
-
-                if (quotes.isEmpty()) {
-                    error = SwapRouteNotFound()
-                } else {
-                    quote = preferredProvider
-                        ?.let { provider -> quotes.find { it.provider == provider } }
-                        ?: quotes.firstOrNull()
-                }
-
-                quoting = false
-                emitState()
-            }
-        }
-    }
-
     fun setSwapSettings(settings: Map<String, Any?>) {
         this.settings = settings
+
         runQuotation()
     }
 
