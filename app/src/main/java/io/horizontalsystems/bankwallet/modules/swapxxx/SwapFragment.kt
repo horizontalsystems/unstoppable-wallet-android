@@ -413,7 +413,6 @@ private fun SwapInput(
                 currency = currency,
                 onValueChange = onValueChange,
                 onFiatValueChange = onFiatValueChange,
-                enabled = true,
                 fiatAmountInputEnabled = fiatAmountInputEnabled,
                 token = tokenIn,
                 onClickCoin = onClickCoinFrom
@@ -448,7 +447,6 @@ private fun SwapCoinInputIn(
     currency: Currency,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
-    enabled: Boolean,
     fiatAmountInputEnabled: Boolean,
     token: Token?,
     onClickCoin: () -> Unit,
@@ -459,7 +457,7 @@ private fun SwapCoinInputIn(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            AmountInput(coinAmount, onValueChange, enabled)
+            AmountInput(coinAmount, onValueChange)
             VSpacer(height = 3.dp)
             FiatAmountInput(fiatAmount, currency, onFiatValueChange, fiatAmountInputEnabled)
         }
@@ -614,7 +612,6 @@ private fun Selector(
 private fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
-    enabled: Boolean,
 ) {
     var text by remember(value) {
         mutableStateOf(value?.toPlainString() ?: "")
@@ -635,7 +632,6 @@ private fun AmountInput(
 
             }
         },
-        enabled = enabled,
         textStyle = ColoredTextStyle(
             color = ComposeAppTheme.colors.leah, textStyle = ComposeAppTheme.typography.headline1
         ),
