@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -76,29 +77,17 @@ class SwapQuoteService {
     }
 
     private fun runQuotation() {
-        cancelCurrentQuotation()
-        resetOutput()
-
-        emitState()
-
-        fetchQuotes()
-    }
-
-    private fun cancelCurrentQuotation() {
         quotingJob?.cancel()
         quoting = false
-    }
-
-    private fun resetOutput() {
         quotes = listOf()
         quote = null
         error = null
-    }
 
-    private fun fetchQuotes() {
-        val amountIn = amountIn
+        emitState()
+
         val tokenIn = tokenIn
         val tokenOut = tokenOut
+        val amountIn = amountIn
 
         if (tokenIn != null && tokenOut != null) {
             val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
@@ -111,22 +100,7 @@ class SwapQuoteService {
                 emitState()
 
                 quotingJob = coroutineScope.launch {
-                    quotes = supportedProviders
-                        .map { provider ->
-                            async {
-                                try {
-                                    val quote =
-                                        provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
-                                    SwapProviderQuote(provider = provider, swapQuote = quote)
-                                } catch (e: Throwable) {
-                                    Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
-                                    null
-                                }
-                            }
-                        }
-                        .awaitAll()
-                        .filterNotNull()
-                        .sortedByDescending { it.amountOut }
+                    quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn)
 
                     if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
                         preferredProvider = null
@@ -145,6 +119,30 @@ class SwapQuoteService {
                 }
             }
         }
+    }
+
+    private suspend fun fetchQuotes(
+        supportedProviders: List<ISwapXxxProvider>,
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+    ) = coroutineScope {
+        supportedProviders
+            .map { provider ->
+                async {
+                    try {
+                        val quote =
+                            provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+                        SwapProviderQuote(provider = provider, swapQuote = quote)
+                    } catch (e: Throwable) {
+                        Log.e("AAA", "fetchQuoteError: ${provider.id}", e)
+                        null
+                    }
+                }
+            }
+            .awaitAll()
+            .filterNotNull()
+            .sortedByDescending { it.amountOut }
     }
 
     fun setAmount(v: BigDecimal?) {
