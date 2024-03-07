@@ -33,7 +33,9 @@ class FiatService : ServiceState<FiatService.State>() {
     private fun refreshFiatAmount() {
         fiatAmount = amount?.let { amount ->
             coinPrice?.let { coinPrice ->
-                amount * coinPrice.value
+                currency?.let { currency ->
+                    (amount * coinPrice.value).setScale(currency.decimal, RoundingMode.DOWN).stripTrailingZeros()
+                }
             }
         }
     }
@@ -42,7 +44,7 @@ class FiatService : ServiceState<FiatService.State>() {
         amount = fiatAmount?.let { fiatAmount ->
             coinPrice?.let { coinPrice ->
                 token?.let { token ->
-                    fiatAmount.divide(coinPrice.value, token.decimals, RoundingMode.CEILING)
+                    fiatAmount.divide(coinPrice.value, token.decimals, RoundingMode.DOWN).stripTrailingZeros()
                 }
             }
         }
