@@ -56,7 +56,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -338,9 +338,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 onClick = onClickReceive,
             )
         } else {
-            ButtonPrimaryYellowWithIcon(
+            ButtonPrimaryYellow(
                 modifier = Modifier.weight(1f),
-                icon = R.drawable.ic_arrow_up_right_24,
                 title = stringResource(R.string.Balance_Send),
                 onClick = {
                     val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
@@ -351,14 +350,22 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 },
                 enabled = viewItem.sendEnabled
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            ButtonPrimaryCircle(
-                icon = R.drawable.ic_arrow_down_left_24,
-                contentDescription = stringResource(R.string.Balance_Receive),
-                onClick = onClickReceive,
-            )
+            HSpacer(8.dp)
+            if (!viewItem.swapVisible) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.Balance_Receive),
+                    onClick =  onClickReceive,
+                )
+            } else {
+                ButtonPrimaryCircle(
+                    icon = R.drawable.ic_arrow_down_left_24,
+                    contentDescription = stringResource(R.string.Balance_Receive),
+                    onClick = onClickReceive,
+                )
+            }
             if (viewItem.swapVisible) {
-                Spacer(modifier = Modifier.width(8.dp))
+                HSpacer(8.dp)
                 ButtonPrimaryCircle(
                     icon = R.drawable.ic_swap_24,
                     contentDescription = stringResource(R.string.Swap),
@@ -372,7 +379,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 )
             }
         }
-        Spacer(modifier = Modifier.width(8.dp))
+        HSpacer(8.dp)
         ButtonPrimaryCircle(
             icon = R.drawable.ic_chart_24,
             contentDescription = stringResource(R.string.Coin_Info),
