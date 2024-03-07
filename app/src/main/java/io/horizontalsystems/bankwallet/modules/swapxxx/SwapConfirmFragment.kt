@@ -21,15 +21,18 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.caption_grey
 import cash.p.terminal.ui.compose.components.cell.CellUniversal
@@ -69,6 +72,15 @@ fun SwapConfirmScreen(navController: NavController) {
                 navigationIcon = {
                     HsBackButton(onClick = navController::popBackStack)
                 },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Settings_Title),
+                        icon = R.drawable.ic_manage_2_24,
+                        onClick = {
+                            navController.slideFromRight(R.id.swapTransactionSettings)
+                        }
+                    )
+                ),
             )
         },
         bottomBar = {

@@ -52,7 +52,6 @@ import cash.p.terminal.modules.swap.getPriceImpactColor
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -62,7 +61,6 @@ import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSRow
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_grey
 import cash.p.terminal.ui.compose.components.cell.CellUniversal
@@ -117,9 +115,6 @@ fun SwapScreen(navController: NavController) {
         onClickProviderSettings = {
             navController.slideFromRight(R.id.swapSettings)
         },
-        onClickTransactionSettings = {
-            navController.slideFromRight(R.id.swapTransactionSettings)
-        },
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)
         }
@@ -136,7 +131,6 @@ private fun SwapScreenInner(
     onEnterAmount: (BigDecimal?) -> Unit,
     onEnterFiatAmount: (BigDecimal?) -> Unit,
     onClickProvider: () -> Unit,
-    onClickTransactionSettings: () -> Unit,
     onClickProviderSettings: () -> Unit,
     onClickNext: () -> Unit,
 ) {
@@ -146,14 +140,7 @@ private fun SwapScreenInner(
                 title = stringResource(R.string.Swap),
                 navigationIcon = {
                     HsBackButton(onClick = onClickClose)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Settings_Title),
-                        icon = R.drawable.ic_manage_2_24,
-                        onClick = onClickTransactionSettings
-                    )
-                ),
+                }
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
