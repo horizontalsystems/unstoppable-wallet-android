@@ -112,12 +112,6 @@
         android:id="@+id/aboutAppFragment"
         android:name="cash.p.terminal.modules.settings.about.AboutFragment"/>
     <fragment
-        android:id="@+id/experimentalFeaturesFragment"
-        android:name="cash.p.terminal.modules.settings.experimental.ExperimentalFeaturesFragment"/>
-    <fragment
-        android:id="@+id/timeLockFragment"
-        android:name="cash.p.terminal.modules.settings.experimental.timelock.TimeLockFragment"/>
-    <fragment
         android:id="@+id/donateAddressesFragment"
         android:name="cash.p.terminal.modules.settings.donate.DonateAddressesFragment"/>
     <fragment

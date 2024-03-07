@@ -232,7 +232,6 @@ class BackupProvider(
         launchScreenService.setLaunchScreen(settings.launchScreen)
         localStorage.marketsTabEnabled = settings.marketsTabEnabled
         currencyManager.setBaseCurrencyCode(settings.baseCurrency)
-        localStorage.isLockTimeEnabled = settings.lockTimeEnabled
 
 
         settings.btcModes.forEach { btcMode ->
@@ -476,7 +475,6 @@ class BackupProvider(
             launchScreen = launchScreenService.optionsFlow.value.selected,
             marketsTabEnabled = localStorage.marketsTabEnabled,
             baseCurrency = currencyManager.baseCurrency.code,
-            lockTimeEnabled = localStorage.isLockTimeEnabled,
             btcModes = btcModes,
             evmSyncSources = evmSyncSources,
             solanaSyncSource = solanaSyncSource,
@@ -730,8 +728,6 @@ data class Settings(
     val marketsTabEnabled: Boolean,
     @SerializedName("currency")
     val baseCurrency: String,
-    @SerializedName("lock_time")
-    val lockTimeEnabled: Boolean,
 
     @SerializedName("btc_modes")
     val btcModes: List<BtcMode>,

@@ -87,7 +87,6 @@ interface ILocalStorage {
     var sortType: BalanceSortType
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
-    var isLockTimeEnabled: Boolean
     var encryptedSampleText: String?
     var bitcoinDerivation: AccountType.Derivation?
     var torEnabled: Boolean

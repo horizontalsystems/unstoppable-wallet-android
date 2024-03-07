@@ -24,7 +24,7 @@ object SendBitcoinModule {
             val feeRateService = SendBitcoinFeeRateService(provider)
             val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
             val addressService = SendBitcoinAddressService(adapter, predefinedAddress)
-            val pluginService = SendBitcoinPluginService(App.localStorage, wallet.token.blockchainType)
+            val pluginService = SendBitcoinPluginService(wallet.token.blockchainType)
             return SendBitcoinViewModel(
                 adapter,
                 wallet,
