@@ -23,6 +23,8 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
+import cash.p.terminal.entities.Currency
+import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -63,7 +65,6 @@ fun SwapConfirmScreen(navController: NavController) {
     val viewModel = viewModel<SwapConfirmViewModel>(initializer = SwapConfirmViewModel.init(currentQuote, settings))
 
     val uiState = viewModel.uiState
-    val quote = uiState.quote
 
     Scaffold(
         topBar = {
@@ -134,12 +135,12 @@ fun SwapConfirmScreen(navController: NavController) {
         ) {
             VSpacer(height = 12.dp)
             SectionUniversalLawrence {
-                TokenRow(quote.tokenIn, quote.amountIn, TokenRowType.In, false)
-                TokenRow(quote.tokenOut, quote.amountOut, TokenRowType.Out)
+                TokenRow(uiState.tokenIn, uiState.amountIn, uiState.fiatAmountIn, uiState.currency, TokenRowType.In, false,)
+                TokenRow(uiState.tokenOut, uiState.amountOut, uiState.fiatAmountOut, uiState.currency, TokenRowType.Out)
             }
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
-                val swapPriceUIHelper = SwapPriceUIHelper(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
+                val swapPriceUIHelper = SwapPriceUIHelper(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, uiState.amountOut)
                 SwapInfoRow(false, stringResource(id = R.string.Swap_Price), swapPriceUIHelper.priceStr)
             }
             VSpacer(height = 32.dp)
@@ -170,6 +171,8 @@ enum class TokenRowType {
 private fun TokenRow(
     token: Token,
     amount: BigDecimal,
+    fiatAmount: BigDecimal?,
+    currency: Currency,
     type: TokenRowType,
     borderTop: Boolean = true,
 ) {
@@ -203,8 +206,10 @@ private fun TokenRow(
                 style = ComposeAppTheme.typography.subhead1,
                 color = color,
             )
-            VSpacer(height = 1.dp)
-            caption_grey(text = "$$$")
+            fiatAmount?.let {
+                VSpacer(height = 1.dp)
+                caption_grey(text = CurrencyValue(currency, fiatAmount).getFormattedFull())
+            }
         }
     }
 }

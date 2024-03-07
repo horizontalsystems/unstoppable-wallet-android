@@ -1,14 +1,14 @@
 package cash.p.terminal.modules.swapxxx
 
-import cash.p.terminal.core.App
 import cash.p.terminal.core.ServiceState
+import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class FiatService : ServiceState<FiatService.State>() {
+class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatService.State>() {
     private var currency: Currency? = null
     private var token: Token? = null
     private var amount: BigDecimal? = null
@@ -25,7 +25,7 @@ class FiatService : ServiceState<FiatService.State>() {
     private fun refreshCoinPrice() {
         coinPrice = token?.let { token ->
             currency?.code?.let { currency ->
-                App.marketKit.coinPrice(token.coin.uid, currency)
+                marketKit.coinPrice(token.coin.uid, currency)
             }
         }
     }

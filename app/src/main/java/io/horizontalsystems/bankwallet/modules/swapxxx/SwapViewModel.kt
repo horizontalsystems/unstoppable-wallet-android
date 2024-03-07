@@ -162,8 +162,8 @@ class SwapViewModel(
                 priceImpactService,
                 SwapQuoteExpirationService(),
                 App.currencyManager,
-                FiatService(),
-                FiatService(),
+                FiatService(App.marketKit),
+                FiatService(App.marketKit),
             ) as T
         }
     }
