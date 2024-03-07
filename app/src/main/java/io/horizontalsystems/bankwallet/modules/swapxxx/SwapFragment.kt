@@ -52,7 +52,6 @@ import io.horizontalsystems.bankwallet.modules.swap.getPriceImpactColor
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -62,7 +61,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -117,9 +115,6 @@ fun SwapScreen(navController: NavController) {
         onClickProviderSettings = {
             navController.slideFromRight(R.id.swapSettings)
         },
-        onClickTransactionSettings = {
-            navController.slideFromRight(R.id.swapTransactionSettings)
-        },
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)
         }
@@ -136,7 +131,6 @@ private fun SwapScreenInner(
     onEnterAmount: (BigDecimal?) -> Unit,
     onEnterFiatAmount: (BigDecimal?) -> Unit,
     onClickProvider: () -> Unit,
-    onClickTransactionSettings: () -> Unit,
     onClickProviderSettings: () -> Unit,
     onClickNext: () -> Unit,
 ) {
@@ -146,14 +140,7 @@ private fun SwapScreenInner(
                 title = stringResource(R.string.Swap),
                 navigationIcon = {
                     HsBackButton(onClick = onClickClose)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Settings_Title),
-                        icon = R.drawable.ic_manage_2_24,
-                        onClick = onClickTransactionSettings
-                    )
-                ),
+                }
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
