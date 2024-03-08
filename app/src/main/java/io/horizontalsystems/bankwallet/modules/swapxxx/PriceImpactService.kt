@@ -106,7 +106,7 @@ class PriceImpactService {
     }
 
     private fun calculateDiff(amountOut: BigDecimal?, amountIn: BigDecimal?): BigDecimal? {
-        if (amountOut == null || amountIn == null) return null
+        if (amountOut == null || amountIn == null || amountIn.compareTo(BigDecimal.ZERO) == 0) return null
 
         return (amountOut - amountIn)
             .divide(amountIn, RoundingMode.DOWN)
