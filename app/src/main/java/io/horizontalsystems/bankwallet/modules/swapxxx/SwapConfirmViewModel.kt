@@ -32,6 +32,7 @@ class SwapConfirmViewModel(
     private var refreshing = false
 
     private var expirationTimer: CountDownTimer? = null
+    private val swapProvider = quote.provider
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -60,7 +61,6 @@ class SwapConfirmViewModel(
     }
 
     override fun createState() = SwapConfirmUiState(
-        quote = quote,
         expiresIn = expiresIn,
         expired = expired,
         refreshing = refreshing,
@@ -84,18 +84,12 @@ class SwapConfirmViewModel(
         }
     }
 
-    private suspend fun reFetchQuote(quote: SwapProviderQuote) = SwapProviderQuote(
-        provider = quote.provider,
-        swapQuote = quote.provider.fetchQuote(
-            tokenIn,
-            tokenOut,
-            amountIn,
-            settings
-        )
+    private suspend fun reFetchQuote() = SwapProviderQuote(
+        provider = swapProvider,
+        swapQuote = swapProvider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
     )
 
     private fun handleQuote(quote: SwapProviderQuote) {
-        this.quote = quote
         amountOut = quote.amountOut
         fiatServiceOut.setAmount(amountOut)
 
@@ -125,7 +119,7 @@ class SwapConfirmViewModel(
             refreshing = true
             emitState()
 
-            val newQuote = reFetchQuote(quote)
+            val newQuote = reFetchQuote()
             refreshing = false
 
             handleQuote(newQuote)
@@ -134,7 +128,7 @@ class SwapConfirmViewModel(
 
     fun swap() {
         viewModelScope.launch {
-            quote.provider.swap(quote.swapQuote)
+            swapProvider.swap(quote.swapQuote)
         }
     }
 
@@ -147,7 +141,6 @@ class SwapConfirmViewModel(
 
 
 data class SwapConfirmUiState(
-    val quote: SwapProviderQuote,
     val expiresIn: Long,
     val expired: Boolean,
     val refreshing: Boolean,
