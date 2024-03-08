@@ -27,7 +27,7 @@ class SwapConfirmViewModel(
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
 
-    private var expiresIn = quote.expireAt - System.currentTimeMillis()
+    private var expiresIn = 10L
     private var expired = false
     private var refreshing = false
 
@@ -93,14 +93,14 @@ class SwapConfirmViewModel(
         amountOut = quote.amountOut
         fiatServiceOut.setAmount(amountOut)
 
-        expiresIn = quote.expireAt - System.currentTimeMillis()
+        expiresIn = 10
         expired = false
         emitState()
 
         runExpirationTimer(
-            millisInFuture = expiresIn,
+            millisInFuture = expiresIn * 1000,
             onTick = { millisUntilFinished ->
-                expiresIn = millisUntilFinished
+                expiresIn = Math.ceil(millisUntilFinished / 1000.0).toLong()
                 emitState()
             },
             onFinish = {
