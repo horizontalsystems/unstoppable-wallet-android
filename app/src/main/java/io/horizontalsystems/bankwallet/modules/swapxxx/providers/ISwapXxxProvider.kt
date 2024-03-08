@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.swapxxx.providers
 
 import cash.p.terminal.modules.swapxxx.ISwapQuote
+import cash.p.terminal.modules.swapxxx.SendTransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -27,4 +28,6 @@ interface ISwapXxxProvider {
     suspend fun swap(swapQuote: ISwapQuote) {
 
     }
+
+    fun getSendTransactionData(swapQuote: ISwapQuote): SendTransactionData = TODO()
 }

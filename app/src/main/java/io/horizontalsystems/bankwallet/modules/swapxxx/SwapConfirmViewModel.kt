@@ -17,7 +17,8 @@ class SwapConfirmViewModel(
     private val settings: Map<String, Any?>,
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
-    private val fiatServiceOut: FiatService
+    private val fiatServiceOut: FiatService,
+    private val sendTransactionService: ISendTransactionService?
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private val currency = currencyManager.baseCurrency
     private val tokenIn = quote.tokenIn
@@ -111,6 +112,8 @@ class SwapConfirmViewModel(
                 emitState()
             }
         )
+
+        sendTransactionService?.setSendTransactionData(swapProvider.getSendTransactionData(swapQuote))
     }
 
     override fun onCleared() {
@@ -135,9 +138,15 @@ class SwapConfirmViewModel(
         }
     }
 
+    fun getSendTransactionService(): ISendTransactionService {
+        return sendTransactionService!!
+    }
+
     companion object {
         fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
-            SwapConfirmViewModel(quote, settings, App.currencyManager, FiatService(App.marketKit), FiatService(App.marketKit))
+            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
+
+            SwapConfirmViewModel(quote, settings, App.currencyManager, FiatService(App.marketKit), FiatService(App.marketKit), sendTransactionService)
         }
     }
 }

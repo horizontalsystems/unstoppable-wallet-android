@@ -2,6 +2,7 @@ package cash.p.terminal.modules.swapxxx.providers
 
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
+import cash.p.terminal.modules.swapxxx.SendTransactionData
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswapV3
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
@@ -14,10 +15,24 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.horizontalsystems.uniswapkit.models.DexType
 import io.horizontalsystems.uniswapkit.models.TradeOptions
+import kotlinx.coroutines.delay
 import java.math.BigDecimal
 
 abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
+
+    override fun getSendTransactionData(swapQuote: ISwapQuote): SendTransactionData {
+        check(swapQuote is SwapQuoteUniswapV3)
+
+        val blockchainType = swapQuote.tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+
+        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
+            uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
+        } ?: throw Exception("Yahoo")
+
+        return SendTransactionData.Evm(transactionData)
+    }
 
     override suspend fun swap(swapQuote: ISwapQuote) {
         check(swapQuote is SwapQuoteUniswapV3)
@@ -28,14 +43,21 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
 
         val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
             uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
-        }
+        } ?: throw Exception("Yahoo")
 
-//        try {
+        val feeData = evmBlockchainHelper.getFeeData(transactionData) ?: throw Exception("Yahoo")
+
+        val gasLimit = feeData.gasData.gasLimit
+        val gasPrice = feeData.gasData.gasPrice
+        val nonce: Long? = null
+
+        try {
+            delay(1000)
 //            val transaction = evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
-////            logger.info("success")
-//        } catch (e: Throwable) {
-////            logger.warning("failed", error)
-//        }
+//            logger.info("success")
+        } catch (e: Throwable) {
+//            logger.warning("failed", error)
+        }
     }
 
     final override suspend fun fetchQuote(

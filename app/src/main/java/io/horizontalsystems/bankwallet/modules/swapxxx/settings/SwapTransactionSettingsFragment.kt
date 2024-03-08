@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.modules.swapxxx.SwapViewModel
+import cash.p.terminal.modules.swapxxx.SwapConfirmViewModel
 
 class SwapTransactionSettingsFragment : BaseComposeFragment() {
     @Composable
@@ -15,10 +15,11 @@ class SwapTransactionSettingsFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapTransactionSettingsScreen(navController: NavController) {
-    val viewModel = viewModel<SwapViewModel>(
+    val viewModel = viewModel<SwapConfirmViewModel>(
         viewModelStoreOwner = navController.previousBackStackEntry!!,
-        factory = SwapViewModel.Factory()
     )
 
-    viewModel.uiState.tokenIn
+    val sendTransactionService = viewModel.getSendTransactionService()
+
+    sendTransactionService.GetContent(navController)
 }
