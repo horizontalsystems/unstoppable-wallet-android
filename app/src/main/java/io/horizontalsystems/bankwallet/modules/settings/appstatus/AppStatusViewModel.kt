@@ -23,7 +23,9 @@ import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModul
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 
 class AppStatusViewModel(
@@ -54,17 +56,25 @@ class AppStatusViewModel(
 
     init {
         viewModelScope.launch {
-            appStatusAsText = formatMapToString(getStatusMap())
-
             blockViewItems = listOf<AppStatusModule.BlockData>()
+                .asSequence()
                 .plus(getAppInfoBlock())
                 .plus(getVersionHistoryBlock())
                 .plus(getWalletsStatusBlock())
                 .plus(getBlockchainStatusBlock())
                 .plus(getMarketLastSyncTimestampsBlock())
                 .plus(getAppLogBlocks())
+                .toList()
 
             sync()
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            appStatusAsText = formatMapToString(getStatusMap())
+
+            withContext(Dispatchers.Main) {
+                sync()
+            }
         }
     }
 
@@ -209,11 +219,12 @@ class AppStatusViewModel(
             blockchainStatus["Solana"] = statusInfo
         }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }?.let { wallet ->
-            (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
-                blockchainStatus["Zcash"] = adapter.statusInfo
+        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
+            ?.let { wallet ->
+                (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
+                    blockchainStatus["Zcash"] = adapter.statusInfo
+                }
             }
-        }
 
         return blockchainStatus
     }
@@ -280,13 +291,14 @@ class AppStatusViewModel(
             blocks.add(block)
         }
 
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }?.let { wallet ->
-            (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
-                val title = if (blocks.isEmpty()) "Blockchain Status" else null
-                val block = getBlockchainInfoBlock(title, "Zcash", adapter.statusInfo)
-                blocks.add(block)
+        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Zcash }
+            ?.let { wallet ->
+                (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
+                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
+                    val block = getBlockchainInfoBlock(title, "Zcash", adapter.statusInfo)
+                    blocks.add(block)
+                }
             }
-        }
 
         return blocks
     }
@@ -342,7 +354,10 @@ class AppStatusViewModel(
         return AppStatusModule.BlockData(
             title = "App Info",
             content = listOf(
-                BlockContent.TitleValue("Current Time", DateHelper.formatDate(Date(), "MMM d, yyyy, HH:mm")),
+                BlockContent.TitleValue(
+                    "Current Time",
+                    DateHelper.formatDate(Date(), "MMM d, yyyy, HH:mm")
+                ),
                 BlockContent.TitleValue("App Version", systemInfoManager.appVersion),
                 BlockContent.TitleValue("Device Model", systemInfoManager.deviceModel),
                 BlockContent.TitleValue("OS Version", systemInfoManager.osVersion),
@@ -363,44 +378,43 @@ class AppStatusViewModel(
         return if (account.isWatchAccount) "Watched" else account.origin.value
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private fun formatMapToString(
-        status: Map<String, Any>?,
-        indentation: String = "",
-        bullet: String = "",
-        level: Int = 0
-    ): String? {
-        if (status == null)
-            return null
+    private fun formatMapToString(status: Map<String, Any>?): String? {
+        if (status == null) return null
+        val list = convertNestedMapToStringList(status)
+        return list.joinToString("\n")
+    }
 
-        val sb = StringBuilder()
-        status.toList().forEach { (key, value) ->
-            val title = "$indentation$bullet$key"
+    @Suppress("UNCHECKED_CAST")
+    private fun convertNestedMapToStringList(
+        map: Map<String, Any>,
+        bullet: String = "",
+        level: Int = 0,
+    ): List<String> {
+        val resultList = mutableListOf<String>()
+        map.forEach { (key, value) ->
+            val indent = "  ".repeat(level)
             when (value) {
+                is Map<*, *> -> {
+                    resultList.add("$indent$bullet$key:")
+                    resultList.addAll(
+                        convertNestedMapToStringList(
+                            map = value as Map<String, Any>,
+                            bullet = " - ",
+                            level = level + 1
+                        )
+                    )
+                    if (level < 2) resultList.add("")
+                }
+
                 is Date -> {
                     val date = DateHelper.formatDate(value, "MMM d, yyyy, HH:mm")
-                    sb.appendLine("$title: $date")
+                    resultList.add("$indent$bullet$key: $date")
                 }
 
-                is Map<*, *> -> {
-                    val formattedValue = formatMapToString(
-                        value as? Map<String, Any>,
-                        "\t\t$indentation",
-                        " - ",
-                        level + 1
-                    )
-                    sb.append("$title:\n$formattedValue${if (level < 2) "\n" else ""}")
-                }
-
-                else -> {
-                    sb.appendLine("$title: $value")
-                }
+                else -> resultList.add("$indent$bullet$key: $value")
             }
         }
-
-        val statusString = sb.trimEnd()
-
-        return if (statusString.isEmpty()) "" else "$statusString\n"
+        return resultList
     }
 
 }
