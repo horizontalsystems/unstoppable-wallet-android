@@ -1,49 +1,49 @@
-Unstoppable wallet is purposely built as a decentralized management tool for cryptocurrencies.
+Unstoppable cüzdan, kripto para birimleri için merkezi olmayan bir yönetim aracı olarak tasarlanmıştır.
 
-It is engineered to serve privacy-conscious individuals looking to manage and invest in cryptocurrencies in a sovereign and professional manner.
+Kripto para birimlerini egemen ve profesyonel bir şekilde yönetmek ve yatırım yapmak isteyen gizlilik bilincine sahip bireylere hizmet etmek için tasarlanmıştır.
 
-Unstoppable is built with the following in mind:
+Unstoppable, aşağıdakiler göz önünde bulundurularak oluşturulmuştur:
 
-- Capital Should Be Free >> It’s built to provide users with genuinely independent control over their capital.
+- Sermaye Özgür Olmalı >> Kullanıcılara sermayeleri üzerinde gerçekten bağımsız kontrol sağlamak için inşa edilmiştir.
 
-- Capital Should Be Borderless >> It works outside the traditional finance layer and acts as a Swiss knife to the world of decentralized finances (DeFi).
+- Sermaye Sınırsız Olmalı >> Geleneksel finans katmanının dışında çalışır ve merkezi olmayan finans (DeFi) dünyası için bir İsviçre bıçağı görevi görür.
 
-- Capital Should Be Private >> It doesn’t leak private data, it has no means to track users, and takes extra measures to ensure privacy on multiple layers.
+- Capital Özel Olmalı >> Özel verileri sızdırmaz, kullanıcıları izlemek için hiçbir aracı yoktur ve birden fazla katmanda gizliliği sağlamak için ekstra önlemler alır.
 
-If the above rhymes well with you then Unstoppable is for you! And we are here to focus on your unique needs and serve you in the best possible manner.
+Eğer yukarıdakiler size uyuyorsa, Durdurulamaz tam size göre! Biz de sizin benzersiz ihtiyaçlarınıza odaklanmak ve size mümkün olan en iyi şekilde hizmet etmek için buradayız.
 
-If you're merely looking for a plain way to store Bitcoin or Ethereum this app might not be for you.
+Eğer sadece Bitcoin veya Ethereum saklamak için sade bir yol arıyorsanız bu uygulama size göre olmayabilir.
 
-WALLET FEATURES:
+CÜZDAN ÖZELLIKLERI:
 
-- Non-Custodial Multi-wallet >> Manage any number of cryptocurrencies across multiple portfolio-style wallets in a non-custodial manner. This wallet is like your own bank where you are the only client and the only one in charge. It’s designed to keep assets secure and easy to restore even if the phone is stolen and tampered with.
+- Gözetimsiz Çoklu Cüzdan >> Birden fazla portföy tarzı cüzdanda istediğiniz sayıda kripto parayı gözetimsiz bir şekilde yönetin. Bu cüzdan, tek müşterinin ve tek yetkilinin siz olduğu kendi bankanız gibidir. Telefon çalınsa ve kurcalansa bile varlıkları güvende tutmak ve geri yüklemeyi kolaylaştırmak için tasarlanmıştır.
 
-- Investment Oriented Wallet >> Unstoppable brings unmatched cryptocurrency market analytics to your device: advanced sorting, curated categorization, extensive search filtering, and event-based alerting features.
+- Yatırım Odaklı Cüzdan >> Unstoppable, cihazınıza benzersiz kripto para piyasası analizleri getiriyor: gelişmiş sıralama, seçilmiş kategorizasyon, kapsamlı arama filtreleme ve olay tabanlı uyarı özellikleri.
 
-- Universal Wallet >> It supports all mainstream blockchains and is built in a standard compliant manner enabling users to use just one wallet app for everything crypto.
+- Evrensel Cüzdan >> Tüm ana akım blok zincirlerini destekler ve kullanıcıların tüm kriptolar için tek bir cüzdan uygulaması kullanmasını sağlayan standartlara uygun bir şekilde oluşturulmuştur.
 
-- A Bitcoin Wallet >> The wallet packs some of the most advanced Bitcoin features available: SPV enabled, BIP 44/49/84/69 compliant, Bitcoin timelocks, custom transaction fees, and more.
+- Bir Bitcoin Cüzdanı >> Cüzdan, mevcut en gelişmiş Bitcoin özelliklerinden bazılarını barındırır: SPV etkin, BIP 44/49/84/69 uyumlu, Bitcoin zaman kilitleri, özel işlem ücretleri ve daha fazlası.
 
-- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. Also, the ability to interact with any smart contract-powered service on the blockchain via the WalletConnect protocol.
+- Bir DeFi Cüzdanı >> Ethereum, Binance Smart Chain, Avalanche, Solana ve daha fazlasında merkezi olmayan token takasları için tam destek. Ayrıca, WalletConnect protokolü aracılığıyla blok zincirindeki herhangi bir akıllı sözleşme destekli hizmetle etkileşim kurma yeteneği.
 
-- Ethereum Wallet >> Full support for Ethereum blockchain, its growing ecosystem of tokens (ERC20, NFT tokens, etc.), and other decentralized services such as ENS (Ethereum Name Service).
+- Ethereum Cüzdan >> Ethereum blok zinciri, büyüyen token ekosistemi (ERC20, NFT tokenleri vb.) ve ENS (Ethereum Name Service) gibi diğer merkezi olmayan hizmetler için tam destek.
 
-- Ethereum L2 Wallet >> Artbitrum, Optimism, Polygon support.
+- Ethereum L2 Cüzdan >> Artbitrum, Optimism, Polygon desteği.
 
-- Avalanche Wallet >> Full support for Avalanche C-Chain blockchain.
+- Avalanche Cüzdan >> Avalanche C-Chain blok zinciri için tam destek.
 
-- Binance Wallet >> Full support for original Binance Chain (incl. BEP2) and Binance Smart Chain.
+- Binance Cüzdan >> Orijinal Binance Zinciri (BEP2 dahil) ve Binance Akıllı Zincir için tam destek.
 
-- NFT Wallet >> Full support for Non Fungible tokens (NFTs).
+- NFT Cüzdanı >> Non Fungible tokenler (NFT'ler) için tam destek.
 
-- Crypto Academy >> The app includes two courses meant to onboard newcomers into the world of cryptocurrencies and the DeFi ecosystem in an easy-to-digest manner covering essential aspects of cryptocurrency security, storage, privacy, transacting, and exchanging.
+- Crypto Academy >> Uygulama, yeni gelenleri kripto para dünyasına ve DeFi ekosistemine, kripto para güvenliği, depolama, gizlilik, işlem yapma ve takas etmenin temel yönlerini kapsayan, sindirmesi kolay bir şekilde dahil etmeyi amaçlayan iki kurs içerir.
 
-- Wallet for Privacy Coins >> Fully supports major privacy coins (ZCash, DASH) in an SPV manner. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
+- Gizlilik Paraları için Cüzdan >> SPV tarzında büyük gizlilik paralarını (ZCash, DASH) tamamen destekler. Tamamen korumalı Zcash işlemlerini ve Bitcoin işlemlerini özelleştirme yeteneğini destekleyebilen çok az sayıdaki cüzdandan biri.
 
-- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn't depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
+- Merkezi Olmayan Cüzdan >> Bir uygulamanın işlem göndermek/almak için bir cüzdan sağlayıcısının sunucusuna bağlı olmadığı, ancak doğrudan blok zinciri ağlarıyla etkileşime girdiği merkezi olmayan bir şekilde en büyük blok zincirleriyle çalışmak üzere tasarlanmıştır.
 
-- Privacy Focused >> Designed to allow for privacy even in the most privacy-breaching scenarios. There are no user accounts keeping your records, no identity checks that risk exposing your financials to the world, and no interaction with traditional finance layers. The app is partially TOR enabled and VPN support is coming soon.
+- Gizlilik Odaklı >> Gizliliği en çok ihlal eden senaryolarda bile gizliliğe izin verecek şekilde tasarlanmıştır. Kayıtlarınızı tutan kullanıcı hesapları, finansal bilgilerinizi dünyaya ifşa etme riski taşıyan kimlik kontrolleri ve geleneksel finans katmanlarıyla etkileşim yoktur. Uygulama kısmen TOR özellikli ve VPN desteği yakında geliyor.
 
-- Fully Open Source >> The most transparent wallet application built to date. The entire 4-year production process of the app is openly accessible online along with 100% of its code for anyone to evaluate or reuse in other projects. Verified and audited by third parties.
+- Tamamen Açık Kaynak >> Bugüne kadar oluşturulmuş en şeffaf cüzdan uygulaması. Uygulamanın 4 yıllık üretim sürecinin tamamı, herkesin değerlendirebilmesi veya başka projelerde yeniden kullanabilmesi için kodunun %100'ü ile birlikte çevrimiçi olarak açık bir şekilde erişilebilir durumdadır. Üçüncü taraflarca doğrulanmış ve denetlenmiştir.
 
-Be Unstoppable!  😎
+Durdurulamaz Ol!  😎
