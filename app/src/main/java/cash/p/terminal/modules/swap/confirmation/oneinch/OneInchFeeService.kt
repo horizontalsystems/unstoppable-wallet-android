@@ -20,6 +20,11 @@ import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.transformWhile
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
@@ -30,6 +35,7 @@ class OneInchFeeService(
     private val gasPriceService: IEvmGasPriceService,
     parameters: OneInchSwapParameters,
 ) : IEvmFeeService {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val disposable = CompositeDisposable()
     private var gasPriceInfoDisposable: Disposable? = null
 
@@ -51,14 +57,15 @@ class OneInchFeeService(
     override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
 
     init {
-        val gasPriceServiceState = gasPriceService.state
-        sync(gasPriceServiceState)
-        if (gasPriceServiceState.dataOrNull == null) {
-            gasPriceService.stateObservable
-                .subscribeIO {
+        coroutineScope.launch {
+            gasPriceService.stateFlow
+                .transformWhile { gasPriceServiceState ->
+                    emit(gasPriceServiceState)
+                    gasPriceServiceState.dataOrNull == null
+                }
+                .collect {
                     sync(it)
                 }
-                .let { disposable.add(it) }
         }
     }
 
@@ -67,6 +74,7 @@ class OneInchFeeService(
     }
 
     override fun clear() {
+        coroutineScope.cancel()
         disposable.clear()
         gasPriceInfoDisposable?.dispose()
         retryDisposable?.dispose()

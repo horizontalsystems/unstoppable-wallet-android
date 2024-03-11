@@ -2,6 +2,7 @@ package cash.p.terminal.modules.evmfee
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cash.p.terminal.core.ServiceState
 import cash.p.terminal.core.Warning
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.entities.DataState
@@ -63,11 +64,8 @@ interface IEvmFeeService {
     fun reset()
 }
 
-interface IEvmGasPriceService {
-    val state: DataState<GasPriceInfo>
-    val stateObservable: Observable<DataState<GasPriceInfo>>
-
-    fun setRecommended()
+abstract class IEvmGasPriceService : ServiceState<DataState<GasPriceInfo>>() {
+    abstract fun setRecommended()
 }
 
 abstract class FeeSettingsError : Throwable() {

@@ -4,12 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.core.feePriceScale
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.evmfee.FeeSummaryViewItem
@@ -19,6 +19,7 @@ import cash.p.terminal.modules.evmfee.IEvmFeeService
 import cash.p.terminal.modules.evmfee.Transaction
 import cash.p.terminal.modules.fee.FeeItem
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class LegacyFeeSettingsViewModel(
     private val gasPriceService: LegacyGasPriceService,
@@ -36,13 +37,11 @@ class LegacyFeeSettingsViewModel(
         private set
 
     init {
-        sync(gasPriceService.state)
-        gasPriceService.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            gasPriceService.stateFlow.collect {
                 sync(it)
-            }.let {
-                disposable.add(it)
             }
+        }
 
         syncTransactionStatus(feeService.transactionStatus)
         feeService.transactionStatusObservable
