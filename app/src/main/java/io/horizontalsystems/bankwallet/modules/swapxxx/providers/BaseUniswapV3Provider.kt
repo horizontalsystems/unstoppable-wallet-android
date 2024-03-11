@@ -2,8 +2,8 @@ package cash.p.terminal.modules.swapxxx.providers
 
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
-import cash.p.terminal.modules.swapxxx.SendTransactionData
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswapV3
+import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
