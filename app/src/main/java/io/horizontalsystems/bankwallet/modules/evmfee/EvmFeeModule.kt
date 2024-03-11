@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.core.ServiceState
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -63,11 +64,8 @@ interface IEvmFeeService {
     fun reset()
 }
 
-interface IEvmGasPriceService {
-    val state: DataState<GasPriceInfo>
-    val stateObservable: Observable<DataState<GasPriceInfo>>
-
-    fun setRecommended()
+abstract class IEvmGasPriceService : ServiceState<DataState<GasPriceInfo>>() {
+    abstract fun setRecommended()
 }
 
 abstract class FeeSettingsError : Throwable() {

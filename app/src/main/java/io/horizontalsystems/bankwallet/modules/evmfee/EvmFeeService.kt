@@ -10,9 +10,12 @@ import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.math.BigInteger
 
 class EvmFeeService(
@@ -22,7 +25,7 @@ class EvmFeeService(
     private val transactionData: TransactionData
 ) : IEvmFeeService {
 
-    private val disposable = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var gasPriceInfoDisposable: Disposable? = null
 
     private val evmBalance: BigInteger
@@ -37,11 +40,11 @@ class EvmFeeService(
     override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
 
     init {
-        sync(gasPriceService.state)
-        gasPriceService.stateObservable
-            .subscribeIO {
+        coroutineScope.launch {
+            gasPriceService.stateFlow.collect {
                 sync(it)
-            }.let { disposable.add(it) }
+            }
+        }
     }
 
     override fun reset() {
@@ -49,7 +52,7 @@ class EvmFeeService(
     }
 
     override fun clear() {
-        disposable.clear()
+        coroutineScope.cancel()
         gasPriceInfoDisposable?.dispose()
     }
 

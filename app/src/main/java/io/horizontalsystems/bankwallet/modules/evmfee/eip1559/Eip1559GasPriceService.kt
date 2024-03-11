@@ -3,15 +3,17 @@ package io.horizontalsystems.bankwallet.modules.evmfee.eip1559
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.evmfee.*
+import io.horizontalsystems.bankwallet.modules.evmfee.Bound
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
+import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.FeeHistory
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal
 import kotlin.math.max
 import kotlin.math.min
@@ -21,7 +23,7 @@ class Eip1559GasPriceService(
     evmKit: EthereumKit,
     minGasPrice: GasPrice.Eip1559? = null,
     initialGasPrice: GasPrice.Eip1559? = null
-) : IEvmGasPriceService {
+) : IEvmGasPriceService() {
 
     private val disposable = CompositeDisposable()
     private val blocksCount: Long = 10
@@ -38,15 +40,9 @@ class Eip1559GasPriceService(
 
     private var recommendedGasPrice: GasPrice.Eip1559? = null
 
-    override var state: DataState<GasPriceInfo> = DataState.Loading
-        private set(value) {
-            field = value
-            stateSubject.onNext(value)
-        }
+    private var state: DataState<GasPriceInfo> = DataState.Loading
 
-    private val stateSubject = PublishSubject.create<DataState<GasPriceInfo>>()
-    override val stateObservable: Observable<DataState<GasPriceInfo>>
-        get() = stateSubject
+    override fun createState() = state
 
     private var recommendedGasPriceSelected = true
 
@@ -83,6 +79,8 @@ class Eip1559GasPriceService(
                     errors = listOf()
                 )
             )
+
+            emitState()
         } ?: syncRecommended()
     }
 
@@ -91,6 +89,8 @@ class Eip1559GasPriceService(
 
         val newGasPrice = GasPrice.Eip1559(maxFee, priorityFee)
         state = validatedGasPriceInfoState(newGasPrice)
+
+        emitState()
     }
 
     private fun validatedGasPriceInfoState(gasPrice: GasPrice): DataState<GasPriceInfo> {
@@ -147,6 +147,8 @@ class Eip1559GasPriceService(
         currentBaseFee = null
         currentPriorityFee = null
         state = DataState.Error(error)
+
+        emitState()
     }
 
     private fun handle(feeHistory: FeeHistory) {
@@ -167,6 +169,8 @@ class Eip1559GasPriceService(
                 state = validatedGasPriceInfoState(it.gasPrice)
             }
         }
+
+        emitState()
     }
 
     private fun recommendedBaseFee(feeHistory: FeeHistory): Long {
