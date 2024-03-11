@@ -9,10 +9,8 @@ import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
 import java.lang.Long.max
 import java.math.BigDecimal
 
@@ -20,7 +18,7 @@ class LegacyGasPriceService(
     private val gasPriceProvider: LegacyGasPriceProvider,
     private val minRecommendedGasPrice: Long? = null,
     initialGasPrice: Long? = null,
-) : IEvmGasPriceService {
+) : IEvmGasPriceService() {
 
     var recommendedGasPrice: Long? = null
     private var disposable: Disposable? = null
@@ -28,15 +26,9 @@ class LegacyGasPriceService(
     private val overpricingBound = Bound.Multiplied(BigDecimal(1.5))
     private val riskOfStuckBound = Bound.Multiplied(BigDecimal(0.9))
 
-    override var state: DataState<GasPriceInfo> = DataState.Loading
-        private set(value) {
-            field = value
-            stateSubject.onNext(value)
-        }
+    private var state: DataState<GasPriceInfo> = DataState.Loading
 
-    private val stateSubject = PublishSubject.create<DataState<GasPriceInfo>>()
-    override val stateObservable: Observable<DataState<GasPriceInfo>>
-        get() = stateSubject
+    override fun createState() = state
 
     private val recommendedGasPriceSingle
         get() = recommendedGasPrice?.let { Single.just(it) }
@@ -57,6 +49,8 @@ class LegacyGasPriceService(
 
     override fun setRecommended() {
         state = DataState.Loading
+        emitState()
+
         disposable?.dispose()
 
         recommendedGasPriceSingle
@@ -70,8 +64,12 @@ class LegacyGasPriceService(
                         errors = listOf()
                     )
                 )
+
+                emitState()
             }, {
                 state = DataState.Error(it)
+
+                emitState()
             }).let {
                 disposable = it
             }
@@ -79,6 +77,7 @@ class LegacyGasPriceService(
 
     fun setGasPrice(value: Long) {
         state = DataState.Loading
+        emitState()
         disposable?.dispose()
 
         recommendedGasPriceSingle
@@ -103,8 +102,10 @@ class LegacyGasPriceService(
                         errors = errors
                     )
                 )
+                emitState()
             }, {
                 state = DataState.Error(it)
+                emitState()
             }).let {
                 disposable = it
             }

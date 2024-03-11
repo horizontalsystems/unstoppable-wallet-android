@@ -4,12 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.core.feePriceScale
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.FeePriceScale
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -21,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class Eip1559FeeSettingsViewModel(
     private val gasPriceService: Eip1559GasPriceService,
@@ -44,13 +45,11 @@ class Eip1559FeeSettingsViewModel(
         private set
 
     init {
-        sync(gasPriceService.state)
-        gasPriceService.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            gasPriceService.stateFlow.collect {
                 sync(it)
-            }.let {
-                disposable.add(it)
             }
+        }
 
         syncTransactionStatus(feeService.transactionStatus)
         feeService.transactionStatusObservable
