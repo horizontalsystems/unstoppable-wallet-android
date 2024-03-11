@@ -24,6 +24,7 @@ class SwapConfirmViewModel(
     private val tokenOut = quote.tokenOut
     private val amountIn = quote.amountIn
     private var amountOut = quote.amountOut
+    private var swapQuote = quote.swapQuote
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
 
@@ -91,10 +92,12 @@ class SwapConfirmViewModel(
 
     private fun handleQuote(quote: SwapProviderQuote) {
         amountOut = quote.amountOut
-        fiatServiceOut.setAmount(amountOut)
-
+        swapQuote = quote.swapQuote
         expiresIn = 10
         expired = false
+
+        fiatServiceOut.setAmount(amountOut)
+
         emitState()
 
         runExpirationTimer(
@@ -128,7 +131,7 @@ class SwapConfirmViewModel(
 
     fun swap() {
         viewModelScope.launch {
-            swapProvider.swap(quote.swapQuote)
+            swapProvider.swap(swapQuote)
         }
     }
 
