@@ -20,7 +20,6 @@ class AboutViewModel(
 
     val githubLink = appConfigProvider.appGithubLink
     val appWebPageLink = appConfigProvider.appWebPageLink
-    val twitterLink = appConfigProvider.appTwitterLink
     val appVersion: String
         get() {
             var appVersion = systemInfoManager.appVersion
