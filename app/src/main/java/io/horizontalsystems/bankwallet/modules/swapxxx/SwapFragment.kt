@@ -252,7 +252,7 @@ private fun SwapScreenInner(
                         }
                         PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel)
                     }
-                } else if (uiState.tokenIn != null && uiState.availableBalance != null) {
+                } else {
                     CardsSwapInfo {
                         AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
                     }
@@ -280,13 +280,19 @@ private fun SwapScreenInner(
 }
 
 @Composable
-private fun AvailableBalanceField(tokenIn: Token, availableBalance: BigDecimal) {
+private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?) {
     QuoteInfoRow(
         title = {
             subhead2_grey(text = stringResource(R.string.Swap_AvailableBalance))
         },
         value = {
-            subhead2_leah(text = CoinValue(tokenIn, availableBalance).getFormattedFull())
+            val text = if (tokenIn != null && availableBalance != null) {
+                CoinValue(tokenIn, availableBalance).getFormattedFull()
+            } else {
+                "-"
+            }
+
+            subhead2_leah(text = text)
         }
     )
 }
