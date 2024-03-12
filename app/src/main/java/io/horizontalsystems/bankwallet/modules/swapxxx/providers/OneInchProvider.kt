@@ -7,11 +7,14 @@ import io.horizontalsystems.bankwallet.modules.swap.scaleUp
 import io.horizontalsystems.bankwallet.modules.swapxxx.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteOneInch
+import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionData
+import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
@@ -42,6 +45,40 @@ object OneInchProvider : EvmSwapProvider() {
         -> true
 
         else -> false
+    }
+
+    override suspend fun getSendTransactionData(
+        swapQuote: ISwapQuote,
+        sendTransactionSettings: SendTransactionSettings?,
+        swapSettings: Map<String, Any?>
+    ): SendTransactionData {
+        check(sendTransactionSettings is SendTransactionSettings.Evm)
+
+        val blockchainType = swapQuote.tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+
+        val gasPrice = sendTransactionSettings.gasPriceInfo?.gasPrice
+
+        val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: throw NullPointerException()
+
+        val settingRecipient = SwapSettingRecipient(swapSettings, blockchainType)
+        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
+
+
+        val swap = oneInchKit.getSwapAsync(
+            chain = evmBlockchainHelper.chain,
+            receiveAddress = evmKitWrapper.evmKit.receiveAddress,
+            fromToken = getTokenAddress(swapQuote.tokenIn),
+            toToken = getTokenAddress(swapQuote.tokenOut),
+            amount = swapQuote.amountIn.scaleUp(swapQuote.tokenIn.decimals),
+            slippagePercentage = settingSlippage.valueOrDefault().toFloat(),
+            recipient = settingRecipient.value?.hex?.let { Address(it) },
+            gasPrice = gasPrice
+        ).await()
+
+        val swapTx = swap.transaction
+
+        return SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data))
     }
 
     override suspend fun fetchQuote(

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.swapxxx.providers
 
 import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionData
+import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -29,5 +30,9 @@ interface ISwapXxxProvider {
 
     }
 
-    fun getSendTransactionData(swapQuote: ISwapQuote): SendTransactionData = TODO()
+    suspend fun getSendTransactionData(
+        swapQuote: ISwapQuote,
+        sendTransactionSettings: SendTransactionSettings?,
+        swapSettings: Map<String, Any?>
+    ): SendTransactionData = TODO()
 }

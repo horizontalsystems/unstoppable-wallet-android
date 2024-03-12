@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteUniswapV3
 import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionData
+import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingDeadline
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
@@ -22,7 +23,11 @@ import java.math.BigDecimal
 abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
-    override fun getSendTransactionData(swapQuote: ISwapQuote): SendTransactionData {
+    override suspend fun getSendTransactionData(
+        swapQuote: ISwapQuote,
+        sendTransactionSettings: SendTransactionSettings?,
+        swapSettings: Map<String, Any?>
+    ): SendTransactionData {
         check(swapQuote is SwapQuoteUniswapV3)
 
         val blockchainType = swapQuote.tokenIn.blockchainType
