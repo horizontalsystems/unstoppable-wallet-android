@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeModule
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
+import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
@@ -22,8 +23,10 @@ import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService {
+class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService() {
     private lateinit var transactionData: TransactionData
 
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
@@ -64,6 +67,22 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
 //            App.evmLabelManager
 //        )
 //    }
+
+    private var gasPriceInfo: GasPriceInfo? = null
+
+    override fun createState() = SendTransactionSettings.Evm(
+        gasPriceInfo
+    )
+
+    override fun start(coroutineScope: CoroutineScope) {
+        coroutineScope.launch {
+            gasPriceService.stateFlow.collect {
+                gasPriceInfo = it.dataOrNull
+
+                emitState()
+            }
+        }
+    }
 
     override fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Evm)

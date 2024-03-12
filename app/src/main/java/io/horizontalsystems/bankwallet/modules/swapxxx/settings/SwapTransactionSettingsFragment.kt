@@ -19,7 +19,7 @@ fun SwapTransactionSettingsScreen(navController: NavController) {
         viewModelStoreOwner = navController.previousBackStackEntry!!,
     )
 
-    val sendTransactionService = viewModel.getSendTransactionService()
+    val sendTransactionService = viewModel.sendTransactionService
 
     sendTransactionService.GetContent(navController)
 }

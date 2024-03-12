@@ -2,9 +2,12 @@ package io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.core.ServiceState
+import kotlinx.coroutines.CoroutineScope
 
-interface ISendTransactionService {
+abstract class ISendTransactionService: ServiceState<SendTransactionSettings>() {
+    abstract fun start(coroutineScope: CoroutineScope)
+    abstract fun setSendTransactionData(data: SendTransactionData)
     @Composable
-    fun GetContent(navController: NavController)
-    fun setSendTransactionData(data: SendTransactionData)
+    abstract fun GetContent(navController: NavController)
 }
