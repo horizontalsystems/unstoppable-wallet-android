@@ -29,17 +29,14 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val walletConnectAppMetaDataIcon by lazy { Translator.getString(R.string.walletConnectAppMetaDataIcon) }
     val accountsBackupFileSalt by lazy { Translator.getString(R.string.accountsBackupFileSalt) }
 
+    val blocksDecodedEthereumRpc by lazy {
+        Translator.getString(R.string.blocksDecodedEthereumRpc)
+    }
     val twitterBearerToken by lazy {
         Translator.getString(R.string.twitterBearerToken)
     }
     val cryptoCompareApiKey by lazy {
         Translator.getString(R.string.cryptoCompareApiKey)
-    }
-    val infuraProjectId by lazy {
-        Translator.getString(R.string.infuraProjectId)
-    }
-    val infuraProjectSecret by lazy {
-        Translator.getString(R.string.infuraSecretKey)
     }
     val etherscanApiKey by lazy {
         Translator.getString(R.string.etherscanKey)
