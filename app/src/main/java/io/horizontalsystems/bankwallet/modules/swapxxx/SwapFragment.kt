@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
@@ -76,6 +77,7 @@ import cash.p.terminal.ui.compose.components.body_grey
 import cash.p.terminal.ui.compose.components.cell.CellUniversal
 import cash.p.terminal.ui.compose.components.headline1_grey
 import cash.p.terminal.ui.compose.components.headline1_leah
+import cash.p.terminal.ui.compose.components.micro_grey
 import cash.p.terminal.ui.compose.components.subhead1_jacob
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
@@ -584,7 +586,11 @@ private fun CoinSelector(
         },
         text = {
             if (token != null) {
-                subhead1_leah(text = token.coin.code)
+                Column {
+                    subhead1_leah(text = token.coin.code)
+                    VSpacer(height = 1.dp)
+                    micro_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+                }
             } else {
                 subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
             }
