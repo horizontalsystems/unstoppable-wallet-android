@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -124,7 +125,7 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.blockchainSettingsFragment)
                 }
             )
-        },{
+        }, {
             HsSettingCell(
                 R.string.BackupManager_Title,
                 R.drawable.ic_file_24,
@@ -133,7 +134,7 @@ private fun SettingSections(
                 }
             )
         }
-            )
+        )
     )
 
     VSpacer(32.dp)
@@ -150,9 +151,11 @@ private fun SettingSections(
                         WCManager.SupportState.Supported -> {
                             navController.slideFromRight(R.id.wcListFragment)
                         }
+
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                         }
+
                         is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                             navController.slideFromBottom(
@@ -160,6 +163,7 @@ private fun SettingSections(
                                 BackupRequiredDialog.Input(state.account, text)
                             )
                         }
+
                         is WCManager.SupportState.NotSupported -> {
                             navController.slideFromBottom(
                                 R.id.wcAccountTypeNotSupportedDialog,
@@ -191,7 +195,10 @@ private fun SettingSections(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {
-                        navController.slideFromRight(R.id.contactsFragment, ContactsFragment.Input(Mode.Full))
+                        navController.slideFromRight(
+                            R.id.contactsFragment,
+                            ContactsFragment.Input(Mode.Full)
+                        )
                     }
                 )
             },
@@ -252,7 +259,31 @@ private fun SettingSections(
     VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
-        listOf {
+        listOf({
+            HsSettingCell(
+                R.string.Settings_Telegram,
+                R.drawable.ic_telegram_20,
+                showAlert = showAlertAboutApp,
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Twitter,
+                R.drawable.ic_twitter_20,
+                showAlert = showAlertAboutApp,
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
+                }
+            )
+        })
+    )
+
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf({
             HsSettingCell(
                 R.string.SettingsAboutApp_Title,
                 R.drawable.ic_about_app_20,
@@ -261,13 +292,7 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.aboutAppFragment)
                 }
             )
-        }
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf({
+        }, {
             HsSettingCell(
                 R.string.Settings_RateUs,
                 R.drawable.ic_star_20,
@@ -352,7 +377,12 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        caption_grey(text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion).uppercase())
+        caption_grey(
+            text = stringResource(
+                R.string.Settings_InfoTitleWithVersion,
+                appVersion
+            ).uppercase()
+        )
         Divider(
             modifier = Modifier
                 .width(100.dp)
