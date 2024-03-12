@@ -50,20 +50,8 @@ class EvmSyncSourceManager(
             BlockchainType.Ethereum -> listOf(
                 evmSyncSource(
                     type,
-                    "Infura",
-                    RpcSource.ethereumInfuraWebSocket(
-                        appConfigProvider.infuraProjectId,
-                        appConfigProvider.infuraProjectSecret
-                    ),
-                    defaultTransactionSource(type)
-                ),
-                evmSyncSource(
-                    type,
-                    "Infura",
-                    RpcSource.ethereumInfuraHttp(
-                        appConfigProvider.infuraProjectId,
-                        appConfigProvider.infuraProjectSecret
-                    ),
+                    "BlocksDecoded",
+                    RpcSource.Http(listOf(URI(appConfigProvider.blocksDecodedEthereumRpc)), null),
                     defaultTransactionSource(type)
                 ),
                 evmSyncSource(
