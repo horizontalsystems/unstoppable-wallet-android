@@ -4,6 +4,7 @@ import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.modules.swapxxx.ISwapQuote
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswapV3
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionData
+import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
@@ -22,7 +23,11 @@ import java.math.BigDecimal
 abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
-    override fun getSendTransactionData(swapQuote: ISwapQuote): SendTransactionData {
+    override suspend fun getSendTransactionData(
+        swapQuote: ISwapQuote,
+        sendTransactionSettings: SendTransactionSettings?,
+        swapSettings: Map<String, Any?>
+    ): SendTransactionData {
         check(swapQuote is SwapQuoteUniswapV3)
 
         val blockchainType = swapQuote.tokenIn.blockchainType

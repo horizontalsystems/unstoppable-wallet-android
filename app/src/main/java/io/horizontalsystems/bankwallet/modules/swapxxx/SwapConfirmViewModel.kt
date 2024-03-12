@@ -9,19 +9,21 @@ import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.swapxxx.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionServiceFactory
+import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SwapConfirmViewModel(
-    private var quote: SwapProviderQuote,
-    private val settings: Map<String, Any?>,
+    quote: SwapProviderQuote,
+    private val swapSettings: Map<String, Any?>,
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
-    private val sendTransactionService: ISendTransactionService?
+    val sendTransactionService: ISendTransactionService
 ) : ViewModelUiState<SwapConfirmUiState>() {
+    private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
     private val tokenIn = quote.tokenIn
     private val tokenOut = quote.tokenOut
@@ -61,7 +63,16 @@ class SwapConfirmViewModel(
             }
         }
 
-        handleQuote(quote)
+        viewModelScope.launch {
+            sendTransactionService.stateFlow.collect {
+                sendTransactionSettings = it
+
+                xxx()
+            }
+        }
+
+        sendTransactionService.start(viewModelScope)
+        handleSwapQuote(quote.swapQuote)
     }
 
     override fun createState() = SwapConfirmUiState(
@@ -88,20 +99,17 @@ class SwapConfirmViewModel(
         }
     }
 
-    private suspend fun reFetchQuote() = SwapProviderQuote(
-        provider = swapProvider,
-        swapQuote = swapProvider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
-    )
-
-    private fun handleQuote(quote: SwapProviderQuote) {
-        amountOut = quote.amountOut
-        swapQuote = quote.swapQuote
+    private fun handleSwapQuote(swapQuote: ISwapQuote) {
+        amountOut = swapQuote.amountOut
+        this.swapQuote = swapQuote
         expiresIn = 10
         expired = false
 
         fiatServiceOut.setAmount(amountOut)
 
         emitState()
+
+        xxx()
 
         runExpirationTimer(
             millisInFuture = expiresIn * 1000,
@@ -114,8 +122,20 @@ class SwapConfirmViewModel(
                 emitState()
             }
         )
+    }
 
-        sendTransactionService?.setSendTransactionData(swapProvider.getSendTransactionData(swapQuote))
+    private fun xxx() {
+        if (sendTransactionSettings == null) return
+
+        viewModelScope.launch(Dispatchers.Default) {
+            sendTransactionService.setSendTransactionData(
+                swapProvider.getSendTransactionData(
+                    swapQuote,
+                    sendTransactionSettings,
+                    swapSettings
+                )
+            )
+        }
     }
 
     override fun onCleared() {
@@ -127,10 +147,10 @@ class SwapConfirmViewModel(
             refreshing = true
             emitState()
 
-            val newQuote = reFetchQuote()
+            val newSwapQuote = swapProvider.fetchQuote(tokenIn, tokenOut, amountIn, swapSettings)
             refreshing = false
 
-            handleQuote(newQuote)
+            handleSwapQuote(newSwapQuote)
         }
     }
 
@@ -138,10 +158,6 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             swapProvider.swap(swapQuote)
         }
-    }
-
-    fun getSendTransactionService(): ISendTransactionService {
-        return sendTransactionService!!
     }
 
     companion object {
