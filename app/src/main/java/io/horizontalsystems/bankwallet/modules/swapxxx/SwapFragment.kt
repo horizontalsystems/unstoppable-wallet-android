@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,9 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -662,20 +665,45 @@ private fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
 ) {
-    var text by remember(value) {
-        mutableStateOf(value?.toPlainString() ?: "")
+    var textFieldValue by rememberSaveable(value, stateSaver = TextFieldValue.Saver) {
+        val valueStr = value?.toPlainString()
+        val cursorPosition = valueStr?.length ?: 0
+
+        mutableStateOf(
+            TextFieldValue(
+                text = valueStr ?: "",
+                selection = TextRange(cursorPosition)
+            )
+        )
     }
+
+    var setCursorToEnd by remember {
+        mutableStateOf(false)
+    }
+
     BasicTextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = text,
-        onValueChange = {
+        modifier = Modifier
+            .fillMaxWidth()
+            .onFocusChanged {
+                setCursorToEnd = it.isFocused
+            },
+        value = textFieldValue,
+        onValueChange = { newValue ->
             try {
-                val amount = if (it.isBlank()) {
+                val text = newValue.text
+                val amount = if (text.isBlank()) {
                     null
                 } else {
-                    it.toBigDecimal()
+                    text.toBigDecimal()
                 }
-                text = it
+
+                textFieldValue = if (setCursorToEnd) {
+                    setCursorToEnd = false
+                    newValue.copy(selection = TextRange(text.length))
+                } else {
+                    newValue
+                }
+
                 onValueChange.invoke(amount)
             } catch (e: Exception) {
 
@@ -690,7 +718,7 @@ private fun AmountInput(
         ),
         cursorBrush = SolidColor(ComposeAppTheme.colors.jacob),
         decorationBox = { innerTextField ->
-            if (text.isEmpty()) {
+            if (textFieldValue.text.isEmpty()) {
                 headline1_grey(text = "0")
             }
             innerTextField()
