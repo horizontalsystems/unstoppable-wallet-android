@@ -879,6 +879,8 @@
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
     <string name="Settings_AutoLock">Auto-Lock</string>
+    <string name="Settings_Telegram" translatable="false">Telegram</string>
+    <string name="Settings_Twitter" translatable="false">Twitter</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
@@ -922,7 +924,6 @@
 
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
-    <string name="SettingsAboutApp_Twitter" translatable="false">Twitter</string>
     <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
 
