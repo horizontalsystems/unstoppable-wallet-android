@@ -209,11 +209,18 @@ private fun SwapScreenInner(
                         onClick = { /*TODO*/ }
                     )
                 } else {
+                    val title = when {
+                        uiState.tokenIn == null -> stringResource(R.string.Swap_SelectTokenIn)
+                        uiState.tokenOut == null -> stringResource(R.string.Swap_SelectTokenOut)
+                        uiState.amountIn == null -> stringResource(R.string.Swap_EnterAmount)
+                        else -> stringResource(R.string.Swap_Proceed)
+                    }
+
                     ButtonPrimaryYellow(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
-                        title = stringResource(R.string.Swap_Proceed),
+                        title = title,
                         enabled = uiState.swapEnabled,
                         onClick = onClickNext
                     )
