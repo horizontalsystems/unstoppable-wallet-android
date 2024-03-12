@@ -47,6 +47,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -76,6 +77,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -584,7 +586,11 @@ private fun CoinSelector(
         },
         text = {
             if (token != null) {
-                subhead1_leah(text = token.coin.code)
+                Column {
+                    subhead1_leah(text = token.coin.code)
+                    VSpacer(height = 1.dp)
+                    micro_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+                }
             } else {
                 subhead1_jacob(text = stringResource(R.string.Swap_TokenSelectorTitle))
             }
