@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvide
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class SwapViewModel(
     private val quoteService: SwapQuoteService,
@@ -140,6 +141,17 @@ class SwapViewModel(
     private fun isSwapEnabled() = quoteState.quote != null
 
     fun onEnterAmount(v: BigDecimal?) = quoteService.setAmount(v)
+    fun onEnterAmountPercentage(percentage: Int) {
+        val tokenIn = quoteState.tokenIn ?: return
+        val availableBalance = availableBalance ?: return
+
+        val amount = availableBalance
+            .times(BigDecimal(percentage / 100.0))
+            .setScale(tokenIn.decimals, RoundingMode.DOWN)
+            .stripTrailingZeros()
+
+        quoteService.setAmount(amount)
+    }
     fun onSelectTokenIn(token: Token) = quoteService.setTokenIn(token)
     fun onSelectTokenOut(token: Token) = quoteService.setTokenOut(token)
     fun onSwitchPairs() = quoteService.switchPairs()
