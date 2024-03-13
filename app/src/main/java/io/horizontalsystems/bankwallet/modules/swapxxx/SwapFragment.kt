@@ -199,31 +199,46 @@ private fun SwapScreenInner(
 
                 VSpacer(height = 12.dp)
 
-                if (uiState.quoting) {
-                    ButtonPrimaryYellowWithSpinner(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                        title = stringResource(R.string.Alert_Loading),
-                        enabled = false,
-                        onClick = { /*TODO*/ }
-                    )
-                } else {
-                    val title = when {
-                        uiState.tokenIn == null -> stringResource(R.string.Swap_SelectTokenIn)
-                        uiState.tokenOut == null -> stringResource(R.string.Swap_SelectTokenOut)
-                        uiState.amountIn == null -> stringResource(R.string.Swap_EnterAmount)
-                        else -> stringResource(R.string.Swap_Proceed)
+                when (val currentStep = uiState.currentStep) {
+                    is SwapStep.InputRequired -> {
+                        val title = when (currentStep.inputType) {
+                            InputType.TokenIn -> stringResource(R.string.Swap_SelectTokenIn)
+                            InputType.TokenOut -> stringResource(R.string.Swap_SelectTokenOut)
+                            InputType.Amount -> stringResource(R.string.Swap_EnterAmount)
+                        }
+
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = title,
+                            enabled = uiState.swapEnabled,
+                            onClick = onClickNext
+                        )
                     }
 
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                        title = title,
-                        enabled = uiState.swapEnabled,
-                        onClick = onClickNext
-                    )
+                    SwapStep.Quoting -> {
+                        ButtonPrimaryYellowWithSpinner(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = stringResource(R.string.Alert_Loading),
+                            enabled = false,
+                            onClick = { /*TODO*/ }
+                        )
+                    }
+
+                    SwapStep.Error -> TODO()
+                    SwapStep.Proceed -> {
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = stringResource(R.string.Swap_Proceed),
+                            enabled = uiState.swapEnabled,
+                            onClick = onClickNext
+                        )
+                    }
                 }
 
                 VSpacer(height = 12.dp)
