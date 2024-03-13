@@ -202,4 +202,26 @@ data class SwapUiState(
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
     val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?
-)
+) {
+    val currentStep: SwapStep
+        get() = when {
+            tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
+            tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
+            amountIn == null -> SwapStep.InputRequired(InputType.Amount)
+            quoting -> SwapStep.Quoting
+            else -> SwapStep.Proceed
+        }
+}
+
+sealed class SwapStep {
+    data class InputRequired(val inputType: InputType) : SwapStep()
+    object Quoting : SwapStep()
+    object Error : SwapStep()
+    object Proceed : SwapStep()
+}
+
+enum class InputType {
+    TokenIn,
+    TokenOut,
+    Amount
+}
