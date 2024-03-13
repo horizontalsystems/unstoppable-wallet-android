@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteOneInch
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -19,7 +20,7 @@ import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-object OneInchProvider : ISwapXxxProvider {
+object OneInchProvider : EvmSwapProvider() {
     override val id = "oneinch"
     override val title = "1inch"
     override val url = "https://app.1inch.io/"
@@ -68,6 +69,9 @@ object OneInchProvider : ISwapXxxProvider {
         val fields = buildList {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
+            }
+            getAllowance(tokenIn, OneInchKit.routerAddress(evmBlockchainHelper.chain))?.let {
+                add(SwapDataFieldAllowance(it, tokenIn))
             }
         }
 

@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTrans
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingDeadline
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -18,7 +19,7 @@ import io.horizontalsystems.uniswapkit.models.TradeOptions
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 
-abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
+abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
 
     override fun getSendTransactionData(swapQuote: ISwapQuote): SendTransactionData {
@@ -97,6 +98,9 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : ISwapXxxProvider {
         val fields = buildList {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
+            }
+            getAllowance(tokenIn, uniswapV3Kit.routerAddress(chain))?.let {
+                add(SwapDataFieldAllowance(it, tokenIn))
             }
         }
 
