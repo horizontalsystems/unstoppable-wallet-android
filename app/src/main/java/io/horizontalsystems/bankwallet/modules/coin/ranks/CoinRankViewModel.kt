@@ -35,7 +35,7 @@ class CoinRankViewModel(
 
     private var internalItems: List<InternalItem> = emptyList()
     private var viewState: ViewState = ViewState.Loading
-    private val periodOptions = TimeDuration.values().toList()
+    private val periodOptions = listOf(TimeDuration.OneDay, TimeDuration.SevenDay, TimeDuration.ThirtyDay)
     private var selectedPeriod: TimeDuration = periodOptions[2]
     private val periodMenu = getPeriodMenu()
 
