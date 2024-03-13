@@ -6,6 +6,7 @@ import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
+import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldAllowance
 import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
@@ -18,7 +19,7 @@ import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
-abstract class BaseUniswapProvider : ISwapXxxProvider {
+abstract class BaseUniswapProvider : EvmSwapProvider() {
     private val uniswapKit by lazy { UniswapKit.getInstance() }
 
     final override suspend fun fetchQuote(
@@ -45,6 +46,9 @@ abstract class BaseUniswapProvider : ISwapXxxProvider {
         val fields = buildList {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
+            }
+            getAllowance(tokenIn, uniswapKit.routerAddress(evmBlockchainHelper.chain))?.let {
+                add(SwapDataFieldAllowance(it, tokenIn))
             }
         }
 
