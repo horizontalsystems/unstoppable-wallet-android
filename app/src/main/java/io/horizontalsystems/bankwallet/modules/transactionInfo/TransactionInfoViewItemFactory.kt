@@ -406,7 +406,13 @@ class TransactionInfoViewItemFactory(
 
             is BitcoinOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(getSendSectionItems(transaction.value, transaction.to, rates[transaction.value.coinUid], transaction.sentToSelf))
+                itemSections.add(getSendSectionItems(
+                    value = transaction.value,
+                    toAddress = transaction.to,
+                    coinPrice = rates[transaction.value.coinUid],
+                    hideAmount = transactionItem.hideAmount,
+                    sentToSelf = transaction.sentToSelf
+                ))
 
                 miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
                 addMemoItem(transaction.memo, miscItemsSection)
@@ -503,7 +509,9 @@ class TransactionInfoViewItemFactory(
 
         itemSections.add(getStatusSectionItems(transaction, status, rates))
         if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
-            itemSections.add(listOf(SpeedUpCancel(transactionHash = transaction.transactionHash)))
+            itemSections.add(listOf(SpeedUpCancel(transactionHash = transaction.transactionHash, blockchainType = transaction.blockchainType)))
+        } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
+            itemSections.add(listOf(SpeedUpCancel(transactionHash = transaction.transactionHash, blockchainType = transaction.blockchainType)))
         }
         itemSections.add(getExplorerSectionItems(transactionItem.explorerData))
 

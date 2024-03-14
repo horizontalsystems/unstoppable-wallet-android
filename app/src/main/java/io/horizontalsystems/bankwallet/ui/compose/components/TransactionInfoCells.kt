@@ -45,6 +45,7 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
+import io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -310,6 +311,7 @@ fun TransactionInfoStatusCell(
 @Composable
 fun TransactionInfoSpeedUpCell(
     transactionHash: String,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
     RowUniversal(
@@ -318,6 +320,7 @@ fun TransactionInfoSpeedUpCell(
             openTransactionOptionsModule(
                 TransactionInfoOptionsModule.Type.SpeedUp,
                 transactionHash,
+                blockchainType,
                 navController
             )
         }
@@ -335,6 +338,7 @@ fun TransactionInfoSpeedUpCell(
 @Composable
 fun TransactionInfoCancelCell(
     transactionHash: String,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
     RowUniversal(
@@ -343,6 +347,7 @@ fun TransactionInfoCancelCell(
             openTransactionOptionsModule(
                 TransactionInfoOptionsModule.Type.Cancel,
                 transactionHash,
+                blockchainType,
                 navController
             )
         }
@@ -577,11 +582,45 @@ fun TransactionInfoCell(title: String, value: String) {
     }
 }
 
-private fun openTransactionOptionsModule(type: TransactionInfoOptionsModule.Type, transactionHash: String, navController: NavController) {
-    navController.slideFromRight(
-        R.id.transactionSpeedUpCancelFragment,
-        TransactionSpeedUpCancelFragment.Input(type, transactionHash)
-    )
+private fun openTransactionOptionsModule(
+    type: TransactionInfoOptionsModule.Type,
+    transactionHash: String,
+    blockchainType: BlockchainType,
+    navController: NavController
+) {
+    when (blockchainType) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash -> {
+            navController.slideFromRight(
+                R.id.resendBitcoinFragment,
+                ResendBitcoinFragment.Input(type)
+            )
+        }
+
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.BinanceChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne -> {
+            navController.slideFromRight(
+                R.id.transactionSpeedUpCancelFragment,
+                TransactionSpeedUpCancelFragment.Input(type, transactionHash)
+            )
+        }
+
+        BlockchainType.Zcash,
+        BlockchainType.Solana,
+        BlockchainType.Gnosis,
+        BlockchainType.Fantom,
+        BlockchainType.Tron,
+        BlockchainType.Ton,
+        is BlockchainType.Unsupported -> Unit
+    }
 }
 
 private fun statusTitle(status: TransactionStatus) = when (status) {

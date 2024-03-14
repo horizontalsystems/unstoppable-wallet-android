@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
+import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -43,7 +44,8 @@ object TransactionsModule {
 data class TransactionLockInfo(
     val lockedUntil: Date,
     val originalAddress: String,
-    val amount: BigDecimal?
+    val amount: BigDecimal?,
+    val lockTimeInterval: LockTimeInterval
 )
 
 sealed class TransactionStatus {

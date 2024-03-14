@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class TransactionInfoService(
-    private val transactionRecord: TransactionRecord,
+    val transactionRecord: TransactionRecord,
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,

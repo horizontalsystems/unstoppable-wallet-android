@@ -16,6 +16,7 @@ class TransactionInfoViewModel(
 ) : ViewModel() {
 
     val source: TransactionSource by service::source
+    val transactionRecord by service::transactionRecord
 
     var viewItems by mutableStateOf<List<List<TransactionInfoViewItem>>>(listOf())
         private set
