@@ -150,7 +150,7 @@ private fun TokenBalanceHeader(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         VSpacer(height = (24.dp))
@@ -162,7 +162,6 @@ private fun TokenBalanceHeader(
         VSpacer(height = 12.dp)
         Text(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -204,7 +203,6 @@ private fun LockedBalanceCell(balanceViewItem: BalanceViewItem, navController: N
         VSpacer(height = 8.dp)
         RowUniversal(
             modifier = Modifier
-                .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
                 .padding(horizontal = 16.dp),
@@ -329,7 +327,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     }
 
     Row(
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 16.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 16.dp)
     ) {
         if (viewItem.isWatchAccount) {
             ButtonPrimaryDefault(

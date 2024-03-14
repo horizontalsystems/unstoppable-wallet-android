@@ -175,10 +175,18 @@ fun TransactionInfoSection(
 
                     is TransactionInfoViewItem.SpeedUpCancel -> {
                         add {
-                            TransactionInfoSpeedUpCell(transactionHash = viewItem.transactionHash, navController = navController)
+                            TransactionInfoSpeedUpCell(
+                                transactionHash = viewItem.transactionHash,
+                                blockchainType = viewItem.blockchainType,
+                                navController = navController
+                            )
                         }
                         add {
-                            TransactionInfoCancelCell(transactionHash = viewItem.transactionHash, navController = navController)
+                            TransactionInfoCancelCell(
+                                transactionHash = viewItem.transactionHash,
+                                blockchainType = viewItem.blockchainType,
+                                navController = navController
+                            )
                         }
                     }
 
