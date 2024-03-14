@@ -22,7 +22,8 @@ class EvmFeeService(
     private val evmKit: EthereumKit,
     private val gasPriceService: IEvmGasPriceService,
     private val gasDataService: EvmCommonGasDataService,
-    private val transactionData: TransactionData
+    private val transactionData: TransactionData,
+    private val gasLimit: Long? = null,
 ) : IEvmFeeService {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -116,19 +117,24 @@ class EvmFeeService(
         gasPrice: GasPrice,
         gasPriceDefault: GasPrice,
         stubAmount: BigInteger? = null
-    ): Single<GasData> = gasDataService.estimatedGasDataAsync(gasPrice, transactionData, stubAmount)
-        .onErrorResumeNext { error ->
-            if (error.convertedError == EvmError.LowerThanBaseGasLimit) {
-                gasDataService.estimatedGasDataAsync(gasPriceDefault, transactionData, stubAmount)
-                    .map {
-                        it.gasPrice = gasPrice
-                        it
-                    }
-            } else {
-                Single.error(error)
-            }
+    ): Single<GasData> {
+        if (gasLimit != null) {
+            return Single.just(GasData(gasLimit = gasLimit, gasPrice = gasPrice))
         }
 
+        return gasDataService.estimatedGasDataAsync(gasPrice, transactionData, stubAmount)
+            .onErrorResumeNext { error ->
+                if (error.convertedError == EvmError.LowerThanBaseGasLimit) {
+                    gasDataService.estimatedGasDataAsync(gasPriceDefault, transactionData, stubAmount)
+                        .map {
+                            it.gasPrice = gasPrice
+                            it
+                        }
+                } else {
+                    Single.error(error)
+                }
+            }
+    }
 
     private fun sync(transaction: Transaction) {
         transactionStatus = if (transaction.totalAmount > evmBalance) {

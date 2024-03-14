@@ -78,7 +78,7 @@ object OneInchProvider : EvmSwapProvider() {
 
         val swapTx = swap.transaction
 
-        return SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data))
+        return SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit)
     }
 
     override suspend fun fetchQuote(

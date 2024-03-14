@@ -125,16 +125,16 @@ class SwapConfirmViewModel(
     }
 
     private fun xxx() {
-        if (sendTransactionSettings == null) return
-
         viewModelScope.launch(Dispatchers.Default) {
-            sendTransactionService.setSendTransactionData(
-                swapProvider.getSendTransactionData(
+            try {
+                val sendTransactionData = swapProvider.getSendTransactionData(
                     swapQuote,
                     sendTransactionSettings,
                     swapSettings
                 )
-            )
+                sendTransactionService.setSendTransactionData(sendTransactionData)
+            } catch (t: Throwable) {
+            }
         }
     }
 
