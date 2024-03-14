@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 
 class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService() {
     private lateinit var transactionData: TransactionData
+    private var gasLimit: Long? = null
 
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
@@ -46,7 +47,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             evmKitWrapper.evmKit,
             evmKitWrapper.blockchainType
         )
-        EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
+        EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData, gasLimit)
     }
     private val coinServiceFactory by lazy {
         EvmCoinServiceFactory(
@@ -88,6 +89,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         check(data is SendTransactionData.Evm)
 
         transactionData = data.transactionData
+        gasLimit = data.gasLimit
     }
 
     @Composable

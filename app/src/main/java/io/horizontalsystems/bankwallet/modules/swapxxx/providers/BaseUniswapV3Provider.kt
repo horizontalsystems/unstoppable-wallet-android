@@ -37,7 +37,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
         } ?: throw Exception("Yahoo")
 
-        return SendTransactionData.Evm(transactionData)
+        return SendTransactionData.Evm(transactionData, null)
     }
 
     override suspend fun swap(swapQuote: ISwapQuote) {
