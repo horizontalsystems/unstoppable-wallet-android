@@ -420,6 +420,7 @@
     <string name="Send_Confirmation_YouSend">You Send</string>
     <string name="Send_Confirmation_Amount">Amount</string>
     <string name="Send_Confirmation_To">To</string>
+    <string name="Send_Confirmation_Own">Own</string>
     <string name="Send_Confirmation_Method">Method</string>
     <string name="Send_Confirmation_Nonce" translatable="false">Nonce</string>
     <string name="Send_Confirmation_Receiver">Receiver</string>
@@ -823,6 +824,13 @@
     <string name="TransactionInfoOptions_Cancel_Button">Cancel Transaction</string>
 
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction already in block</string>
+
+    <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Replaced Transactions</string>
+    <string name="TransactionInfoOptions_Rbf_Cancel_Description">This action will attempt to invalidate the previous transaction by resending it as a new transaction sending some amount to self. If the original transaction remains pending when a new one is sent there is a high chance (not guaranteed) that it will be invalidated and replaced. Only one of these two transactions will be included in the blockchain.</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTitle">Fee (Sat)</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTooLow">Fee Too Low</string>
+    <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF not enabled</string>
+    <string name="TransactionInfoOptions_Rbf_UnableToReplace">Unable to replace</string>
 
     <!-- Info -->
 

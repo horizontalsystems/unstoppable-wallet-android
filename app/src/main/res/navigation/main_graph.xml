@@ -32,6 +32,9 @@
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="cash.p.terminal.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"/>
     <fragment
+        android:id="@+id/resendBitcoinFragment"
+        android:name="cash.p.terminal.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment"/>
+    <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="cash.p.terminal.modules.managewallets.ManageWalletsFragment"/>
     <fragment

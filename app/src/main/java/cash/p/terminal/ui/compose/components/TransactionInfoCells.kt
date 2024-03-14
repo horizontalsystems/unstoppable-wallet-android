@@ -45,6 +45,7 @@ import cash.p.terminal.modules.transactionInfo.ColoredValue
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem
 import cash.p.terminal.modules.transactionInfo.options.TransactionInfoOptionsModule
 import cash.p.terminal.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
+import cash.p.terminal.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.helpers.LinkHelper
@@ -313,6 +314,7 @@ fun TransactionInfoStatusCell(
 @Composable
 fun TransactionInfoSpeedUpCell(
     transactionHash: String,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
     RowUniversal(
@@ -321,6 +323,7 @@ fun TransactionInfoSpeedUpCell(
             openTransactionOptionsModule(
                 TransactionInfoOptionsModule.Type.SpeedUp,
                 transactionHash,
+                blockchainType,
                 navController
             )
         }
@@ -338,6 +341,7 @@ fun TransactionInfoSpeedUpCell(
 @Composable
 fun TransactionInfoCancelCell(
     transactionHash: String,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
     RowUniversal(
@@ -346,6 +350,7 @@ fun TransactionInfoCancelCell(
             openTransactionOptionsModule(
                 TransactionInfoOptionsModule.Type.Cancel,
                 transactionHash,
+                blockchainType,
                 navController
             )
         }
@@ -582,12 +587,45 @@ fun TransactionInfoCell(title: String, value: String) {
     }
 }
 
-private fun openTransactionOptionsModule(type: TransactionInfoOptionsModule.Type, transactionHash: String, navController: NavController) {
-    val params = TransactionSpeedUpCancelFragment.prepareParams(type, transactionHash)
-    navController.slideFromRight(
-        R.id.transactionSpeedUpCancelFragment,
-        params
-    )
+private fun openTransactionOptionsModule(
+    type: TransactionInfoOptionsModule.Type,
+    transactionHash: String,
+    blockchainType: BlockchainType,
+    navController: NavController
+) {
+    when (blockchainType) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash -> {
+            navController.slideFromRight(
+                R.id.resendBitcoinFragment,
+                ResendBitcoinFragment.Input(type)
+            )
+        }
+
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.BinanceChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne -> {
+            navController.slideFromRight(
+                R.id.transactionSpeedUpCancelFragment,
+                TransactionSpeedUpCancelFragment.Input(type, transactionHash)
+            )
+        }
+
+        BlockchainType.Zcash,
+        BlockchainType.Solana,
+        BlockchainType.Gnosis,
+        BlockchainType.Fantom,
+        BlockchainType.Tron,
+        BlockchainType.Ton,
+        is BlockchainType.Unsupported -> Unit
+    }
 }
 
 private fun statusTitle(status: TransactionStatus) = when (status) {

@@ -356,7 +356,8 @@ class ZcashAdapter(
                 to = transaction.toAddress,
                 sentToSelf = false,
                 memo = transaction.memo,
-                source = wallet.transactionSource
+                source = wallet.transactionSource,
+                replaceable = false
             )
         }
     }

@@ -35,7 +35,7 @@ sealed class TransactionInfoViewItem {
 
     object SentToSelf : TransactionInfoViewItem()
 
-    class SpeedUpCancel(val transactionHash: String) : TransactionInfoViewItem()
+    class SpeedUpCancel(val transactionHash: String, val blockchainType: BlockchainType) : TransactionInfoViewItem()
 
     class WarningMessage(val message: String) : TransactionInfoViewItem()
 }
