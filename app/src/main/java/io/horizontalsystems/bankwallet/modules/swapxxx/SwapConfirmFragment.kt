@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
@@ -92,7 +93,7 @@ fun SwapConfirmScreen(navController: NavController) {
         bottomBar = {
             ButtonsGroupWithShade {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    if (uiState.refreshing) {
+                    if (uiState.loading) {
                         ButtonPrimaryYellow(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -102,9 +103,21 @@ fun SwapConfirmScreen(navController: NavController) {
                             onClick = { },
                         )
                         VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Quote expired")
+                        subhead1_leah(text = "Loading final quote")
+                    } else if (!uiState.validQuote) {
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp),
+                            title = stringResource(R.string.Button_Refresh),
+                            onClick = {
+                                viewModel.refresh()
+                            },
+                        )
+                        VSpacer(height = 12.dp)
+                        subhead1_leah(text = "Quote is invalid")
                     } else if (uiState.expired) {
-                        ButtonPrimaryYellow(
+                        ButtonPrimaryDefault(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 16.dp, end = 16.dp),
@@ -120,13 +133,13 @@ fun SwapConfirmScreen(navController: NavController) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Button_Confirm),
+                            title = stringResource(R.string.Swap),
                             onClick = {
                                 viewModel.swap()
                             },
                         )
                         VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Quote expires in ${uiState.expiresIn} seconds")
+                        subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
                     }
                 }
             }
