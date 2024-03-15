@@ -9,10 +9,10 @@ import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeModule
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
-import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
+import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmFeeSettingsScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
@@ -24,6 +24,9 @@ import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService() {
@@ -68,22 +71,37 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
 //        )
 //    }
 
-    private var gasPriceInfo: GasPriceInfo? = null
+    private val baseCoinService = coinServiceFactory.baseCoinService
 
-    override fun createState() = SendTransactionSettings.Evm(
-        gasPriceInfo
+    private val _sendTransactionSettingsFlow = MutableStateFlow(
+        SendTransactionSettings.Evm(null)
+    )
+    override val sendTransactionSettingsFlow = _sendTransactionSettingsFlow.asStateFlow()
+
+    private var feeAmountData: SendModule.AmountData? = null
+
+    override fun createState() = SendTransactionServiceState(
+        networkFee = feeAmountData
     )
 
     override fun start(coroutineScope: CoroutineScope) {
         coroutineScope.launch {
-            gasPriceService.stateFlow.collect {
-                gasPriceInfo = it.dataOrNull
-
-                emitState()
+            gasPriceService.stateFlow.collect { gasPriceState ->
+                _sendTransactionSettingsFlow.update {
+                    SendTransactionSettings.Evm(gasPriceState.dataOrNull)
+                }
             }
         }
         coroutineScope.launch {
             settingsService.start()
+        }
+        coroutineScope.launch {
+            feeService.transactionStatusFlow.collect {
+                feeAmountData = it.dataOrNull?.let {
+                    baseCoinService.amountData(it.gasData.estimatedFee, it.gasData.isSurcharged)
+                }
+                emitState()
+            }
         }
     }
 
@@ -111,7 +129,6 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             SendEvmNonceViewModel(nonceService)
         })
 
-        val baseCoinService = coinServiceFactory.baseCoinService
         val feeSettingsViewModel = viewModel<ViewModel>(
             factory = EvmFeeModule.Factory(
                 feeService,
