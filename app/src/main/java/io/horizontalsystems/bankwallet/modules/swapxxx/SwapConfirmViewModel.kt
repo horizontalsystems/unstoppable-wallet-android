@@ -8,6 +8,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.entities.Currency
+import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.modules.swapxxx.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionServiceFactory
@@ -41,6 +42,7 @@ class SwapConfirmViewModel(
     private var expirationTimer: CountDownTimer? = null
 
     private var amountOut: BigDecimal? = null
+    private var networkFee: SendModule.AmountData? = null
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -66,10 +68,18 @@ class SwapConfirmViewModel(
         }
 
         viewModelScope.launch {
-            sendTransactionService.stateFlow.collect {
+            sendTransactionService.sendTransactionSettingsFlow.collect {
                 sendTransactionSettings = it
 
                 fetchFinalQuote(false)
+            }
+        }
+
+        viewModelScope.launch {
+            sendTransactionService.stateFlow.collect {
+                networkFee = it.networkFee
+
+                emitState()
             }
         }
 
@@ -88,7 +98,8 @@ class SwapConfirmViewModel(
         amountOut = amountOut,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
-        currency = currency
+        currency = currency,
+        networkFee = networkFee
     )
 
     private fun runExpirationTimer(millisInFuture: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
@@ -191,4 +202,5 @@ data class SwapConfirmUiState(
     val fiatAmountIn: BigDecimal?,
     val fiatAmountOut: BigDecimal?,
     val currency: Currency,
+    val networkFee: SendModule.AmountData?,
 )
