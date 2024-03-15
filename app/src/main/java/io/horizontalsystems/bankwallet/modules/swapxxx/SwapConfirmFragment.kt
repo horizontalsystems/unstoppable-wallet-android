@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -153,9 +154,14 @@ fun SwapConfirmScreen(navController: NavController) {
                     borderTop = false,
                     title = stringResource(id = R.string.FeeSettings_NetworkFee),
                     value = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                    subvalue = uiState.networkFee?.secondary?.getFormattedPlain()
+                    subvalue = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
                 )
             }
+
+            if (uiState.cautions.isNotEmpty()) {
+                Cautions(cautions = uiState.cautions)
+            }
+
             VSpacer(height = 32.dp)
         }
     }

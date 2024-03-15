@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -43,6 +44,7 @@ class SwapConfirmViewModel(
 
     private var amountOut: BigDecimal? = null
     private var networkFee: SendModule.AmountData? = null
+    private var cautions: List<CautionViewItem> = listOf()
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -78,6 +80,7 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect {
                 networkFee = it.networkFee
+                cautions = it.cautions
 
                 emitState()
             }
@@ -99,7 +102,8 @@ class SwapConfirmViewModel(
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
         currency = currency,
-        networkFee = networkFee
+        networkFee = networkFee,
+        cautions = cautions,
     )
 
     private fun runExpirationTimer(millisInFuture: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
@@ -203,4 +207,5 @@ data class SwapConfirmUiState(
     val fiatAmountOut: BigDecimal?,
     val currency: Currency,
     val networkFee: SendModule.AmountData?,
+    val cautions: List<CautionViewItem>,
 )
