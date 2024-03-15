@@ -143,10 +143,10 @@ fun SwapConfirmScreen(navController: NavController) {
                 TokenRow(uiState.tokenOut, uiState.amountOut, uiState.fiatAmountOut, uiState.currency, TokenRowType.Out)
             }
             VSpacer(height = 16.dp)
-            SectionUniversalLawrence {
-                val swapPriceUIHelper = SwapPriceUIHelper(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, uiState.amountOut)
-                SwapInfoRow(false, stringResource(id = R.string.Swap_Price), swapPriceUIHelper.priceStr)
-            }
+//            SectionUniversalLawrence {
+//                val swapPriceUIHelper = SwapPriceUIHelper(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, uiState.amountOut)
+//                SwapInfoRow(false, stringResource(id = R.string.Swap_Price), swapPriceUIHelper.priceStr)
+//            }
             VSpacer(height = 32.dp)
         }
     }
@@ -174,7 +174,7 @@ enum class TokenRowType {
 @Composable
 private fun TokenRow(
     token: Token,
-    amount: BigDecimal,
+    amount: BigDecimal?,
     fiatAmount: BigDecimal?,
     currency: Currency,
     type: TokenRowType,
@@ -206,7 +206,7 @@ private fun TokenRow(
                 TokenRowType.Out -> ComposeAppTheme.colors.remus
             }
             Text(
-                text = CoinValue(token, amount).getFormattedFull(),
+                text = amount?.let { CoinValue(token, it).getFormattedFull() } ?: "---",
                 style = ComposeAppTheme.typography.subhead1,
                 color = color,
             )
