@@ -20,7 +20,6 @@ import cash.p.terminal.modules.evmfee.IEvmFeeService
 import cash.p.terminal.modules.evmfee.Transaction
 import cash.p.terminal.modules.fee.FeeItem
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
 class Eip1559FeeSettingsViewModel(
@@ -30,7 +29,6 @@ class Eip1559FeeSettingsViewModel(
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
-    private val disposable = CompositeDisposable()
 
     var feeSummaryViewItem by mutableStateOf<FeeSummaryViewItem?>(null)
         private set
@@ -51,14 +49,11 @@ class Eip1559FeeSettingsViewModel(
             }
         }
 
-        syncTransactionStatus(feeService.transactionStatus)
-        feeService.transactionStatusObservable
-            .subscribe { transactionStatus ->
-                syncTransactionStatus(transactionStatus)
+        viewModelScope.launch {
+            feeService.transactionStatusFlow.collect {
+                syncTransactionStatus(it)
             }
-            .let {
-                disposable.add(it)
-            }
+        }
     }
 
     fun onSelectGasPrice(maxFee: Long, priorityFee: Long) {
@@ -79,10 +74,6 @@ class Eip1559FeeSettingsViewModel(
 
     fun onDecrementPriorityFee(maxFee: Long, priorityFee: Long) {
         gasPriceService.setGasPrice(maxFee, (priorityFee - scale.scaleValue).coerceAtLeast(0))
-    }
-
-    override fun onCleared() {
-        disposable.clear()
     }
 
     private fun sync(state: DataState<GasPriceInfo>) {
