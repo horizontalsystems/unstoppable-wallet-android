@@ -142,11 +142,20 @@ fun SwapConfirmScreen(navController: NavController) {
                 TokenRow(uiState.tokenIn, uiState.amountIn, uiState.fiatAmountIn, uiState.currency, TokenRowType.In, false,)
                 TokenRow(uiState.tokenOut, uiState.amountOut, uiState.fiatAmountOut, uiState.currency, TokenRowType.Out)
             }
-            VSpacer(height = 16.dp)
+//            VSpacer(height = 16.dp)
 //            SectionUniversalLawrence {
 //                val swapPriceUIHelper = SwapPriceUIHelper(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, uiState.amountOut)
 //                SwapInfoRow(false, stringResource(id = R.string.Swap_Price), swapPriceUIHelper.priceStr)
 //            }
+            VSpacer(height = 16.dp)
+            SectionUniversalLawrence {
+                SwapInfoRow(
+                    borderTop = false,
+                    title = stringResource(id = R.string.FeeSettings_NetworkFee),
+                    value = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+                    subvalue = uiState.networkFee?.secondary?.getFormattedPlain()
+                )
+            }
             VSpacer(height = 32.dp)
         }
     }
