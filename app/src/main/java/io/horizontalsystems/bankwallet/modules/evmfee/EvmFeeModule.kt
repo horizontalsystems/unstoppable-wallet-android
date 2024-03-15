@@ -17,7 +17,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -57,8 +57,7 @@ object EvmFeeModule {
 }
 
 interface IEvmFeeService {
-    val transactionStatus: DataState<Transaction>
-    val transactionStatusObservable: Observable<DataState<Transaction>>
+    val transactionStatusFlow: StateFlow<DataState<Transaction>>
 
     fun clear()
     fun reset()

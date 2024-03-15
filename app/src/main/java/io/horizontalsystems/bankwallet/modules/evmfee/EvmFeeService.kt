@@ -8,13 +8,14 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 
@@ -33,13 +34,8 @@ class EvmFeeService(
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
 
-    override var transactionStatus: DataState<Transaction> = DataState.Error(GasDataError.NoTransactionData)
-        private set(value) {
-            field = value
-            transactionStatusSubject.onNext(value)
-        }
-    private val transactionStatusSubject = PublishSubject.create<DataState<Transaction>>()
-    override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
+    private val _transactionStatusFlow = MutableStateFlow<DataState<Transaction>>(DataState.Error(GasDataError.NoTransactionData))
+    override val transactionStatusFlow = _transactionStatusFlow.asStateFlow()
 
     init {
         coroutineScope.launch {
@@ -63,10 +59,10 @@ class EvmFeeService(
         val gasPriceInfoState = gasPriceInfoState
         when (gasPriceInfoState) {
             is DataState.Error -> {
-                transactionStatus = gasPriceInfoState
+                _transactionStatusFlow.update { gasPriceInfoState }
             }
             DataState.Loading -> {
-                transactionStatus = DataState.Loading
+                _transactionStatusFlow.update { DataState.Loading }
             }
             is DataState.Success -> {
                 sync(gasPriceInfoState.data)
@@ -93,12 +89,12 @@ class EvmFeeService(
             feeDataSingle
                 .subscribeIO({ transaction ->
                     sync(transaction)
-                }, {
-                    transactionStatus = DataState.Error(it)
+                }, { error ->
+                    _transactionStatusFlow.update { DataState.Error(error) }
                 })
                 .let { gasPriceInfoDisposable = it }
         } else {
-            transactionStatus = DataState.Loading
+            _transactionStatusFlow.update { DataState.Loading }
         }
     }
 
@@ -153,10 +149,12 @@ class EvmFeeService(
     }
 
     private fun sync(transaction: Transaction) {
-        transactionStatus = if (transaction.totalAmount > evmBalance) {
-            DataState.Success(transaction.copy(errors = transaction.errors + FeeSettingsError.InsufficientBalance))
-        } else {
-            DataState.Success(transaction)
+        _transactionStatusFlow.update {
+            if (transaction.totalAmount > evmBalance) {
+                DataState.Success(transaction.copy(errors = transaction.errors + FeeSettingsError.InsufficientBalance))
+            } else {
+                DataState.Success(transaction)
+            }
         }
     }
 
