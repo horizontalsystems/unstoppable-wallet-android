@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.withContext
 
 class SendEvmSettingsService(
@@ -26,7 +25,7 @@ class SendEvmSettingsService(
 
     suspend fun start() = withContext(Dispatchers.IO) {
         launch {
-            feeService.transactionStatusObservable.asFlow().collect {
+            feeService.transactionStatusFlow.collect {
                 sync()
             }
         }
@@ -44,7 +43,7 @@ class SendEvmSettingsService(
     }
 
     private fun sync() {
-        val feeState = feeService.transactionStatus
+        val feeState = feeService.transactionStatusFlow.value
         val nonceState = nonceService.state
 
         state = when {

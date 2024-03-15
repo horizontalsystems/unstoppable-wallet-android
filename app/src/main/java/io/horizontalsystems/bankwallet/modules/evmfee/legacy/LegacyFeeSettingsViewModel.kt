@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmFeeService
 import io.horizontalsystems.bankwallet.modules.evmfee.Transaction
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
 class LegacyFeeSettingsViewModel(
@@ -28,7 +27,6 @@ class LegacyFeeSettingsViewModel(
 ) : ViewModel() {
 
     private val scale = coinService.token.blockchainType.feePriceScale
-    private val disposable = CompositeDisposable()
 
     var feeSummaryViewItem by mutableStateOf<FeeSummaryViewItem?>(null)
         private set
@@ -43,14 +41,11 @@ class LegacyFeeSettingsViewModel(
             }
         }
 
-        syncTransactionStatus(feeService.transactionStatus)
-        feeService.transactionStatusObservable
-            .subscribe { transactionStatus ->
-                syncTransactionStatus(transactionStatus)
+        viewModelScope.launch {
+            feeService.transactionStatusFlow.collect {
+                syncTransactionStatus(it)
             }
-            .let {
-                disposable.add(it)
-            }
+        }
     }
 
     fun onSelectGasPrice(gasPrice: Long) {
