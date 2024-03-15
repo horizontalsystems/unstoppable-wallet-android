@@ -22,10 +22,11 @@ class EvmFeeService(
     private val evmKit: EthereumKit,
     private val gasPriceService: IEvmGasPriceService,
     private val gasDataService: EvmCommonGasDataService,
-    private val transactionData: TransactionData,
-    private val gasLimit: Long? = null,
+    private var transactionData: TransactionData?,
+    private var gasLimit: Long? = null,
 ) : IEvmFeeService {
 
+    private var gasPriceInfoState: DataState<GasPriceInfo> = DataState.Loading
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var gasPriceInfoDisposable: Disposable? = null
 
@@ -43,7 +44,8 @@ class EvmFeeService(
     init {
         coroutineScope.launch {
             gasPriceService.stateFlow.collect {
-                sync(it)
+                gasPriceInfoState = it
+                sync()
             }
         }
     }
@@ -57,16 +59,17 @@ class EvmFeeService(
         gasPriceInfoDisposable?.dispose()
     }
 
-    private fun sync(gasPriceServiceState: DataState<GasPriceInfo>) {
-        when (gasPriceServiceState) {
+    private fun sync() {
+        val gasPriceInfoState = gasPriceInfoState
+        when (gasPriceInfoState) {
             is DataState.Error -> {
-                transactionStatus = gasPriceServiceState
+                transactionStatus = gasPriceInfoState
             }
             DataState.Loading -> {
                 transactionStatus = DataState.Loading
             }
             is DataState.Success -> {
-                sync(gasPriceServiceState.data)
+                sync(gasPriceInfoState.data)
             }
         }
     }
@@ -80,15 +83,23 @@ class EvmFeeService(
         val warnings = gasPriceInfo.warnings
         val errors = gasPriceInfo.errors
 
-        val feeDataSingle = feeDataSingle(gasPrice, gasPriceDefault, default, warnings, errors)
+        val transactionData = transactionData
 
-        feeDataSingle
-            .subscribeIO({ transaction ->
-                sync(transaction)
-            }, {
-                transactionStatus = DataState.Error(it)
-            })
-            .let { gasPriceInfoDisposable = it }
+        if (transactionData != null) {
+            val feeDataSingle = feeDataSingle(gasPrice, gasPriceDefault, default, warnings, errors,
+                transactionData
+            )
+
+            feeDataSingle
+                .subscribeIO({ transaction ->
+                    sync(transaction)
+                }, {
+                    transactionStatus = DataState.Error(it)
+                })
+                .let { gasPriceInfoDisposable = it }
+        } else {
+            transactionStatus = DataState.Loading
+        }
     }
 
     private fun feeDataSingle(
@@ -96,9 +107,10 @@ class EvmFeeService(
         gasPriceDefault: GasPrice,
         default: Boolean,
         warnings: List<Warning>,
-        errors: List<Throwable>
+        errors: List<Throwable>,
+        transactionData: TransactionData
     ): Single<Transaction> = if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
-        gasDataSingle(gasPrice, gasPriceDefault, BigInteger.ONE).map { gasData ->
+        gasDataSingle(gasPrice, gasPriceDefault, BigInteger.ONE, transactionData).map { gasData ->
             val adjustedValue = transactionData.value - gasData.fee
             if (adjustedValue <= BigInteger.ZERO) {
                 throw FeeSettingsError.InsufficientBalance
@@ -108,16 +120,20 @@ class EvmFeeService(
             }
         }
     } else {
-        gasDataSingle(gasPrice, gasPriceDefault).map { gasData ->
-            Transaction(transactionData, gasData, default, warnings, errors)
-        }
+        gasDataSingle(gasPrice, gasPriceDefault, null, transactionData)
+            .map { gasData ->
+                Transaction(transactionData, gasData, default, warnings, errors)
+            }
     }
 
     private fun gasDataSingle(
         gasPrice: GasPrice,
         gasPriceDefault: GasPrice,
-        stubAmount: BigInteger? = null
+        stubAmount: BigInteger? = null,
+        transactionData: TransactionData
     ): Single<GasData> {
+        val gasLimit = gasLimit
+
         if (gasLimit != null) {
             return Single.just(GasData(gasLimit = gasLimit, gasPrice = gasPrice))
         }
@@ -142,6 +158,16 @@ class EvmFeeService(
         } else {
             DataState.Success(transaction)
         }
+    }
+
+    fun setGasLimit(gasLimit: Long?) {
+        this.gasLimit = gasLimit
+        sync()
+    }
+
+    fun setTransactionData(transactionData: TransactionData) {
+        this.transactionData = transactionData
+        sync()
     }
 
 }

@@ -21,14 +21,13 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettings
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsViewModel
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService() {
-    private lateinit var transactionData: TransactionData
-    private var gasLimit: Long? = null
+    private var sendTransactionData: SendTransactionData.Evm? = null
 
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
@@ -47,7 +46,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             evmKitWrapper.evmKit,
             evmKitWrapper.blockchainType
         )
-        EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData, gasLimit)
+        EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendTransactionData?.transactionData, sendTransactionData?.gasLimit)
     }
     private val coinServiceFactory by lazy {
         EvmCoinServiceFactory(
@@ -83,13 +82,27 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
                 emitState()
             }
         }
+        coroutineScope.launch {
+            settingsService.start()
+        }
     }
 
     override fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Evm)
 
-        transactionData = data.transactionData
-        gasLimit = data.gasLimit
+        sendTransactionData = data
+
+        feeService.setGasLimit(data.gasLimit)
+        feeService.setTransactionData(data.transactionData)
+    }
+
+    override suspend fun sendTransaction() {
+        delay(300)
+//        val gasPrice = gasPriceInfo?.gasPrice!!
+//        val gasLimit = gasLimit!!
+//        val nonce = nonceService.state.dataOrNull?.nonce
+//
+//        evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
     }
 
     @Composable
