@@ -81,12 +81,17 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     )
     override val sendTransactionSettingsFlow = _sendTransactionSettingsFlow.asStateFlow()
 
+    private var transaction: SendEvmSettingsService.Transaction? = null
     private var feeAmountData: SendModule.AmountData? = null
     private var cautions: List<CautionViewItem> = listOf()
+    private var sendable = false
+    private var loading = true
 
     override fun createState() = SendTransactionServiceState(
         networkFee = feeAmountData,
         cautions = cautions,
+        sendable = sendable,
+        loading = loading
     )
 
     override fun start(coroutineScope: CoroutineScope) {
@@ -101,28 +106,45 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             settingsService.start()
         }
         coroutineScope.launch {
-            settingsService.stateFlow.collect {
-                feeAmountData = it.dataOrNull?.let {
-                    baseCoinService.amountData(it.gasData.estimatedFee, it.gasData.isSurcharged)
-                }
-
-                cautions = when (it) {
-                    is DataState.Error -> cautionViewItemFactory.cautionViewItems(
-                        listOf(),
-                        listOf(it.error)
-                    )
-
-                    is DataState.Success -> cautionViewItemFactory.cautionViewItems(
-                        it.data.warnings,
-                        it.data.errors
-                    )
-
-                    else -> listOf()
-                }
-
-                emitState()
+            settingsService.stateFlow.collect { transactionState ->
+                handleTransactionState(transactionState)
             }
         }
+    }
+
+    private fun handleTransactionState(transactionState: DataState<SendEvmSettingsService.Transaction>) {
+        loading = transactionState.loading
+        transaction = transactionState.dataOrNull
+        feeAmountData = transaction?.let {
+            baseCoinService.amountData(
+                it.gasData.estimatedFee,
+                it.gasData.isSurcharged
+            )
+        }
+        cautions = listOf()
+        sendable = false
+
+        when (transactionState) {
+            is DataState.Error -> {
+                cautions = cautionViewItemFactory.cautionViewItems(
+                    listOf(),
+                    listOf(transactionState.error)
+                )
+            }
+
+            is DataState.Success -> {
+                cautions = cautionViewItemFactory.cautionViewItems(
+                    transactionState.data.warnings,
+                    transactionState.data.errors
+                )
+                sendable = transactionState.data.errors.isEmpty()
+            }
+
+            DataState.Loading -> {
+            }
+        }
+
+        emitState()
     }
 
     override fun setSendTransactionData(data: SendTransactionData) {
@@ -135,11 +157,15 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     }
 
     override suspend fun sendTransaction() {
+        val transaction = transaction ?: throw Exception()
+        if (transaction.errors.isNotEmpty()) throw Exception()
+
+        val transactionData = transaction.transactionData
+        val gasPrice = transaction.gasData.gasPrice
+        val gasLimit = transaction.gasData.gasLimit
+        val nonce = transaction.nonce
+
         delay(300)
-//        val gasPrice = gasPriceInfo?.gasPrice!!
-//        val gasLimit = gasLimit!!
-//        val nonce = nonceService.state.dataOrNull?.nonce
-//
 //        evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
     }
 
