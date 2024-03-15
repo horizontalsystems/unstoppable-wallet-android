@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.core.App
+import cash.p.terminal.core.ethereum.CautionViewItem
+import cash.p.terminal.core.ethereum.CautionViewItemFactory
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
+import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.EvmCommonGasDataService
 import cash.p.terminal.modules.evmfee.EvmFeeModule
 import cash.p.terminal.modules.evmfee.EvmFeeService
@@ -59,7 +62,6 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             App.coinManager
         )
     }
-//    private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
     private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit) }
     private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
 //    private val sendService by lazy {
@@ -72,6 +74,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
 //    }
 
     private val baseCoinService = coinServiceFactory.baseCoinService
+    private val cautionViewItemFactory by lazy { CautionViewItemFactory(baseCoinService) }
 
     private val _sendTransactionSettingsFlow = MutableStateFlow(
         SendTransactionSettings.Evm(null)
@@ -79,9 +82,11 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     override val sendTransactionSettingsFlow = _sendTransactionSettingsFlow.asStateFlow()
 
     private var feeAmountData: SendModule.AmountData? = null
+    private var cautions: List<CautionViewItem> = listOf()
 
     override fun createState() = SendTransactionServiceState(
-        networkFee = feeAmountData
+        networkFee = feeAmountData,
+        cautions = cautions,
     )
 
     override fun start(coroutineScope: CoroutineScope) {
@@ -96,10 +101,25 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             settingsService.start()
         }
         coroutineScope.launch {
-            feeService.transactionStatusFlow.collect {
+            settingsService.stateFlow.collect {
                 feeAmountData = it.dataOrNull?.let {
                     baseCoinService.amountData(it.gasData.estimatedFee, it.gasData.isSurcharged)
                 }
+
+                cautions = when (it) {
+                    is DataState.Error -> cautionViewItemFactory.cautionViewItems(
+                        listOf(),
+                        listOf(it.error)
+                    )
+
+                    is DataState.Success -> cautionViewItemFactory.cautionViewItems(
+                        it.data.warnings,
+                        it.data.errors
+                    )
+
+                    else -> listOf()
+                }
+
                 emitState()
             }
         }

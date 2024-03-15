@@ -26,6 +26,7 @@ import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -153,9 +154,14 @@ fun SwapConfirmScreen(navController: NavController) {
                     borderTop = false,
                     title = stringResource(id = R.string.FeeSettings_NetworkFee),
                     value = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                    subvalue = uiState.networkFee?.secondary?.getFormattedPlain()
+                    subvalue = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
                 )
             }
+
+            if (uiState.cautions.isNotEmpty()) {
+                Cautions(cautions = uiState.cautions)
+            }
+
             VSpacer(height = 32.dp)
         }
     }
