@@ -1,7 +1,9 @@
 package cash.p.terminal.modules.swapxxx.providers
 
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
+import cash.p.terminal.modules.swapxxx.ISwapFinalQuote
 import cash.p.terminal.modules.swapxxx.ISwapQuote
+import cash.p.terminal.modules.swapxxx.SwapFinalQuoteUniswapV3
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswapV3
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
@@ -17,54 +19,10 @@ import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.horizontalsystems.uniswapkit.models.DexType
 import io.horizontalsystems.uniswapkit.models.TradeOptions
-import kotlinx.coroutines.delay
 import java.math.BigDecimal
 
 abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
     private val uniswapV3Kit by lazy { UniswapV3Kit.getInstance(dexType) }
-
-    override suspend fun getSendTransactionData(
-        swapQuote: ISwapQuote,
-        sendTransactionSettings: SendTransactionSettings?,
-        swapSettings: Map<String, Any?>
-    ): SendTransactionData {
-        check(swapQuote is SwapQuoteUniswapV3)
-
-        val blockchainType = swapQuote.tokenIn.blockchainType
-        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
-
-        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
-            uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
-        } ?: throw Exception("Yahoo")
-
-        return SendTransactionData.Evm(transactionData, null)
-    }
-
-    override suspend fun swap(swapQuote: ISwapQuote) {
-        check(swapQuote is SwapQuoteUniswapV3)
-
-        val blockchainType = swapQuote.tokenIn.blockchainType
-        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
-        val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: return
-
-        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
-            uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
-        } ?: throw Exception("Yahoo")
-
-        val feeData = evmBlockchainHelper.getFeeData(transactionData) ?: throw Exception("Yahoo")
-
-        val gasLimit = feeData.gasData.gasLimit
-        val gasPrice = feeData.gasData.gasPrice
-        val nonce: Long? = null
-
-        try {
-            delay(1000)
-//            val transaction = evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
-//            logger.info("success")
-        } catch (e: Throwable) {
-//            logger.warning("failed", error)
-        }
-    }
 
     final override suspend fun fetchQuote(
         tokenIn: Token,
@@ -134,5 +92,30 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
                 tokenType.address
             ), token.decimals)
         else -> throw Exception("Invalid coin for swap: $token")
+    }
+
+    override suspend fun fetchFinalQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        swapSettings: Map<String, Any?>,
+        sendTransactionSettings: SendTransactionSettings?,
+    ): ISwapFinalQuote {
+        val blockchainType = tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+
+        val swapQuote = fetchQuote(tokenIn, tokenOut, amountIn, swapSettings) as SwapQuoteUniswapV3
+
+        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
+            uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
+        } ?: throw Exception("Yahoo")
+
+        return SwapFinalQuoteUniswapV3(
+            tokenIn,
+            tokenOut,
+            amountIn,
+            swapQuote.amountOut,
+            SendTransactionData.Evm(transactionData, null)
+        )
     }
 }

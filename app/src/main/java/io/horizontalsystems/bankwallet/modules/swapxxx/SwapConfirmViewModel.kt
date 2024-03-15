@@ -1,12 +1,14 @@
 package cash.p.terminal.modules.swapxxx
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.entities.Currency
+import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.modules.swapxxx.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionServiceFactory
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
@@ -16,7 +18,8 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SwapConfirmViewModel(
-    quote: SwapProviderQuote,
+    private val swapProvider: ISwapXxxProvider,
+    swapQuote: ISwapQuote,
     private val swapSettings: Map<String, Any?>,
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
@@ -25,20 +28,19 @@ class SwapConfirmViewModel(
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
-    private val tokenIn = quote.tokenIn
-    private val tokenOut = quote.tokenOut
-    private val amountIn = quote.amountIn
-    private var amountOut = quote.amountOut
-    private var swapQuote = quote.swapQuote
+    private val tokenIn = swapQuote.tokenIn
+    private val tokenOut = swapQuote.tokenOut
+    private val amountIn = swapQuote.amountIn
     private var fiatAmountIn: BigDecimal? = null
-    private var fiatAmountOut: BigDecimal? = null
 
+    private var fiatAmountOut: BigDecimal? = null
     private var expiresIn = 10L
     private var expired = false
-    private var refreshing = false
 
+    private var refreshing = false
     private var expirationTimer: CountDownTimer? = null
-    private val swapProvider = quote.provider
+
+    private var amountOut: BigDecimal? = null
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -67,12 +69,13 @@ class SwapConfirmViewModel(
             sendTransactionService.stateFlow.collect {
                 sendTransactionSettings = it
 
-                xxx()
+                fetchFinalQuote(false)
             }
         }
 
         sendTransactionService.start(viewModelScope)
-        handleSwapQuote(quote.swapQuote)
+
+        fetchFinalQuote(true)
     }
 
     override fun createState() = SwapConfirmUiState(
@@ -99,17 +102,11 @@ class SwapConfirmViewModel(
         }
     }
 
-    private fun handleSwapQuote(swapQuote: ISwapQuote) {
-        amountOut = swapQuote.amountOut
-        this.swapQuote = swapQuote
+    private fun runExpiration() {
         expiresIn = 10
         expired = false
 
-        fiatServiceOut.setAmount(amountOut)
-
         emitState()
-
-        xxx()
 
         runExpirationTimer(
             millisInFuture = expiresIn * 1000,
@@ -124,39 +121,44 @@ class SwapConfirmViewModel(
         )
     }
 
-    private fun xxx() {
-        viewModelScope.launch(Dispatchers.Default) {
-            try {
-                val sendTransactionData = swapProvider.getSendTransactionData(
-                    swapQuote,
-                    sendTransactionSettings,
-                    swapSettings
-                )
-                sendTransactionService.setSendTransactionData(sendTransactionData)
-            } catch (t: Throwable) {
-            }
-        }
-    }
-
     override fun onCleared() {
         expirationTimer?.cancel()
     }
 
     fun refresh() {
+        refreshing = true
+        emitState()
+
+        fetchFinalQuote(true)
+
+        refreshing = false
+        emitState()
+    }
+
+    private fun fetchFinalQuote(runExpiration: Boolean) {
         viewModelScope.launch(Dispatchers.Default) {
-            refreshing = true
-            emitState()
+            try {
+                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings)
 
-            val newSwapQuote = swapProvider.fetchQuote(tokenIn, tokenOut, amountIn, swapSettings)
-            refreshing = false
+                amountOut = finalQuote.amountOut
+                emitState()
 
-            handleSwapQuote(newSwapQuote)
+                fiatServiceOut.setAmount(amountOut)
+                sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
+
+                if (runExpiration) {
+                    runExpiration()
+                }
+            } catch (t: Throwable) {
+                Log.e("AAA", "fetchFinalQuote error", t)
+            }
         }
     }
 
+
     fun swap() {
         viewModelScope.launch {
-            swapProvider.swap(swapQuote)
+            sendTransactionService.sendTransaction()
         }
     }
 
@@ -164,7 +166,15 @@ class SwapConfirmViewModel(
         fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
             val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
 
-            SwapConfirmViewModel(quote, settings, App.currencyManager, FiatService(App.marketKit), FiatService(App.marketKit), sendTransactionService)
+            SwapConfirmViewModel(
+                quote.provider,
+                quote.swapQuote,
+                settings,
+                App.currencyManager,
+                FiatService(App.marketKit),
+                FiatService(App.marketKit),
+                sendTransactionService
+            )
         }
     }
 }
@@ -177,7 +187,7 @@ data class SwapConfirmUiState(
     val tokenIn: Token,
     val tokenOut: Token,
     val amountIn: BigDecimal,
-    val amountOut: BigDecimal,
+    val amountOut: BigDecimal?,
     val fiatAmountIn: BigDecimal?,
     val fiatAmountOut: BigDecimal?,
     val currency: Currency,

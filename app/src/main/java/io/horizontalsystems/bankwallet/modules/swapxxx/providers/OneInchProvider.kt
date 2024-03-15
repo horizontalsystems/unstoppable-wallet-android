@@ -5,7 +5,9 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.convertedError
 import cash.p.terminal.modules.swap.scaleUp
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
+import cash.p.terminal.modules.swapxxx.ISwapFinalQuote
 import cash.p.terminal.modules.swapxxx.ISwapQuote
+import cash.p.terminal.modules.swapxxx.SwapFinalQuoteOneInch
 import cash.p.terminal.modules.swapxxx.SwapQuoteOneInch
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
@@ -47,40 +49,6 @@ object OneInchProvider : EvmSwapProvider() {
         else -> false
     }
 
-    override suspend fun getSendTransactionData(
-        swapQuote: ISwapQuote,
-        sendTransactionSettings: SendTransactionSettings?,
-        swapSettings: Map<String, Any?>
-    ): SendTransactionData {
-        check(sendTransactionSettings is SendTransactionSettings.Evm)
-
-        val blockchainType = swapQuote.tokenIn.blockchainType
-        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
-
-        val gasPrice = sendTransactionSettings.gasPriceInfo?.gasPrice
-
-        val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: throw NullPointerException()
-
-        val settingRecipient = SwapSettingRecipient(swapSettings, blockchainType)
-        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
-
-
-        val swap = oneInchKit.getSwapAsync(
-            chain = evmBlockchainHelper.chain,
-            receiveAddress = evmKitWrapper.evmKit.receiveAddress,
-            fromToken = getTokenAddress(swapQuote.tokenIn),
-            toToken = getTokenAddress(swapQuote.tokenOut),
-            amount = swapQuote.amountIn.scaleUp(swapQuote.tokenIn.decimals),
-            slippagePercentage = settingSlippage.valueOrDefault().toFloat(),
-            recipient = settingRecipient.value?.hex?.let { Address(it) },
-            gasPrice = gasPrice
-        ).await()
-
-        val swapTx = swap.transaction
-
-        return SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit)
-    }
-
     override suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,
@@ -102,7 +70,7 @@ object OneInchProvider : EvmSwapProvider() {
             Single.error(it.convertedError)
         }.await()
 
-        val amountOut = quote.toTokenAmount.abs().toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        val amountOut = quote.toTokenAmount.toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
         val fields = buildList {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
@@ -127,5 +95,48 @@ object OneInchProvider : EvmSwapProvider() {
         TokenType.Native -> evmCoinAddress
         is TokenType.Eip20 -> Address(tokenType.address)
         else -> throw IllegalStateException("Unsupported tokenType: $tokenType")
+    }
+
+    override suspend fun fetchFinalQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        swapSettings: Map<String, Any?>,
+        sendTransactionSettings: SendTransactionSettings?,
+    ): ISwapFinalQuote {
+        check(sendTransactionSettings is SendTransactionSettings.Evm)
+
+        val blockchainType = tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+
+        val gasPrice = sendTransactionSettings.gasPriceInfo?.gasPrice
+
+        val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: throw NullPointerException()
+
+        val settingRecipient = SwapSettingRecipient(swapSettings, blockchainType)
+        val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
+
+        val swap = oneInchKit.getSwapAsync(
+            chain = evmBlockchainHelper.chain,
+            receiveAddress = evmKitWrapper.evmKit.receiveAddress,
+            fromToken = getTokenAddress(tokenIn),
+            toToken = getTokenAddress(tokenOut),
+            amount = amountIn.scaleUp(tokenIn.decimals),
+            slippagePercentage = settingSlippage.valueOrDefault().toFloat(),
+            recipient = settingRecipient.value?.hex?.let { Address(it) },
+            gasPrice = gasPrice
+        ).await()
+
+        val swapTx = swap.transaction
+
+        val amountOut = swap.toTokenAmount.toBigDecimal().movePointLeft(swap.toToken.decimals).stripTrailingZeros()
+
+        return SwapFinalQuoteOneInch(
+            tokenIn,
+            tokenOut,
+            amountIn,
+            amountOut,
+            SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit)
+        )
     }
 }

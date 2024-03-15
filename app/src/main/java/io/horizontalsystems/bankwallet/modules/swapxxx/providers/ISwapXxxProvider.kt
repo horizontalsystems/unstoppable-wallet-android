@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.swapxxx.providers
 
+import cash.p.terminal.modules.swapxxx.ISwapFinalQuote
 import cash.p.terminal.modules.swapxxx.ISwapQuote
-import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -26,13 +26,13 @@ interface ISwapXxxProvider {
         settings: Map<String, Any?>
     ): ISwapQuote
 
-    suspend fun swap(swapQuote: ISwapQuote) {
-
+    suspend fun fetchFinalQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        swapSettings: Map<String, Any?>,
+        sendTransactionSettings: SendTransactionSettings?
+    ) : ISwapFinalQuote {
+        TODO()
     }
-
-    suspend fun getSendTransactionData(
-        swapQuote: ISwapQuote,
-        sendTransactionSettings: SendTransactionSettings?,
-        swapSettings: Map<String, Any?>
-    ): SendTransactionData = TODO()
 }
