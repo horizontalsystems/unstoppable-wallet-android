@@ -20,4 +20,6 @@ abstract class ISendTransactionService: ServiceState<SendTransactionServiceState
 data class SendTransactionServiceState(
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
+    val sendable: Boolean,
+    val loading: Boolean,
 )

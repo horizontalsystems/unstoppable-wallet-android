@@ -39,12 +39,13 @@ class SwapConfirmViewModel(
     private var expiresIn = 10L
     private var expired = false
 
-    private var refreshing = false
+    private var loading = true
     private var expirationTimer: CountDownTimer? = null
 
     private var amountOut: BigDecimal? = null
     private var networkFee: SendModule.AmountData? = null
     private var cautions: List<CautionViewItem> = listOf()
+    private var validQuote = false
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -73,28 +74,34 @@ class SwapConfirmViewModel(
             sendTransactionService.sendTransactionSettingsFlow.collect {
                 sendTransactionSettings = it
 
-                fetchFinalQuote(false)
+                fetchFinalQuote()
             }
         }
 
         viewModelScope.launch {
-            sendTransactionService.stateFlow.collect {
-                networkFee = it.networkFee
-                cautions = it.cautions
+            sendTransactionService.stateFlow.collect { transactionState ->
+                networkFee = transactionState.networkFee
+                cautions = transactionState.cautions
+                validQuote = transactionState.sendable
+                loading = transactionState.loading
 
                 emitState()
+
+                if (validQuote) {
+                    runExpiration()
+                }
             }
         }
 
         sendTransactionService.start(viewModelScope)
 
-        fetchFinalQuote(true)
+        fetchFinalQuote()
     }
 
     override fun createState() = SwapConfirmUiState(
         expiresIn = expiresIn,
         expired = expired,
-        refreshing = refreshing,
+        loading = loading,
         tokenIn = tokenIn,
         tokenOut = tokenOut,
         amountIn = amountIn,
@@ -104,6 +111,7 @@ class SwapConfirmViewModel(
         currency = currency,
         networkFee = networkFee,
         cautions = cautions,
+        validQuote = validQuote,
     )
 
     private fun runExpirationTimer(millisInFuture: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
@@ -141,16 +149,13 @@ class SwapConfirmViewModel(
     }
 
     fun refresh() {
-        refreshing = true
+        loading = true
         emitState()
 
-        fetchFinalQuote(true)
-
-        refreshing = false
-        emitState()
+        fetchFinalQuote()
     }
 
-    private fun fetchFinalQuote(runExpiration: Boolean) {
+    private fun fetchFinalQuote() {
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings)
@@ -160,10 +165,6 @@ class SwapConfirmViewModel(
 
                 fiatServiceOut.setAmount(amountOut)
                 sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
-
-                if (runExpiration) {
-                    runExpiration()
-                }
             } catch (t: Throwable) {
                 Log.e("AAA", "fetchFinalQuote error", t)
             }
@@ -198,7 +199,7 @@ class SwapConfirmViewModel(
 data class SwapConfirmUiState(
     val expiresIn: Long,
     val expired: Boolean,
-    val refreshing: Boolean,
+    val loading: Boolean,
     val tokenIn: Token,
     val tokenOut: Token,
     val amountIn: BigDecimal,
@@ -208,4 +209,5 @@ data class SwapConfirmUiState(
     val currency: Currency,
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
+    val validQuote: Boolean,
 )
