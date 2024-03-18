@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.evmfee
 
 import cash.p.terminal.core.EvmError
-import cash.p.terminal.core.Warning
 import cash.p.terminal.core.convertedError
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
@@ -56,8 +55,7 @@ class EvmFeeService(
     }
 
     private fun sync() {
-        val gasPriceInfoState = gasPriceInfoState
-        when (gasPriceInfoState) {
+        when (val gasPriceInfoState = gasPriceInfoState) {
             is DataState.Error -> {
                 _transactionStatusFlow.update { gasPriceInfoState }
             }
@@ -73,20 +71,10 @@ class EvmFeeService(
     private fun sync(gasPriceInfo: GasPriceInfo) {
         gasPriceInfoDisposable?.dispose()
 
-        val gasPrice = gasPriceInfo.gasPrice
-        val gasPriceDefault = gasPriceInfo.gasPriceDefault
-        val default = gasPriceInfo.default
-        val warnings = gasPriceInfo.warnings
-        val errors = gasPriceInfo.errors
-
         val transactionData = transactionData
 
         if (transactionData != null) {
-            val feeDataSingle = feeDataSingle(gasPrice, gasPriceDefault, default, warnings, errors,
-                transactionData
-            )
-
-            feeDataSingle
+            feeDataSingle(gasPriceInfo, transactionData)
                 .subscribeIO({ transaction ->
                     sync(transaction)
                 }, { error ->
@@ -99,27 +87,31 @@ class EvmFeeService(
     }
 
     private fun feeDataSingle(
-        gasPrice: GasPrice,
-        gasPriceDefault: GasPrice,
-        default: Boolean,
-        warnings: List<Warning>,
-        errors: List<Throwable>,
+        gasPriceInfo: GasPriceInfo,
         transactionData: TransactionData
-    ): Single<Transaction> = if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
-        gasDataSingle(gasPrice, gasPriceDefault, BigInteger.ONE, transactionData).map { gasData ->
-            val adjustedValue = transactionData.value - gasData.fee
-            if (adjustedValue <= BigInteger.ZERO) {
-                throw FeeSettingsError.InsufficientBalance
-            } else {
-                val transactionData = TransactionData(transactionData.to, adjustedValue, byteArrayOf())
-                Transaction(transactionData, gasData, default, warnings, errors)
+    ): Single<Transaction> {
+        val gasPrice = gasPriceInfo.gasPrice
+        val gasPriceDefault = gasPriceInfo.gasPriceDefault
+        val default = gasPriceInfo.default
+        val warnings = gasPriceInfo.warnings
+        val errors = gasPriceInfo.errors
+
+        return if (transactionData.input.isEmpty() && transactionData.value == evmBalance) {
+            gasDataSingle(gasPrice, gasPriceDefault, BigInteger.ONE, transactionData).map { gasData ->
+                val adjustedValue = transactionData.value - gasData.fee
+                if (adjustedValue <= BigInteger.ZERO) {
+                    throw FeeSettingsError.InsufficientBalance
+                } else {
+                    val transactionDataAdjusted = TransactionData(transactionData.to, adjustedValue, byteArrayOf())
+                    Transaction(transactionDataAdjusted, gasData, default, warnings, errors)
+                }
             }
+        } else {
+            gasDataSingle(gasPrice, gasPriceDefault, null, transactionData)
+                .map { gasData ->
+                    Transaction(transactionData, gasData, default, warnings, errors)
+                }
         }
-    } else {
-        gasDataSingle(gasPrice, gasPriceDefault, null, transactionData)
-            .map { gasData ->
-                Transaction(transactionData, gasData, default, warnings, errors)
-            }
     }
 
     private fun gasDataSingle(
