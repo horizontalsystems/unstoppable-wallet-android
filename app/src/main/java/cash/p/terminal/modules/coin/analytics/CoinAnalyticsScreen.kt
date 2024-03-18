@@ -35,7 +35,6 @@ import cash.p.terminal.modules.coin.investments.CoinInvestmentsFragment
 import cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.reports.CoinReportsFragment
-import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.InfoText
@@ -50,7 +49,6 @@ import cash.p.terminal.ui.compose.components.subhead1_lucian
 import cash.p.terminal.ui.compose.components.subhead1_remus
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 
 @Composable
 fun CoinAnalyticsScreen(
@@ -94,7 +92,6 @@ fun CoinAnalyticsScreen(
                                 item.blocks,
                                 navController,
                                 fragmentManager,
-                                { viewModel.onPeriodChange(it) }
                             )
                         }
 
@@ -117,7 +114,6 @@ private fun AnalyticsData(
     blocks: List<CoinAnalyticsModule.BlockViewItem>,
     navController: NavController,
     fragmentManager: FragmentManager,
-    onPeriodChange: (HsPointTimePeriod) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(blocks) { block ->
@@ -125,7 +121,6 @@ private fun AnalyticsData(
                 block,
                 navController,
                 fragmentManager,
-                onPeriodChange
             )
         }
         item {
@@ -154,7 +149,6 @@ private fun AnalyticsBlock(
     block: CoinAnalyticsModule.BlockViewItem,
     navController: NavController,
     fragmentManager: FragmentManager,
-    onPeriodChange: (HsPointTimePeriod) -> Unit
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -212,11 +206,7 @@ private fun AnalyticsBlock(
             }
             block.analyticChart?.let { chartViewItem ->
                 VSpacer(12.dp)
-                AnalyticsChart(
-                    chartViewItem.analyticChart,
-                    navController,
-                    onPeriodChange
-                )
+                AnalyticsChart(chartViewItem.analyticChart)
             }
         }
     }
@@ -339,8 +329,6 @@ private fun AnalyticsPreviewBlock(
             } else {
                 AnalyticsChart(
                     CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(chartType == CoinAnalyticsModule.PreviewChartType.Line),
-                    navController,
-                    {},
                 )
             }
         }
@@ -395,11 +383,6 @@ private fun handleActionClick(
 
         CoinAnalyticsModule.ActionType.Preview -> {
             navController.slideFromBottom(R.id.subscriptionInfoFragment)
-        }
-
-        is CoinAnalyticsModule.ActionType.OpenTechnicalIndicatorsDetails -> {
-            val params = TechnicalIndicatorsDetailsFragment.Input(action.coinUid, action.period)
-            navController.slideFromRight(R.id.technicalIndicatorsDetailsFragment, params)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
