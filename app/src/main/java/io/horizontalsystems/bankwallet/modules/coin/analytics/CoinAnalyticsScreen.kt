@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsF
 import io.horizontalsystems.bankwallet.modules.coin.majorholders.CoinMajorHoldersFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -50,7 +49,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 
 @Composable
 fun CoinAnalyticsScreen(
@@ -94,7 +92,6 @@ fun CoinAnalyticsScreen(
                                 item.blocks,
                                 navController,
                                 fragmentManager,
-                                { viewModel.onPeriodChange(it) }
                             )
                         }
 
@@ -117,7 +114,6 @@ private fun AnalyticsData(
     blocks: List<CoinAnalyticsModule.BlockViewItem>,
     navController: NavController,
     fragmentManager: FragmentManager,
-    onPeriodChange: (HsPointTimePeriod) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(blocks) { block ->
@@ -125,7 +121,6 @@ private fun AnalyticsData(
                 block,
                 navController,
                 fragmentManager,
-                onPeriodChange
             )
         }
         item {
@@ -154,7 +149,6 @@ private fun AnalyticsBlock(
     block: CoinAnalyticsModule.BlockViewItem,
     navController: NavController,
     fragmentManager: FragmentManager,
-    onPeriodChange: (HsPointTimePeriod) -> Unit
 ) {
     AnalyticsContainer(
         showFooterDivider = block.showFooterDivider,
@@ -211,11 +205,7 @@ private fun AnalyticsBlock(
             }
             block.analyticChart?.let { chartViewItem ->
                 VSpacer(12.dp)
-                AnalyticsChart(
-                    chartViewItem.analyticChart,
-                    navController,
-                    onPeriodChange
-                )
+                AnalyticsChart(chartViewItem.analyticChart)
             }
         }
     }
@@ -337,8 +327,6 @@ private fun AnalyticsPreviewBlock(
             } else {
                 AnalyticsChart(
                     CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(chartType == CoinAnalyticsModule.PreviewChartType.Line),
-                    navController,
-                    {},
                 )
             }
         }
@@ -393,11 +381,6 @@ private fun handleActionClick(
 
         CoinAnalyticsModule.ActionType.Preview -> {
             navController.slideFromBottom(R.id.subscriptionInfoFragment)
-        }
-
-        is CoinAnalyticsModule.ActionType.OpenTechnicalIndicatorsDetails -> {
-            val params = TechnicalIndicatorsDetailsFragment.Input(action.coinUid, action.period)
-            navController.slideFromRight(R.id.technicalIndicatorsDetailsFragment, params)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {

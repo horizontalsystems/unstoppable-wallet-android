@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
@@ -42,14 +41,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.bankwallet.ui.compose.components.StackedBarChart
-import io.horizontalsystems.bankwallet.ui.compose.components.TechnicalIndicatorsChart
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.chartview.ChartMinimal
-import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 
 @Composable
 fun AnalyticsBlockHeader(
@@ -272,8 +269,6 @@ fun AnalyticsContainer(
 @Composable
 fun AnalyticsChart(
     analyticChart: CoinAnalyticsModule.AnalyticChart,
-    navController: NavController,
-    onPeriodChange: (HsPointTimePeriod) -> Unit,
 ) {
     when (analyticChart) {
         is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
@@ -310,13 +305,12 @@ fun AnalyticsChart(
             VSpacer(12.dp)
         }
 
-        is CoinAnalyticsModule.AnalyticChart.TechIndicators -> {
-            TechnicalIndicatorsChart(
-                rows = analyticChart.data,
-                selectedPeriod = analyticChart.selectedPeriod,
-                navController = navController,
-                onPeriodChange = onPeriodChange
-            )
+        is CoinAnalyticsModule.AnalyticChart.TechAdvice -> {
+            TechnicalAdviceBlock(
+                adviceTitle = analyticChart.data.adviceTitle,
+                detailText = analyticChart.data.detailText,
+                sliderPosition = analyticChart.data.sliderPosition
+                )
         }
     }
 }
@@ -398,8 +392,6 @@ private fun Preview_AnalyticsBarChartDisabled() {
             )
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(false),
-                navController,
-                {},
             )
             VSpacer(12.dp)
         }
@@ -433,8 +425,6 @@ private fun Preview_AnalyticsLineChartDisabled() {
             )
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
-                navController,
-                {},
             )
             VSpacer(12.dp)
         }
@@ -516,8 +506,6 @@ private fun Preview_AnalyticsRatingScale() {
             )
             AnalyticsChart(
                 CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
-                navController,
-                {},
             )
             VSpacer(12.dp)
         }
