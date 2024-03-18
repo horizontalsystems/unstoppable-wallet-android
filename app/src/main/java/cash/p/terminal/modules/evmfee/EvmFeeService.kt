@@ -22,10 +22,10 @@ class EvmFeeService(
     private val evmKit: EthereumKit,
     private val gasPriceService: IEvmGasPriceService,
     private val gasDataService: EvmCommonGasDataService,
-    private var transactionData: TransactionData?,
-    private var gasLimit: Long? = null,
+    private var transactionData: TransactionData? = null,
 ) : IEvmFeeService {
 
+    private var gasLimit: Long? = null
     private var gasPriceInfoState: DataState<GasPriceInfo> = DataState.Loading
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var gasPriceInfoDisposable: Disposable? = null

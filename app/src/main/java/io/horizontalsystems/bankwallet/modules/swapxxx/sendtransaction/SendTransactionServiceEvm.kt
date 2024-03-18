@@ -33,8 +33,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService() {
-    private var sendTransactionData: SendTransactionData.Evm? = null
-
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
     private val evmKitWrapper by lazy { App.evmBlockchainManager.getEvmKitManager(blockchainType).evmKitWrapper!! }
     private val gasPriceService: IEvmGasPriceService by lazy {
@@ -52,7 +50,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             evmKitWrapper.evmKit,
             evmKitWrapper.blockchainType
         )
-        EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, sendTransactionData?.transactionData, sendTransactionData?.gasLimit)
+        EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService)
     }
     private val coinServiceFactory by lazy {
         EvmCoinServiceFactory(
@@ -149,8 +147,6 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
 
     override fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Evm)
-
-        sendTransactionData = data
 
         feeService.setGasLimit(data.gasLimit)
         feeService.setTransactionData(data.transactionData)
