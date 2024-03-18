@@ -12,9 +12,9 @@ import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 
@@ -33,8 +33,9 @@ class EvmFeeService(
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
 
-    private val _transactionStatusFlow = MutableStateFlow<DataState<Transaction>>(DataState.Error(GasDataError.NoTransactionData))
-    override val transactionStatusFlow = _transactionStatusFlow.asStateFlow()
+    private val _transactionStatusFlow: MutableSharedFlow<DataState<Transaction>> =
+        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    override val transactionStatusFlow = _transactionStatusFlow.asSharedFlow()
 
     init {
         coroutineScope.launch {
@@ -57,10 +58,10 @@ class EvmFeeService(
     private fun sync() {
         when (val gasPriceInfoState = gasPriceInfoState) {
             is DataState.Error -> {
-                _transactionStatusFlow.update { gasPriceInfoState }
+                _transactionStatusFlow.tryEmit(gasPriceInfoState)
             }
             DataState.Loading -> {
-                _transactionStatusFlow.update { DataState.Loading }
+                _transactionStatusFlow.tryEmit(DataState.Loading)
             }
             is DataState.Success -> {
                 sync(gasPriceInfoState.data)
@@ -78,11 +79,11 @@ class EvmFeeService(
                 .subscribeIO({ transaction ->
                     sync(transaction)
                 }, { error ->
-                    _transactionStatusFlow.update { DataState.Error(error) }
+                    _transactionStatusFlow.tryEmit(DataState.Error(error))
                 })
                 .let { gasPriceInfoDisposable = it }
         } else {
-            _transactionStatusFlow.update { DataState.Loading }
+            _transactionStatusFlow.tryEmit(DataState.Loading)
         }
     }
 
@@ -141,13 +142,13 @@ class EvmFeeService(
     }
 
     private fun sync(transaction: Transaction) {
-        _transactionStatusFlow.update {
+        _transactionStatusFlow.tryEmit(
             if (transaction.totalAmount > evmBalance) {
                 DataState.Success(transaction.copy(errors = transaction.errors + FeeSettingsError.InsufficientBalance))
             } else {
                 DataState.Success(transaction)
             }
-        }
+        )
     }
 
     fun setGasLimit(gasLimit: Long?) {
