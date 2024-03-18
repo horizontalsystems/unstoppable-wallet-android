@@ -9,9 +9,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule
 import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueParcelable
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorData
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorService
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -22,7 +19,6 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import kotlinx.parcelize.Parcelize
 
 object CoinAnalyticsModule {
@@ -40,17 +36,10 @@ object CoinAnalyticsModule {
                 App.accountManager,
             )
 
-            val indicatorsService = TechnicalIndicatorService(
-                fullCoin.coin.uid,
-                App.marketKit,
-                App.currencyManager
-            )
-
             return CoinAnalyticsViewModel(
                 service,
-                indicatorsService,
-                CoinIndicatorViewItemFactory(),
                 App.numberFormatter,
+                TechnicalAdviceViewItemFactory(App.numberFormatter),
                 fullCoin.coin.code
             ) as T
         }
@@ -104,8 +93,14 @@ object CoinAnalyticsModule {
         class Line(val data: ChartData) : AnalyticChart()
         class Bars(val data: ChartData) : AnalyticChart()
         class StackedBars(val data: List<StackBarSlice>) : AnalyticChart()
-        class TechIndicators(val data: List<TechnicalIndicatorData>, val selectedPeriod: HsPointTimePeriod) : AnalyticChart()
+        class TechAdvice(val data: TechAdviceData) : AnalyticChart()
     }
+
+    data class TechAdviceData(
+        val adviceTitle: String,
+        val detailText: String,
+        val sliderPosition: Int
+    )
 
     enum class OverallScore(val title: Int, val icon: Int) {
         Excellent(R.string.Coin_Analytics_OverallScore_Excellent, R.drawable.ic_score_excellent_24),
@@ -167,7 +162,7 @@ object CoinAnalyticsModule {
         TransactionCountInfo(R.string.CoinAnalytics_TransactionCount),
         HoldersInfo(R.string.CoinAnalytics_Holders),
         TvlInfo(R.string.CoinAnalytics_ProjectTvl_FullTitle),
-        TechnicalIndicatorsInfo(R.string.Coin_Analytics_TechnicalIndicators),
+        TechnicalIndicatorsInfo(R.string.TechnicalAdvice_InfoTitle),
     }
 
     @Parcelize
@@ -201,7 +196,6 @@ object CoinAnalyticsModule {
         object Preview : ActionType()
         object OpenTvl : ActionType()
         class OpenOverallScoreInfo(val scoreCategory: ScoreCategory) : ActionType()
-        class OpenTechnicalIndicatorsDetails(val coinUid: String, val period: HsPointTimePeriod) : ActionType()
         class OpenRank(val type: RankType) : ActionType()
         class OpenReports(val coinUid: String) : ActionType()
         class OpenInvestors(val coinUid: String) : ActionType()

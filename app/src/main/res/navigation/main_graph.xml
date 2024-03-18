@@ -127,9 +127,6 @@
         android:id="@+id/coinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment" />
     <fragment
-        android:id="@+id/technicalIndicatorsDetailsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment" />
-    <fragment
         android:id="@+id/indicatorsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsFragment" />
     <fragment

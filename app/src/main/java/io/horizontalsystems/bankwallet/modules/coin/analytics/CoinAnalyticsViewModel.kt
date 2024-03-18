@@ -36,10 +36,6 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModul
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsModule
 import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueItemParcelable
 import io.horizontalsystems.bankwallet.modules.coin.detectors.IssueParcelable
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorData
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorService
-import io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorService.SectionItem
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -52,7 +48,6 @@ import io.horizontalsystems.marketkit.models.AnalyticsPreview
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -62,9 +57,8 @@ import java.math.RoundingMode
 
 class CoinAnalyticsViewModel(
     private val service: CoinAnalyticsService,
-    private val indicatorsService: TechnicalIndicatorService,
-    private val indicatorFactory: CoinIndicatorViewItemFactory,
     private val numberFormatter: IAppNumberFormatter,
+    private val technicalAdviceViewItemFactory: TechnicalAdviceViewItemFactory,
     private val code: String
 ) : ViewModel() {
 
@@ -76,8 +70,6 @@ class CoinAnalyticsViewModel(
     private var analyticsViewItem: AnalyticsViewItem? = null
     private var cachedAnalyticData: CoinAnalyticsService.AnalyticData? = null
     private var isRefreshing = false
-    private var technicalIndicators = listOf<TechnicalIndicatorData>()
-    private var techIndicatorPeriod: HsPointTimePeriod = HsPointTimePeriod.Day1
 
     var uiState by mutableStateOf(CoinAnalyticsModule.UiState(viewState))
         private set
@@ -109,8 +101,6 @@ class CoinAnalyticsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             service.start()
         }
-
-        fetchTechnicalIndicators()
     }
 
     fun refresh() {
@@ -122,40 +112,6 @@ class CoinAnalyticsViewModel(
             isRefreshing = false
             syncState()
         }
-    }
-
-    fun onPeriodChange(period: HsPointTimePeriod) {
-        techIndicatorPeriod = period
-        viewModelScope.launch {
-            syncState()
-        }
-        fetchTechnicalIndicators()
-    }
-
-    private fun fetchTechnicalIndicators() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = indicatorsService.fetch(techIndicatorPeriod)
-            handle(result)
-        }
-    }
-
-    private suspend fun handle(result: DataState<List<SectionItem>>?) {
-        when (result) {
-            is DataState.Success -> {
-                technicalIndicators = indicatorFactory.viewItems(result.data)
-            }
-
-            is DataState.Error -> {
-            }
-
-            DataState.Loading -> {}
-            null -> {}
-        }
-
-        cachedAnalyticData?.let {
-            analyticsViewItem = viewItem(it)
-        }
-        syncState()
     }
 
     private suspend fun syncState() {
@@ -187,21 +143,23 @@ class CoinAnalyticsViewModel(
     private fun getViewItems(analytics: Analytics): List<BlockViewItem> {
         val blocks = mutableListOf<BlockViewItem>()
 
-        if (technicalIndicators.isNotEmpty()) {
+        analytics.technicalAdvice?.let { technicalAdvice ->
+            val advice = technicalAdvice.advice ?: return@let
             blocks.add(
                 BlockViewItem(
-                    title = R.string.Coin_Analytics_TechnicalIndicators,
+                    title = R.string.TechnicalAdvice_Title,
                     info = AnalyticInfo.TechnicalIndicatorsInfo,
                     analyticChart = ChartViewItem(
-                        AnalyticChart.TechIndicators(technicalIndicators, techIndicatorPeriod),
+                        AnalyticChart.TechAdvice(
+                            CoinAnalyticsModule.TechAdviceData(
+                                adviceTitle = advice.title,
+                                detailText = technicalAdviceViewItemFactory.advice(technicalAdvice),
+                                sliderPosition = advice.sliderIndex
+                            )
+                        ),
                         coin.uid,
                     ),
-                    footerItems = listOf(
-                        FooterItem(
-                            title = Title(ResString(R.string.Coin_Analytics_Details)),
-                            action = ActionType.OpenTechnicalIndicatorsDetails(coin.uid, techIndicatorPeriod)
-                        )
-                    )
+                    footerItems = emptyList()
                 )
             )
         }
@@ -386,13 +344,22 @@ class CoinAnalyticsViewModel(
             data.sortedByDescending { it.holdersCount }.forEach { item ->
                 val blockchain = blockchains.firstOrNull { it.uid == item.blockchainUid }
                 blockchain?.let {
-                    val percent = item.holdersCount.divide(total, 4, RoundingMode.HALF_EVEN).times("100".toBigDecimal())
+                    val percent = item.holdersCount.divide(total, 4, RoundingMode.HALF_EVEN)
+                        .times("100".toBigDecimal())
                     val percentFormatted = numberFormatter.format(percent, 0, 2, suffix = "%")
-                    chartSlices.add(StackBarSlice(value = percent.toFloat(), color = blockchain.type.brandColor ?: Color(0xFFFFA800)))
+                    chartSlices.add(
+                        StackBarSlice(
+                            value = percent.toFloat(),
+                            color = blockchain.type.brandColor ?: Color(0xFFFFA800)
+                        )
+                    )
                     footerItems.add(
                         FooterItem(
                             title = IconTitle(
-                                ImageSource.Remote(blockchain.type.imageUrl, R.drawable.coin_placeholder),
+                                ImageSource.Remote(
+                                    blockchain.type.imageUrl,
+                                    R.drawable.coin_placeholder
+                                ),
                                 TranslatableString.PlainString(blockchain.name)
                             ),
                             value = Value(percentFormatted),
@@ -496,7 +463,7 @@ class CoinAnalyticsViewModel(
             analytics.issues?.let { issues ->
                 val detectorFooterItems = mutableListOf<DetectorFooterItem>()
 
-                val sortedList =  issues.mapNotNull {
+                val sortedList = issues.mapNotNull {
                     val blockchain = service.blockchain(it.blockchain) ?: return@mapNotNull null
                     CoinAnalyticsModule.BlockchainAndIssues(blockchain, it)
                 }.sortedBy { it.blockchain.type.order }
@@ -546,7 +513,7 @@ class CoinAnalyticsViewModel(
             }
 
             analytics.audits?.let { audits ->
-                val auditsParcelable = audits.map{
+                val auditsParcelable = audits.map {
                     CoinAuditsModule.AuditParcelable(
                         date = it.date,
                         name = it.name,
