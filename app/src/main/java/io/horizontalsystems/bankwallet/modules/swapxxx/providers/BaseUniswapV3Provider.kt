@@ -110,11 +110,18 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
         } ?: throw Exception("Yahoo")
 
+        val settingSlippage = SwapSettingSlippage(swapSettings, TradeOptions.defaultAllowedSlippage)
+        val slippage = settingSlippage.valueOrDefault()
+
+        val amountOut = swapQuote.amountOut
+        val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
+
         return SwapFinalQuoteUniswapV3(
             tokenIn,
             tokenOut,
             amountIn,
-            swapQuote.amountOut,
+            amountOut,
+            amountOutMin,
             SendTransactionData.Evm(transactionData, null)
         )
     }

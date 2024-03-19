@@ -25,6 +25,7 @@ class SwapConfirmViewModel(
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
+    private val fiatServiceOutMin: FiatService,
     val sendTransactionService: ISendTransactionService
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
@@ -35,6 +36,7 @@ class SwapConfirmViewModel(
     private var fiatAmountIn: BigDecimal? = null
 
     private var fiatAmountOut: BigDecimal? = null
+    private var fiatAmountOutMin: BigDecimal? = null
     private var expiresIn = 10L
     private var expired = false
 
@@ -42,6 +44,7 @@ class SwapConfirmViewModel(
     private var expirationTimer: CountDownTimer? = null
 
     private var amountOut: BigDecimal? = null
+    private var amountOutMin: BigDecimal? = null
     private var networkFee: SendModule.AmountData? = null
     private var cautions: List<CautionViewItem> = listOf()
     private var validQuote = false
@@ -55,6 +58,10 @@ class SwapConfirmViewModel(
         fiatServiceOut.setToken(tokenOut)
         fiatServiceOut.setAmount(amountOut)
 
+        fiatServiceOutMin.setCurrency(currency)
+        fiatServiceOutMin.setToken(tokenOut)
+        fiatServiceOutMin.setAmount(amountOutMin)
+
         viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
                 fiatAmountIn = it.fiatAmount
@@ -65,6 +72,13 @@ class SwapConfirmViewModel(
         viewModelScope.launch {
             fiatServiceOut.stateFlow.collect {
                 fiatAmountOut = it.fiatAmount
+                emitState()
+            }
+        }
+
+        viewModelScope.launch {
+            fiatServiceOutMin.stateFlow.collect {
+                fiatAmountOutMin = it.fiatAmount
                 emitState()
             }
         }
@@ -105,8 +119,10 @@ class SwapConfirmViewModel(
         tokenOut = tokenOut,
         amountIn = amountIn,
         amountOut = amountOut,
+        amountOutMin = amountOutMin,
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
+        fiatAmountOutMin = fiatAmountOutMin,
         currency = currency,
         networkFee = networkFee,
         cautions = cautions,
@@ -160,9 +176,11 @@ class SwapConfirmViewModel(
                 val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings)
 
                 amountOut = finalQuote.amountOut
+                amountOutMin = finalQuote.amountOutMin
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
+                fiatServiceOutMin.setAmount(amountOutMin)
                 sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
             } catch (t: Throwable) {
 //                Log.e("AAA", "fetchFinalQuote error", t)
@@ -188,6 +206,7 @@ class SwapConfirmViewModel(
                 App.currencyManager,
                 FiatService(App.marketKit),
                 FiatService(App.marketKit),
+                FiatService(App.marketKit),
                 sendTransactionService
             )
         }
@@ -203,8 +222,10 @@ data class SwapConfirmUiState(
     val tokenOut: Token,
     val amountIn: BigDecimal,
     val amountOut: BigDecimal?,
+    val amountOutMin: BigDecimal?,
     val fiatAmountIn: BigDecimal?,
     val fiatAmountOut: BigDecimal?,
+    val fiatAmountOutMin: BigDecimal?,
     val currency: Currency,
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,

@@ -116,6 +116,7 @@ object OneInchProvider : EvmSwapProvider() {
 
         val settingRecipient = SwapSettingRecipient(swapSettings, blockchainType)
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
+        val slippage = settingSlippage.valueOrDefault()
 
         val swap = oneInchKit.getSwapAsync(
             chain = evmBlockchainHelper.chain,
@@ -123,7 +124,7 @@ object OneInchProvider : EvmSwapProvider() {
             fromToken = getTokenAddress(tokenIn),
             toToken = getTokenAddress(tokenOut),
             amount = amountIn.scaleUp(tokenIn.decimals),
-            slippagePercentage = settingSlippage.valueOrDefault().toFloat(),
+            slippagePercentage = slippage.toFloat(),
             recipient = settingRecipient.value?.hex?.let { Address(it) },
             gasPrice = gasPrice
         ).await()
@@ -131,12 +132,14 @@ object OneInchProvider : EvmSwapProvider() {
         val swapTx = swap.transaction
 
         val amountOut = swap.toTokenAmount.toBigDecimal().movePointLeft(swap.toToken.decimals).stripTrailingZeros()
+        val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
         return SwapFinalQuoteOneInch(
             tokenIn,
             tokenOut,
             amountIn,
             amountOut,
+            amountOutMin,
             SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit)
         )
     }
