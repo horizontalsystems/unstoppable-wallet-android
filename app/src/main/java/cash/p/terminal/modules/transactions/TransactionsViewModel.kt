@@ -1,8 +1,5 @@
 package cash.p.terminal.modules.transactions
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
@@ -10,7 +7,6 @@ import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.managers.BalanceHiddenManager
-import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
@@ -39,7 +35,6 @@ class TransactionsViewModel(
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
-    private val spamManager: SpamManager
 ) : ViewModelUiState<TransactionsUiState>() {
 
     var tmpItemToShow: TransactionItem? = null
@@ -49,7 +44,7 @@ class TransactionsViewModel(
     val filterTypesLiveData = MutableLiveData<List<Filter<FilterTransactionType>>>()
     val filterBlockchainsLiveData = MutableLiveData<List<Filter<Blockchain?>>>()
     val filterContactLiveData = MutableLiveData<Contact?>()
-    var filterHideSuspiciousTx by mutableStateOf(spamManager.hideSuspiciousTx)
+    var filterHideSuspiciousTx = MutableLiveData<Boolean>()
 
     private var transactionListId: String? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
@@ -105,6 +100,11 @@ class TransactionsViewModel(
                 filterTokensLiveData.postValue(filterCoins)
 
                 filterContactLiveData.postValue(state.contact)
+
+                if (filterHideSuspiciousTx.value != state.hideSuspiciousTx){
+                    service.reload()
+                }
+                filterHideSuspiciousTx.postValue(state.hideSuspiciousTx)
 
                 transactionListId = selectedTransactionWallet.hashCode().toString() +
                     state.selectedTransactionType.name +
@@ -190,11 +190,7 @@ class TransactionsViewModel(
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
 
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
-        spamManager.updateFilterHideSuspiciousTx(checked)
-
-        service.reload()
-
-        filterHideSuspiciousTx = checked
+        transactionFilterService.updateFilterHideSuspiciousTx(checked)
     }
 
 }

@@ -65,7 +65,7 @@ fun FilterScreen(
     val filterResetEnabled by viewModel.filterResetEnabled.observeAsState(false)
     val filterCoins by viewModel.filterTokensLiveData.observeAsState()
     val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
-    val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx
+    val filterHideUnknownTokens = viewModel.filterHideSuspiciousTx.observeAsState(true)
     val filterContact by viewModel.filterContactLiveData.observeAsState()
 
     val filterCoin = filterCoins?.find { it.selected }?.item
@@ -153,7 +153,7 @@ fun FilterScreen(
                     listOf {
                         FilterSwitch(
                             title = stringResource(R.string.Transactions_Filter_HideSuspiciousTx),
-                            enabled = filterHideUnknownTokens,
+                            enabled = filterHideUnknownTokens.value,
                             onChecked = { checked ->
                                 viewModel.updateFilterHideSuspiciousTx(checked)
                             }
