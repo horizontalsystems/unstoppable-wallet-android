@@ -156,11 +156,24 @@ fun SwapConfirmScreen(navController: NavController) {
                 TokenRow(uiState.tokenIn, uiState.amountIn, uiState.fiatAmountIn, uiState.currency, TokenRowType.In, false,)
                 TokenRow(uiState.tokenOut, uiState.amountOut, uiState.fiatAmountOut, uiState.currency, TokenRowType.Out)
             }
-//            VSpacer(height = 16.dp)
-//            SectionUniversalLawrence {
-//                val swapPriceUIHelper = SwapPriceUIHelper(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, uiState.amountOut)
-//                SwapInfoRow(false, stringResource(id = R.string.Swap_Price), swapPriceUIHelper.priceStr)
-//            }
+            uiState.amountOut?.let { amountOut ->
+                VSpacer(height = 16.dp)
+                SectionUniversalLawrence {
+                    PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut)
+                    uiState.amountOutMin?.let { amountOutMin ->
+                        val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
+                            CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
+                        } ?: "---"
+
+                        SwapInfoRow(
+                            borderTop = false,
+                            title = stringResource(id = R.string.Swap_MinimumReceived),
+                            value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
+                            subvalue = subvalue
+                        )
+                    }
+                }
+            }
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
                 SwapInfoRow(

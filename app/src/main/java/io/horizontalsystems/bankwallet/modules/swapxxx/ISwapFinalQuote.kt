@@ -9,6 +9,7 @@ interface ISwapFinalQuote {
     val tokenOut: Token
     val amountIn: BigDecimal
     val amountOut: BigDecimal
+    val amountOutMin: BigDecimal
     val sendTransactionData: SendTransactionData
 }
 
@@ -17,6 +18,7 @@ data class SwapFinalQuoteUniswapV3(
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
     override val amountOut: BigDecimal,
+    override val amountOutMin: BigDecimal,
     override val sendTransactionData: SendTransactionData.Evm,
 ) : ISwapFinalQuote
 
@@ -25,5 +27,6 @@ data class SwapFinalQuoteOneInch(
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
     override val amountOut: BigDecimal,
+    override val amountOutMin: BigDecimal,
     override val sendTransactionData: SendTransactionData.Evm,
 ) : ISwapFinalQuote
