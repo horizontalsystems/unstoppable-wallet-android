@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.evmfee.eip1559
 
 import cash.p.terminal.core.Warning
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.Bound
 import cash.p.terminal.modules.evmfee.FeeSettingsError
@@ -13,19 +12,24 @@ import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.FeeHistory
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import kotlin.math.max
 import kotlin.math.min
 
 class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
-    evmKit: EthereumKit,
+    refreshSignalFlowable: Flowable<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
     initialGasPrice: GasPrice.Eip1559? = null
 ) : IEvmGasPriceService() {
 
-    private val disposable = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val blocksCount: Long = 10
     private val rewardPercentile = listOf(50)
     private val lastNRecommendedBaseFees = 2
@@ -52,6 +56,13 @@ class Eip1559GasPriceService(
     var currentPriorityFee: Long? = null
         private set
 
+    constructor(
+        gasProvider: Eip1559GasPriceProvider,
+        evmKit: EthereumKit,
+        minGasPrice: GasPrice.Eip1559? = null,
+        initialGasPrice: GasPrice.Eip1559? = null
+    ) : this(gasProvider, evmKit.lastBlockHeightFlowable, minGasPrice, initialGasPrice)
+
     init {
         if (initialBaseFee != null && initialPriorityFee != null) {
             setGasPrice(initialBaseFee, initialPriorityFee)
@@ -59,21 +70,27 @@ class Eip1559GasPriceService(
             setRecommended()
         }
 
-        evmKit.lastBlockHeightFlowable
-            .subscribeIO {
+        coroutineScope.launch {
+            refreshSignalFlowable.asFlow().collect {
                 syncRecommended()
             }
-            .let { disposable.add(it) }
+        }
     }
 
     override fun setRecommended() {
         recommendedGasPriceSelected = true
 
-        recommendedGasPrice?.let {
+        val recommendedGasPrice = recommendedGasPrice
+
+        if (recommendedGasPrice == null) {
+            coroutineScope.launch {
+                syncRecommended()
+            }
+        } else {
             state = DataState.Success(
                 GasPriceInfo(
-                    gasPrice = it,
-                    gasPriceDefault = it,
+                    gasPrice = recommendedGasPrice,
+                    gasPriceDefault = recommendedGasPrice,
                     default = true,
                     warnings = listOf(),
                     errors = listOf()
@@ -81,7 +98,7 @@ class Eip1559GasPriceService(
             )
 
             emitState()
-        } ?: syncRecommended()
+        }
     }
 
     fun setGasPrice(maxFee: Long, priorityFee: Long) {
@@ -133,14 +150,13 @@ class Eip1559GasPriceService(
         )
     }
 
-    private fun syncRecommended() {
-        gasProvider.feeHistorySingle(blocksCount, DefaultBlockParameter.Latest, rewardPercentile)
-            .subscribeIO({ feeHistory ->
-                handle(feeHistory)
-            }, { error ->
-                handle(error)
-            })
-            .let { disposable.add(it) }
+    private suspend fun syncRecommended() {
+        try {
+            val feeHistory = gasProvider.feeHistorySingle(blocksCount, DefaultBlockParameter.Latest, rewardPercentile).await()
+            handle(feeHistory)
+        } catch (error: Throwable) {
+            handle(error)
+        }
     }
 
     private fun handle(error: Throwable) {
@@ -175,7 +191,7 @@ class Eip1559GasPriceService(
 
     private fun recommendedBaseFee(feeHistory: FeeHistory): Long {
         val lastNRecommendedBaseFeesList = feeHistory.baseFeePerGas.takeLast(lastNRecommendedBaseFees)
-        return java.util.Collections.max(lastNRecommendedBaseFeesList)
+        return lastNRecommendedBaseFeesList.max()
     }
 
     private fun recommendedPriorityFee(feeHistory: FeeHistory): Long {
