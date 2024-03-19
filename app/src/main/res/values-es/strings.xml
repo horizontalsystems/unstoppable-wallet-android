@@ -1242,6 +1242,7 @@
     <string name="Coin_Analytics_Indicators_Buy">Comprar</string>
     <string name="Coin_Analytics_Indicators_NoData">No hay datos</string>
     <string name="CoinAnalytics_CountItems">%d Artículos</string>
+    <string name="TechnicalAdvice_InfoTitle">Indicadores técnicos</string>
     <string name="ActivateSubscription_Title">Activar</string>
     <string name="ActivateSubscription_Wallet">Monedero</string>
     <string name="ActivateSubscription_Address">Dirección</string>
