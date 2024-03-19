@@ -25,6 +25,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsViewModel
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
+import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +40,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         val evmKit = evmKitWrapper.evmKit
         if (evmKit.chain.isEIP1559Supported) {
             val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
-            Eip1559GasPriceService(gasPriceProvider, evmKit)
+            Eip1559GasPriceService(gasPriceProvider, Flowable.empty())
         } else {
             val gasPriceProvider = LegacyGasPriceProvider(evmKit)
             LegacyGasPriceService(gasPriceProvider)
