@@ -34,8 +34,7 @@ object TransactionsModule {
                 App.balanceHiddenManager,
                 App.transactionAdapterManager,
                 App.walletManager,
-                TransactionFilterService(App.marketKit, App.transactionAdapterManager),
-                App.spamManager
+                TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.spamManager),
             ) as T
         }
     }

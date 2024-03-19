@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
@@ -12,7 +13,8 @@ import java.util.UUID
 
 class TransactionFilterService(
     private val marketKitWrapper: MarketKitWrapper,
-    private val transactionAdapterManager: TransactionAdapterManager
+    private val transactionAdapterManager: TransactionAdapterManager,
+    private val spamManager: SpamManager
 ) {
     private var blockchains: List<Blockchain?> = listOf(null)
     private var selectedBlockchain: Blockchain? = null
@@ -22,6 +24,7 @@ class TransactionFilterService(
     private var selectedTransactionType: FilterTransactionType = FilterTransactionType.All
     private var contact: Contact? = null
     private var uniqueId = UUID.randomUUID().toString()
+    private var hideSuspiciousTx = spamManager.hideSuspiciousTx
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -33,7 +36,8 @@ class TransactionFilterService(
             selectedTransactionType = selectedTransactionType,
             resetEnabled = resetEnabled(),
             uniqueId = uniqueId,
-            contact = contact
+            contact = contact,
+            hideSuspiciousTx = hideSuspiciousTx,
         )
     )
     val stateFlow get() = _stateFlow.asStateFlow()
@@ -49,7 +53,8 @@ class TransactionFilterService(
                 selectedTransactionType = selectedTransactionType,
                 resetEnabled = resetEnabled(),
                 uniqueId = uniqueId,
-                contact = contact
+                contact = contact,
+                hideSuspiciousTx = hideSuspiciousTx,
             )
         }
     }
@@ -129,6 +134,8 @@ class TransactionFilterService(
         selectedToken = null
         selectedBlockchain = null
         contact = null
+        hideSuspiciousTx = true
+        spamManager.updateFilterHideSuspiciousTx(true)
 
         emitState()
     }
@@ -138,6 +145,7 @@ class TransactionFilterService(
                 || selectedBlockchain != null
                 || selectedTransactionType != FilterTransactionType.All
                 || contact != null
+                || !hideSuspiciousTx
     }
 
     private fun refreshContact() {
@@ -151,6 +159,12 @@ class TransactionFilterService(
         }
     }
 
+    fun updateFilterHideSuspiciousTx(checked: Boolean) {
+        hideSuspiciousTx = checked
+        spamManager.updateFilterHideSuspiciousTx(checked)
+        emitState()
+    }
+
     data class State(
         val blockchains: List<Blockchain?>,
         val selectedBlockchain: Blockchain?,
@@ -161,6 +175,7 @@ class TransactionFilterService(
         val resetEnabled: Boolean,
         val uniqueId: String,
         val contact: Contact?,
+        val hideSuspiciousTx: Boolean,
     )
 
 }
