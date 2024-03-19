@@ -105,11 +105,12 @@ object OneInchProvider : EvmSwapProvider() {
         sendTransactionSettings: SendTransactionSettings?,
     ): ISwapFinalQuote {
         check(sendTransactionSettings is SendTransactionSettings.Evm)
+        checkNotNull(sendTransactionSettings.gasPriceInfo)
 
         val blockchainType = tokenIn.blockchainType
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
 
-        val gasPrice = sendTransactionSettings.gasPriceInfo?.gasPrice
+        val gasPrice = sendTransactionSettings.gasPriceInfo.gasPrice
 
         val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: throw NullPointerException()
 

@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
@@ -166,7 +165,7 @@ class SwapConfirmViewModel(
                 fiatServiceOut.setAmount(amountOut)
                 sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
             } catch (t: Throwable) {
-                Log.e("AAA", "fetchFinalQuote error", t)
+//                Log.e("AAA", "fetchFinalQuote error", t)
             }
         }
     }
