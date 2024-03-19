@@ -1203,6 +1203,7 @@
     <string name="Coin_Analytics_Indicators_Buy">Kaufen</string>
     <string name="Coin_Analytics_Indicators_NoData">Keine Daten</string>
     <string name="CoinAnalytics_CountItems">%d Elemente</string>
+    <string name="TechnicalAdvice_InfoTitle">Technische Indikatoren</string>
     <string name="ActivateSubscription_Address">Adresse</string>
     <string name="ActivateSubscription_MessageToSign">zu signierende Nachricht</string>
     <string name="ActivateSubscription_SignMessageDescription">Du musst diese Nachricht unterschreiben, um dein Abonnement zu aktivieren.</string>
