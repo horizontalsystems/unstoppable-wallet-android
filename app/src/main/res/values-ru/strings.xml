@@ -1318,6 +1318,8 @@
     <string name="Coin_Analytics_Indicators_Neutral">Нейтрально</string>
     <string name="Coin_Analytics_Indicators_NoData">Нет данных</string>
     <string name="CoinAnalytics_CountItems">%d Элементов</string>
+    <string name="TechnicalAdvice_InfoTitle">Технические индикаторы</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Нейтрально</string>
     <string name="ActivateSubscription_Title">Активировать</string>
     <string name="ActivateSubscription_Wallet">Кошелек</string>
     <string name="ActivateSubscription_Address">Адрес</string>
