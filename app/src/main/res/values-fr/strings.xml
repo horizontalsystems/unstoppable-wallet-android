@@ -1275,6 +1275,8 @@
     <string name="Coin_Analytics_Indicators_Neutral">Neutre</string>
     <string name="Coin_Analytics_Indicators_NoData">Pas de données</string>
     <string name="CoinAnalytics_CountItems">%d éléments</string>
+    <string name="TechnicalAdvice_InfoTitle">Indicateurs techniques</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Neutre</string>
     <string name="ActivateSubscription_Title">Activer</string>
     <string name="ActivateSubscription_Wallet">Portefeuille</string>
     <string name="ActivateSubscription_Address">Adresse</string>
