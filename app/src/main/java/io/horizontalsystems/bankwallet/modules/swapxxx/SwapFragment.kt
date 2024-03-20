@@ -67,6 +67,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -137,7 +138,11 @@ fun SwapScreen(navController: NavController) {
         onTimeout = viewModel::reQuote,
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)
-        }
+        },
+        onActionExecuted = {
+            viewModel.onActionExecuted()
+        },
+        navController = navController
     )
 }
 
@@ -155,6 +160,8 @@ private fun SwapScreenInner(
     onClickProviderSettings: () -> Unit,
     onTimeout: () -> Unit,
     onClickNext: () -> Unit,
+    onActionExecuted: () -> Unit,
+    navController: NavController,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
@@ -249,7 +256,7 @@ private fun SwapScreenInner(
                                 .fillMaxWidth(),
                             title = stringResource(R.string.Alert_Loading),
                             enabled = false,
-                            onClick = { /*TODO*/ }
+                            onClick = {}
                         )
                     }
 
@@ -267,7 +274,21 @@ private fun SwapScreenInner(
                                 .fillMaxWidth(),
                             title = errorText,
                             enabled = false,
-                            onClick = onClickNext
+                            onClick = {}
+                        )
+                    }
+
+                    is SwapStep.ActionRequired -> {
+                        val action = currentStep.action
+                        ButtonPrimaryDefault(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = action.getTitle(),
+                            onClick = {
+                                onActionExecuted.invoke()
+                                action.execute(navController)
+                            }
                         )
                     }
 
