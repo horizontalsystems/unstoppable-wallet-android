@@ -165,7 +165,8 @@ class SwapViewModel(
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     fun reQuote() = quoteService.reQuote()
-    fun onActionExecuted() = quoteService.onActionExecuted()
+    fun onActionStarted() = quoteService.onActionStarted()
+    fun onActionCompleted() = quoteService.onActionCompleted()
 
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()

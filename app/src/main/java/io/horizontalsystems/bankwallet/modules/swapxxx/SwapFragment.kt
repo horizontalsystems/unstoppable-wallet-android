@@ -139,8 +139,11 @@ fun SwapScreen(navController: NavController) {
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)
         },
-        onActionExecuted = {
-            viewModel.onActionExecuted()
+        onActionStarted = {
+            viewModel.onActionStarted()
+        },
+        onActionCompleted = {
+            viewModel.onActionCompleted()
         },
         navController = navController
     )
@@ -160,7 +163,8 @@ private fun SwapScreenInner(
     onClickProviderSettings: () -> Unit,
     onTimeout: () -> Unit,
     onClickNext: () -> Unit,
-    onActionExecuted: () -> Unit,
+    onActionStarted: () -> Unit,
+    onActionCompleted: () -> Unit,
     navController: NavController,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -286,8 +290,8 @@ private fun SwapScreenInner(
                                 .fillMaxWidth(),
                             title = action.getTitle(),
                             onClick = {
-                                onActionExecuted.invoke()
-                                action.execute(navController)
+                                onActionStarted.invoke()
+                                action.execute(navController, onActionCompleted)
                             }
                         )
                     }
