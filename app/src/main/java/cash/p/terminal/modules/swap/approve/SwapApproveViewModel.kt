@@ -6,12 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.swap.SwapMainModule
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 
 class SwapApproveViewModel(
-    val dex: SwapMainModule.Dex,
+    val blockchainType: BlockchainType,
     private val service: SwapApproveService,
     private val coinService: EvmCoinService
 ) : ViewModel() {

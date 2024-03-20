@@ -113,8 +113,10 @@ fun SwapApproveScreen(
                     swapApproveViewModel.getSendEvmData()?.let { sendEvmData ->
                         navController.slideFromRight(
                             R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.prepareParams(sendEvmData, swapApproveViewModel.dex.blockchainType)
-                        )
+                            SwapApproveConfirmationModule.Input(sendEvmData, swapApproveViewModel.blockchainType)
+                        ) {
+                            navController.setNavigationResultX(it)
+                        }
                     }
                 },
                 enabled = approveAllowed
