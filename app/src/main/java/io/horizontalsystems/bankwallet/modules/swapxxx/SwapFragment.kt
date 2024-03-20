@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.swapxxx
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -82,7 +81,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -212,7 +210,7 @@ private fun SwapScreenInner(
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
                             title = title,
-                            enabled = uiState.swapEnabled,
+                            enabled = false,
                             onClick = onClickNext
                         )
                     }
@@ -228,40 +226,31 @@ private fun SwapScreenInner(
                         )
                     }
 
-                    SwapStep.Error -> TODO()
+                    is SwapStep.Error -> {
+                        val errorText = when (val error = currentStep.error) {
+                            SwapMainModule.SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
+                            is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
+                            is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
+                            else -> error.message ?: error.javaClass.simpleName
+                        }
+
+                        ButtonPrimaryYellow(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .fillMaxWidth(),
+                            title = errorText,
+                            enabled = false,
+                            onClick = onClickNext
+                        )
+                    }
+
                     SwapStep.Proceed -> {
                         ButtonPrimaryYellow(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
                             title = stringResource(R.string.Swap_Proceed),
-                            enabled = uiState.swapEnabled,
                             onClick = onClickNext
-                        )
-                    }
-                }
-
-                VSpacer(height = 12.dp)
-
-                uiState.error?.let { error ->
-                    VSpacer(height = 12.dp)
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp)),
-                    ) {
-                        QuoteInfoRow(
-                            title = {
-                                val errorText = if (error is SwapRouteNotFound) {
-                                    stringResource(id = R.string.Swap_SwapRouteNotFound)
-                                } else {
-                                    error.javaClass.simpleName
-                                }
-                                subhead2_lucian(text = errorText)
-                            },
-                            value = {
-                            }
                         )
                     }
                 }
