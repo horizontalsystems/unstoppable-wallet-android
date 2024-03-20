@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.UsedAddress
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.factories.uriScheme
@@ -22,13 +19,12 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
     private val wallet: Wallet,
     private val adapterManager: IAdapterManager
-) : ViewModel() {
+) : ViewModelUiState<ReceiveModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
@@ -42,22 +38,6 @@ class ReceiveAddressViewModel(
     private var watchAccount = wallet.account.isWatchAccount
     private var alertText: ReceiveModule.AlertText? = getAlertText(watchAccount)
 
-    var uiState by mutableStateOf(
-        ReceiveModule.UiState(
-            viewState = viewState,
-            address = address,
-            usedAddresses = usedAddresses,
-            usedChangeAddresses = usedChangeAddresses,
-            uri = uri,
-            networkName = networkName,
-            watchAccount = watchAccount,
-            additionalItems = getAdditionalData(),
-            amount = amount,
-            alertText = alertText,
-        )
-    )
-        private set
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             adapterManager.adaptersReadyObservable.asFlow()
@@ -70,6 +50,19 @@ class ReceiveAddressViewModel(
         }
         setNetworkName()
     }
+
+    override fun createState() = ReceiveModule.UiState(
+        viewState = viewState,
+        address = address,
+        usedAddresses = usedAddresses,
+        usedChangeAddresses = usedChangeAddresses,
+        uri = uri,
+        networkName = networkName,
+        watchAccount = watchAccount,
+        additionalItems = getAdditionalData(),
+        amount = amount,
+        alertText = alertText,
+    )
 
     private fun setNetworkName() {
         when (val tokenType = wallet.token.type) {
@@ -91,7 +84,7 @@ class ReceiveAddressViewModel(
         if (!mainNet) {
             networkName += " (TestNet)"
         }
-        syncState()
+        emitState()
     }
 
     private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? {
@@ -114,9 +107,7 @@ class ReceiveAddressViewModel(
         } else {
             viewState = ViewState.Error(NullPointerException())
         }
-        withContext(Dispatchers.Main) {
-            syncState()
-        }
+        emitState()
     }
 
     private fun getUri(): String {
@@ -134,21 +125,6 @@ class ReceiveAddressViewModel(
         }
 
         return newUri
-    }
-
-    private fun syncState() {
-        uiState = ReceiveModule.UiState(
-            viewState = viewState,
-            address = address,
-            usedAddresses = usedAddresses,
-            usedChangeAddresses = usedChangeAddresses,
-            uri = uri,
-            networkName = networkName,
-            watchAccount = watchAccount,
-            additionalItems = getAdditionalData(),
-            amount = amount,
-            alertText = alertText,
-        )
     }
 
     private fun getAdditionalData(): List<AdditionalData> {
@@ -179,13 +155,13 @@ class ReceiveAddressViewModel(
         amount?.let {
             if (it <= BigDecimal.ZERO) {
                 this.amount = null
-                syncState()
+                emitState()
                 return
             }
         }
         this.amount = amount
         uri = getUri()
-        syncState()
+        emitState()
     }
 
 }

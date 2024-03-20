@@ -1,12 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.coin.majorholders
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.brandColor
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -29,7 +26,7 @@ class CoinMajorHoldersViewModel(
     private val blockchain: Blockchain,
     private val marketKit: MarketKitWrapper,
     private val factory: CoinViewFactory
-) : ViewModel() {
+) : ViewModelUiState<UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
     private var top10Share: String = ""
@@ -39,35 +36,30 @@ class CoinMajorHoldersViewModel(
     private var topHolders: List<MajorHolderItem> = emptyList()
     private var error: TranslatableString? = null
 
-    var uiState by mutableStateOf(UiState(viewState))
-        private set
-
     init {
         fetch()
     }
 
+    override fun createState() = UiState(
+        viewState = viewState,
+        top10Share = top10Share,
+        totalHoldersCount  = totalHoldersCount,
+        seeAllUrl = seeAllUrl,
+        chartData = chartData,
+        topHolders = topHolders,
+        error = error
+    )
+
     fun onErrorClick() {
         viewState = ViewState.Loading
         error = null
-        syncState()
+        emitState()
         fetch()
     }
 
     fun errorShown() {
         error = null
-        syncState()
-    }
-
-    private fun syncState() {
-        uiState = UiState(
-            viewState = viewState,
-            top10Share = top10Share,
-            totalHoldersCount  = totalHoldersCount,
-            seeAllUrl = seeAllUrl,
-            chartData = chartData,
-            topHolders = topHolders,
-            error = error
-        )
+        emitState()
     }
 
     private fun fetch() {
@@ -87,7 +79,7 @@ class CoinMajorHoldersViewModel(
                 viewState = ViewState.Error(e)
                 error = errorText(e)
             }
-            syncState()
+            emitState()
         }
     }
 

@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.balance.token
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
@@ -17,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
+import io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItemFactory
@@ -24,7 +22,6 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.IllegalStateException
 
 class TokenBalanceViewModel(
     private val wallet: Wallet,
@@ -35,22 +32,13 @@ class TokenBalanceViewModel(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
     private val accountManager: IAccountManager
-) : ViewModel() {
+) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
     private val disposables = CompositeDisposable()
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
-
-    var uiState by mutableStateOf(
-        TokenBalanceModule.TokenBalanceUiState(
-            title = title,
-            balanceViewItem = balanceViewItem,
-            transactions = transactions,
-        )
-    )
-        private set
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -86,22 +74,18 @@ class TokenBalanceViewModel(
         }
     }
 
-    private fun emitUiState() {
-        viewModelScope.launch {
-            uiState = TokenBalanceModule.TokenBalanceUiState(
-                title = title,
-                balanceViewItem = balanceViewItem,
-                transactions = transactions,
-            )
-        }
-    }
+    override fun createState() = TokenBalanceUiState(
+        title = title,
+        balanceViewItem = balanceViewItem,
+        transactions = transactions,
+    )
 
     private fun updateTransactions(items: List<TransactionItem>) {
         transactions = items
             .map { transactionViewItem2Factory.convertToViewItemCached(it) }
             .groupBy { it.formattedDate }
 
-        emitUiState()
+        emitState()
     }
 
     private fun updateBalanceViewItem(balanceItem: BalanceModule.BalanceItem) {
@@ -117,7 +101,7 @@ class TokenBalanceViewModel(
             primaryValue = balanceViewItem.primaryValue.copy(value = balanceViewItem.primaryValue.value + " " + balanceViewItem.coinCode)
         )
 
-        emitUiState()
+        emitState()
     }
 
     @Throws(BackupRequiredError::class, IllegalStateException::class)

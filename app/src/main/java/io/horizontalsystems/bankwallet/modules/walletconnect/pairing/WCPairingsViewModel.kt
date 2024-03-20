@@ -1,25 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.pairing
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.walletconnect.android.Core
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 
-class WCPairingsViewModel : ViewModel() {
+class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {
 
     private val pairings: List<PairingViewItem>
         get() = WCDelegate.getPairings().map { getPairingViewItem(it) }
 
-    var uiState by mutableStateOf(
-        WCPairingsUiState(
-            pairings = pairings,
-            closeScreen = pairings.isEmpty(),
-        )
+    override fun createState() = WCPairingsUiState(
+        pairings = pairings,
+        closeScreen = pairings.isEmpty(),
     )
-        private set
 
     private fun getPairingViewItem(pairing: Core.Model.Pairing): PairingViewItem {
         val metaData = pairing.peerAppMetaData
@@ -29,13 +24,6 @@ class WCPairingsViewModel : ViewModel() {
             name = metaData?.name,
             url = metaData?.url,
             topic = pairing.topic
-        )
-    }
-
-    private fun emitState() {
-        uiState = WCPairingsUiState(
-            pairings = pairings,
-            closeScreen = pairings.isEmpty()
         )
     }
 

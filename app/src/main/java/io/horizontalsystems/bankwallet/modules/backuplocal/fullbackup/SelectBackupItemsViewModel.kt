@@ -1,34 +1,24 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SelectBackupItemsViewModel(
     private val backupProvider: BackupProvider,
     private val backupViewItemFactory: BackupViewItemFactory
-) : ViewModel() {
+) : ViewModelUiState<UIState>() {
 
     private var viewState: ViewState = ViewState.Loading
     private var wallets: List<WalletBackupViewItem> = emptyList()
     private var otherBackupItems: List<OtherBackupViewItem> = emptyList()
-
-    var uiState by mutableStateOf(
-        UIState(
-            viewState = viewState,
-            wallets = wallets,
-            otherBackupItems = otherBackupItems
-        )
-    )
-        private set
 
     val selectedWallets: List<String>
         get() = wallets.filter { it.selected }.map { it.account.id }
@@ -46,11 +36,11 @@ class SelectBackupItemsViewModel(
         }
     }
 
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = UIState(viewState, wallets, otherBackupItems)
-        }
-    }
+    override fun createState() = UIState(
+        viewState = viewState,
+        wallets = wallets,
+        otherBackupItems = otherBackupItems
+    )
 
     fun toggle(wallet: WalletBackupViewItem) {
         wallets = wallets.map {

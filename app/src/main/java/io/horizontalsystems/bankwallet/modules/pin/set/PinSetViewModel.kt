@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.pin.set
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.pin.PinModule
 import io.horizontalsystems.bankwallet.modules.pin.set.PinSetModule.PinSetViewState
@@ -18,7 +15,7 @@ import kotlinx.coroutines.launch
 class PinSetViewModel(
     private val pinComponent: IPinComponent,
     private val forDuress: Boolean,
-) : ViewModel() {
+) : ViewModelUiState<PinSetViewState>() {
 
     private var enteredPin = ""
     private var submittedPin = ""
@@ -28,35 +25,18 @@ class PinSetViewModel(
     private var reverseSlideAnimation = false
     private var error: String? = null
 
-    var uiState by mutableStateOf(
-        PinSetViewState(
-            stage = stage,
-            enteredCount = enteredPin.length,
-            finished = finished,
-            reverseSlideAnimation = reverseSlideAnimation,
-            error = error,
-        )
+    override fun createState() = PinSetViewState(
+        stage = stage,
+        enteredCount = enteredPin.length,
+        finished = finished,
+        reverseSlideAnimation = reverseSlideAnimation,
+        error = error,
     )
-        private set
-
 
     fun onDelete() {
         if (enteredPin.isNotEmpty()) {
             enteredPin = enteredPin.dropLast(1)
             emitState()
-        }
-    }
-
-    private fun emitState(delayTime: Long = 0) {
-        viewModelScope.launch {
-            delay(delayTime)
-            uiState = PinSetViewState(
-                stage = stage,
-                enteredCount = enteredPin.length,
-                finished = finished,
-                reverseSlideAnimation = reverseSlideAnimation,
-                error = error,
-            )
         }
     }
 
@@ -83,7 +63,10 @@ class PinSetViewModel(
                     enteredPin = ""
 
                     stage = Confirm
-                    emitState(500)
+                    viewModelScope.launch {
+                        delay(500)
+                        emitState()
+                    }
                 } else {
                     enteredPin = ""
 
@@ -119,7 +102,10 @@ class PinSetViewModel(
         stage = Enter
         reverseSlideAnimation = true
         error = Translator.getString(errorMessage)
-        emitState(500)
+        viewModelScope.launch {
+            delay(500)
+            emitState()
+        }
     }
 
 }

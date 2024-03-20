@@ -1,12 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.balance.cex
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
 import io.horizontalsystems.bankwallet.core.providers.ICexProvider
@@ -36,7 +33,7 @@ class BalanceCexViewModel(
     private val xRateRepository: BalanceXRateRepository,
     private val balanceCexSorter: BalanceCexSorter,
     private val cexProviderManager: CexProviderManager,
-) : ViewModel(), ITotalBalance by totalBalance {
+) : ViewModelUiState<UiState>(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
 
@@ -49,17 +46,6 @@ class BalanceCexViewModel(
     private var viewItems = mutableListOf<BalanceCexViewItem>()
     private var isActiveScreen = false
     private var withdrawEnabled = false
-
-    var uiState by mutableStateOf(
-        UiState(
-            isRefreshing = isRefreshing,
-            viewItems = viewItems,
-            sortType = sortType,
-            isActiveScreen = isActiveScreen,
-            withdrawEnabled = withdrawEnabled,
-        )
-    )
-        private set
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -96,6 +82,14 @@ class BalanceCexViewModel(
         totalBalance.start(viewModelScope)
         balanceCexRepository.start()
     }
+
+    override fun createState()= UiState(
+        isRefreshing = isRefreshing,
+        viewItems = viewItems,
+        sortType = sortType,
+        isActiveScreen = isActiveScreen,
+        withdrawEnabled = withdrawEnabled,
+    )
 
     private fun handleCexProvider(cexProvider: ICexProvider?) {
         balanceCexRepository.setCexProvider(cexProvider)
@@ -196,18 +190,6 @@ class BalanceCexViewModel(
 
     private fun sortItems() {
         viewItems = balanceCexSorter.sort(viewItems, sortType).toMutableList()
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = UiState(
-                isRefreshing = isRefreshing,
-                viewItems = viewItems,
-                sortType = sortType,
-                isActiveScreen = isActiveScreen,
-                withdrawEnabled = withdrawEnabled,
-            )
-        }
     }
 
     override fun onCleared() {

@@ -1,12 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.toppairs
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -21,19 +19,10 @@ import kotlinx.coroutines.withContext
 class TopPairsViewModel(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
-) : ViewModel() {
+) : ViewModelUiState<TopPairsUiState>() {
     private var isRefreshing = false
     private var items = listOf<TopPairViewItem>()
     private var viewState: ViewState = ViewState.Loading
-
-    var uiState by mutableStateOf(
-        TopPairsUiState(
-            isRefreshing = isRefreshing,
-            items = items,
-            viewState = viewState
-        )
-    )
-        private set
 
     init {
         viewModelScope.launch {
@@ -49,6 +38,12 @@ class TopPairsViewModel(
         }
     }
 
+    override fun createState() = TopPairsUiState(
+        isRefreshing = isRefreshing,
+        items = items,
+        viewState = viewState
+    )
+
     private suspend fun fetchItems() = withContext(Dispatchers.Default) {
         try {
             val topPairs = marketKit.topPairsSingle(currencyManager.baseCurrency.code, 1, 100).await()
@@ -58,16 +53,6 @@ class TopPairsViewModel(
             viewState = ViewState.Success
         } catch (e: Throwable) {
             viewState = ViewState.Error(e)
-        }
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = TopPairsUiState(
-                isRefreshing = isRefreshing,
-                items = items,
-                viewState = viewState,
-            )
         }
     }
 

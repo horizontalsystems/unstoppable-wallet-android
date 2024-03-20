@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.send.binance
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
@@ -12,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -35,7 +35,7 @@ class SendBinanceViewModel(
     private val xRateService: XRateService,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
-) : ViewModel() {
+) : ViewModelUiState<SendBinanceUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeToken by feeService::feeToken
     val feeTokenMaxAllowedDecimals = feeToken.decimals
@@ -48,19 +48,6 @@ class SendBinanceViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
-
-    var uiState by mutableStateOf(
-        SendBinanceUiState(
-            availableBalance = amountState.availableBalance,
-            fee = feeState.fee,
-            feeCaution = feeState.feeCaution,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
@@ -91,6 +78,16 @@ class SendBinanceViewModel(
         feeService.start()
     }
 
+    override fun createState() = SendBinanceUiState(
+        availableBalance = amountState.availableBalance,
+        fee = feeState.fee,
+        feeCaution = feeState.feeCaution,
+        amountCaution = amountState.amountCaution,
+        addressError = addressState.addressError,
+        canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
+        showAddressInput = showAddressInput,
+    )
+
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
     }
@@ -119,18 +116,6 @@ class SendBinanceViewModel(
         this.feeState = feeState
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = SendBinanceUiState(
-            availableBalance = amountState.availableBalance,
-            fee = adapter.fee,
-            feeCaution = feeState.feeCaution,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
     }
 
     fun getConfirmationData(): SendConfirmationData {

@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.market.filters
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.BlockchainViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -17,7 +14,9 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
-class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
+class MarketFiltersViewModel(val service: MarketFiltersService)
+    : ViewModelUiState<MarketFiltersUiState>() {
+
     private var coinListSet = FilterViewItemWrapper(
         Translator.getString(CoinList.Top250.titleResId),
         CoinList.Top250,
@@ -46,33 +45,6 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     private var buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults)
     private var errorMessage: TranslatableString? = null
 
-    var uiState by mutableStateOf(
-        MarketFiltersUiState(
-            coinListSet = coinListSet,
-            period = period,
-            marketCap = marketCap,
-            volume = volume,
-            priceChange = priceChange,
-            outperformedBtcOn = outperformedBtcOn,
-            outperformedEthOn = outperformedEthOn,
-            outperformedBnbOn = outperformedBnbOn,
-            priceCloseToAth = priceCloseToAth,
-            priceCloseToAtl = priceCloseToAtl,
-            selectedBlockchainsValue = selectedBlockchainsValue,
-            selectedBlockchains = selectedBlockchains,
-            blockchainOptions = blockchainOptions,
-            showSpinner = showSpinner,
-            buttonEnabled = buttonEnabled,
-            buttonTitle = buttonTitle,
-            errorMessage = errorMessage,
-            listedOnTopExchangesOn = listedOnTopExchangesOn,
-            solidCexOn = solidCexOn,
-            solidDexOn = solidDexOn,
-            goodDistributionOn = goodDistributionOn,
-        )
-    )
-        private set
-
     private var reloadDataJob: Job? = null
 
     val coinListsViewItemOptions = CoinList.values().map {
@@ -94,6 +66,30 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         emitState()
         reloadData()
     }
+
+    override fun createState() = MarketFiltersUiState(
+        coinListSet = coinListSet,
+        period = period,
+        marketCap = marketCap,
+        volume = volume,
+        priceChange = priceChange,
+        outperformedBtcOn = outperformedBtcOn,
+        outperformedEthOn = outperformedEthOn,
+        outperformedBnbOn = outperformedBnbOn,
+        priceCloseToAth = priceCloseToAth,
+        priceCloseToAtl = priceCloseToAtl,
+        selectedBlockchainsValue = selectedBlockchainsValue,
+        selectedBlockchains = selectedBlockchains,
+        blockchainOptions = blockchainOptions,
+        showSpinner = showSpinner,
+        buttonEnabled = buttonEnabled,
+        buttonTitle = buttonTitle,
+        errorMessage = errorMessage,
+        listedOnTopExchangesOn = listedOnTopExchangesOn,
+        solidCexOn = solidCexOn,
+        solidDexOn = solidDexOn,
+        goodDistributionOn = goodDistributionOn,
+    )
 
     fun reset() {
         updateCoinList(
@@ -270,34 +266,6 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
 
             ensureActive()
             emitState()
-        }
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = MarketFiltersUiState(
-                coinListSet = coinListSet,
-                period = period,
-                marketCap = marketCap,
-                volume = volume,
-                priceChange = priceChange,
-                outperformedBtcOn = outperformedBtcOn,
-                outperformedEthOn = outperformedEthOn,
-                outperformedBnbOn = outperformedBnbOn,
-                priceCloseToAth = priceCloseToAth,
-                priceCloseToAtl = priceCloseToAtl,
-                selectedBlockchainsValue = selectedBlockchainsValue,
-                selectedBlockchains = selectedBlockchains,
-                blockchainOptions = blockchainOptions,
-                showSpinner = showSpinner,
-                buttonEnabled = buttonEnabled,
-                buttonTitle = buttonTitle,
-                errorMessage = errorMessage,
-                listedOnTopExchangesOn = listedOnTopExchangesOn,
-                solidCexOn = solidCexOn,
-                solidDexOn = solidDexOn,
-                goodDistributionOn = goodDistributionOn,
-            )
         }
     }
 

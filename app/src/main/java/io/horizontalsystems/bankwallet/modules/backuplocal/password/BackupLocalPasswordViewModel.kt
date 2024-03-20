@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.backuplocal.password
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.PasswordError
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.PassphraseValidator
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -27,7 +24,7 @@ class BackupLocalPasswordViewModel(
     private val passphraseValidator: PassphraseValidator,
     private val accountManager: IAccountManager,
     private val backupProvider: BackupProvider,
-) : ViewModel() {
+) : ViewModelUiState<BackupLocalPasswordModule.UiState>() {
 
     private var passphrase = ""
     private var passphraseConfirmation = ""
@@ -41,18 +38,6 @@ class BackupLocalPasswordViewModel(
     private var backupJson: String? = null
 
     var backupFileName: String = "UW_Backup.json"
-        private set
-
-    var uiState by mutableStateOf(
-        BackupLocalPasswordModule.UiState(
-            passphraseState = null,
-            passphraseConfirmState = null,
-            showButtonSpinner = showButtonSpinner,
-            backupJson = backupJson,
-            closeScreen = closeScreen,
-            error = error
-        )
-    )
         private set
 
     init {
@@ -73,8 +58,17 @@ class BackupLocalPasswordViewModel(
             }
         }
 
-        syncState()
+        emitState()
     }
+
+    override fun createState() = BackupLocalPasswordModule.UiState(
+        passphraseState = passphraseState,
+        passphraseConfirmState = passphraseConfirmState,
+        showButtonSpinner = showButtonSpinner,
+        backupJson = backupJson,
+        closeScreen = closeScreen,
+        error = error
+    )
 
     fun onChangePassphrase(v: String) {
         if (passphraseValidator.containsValidCharacters(v)) {
@@ -87,20 +81,20 @@ class BackupLocalPasswordViewModel(
                 )
             )
         }
-        syncState()
+        emitState()
     }
 
     fun onChangePassphraseConfirmation(v: String) {
         passphraseConfirmState = null
         passphraseConfirmation = v
-        syncState()
+        emitState()
     }
 
     fun onSaveClick() {
         validatePassword()
         if (passphraseState == null && passphraseConfirmState == null) {
             showButtonSpinner = true
-            syncState()
+            emitState()
             saveAccount()
         }
     }
@@ -108,7 +102,7 @@ class BackupLocalPasswordViewModel(
     fun backupFinished() {
         backupJson = null
         showButtonSpinner = false
-        syncState()
+        emitState()
         viewModelScope.launch {
             when (type) {
                 is BackupType.SingleWalletBackup -> {
@@ -125,24 +119,24 @@ class BackupLocalPasswordViewModel(
             }
             delay(1700) //Wait for showing Snackbar (SHORT duration ~ 1500ms)
             closeScreen = true
-            syncState()
+            emitState()
         }
     }
 
     fun closeScreenCalled() {
         closeScreen = false
-        syncState()
+        emitState()
     }
 
     fun accountErrorIsShown() {
         error = null
-        syncState()
+        emitState()
     }
 
     fun backupCanceled() {
         backupJson = null
         showButtonSpinner = false
-        syncState()
+        emitState()
     }
 
     private fun saveAccount() {
@@ -169,20 +163,9 @@ class BackupLocalPasswordViewModel(
             }
 
             withContext(Dispatchers.Main) {
-                syncState()
+                emitState()
             }
         }
-    }
-
-    private fun syncState() {
-        uiState = BackupLocalPasswordModule.UiState(
-            passphraseState = passphraseState,
-            passphraseConfirmState = passphraseConfirmState,
-            showButtonSpinner = showButtonSpinner,
-            backupJson = backupJson,
-            closeScreen = closeScreen,
-            error = error
-        )
     }
 
     private fun validatePassword() {
@@ -195,7 +178,7 @@ class BackupLocalPasswordViewModel(
             passphraseState = DataState.Error(
                 Exception(Translator.getString(R.string.LocalBackup_PasswordInvalid))
             )
-            syncState()
+            emitState()
             return
         }
 
@@ -205,6 +188,6 @@ class BackupLocalPasswordViewModel(
             )
         }
 
-        syncState()
+        emitState()
     }
 }

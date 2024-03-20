@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.watchaddress
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Address
@@ -24,7 +21,7 @@ import kotlinx.coroutines.withContext
 class WatchAddressViewModel(
     private val watchAddressService: WatchAddressService,
     private val addressParserChain: AddressParserChain
-) : ViewModel() {
+) : ViewModelUiState<WatchAddressUiState>() {
 
     private var accountCreated = false
     private var submitButtonType: SubmitButtonType = SubmitButtonType.Next(false)
@@ -41,26 +38,13 @@ class WatchAddressViewModel(
         get() = field.ifBlank { defaultAccountName }
         private set
 
-    var uiState by mutableStateOf(
-        WatchAddressUiState(
-            accountCreated = accountCreated,
-            submitButtonType = submitButtonType,
-            accountType = accountType,
-            accountName = accountName,
-            inputState = inputState
-        )
+    override fun createState() = WatchAddressUiState(
+        accountCreated = accountCreated,
+        submitButtonType = submitButtonType,
+        accountType = accountType,
+        accountName = accountName,
+        inputState = inputState
     )
-        private set
-
-    private fun emitState() {
-        uiState = WatchAddressUiState(
-            accountCreated = accountCreated,
-            submitButtonType = submitButtonType,
-            accountType = accountType,
-            accountName = accountName,
-            inputState = inputState
-        )
-    }
 
     fun onEnterAccountName(v: String) {
         accountNameEdited = v.isNotBlank()
