@@ -1,12 +1,9 @@
 package cash.p.terminal.modules.manageaccount.backupconfirmkey
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IRandomProvider
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
@@ -15,7 +12,7 @@ class BackupConfirmKeyViewModel(
     private val account: Account,
     private val accountManager: IAccountManager,
     private val randomProvider: IRandomProvider
-) : ViewModel() {
+) : ViewModelUiState<BackupConfirmUiState>() {
 
     private val wordsIndexed: List<Pair<Int, String>>
     private var hiddenWordItems = listOf<HiddenWordItem>()
@@ -23,16 +20,6 @@ class BackupConfirmKeyViewModel(
     private var currentHiddenWordItemIndex = -1
     private var confirmed = false
     private var error: Throwable? = null
-
-    var uiState by mutableStateOf(
-        BackupConfirmUiState(
-            hiddenWordItems = hiddenWordItems,
-            wordOptions = wordOptions,
-            currentHiddenWordItemIndex = currentHiddenWordItemIndex,
-            confirmed = confirmed,
-            error = error,
-        )
-    )
 
     init {
         if (account.type is AccountType.Mnemonic) {
@@ -46,6 +33,14 @@ class BackupConfirmKeyViewModel(
             wordsIndexed = listOf()
         }
     }
+
+    override fun createState() = BackupConfirmUiState(
+        hiddenWordItems = hiddenWordItems,
+        wordOptions = wordOptions,
+        currentHiddenWordItemIndex = currentHiddenWordItemIndex,
+        confirmed = confirmed,
+        error = error
+    )
 
     private fun reset() {
         val wordsCountToGuess = when (wordsIndexed.size) {
@@ -101,16 +96,6 @@ class BackupConfirmKeyViewModel(
     fun onErrorShown() {
         error = null
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = BackupConfirmUiState(
-            hiddenWordItems = hiddenWordItems,
-            wordOptions = wordOptions,
-            currentHiddenWordItemIndex = currentHiddenWordItemIndex,
-            confirmed = confirmed,
-            error = error
-        )
     }
 }
 

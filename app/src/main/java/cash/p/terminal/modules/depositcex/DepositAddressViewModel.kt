@@ -1,13 +1,11 @@
 package cash.p.terminal.modules.depositcex
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexDepositNetwork
 import cash.p.terminal.core.providers.CexProviderManager
@@ -22,7 +20,7 @@ class DepositAddressViewModel(
     private val cexAsset: CexAsset,
     private val network: CexDepositNetwork?,
     cexProviderManager: CexProviderManager
-) : ViewModel() {
+) : ViewModelUiState<ReceiveModule.UiState>() {
     private val cexProvider = cexProviderManager.cexProviderFlow.value
 
     private var viewState: ViewState = ViewState.Loading
@@ -33,24 +31,22 @@ class DepositAddressViewModel(
     private val networkName = network?.name ?: cexAsset.depositNetworks.firstOrNull()?.name ?: ""
     private val watchAccount = false
 
-    var uiState by mutableStateOf(
-        ReceiveModule.UiState(
-            viewState = viewState,
-            address = address,
-            usedAddresses = listOf(),
-            usedChangeAddresses = listOf(),
-            uri = uri,
-            networkName = networkName,
-            watchAccount = watchAccount,
-            additionalItems = getAdditionalData(),
-            amount = amount,
-            alertText = getAlertText(memo != null)
-        )
-    )
-
     init {
         setInitialData()
     }
+
+    override fun createState() = ReceiveModule.UiState(
+        viewState = viewState,
+        address = address,
+        usedAddresses = listOf(),
+        usedChangeAddresses = listOf(),
+        uri = uri,
+        networkName = networkName,
+        watchAccount = watchAccount,
+        additionalItems = getAdditionalData(),
+        amount = amount,
+        alertText = getAlertText(memo != null)
+    )
 
     private fun setInitialData() {
         viewState = ViewState.Loading
@@ -74,21 +70,6 @@ class DepositAddressViewModel(
             }
             emitState()
         }
-    }
-
-    private fun emitState() {
-        uiState = ReceiveModule.UiState(
-            viewState = viewState,
-            address = address,
-            usedAddresses = listOf(),
-            usedChangeAddresses = listOf(),
-            uri = uri,
-            networkName = networkName,
-            watchAccount = watchAccount,
-            additionalItems = getAdditionalData(),
-            amount = amount,
-            alertText = getAlertText(memo != null)
-        )
     }
 
     private fun getAdditionalData(): List<ReceiveModule.AdditionalData> {

@@ -3,7 +3,6 @@ package cash.p.terminal.modules.send.bitcoin
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
@@ -13,6 +12,7 @@ import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.entities.Address
@@ -43,7 +43,7 @@ class SendBitcoinViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
-) : ViewModel() {
+) : ViewModelUiState<SendBitcoinUiState>() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -66,24 +66,6 @@ class SendBitcoinViewModel(
         private set
 
     var sendResult by mutableStateOf<SendResult?>(null)
-
-    var uiState by mutableStateOf(
-        SendBitcoinUiState(
-            availableBalance = amountState.availableBalance,
-            amount = amountState.amount,
-            feeRate = feeRateState.feeRate,
-            address = addressState.validAddress,
-            fee = fee,
-            lockTimeInterval = pluginState.lockTimeInterval,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            feeRateCaution = feeRateState.feeRateCaution,
-            canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-            showAddressInput = showAddressInput,
-            utxoData = if (utxoExpertModeEnabled) utxoData else null,
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
@@ -117,26 +99,20 @@ class SendBitcoinViewModel(
         }
     }
 
-    private fun emitState() {
-        val newUiState = SendBitcoinUiState(
-            availableBalance = amountState.availableBalance,
-            amount = amountState.amount,
-            feeRate = feeRateState.feeRate,
-            address = addressState.validAddress,
-            fee = fee,
-            lockTimeInterval = pluginState.lockTimeInterval,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            feeRateCaution = feeRateState.feeRateCaution,
-            canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-            showAddressInput = showAddressInput,
-            utxoData = if (utxoExpertModeEnabled) utxoData else null,
-        )
-
-        viewModelScope.launch {
-            uiState = newUiState
-        }
-    }
+    override fun createState() = SendBitcoinUiState(
+        availableBalance = amountState.availableBalance,
+        amount = amountState.amount,
+        feeRate = feeRateState.feeRate,
+        address = addressState.validAddress,
+        fee = fee,
+        lockTimeInterval = pluginState.lockTimeInterval,
+        addressError = addressState.addressError,
+        amountCaution = amountState.amountCaution,
+        feeRateCaution = feeRateState.feeRateCaution,
+        canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
+        showAddressInput = showAddressInput,
+        utxoData = if (utxoExpertModeEnabled) utxoData else null,
+    )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)

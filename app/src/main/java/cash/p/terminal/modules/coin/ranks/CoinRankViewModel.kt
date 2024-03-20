@@ -1,11 +1,8 @@
 package cash.p.terminal.modules.coin.ranks
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.IAppNumberFormatter
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.providers.Translator
@@ -31,13 +28,14 @@ class CoinRankViewModel(
     private val baseCurrency: Currency,
     private val marketKit: MarketKitWrapper,
     private val numberFormatter: IAppNumberFormatter
-) : ViewModel() {
+) : ViewModelUiState<UiState>() {
 
     private var internalItems: List<InternalItem> = emptyList()
     private var viewState: ViewState = ViewState.Loading
     private val periodOptions = listOf(TimeDuration.OneDay, TimeDuration.SevenDay, TimeDuration.ThirtyDay)
     private var selectedPeriod: TimeDuration = periodOptions[2]
     private val periodMenu = getPeriodMenu()
+    private var rankViewItems = emptyList<CoinRankModule.RankViewItem>()
 
     private var sortDescending = true
     private val itemsToShow = 300
@@ -48,41 +46,33 @@ class CoinRankViewModel(
         icon = rankType.headerIcon
     )
 
-    var uiState by mutableStateOf(
-        UiState(
-            viewState = viewState,
-            rankViewItems = emptyList(),
-            periodSelect = periodMenu,
-            header = header,
-            sortDescending = sortDescending
-        )
-    )
-        private set
-
     init {
         fetch()
     }
 
+    override fun createState() = UiState(
+        viewState = viewState,
+        rankViewItems = rankViewItems,
+        periodSelect = periodMenu,
+        header = header,
+        sortDescending = sortDescending
+    )
+
     fun onErrorClick() {
         viewState = ViewState.Loading
-        syncState()
+        emitState()
         fetch()
     }
 
-    private fun syncState() {
+    private fun updateItems() {
         if (internalItems.isEmpty()) {
-            uiState = UiState(
-                viewState = viewState,
-                rankViewItems = emptyList(),
-                periodSelect = periodMenu,
-                header = header,
-                sortDescending = sortDescending
-            )
+            rankViewItems = emptyList()
+            emitState()
             return
         }
 
         viewModelScope.launch {
-            val viewItems = withContext(Dispatchers.IO) {
+            rankViewItems = withContext(Dispatchers.IO) {
                 val items = internalItems.mapNotNull { internalItem ->
                     val resolvedValue: BigDecimal? = when (val anyValue = internalItem.value) {
                         is RankAnyValue.MultiValue -> {
@@ -115,13 +105,7 @@ class CoinRankViewModel(
                 if (sortDescending) viewItems else viewItems.reversed()
             }
 
-            uiState = UiState(
-                viewState = viewState,
-                rankViewItems = viewItems,
-                periodSelect = periodMenu,
-                header = header,
-                sortDescending = sortDescending
-            )
+            emitState()
         }
     }
 
@@ -151,11 +135,10 @@ class CoinRankViewModel(
                 }
 
                 viewState = ViewState.Success
-                syncState()
             } catch (e: Throwable) {
                 viewState = ViewState.Error(e)
             }
-            syncState()
+            updateItems()
         }
     }
 
@@ -194,12 +177,12 @@ class CoinRankViewModel(
 
     fun toggle(period: TimeDuration) {
         selectedPeriod = period
-        syncState()
+        updateItems()
     }
 
     fun toggleSortType() {
         sortDescending = !sortDescending
-        syncState()
+        updateItems()
     }
 
     data class InternalItem(

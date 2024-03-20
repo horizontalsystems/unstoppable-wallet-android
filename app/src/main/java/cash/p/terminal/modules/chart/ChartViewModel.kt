@@ -1,12 +1,9 @@
 package cash.p.terminal.modules.chart
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
@@ -28,26 +25,13 @@ import java.util.Date
 open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter,
-) : ViewModel() {
+) : ViewModelUiState<ChartUiState>() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
     private var chartHeaderView: ChartModule.ChartHeaderView? = null
     private var chartInfoData: ChartInfoData? = null
     private var loading = false
     private var viewState: ViewState = ViewState.Success
-
-    var uiState by mutableStateOf(
-        ChartUiState(
-            tabItems = tabItems,
-            chartHeaderView = chartHeaderView,
-            chartInfoData = chartInfoData,
-            loading = loading,
-            viewState = viewState,
-            hasVolumes = service.hasVolumes,
-            chartViewType = service.chartViewType,
-        )
-    )
-        private set
 
     private val disposables = CompositeDisposable()
 
@@ -90,19 +74,15 @@ open class ChartViewModel(
         }
     }
 
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = ChartUiState(
-                tabItems = tabItems,
-                chartHeaderView = chartHeaderView,
-                chartInfoData = chartInfoData,
-                loading = loading,
-                viewState = viewState,
-                hasVolumes = service.hasVolumes,
-                chartViewType = service.chartViewType,
-            )
-        }
-    }
+    override fun createState() = ChartUiState(
+        tabItems = tabItems,
+        chartHeaderView = chartHeaderView,
+        chartInfoData = chartInfoData,
+        loading = loading,
+        viewState = viewState,
+        hasVolumes = service.hasVolumes,
+        chartViewType = service.chartViewType,
+    )
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
         loading = true

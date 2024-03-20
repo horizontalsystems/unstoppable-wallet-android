@@ -1,29 +1,25 @@
 package cash.p.terminal.modules.walletconnect.session
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.R
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Invalid
-import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Killed
-import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Ready
-import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
+import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableAccount
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.RequestNotFoundError
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.UnsupportedChainId
-import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.WCUtils
->>>>>>>> b314ca824 (Rename prefix `wc2` to `wc` for WalletConnect classes):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WCSessionViewModel.kt
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Invalid
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Killed
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.Ready
+import cash.p.terminal.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
@@ -38,7 +34,7 @@ class WCSessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
     private val topic: String?,
-) : ViewModel() {
+) : ViewModelUiState<WCSessionUiState>() {
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<Unit>()
@@ -52,19 +48,16 @@ class WCSessionViewModel(
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
 
-    var uiState by mutableStateOf(
-        WCSessionUiState(
-            peerMeta = peerMeta,
-            closeEnabled = closeEnabled,
-            connecting = connecting,
-            buttonStates = buttonStates,
-            hint = hint,
-            showError = showError,
-            status = status,
-            pendingRequests = pendingRequests,
-        )
+    override fun createState() = WCSessionUiState(
+        peerMeta = peerMeta,
+        closeEnabled = closeEnabled,
+        connecting = connecting,
+        buttonStates = buttonStates,
+        hint = hint,
+        showError = showError,
+        status = status,
+        pendingRequests = pendingRequests,
     )
-        private set
 
     private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
         set(value) {
@@ -233,19 +226,6 @@ class WCSessionViewModel(
         setError(state)
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = WCSessionUiState(
-            peerMeta = peerMeta,
-            closeEnabled = closeEnabled,
-            connecting = connecting,
-            buttonStates = buttonStates,
-            hint = hint,
-            showError = showError,
-            status = status,
-            pendingRequests = pendingRequests,
-        )
     }
 
     fun rejectProposal() {

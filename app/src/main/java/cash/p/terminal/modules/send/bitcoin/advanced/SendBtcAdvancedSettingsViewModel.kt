@@ -1,10 +1,7 @@
 package cash.p.terminal.modules.send.bitcoin.advanced
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.TransactionDataSortMode
@@ -15,7 +12,7 @@ class SendBtcAdvancedSettingsViewModel(
     val blockchainType: BlockchainType,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val localStorage: ILocalStorage,
-) : ViewModel() {
+) : ViewModelUiState<SendBtcAdvancedSettingsModule.UiState>() {
 
     private var sortMode = btcBlockchainManager.transactionSortMode(blockchainType)
     private val sortOptions: List<SortModeViewItem>
@@ -23,40 +20,29 @@ class SendBtcAdvancedSettingsViewModel(
     private var utxoExpertModeEnabled = localStorage.utxoExpertModeEnabled
     private var rbfEnabled = localStorage.rbfEnabled
 
-    var uiState by mutableStateOf(
-        SendBtcAdvancedSettingsModule.UiState(
-            transactionSortOptions = sortOptions,
-            transactionSortTitle = Translator.getString(sortMode.titleShort),
-            utxoExpertModeEnabled = utxoExpertModeEnabled,
-            rbfEnabled = rbfEnabled,
-        )
+    override fun createState() = SendBtcAdvancedSettingsModule.UiState(
+        transactionSortOptions = sortOptions,
+        transactionSortTitle = Translator.getString(sortMode.titleShort),
+        utxoExpertModeEnabled = utxoExpertModeEnabled,
+        rbfEnabled = rbfEnabled
     )
 
     fun setTransactionMode(mode: TransactionDataSortMode) {
         sortMode = mode
         btcBlockchainManager.save(sortMode, blockchainType)
-        syncState()
+        emitState()
     }
 
     fun setUtxoExpertMode(enabled: Boolean) {
         utxoExpertModeEnabled = enabled
         localStorage.utxoExpertModeEnabled = enabled
-        syncState()
+        emitState()
     }
 
     fun setRbfEnabled(enabled: Boolean) {
         rbfEnabled = enabled
         localStorage.rbfEnabled = enabled
-        syncState()
-    }
-
-    private fun syncState() {
-        uiState = SendBtcAdvancedSettingsModule.UiState(
-            transactionSortOptions = sortOptions,
-            transactionSortTitle = Translator.getString(sortMode.titleShort),
-            utxoExpertModeEnabled = utxoExpertModeEnabled,
-            rbfEnabled = rbfEnabled
-        )
+        emitState()
     }
 
     private fun getTransactionSortModeViewItems(): List<SortModeViewItem> {

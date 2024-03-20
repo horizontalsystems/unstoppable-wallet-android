@@ -1,10 +1,6 @@
 package cash.p.terminal.modules.main
 
 import android.net.Uri
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
@@ -13,6 +9,7 @@ import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.providers.Translator
@@ -23,9 +20,9 @@ import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.modules.nft.collection.NftCollectionFragment
-import cash.p.terminal.modules.walletconnect.list.WCListFragment
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
+import cash.p.terminal.modules.walletconnect.list.WCListFragment
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -42,7 +39,7 @@ class MainViewModel(
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
     deepLink: Uri?
-) : ViewModel() {
+) : ViewModelUiState<MainModule.UiState>() {
 
     private val disposables = CompositeDisposable()
     private var wcPendingRequestsCount = 0
@@ -96,21 +93,6 @@ class MainViewModel(
     val watchWallets: List<Account>
         get() = accountManager.accounts.filter { it.isWatchAccount }
 
-    var uiState by mutableStateOf(
-        MainModule.UiState(
-            selectedTabIndex = selectedTabIndex,
-            deeplinkPage = deeplinkPage,
-            mainNavItems = mainNavItems,
-            showRateAppDialog = showRateAppDialog,
-            contentHidden = contentHidden,
-            showWhatsNew = showWhatsNew,
-            activeWallet = activeWallet,
-            wcSupportState = wcSupportState,
-            torEnabled = torEnabled
-        )
-    )
-        private set
-
     init {
         localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) {
             marketsTabEnabled = it
@@ -128,7 +110,7 @@ class MainViewModel(
 
         rateAppManager.showRateAppFlow.collectWith(viewModelScope) {
             showRateAppDialog = it
-            syncState()
+            emitState()
         }
 
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
@@ -155,7 +137,7 @@ class MainViewModel(
         accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
             (it as? ActiveAccountState.ActiveAccount)?.let { state ->
                 activeWallet = state.account
-                syncState()
+                emitState()
             }
         }
 
@@ -163,6 +145,18 @@ class MainViewModel(
         updateTransactionsTabEnabled()
         showWhatsNew()
     }
+
+    override fun createState() = MainModule.UiState(
+        selectedTabIndex = selectedTabIndex,
+        deeplinkPage = deeplinkPage,
+        mainNavItems = mainNavItems,
+        showRateAppDialog = showRateAppDialog,
+        contentHidden = contentHidden,
+        showWhatsNew = showWhatsNew,
+        activeWallet = activeWallet,
+        wcSupportState = wcSupportState,
+        torEnabled = torEnabled
+    )
 
     private fun isTransactionsTabEnabled(): Boolean =
         !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
@@ -174,23 +168,23 @@ class MainViewModel(
 
     fun whatsNewShown() {
         showWhatsNew = false
-        syncState()
+        emitState()
     }
 
     fun closeRateDialog() {
         showRateAppDialog = false
-        syncState()
+        emitState()
     }
 
     fun onSelect(account: Account) {
         accountManager.setActiveAccountId(account.id)
         activeWallet = account
-        syncState()
+        emitState()
     }
 
     fun onResume() {
         contentHidden = pinComponent.isLocked
-        syncState()
+        emitState()
     }
 
     fun onSelect(mainNavItem: MainNavigation) {
@@ -208,21 +202,7 @@ class MainViewModel(
 
     fun wcSupportStateHandled() {
         wcSupportState = null
-        syncState()
-    }
-
-    private fun syncState() {
-        uiState = MainModule.UiState(
-            selectedTabIndex = selectedTabIndex,
-            deeplinkPage = deeplinkPage,
-            mainNavItems = mainNavItems,
-            showRateAppDialog = showRateAppDialog,
-            contentHidden = contentHidden,
-            showWhatsNew = showWhatsNew,
-            activeWallet = activeWallet,
-            wcSupportState = wcSupportState,
-            torEnabled = torEnabled
-        )
+        emitState()
     }
 
     private fun navigationItems(): List<MainModule.NavigationViewItem> {
@@ -349,7 +329,7 @@ class MainViewModel(
         if (selectedTabIndex >= mainNavItems.size) {
             selectedTabIndex = mainNavItems.size - 1
         }
-        syncState()
+        emitState()
     }
 
     private fun showWhatsNew() {
@@ -357,7 +337,7 @@ class MainViewModel(
             if (releaseNotesManager.shouldShowChangeLog()) {
                 delay(2000)
                 showWhatsNew = true
-                syncState()
+                emitState()
             }
         }
     }
@@ -378,7 +358,7 @@ class MainViewModel(
 
     fun deeplinkPageHandled() {
         deeplinkPage = null
-        syncState()
+        emitState()
     }
 
 }

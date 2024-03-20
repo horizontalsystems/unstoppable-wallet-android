@@ -1,15 +1,12 @@
 package cash.p.terminal.modules.settings.appstatus
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.AppLog
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IAdapterManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.BinanceKitManager
@@ -40,19 +37,11 @@ class AppStatusViewModel(
     private val tronKitManager: TronKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
-) : ViewModel() {
+) : ViewModelUiState<AppStatusModule.UiState>() {
 
     private var blockViewItems: List<AppStatusModule.BlockData> = emptyList()
     private var appStatusAsText: String? = null
     private val appLogs = AppLog.getLog()
-
-    var uiState by mutableStateOf(
-        AppStatusModule.UiState(
-            appStatusAsText = appStatusAsText,
-            blockViewItems = blockViewItems
-        )
-    )
-        private set
 
     init {
         viewModelScope.launch {
@@ -66,24 +55,22 @@ class AppStatusViewModel(
                 .plus(getAppLogBlocks())
                 .toList()
 
-            sync()
+            emitState()
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             appStatusAsText = formatMapToString(getStatusMap())
 
             withContext(Dispatchers.Main) {
-                sync()
+                emitState()
             }
         }
     }
 
-    private fun sync() {
-        uiState = AppStatusModule.UiState(
-            appStatusAsText = appStatusAsText,
-            blockViewItems = blockViewItems
-        )
-    }
+    override fun createState() = AppStatusModule.UiState(
+        appStatusAsText = appStatusAsText,
+        blockViewItems = blockViewItems
+    )
 
     private fun getStatusMap(): LinkedHashMap<String, Any> {
         val status = LinkedHashMap<String, Any>()

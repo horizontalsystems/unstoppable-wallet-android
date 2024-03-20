@@ -3,7 +3,6 @@ package cash.p.terminal.modules.send.ton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
@@ -12,6 +11,7 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.contacts.ContactsRepository
@@ -38,7 +38,7 @@ class SendTonViewModel(
     val coinMaxAllowedDecimals: Int,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
-): ViewModel() {
+): ViewModelUiState<SendTonUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -47,18 +47,6 @@ class SendTonViewModel(
     private var addressState = addressService.stateFlow.value
     private var feeState = feeService.stateFlow.value
     private var memo: String? = null
-
-    var uiState by mutableStateOf(
-        SendTonUiState(
-            availableBalance = amountState.availableBalance,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-            fee = feeState.fee
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
         private set
@@ -90,6 +78,15 @@ class SendTonViewModel(
             feeService.start()
         }
     }
+
+    override fun createState() = SendTonUiState(
+        availableBalance = amountState.availableBalance,
+        amountCaution = amountState.amountCaution,
+        addressError = addressState.addressError,
+        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        showAddressInput = showAddressInput,
+        fee = feeState.fee,
+    )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -167,17 +164,6 @@ class SendTonViewModel(
         amountService.setFee(feeState.fee)
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = SendTonUiState(
-            availableBalance = amountState.availableBalance,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-            fee = feeState.fee,
-        )
     }
 
 }

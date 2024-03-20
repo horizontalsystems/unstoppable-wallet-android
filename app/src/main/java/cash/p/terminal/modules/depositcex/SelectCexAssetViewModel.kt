@@ -1,14 +1,12 @@
 package cash.p.terminal.modules.depositcex
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.CexAssetManager
 import kotlinx.coroutines.Dispatchers
@@ -20,18 +18,10 @@ class SelectCexAssetViewModel(
     private val cexAssetManager: CexAssetManager,
     private val accountManager: IAccountManager,
     private val withBalance: Boolean
-) : ViewModel() {
+) : ViewModelUiState<SelectCexAssetUiState>() {
     private var allItems: List<DepositCexModule.CexCoinViewItem> = listOf()
     private var loading = true
     private var items: List<DepositCexModule.CexCoinViewItem>? = null
-
-    var uiState by mutableStateOf(
-        SelectCexAssetUiState(
-            loading = loading,
-            items = items
-        )
-    )
-        private set
 
     private var searchJob: Job? = null
 
@@ -63,14 +53,10 @@ class SelectCexAssetViewModel(
         }
     }
 
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = SelectCexAssetUiState(
-                loading = loading,
-                items = items
-            )
-        }
-    }
+    override fun createState() = SelectCexAssetUiState(
+        loading = loading,
+        items = items
+    )
 
     fun onEnterQuery(q: String) {
         searchJob?.cancel()

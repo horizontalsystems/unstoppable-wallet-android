@@ -3,7 +3,6 @@ package cash.p.terminal.modules.send.zcash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
@@ -12,6 +11,7 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.LocalizedException
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.SendAmountService
@@ -35,7 +35,7 @@ class SendZCashViewModel(
     private val memoService: SendZCashMemoService,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean
-) : ViewModel() {
+) : ViewModelUiState<SendZCashUiState>() {
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -45,19 +45,6 @@ class SendZCashViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var memoState = memoService.stateFlow.value
-
-    var uiState by mutableStateOf(
-        SendZCashUiState(
-            fee = fee,
-            availableBalance = amountState.availableBalance,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            memoIsAllowed = memoState.memoIsAllowed,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
@@ -80,6 +67,16 @@ class SendZCashViewModel(
             handleUpdatedMemoState(it)
         }
     }
+
+    override fun createState() = SendZCashUiState(
+        fee = fee,
+        availableBalance = amountState.availableBalance,
+        addressError = addressState.addressError,
+        amountCaution = amountState.amountCaution,
+        memoIsAllowed = memoState.memoIsAllowed,
+        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        showAddressInput = showAddressInput,
+    )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -113,18 +110,6 @@ class SendZCashViewModel(
         this.memoState = memoState
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = SendZCashUiState(
-            availableBalance = amountState.availableBalance,
-            fee = fee,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            memoIsAllowed = memoState.memoIsAllowed,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
     }
 
     fun getConfirmationData(): SendConfirmationData {

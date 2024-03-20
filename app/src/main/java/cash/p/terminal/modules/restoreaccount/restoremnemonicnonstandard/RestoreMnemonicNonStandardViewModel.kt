@@ -1,11 +1,8 @@
 package cash.p.terminal.modules.restoreaccount.restoremnemonicnonstandard
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.AccountType
@@ -21,7 +18,7 @@ class RestoreMnemonicNonStandardViewModel(
     accountFactory: IAccountFactory,
     private val wordsManager: WordsManager,
     private val thirdKeyboardStorage: IThirdKeyboard,
-) : ViewModel() {
+) : ViewModelUiState<UiState>() {
 
     val mnemonicLanguages = Language.values().toList()
 
@@ -39,19 +36,6 @@ class RestoreMnemonicNonStandardViewModel(
     private var cursorPosition = 0
     private var mnemonicWordList = WordList.wordList(language)
 
-    var uiState by mutableStateOf(
-        UiState(
-            passphraseEnabled = passphraseEnabled,
-            passphraseError = passphraseError,
-            invalidWordRanges = invalidWordRanges,
-            error = error,
-            accountType = accountType,
-            wordSuggestions = wordSuggestions,
-            language = language,
-        )
-    )
-        private set
-
     private val regex = Regex("\\S+")
 
     val defaultName = accountFactory.getNextAccountName()
@@ -62,17 +46,15 @@ class RestoreMnemonicNonStandardViewModel(
     val isThirdPartyKeyboardAllowed: Boolean
         get() = CoreApp.thirdKeyboardStorage.isThirdPartyKeyboardAllowed
 
-    private fun emitState() {
-        uiState = UiState(
-            passphraseEnabled = passphraseEnabled,
-            passphraseError = passphraseError,
-            invalidWordRanges = invalidWordRanges,
-            error = error,
-            accountType = accountType,
-            wordSuggestions = wordSuggestions,
-            language = language,
-        )
-    }
+    override fun createState() = UiState(
+        passphraseEnabled = passphraseEnabled,
+        passphraseError = passphraseError,
+        invalidWordRanges = invalidWordRanges,
+        error = error,
+        accountType = accountType,
+        wordSuggestions = wordSuggestions,
+        language = language,
+    )
 
     private fun processText() {
         wordItems = wordItems(text)

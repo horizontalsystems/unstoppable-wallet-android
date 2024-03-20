@@ -1,11 +1,8 @@
 package cash.p.terminal.modules.contacts.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.shorten
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.Mode
@@ -16,7 +13,7 @@ import kotlinx.coroutines.launch
 class ContactsViewModel(
     private val repository: ContactsRepository,
     private val mode: Mode
-) : ViewModel() {
+) : ViewModelUiState<ContactsViewModel.UiState>() {
 
     private val readOnly = mode != Mode.Full
     private val showAddContact = !readOnly
@@ -32,17 +29,6 @@ class ContactsViewModel(
     val backupFileName: String
         get() = "UW_Contacts_${System.currentTimeMillis() / 1000}.json"
 
-    var uiState by mutableStateOf(
-        UiState(
-            contacts = contacts,
-            nameQuery = nameQuery,
-            searchMode = nameQuery.isNotEmpty(),
-            showAddContact = showAddContact,
-            showMoreOptions = showMoreOptions
-        )
-    )
-        private set
-
     init {
         viewModelScope.launch {
             repository.contactsFlow.collect {
@@ -50,6 +36,14 @@ class ContactsViewModel(
             }
         }
     }
+
+    override fun createState() = UiState(
+        contacts = contacts,
+        nameQuery = nameQuery,
+        searchMode = nameQuery.isNotEmpty(),
+        showAddContact = showAddContact,
+        showMoreOptions = showMoreOptions
+    )
 
     fun onEnterQuery(query: String) {
         nameQuery = query
@@ -80,16 +74,6 @@ class ContactsViewModel(
             oldAddress.blockchain.name,
             oldAddress.address.shorten(),
             address.shorten()
-        )
-    }
-
-    private fun emitState() {
-        uiState = UiState(
-            contacts = contacts,
-            nameQuery = nameQuery,
-            searchMode = nameQuery.isNotEmpty(),
-            showAddContact = showAddContact,
-            showMoreOptions = showMoreOptions
         )
     }
 

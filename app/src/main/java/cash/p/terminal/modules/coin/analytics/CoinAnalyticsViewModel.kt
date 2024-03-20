@@ -1,13 +1,10 @@
 package cash.p.terminal.modules.coin.analytics
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.IAppNumberFormatter
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.brandColor
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.order
@@ -51,7 +48,6 @@ import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -60,7 +56,7 @@ class CoinAnalyticsViewModel(
     private val numberFormatter: IAppNumberFormatter,
     private val technicalAdviceViewItemFactory: TechnicalAdviceViewItemFactory,
     private val code: String
-) : ViewModel() {
+) : ViewModelUiState<CoinAnalyticsModule.UiState>() {
 
     private val currency = service.currency
     val coin: Coin
@@ -71,28 +67,25 @@ class CoinAnalyticsViewModel(
     private var cachedAnalyticData: CoinAnalyticsService.AnalyticData? = null
     private var isRefreshing = false
 
-    var uiState by mutableStateOf(CoinAnalyticsModule.UiState(viewState))
-        private set
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             service.stateFlow.collect {
                 when (it) {
                     is DataState.Loading -> {
                         viewState = ViewState.Loading
-                        syncState()
+                        emitState()
                     }
 
                     is DataState.Success -> {
                         viewState = ViewState.Success
                         cachedAnalyticData = it.data
                         analyticsViewItem = viewItem(it.data)
-                        syncState()
+                        emitState()
                     }
 
                     is DataState.Error -> {
                         viewState = ViewState.Error(it.error)
-                        syncState()
+                        emitState()
                     }
                 }
             }
@@ -103,24 +96,20 @@ class CoinAnalyticsViewModel(
         }
     }
 
+    override fun createState() = CoinAnalyticsModule.UiState(
+        viewState = viewState,
+        viewItem = analyticsViewItem,
+        isRefreshing = isRefreshing
+    )
+
     fun refresh() {
         viewModelScope.launch {
             service.refresh()
             isRefreshing = true
-            syncState()
+            emitState()
             delay(1000)
             isRefreshing = false
-            syncState()
-        }
-    }
-
-    private suspend fun syncState() {
-        withContext(Dispatchers.Main) {
-            uiState = CoinAnalyticsModule.UiState(
-                viewState = viewState,
-                viewItem = analyticsViewItem,
-                isRefreshing = isRefreshing
-            )
+            emitState()
         }
     }
 

@@ -182,8 +182,8 @@ object CoinAnalyticsModule {
 
     data class UiState(
         val viewState: ViewState,
-        val viewItem: AnalyticsViewItem? = null,
-        val isRefreshing: Boolean = false
+        val viewItem: AnalyticsViewItem?,
+        val isRefreshing: Boolean
     )
 
     sealed class AnalyticsViewItem {
