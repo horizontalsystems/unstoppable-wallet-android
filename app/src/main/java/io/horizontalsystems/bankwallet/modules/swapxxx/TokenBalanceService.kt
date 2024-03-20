@@ -2,28 +2,50 @@ package io.horizontalsystems.bankwallet.modules.swapxxx
 
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
+import io.horizontalsystems.bankwallet.core.ServiceState
+import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
-class TokenBalanceService(private val adapterManager: IAdapterManager) {
+class TokenBalanceService(
+    private val adapterManager: IAdapterManager,
+) : ServiceState<TokenBalanceService.State>() {
     private var token: Token? = null
+    private var amount: BigDecimal? = null
     private var balance: BigDecimal? = null
+    private var error: Throwable? = null
 
-    private val _balanceFlow: MutableStateFlow<BigDecimal?> = MutableStateFlow(null)
-    val balanceFlow = _balanceFlow.asStateFlow()
+    override fun createState() = State(
+        balance = balance,
+        error = error
+    )
 
     fun setToken(token: Token?) {
         this.token = token
 
         refreshAvailableBalance()
+        validate()
+
         emitState()
     }
 
-    private fun emitState() {
-        _balanceFlow.update { balance }
+    fun setAmount(amount: BigDecimal?) {
+        this.amount = amount
+
+        validate()
+
+        emitState()
+    }
+
+    private fun validate() {
+        error = null
+
+        val balance = balance ?: return
+        val amount = amount ?: return
+
+        if (amount > balance) {
+            error = SwapMainModule.SwapError.InsufficientBalanceFrom
+        }
     }
 
     private fun refreshAvailableBalance() {
@@ -32,4 +54,5 @@ class TokenBalanceService(private val adapterManager: IAdapterManager) {
         }
     }
 
+    data class State(val balance: BigDecimal?, val error: Throwable?)
 }
