@@ -43,11 +43,13 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
         val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
         val swapData = swapDataSingle(tokenIn, tokenOut, evmBlockchainHelper).await()
         val tradeData = uniswapKit.bestTradeExactIn(swapData, amountIn, tradeOptions)
+        val routerAddress = uniswapKit.routerAddress(evmBlockchainHelper.chain)
+        val allowance = getAllowance(tokenIn, routerAddress)
         val fields = buildList {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }
-            getAllowance(tokenIn, uniswapKit.routerAddress(evmBlockchainHelper.chain))?.let {
+            allowance?.let {
                 add(SwapDataFieldAllowance(it, tokenIn))
             }
         }
@@ -59,7 +61,8 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
             listOf(settingRecipient, settingSlippage, settingDeadline),
             tokenIn,
             tokenOut,
-            amountIn
+            amountIn,
+            actionApprove(allowance, amountIn, routerAddress, tokenIn)
         )
     }
 

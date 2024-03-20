@@ -70,16 +70,18 @@ object OneInchProvider : EvmSwapProvider() {
             Single.error(it.convertedError)
         }.await()
 
-        val amountOut = quote.toTokenAmount.toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
+        val routerAddress = OneInchKit.routerAddress(evmBlockchainHelper.chain)
+        val allowance = getAllowance(tokenIn, routerAddress)
         val fields = buildList {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }
-            getAllowance(tokenIn, OneInchKit.routerAddress(evmBlockchainHelper.chain))?.let {
+            allowance?.let {
                 add(SwapDataFieldAllowance(it, tokenIn))
             }
         }
 
+        val amountOut = quote.toTokenAmount.toBigDecimal().movePointLeft(quote.toToken.decimals).stripTrailingZeros()
         return SwapQuoteOneInch(
             amountOut,
             null,
@@ -87,7 +89,8 @@ object OneInchProvider : EvmSwapProvider() {
             listOf(settingRecipient, settingSlippage),
             tokenIn,
             tokenOut,
-            amountIn
+            amountIn,
+            actionApprove(allowance, amountIn, routerAddress, tokenIn)
         )
     }
 

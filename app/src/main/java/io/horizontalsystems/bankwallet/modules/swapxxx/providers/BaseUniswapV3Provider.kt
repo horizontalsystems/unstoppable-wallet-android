@@ -58,11 +58,14 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             tradeOptions
         )
 
+        val routerAddress = uniswapV3Kit.routerAddress(chain)
+        val allowance = getAllowance(tokenIn, routerAddress)
+
         val fields = buildList {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }
-            getAllowance(tokenIn, uniswapV3Kit.routerAddress(chain))?.let {
+            allowance?.let {
                 add(SwapDataFieldAllowance(it, tokenIn))
             }
         }
@@ -73,7 +76,8 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             listOf(settingRecipient, settingSlippage, settingDeadline),
             tokenIn,
             tokenOut,
-            amountIn
+            amountIn,
+            actionApprove(allowance, amountIn, routerAddress, tokenIn)
         )
     }
 

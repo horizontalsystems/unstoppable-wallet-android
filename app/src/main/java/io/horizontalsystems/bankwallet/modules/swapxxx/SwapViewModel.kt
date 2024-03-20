@@ -165,6 +165,7 @@ class SwapViewModel(
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     fun reQuote() = quoteService.reQuote()
+    fun onActionExecuted() = quoteService.onActionExecuted()
 
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
@@ -219,6 +220,7 @@ data class SwapUiState(
             tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
             tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
             amountIn == null -> SwapStep.InputRequired(InputType.Amount)
+            quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
             else -> SwapStep.Proceed
         }
 }
@@ -228,6 +230,7 @@ sealed class SwapStep {
     object Quoting : SwapStep()
     data class Error(val error: Throwable) : SwapStep()
     object Proceed : SwapStep()
+    data class ActionRequired(val action: ISwapProviderAction) : SwapStep()
 }
 
 enum class InputType {

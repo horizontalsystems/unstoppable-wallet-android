@@ -35,7 +35,11 @@ object SwapApproveModule {
                     val coinService by lazy {
                         EvmCoinService(approveData.token, App.currencyManager, App.marketKit)
                     }
-                    SwapApproveViewModel(approveData.dex, swapApproveService, coinService) as T
+                    SwapApproveViewModel(
+                        approveData.blockchainType,
+                        swapApproveService,
+                        coinService
+                    ) as T
                 }
 
                 else -> throw IllegalArgumentException()
