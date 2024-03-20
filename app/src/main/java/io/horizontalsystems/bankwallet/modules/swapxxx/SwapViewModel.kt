@@ -19,15 +19,16 @@ class SwapViewModel(
     private val quoteService: SwapQuoteService,
     private val balanceService: TokenBalanceService,
     private val priceImpactService: PriceImpactService,
-    private val quoteExpirationService: SwapQuoteExpirationService,
     private val currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
-    private val fiatServiceOut: FiatService
+    private val fiatServiceOut: FiatService,
+    private val timerService: TimerService
 ) : ViewModelUiState<SwapUiState>() {
 
     private var quoteState = quoteService.stateFlow.value
     private var balanceState = balanceService.stateFlow.value
     private var priceImpactState = priceImpactService.stateFlow.value
+    private var timerState = timerService.stateFlow.value
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountInputEnabled = false
@@ -50,11 +51,6 @@ class SwapViewModel(
             }
         }
         viewModelScope.launch {
-            quoteExpirationService.quoteExpiredFlow.collect {
-                handleUpdatedQuoteExpiredState(it)
-            }
-        }
-        viewModelScope.launch {
             fiatServiceIn.stateFlow.collect {
                 fiatAmountInputEnabled = it.coinPrice != null
                 fiatAmountIn = it.fiatAmount
@@ -69,6 +65,13 @@ class SwapViewModel(
                 fiatAmountOut = it.fiatAmount
 
                 priceImpactService.setFiatAmountOut(fiatAmountOut)
+
+                emitState()
+            }
+        }
+        viewModelScope.launch {
+            timerService.stateFlow.collect {
+                timerState = it
 
                 emitState()
             }
@@ -97,7 +100,9 @@ class SwapViewModel(
         fiatAmountIn = fiatAmountIn,
         fiatAmountOut = fiatAmountOut,
         currency = currency,
-        fiatAmountInputEnabled = fiatAmountInputEnabled
+        fiatAmountInputEnabled = fiatAmountInputEnabled,
+        timeRemaining = timerState.remaining,
+        timeout = timerState.timeout,
     )
 
     private fun handleUpdatedBalanceState(balanceState: TokenBalanceService.State) {
@@ -113,7 +118,6 @@ class SwapViewModel(
         balanceService.setAmount(quoteState.amountIn)
 
         priceImpactService.setPriceImpact(quoteState.quote?.priceImpact, quoteState.quote?.provider?.title)
-        quoteExpirationService.setQuote(quoteState.quote)
 
         fiatServiceIn.setToken(quoteState.tokenIn)
         fiatServiceIn.setAmount(quoteState.amountIn)
@@ -121,11 +125,15 @@ class SwapViewModel(
         fiatServiceOut.setAmount(quoteState.quote?.amountOut)
 
         emitState()
-    }
 
-    private fun handleUpdatedQuoteExpiredState(quoteExpired: Boolean) {
-        if (quoteExpired) {
-            quoteService.reQuote()
+        if (quoteState.quote != null) {
+            val quoteLifetime = 20
+
+            val elapsedMillis = System.currentTimeMillis() - quoteState.quote.createdAt
+            val remainingSeconds = (quoteLifetime - elapsedMillis / 1000).coerceAtLeast(0)
+            timerService.start(remainingSeconds)
+        } else {
+            timerService.reset()
         }
     }
 
@@ -156,6 +164,7 @@ class SwapViewModel(
     fun onSwitchPairs() = quoteService.switchPairs()
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
+    fun reQuote() = quoteService.reQuote()
 
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
@@ -171,10 +180,10 @@ class SwapViewModel(
                 swapQuoteService,
                 tokenBalanceService,
                 priceImpactService,
-                SwapQuoteExpirationService(),
                 App.currencyManager,
                 FiatService(App.marketKit),
                 FiatService(App.marketKit),
+                TimerService()
             ) as T
         }
     }
@@ -199,7 +208,9 @@ data class SwapUiState(
     val fiatPriceImpact: BigDecimal?,
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
-    val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?
+    val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    val timeRemaining: Long?,
+    val timeout: Boolean
 ) {
     val currentStep: SwapStep
         get() = when {

@@ -118,7 +118,7 @@ class SwapConfirmViewModel(
     }
 
     override fun createState() = SwapConfirmUiState(
-        expiresIn = timerState.secondsRemaining,
+        expiresIn = timerState.remaining,
         expired = timerState.timeout,
         loading = loading,
         tokenIn = tokenIn,
@@ -192,7 +192,7 @@ class SwapConfirmViewModel(
 
 
 data class SwapConfirmUiState(
-    val expiresIn: Long,
+    val expiresIn: Long?,
     val expired: Boolean,
     val loading: Boolean,
     val tokenIn: Token,

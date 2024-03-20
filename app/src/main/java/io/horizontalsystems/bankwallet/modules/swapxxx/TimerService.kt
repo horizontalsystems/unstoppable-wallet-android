@@ -1,16 +1,17 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package cash.p.terminal.modules.swapxxx
 
 import android.os.CountDownTimer
-import io.horizontalsystems.bankwallet.core.ServiceState
+import cash.p.terminal.core.ServiceState
+import kotlin.math.ceil
 
 class TimerService : ServiceState<TimerService.State>() {
     private var expirationTimer: CountDownTimer? = null
 
-    private var secondsRemaining = 10L
+    private var secondsRemaining: Long? = null
     private var timeout = false
 
     override fun createState() = State(
-        secondsRemaining = secondsRemaining,
+        remaining = secondsRemaining,
         timeout = timeout
     )
 
@@ -21,9 +22,9 @@ class TimerService : ServiceState<TimerService.State>() {
         emitState()
 
         runExpirationTimer(
-            millisInFuture = secondsRemaining * 1000,
+            millisInFuture = seconds * 1000,
             onTick = { millisUntilFinished ->
-                secondsRemaining = Math.ceil(millisUntilFinished / 1000.0).toLong()
+                secondsRemaining = ceil(millisUntilFinished / 1000.0).toLong()
                 emitState()
             },
             onFinish = {
@@ -46,5 +47,13 @@ class TimerService : ServiceState<TimerService.State>() {
         expirationTimer?.start()
     }
 
-    data class State(val secondsRemaining: Long, val timeout: Boolean)
+    fun reset() {
+        expirationTimer?.cancel()
+        secondsRemaining = null
+        timeout = false
+
+        emitState()
+    }
+
+    data class State(val remaining: Long?, val timeout: Boolean)
 }
