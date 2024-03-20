@@ -15,7 +15,7 @@ import java.math.BigDecimal
 interface ISwapProviderAction {
     @Composable
     fun getTitle() : String
-    fun execute(navController: NavController)
+    fun execute(navController: NavController, onActionCompleted: () -> Unit)
 }
 
 class ActionApprove(
@@ -28,7 +28,7 @@ class ActionApprove(
     @Composable
     override fun getTitle() = stringResource(R.string.Swap_Unlock)
 
-    override fun execute(navController: NavController) {
+    override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
         val approveData = SwapMainModule.ApproveData(
             tokenIn.blockchainType,
             tokenIn,
@@ -42,6 +42,7 @@ class ActionApprove(
             approveData
         ) {
             Log.e("AAA", "result: $it")
+            onActionCompleted.invoke()
         }
     }
 }
