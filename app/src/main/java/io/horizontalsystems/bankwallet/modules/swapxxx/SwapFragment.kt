@@ -23,6 +23,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +37,7 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -42,6 +45,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -128,6 +132,7 @@ fun SwapScreen(navController: NavController) {
         onClickProviderSettings = {
             navController.slideFromRight(R.id.swapSettings)
         },
+        onTimeout = viewModel::reQuote,
         onClickNext = {
             navController.slideFromRight(R.id.swapConfirm)
         }
@@ -146,8 +151,18 @@ private fun SwapScreenInner(
     onEnterAmountPercentage: (Int) -> Unit,
     onClickProvider: () -> Unit,
     onClickProviderSettings: () -> Unit,
+    onTimeout: () -> Unit,
     onClickNext: () -> Unit,
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
+
+    LaunchedEffect(uiState.timeout, lifecycleState) {
+        if (uiState.timeout && lifecycleState == Lifecycle.State.RESUMED) {
+            onTimeout.invoke()
+        }
+    }
+
     val quote = uiState.quote
 
     Scaffold(
