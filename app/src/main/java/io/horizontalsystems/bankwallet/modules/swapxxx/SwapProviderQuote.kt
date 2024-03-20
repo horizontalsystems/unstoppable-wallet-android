@@ -14,5 +14,4 @@ data class SwapProviderQuote(
     val priceImpact by swapQuote::priceImpact
 
     val createdAt = System.currentTimeMillis()
-    val expireAt = createdAt + 30000L
 }
