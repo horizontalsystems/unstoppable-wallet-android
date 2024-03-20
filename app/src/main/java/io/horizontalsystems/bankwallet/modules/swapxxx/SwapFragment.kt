@@ -65,6 +65,7 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvide
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -75,6 +76,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -171,6 +173,16 @@ private fun SwapScreenInner(
                 title = stringResource(R.string.Swap),
                 navigationIcon = {
                     HsBackButton(onClick = onClickClose)
+                },
+                menuItems = buildList {
+                    uiState.timeRemaining?.let<Long, Unit> { timeRemaining ->
+                        add(
+                            MenuItem(
+                                title = TranslatableString.PlainString(timeRemaining.toString()),
+                                onClick = {}
+                            )
+                        )
+                    }
                 }
             )
         },
