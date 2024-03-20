@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
-import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import io.horizontalsystems.bankwallet.core.App
@@ -26,7 +25,8 @@ class SwapConfirmViewModel(
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
     private val fiatServiceOutMin: FiatService,
-    val sendTransactionService: ISendTransactionService
+    val sendTransactionService: ISendTransactionService,
+    private val timerService: TimerService
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -37,11 +37,9 @@ class SwapConfirmViewModel(
 
     private var fiatAmountOut: BigDecimal? = null
     private var fiatAmountOutMin: BigDecimal? = null
-    private var expiresIn = 10L
-    private var expired = false
 
     private var loading = true
-    private var expirationTimer: CountDownTimer? = null
+    private var timerState = timerService.stateFlow.value
 
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
@@ -101,8 +99,16 @@ class SwapConfirmViewModel(
                 emitState()
 
                 if (validQuote) {
-                    runExpiration()
+                    timerService.start(10)
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            timerService.stateFlow.collect {
+                timerState = it
+
+                emitState()
             }
         }
 
@@ -112,8 +118,8 @@ class SwapConfirmViewModel(
     }
 
     override fun createState() = SwapConfirmUiState(
-        expiresIn = expiresIn,
-        expired = expired,
+        expiresIn = timerState.secondsRemaining,
+        expired = timerState.timeout,
         loading = loading,
         tokenIn = tokenIn,
         tokenOut = tokenOut,
@@ -129,38 +135,8 @@ class SwapConfirmViewModel(
         validQuote = validQuote,
     )
 
-    private fun runExpirationTimer(millisInFuture: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
-        viewModelScope.launch {
-            expirationTimer?.cancel()
-            expirationTimer = object : CountDownTimer(millisInFuture, 1000) {
-                override fun onTick(millisUntilFinished: Long) = onTick.invoke(millisUntilFinished)
-                override fun onFinish() = onFinish.invoke()
-            }
-            expirationTimer?.start()
-        }
-    }
-
-    private fun runExpiration() {
-        expiresIn = 10
-        expired = false
-
-        emitState()
-
-        runExpirationTimer(
-            millisInFuture = expiresIn * 1000,
-            onTick = { millisUntilFinished ->
-                expiresIn = Math.ceil(millisUntilFinished / 1000.0).toLong()
-                emitState()
-            },
-            onFinish = {
-                expired = true
-                emitState()
-            }
-        )
-    }
-
     override fun onCleared() {
-        expirationTimer?.cancel()
+        timerService.stop()
     }
 
     fun refresh() {
@@ -207,7 +183,8 @@ class SwapConfirmViewModel(
                 FiatService(App.marketKit),
                 FiatService(App.marketKit),
                 FiatService(App.marketKit),
-                sendTransactionService
+                sendTransactionService,
+                TimerService()
             )
         }
     }
