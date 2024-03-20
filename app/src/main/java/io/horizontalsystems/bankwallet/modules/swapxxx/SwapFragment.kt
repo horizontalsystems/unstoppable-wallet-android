@@ -65,6 +65,7 @@ import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard
+import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
@@ -75,6 +76,7 @@ import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSRow
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_grey
 import cash.p.terminal.ui.compose.components.cell.CellUniversal
@@ -171,6 +173,16 @@ private fun SwapScreenInner(
                 title = stringResource(R.string.Swap),
                 navigationIcon = {
                     HsBackButton(onClick = onClickClose)
+                },
+                menuItems = buildList {
+                    uiState.timeRemaining?.let<Long, Unit> { timeRemaining ->
+                        add(
+                            MenuItem(
+                                title = TranslatableString.PlainString(timeRemaining.toString()),
+                                onClick = {}
+                            )
+                        )
+                    }
                 }
             )
         },
