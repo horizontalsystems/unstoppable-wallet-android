@@ -1,15 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.importcexaccount
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.binance.connector.client.exceptions.BinanceClientException
 import com.binance.connector.client.exceptions.BinanceConnectorException
 import com.google.gson.Gson
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.BinanceCexProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountOrigin
@@ -18,29 +15,25 @@ import io.horizontalsystems.bankwallet.entities.CexType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class EnterCexDataBinanceViewModel : ViewModel() {
+class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewModel.UiState>() {
     private val accountManager = App.accountManager
     private val accountFactory = App.accountFactory
     private val gson = Gson()
 
     private var apiKey: String? = null
     private var secretKey: String? = null
-    private var connectEnabled = false
     private var accountCreated = false
     private var errorMessage: String? = null
     private var showSpinner = false
 
-    var uiState by mutableStateOf(
-        UiState(
-            connectEnabled = connectEnabled,
-            accountCreated = accountCreated,
-            apiKey = apiKey,
-            secretKey = secretKey,
-            errorMessage = errorMessage,
-            showSpinner = showSpinner
-        )
+    override fun createState() = UiState(
+        connectEnabled = !(apiKey.isNullOrBlank() || secretKey.isNullOrBlank()),
+        accountCreated = accountCreated,
+        apiKey = apiKey,
+        secretKey = secretKey,
+        errorMessage = errorMessage,
+        showSpinner = showSpinner
     )
-        private set
 
     fun onEnterApiKey(v: String) {
         apiKey = v
@@ -74,20 +67,6 @@ class EnterCexDataBinanceViewModel : ViewModel() {
         }
 
         emitState()
-    }
-
-    private fun emitState() {
-        connectEnabled = !(apiKey.isNullOrBlank() || secretKey.isNullOrBlank())
-        viewModelScope.launch {
-            uiState = UiState(
-                connectEnabled = connectEnabled,
-                accountCreated = accountCreated,
-                apiKey = apiKey,
-                secretKey = secretKey,
-                errorMessage = errorMessage,
-                showSpinner = showSpinner
-            )
-        }
     }
 
     fun onClickConnect() {

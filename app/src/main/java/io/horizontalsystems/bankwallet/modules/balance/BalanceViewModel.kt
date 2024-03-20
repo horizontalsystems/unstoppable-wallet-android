@@ -3,13 +3,13 @@ package io.horizontalsystems.bankwallet.modules.balance
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.walletconnect.web3.wallet.client.Wallet.Params.*
+import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.factories.uriScheme
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.supported
@@ -21,9 +21,9 @@ import io.horizontalsystems.bankwallet.entities.AddressUri
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +40,7 @@ class BalanceViewModel(
     private val localStorage: ILocalStorage,
     private val wCManager: WCManager,
     private val addressHandlerFactory: AddressHandlerFactory,
-) : ViewModel(), ITotalBalance by totalBalance {
+) : ViewModelUiState<BalanceUiState>(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
@@ -48,18 +48,6 @@ class BalanceViewModel(
     private var isRefreshing = false
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var errorMessage: String? = null
-
-    var uiState by mutableStateOf(
-        BalanceUiState(
-            balanceViewItems = balanceViewItems,
-            viewState = viewState,
-            isRefreshing = isRefreshing,
-            headerNote = HeaderNote.None,
-            errorMessage = errorMessage,
-            openSend = openSendTokenSelect
-        )
-    )
-        private set
 
     val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
@@ -101,26 +89,20 @@ class BalanceViewModel(
         totalBalance.start(viewModelScope)
     }
 
+    override fun createState()= BalanceUiState(
+        balanceViewItems = balanceViewItems,
+        viewState = viewState,
+        isRefreshing = isRefreshing,
+        headerNote = headerNote(),
+        errorMessage = errorMessage,
+        openSend = openSendTokenSelect
+    )
+
     private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
 
         service.balanceItemsFlow.value?.let {
             refreshViewItems(it)
-        }
-    }
-
-    private fun emitState() {
-        val newUiState = BalanceUiState(
-            balanceViewItems = balanceViewItems,
-            viewState = viewState,
-            isRefreshing = isRefreshing,
-            headerNote = headerNote(),
-            errorMessage = errorMessage,
-            openSend = openSendTokenSelect
-        )
-
-        viewModelScope.launch {
-            uiState = newUiState
         }
     }
 

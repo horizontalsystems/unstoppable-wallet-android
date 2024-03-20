@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.support
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +11,7 @@ import kotlinx.coroutines.rx2.await
 class PersonalSupportViewModel(
     private val marketKitWrapper: MarketKitWrapper,
     private val localStorage: ILocalStorage,
-) : ViewModel() {
+) : ViewModelUiState<PersonalSupportModule.UiState>() {
 
     private var contactName: String = ""
     private var showSuccess = false
@@ -23,38 +20,35 @@ class PersonalSupportViewModel(
     private var buttonEnabled = false
     private var showRequestForm = !localStorage.personalSupportEnabled
 
-    var uiState by mutableStateOf(
-        PersonalSupportModule.UiState(
-            contactName = contactName,
-            showSuccess = showSuccess,
-            showError = showError,
-            showSpinner = showSpinner,
-            buttonEnabled = buttonEnabled,
-            showRequestForm = showRequestForm
-        )
+    override fun createState() = PersonalSupportModule.UiState(
+        contactName = contactName,
+        showSuccess = showSuccess,
+        showError = showError,
+        showSpinner = showSpinner,
+        buttonEnabled = buttonEnabled,
+        showRequestForm = showRequestForm
     )
-        private set
 
     fun onUsernameChange(username: String) {
         contactName = username
         buttonEnabled = username.isNotEmpty()
-        syncState()
+        emitState()
     }
 
     fun errorShown() {
         showError = false
-        syncState()
+        emitState()
     }
 
     fun successShown() {
         showSuccess = false
-        syncState()
+        emitState()
     }
 
     fun onRequestClicked() {
         showSpinner = true
         buttonEnabled = false
-        syncState()
+        emitState()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -66,32 +60,19 @@ class PersonalSupportViewModel(
                 showSpinner = false
                 buttonEnabled = true
                 showError = true
-                syncState()
+                emitState()
                 return@launch
             }
             showSpinner = false
             buttonEnabled = true
             showSuccess = true
-            syncState()
-        }
-    }
-
-    private fun syncState() {
-        viewModelScope.launch {
-            uiState = PersonalSupportModule.UiState(
-                contactName = contactName,
-                showSuccess = showSuccess,
-                showError = showError,
-                showSpinner = showSpinner,
-                buttonEnabled = buttonEnabled,
-                showRequestForm = showRequestForm
-            )
+            emitState()
         }
     }
 
     fun showRequestForm() {
         showRequestForm = true
-        syncState()
+        emitState()
     }
 
 }

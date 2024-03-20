@@ -1,29 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.coin.detectors
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsModule.IssueViewItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DetectorsViewModel(
     private val title: String,
     private val detectors: List<IssueParcelable>
-) : ViewModel() {
+) : ViewModelUiState<DetectorsModule.UiState>() {
 
     var coreIssues = emptyList<IssueViewItem>()
     var generalIssues = emptyList<IssueViewItem>()
-    var uiState by mutableStateOf(
-        DetectorsModule.UiState(
-            title,
-            coreIssues,
-            generalIssues
-        )
-    )
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -40,11 +29,15 @@ class DetectorsViewModel(
             coreIssues = sortIssuesByImpact(coreIssueList)
             generalIssues = sortIssuesByImpact(generalIssueList)
 
-            withContext(Dispatchers.Main) {
-                sync()
-            }
+            emitState()
         }
     }
+
+    override fun createState() = DetectorsModule.UiState(
+        title = title,
+        coreIssues = coreIssues,
+        generalIssues = generalIssues
+    )
 
     fun toggleExpandGeneral(id: Int) {
         generalIssues = generalIssues.map {
@@ -54,9 +47,7 @@ class DetectorsViewModel(
                 it
             }
         }
-        uiState = uiState.copy(
-            generalIssues = generalIssues
-        )
+        emitState()
     }
 
     fun toggleExpandCore(id: Int) {
@@ -67,17 +58,7 @@ class DetectorsViewModel(
                 it
             }
         }
-        uiState = uiState.copy(
-            coreIssues = coreIssues
-        )
-    }
-
-    private fun sync() {
-        uiState = DetectorsModule.UiState(
-            title,
-            coreIssues,
-            generalIssues
-        )
+        emitState()
     }
 
     private fun sortIssuesByImpact(issues: List<IssueParcelable>): List<IssueViewItem> {

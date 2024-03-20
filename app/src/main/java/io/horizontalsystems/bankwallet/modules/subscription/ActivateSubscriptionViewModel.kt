@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.subscription
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -24,7 +22,7 @@ class ActivateSubscriptionViewModel(
     private val marketKit: MarketKitWrapper,
     private val accountManager: IAccountManager,
     private val subscriptionManager: SubscriptionManager
-) : ViewModel() {
+) : ViewModelUiState<ActivateSubscription>() {
 
     private var subscriptionAccount: SubscriptionAccount? = null
 
@@ -35,22 +33,19 @@ class ActivateSubscriptionViewModel(
     private var fetchingTokenError: Throwable? = null
     private var fetchingTokenSuccess = false
 
-    var uiState: ActivateSubscription by mutableStateOf(
-        ActivateSubscription(
-            fetchingMessage = fetchingMessage,
-            fetchingMessageError = fetchingMessageError,
-            subscriptionInfo = subscriptionInfo,
-            fetchingToken = fetchingToken,
-            fetchingTokenError = fetchingTokenError,
-            fetchingTokenSuccess = fetchingTokenSuccess,
-            signButtonState = getSignButtonState(),
-        )
-    )
-        private set
-
     init {
         fetchMessageToSign()
     }
+
+    override fun createState() = ActivateSubscription(
+        fetchingMessage = fetchingMessage,
+        fetchingMessageError = fetchingMessageError,
+        subscriptionInfo = subscriptionInfo,
+        fetchingToken = fetchingToken,
+        fetchingTokenError = fetchingTokenError,
+        fetchingTokenSuccess = fetchingTokenSuccess,
+        signButtonState = getSignButtonState()
+    )
 
     private fun fetchMessageToSign() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -90,20 +85,6 @@ class ActivateSubscriptionViewModel(
             }
 
             emitState()
-        }
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = ActivateSubscription(
-                fetchingMessage = fetchingMessage,
-                fetchingMessageError = fetchingMessageError,
-                subscriptionInfo = subscriptionInfo,
-                fetchingToken = fetchingToken,
-                fetchingTokenError = fetchingTokenError,
-                fetchingTokenSuccess = fetchingTokenSuccess,
-                signButtonState = getSignButtonState()
-            )
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import kotlinx.coroutines.launch
@@ -14,23 +15,20 @@ import kotlinx.coroutines.launch
 class RsiSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,
     private val chartIndicatorManager: ChartIndicatorManager
-) : ViewModel() {
+) : ViewModelUiState<IndicatorSettingUiState>() {
     val name = indicatorSetting.name
     val defaultPeriod = indicatorSetting.defaultData["period"]
     private var period = indicatorSetting.extraData["period"]
     private var periodError: Throwable? = null
     private var finish = false
 
-    var uiState by mutableStateOf(
-        IndicatorSettingUiState(
-            period = period,
-            periodError = periodError,
-            applyEnabled = applyEnabled(),
-            finish = finish,
-            resetEnabled = resetEnabled()
-        )
+    override fun createState() = IndicatorSettingUiState(
+        period = period,
+        periodError = periodError,
+        applyEnabled = applyEnabled(),
+        finish = finish,
+        resetEnabled = resetEnabled()
     )
-        private set
 
     private fun applyEnabled(): Boolean {
         return period != indicatorSetting.extraData["period"]
@@ -38,18 +36,6 @@ class RsiSettingViewModel(
 
     private fun resetEnabled(): Boolean {
         return period != null
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = IndicatorSettingUiState(
-                period = period,
-                periodError = periodError,
-                applyEnabled = applyEnabled(),
-                finish = finish,
-                resetEnabled = resetEnabled(),
-            )
-        }
     }
 
     fun onEnterPeriod(v: String) {

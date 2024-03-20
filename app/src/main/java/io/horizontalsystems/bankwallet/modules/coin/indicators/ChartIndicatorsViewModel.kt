@@ -1,29 +1,19 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
 import kotlinx.coroutines.launch
 
 class ChartIndicatorsViewModel(
     private val chartIndicatorManager: ChartIndicatorManager
-) : ViewModel() {
+) : ViewModelUiState<ChartIndicatorsUiState>() {
     private var maIndicators: List<ChartIndicatorSetting> = listOf()
     private var oscillatorIndicators: List<ChartIndicatorSetting> = listOf()
-
-    var uiState by mutableStateOf(
-        ChartIndicatorsUiState(
-            maIndicators = maIndicators,
-            oscillatorIndicators = oscillatorIndicators
-        )
-    )
-        private set
 
     init {
         viewModelScope.launch {
@@ -36,14 +26,10 @@ class ChartIndicatorsViewModel(
         }
     }
 
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = ChartIndicatorsUiState(
-                maIndicators = maIndicators,
-                oscillatorIndicators = oscillatorIndicators
-            )
-        }
-    }
+    override fun createState() = ChartIndicatorsUiState(
+        maIndicators = maIndicators,
+        oscillatorIndicators = oscillatorIndicators
+    )
 
     fun enable(indicator: ChartIndicatorSetting) {
         chartIndicatorManager.enableIndicator(indicator.id)

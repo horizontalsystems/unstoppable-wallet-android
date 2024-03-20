@@ -1,28 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.session
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Invalid
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Killed
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
-import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableAccount
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableEvmKit
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.RequestNotFoundError
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager.RequestDataError.UnsupportedChainId
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Invalid
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Killed
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.Ready
+import io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionServiceState.WaitingForApproveSession
 import io.horizontalsystems.core.SingleLiveEvent
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.ethereumkit.models.Address
@@ -37,7 +34,7 @@ class WCSessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
     private val topic: String?,
-) : ViewModel() {
+) : ViewModelUiState<WCSessionUiState>() {
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
     val showErrorLiveEvent = SingleLiveEvent<Unit>()
@@ -51,19 +48,16 @@ class WCSessionViewModel(
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
 
-    var uiState by mutableStateOf(
-        WCSessionUiState(
-            peerMeta = peerMeta,
-            closeEnabled = closeEnabled,
-            connecting = connecting,
-            buttonStates = buttonStates,
-            hint = hint,
-            showError = showError,
-            status = status,
-            pendingRequests = pendingRequests,
-        )
+    override fun createState() = WCSessionUiState(
+        peerMeta = peerMeta,
+        closeEnabled = closeEnabled,
+        connecting = connecting,
+        buttonStates = buttonStates,
+        hint = hint,
+        showError = showError,
+        status = status,
+        pendingRequests = pendingRequests,
     )
-        private set
 
     private var sessionServiceState: WCSessionServiceState = WCSessionServiceState.Idle
         set(value) {
@@ -232,19 +226,6 @@ class WCSessionViewModel(
         setError(state)
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = WCSessionUiState(
-            peerMeta = peerMeta,
-            closeEnabled = closeEnabled,
-            connecting = connecting,
-            buttonStates = buttonStates,
-            hint = hint,
-            showError = showError,
-            status = status,
-            pendingRequests = pendingRequests,
-        )
     }
 
     fun rejectProposal() {

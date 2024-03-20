@@ -1,11 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.settings.appearance
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
@@ -25,7 +22,7 @@ class AppearanceViewModel(
     private val baseTokenManager: BaseTokenManager,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val localStorage: ILocalStorage
-) : ViewModel() {
+) : ViewModelUiState<AppearanceUIState>() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var appIconOptions = appIconService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
@@ -33,17 +30,6 @@ class AppearanceViewModel(
     private var marketsTabEnabled = localStorage.marketsTabEnabled
     private var balanceViewTypeOptions =
         buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
-
-    var uiState by mutableStateOf(
-        AppearanceUIState(
-            launchScreenOptions = launchScreenOptions,
-            appIconOptions = appIconOptions,
-            themeOptions = themeOptions,
-            baseTokenOptions = baseTokenOptions,
-            balanceViewTypeOptions = balanceViewTypeOptions,
-            marketsTabEnabled = marketsTabEnabled
-        )
-    )
 
     init {
         viewModelScope.launch {
@@ -78,6 +64,15 @@ class AppearanceViewModel(
         }
     }
 
+    override fun createState() = AppearanceUIState(
+        launchScreenOptions = launchScreenOptions,
+        appIconOptions = appIconOptions,
+        themeOptions = themeOptions,
+        baseTokenOptions = baseTokenOptions,
+        balanceViewTypeOptions = balanceViewTypeOptions,
+        marketsTabEnabled = marketsTabEnabled
+    )
+
     private fun buildBaseTokenSelect(token: Token?): SelectOptional<Token> {
         return SelectOptional(token, baseTokenManager.tokens)
     }
@@ -109,17 +104,6 @@ class AppearanceViewModel(
     private fun handleUpdatedBaseToken(baseTokenOptions: SelectOptional<Token>) {
         this.baseTokenOptions = baseTokenOptions
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = AppearanceUIState(
-            launchScreenOptions = launchScreenOptions,
-            appIconOptions = appIconOptions,
-            themeOptions = themeOptions,
-            baseTokenOptions = baseTokenOptions,
-            balanceViewTypeOptions = balanceViewTypeOptions,
-            marketsTabEnabled = marketsTabEnabled,
-        )
     }
 
     fun onEnterLaunchPage(launchPage: LaunchPage) {

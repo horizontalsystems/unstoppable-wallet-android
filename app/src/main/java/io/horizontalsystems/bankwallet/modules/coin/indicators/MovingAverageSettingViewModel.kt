@@ -1,20 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
-import kotlinx.coroutines.launch
 
 class MovingAverageSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,
     private val chartIndicatorManager: ChartIndicatorManager
-) : ViewModel() {
+) : ViewModelUiState<MovingAverageSettingUiState>() {
     val name = indicatorSetting.name
     val maTypes = listOf("EMA", "SMA", "WMA")
     val defaultMaType = indicatorSetting.defaultData["maType"] ?: ""
@@ -24,17 +20,14 @@ class MovingAverageSettingViewModel(
     private var periodError: Throwable? = null
     private var finish = false
 
-    var uiState by mutableStateOf(
-        MovingAverageSettingUiState(
-            maType = maType,
-            period = period,
-            periodError = periodError,
-            applyEnabled = applyEnabled(),
-            finish = finish,
-            resetEnabled = resetEnabled()
-        )
+    override fun createState() = MovingAverageSettingUiState(
+        maType = maType,
+        period = period,
+        periodError = periodError,
+        applyEnabled = applyEnabled(),
+        finish = finish,
+        resetEnabled = resetEnabled()
     )
-        private set
 
     private fun applyEnabled(): Boolean {
         if (periodError != null)
@@ -46,19 +39,6 @@ class MovingAverageSettingViewModel(
 
     private fun resetEnabled(): Boolean {
         return maType != null || period != null
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = MovingAverageSettingUiState(
-                maType = maType,
-                period = period,
-                periodError = periodError,
-                applyEnabled = applyEnabled(),
-                finish = finish,
-                resetEnabled = resetEnabled(),
-            )
-        }
     }
 
     fun onSelectMaType(v: String) {
