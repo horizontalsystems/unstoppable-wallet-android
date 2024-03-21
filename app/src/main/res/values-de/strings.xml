@@ -464,6 +464,7 @@
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Dieser Service erlaubt keine Verpackung/Auspackung. Verwenden Sie stattdessen 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Hohe Preisauswirkung</string>
     <string name="Swap_Proceed">Weiter</string>
+    <string name="Swap_Unlock">Entsperren</string>
     <string name="Swap_Revoke">Widerrufen</string>
     <string name="Swap_Revoking">Widerrufen...</string>
     <string name="Swap_Approve">Genehmigen</string>
