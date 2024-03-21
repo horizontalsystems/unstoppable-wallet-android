@@ -70,7 +70,6 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.CardsSwapInfo
 import cash.p.terminal.ui.compose.components.CoinImage
@@ -256,17 +255,18 @@ private fun SwapScreenInner(
                                 .fillMaxWidth(),
                             title = title,
                             enabled = false,
-                            onClick = onClickNext
+                            onClick = {}
                         )
                     }
 
                     SwapStep.Quoting -> {
-                        ButtonPrimaryYellowWithSpinner(
+                        ButtonPrimaryYellow(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
-                            title = stringResource(R.string.Alert_Loading),
+                            title = stringResource(R.string.Swap_Quoting),
                             enabled = false,
+                            loadingIndicator = true,
                             onClick = {}
                         )
                     }
