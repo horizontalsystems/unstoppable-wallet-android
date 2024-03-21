@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.swapxxx
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,9 +10,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -21,6 +27,7 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
@@ -44,7 +51,12 @@ import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_leah
+import io.horizontalsystems.core.SnackbarDuration
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class SwapConfirmFragment : BaseComposeFragment() {
@@ -52,10 +64,16 @@ class SwapConfirmFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         SwapConfirmScreen(navController)
     }
+
+    @Parcelize
+    data class Result(val success: Boolean) : Parcelable
 }
 
 @Composable
 fun SwapConfirmScreen(navController: NavController) {
+    val coroutineScope = rememberCoroutineScope()
+    val view = LocalView.current
+
     val swapViewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = navController.previousBackStackEntry!!,
         factory = SwapViewModel.Factory()
@@ -129,13 +147,33 @@ fun SwapConfirmScreen(navController: NavController) {
                         VSpacer(height = 12.dp)
                         subhead1_leah(text = "Quote expired")
                     } else {
+                        var buttonEnabled by remember { mutableStateOf(true) }
                         ButtonPrimaryYellow(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 16.dp, end = 16.dp),
                             title = stringResource(R.string.Swap),
+                            enabled = buttonEnabled,
                             onClick = {
-                                viewModel.swap()
+                                coroutineScope.launch {
+                                    buttonEnabled = false
+                                    HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
+
+                                    val result = try {
+                                        viewModel.swap()
+
+                                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                        delay(1200)
+                                        SwapConfirmFragment.Result(true)
+                                    } catch (t: Throwable) {
+                                        HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                        SwapConfirmFragment.Result(false)
+                                    }
+
+                                    buttonEnabled = true
+                                    navController.setNavigationResultX(result)
+                                    navController.popBackStack()
+                                }
                             },
                         )
                         VSpacer(height = 12.dp)

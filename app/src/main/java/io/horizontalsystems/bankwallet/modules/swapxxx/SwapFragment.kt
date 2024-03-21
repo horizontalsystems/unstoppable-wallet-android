@@ -56,6 +56,7 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.swap.SwapMainModule
@@ -139,7 +140,11 @@ fun SwapScreen(navController: NavController) {
         },
         onTimeout = viewModel::reQuote,
         onClickNext = {
-            navController.slideFromRight(R.id.swapConfirm)
+            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+                if (it.success) {
+                    navController.popBackStack()
+                }
+            }
         },
         onActionStarted = {
             viewModel.onActionStarted()
