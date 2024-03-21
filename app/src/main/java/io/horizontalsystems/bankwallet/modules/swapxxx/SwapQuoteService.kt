@@ -31,7 +31,6 @@ class SwapQuoteService {
         UniswapV3Provider,
     )
 
-    private val quoteLifetime = 30000L
     private var amountIn: BigDecimal? = null
     private var tokenIn: Token? = null
     private var tokenOut: Token? = null
@@ -49,7 +48,6 @@ class SwapQuoteService {
             quoting = quoting,
             quotes = quotes,
             preferredProvider = preferredProvider,
-            quoteLifetime = quoteLifetime,
             quote = quote,
             error = error,
         )
@@ -69,7 +67,6 @@ class SwapQuoteService {
                 quoting = quoting,
                 quotes = quotes,
                 preferredProvider = preferredProvider,
-                quoteLifetime = quoteLifetime,
                 quote = quote,
                 error = error,
             )
@@ -216,7 +213,6 @@ class SwapQuoteService {
         val quoting: Boolean,
         val quotes: List<SwapProviderQuote>,
         val preferredProvider: ISwapXxxProvider?,
-        val quoteLifetime: Long,
         val quote: SwapProviderQuote?,
         val error: Throwable?,
     )
