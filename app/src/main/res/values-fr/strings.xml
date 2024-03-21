@@ -502,6 +502,7 @@
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Ce service n\'autorise pas l\'emballage/déballage. Utilisez 1inch à la place.</string>
     <string name="Swap_ErrorHighPriceImpact">Impact élevé sur les prix</string>
     <string name="Swap_Proceed">Suivant</string>
+    <string name="Swap_Unlock">Déverrouiller</string>
     <string name="Swap_Revoke">Révoquer</string>
     <string name="Swap_Revoking">Révocation en cours...</string>
     <string name="Swap_Approve">Approuver</string>
