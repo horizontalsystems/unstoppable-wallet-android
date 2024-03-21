@@ -515,6 +515,7 @@
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
+    <string name="Swap_Unlock">Разблокировать</string>
     <string name="Swap_Revoke">Отозвать</string>
     <string name="Swap_Revoking">Отзыв...</string>
     <string name="Swap_Approve">Разрешить</string>
