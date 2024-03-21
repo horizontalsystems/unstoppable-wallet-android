@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package io.horizontalsystems.bankwallet.modules.swapxxx.action
 
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -12,21 +12,19 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
-interface ISwapProviderAction {
-    @Composable
-    fun getTitle() : String
-    fun execute(navController: NavController, onActionCompleted: () -> Unit)
-}
-
 class ActionApprove(
     private val requiredAllowance: BigDecimal,
     private val spenderAddress: Address,
     private val tokenIn: Token,
     private val currentAllowance: BigDecimal,
+    override val inProgress: Boolean
 ) : ISwapProviderAction {
 
     @Composable
     override fun getTitle() = stringResource(R.string.Swap_Unlock)
+
+    @Composable
+    override fun getTitleInProgress() = stringResource(R.string.Swap_Unlocking)
 
     override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
         val approveData = SwapMainModule.ApproveData(

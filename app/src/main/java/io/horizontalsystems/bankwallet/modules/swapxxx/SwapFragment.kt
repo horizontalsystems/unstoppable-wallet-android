@@ -286,11 +286,18 @@ private fun SwapScreenInner(
 
                     is SwapStep.ActionRequired -> {
                         val action = currentStep.action
+                        val title = if (action.inProgress) {
+                            action.getTitleInProgress()
+                        } else {
+                            action.getTitle()
+                        }
+
                         ButtonPrimaryDefault(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
-                            title = action.getTitle(),
+                            title = title,
+                            enabled = !action.inProgress,
                             onClick = {
                                 onActionStarted.invoke()
                                 action.execute(navController, onActionCompleted)

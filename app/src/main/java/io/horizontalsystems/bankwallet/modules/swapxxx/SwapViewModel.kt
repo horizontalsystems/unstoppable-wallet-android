@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
+import io.horizontalsystems.bankwallet.modules.swapxxx.action.ISwapProviderAction
 import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvider
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
