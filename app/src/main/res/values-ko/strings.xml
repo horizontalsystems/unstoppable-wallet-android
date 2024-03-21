@@ -511,6 +511,7 @@
     <string name="Swap_ErrorWrapUnwrapNotAllowed">이 서비스는 래핑/언래핑을 허용하지 않습니다. 대신 1inch 를 사용하십시오.</string>
     <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
     <string name="Swap_Proceed">다음</string>
+    <string name="Swap_Unlock">잠금 해제</string>
     <string name="Swap_Revoke">취소</string>
     <string name="Swap_Revoking">철회...</string>
     <string name="Swap_Approve">승인</string>
