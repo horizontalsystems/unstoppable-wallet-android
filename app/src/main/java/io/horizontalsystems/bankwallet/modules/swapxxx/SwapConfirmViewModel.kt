@@ -164,11 +164,8 @@ class SwapConfirmViewModel(
         }
     }
 
-
-    fun swap() {
-        viewModelScope.launch {
-            sendTransactionService.sendTransaction()
-        }
+    suspend fun swap() {
+        sendTransactionService.sendTransaction()
     }
 
     companion object {

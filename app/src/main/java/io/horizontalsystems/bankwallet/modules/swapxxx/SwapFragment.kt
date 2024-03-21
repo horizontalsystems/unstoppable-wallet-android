@@ -56,6 +56,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
@@ -137,7 +138,11 @@ fun SwapScreen(navController: NavController) {
         },
         onTimeout = viewModel::reQuote,
         onClickNext = {
-            navController.slideFromRight(R.id.swapConfirm)
+            navController.slideFromRightForResult<SwapConfirmFragment.Result>(R.id.swapConfirm) {
+                if (it.success) {
+                    navController.popBackStack()
+                }
+            }
         },
         onActionStarted = {
             viewModel.onActionStarted()
