@@ -510,6 +510,7 @@
     <string name="Swap_ErrorWrapUnwrapNotAllowed">此服务不允许包装/拆包。请使用1英寸代替。</string>
     <string name="Swap_ErrorHighPriceImpact">高价格影响</string>
     <string name="Swap_Proceed">继续</string>
+    <string name="Swap_Unlock">解锁​​​​</string>
     <string name="Swap_Revoke">撤回</string>
     <string name="Swap_Revoking">正在取消...</string>
     <string name="Swap_Approve">批准</string>
