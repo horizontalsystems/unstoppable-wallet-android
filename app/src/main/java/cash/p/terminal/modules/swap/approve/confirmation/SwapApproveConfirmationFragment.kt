@@ -120,12 +120,8 @@ class SwapApproveConfirmationFragment : BaseComposeFragment() {
                 R.string.Hud_Text_Done
             )
             Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().setNavigationResult(
-                    SwapApproveModule.requestKey,
-                    bundleOf(SwapApproveModule.resultKey to true),
-                    R.id.swapFragment
-                )
-                findNavController().popBackStack(R.id.swapFragment, false)
+                findNavController().setNavigationResultX(Result(true))
+                findNavController().popBackStack()
             }, 1200)
         }
 
