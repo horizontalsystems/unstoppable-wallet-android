@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.swapxxx
 
+import cash.p.terminal.modules.swapxxx.action.ISwapProviderAction
 import cash.p.terminal.modules.swapxxx.settings.ISwapSetting
 import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import io.horizontalsystems.marketkit.models.Token
