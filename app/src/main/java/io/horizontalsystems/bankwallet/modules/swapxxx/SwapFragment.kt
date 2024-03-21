@@ -70,7 +70,6 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CardsSwapInfo
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -254,17 +253,18 @@ private fun SwapScreenInner(
                                 .fillMaxWidth(),
                             title = title,
                             enabled = false,
-                            onClick = onClickNext
+                            onClick = {}
                         )
                     }
 
                     SwapStep.Quoting -> {
-                        ButtonPrimaryYellowWithSpinner(
+                        ButtonPrimaryYellow(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp)
                                 .fillMaxWidth(),
-                            title = stringResource(R.string.Alert_Loading),
+                            title = stringResource(R.string.Swap_Quoting),
                             enabled = false,
+                            loadingIndicator = true,
                             onClick = {}
                         )
                     }

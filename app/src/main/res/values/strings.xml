@@ -665,6 +665,7 @@
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
+    <string name="Swap_Quoting">Quoting</string>
     <string name="Swap_MaximumPaid">Maximum Amount</string>
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <string name="Swap_PoweredBy">Powered by</string>
