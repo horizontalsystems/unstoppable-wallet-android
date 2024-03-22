@@ -23,7 +23,7 @@ class BtcBlockchainManager(
 
     private val blockchairSyncEnabledBlockchains = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash)
 
-    private val blockchainTypes = listOf(
+    val blockchainTypes = listOf(
         BlockchainType.Bitcoin,
         BlockchainType.BitcoinCash,
         BlockchainType.Litecoin,
