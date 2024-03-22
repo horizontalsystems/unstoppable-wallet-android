@@ -53,7 +53,8 @@ abstract class EvmSwapProvider : ISwapXxxProvider {
             ActionRevoke(
                 token,
                 sendEvmData,
-                revokeInProgress
+                revokeInProgress,
+                allowance
             )
         } else {
             val approveInProgress = approveTransaction != null && !approveTransaction.value.zeroValue

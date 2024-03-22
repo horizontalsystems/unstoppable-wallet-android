@@ -78,6 +78,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -276,6 +278,7 @@ private fun SwapScreenInner(
                             SwapMainModule.SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
+                            is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
                             else -> error.message ?: error.javaClass.simpleName
                         }
 
@@ -335,6 +338,27 @@ private fun SwapScreenInner(
                     CardsSwapInfo {
                         AvailableBalanceField(uiState.tokenIn, uiState.availableBalance)
                     }
+                }
+
+                if (uiState.error is PriceImpactTooHigh) {
+                    VSpacer(height = 12.dp)
+                    TextImportantError(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        icon = R.drawable.ic_attention_20,
+                        title = stringResource(id = R.string.Swap_PriceImpact),
+                        text = stringResource(id = R.string.Swap_PriceImpactTooHigh, uiState.error.providerTitle ?: "")
+                    )
+                } else {
+                    (uiState.currentStep as? SwapStep.ActionRequired)
+                        ?.action
+                        ?.getDescription()
+                        ?.let { actionDescription ->
+                            VSpacer(height = 12.dp)
+                            TextImportantWarning(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                text = actionDescription
+                            )
+                        }
                 }
 
                 VSpacer(height = 32.dp)
