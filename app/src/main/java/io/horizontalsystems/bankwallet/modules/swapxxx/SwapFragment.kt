@@ -329,10 +329,10 @@ private fun SwapScreenInner(
                     CardsSwapInfo {
                         ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
                         PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
+                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel)
                         quote.fields.forEach {
                             it.GetContent()
                         }
-                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel)
                     }
                 } else {
                     CardsSwapInfo {
