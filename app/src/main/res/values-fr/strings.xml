@@ -497,6 +497,7 @@
     <string name="Swap_EstimatedFee">Frais estimés</string>
     <string name="Swap_MaxFee">Frais Max</string>
     <string name="Swap_Fee">Frais</string>
+    <string name="Swap_Recipient">Destinataire</string>
     <string name="Swap_ErrorInsufficientBalance">Solde insuffisant</string>
     <string name="Swap_ErrorNoLiquidity">Impossible d\'échanger ces tokens</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Ce service n\'autorise pas l\'emballage/déballage. Utilisez 1inch à la place.</string>
