@@ -349,17 +349,14 @@ private fun SwapScreenInner(
                         title = stringResource(id = R.string.Swap_PriceImpact),
                         text = stringResource(id = R.string.Swap_PriceImpactTooHigh, uiState.error.providerTitle ?: "")
                     )
-                } else {
-                    (uiState.currentStep as? SwapStep.ActionRequired)
-                        ?.action
-                        ?.getDescription()
-                        ?.let { actionDescription ->
-                            VSpacer(height = 12.dp)
-                            TextImportantWarning(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                text = actionDescription
-                            )
-                        }
+                } else if (uiState.currentStep is SwapStep.ActionRequired) {
+                    uiState.currentStep.action.getDescription()?.let { actionDescription ->
+                        VSpacer(height = 12.dp)
+                        TextImportantWarning(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            text = actionDescription
+                        )
+                    }
                 }
 
                 VSpacer(height = 32.dp)
