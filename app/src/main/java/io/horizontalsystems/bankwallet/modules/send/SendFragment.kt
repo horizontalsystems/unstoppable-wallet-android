@@ -5,12 +5,10 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -198,9 +196,6 @@ class SendFragment : BaseFragment() {
                     else -> {}
                 }
             } catch (t: Throwable) {
-                Toast.makeText(
-                    App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT
-                ).show()
                 findNavController().popBackStack()
             }
         }
