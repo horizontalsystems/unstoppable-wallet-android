@@ -11,6 +11,7 @@ import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
 import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldAllowance
+import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldRecipient
 import cash.p.terminal.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -62,6 +63,9 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
         val allowance = getAllowance(tokenIn, routerAddress)
 
         val fields = buildList {
+            settingRecipient.value?.let {
+                add(SwapDataFieldRecipient(it))
+            }
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }

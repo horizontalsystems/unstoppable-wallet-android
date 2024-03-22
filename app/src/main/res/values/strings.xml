@@ -642,6 +642,7 @@
     <string name="Swap_MaxFee">Max Fee</string>
     <string name="Swap_Fee">Fee</string>
     <string name="Swap_Slippage">Slippage</string>
+    <string name="Swap_Recipient">Recipient</string>
     <string name="Swap_ErrorNoProviders">No Providers</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
