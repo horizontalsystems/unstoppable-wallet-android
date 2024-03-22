@@ -493,6 +493,20 @@ val BlockchainType.nativeTokenQueries: List<TokenQuery>
         }
     }
 
+val BlockchainType.defaultTokenQuery: TokenQuery
+    get() = when (this) {
+        BlockchainType.Bitcoin,
+        BlockchainType.Litecoin -> {
+            TokenQuery(this, TokenType.Derived(TokenType.Derivation.Bip84))
+        }
+        BlockchainType.BitcoinCash -> {
+            TokenQuery(this, TokenType.AddressTyped(TokenType.AddressType.Type145))
+        }
+        else -> {
+            TokenQuery(this, TokenType.Native)
+        }
+    }
+
 val TokenType.title: String
     get() = when (this) {
         is TokenType.Derived -> derivation.accountTypeDerivation.rawName
