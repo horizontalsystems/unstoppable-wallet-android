@@ -396,11 +396,19 @@ fun SwapCards(
         }
 
         VSpacer(32.dp)
-        if (hasNonZeroBalance == true && fromState.inputState.amount.isEmpty() && showSuggestions && keyboardState == Opened) {
-            SuggestionsBar(modifier = Modifier.align(Alignment.BottomCenter)) {
-                focusManager.clearFocus()
-                viewModel.onSetAmountInBalancePercent(it)
-            }
+        if (showSuggestions && keyboardState == Opened) {
+            SuggestionsBar(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                onDelete = {
+                    viewModel.onFromAmountChange(null)
+                },
+                onSelect = {
+                    focusManager.clearFocus()
+                    viewModel.onSetAmountInBalancePercent(it)
+                },
+                selectEnabled = hasNonZeroBalance ?: false,
+                deleteEnabled = fromState.inputState.amount.isNotBlank()
+            )
         }
     }
 }
