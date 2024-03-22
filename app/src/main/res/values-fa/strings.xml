@@ -282,6 +282,7 @@
     <string name="Swap_EstimatedFee">هزینه تخمینی</string>
     <string name="Swap_MaxFee">حداکثر هزینه</string>
     <string name="Swap_Fee">هزینه</string>
+    <string name="Swap_Recipient">گیرنده</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_ErrorNoLiquidity">نمی توان این نشانه ها را عوض کر</string>
     <string name="Swap_ErrorHighPriceImpact">تأثیر بالای قیمت</string>
