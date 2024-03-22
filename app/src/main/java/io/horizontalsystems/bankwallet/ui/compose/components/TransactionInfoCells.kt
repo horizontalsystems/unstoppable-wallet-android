@@ -358,7 +358,7 @@ fun TransactionInfoCancelCell(
             tint = ComposeAppTheme.colors.redL
         )
         Spacer(Modifier.width(16.dp))
-        body_lucian(text = stringResource(R.string.TransactionInfo_Cancel))
+        body_lucian(text = stringResource(R.string.TransactionInfoOptions_Cancel_Button))
     }
 }
 
