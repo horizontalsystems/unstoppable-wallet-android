@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx
 
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.ServiceState
@@ -12,6 +13,7 @@ class TokenBalanceService(
 ) : ServiceState<TokenBalanceService.State>() {
     private var token: Token? = null
     private var amount: BigDecimal? = null
+    private var adapter: IBalanceAdapter? = null
     private var balance: BigDecimal? = null
     private var error: Throwable? = null
 
@@ -40,19 +42,31 @@ class TokenBalanceService(
     private fun validate() {
         error = null
 
-        val balance = balance ?: return
         val amount = amount ?: return
 
-        if (amount > balance) {
-            error = SwapMainModule.SwapError.InsufficientBalanceFrom
+        error = when (adapter?.balanceState) {
+            null -> TokenNotEnabled()
+            is AdapterState.SearchingTxs -> WalletSyncing()
+            is AdapterState.Syncing -> WalletSyncing()
+            is AdapterState.NotSynced -> WalletNotSynced()
+            AdapterState.Synced -> {
+                if (amount > balance) {
+                    SwapMainModule.SwapError.InsufficientBalanceFrom
+                } else {
+                    null
+                }
+            }
         }
     }
 
     private fun refreshAvailableBalance() {
-        balance = token?.let {
-            (adapterManager.getAdapterForToken(it) as? IBalanceAdapter)?.balanceData?.available
-        }
+        adapter = token?.let { adapterManager.getAdapterForToken(it) as? IBalanceAdapter }
+        balance = adapter?.balanceData?.available
     }
 
     data class State(val balance: BigDecimal?, val error: Throwable?)
 }
+
+class TokenNotEnabled : Exception()
+class WalletSyncing : Exception()
+class WalletNotSynced : Exception()
