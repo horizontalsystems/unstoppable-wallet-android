@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogScreen
@@ -14,12 +15,9 @@ import kotlinx.parcelize.Parcelize
 class SwapSelectCoinFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        SwapSelectCoinScreen(navController, input.otherSelectedToken)
+        SwapSelectCoinScreen(navController, navController.getInput())
     }
 
-    @Parcelize
-    data class Input(val otherSelectedToken: Token?) : Parcelable
 }
 
 @Composable
