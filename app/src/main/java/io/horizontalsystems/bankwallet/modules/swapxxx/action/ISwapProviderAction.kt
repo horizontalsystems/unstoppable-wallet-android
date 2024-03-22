@@ -12,5 +12,8 @@ interface ISwapProviderAction {
     @Composable
     fun getTitleInProgress() : String
 
+    @Composable
+    fun getDescription() : String? = null
+
     fun execute(navController: NavController, onActionCompleted: () -> Unit)
 }

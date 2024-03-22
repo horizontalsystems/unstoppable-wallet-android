@@ -23,6 +23,7 @@ class PriceImpactService {
     private var priceImpact: BigDecimal? = null
     private var priceImpactLevel: SwapMainModule.PriceImpactLevel? = null
     private var priceImpactCaution: HSCaution? = null
+    private var error: Throwable? = null
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -31,6 +32,7 @@ class PriceImpactService {
             priceImpactCaution = priceImpactCaution,
             fiatPriceImpact = fiatPriceImpact,
             fiatPriceImpactLevel = fiatPriceImpactLevel,
+            error = error
         )
     )
     val stateFlow = _stateFlow.asStateFlow()
@@ -70,6 +72,12 @@ class PriceImpactService {
             }
         }
 
+        error = if (priceImpactLevel == SwapMainModule.PriceImpactLevel.Forbidden) {
+            PriceImpactTooHigh(providerTitle)
+        } else {
+            null
+        }
+
         emitState()
     }
 
@@ -80,7 +88,8 @@ class PriceImpactService {
                 priceImpactLevel,
                 priceImpactCaution,
                 fiatPriceImpact,
-                fiatPriceImpactLevel
+                fiatPriceImpactLevel,
+                error
             )
         }
     }
@@ -136,6 +145,9 @@ class PriceImpactService {
         val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
         val priceImpactCaution: HSCaution?,
         val fiatPriceImpact: BigDecimal?,
-        val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?
+        val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+        val error: Throwable?
     )
 }
+
+data class PriceImpactTooHigh(val providerTitle: String?) : Exception()
