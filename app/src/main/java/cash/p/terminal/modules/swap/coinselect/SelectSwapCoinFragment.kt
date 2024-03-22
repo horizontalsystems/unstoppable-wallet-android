@@ -125,13 +125,13 @@ fun SelectSwapCoinDialogScreen(
                         MultitextM1(
                             title = {
                                 Row {
-                                    B2(text = coinItem.token.coin.name)
+                                    B2(text = coinItem.token.coin.code)
                                     coinItem.token.badge?.let {
                                         Badge(text = it)
                                     }
                                 }
                             },
-                            subtitle = { D1(text = coinItem.token.coin.code) }
+                            subtitle = { D1(text = coinItem.token.coin.name) }
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         MultitextM1(

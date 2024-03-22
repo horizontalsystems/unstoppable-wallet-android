@@ -108,20 +108,22 @@ fun SwapScreen(navController: NavController) {
     )
     val uiState = viewModel.uiState
 
-    val selectToken = { onResult: (Token) -> Unit ->
-        navController.slideFromBottomForResult(R.id.swapSelectCoinFragment, onResult = onResult)
-    }
-
     SwapScreenInner(
         uiState = uiState,
         onClickClose = navController::popBackStack,
         onClickCoinFrom = {
-            selectToken {
+            navController.slideFromBottomForResult<Token>(
+                R.id.swapSelectCoinFragment,
+                SwapSelectCoinFragment.Input(uiState.tokenOut)
+            ) {
                 viewModel.onSelectTokenIn(it)
             }
         },
         onClickCoinTo = {
-            selectToken {
+            navController.slideFromBottomForResult<Token>(
+                R.id.swapSelectCoinFragment,
+                SwapSelectCoinFragment.Input(uiState.tokenIn)
+            ) {
                 viewModel.onSelectTokenOut(it)
             }
         },
