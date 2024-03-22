@@ -470,6 +470,7 @@
     <string name="Swap_EstimatedFee">Tasa Estimada</string>
     <string name="Swap_MaxFee">Comisión Máx.</string>
     <string name="Swap_Fee">Comisión</string>
+    <string name="Swap_Recipient">Destinatario</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Este servicio no permite envolver/desenvolver. Usa 1inch.</string>
