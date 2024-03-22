@@ -21,6 +21,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
@@ -29,13 +30,13 @@ import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
-import io.horizontalsystems.bankwallet.modules.send.SendButton
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -238,13 +239,53 @@ class ResendBitcoinFragment : BaseComposeFragment() {
             }
 
             Spacer(modifier = Modifier.weight(1f))
-            SendButton(
+            ResendButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                titleResId = uiState.sendButtonTitleResId,
+                error =  uiState.feeCaution?.type == HSCaution.Type.Error,
                 sendResult = uiState.sendResult,
                 onClickSend = resendViewModel::onClickSend
             )
+        }
+    }
+
+    @Composable
+    private fun ResendButton(
+        modifier: Modifier,
+        titleResId: Int,
+        error: Boolean,
+        sendResult: SendResult?,
+        onClickSend: () -> Unit
+    ) {
+        when (sendResult) {
+            SendResult.Sending -> {
+                ButtonPrimaryYellow(
+                    modifier = modifier,
+                    title = stringResource(R.string.Send_Sending),
+                    onClick = { },
+                    enabled = false
+                )
+            }
+
+            SendResult.Sent -> {
+                ButtonPrimaryYellow(
+                    modifier = modifier,
+                    title = stringResource(R.string.Send_Success),
+                    onClick = { },
+                    enabled = false
+                )
+            }
+
+            else -> {
+                ButtonPrimaryYellow(
+                    modifier = modifier,
+                    title = stringResource(titleResId),
+                    onClick = onClickSend,
+                    enabled = !error
+                )
+            }
         }
     }
 }

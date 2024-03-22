@@ -44,6 +44,7 @@ class ResendBitcoinViewModel(
 
     private val titleResId: Int
     private val descriptionResId: Int
+    private val sendButtonTitleResId: Int
     private val addressTitleResId: Int
 
     private val token = adapter.wallet.token
@@ -70,19 +71,21 @@ class ResendBitcoinViewModel(
                 titleResId = R.string.TransactionInfoOptions_SpeedUp_Title
                 descriptionResId = R.string.TransactionInfoOptions_SpeedUp_Description
                 addressTitleResId = R.string.Send_Confirmation_To
+                sendButtonTitleResId = R.string.TransactionInfoOptions_SpeedUp_Button
             }
 
             TransactionInfoOptionsModule.Type.Cancel -> {
                 titleResId = R.string.TransactionInfoOptions_Cancel_Title
                 descriptionResId = R.string.TransactionInfoOptions_Rbf_Cancel_Description
                 addressTitleResId = R.string.Send_Confirmation_Own
+                sendButtonTitleResId = R.string.TransactionInfoOptions_Cancel_Button
             }
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             val feeRates = feeRateProvider.getFeeRates()
             val feeRange = replacementInfo.feeRange
-            val recommendedFee = replacementInfo.originalTransactionSize * feeRates.recommended
+            val recommendedFee = replacementInfo.replacementTxMinSize * feeRates.recommended
             val minFee = recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
 
             updateReplacementTransaction(minFee)
@@ -134,6 +137,7 @@ class ResendBitcoinViewModel(
         return ResendBitcoinUiState(
             titleResId = titleResId,
             descriptionResId = descriptionResId,
+            sendButtonTitleResId = sendButtonTitleResId,
             type = type,
 
             coin = token.coin,
@@ -210,6 +214,7 @@ data class ResendBitcoinUiState(
     @StringRes
     val titleResId: Int,
     val descriptionResId: Int,
+    val sendButtonTitleResId: Int,
     val type: TransactionInfoOptionsModule.Type,
 
     val coin: Coin,
