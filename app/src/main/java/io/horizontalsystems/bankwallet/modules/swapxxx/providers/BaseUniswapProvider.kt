@@ -49,8 +49,8 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }
-            allowance?.let {
-                add(SwapDataFieldAllowance(it, tokenIn))
+            if (allowance != null && allowance < amountIn) {
+                add(SwapDataFieldAllowance(allowance, tokenIn))
             }
         }
 
