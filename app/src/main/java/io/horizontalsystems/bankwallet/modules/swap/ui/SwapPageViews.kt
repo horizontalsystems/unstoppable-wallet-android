@@ -52,7 +52,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCirc
 import io.horizontalsystems.bankwallet.ui.compose.components.HSCircularProgressIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
@@ -128,7 +127,10 @@ fun AvailableBalance(value: String) {
 fun SuggestionsBar(
     modifier: Modifier = Modifier,
     percents: List<Int> = listOf(25, 50, 75, 100),
-    onClick: (Int) -> Unit
+    onDelete: () -> Unit,
+    onSelect: (Int) -> Unit,
+    selectEnabled: Boolean,
+    deleteEnabled: Boolean,
 ) {
     Box(modifier = modifier) {
         BoxTyler44(borderTop = true) {
@@ -139,11 +141,31 @@ fun SuggestionsBar(
             ) {
                 percents.forEach { percent ->
                     ButtonSecondary(
-                        onClick = { onClick.invoke(percent) }
+                        enabled = selectEnabled,
+                        onClick = { onSelect.invoke(percent) }
                     ) {
-                        subhead1_leah(text = "$percent%")
+                        Text(
+                            text = "$percent%",
+                            modifier = modifier,
+                            style = ComposeAppTheme.typography.subhead1,
+                            color = if (selectEnabled) {
+                                ComposeAppTheme.colors.leah
+                            } else {
+                                ComposeAppTheme.colors.grey50
+                            },
+                        )
                     }
                 }
+                ButtonSecondaryCircle(
+                    icon = R.drawable.ic_delete_20,
+                    enabled = deleteEnabled,
+                    tint = if (deleteEnabled) {
+                        ComposeAppTheme.colors.leah
+                    } else {
+                        ComposeAppTheme.colors.grey50
+                    },
+                    onClick = onDelete
+                )
             }
         }
     }
