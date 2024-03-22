@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTrans
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldAllowance
+import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -73,6 +74,9 @@ object OneInchProvider : EvmSwapProvider() {
         val routerAddress = OneInchKit.routerAddress(evmBlockchainHelper.chain)
         val allowance = getAllowance(tokenIn, routerAddress)
         val fields = buildList {
+            settingRecipient.value?.let {
+                add(SwapDataFieldRecipient(it))
+            }
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
             }
