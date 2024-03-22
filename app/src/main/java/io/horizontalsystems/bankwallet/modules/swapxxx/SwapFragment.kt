@@ -59,6 +59,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.getPriceImpactColor
 import io.horizontalsystems.bankwallet.modules.swap.ui.SuggestionsBar
@@ -327,9 +328,9 @@ private fun SwapScreenInner(
                     CardsSwapInfo {
                         ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
                         PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
-                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel)
+                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                         quote.fields.forEach {
-                            it.GetContent()
+                            it.GetContent(navController)
                         }
                     }
                 } else {
@@ -401,7 +402,8 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 @Composable
 private fun PriceImpactField(
     priceImpact: BigDecimal?,
-    priceImpactLevel: SwapMainModule.PriceImpactLevel?
+    priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    navController: NavController
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
 
@@ -417,10 +419,10 @@ private fun PriceImpactField(
                     .padding(horizontal = 8.dp)
                     .clickable(
                         onClick = {
-//                            navController.slideFromBottom(
-//                                R.id.feeSettingsInfoDialog,
-//                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
-//                            )
+                            navController.slideFromBottom(
+                                R.id.feeSettingsInfoDialog,
+                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
+                            )
                         },
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
