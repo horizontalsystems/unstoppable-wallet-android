@@ -90,7 +90,7 @@ class SwapViewModel(
         quotes = quoteState.quotes,
         preferredProvider = quoteState.preferredProvider,
         quote = quoteState.quote,
-        error = quoteState.error ?: balanceState.error,
+        error = quoteState.error ?: balanceState.error ?: priceImpactState.error,
         availableBalance = balanceState.balance,
         priceImpact = priceImpactState.priceImpact,
         priceImpactLevel = priceImpactState.priceImpactLevel,
@@ -213,16 +213,15 @@ data class SwapUiState(
     val timeRemaining: Long?,
     val timeout: Boolean
 ) {
-    val currentStep: SwapStep
-        get() = when {
-            quoting -> SwapStep.Quoting
-            error != null -> SwapStep.Error(error)
-            tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
-            tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
-            amountIn == null -> SwapStep.InputRequired(InputType.Amount)
-            quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
-            else -> SwapStep.Proceed
-        }
+    val currentStep: SwapStep = when {
+        quoting -> SwapStep.Quoting
+        error != null -> SwapStep.Error(error)
+        tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
+        tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
+        amountIn == null -> SwapStep.InputRequired(InputType.Amount)
+        quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
+        else -> SwapStep.Proceed
+    }
 }
 
 sealed class SwapStep {
