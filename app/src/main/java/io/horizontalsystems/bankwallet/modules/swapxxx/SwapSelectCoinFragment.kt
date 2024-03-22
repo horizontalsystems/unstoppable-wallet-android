@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.swap.coinselect.SelectSwapCoinDialogScreen
@@ -14,12 +15,9 @@ import kotlinx.parcelize.Parcelize
 class SwapSelectCoinFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        SwapSelectCoinScreen(navController, input.otherSelectedToken)
+        SwapSelectCoinScreen(navController, navController.getInput())
     }
 
-    @Parcelize
-    data class Input(val otherSelectedToken: Token?) : Parcelable
 }
 
 @Composable

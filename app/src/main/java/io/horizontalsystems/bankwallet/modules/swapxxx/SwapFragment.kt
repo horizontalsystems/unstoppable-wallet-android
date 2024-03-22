@@ -114,7 +114,7 @@ fun SwapScreen(navController: NavController) {
         onClickCoinFrom = {
             navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
-                SwapSelectCoinFragment.Input(uiState.tokenOut)
+                uiState.tokenOut
             ) {
                 viewModel.onSelectTokenIn(it)
             }
@@ -122,7 +122,7 @@ fun SwapScreen(navController: NavController) {
         onClickCoinTo = {
             navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
-                SwapSelectCoinFragment.Input(uiState.tokenIn)
+                uiState.tokenIn
             ) {
                 viewModel.onSelectTokenOut(it)
             }
