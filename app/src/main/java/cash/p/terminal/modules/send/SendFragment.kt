@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountInputModeModule
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
@@ -195,9 +194,6 @@ class SendFragment : BaseFragment() {
                     else -> {}
                 }
             } catch (t: Throwable) {
-                Toast.makeText(
-                    App.instance, t.message ?: t.javaClass.simpleName, Toast.LENGTH_SHORT
-                ).show()
                 findNavController().popBackStack()
             }
         }
