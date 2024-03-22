@@ -510,6 +510,7 @@
     <string name="Swap_EstimatedFee">Предполагаемая комиссия</string>
     <string name="Swap_MaxFee">Макс. комиссия</string>
     <string name="Swap_Fee">Комиссия</string>
+    <string name="Swap_Recipient">Получатель</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
