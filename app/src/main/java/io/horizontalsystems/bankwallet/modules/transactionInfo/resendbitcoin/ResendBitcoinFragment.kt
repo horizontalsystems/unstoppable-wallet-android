@@ -21,6 +21,7 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.getInputX
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
@@ -29,13 +30,13 @@ import cash.p.terminal.modules.evmfee.EvmSettingsInput
 import cash.p.terminal.modules.fee.HSFeeRaw
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.modules.send.ConfirmAmountCell
-import cash.p.terminal.modules.send.SendButton
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewModel
 import cash.p.terminal.modules.transactionInfo.options.TransactionInfoOptionsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
@@ -238,13 +239,53 @@ class ResendBitcoinFragment : BaseComposeFragment() {
             }
 
             Spacer(modifier = Modifier.weight(1f))
-            SendButton(
+            ResendButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                titleResId = uiState.sendButtonTitleResId,
+                error =  uiState.feeCaution?.type == HSCaution.Type.Error,
                 sendResult = uiState.sendResult,
                 onClickSend = resendViewModel::onClickSend
             )
+        }
+    }
+
+    @Composable
+    private fun ResendButton(
+        modifier: Modifier,
+        titleResId: Int,
+        error: Boolean,
+        sendResult: SendResult?,
+        onClickSend: () -> Unit
+    ) {
+        when (sendResult) {
+            SendResult.Sending -> {
+                ButtonPrimaryYellow(
+                    modifier = modifier,
+                    title = stringResource(R.string.Send_Sending),
+                    onClick = { },
+                    enabled = false
+                )
+            }
+
+            SendResult.Sent -> {
+                ButtonPrimaryYellow(
+                    modifier = modifier,
+                    title = stringResource(R.string.Send_Success),
+                    onClick = { },
+                    enabled = false
+                )
+            }
+
+            else -> {
+                ButtonPrimaryYellow(
+                    modifier = modifier,
+                    title = stringResource(titleResId),
+                    onClick = onClickSend,
+                    enabled = !error
+                )
+            }
         }
     }
 }
