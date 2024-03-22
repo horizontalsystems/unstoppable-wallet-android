@@ -208,7 +208,7 @@ private fun SwapScreenInner(
     ) {
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
-        var showSuggestions by remember { mutableStateOf(false) }
+        var amountInputHasFocus by remember { mutableStateOf(false) }
 
         Box(modifier = Modifier
             .padding(it)
@@ -236,7 +236,7 @@ private fun SwapScreenInner(
                     tokenOut = uiState.tokenOut,
                     currency = uiState.currency,
                     onFocusChanged = {
-                        showSuggestions = it.hasFocus
+                        amountInputHasFocus = it.hasFocus
                     },
                 )
 
@@ -361,18 +361,22 @@ private fun SwapScreenInner(
             }
 
 
-            if (
-                uiState.availableBalance != null &&
-                uiState.availableBalance > BigDecimal.ZERO &&
-                showSuggestions &&
-                keyboardState == Keyboard.Opened
-            ) {
+            if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
+                val hasNonZeroBalance =
+                    uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
+
                 SuggestionsBar(
-                    modifier = Modifier.align(Alignment.BottomCenter)
-                ) {
-                    focusManager.clearFocus()
-                    onEnterAmountPercentage.invoke(it)
-                }
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    onDelete = {
+                        onEnterAmount.invoke(null)
+                    },
+                    onSelect = {
+                        focusManager.clearFocus()
+                        onEnterAmountPercentage.invoke(it)
+                    },
+                    selectEnabled = hasNonZeroBalance,
+                    deleteEnabled = uiState.amountIn != null,
+                )
             }
         }
     }
