@@ -59,6 +59,7 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
+import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.getPriceImpactColor
 import cash.p.terminal.modules.swap.ui.SuggestionsBar
@@ -329,9 +330,9 @@ private fun SwapScreenInner(
                     CardsSwapInfo {
                         ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
                         PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
-                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel)
+                        PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                         quote.fields.forEach {
-                            it.GetContent()
+                            it.GetContent(navController)
                         }
                     }
                 } else {
@@ -403,7 +404,8 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 @Composable
 private fun PriceImpactField(
     priceImpact: BigDecimal?,
-    priceImpactLevel: SwapMainModule.PriceImpactLevel?
+    priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    navController: NavController
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
 
@@ -419,10 +421,10 @@ private fun PriceImpactField(
                     .padding(horizontal = 8.dp)
                     .clickable(
                         onClick = {
-//                            navController.slideFromBottom(
-//                                R.id.feeSettingsInfoDialog,
-//                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
-//                            )
+                            navController.slideFromBottom(
+                                R.id.feeSettingsInfoDialog,
+                                FeeSettingsInfoDialog.Input(infoTitle, infoText)
+                            )
                         },
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
