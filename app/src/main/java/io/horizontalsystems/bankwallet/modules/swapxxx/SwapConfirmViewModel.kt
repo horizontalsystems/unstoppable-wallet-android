@@ -14,6 +14,7 @@ import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.modules.swapxxx.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionServiceFactory
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
+import cash.p.terminal.modules.swapxxx.ui.SwapDataField
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ class SwapConfirmViewModel(
 
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
+    private var fields: List<SwapDataField> = listOf()
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -166,6 +168,7 @@ class SwapConfirmViewModel(
             validQuote = sendTransactionState.sendable,
             priceImpact = priceImpactState.priceImpact,
             priceImpactLevel = priceImpactState.priceImpactLevel,
+            fields = fields,
         )
     }
 
@@ -187,6 +190,7 @@ class SwapConfirmViewModel(
 
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
+                fields = finalQuote.fields
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -243,4 +247,5 @@ data class SwapConfirmUiState(
     val validQuote: Boolean,
     val priceImpact: BigDecimal?,
     val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    val fields: List<SwapDataField>,
 )

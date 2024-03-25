@@ -211,6 +211,9 @@ fun SwapConfirmScreen(navController: NavController) {
                             subvalue = subvalue
                         )
                     }
+                    uiState.fields.forEach {
+                        it.GetContent(navController)
+                    }
                 }
             }
             VSpacer(height = 16.dp)

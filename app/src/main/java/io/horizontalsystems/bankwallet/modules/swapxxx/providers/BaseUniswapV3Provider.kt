@@ -131,7 +131,8 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             amountOut,
             amountOutMin,
             SendTransactionData.Evm(transactionData, null),
-            swapQuote.tradeDataV3.priceImpact
+            swapQuote.tradeDataV3.priceImpact,
+            swapQuote.fields
         )
     }
 }
