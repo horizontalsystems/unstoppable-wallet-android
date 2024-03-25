@@ -5,6 +5,11 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -15,6 +20,8 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
     private var coinPrice: CoinPrice? = null
 
     private var fiatAmount: BigDecimal? = null
+    private var coinPriceUpdatesJob: Job? = null
+    private var coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun createState() = State(
         coinPrice = coinPrice,
@@ -28,6 +35,7 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
                 marketKit.coinPrice(token.coin.uid, currency)
             }
         }
+        resubscribeForCoinPrice()
     }
 
     private fun refreshFiatAmount() {
@@ -46,6 +54,23 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
                 token?.let { token ->
                     fiatAmount.divide(coinPrice.value, token.decimals, RoundingMode.DOWN).stripTrailingZeros()
                 }
+            }
+        }
+    }
+
+    private fun resubscribeForCoinPrice() {
+        coinPriceUpdatesJob?.cancel()
+        val currency = currency ?: return
+
+        token?.let { platformCoin ->
+            coinPriceUpdatesJob = coroutineScope.launch {
+                marketKit.coinPriceObservable("swap", platformCoin.coin.uid, currency.code)
+                    .asFlow()
+                    .collect {
+                        coinPrice = it
+                        refreshAmount()
+                        emitState()
+                    }
             }
         }
     }
