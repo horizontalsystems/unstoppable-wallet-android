@@ -67,7 +67,6 @@ import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -78,7 +77,7 @@ import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSRow
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.MenuItemTimeoutIndicator
 import cash.p.terminal.ui.compose.components.TextImportantError
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
@@ -196,12 +195,9 @@ private fun SwapScreenInner(
                     HsBackButton(onClick = onClickClose)
                 },
                 menuItems = buildList {
-                    uiState.timeRemaining?.let<Long, Unit> { timeRemaining ->
+                    uiState.timeRemainingProgress?.let { timeRemainingProgress ->
                         add(
-                            MenuItem(
-                                title = TranslatableString.PlainString(timeRemaining.toString()),
-                                onClick = {}
-                            )
+                            MenuItemTimeoutIndicator(timeRemainingProgress)
                         )
                     }
                 }
