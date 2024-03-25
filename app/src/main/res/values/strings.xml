@@ -669,6 +669,7 @@
     <string name="Swap_MinimumGot">Guaranteed Amount</string>
     <string name="Swap_PoweredBy">Powered by</string>
     <string name="Swap_Provider">Provider</string>
+    <string name="Swap_Providers">Providers</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
     <string name="Swap_SelectSwapProvider_FeeInfo">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
     <string name="Swap_AmountEstimated">(est)</string>
