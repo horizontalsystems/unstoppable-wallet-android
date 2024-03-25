@@ -198,6 +198,7 @@ fun SwapConfirmScreen(navController: NavController) {
                 VSpacer(height = 16.dp)
                 SectionUniversalLawrence {
                     PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut)
+                    PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                     uiState.amountOutMin?.let { amountOutMin ->
                         val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
                             CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()

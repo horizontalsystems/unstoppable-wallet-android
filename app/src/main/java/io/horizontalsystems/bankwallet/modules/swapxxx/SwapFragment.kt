@@ -408,7 +408,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 }
 
 @Composable
-private fun PriceImpactField(
+fun PriceImpactField(
     priceImpact: BigDecimal?,
     priceImpactLevel: SwapMainModule.PriceImpactLevel?,
     navController: NavController

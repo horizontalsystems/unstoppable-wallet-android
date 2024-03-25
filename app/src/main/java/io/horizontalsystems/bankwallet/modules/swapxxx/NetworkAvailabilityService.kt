@@ -1,7 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.swapxxx
+package cash.p.terminal.modules.swapxxx
 
-import io.horizontalsystems.bankwallet.core.ServiceState
-import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import cash.p.terminal.core.ServiceState
+import cash.p.terminal.core.managers.ConnectivityManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException

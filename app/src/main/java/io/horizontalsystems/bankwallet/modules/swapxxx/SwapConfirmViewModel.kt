@@ -3,11 +3,13 @@ package cash.p.terminal.modules.swapxxx
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import cash.p.terminal.core.App
+import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.send.SendModule
+import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swapxxx.providers.ISwapXxxProvider
 import cash.p.terminal.modules.swapxxx.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionServiceFactory
@@ -26,7 +28,8 @@ class SwapConfirmViewModel(
     private val fiatServiceOut: FiatService,
     private val fiatServiceOutMin: FiatService,
     val sendTransactionService: ISendTransactionService,
-    private val timerService: TimerService
+    private val timerService: TimerService,
+    private val priceImpactService: PriceImpactService
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -40,12 +43,11 @@ class SwapConfirmViewModel(
 
     private var loading = true
     private var timerState = timerService.stateFlow.value
+    private var sendTransactionState = sendTransactionService.stateFlow.value
+    private var priceImpactState = priceImpactService.stateFlow.value
 
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
-    private var networkFee: SendModule.AmountData? = null
-    private var cautions: List<CautionViewItem> = listOf()
-    private var validQuote = false
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -91,14 +93,13 @@ class SwapConfirmViewModel(
 
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
-                networkFee = transactionState.networkFee
-                cautions = transactionState.cautions
-                validQuote = transactionState.sendable
+                sendTransactionState = transactionState
+
                 loading = transactionState.loading
 
                 emitState()
 
-                if (validQuote) {
+                if (sendTransactionState.sendable) {
                     timerService.start(10)
                 }
             }
@@ -112,28 +113,61 @@ class SwapConfirmViewModel(
             }
         }
 
+        viewModelScope.launch {
+            priceImpactService.stateFlow.collect {
+                handleUpdatedPriceImpactState(it)
+            }
+        }
+
         sendTransactionService.start(viewModelScope)
 
         fetchFinalQuote()
     }
 
-    override fun createState() = SwapConfirmUiState(
-        expiresIn = timerState.remaining,
-        expired = timerState.timeout,
-        loading = loading,
-        tokenIn = tokenIn,
-        tokenOut = tokenOut,
-        amountIn = amountIn,
-        amountOut = amountOut,
-        amountOutMin = amountOutMin,
-        fiatAmountIn = fiatAmountIn,
-        fiatAmountOut = fiatAmountOut,
-        fiatAmountOutMin = fiatAmountOutMin,
-        currency = currency,
-        networkFee = networkFee,
-        cautions = cautions,
-        validQuote = validQuote,
-    )
+    private fun handleUpdatedPriceImpactState(priceImpactState: PriceImpactService.State) {
+        this.priceImpactState = priceImpactState
+
+        emitState()
+    }
+
+    override fun createState(): SwapConfirmUiState {
+        var cautions = sendTransactionState.cautions
+
+        if (cautions.isEmpty()) {
+            priceImpactState.priceImpactCaution?.let { hsCaution ->
+                cautions = listOf(
+                    CautionViewItem(
+                        hsCaution.s.toString(),
+                        hsCaution.description.toString(),
+                        when (hsCaution.type) {
+                            HSCaution.Type.Error -> CautionViewItem.Type.Error
+                            HSCaution.Type.Warning -> CautionViewItem.Type.Warning
+                        }
+                    )
+                )
+            }
+        }
+
+        return SwapConfirmUiState(
+            expiresIn = timerState.remaining,
+            expired = timerState.timeout,
+            loading = loading,
+            tokenIn = tokenIn,
+            tokenOut = tokenOut,
+            amountIn = amountIn,
+            amountOut = amountOut,
+            amountOutMin = amountOutMin,
+            fiatAmountIn = fiatAmountIn,
+            fiatAmountOut = fiatAmountOut,
+            fiatAmountOutMin = fiatAmountOutMin,
+            currency = currency,
+            networkFee = sendTransactionState.networkFee,
+            cautions = cautions,
+            validQuote = sendTransactionState.sendable,
+            priceImpact = priceImpactState.priceImpact,
+            priceImpactLevel = priceImpactState.priceImpactLevel,
+        )
+    }
 
     override fun onCleared() {
         timerService.stop()
@@ -158,6 +192,8 @@ class SwapConfirmViewModel(
                 fiatServiceOut.setAmount(amountOut)
                 fiatServiceOutMin.setAmount(amountOutMin)
                 sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
+
+                priceImpactService.setPriceImpact(finalQuote.priceImpact, swapProvider.title)
             } catch (t: Throwable) {
 //                Log.e("AAA", "fetchFinalQuote error", t)
             }
@@ -181,7 +217,8 @@ class SwapConfirmViewModel(
                 FiatService(App.marketKit),
                 FiatService(App.marketKit),
                 sendTransactionService,
-                TimerService()
+                TimerService(),
+                PriceImpactService()
             )
         }
     }
@@ -204,4 +241,6 @@ data class SwapConfirmUiState(
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
     val validQuote: Boolean,
+    val priceImpact: BigDecimal?,
+    val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
 )
