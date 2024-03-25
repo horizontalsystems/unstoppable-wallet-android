@@ -116,7 +116,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
 
         val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
             uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
-        } ?: throw Exception("Yahoo")
+        } ?: throw Exception("No Receive Address")
 
         val settingSlippage = SwapSettingSlippage(swapSettings, TradeOptions.defaultAllowedSlippage)
         val slippage = settingSlippage.valueOrDefault()
