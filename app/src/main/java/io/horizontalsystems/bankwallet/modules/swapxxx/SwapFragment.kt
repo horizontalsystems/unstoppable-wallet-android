@@ -94,6 +94,7 @@ import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.compose.observeKeyboardState
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
+import java.net.UnknownHostException
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
@@ -280,6 +281,10 @@ private fun SwapScreenInner(
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
                             is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
+                            is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
+                            is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)
+                            is WalletSyncing -> stringResource(id = R.string.Swap_ErrorWalletSyncing)
+                            is WalletNotSynced -> stringResource(id = R.string.Swap_ErrorWalletNotSynced)
                             else -> error.message ?: error.javaClass.simpleName
                         }
 
