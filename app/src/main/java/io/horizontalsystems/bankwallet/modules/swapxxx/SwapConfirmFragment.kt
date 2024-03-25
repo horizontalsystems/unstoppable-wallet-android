@@ -121,7 +121,7 @@ fun SwapConfirmScreen(navController: NavController) {
                             onClick = { },
                         )
                         VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Loading final quote")
+                        subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
                     } else if (!uiState.validQuote) {
                         ButtonPrimaryDefault(
                             modifier = Modifier
@@ -145,7 +145,7 @@ fun SwapConfirmScreen(navController: NavController) {
                             },
                         )
                         VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Quote expired")
+                        subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
                     } else {
                         var buttonEnabled by remember { mutableStateOf(true) }
                         ButtonPrimaryYellow(
