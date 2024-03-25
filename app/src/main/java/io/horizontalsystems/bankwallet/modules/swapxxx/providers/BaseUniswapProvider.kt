@@ -1,8 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx.providers
 
 import io.horizontalsystems.bankwallet.modules.swapxxx.EvmBlockchainHelper
+import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.swapxxx.ISwapQuote
+import io.horizontalsystems.bankwallet.modules.swapxxx.SwapFinalQuoteUniswapV3
 import io.horizontalsystems.bankwallet.modules.swapxxx.SwapQuoteUniswap
+import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionData
+import io.horizontalsystems.bankwallet.modules.swapxxx.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingDeadline
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingSlippage
@@ -59,16 +63,50 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
         }
 
         return SwapQuoteUniswap(
-            tradeData.amountOut!!,
-            tradeData.priceImpact,
             fields,
             listOf(settingRecipient, settingSlippage, settingDeadline),
             tokenIn,
             tokenOut,
             amountIn,
-            actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            actionApprove(allowance, amountIn, routerAddress, tokenIn),
+            tradeData
         )
     }
+
+    override suspend fun fetchFinalQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        swapSettings: Map<String, Any?>,
+        sendTransactionSettings: SendTransactionSettings?,
+    ): ISwapFinalQuote {
+        val blockchainType = tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+
+        val swapQuote = fetchQuote(tokenIn, tokenOut, amountIn, swapSettings) as SwapQuoteUniswap
+
+        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
+            uniswapKit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeData)
+        } ?: throw Exception("Yahoo")
+
+        val settingSlippage = SwapSettingSlippage(swapSettings, TradeOptions.defaultAllowedSlippage)
+        val slippage = settingSlippage.valueOrDefault()
+
+        val amountOut = swapQuote.amountOut
+        val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
+
+        return SwapFinalQuoteUniswapV3(
+            tokenIn,
+            tokenOut,
+            amountIn,
+            amountOut,
+            amountOutMin,
+            SendTransactionData.Evm(transactionData, null),
+            swapQuote.tradeData.priceImpact,
+            swapQuote.fields
+        )
+    }
+
 
     private fun swapDataSingle(
         tokenIn: Token,
