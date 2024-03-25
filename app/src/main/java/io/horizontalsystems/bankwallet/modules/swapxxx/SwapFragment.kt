@@ -67,7 +67,6 @@ import io.horizontalsystems.bankwallet.modules.swapxxx.providers.ISwapXxxProvide
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -78,7 +77,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSRow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItemTimeoutIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -196,12 +195,9 @@ private fun SwapScreenInner(
                     HsBackButton(onClick = onClickClose)
                 },
                 menuItems = buildList {
-                    uiState.timeRemaining?.let<Long, Unit> { timeRemaining ->
+                    uiState.timeRemainingProgress?.let { timeRemainingProgress ->
                         add(
-                            MenuItem(
-                                title = TranslatableString.PlainString(timeRemaining.toString()),
-                                onClick = {}
-                            )
+                            MenuItemTimeoutIndicator(timeRemainingProgress)
                         )
                     }
                 }
