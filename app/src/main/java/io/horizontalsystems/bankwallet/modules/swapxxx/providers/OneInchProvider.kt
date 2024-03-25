@@ -141,6 +141,15 @@ object OneInchProvider : EvmSwapProvider() {
         val amountOut = swap.toTokenAmount.toBigDecimal().movePointLeft(swap.toToken.decimals).stripTrailingZeros()
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
 
+        val fields = buildList {
+            settingRecipient.value?.let {
+                add(SwapDataFieldRecipient(it))
+            }
+            settingSlippage.value?.let {
+                add(SwapDataFieldSlippage(it))
+            }
+        }
+
         return SwapFinalQuoteOneInch(
             tokenIn,
             tokenOut,
@@ -148,7 +157,8 @@ object OneInchProvider : EvmSwapProvider() {
             amountOut,
             amountOutMin,
             SendTransactionData.Evm(TransactionData(swapTx.to, swapTx.value, swapTx.data), swapTx.gasLimit),
-            null
+            null,
+            fields
         )
     }
 }
