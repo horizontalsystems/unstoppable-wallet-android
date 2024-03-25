@@ -32,7 +32,5 @@ interface ISwapXxxProvider {
         amountIn: BigDecimal,
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?
-    ) : ISwapFinalQuote {
-        TODO()
-    }
+    ) : ISwapFinalQuote
 }

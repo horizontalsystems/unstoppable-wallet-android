@@ -1,8 +1,12 @@
 package cash.p.terminal.modules.swapxxx.providers
 
 import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
+import cash.p.terminal.modules.swapxxx.ISwapFinalQuote
 import cash.p.terminal.modules.swapxxx.ISwapQuote
+import cash.p.terminal.modules.swapxxx.SwapFinalQuoteUniswapV3
 import cash.p.terminal.modules.swapxxx.SwapQuoteUniswap
+import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionData
+import cash.p.terminal.modules.swapxxx.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingDeadline
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingRecipient
 import cash.p.terminal.modules.swapxxx.settings.SwapSettingSlippage
@@ -59,16 +63,50 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
         }
 
         return SwapQuoteUniswap(
-            tradeData.amountOut!!,
-            tradeData.priceImpact,
             fields,
             listOf(settingRecipient, settingSlippage, settingDeadline),
             tokenIn,
             tokenOut,
             amountIn,
-            actionApprove(allowance, amountIn, routerAddress, tokenIn)
+            actionApprove(allowance, amountIn, routerAddress, tokenIn),
+            tradeData
         )
     }
+
+    override suspend fun fetchFinalQuote(
+        tokenIn: Token,
+        tokenOut: Token,
+        amountIn: BigDecimal,
+        swapSettings: Map<String, Any?>,
+        sendTransactionSettings: SendTransactionSettings?,
+    ): ISwapFinalQuote {
+        val blockchainType = tokenIn.blockchainType
+        val evmBlockchainHelper = EvmBlockchainHelper(blockchainType)
+
+        val swapQuote = fetchQuote(tokenIn, tokenOut, amountIn, swapSettings) as SwapQuoteUniswap
+
+        val transactionData = evmBlockchainHelper.receiveAddress?.let { receiveAddress ->
+            uniswapKit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeData)
+        } ?: throw Exception("Yahoo")
+
+        val settingSlippage = SwapSettingSlippage(swapSettings, TradeOptions.defaultAllowedSlippage)
+        val slippage = settingSlippage.valueOrDefault()
+
+        val amountOut = swapQuote.amountOut
+        val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
+
+        return SwapFinalQuoteUniswapV3(
+            tokenIn,
+            tokenOut,
+            amountIn,
+            amountOut,
+            amountOutMin,
+            SendTransactionData.Evm(transactionData, null),
+            swapQuote.tradeData.priceImpact,
+            swapQuote.fields
+        )
+    }
+
 
     private fun swapDataSingle(
         tokenIn: Token,
