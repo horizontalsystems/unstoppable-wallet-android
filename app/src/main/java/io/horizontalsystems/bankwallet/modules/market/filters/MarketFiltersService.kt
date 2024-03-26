@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
+import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.MarketInfo
@@ -48,6 +49,7 @@ class MarketFiltersService(
     var filterPeriod = TimePeriod.TimePeriod_1D
     var filterPriceChange: Pair<Long?, Long?>? = null
     var filterBlockchains = listOf<Blockchain>()
+    var filterTradingSignal = listOf<Advice>()
     var filterOutperformedBtcOn = false
     var filterOutperformedEthOn = false
     var filterOutperformedBnbOn = false
@@ -103,18 +105,19 @@ class MarketFiltersService(
         val priceChangeValue = marketInfo.priceChangeValue(filterPeriod) ?: return false
 
         return filterByRange(filterMarketCap, marketCap.toLong())
-            && filterByRange(filterVolume, totalVolume.toLong())
-            && inBlockchain(marketInfo.fullCoin.tokens)
-            && filterByRange(filterPriceChange, priceChangeValue.toLong())
-            && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
-            && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
-            && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
-            && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
-            && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
-            && (!filterListedOnTopExchanges || marketInfo.listedOnTopExchanges == true)
-            && (!filterSolidCex || marketInfo.solidCex == true)
-            && (!filterSolidDex || marketInfo.solidDex == true)
-            && (!filterGoodDistribution || marketInfo.goodDistribution == true)
+                && filterByRange(filterVolume, totalVolume.toLong())
+                && inBlockchain(marketInfo.fullCoin.tokens)
+                && filterByRange(filterPriceChange, priceChangeValue.toLong())
+                && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
+                && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
+                && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
+                && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
+                && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
+                && (!filterListedOnTopExchanges || marketInfo.listedOnTopExchanges == true)
+                && (!filterSolidCex || marketInfo.solidCex == true)
+                && (!filterSolidDex || marketInfo.solidDex == true)
+                && (!filterGoodDistribution || marketInfo.goodDistribution == true)
+                && inAdvice(marketInfo.advice)
     }
 
     private fun filterByRange(filter: Pair<Long?, Long?>?, value: Long?): Boolean {
@@ -147,6 +150,11 @@ class MarketFiltersService(
 
     private fun closeToAllTime(value: BigDecimal?): Boolean {
         return value != null && value.abs() < BigDecimal.TEN
+    }
+
+    private fun inAdvice(tokenAdvice: Advice?): Boolean {
+        if (filterTradingSignal.isEmpty()) return true
+        return filterTradingSignal.contains(tokenAdvice)
     }
 
     private fun inBlockchain(tokens: List<Token>): Boolean {
