@@ -220,6 +220,11 @@
     <string name="Market_Filter_OutperformedBnb">跑赢BNB</string>
     <string name="Market_Filter_PriceCloseToAth">接近历史最高价</string>
     <string name="Market_Filter_PriceCloseToAtl">接近历史最低价</string>
+    <string name="Market_Filter_StrongBuy">强烈建议买入</string>
+    <string name="Market_Filter_Buy">购买</string>
+    <string name="Market_Filter_Neutral">中性</string>
+    <string name="Market_Filter_StrongSell">强烈建议卖出</string>
+    <string name="Market_Filter_Sell">出售</string>
     <string name="Market_Filter_Top_100">前100名</string>
     <string name="Market_Filter_Top_250">前250名</string>
     <string name="Market_Filter_Top_500">前500名</string>
