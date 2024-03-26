@@ -58,7 +58,7 @@ fun TechnicalAdviceBlock(
             contentAlignment = Alignment.Center
         ) {
             headline2_leah(
-                text = stringResource(if (showDetails) R.string.TechnicalAdvice_ShowDetails else R.string.TechnicalAdvice_HideDetails),
+                text = stringResource(if (showDetails) R.string.TechnicalAdvice_HideDetails else R.string.TechnicalAdvice_ShowDetails),
                 modifier = Modifier
                     .clickable {
                         showDetails = !showDetails
