@@ -25,6 +25,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
         TimePeriod.TimePeriod_1D,
     )
+    private var filterTradingSignal = FilterViewItemWrapper.getAny<FilterTradingSignal>()
     private var marketCap = rangeEmpty
     private var volume = rangeEmpty
     private var priceChange = FilterViewItemWrapper.getAny<PriceChange>()
@@ -55,6 +56,9 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     val periodViewItemOptions = TimePeriod.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
     }
+
+    val tradingSignals = listOf(FilterViewItemWrapper.getAny<FilterTradingSignal>()) +
+                FilterTradingSignal.values().map { FilterViewItemWrapper<FilterTradingSignal?>(Translator.getString(it.titleResId), it) }
     val priceChangeViewItemOptions =
         listOf(FilterViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
             FilterViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it)
@@ -89,6 +93,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         solidCexOn = solidCexOn,
         solidDexOn = solidDexOn,
         goodDistributionOn = goodDistributionOn,
+        filterTradingSignal = filterTradingSignal,
     )
 
     fun reset() {
@@ -143,6 +148,12 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
 
     fun updatePeriod(value: FilterViewItemWrapper<TimePeriod>) {
         period = value
+        emitState()
+        reloadData()
+    }
+
+    fun updateTradingSignal(value: FilterViewItemWrapper<FilterTradingSignal?>) {
+        filterTradingSignal = value
         emitState()
         reloadData()
     }
@@ -248,6 +259,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
                 service.filterPriceCloseToAth = priceCloseToAth
                 service.filterPriceCloseToAtl = priceCloseToAtl
                 service.filterBlockchains = selectedBlockchains
+                service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
 
                 val numberOfItems = service.fetchNumberOfItems()
 
@@ -294,6 +306,7 @@ fun getRanges(currencyCode: String): List<FilterViewItemWrapper<Range?>> {
 data class MarketFiltersUiState(
     val coinListSet: FilterViewItemWrapper<CoinList>,
     val period: FilterViewItemWrapper<TimePeriod>,
+    val filterTradingSignal: FilterViewItemWrapper<FilterTradingSignal?>,
     val marketCap: FilterViewItemWrapper<Range?>,
     val volume: FilterViewItemWrapper<Range?>,
     val priceChange: FilterViewItemWrapper<PriceChange?>,

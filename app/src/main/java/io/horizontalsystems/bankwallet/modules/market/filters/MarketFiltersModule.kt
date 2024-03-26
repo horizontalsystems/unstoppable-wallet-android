@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Single
 
@@ -27,9 +28,30 @@ object MarketFiltersModule {
         TradingVolume(R.string.Market_Filter_Volume),
         PriceChange(R.string.Market_Filter_PriceChange),
         PricePeriod(R.string.Market_Filter_PricePeriod),
+        TradingSignals(R.string.Market_Filter_TradingSignals),
     }
 
     data class BlockchainViewItem(val blockchain: Blockchain, val checked: Boolean)
+}
+
+enum class FilterTradingSignal(@StringRes val titleResId: Int) {
+    StrongBuy(R.string.Market_Filter_StrongBuy),
+    Buy(R.string.Market_Filter_Buy),
+    Neutral(R.string.Market_Filter_Neutral),
+    Sell(R.string.Market_Filter_Sell),
+    StrongSell(R.string.Market_Filter_StrongSell),
+    CriticalTrade(R.string.Market_Filter_RiskToTrade);
+
+    fun getAdvices(): List<Advice> {
+        return when (this) {
+            StrongSell -> listOf(Advice.StrongSell)
+            Sell -> listOf(Advice.Sell)
+            Neutral -> listOf(Advice.Neutral)
+            Buy -> listOf(Advice.Buy)
+            StrongBuy -> listOf(Advice.StrongBuy)
+            CriticalTrade -> listOf(Advice.Overbought, Advice.Oversold)
+        }
+    }
 }
 
 enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {

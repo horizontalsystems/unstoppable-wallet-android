@@ -35,8 +35,8 @@ class TechnicalAdviceViewItemFactory(private val numberFormatter: IAppNumberForm
             )
 
             Advice.Overbought, Advice.StrongSell, Advice.Sell, Advice.Neutral -> Triple(
-                Translator.getString(R.string.TechnicalAdvice_OverSold),
-                Translator.getString(R.string.TechnicalAdvice_Down),
+                Translator.getString(R.string.TechnicalAdvice_OverBought),
+                Translator.getString(R.string.TechnicalAdvice_Up),
                 "70%"
             )
         }
@@ -212,13 +212,13 @@ class TechnicalAdviceViewItemFactory(private val numberFormatter: IAppNumberForm
 val Advice.title: String
     get() {
         return when (this) {
-            Advice.Oversold -> Translator.getString(R.string.TechnicalAdvice_Indicators_Oversold)
-            Advice.StrongBuy -> Translator.getString(R.string.TechnicalAdvice_Indicators_StrongBuy)
-            Advice.Buy -> Translator.getString(R.string.TechnicalAdvice_Indicators_Buy)
-            Advice.Neutral -> Translator.getString(R.string.TechnicalAdvice_Indicators_Neutral)
-            Advice.Sell -> Translator.getString(R.string.TechnicalAdvice_Indicators_Sell)
+            Advice.Oversold -> Translator.getString(R.string.TechnicalAdvice_Indicators_RiskyToTrade)
             Advice.StrongSell -> Translator.getString(R.string.TechnicalAdvice_Indicators_StrongSell)
-            Advice.Overbought -> Translator.getString(R.string.TechnicalAdvice_Indicators_Overbought)
+            Advice.Sell -> Translator.getString(R.string.TechnicalAdvice_Indicators_Sell)
+            Advice.Neutral -> Translator.getString(R.string.TechnicalAdvice_Indicators_Neutral)
+            Advice.Buy -> Translator.getString(R.string.TechnicalAdvice_Indicators_Buy)
+            Advice.StrongBuy -> Translator.getString(R.string.TechnicalAdvice_Indicators_StrongBuy)
+            Advice.Overbought -> Translator.getString(R.string.TechnicalAdvice_Indicators_RiskyToTrade)
         }
     }
 
@@ -226,11 +226,11 @@ val Advice.sliderIndex: Int
     get() {
         return when (this) {
             Advice.Oversold -> 0
-            Advice.StrongBuy -> 3
-            Advice.Buy -> 2
-            Advice.Neutral -> 1
-            Advice.Sell -> 2
             Advice.StrongSell -> 3
+            Advice.Sell -> 2
+            Advice.Neutral -> 1
+            Advice.Buy -> 2
+            Advice.StrongBuy -> 3
             Advice.Overbought -> 0
         }
     }
