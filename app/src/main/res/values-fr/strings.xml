@@ -220,6 +220,11 @@
     <string name="Market_Filter_OutperformedBnb">A surpassé BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Prix proche d\'ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Prix proche d\'ATL</string>
+    <string name="Market_Filter_StrongBuy">Achat fort</string>
+    <string name="Market_Filter_Buy">Acheter</string>
+    <string name="Market_Filter_Neutral">Neutre</string>
+    <string name="Market_Filter_StrongSell">Vente forte</string>
+    <string name="Market_Filter_Sell">Vendre</string>
     <string name="Market_Filter_ShowResults">Afficher les résultats</string>
     <string name="Market_Filter_ShowResults_Counter">Afficher les résultats : %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5mn</string>
