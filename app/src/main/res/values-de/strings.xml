@@ -208,6 +208,10 @@
     <string name="Market_Filter_OutperformedBnb">Übertraf BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Preis nahe an ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Preis nahe zum ATL</string>
+    <string name="Market_Filter_StrongBuy">Stark Kaufen</string>
+    <string name="Market_Filter_Buy">Kaufen</string>
+    <string name="Market_Filter_StrongSell">Stark Verkaufen</string>
+    <string name="Market_Filter_Sell">Verkaufen</string>
     <string name="Market_Filter_ShowResults">Ergebnisse anzeigen</string>
     <string name="Market_Filter_ShowResults_Counter">Ergebnisse anzeigen: %d</string>
     <string name="Market_Filter_Range_0_500M">&lt; 50M</string>
