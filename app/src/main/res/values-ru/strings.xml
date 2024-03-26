@@ -225,6 +225,11 @@
     <string name="Market_Filter_OutperformedBnb">Обошел BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Цена Близка к ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Цена Близка к ATL</string>
+    <string name="Market_Filter_StrongBuy">Активно покупать</string>
+    <string name="Market_Filter_Buy">Покупать</string>
+    <string name="Market_Filter_Neutral">Нейтрально</string>
+    <string name="Market_Filter_StrongSell">Активно продавать</string>
+    <string name="Market_Filter_Sell">Продавать</string>
     <string name="Market_Filter_Top_100">Топ 100</string>
     <string name="Market_Filter_Top_250">Топ 250</string>
     <string name="Market_Filter_Top_500">Топ 500</string>
