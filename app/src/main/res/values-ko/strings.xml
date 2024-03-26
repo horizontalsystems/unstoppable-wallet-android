@@ -217,6 +217,11 @@
     <string name="Market_Filter_OutperformedBnb">BNB를 능가했습니다</string>
     <string name="Market_Filter_PriceCloseToAth">최고가에 가까운 가격</string>
     <string name="Market_Filter_PriceCloseToAtl">ATL 가격에 근접</string>
+    <string name="Market_Filter_StrongBuy">강한 매수</string>
+    <string name="Market_Filter_Buy">매수</string>
+    <string name="Market_Filter_Neutral">보통</string>
+    <string name="Market_Filter_StrongSell">강한 매도</string>
+    <string name="Market_Filter_Sell">매도</string>
     <string name="Market_Filter_Top_100">상위 100</string>
     <string name="Market_Filter_Top_250">상위 250</string>
     <string name="Market_Filter_Top_500">상위 500</string>
