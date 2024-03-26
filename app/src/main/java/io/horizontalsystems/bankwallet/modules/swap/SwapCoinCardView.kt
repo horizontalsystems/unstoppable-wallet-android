@@ -142,7 +142,7 @@ private fun SwapAmountInput(
 //    LaunchedEffect(amountData?.first) {
     if (!amountsEqual(state.amount.toBigDecimalOrNull(), textState.text.toBigDecimalOrNull())) {
         if (!state.dimAmount || state.amount.isNotEmpty())
-            textState = textState.copy(text = state.amount, selection = TextRange(state.amount.length))
+            textState = textState.copy(text = state.amount, selection = TextRange(0))
     }
 //    }
 
@@ -152,6 +152,10 @@ private fun SwapAmountInput(
                 .onFocusChanged { focusState ->
                     focused = focusState.isFocused
                     onFocusChanged?.invoke(focusState.isFocused)
+
+                    if (!focusState.isFocused) {
+                        textState = textState.copy(selection = TextRange(0))
+                    }
                 }
                 .focusRequester(focusRequester)
                 .fillMaxWidth(),
