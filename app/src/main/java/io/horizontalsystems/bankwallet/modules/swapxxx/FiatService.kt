@@ -68,7 +68,8 @@ class FiatService(private val marketKit: MarketKitWrapper) : ServiceState<FiatSe
                     .asFlow()
                     .collect {
                         coinPrice = it
-                        refreshAmount()
+
+                        refreshFiatAmount()
                         emitState()
                     }
             }
