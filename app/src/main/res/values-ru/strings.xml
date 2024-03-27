@@ -2,6 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Не задан параметр</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
     <string name="Alert_Close">Закрыть</string>
@@ -24,6 +25,7 @@
     <string name="Button_Add">Добавить</string>
     <string name="Button_Approve">Разрешить</string>
     <string name="Button_Confirm">Подтвердить</string>
+    <string name="Button_Refresh">Обновить</string>
     <string name="Button_Connect">Подключиться</string>
     <string name="Button_Reject">Отклонить</string>
     <string name="Button_Disconnect">Отсоединить</string>
@@ -57,9 +59,11 @@
     <string name="Button_TryAgain">Попробовать ещё раз</string>
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Apply">Применить</string>
+    <string name="Button_SetAmount">Установить сумму</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
+    <string name="NotAvailable">Нет данных</string>
     <string name="Any">Любые</string>
     <string name="SyncError">Ошибка синхронизации. Повторите попытку</string>
     <string name="PercentTitle">Процент</string>
@@ -156,6 +160,7 @@
     <string name="Market_Field_PriceDiff">Цена</string>
     <string name="Market_Title">Рынки</string>
     <string name="Market_Search">Поиск</string>
+    <string name="Market_Search_Sections_PopularTitle">ПОПУЛЯРНЫЕ</string>
     <string name="Market_FilterSection_MarketParameters">ПАРАМЕТРЫ РЫНКА</string>
     <string name="Market_FilterSection_PriceParameters">ПАРАМЕТРЫ ЦЕНЫ</string>
     <string name="Market_FilterSection_NetworkParameters">ПАРАМЕТРЫ СЕТИ</string>
@@ -166,7 +171,6 @@
     <string name="Market_Field_HighestPrice">Самая высокая цена</string>
     <string name="Market_Field_LowestPrice">Самая низкая цена</string>
     <string name="Market_Sort_PopupTitle">Сортировать по</string>
-    <string name="Market_TotalMarketCap">Общая капитализация</string>
     <string name="Market_BtcDominance">Доминирование BTC</string>
     <string name="Market_Volume24h">Объем торгов (24ч)</string>
     <string name="Market_TvlDeFi">TVL в DeFi</string>
@@ -181,8 +185,12 @@
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
+    <string name="TopPairs_Title">Лучшие рыночные пары</string>
+    <string name="TopPairs_Description">Лучшие торговые пары по объему на каждой бирже</string>
     <!--Market Overview-->
+    <string name="Market_Overview_TopPairs">Лучшие рыночные пары</string>
     <string name="Market_Overview_TopSectors">Лучшие секторы</string>
+    <string name="Market_Overview_Sectors">Секторы</string>
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Лучшие платформы</string>
     <string name="MarketTopPlatforms_PlatofrmsRank">Лучшие блокчейн-платформы</string>
@@ -218,6 +226,7 @@
     <string name="Market_Filter_Volume">Объем торговли</string>
     <string name="Market_Filter_Volume24h">Объем торговли (24ч)</string>
     <string name="Market_Filter_PricePeriod">Ценовой период</string>
+    <string name="Market_Filter_TradingSignals">Торговые сигналы</string>
     <string name="Market_Filter_PriceChange">Изменение цены</string>
     <string name="Market_Filter_Blockchains">Блокчейны</string>
     <string name="Market_Filter_OutperformedBtc">Обошел BTC</string>
@@ -283,6 +292,7 @@
     <string name="Balance_SyncedUntil">до %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_AddCoins">Добавить токен</string>
     <string name="Balance_AddCoin">Добавить токен</string>
@@ -311,6 +321,7 @@
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Формат Native SegWit предпочтителен в Биткойне для повышения пропускной способности и безопасности. Все форматы адресов (Taproot, SegWit, Legacy) могут использоваться взаимозаменяемо для получения BTC независимо от формата адреса отправителя, что обеспечивает бесперебойные транзакции между различными типами монет.</string>
     <string name="Balance_Receive_Account">Аккаунт</string>
     <string name="Balance_Receive_NotActive">Не активен</string>
+    <string name="Balance_Receive_SetAmount">Установить сумму</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
     <!--Send NFT-->
@@ -1084,7 +1095,6 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Адрес контракта не найден в %s блокчейне </string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат адреса</string>
-    <string name="AddressFormatSettings_Description">Выберите формат адреса для токена. Если вы сомневаетесь в правильности выбранного формата, выберите рекомендуемую опцию. При восстановлении существующего кошелька должен быть выбран правильный формат.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Нативный</string>
     <string name="CoinPlatformsSelector_Title">Тип токена</string>
@@ -1383,6 +1393,7 @@
     <string name="NftCollection_AveragePrice">Средняя оценка за все время</string>
     <string name="NftCollection_ItemsCount">%d Элементов</string>
     <string name="NftCollection_TodaysSales">Продажи за сегодня</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s за NFT</string>
     <string name="NftCollection_Royalty">Вознаграждение</string>
     <string name="NftCollection_InceptionDate">Дата старта</string>
