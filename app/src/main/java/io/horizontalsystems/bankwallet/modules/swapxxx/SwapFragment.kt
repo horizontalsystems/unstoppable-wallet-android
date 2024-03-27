@@ -548,14 +548,14 @@ private fun SwapInput(
     currency: Currency,
     onFocusChanged: (FocusState) -> Unit,
 ) {
-    Box {
+    Box(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(18.dp))
                 .background(ComposeAppTheme.colors.lawrence)
-                .padding()
         ) {
             SwapCoinInputIn(
                 coinAmount = amountIn,
