@@ -164,7 +164,6 @@
     <string name="Market_Field_HighestPrice">Maior preço</string>
     <string name="Market_Field_LowestPrice">Menor preço</string>
     <string name="Market_Sort_PopupTitle">Organizar por</string>
-    <string name="Market_TotalMarketCap">Valor total de mercado</string>
     <string name="Market_BtcDominance">Dominação BTC</string>
     <string name="Market_Volume24h">Volume em 24h</string>
     <string name="Market_TvlDeFi">TVL no DeFi</string>
@@ -1066,7 +1065,6 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Endereço do contrato não encontrado em %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato do Endereço</string>
-    <string name="AddressFormatSettings_Description">Selecione o formato do endereço para a moeda. Prossiga com a opção recomendada se não tiver certeza. Um formato correto deve ser escolhido quando restaurar uma carteira existente.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativo</string>
     <string name="CoinPlatformsSelector_Title">Tipo de moeda</string>
