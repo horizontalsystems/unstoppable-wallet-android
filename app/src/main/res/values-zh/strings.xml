@@ -163,7 +163,6 @@
     <string name="Market_Field_HighestPrice">价格由高到低</string>
     <string name="Market_Field_LowestPrice">价格由低到高</string>
     <string name="Market_Sort_PopupTitle">排序</string>
-    <string name="Market_TotalMarketCap">总市值</string>
     <string name="Market_BtcDominance">BTC市场占比</string>
     <string name="Market_Volume24h">24h成交量</string>
     <string name="Market_TvlDeFi">DeFi锁定</string>
@@ -1071,7 +1070,6 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">在 %s 区块链中找不到合同地址</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
-    <string name="AddressFormatSettings_Description">选择您 %s 钱包的地址格式。每个选中的格式代表应用的余额选项卡上不同的钱包。</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">原生</string>
     <string name="CoinPlatformsSelector_Title">代币平台选择</string>
