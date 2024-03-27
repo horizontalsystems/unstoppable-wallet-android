@@ -161,7 +161,6 @@
     <string name="Market_Field_HighestPrice">최고 가격</string>
     <string name="Market_Field_LowestPrice">최저 가격</string>
     <string name="Market_Sort_PopupTitle">정렬 기준</string>
-    <string name="Market_TotalMarketCap">시가 총액</string>
     <string name="Market_BtcDominance">BTC 지배력</string>
     <string name="Market_Volume24h">24시간 거래량</string>
     <string name="Market_TvlDeFi">디파이(DeFi)에서의 총 예치 가치</string>
@@ -1076,7 +1075,6 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">%s 블록체인에서 계약 주소를 찾을 수 없습니다.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
-    <string name="AddressFormatSettings_Description">코인의 주소 형식을 선택합니다. 확실하지 않은 경우 권장 옵션을 진행합니다. 기존 지갑을 복원할 때 올바른 형식을 선택해야 합니다.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">네이티브</string>
     <string name="CoinPlatformsSelector_Title">코인 유형</string>
