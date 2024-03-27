@@ -205,7 +205,7 @@
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Cap</string>
+    <string name="Market_TotalMarketCap">Total M.Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
@@ -1278,7 +1278,7 @@
     <string name="ShowKey_PrivateKey_Warning">This key is for all EVM-compatible blockchains.\n\nAs a security measure we recommend not to use copy action on private key.</string>
     <string name="ShowKey_Bip44" translatable="false">BIP 44</string>
     <string name="ShowKey_Bip49" translatable="false">BIP 49 - SegWit</string>
-    <string name="ShowKey_Bip84" translatable="false">BIP 84 - Native SegWit</string>
+    <string name="ShowKey_Bip84" translatable="false">BIP 84 - Native SegWit(recommended)</string>
 
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Backup Recovery Phrase</string>
@@ -1411,7 +1411,7 @@
     <!-- Address Format Settings List -->
 
     <string name="AddressFormatSettings_Title">Address Format</string>
-    <string name="AddressFormatSettings_Description">Select address format for the coin. Proceed with recommended option if unsure. A correct format should be chosen when restoring an existing wallet.</string>
+    <string name="AddressFormatSettings_Description">Select address format for receiving payments. A correct format should be chosen when restoring an existing wallet.</string>
 
     <!-- Coin Platforms -->
 
