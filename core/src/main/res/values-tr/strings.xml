@@ -3,7 +3,7 @@
     <string name="Timestamp_Today">Bugün</string>
     <string name="Timestamp_Yesterday">Dün</string>
     <string name="Duration_instant">Anlık</string>
-    <string name="Duration_Within">%s Içinde</string>
+    <string name="Duration_Within">%s içinde</string>
     <string name="Duration_Hours">%d sa.</string>
     <string name="Duration_Minutes">%d dk.</string>
     <string name="Duration_Seconds">%d sn.</string>
