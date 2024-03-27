@@ -155,6 +155,9 @@ class SwapQuoteService {
 
         tokenIn = token
         preferredProvider = null
+        if (tokenOut == token) {
+            tokenOut = null
+        }
 
         runQuotation()
     }
@@ -164,6 +167,9 @@ class SwapQuoteService {
 
         tokenOut = token
         preferredProvider = null
+        if (tokenIn == token) {
+            tokenIn = null
+        }
 
         runQuotation()
     }
