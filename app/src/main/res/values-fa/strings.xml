@@ -99,7 +99,6 @@
     <!--Market-->
     <string name="Market_Field_PriceDiff">قیمت</string>
     <string name="Market_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
-    <string name="Market_TotalMarketCap">آستانه کل</string>
     <string name="Market_Volume24h">۲۴ ساعته</string>
     <string name="Market_SeeAll">همه</string>
     <string name="Market_Tab_Overview">نمای کلی</string>
@@ -645,7 +644,6 @@
     <string name="AddToken_AddressOrSymbol">آدرس قرارداد</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
-    <string name="AddressFormatSettings_Description">قالب آدرس را برای سکه انتخاب کنید. اگر مطمئن نیستید گزینه پیشنهادی را ادامه دهید. هنگام بازیابی کیف پول موجود باید یک قالب صحیح انتخاب شود.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">بومی</string>
     <string name="CoinPlatformsSelector_Title">نوع سکه</string>
