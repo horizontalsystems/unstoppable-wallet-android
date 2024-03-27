@@ -162,7 +162,6 @@
     <string name="Market_Field_HighestPrice">Prix le plus élevé</string>
     <string name="Market_Field_LowestPrice">Prix le plus bas</string>
     <string name="Market_Sort_PopupTitle">Trier par</string>
-    <string name="Market_TotalMarketCap">Cap totale</string>
     <string name="Market_BtcDominance">Pourcentage de Dominance du BTC</string>
     <string name="Market_Volume24h">Volume des dernières 24h</string>
     <string name="Market_TvlDeFi">TVL en DeFi</string>
@@ -1057,7 +1056,6 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Adresse du contrat introuvable dans la blockchain %s</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Format de l\'adresse</string>
-    <string name="AddressFormatSettings_Description">Sélectionnez le format d\'adresse de la pièce. Procédez avec l\'option recommandée si vous n\'êtes pas sur de vous. Un format correct doit être choisi lors de la restauration d\'un portefeuille existant.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Natif</string>
     <string name="CoinPlatformsSelector_Title">Type de pièce</string>
