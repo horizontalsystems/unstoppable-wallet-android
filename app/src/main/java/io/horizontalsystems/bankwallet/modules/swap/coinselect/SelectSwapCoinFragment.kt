@@ -115,7 +115,7 @@ fun SelectSwapCoinDialogScreen(
                         MultitextM1(
                             title = {
                                 coinItem.balance?.let {
-                                    App.numberFormatter.formatCoinFull(
+                                    App.numberFormatter.formatCoinShort(
                                         it,
                                         coinItem.token.coin.code,
                                         8
@@ -126,9 +126,10 @@ fun SelectSwapCoinDialogScreen(
                             },
                             subtitle = {
                                 coinItem.fiatBalanceValue?.let { fiatBalanceValue ->
-                                    App.numberFormatter.formatFiatFull(
+                                    App.numberFormatter.formatFiatShort(
                                         fiatBalanceValue.value,
-                                        fiatBalanceValue.currency.symbol
+                                        fiatBalanceValue.currency.symbol,
+                                        2
                                     )
                                 }?.let {
                                     D1(
