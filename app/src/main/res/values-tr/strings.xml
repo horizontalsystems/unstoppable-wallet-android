@@ -1000,7 +1000,6 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Sözleşme adresi %s blockchain\'de bulunamadı</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adres Formatı</string>
-    <string name="AddressFormatSettings_Description">Koin için adres formatını seçin. Emin değilseniz önerilen seçenekle devam edin. Mevcut bir cüzdanı geri yüklerken doğru bir format seçilmelidir.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Yerel</string>
     <string name="CoinPlatformsSelector_Title">Coin Tipi</string>
