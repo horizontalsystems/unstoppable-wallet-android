@@ -1004,7 +1004,6 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Vertragsadresse in %s Blockchain nicht gefunden</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Adressformat</string>
-    <string name="AddressFormatSettings_Description">Wählen Sie das Adressformat für die Coin. Fahren Sie mit der empfohlenen Option fort, wenn Sie unsicher sind. Wenn Sie ein bestehendes Wallet wiederherstellen, sollten Sie das richtige Format wählen.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativ</string>
     <string name="CoinPlatformsSelector_Title">Cointyp</string>
