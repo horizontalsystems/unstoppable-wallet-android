@@ -782,19 +782,23 @@ private fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
 ) {
-    var textFieldValue by rememberSaveable(value, stateSaver = TextFieldValue.Saver) {
-        val valueStr = value?.toPlainString()
-        val cursorPosition = valueStr?.length ?: 0
-
-        mutableStateOf(
-            TextFieldValue(
-                text = valueStr ?: "",
-                selection = TextRange(cursorPosition)
-            )
-        )
+    var amount by rememberSaveable {
+        mutableStateOf(value)
     }
 
-    var setCursorToEnd by remember {
+    var textFieldValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue(text = amount?.toPlainString() ?: ""))
+    }
+
+    LaunchedEffect(value) {
+        if (value?.stripTrailingZeros() != amount?.stripTrailingZeros()) {
+            amount = value
+
+            textFieldValue = TextFieldValue(text = amount?.toPlainString() ?: "")
+        }
+    }
+
+    var setCursorToEndOnFocused by remember {
         mutableStateOf(false)
     }
 
@@ -802,23 +806,27 @@ private fun AmountInput(
         modifier = Modifier
             .fillMaxWidth()
             .onFocusChanged {
-                setCursorToEnd = it.isFocused
+                setCursorToEndOnFocused = it.isFocused
+
+                if (!it.isFocused) {
+                    textFieldValue = textFieldValue.copy(selection = TextRange.Zero)
+                }
             },
         value = textFieldValue,
         onValueChange = { newValue ->
             try {
                 val text = newValue.text
-                val amount = if (text.isBlank()) {
+                amount = if (text.isBlank()) {
                     null
                 } else {
                     text.toBigDecimal()
                 }
 
-                textFieldValue = if (setCursorToEnd) {
-                    setCursorToEnd = false
-                    newValue.copy(selection = TextRange(text.length))
+                if (!setCursorToEndOnFocused) {
+                    textFieldValue = newValue
                 } else {
-                    newValue
+                    textFieldValue = newValue.copy(selection = TextRange(text.length))
+                    setCursorToEndOnFocused = false
                 }
 
                 onValueChange.invoke(amount)
