@@ -17,11 +17,9 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swapxxx.SwapViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 
 class SwapSettingsFragment : BaseComposeFragment() {
@@ -38,7 +36,9 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
         viewModelStoreOwner = previousBackStackEntry!!,
     )
 
-    val viewModel = viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory())
+    val viewModel = viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory(swapViewModel.getSettings()))
+
+    val uiState = viewModel.uiState
 
     Scaffold(
         topBar = {
@@ -47,14 +47,6 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Reset),
-                        onClick = {
-
-                        }
-                    )
-                ),
             )
         },
         bottomBar = {
@@ -64,9 +56,8 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     title = stringResource(id = R.string.SwapSettings_Apply),
-                    enabled = viewModel.saveSettingsEnabled,
+                    enabled = uiState.applyEnabled,
                     onClick = {
-                        viewModel.saveSettings()
                         swapViewModel.onUpdateSettings(viewModel.getSettings())
                         navController.popBackStack()
                     }
