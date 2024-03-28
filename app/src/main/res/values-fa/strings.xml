@@ -355,7 +355,7 @@
     <string name="Transactions_ContractCreation">ایجاد قرارداد</string>
     <string name="Transactions_To">به %s</string>
     <string name="Transactions_From">از %s</string>
-    <string name="Transaction_Unlimited">نامحدود %s</string>
+    <string name="Transaction_Unlimited_CoinCode">نامحدود %s</string>
     <string name="Transactions_All">همه</string>
     <string name="Transactions_Filter_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="Transactions_Filter_ChooseBlockchain">انتخاب زنجیره بلوکی</string>

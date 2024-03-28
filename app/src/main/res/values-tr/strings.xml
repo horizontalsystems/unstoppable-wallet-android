@@ -578,7 +578,7 @@
     <string name="Transactions_ContractCreation">Sözleşme Oluşturma</string>
     <string name="Transactions_To">%s kişisine</string>
     <string name="Transactions_From">%s kişisinden</string>
-    <string name="Transaction_Unlimited">sınırsız %s</string>
+    <string name="Transaction_Unlimited_CoinCode">sınırsız %s</string>
     <string name="Transactions_All">Hepsi</string>
     <string name="Transactions_Filter_Blockchain">Blok zincirine göre filtrele</string>
     <string name="Transactions_Filter_AllBlockchains">Tüm Blok Zincirleri</string>

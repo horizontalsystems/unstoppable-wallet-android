@@ -598,7 +598,7 @@
     <string name="Transactions_ContractCreation">合约创建</string>
     <string name="Transactions_To">接收人%s</string>
     <string name="Transactions_From">发送人%s</string>
-    <string name="Transaction_Unlimited">无限%s</string>
+    <string name="Transaction_Unlimited_CoinCode">无限%s</string>
     <string name="Transactions_All">所有</string>
     <string name="Transactions_Filter_Blockchain">按区块链过滤</string>
     <string name="Transactions_Filter_AllBlockchains">所有Blockchains</string>

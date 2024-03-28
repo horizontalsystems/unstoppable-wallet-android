@@ -596,7 +596,7 @@
     <string name="Transactions_ContractCreation">Creación de Contrato</string>
     <string name="Transactions_To">a %s</string>
     <string name="Transactions_From">desde %s</string>
-    <string name="Transaction_Unlimited">%s ilimitado</string>
+    <string name="Transaction_Unlimited_CoinCode">%s ilimitado</string>
     <string name="Transactions_All">Todo</string>
     <string name="Transactions_Filter_Blockchain">Filtrar por blockchain</string>
     <string name="Transactions_Filter_AllBlockchains">Todos los bloqueos</string>

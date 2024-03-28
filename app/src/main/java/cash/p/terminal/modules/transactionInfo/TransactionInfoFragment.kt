@@ -14,6 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -120,12 +122,15 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.Amount -> {
                         add {
                             TransactionAmountCell(
+                                amountType = viewItem.amountType,
                                 fiatAmount = viewItem.fiatValue,
                                 coinAmount = viewItem.coinValue,
                                 coinIconUrl = viewItem.coinIconUrl,
+                                badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
-                                coinUid = viewItem.coinUid,
-                                navController = navController
+                                onClick = viewItem.coinUid?.let {
+                                    { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it, "transaction_info")) }
+                                }
                             )
                         }
                     }
@@ -133,12 +138,12 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.NftAmount -> {
                         add {
                             TransactionNftAmountCell(
+                                viewItem.title,
                                 viewItem.nftValue,
+                                viewItem.nftName,
                                 viewItem.iconUrl,
                                 viewItem.iconPlaceholder,
-                                viewItem.nftUid,
-                                viewItem.providerCollectionUid,
-                                navController
+                                viewItem.badge,
                             )
                         }
                     }

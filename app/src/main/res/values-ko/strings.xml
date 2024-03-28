@@ -602,7 +602,7 @@
     <string name="Transactions_ContractCreation">계약 생성</string>
     <string name="Transactions_To">%s에게</string>
     <string name="Transactions_From">%s부터</string>
-    <string name="Transaction_Unlimited">무제한 %s</string>
+    <string name="Transaction_Unlimited_CoinCode">무제한 %s</string>
     <string name="Transactions_All">모든</string>
     <string name="Transactions_Filter_Blockchain">블록체인으로 필터링</string>
     <string name="Transactions_Filter_AllBlockchains">모든 블록체인</string>
