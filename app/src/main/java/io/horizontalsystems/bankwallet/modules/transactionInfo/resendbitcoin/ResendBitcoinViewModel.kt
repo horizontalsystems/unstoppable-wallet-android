@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.Bitco
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.send.SendResult
+import io.horizontalsystems.bankwallet.modules.send.SendWarningRiskOfGettingStuck
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -34,7 +35,7 @@ class ResendBitcoinViewModel(
     private val type: TransactionInfoOptionsModule.Type,
     private val transactionRecord: BitcoinOutgoingTransactionRecord,
 
-    private val replacementInfo: ReplacementTransactionInfo,
+    private val replacementInfo: ReplacementTransactionInfo?,
 
     private val adapter: BitcoinBaseAdapter,
     private val feeRateProvider: IFeeRateProvider,
@@ -61,6 +62,7 @@ class ResendBitcoinViewModel(
     private var feeCaution: HSCaution? = null
 
     private var minFee: Long = 0
+    private var recommendedFee: Long = 0
 
     private var replacementTransaction: ReplacementTransaction? = null
     private var record = transactionRecord
@@ -83,12 +85,17 @@ class ResendBitcoinViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            val feeRates = feeRateProvider.getFeeRates()
-            val feeRange = replacementInfo.feeRange
-            val recommendedFee = replacementInfo.replacementTxMinSize * feeRates.recommended
-            val minFee = recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
+            if (replacementInfo != null) {
+                val feeRates = feeRateProvider.getFeeRates()
+                val feeRange = replacementInfo.feeRange
+                recommendedFee = replacementInfo.replacementTxMinSize * feeRates.recommended
+                val minFee = recommendedFee.coerceAtLeast(feeRange.first).coerceAtMost(feeRange.last)
 
-            updateReplacementTransaction(minFee)
+                updateReplacementTransaction(minFee)
+            } else {
+                feeCaution = createCaution(BuildError.UnableToReplace)
+                emitState()
+            }
         }
 
         viewModelScope.launch {
@@ -110,7 +117,7 @@ class ResendBitcoinViewModel(
             this.replacementTransaction = replacementTransaction
             this.record = bitcoinTransactionRecord as BitcoinOutgoingTransactionRecord
 
-            feeCaution = null
+            feeCaution = if (minFee < recommendedFee) SendWarningRiskOfGettingStuck else null
         } catch (error: Throwable) {
             feeCaution = createCaution(error)
         }

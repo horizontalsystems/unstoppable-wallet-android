@@ -285,8 +285,12 @@ interface IBalanceAdapter {
     fun sendAllowed() = balanceState is AdapterState.Synced
 }
 
-data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDecimal.ZERO) {
-    val total get() = available + locked
+data class BalanceData(
+    val available: BigDecimal,
+    val timeLocked: BigDecimal = BigDecimal.ZERO,
+    val notRelayed: BigDecimal = BigDecimal.ZERO
+) {
+    val total get() = available + timeLocked + notRelayed
 }
 
 interface IReceiveAdapter {
