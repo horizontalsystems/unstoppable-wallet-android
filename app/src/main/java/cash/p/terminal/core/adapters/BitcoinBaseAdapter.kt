@@ -160,13 +160,16 @@ abstract class BitcoinBaseAdapter(
     override val debugInfo: String = ""
 
     override val balanceData: BalanceData
-        get() = BalanceData(balance, balanceLocked)
+        get() = BalanceData(balance, balanceTimeLocked, balanceNotRelayed)
 
     private val balance: BigDecimal
         get() = satoshiToBTC(kit.balance.spendable)
 
-    private val balanceLocked: BigDecimal
-        get() = satoshiToBTC(kit.balance.unspendable)
+    private val balanceTimeLocked: BigDecimal
+        get() = satoshiToBTC(kit.balance.unspendableTimeLocked)
+
+    private val balanceNotRelayed: BigDecimal
+        get() = satoshiToBTC(kit.balance.unspendableNotRelayed)
 
     override fun start() {
         kit.start()
