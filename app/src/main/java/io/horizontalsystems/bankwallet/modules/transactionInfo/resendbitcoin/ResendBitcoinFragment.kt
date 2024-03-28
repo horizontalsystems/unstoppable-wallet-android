@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
+import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -109,10 +110,6 @@ class ResendBitcoinFragment : BaseComposeFragment() {
             }
 
             null -> Unit
-        }
-
-        uiState.feeCaution?.let {
-            HudHelper.showErrorMessage(view, it.getString())
         }
 
         LaunchedEffect(uiState.sendResult) {
@@ -201,7 +198,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
 
                 CellUniversalLawrenceSection(topSectionItems)
 
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 val bottomSectionItems = buildList<@Composable () -> Unit> {
                     add {
@@ -236,6 +233,13 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                         resendViewModel.decrementMinFee()
                     }
                 )
+
+                uiState.feeCaution?.let {
+                    FeeRateCaution(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 24.dp),
+                        feeRateCaution = it
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.weight(1f))

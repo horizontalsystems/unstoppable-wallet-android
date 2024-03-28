@@ -27,7 +27,7 @@ object ResendBitcoinModule {
             val replacementInfo = when (optionType) {
                 TransactionInfoOptionsModule.Type.SpeedUp -> adapter.speedUpTransactionInfo(transactionRecord.transactionHash)
                 TransactionInfoOptionsModule.Type.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash)
-            } ?: throw IllegalStateException("Wrong transaction")
+            }
 
             return ResendBitcoinViewModel(
                 type = optionType,

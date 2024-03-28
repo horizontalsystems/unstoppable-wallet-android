@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewItem
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinPrice
@@ -28,8 +29,7 @@ data class BalanceViewItem(
     val primaryValue: DeemedValue<String>,
     val exchangeValue: DeemedValue<String>,
     val secondaryValue: DeemedValue<String>,
-    val coinValueLocked: DeemedValue<String?>,
-    val fiatValueLocked: DeemedValue<String>,
+    val lockedValues: List<LockedValue>,
     val sendEnabled: Boolean = false,
     val syncingProgress: SyncingProgress,
     val syncingTextValue: String?,
@@ -41,6 +41,13 @@ data class BalanceViewItem(
     val swapEnabled: Boolean = false,
     val errorMessage: String?,
     val isWatchAccount: Boolean
+)
+
+data class LockedValue(
+    val title: TranslatableString,
+    val infoTitle: TranslatableString,
+    val info: TranslatableString,
+    val coinValue: DeemedValue<String>
 )
 
 @Immutable
@@ -153,9 +160,9 @@ class BalanceViewItemFactory {
         hideBalance: Boolean,
         coinDecimals: Int,
         token: Token
-    ): DeemedValue<String?> {
+    ): DeemedValue<String>? {
         if (balance <= BigDecimal.ZERO) {
-            return DeemedValue(null, false, false)
+            return null
         }
 
         val visible = !hideBalance
@@ -179,7 +186,6 @@ class BalanceViewItemFactory {
         val latestRate = item.coinPrice
 
         val balanceTotalVisibility = !hideBalance
-        val fiatLockedVisibility = !hideBalance && item.balanceData.locked > BigDecimal.ZERO
 
         val (primaryValue, secondaryValue) = BalanceViewHelper.getPrimaryAndSecondaryValues(
             balance = item.balanceData.total,
@@ -192,6 +198,42 @@ class BalanceViewItemFactory {
             balanceViewType = balanceViewType
         )
 
+        val lockedValues = buildList {
+            lockedCoinValue(
+                state,
+                item.balanceData.timeLocked,
+                hideBalance,
+                wallet.decimal,
+                wallet.token
+            )?.let {
+                add(
+                    LockedValue(
+                        title = TranslatableString.ResString(R.string.Balance_LockedAmount_Title),
+                        infoTitle = TranslatableString.ResString(R.string.Info_LockTime_Title),
+                        info = TranslatableString.ResString(R.string.Info_LockTime_Description_Static),
+                        coinValue = it
+                    )
+                )
+            }
+
+            lockedCoinValue(
+                state,
+                item.balanceData.notRelayed,
+                hideBalance,
+                wallet.decimal,
+                wallet.token
+            )?.let {
+                add(
+                    LockedValue(
+                        title = TranslatableString.ResString(R.string.Balance_NotRelayedAmount_Title),
+                        infoTitle = TranslatableString.ResString(R.string.Info_NotRelayed_Title),
+                        info = TranslatableString.ResString(R.string.Info_NotRelayed_Description),
+                        coinValue = it
+                    )
+                )
+            }
+        }
+
         return BalanceViewItem(
             wallet = item.wallet,
             coinCode = coin.code,
@@ -200,21 +242,7 @@ class BalanceViewItemFactory {
             coinIconPlaceholder = wallet.token.iconPlaceholder,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
-            coinValueLocked = lockedCoinValue(
-                state,
-                item.balanceData.locked,
-                hideBalance,
-                wallet.decimal,
-                wallet.token
-            ),
-            fiatValueLocked = BalanceViewHelper.currencyValue(
-                item.balanceData.locked,
-                latestRate,
-                fiatLockedVisibility,
-                true,
-                currency,
-                state !is AdapterState.Synced
-            ),
+            lockedValues = lockedValues,
             exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
             sendEnabled = item.sendAllowed,
             syncingProgress = getSyncingProgress(state, wallet.token.blockchainType),

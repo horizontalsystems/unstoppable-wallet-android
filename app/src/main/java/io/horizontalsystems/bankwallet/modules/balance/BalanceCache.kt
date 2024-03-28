@@ -34,7 +34,7 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
                 wallet.token.tokenQuery.id,
                 wallet.account.id,
                 balanceData.available,
-                balanceData.locked
+                balanceData.timeLocked
             )
         }
         cacheMap = cacheMap + convertToCacheMap(list)
