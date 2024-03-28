@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,7 +46,6 @@ import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.send.SendFragment
-import cash.p.terminal.modules.swap.SwapMainFragment
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionsViewModel
@@ -368,10 +366,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     icon = R.drawable.ic_swap_24,
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.swapFragment,
-                            SwapMainModule.prepareParams(viewItem.wallet.token)
-                        )
+                        navController.slideFromRight(R.id.swapXxx, viewItem.wallet.token)
                     },
                     enabled = viewItem.swapEnabled
                 )

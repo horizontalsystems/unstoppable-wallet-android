@@ -51,6 +51,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.badge
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
@@ -98,16 +99,16 @@ import java.net.UnknownHostException
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapScreen(navController)
+        SwapScreen(navController, navController.getInput())
     }
 }
 
 @Composable
-fun SwapScreen(navController: NavController) {
+fun SwapScreen(navController: NavController, tokenIn: Token?) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapViewModel.Factory()
+        factory = SwapViewModel.Factory(tokenIn)
     )
     val uiState = viewModel.uiState
 
