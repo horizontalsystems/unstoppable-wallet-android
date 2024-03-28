@@ -16,7 +16,6 @@ import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.FullCoinsProvider
 import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -63,20 +62,24 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
     private suspend fun reloadItems() = withContext(Dispatchers.Default) {
         val activeWallets = App.walletManager.activeWallets
         val resultTokens = mutableListOf<CoinBalanceItem>()
+
         if (query.isEmpty()) {
             //Enabled Tokens
-            activeWallets.sortedWith(
-                compareByDescending<Wallet> { it.coin.marketCapRank }
-                    .thenBy { it.token.blockchainType.order }
-                    .thenBy { it.coin.code }
-                    .thenBy { it.badge }
-            )
-                .map { wallet ->
-                    val balance =
-                        adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
-                    CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
+            activeWallets.map { wallet ->
+                val balance =
+                    adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
+                CoinBalanceItem(wallet.token, balance, getFiatValue(wallet.token, balance))
+            }.sortedWith(
+                if (otherSelectedToken != null) {
+                    compareBy<CoinBalanceItem> { it.token.blockchainType != otherSelectedToken.blockchainType }
+                        .thenByDescending { it.fiatBalanceValue?.value }
+                } else {
+                    compareByDescending { it.fiatBalanceValue?.value }
                 }
-                .sortedWith(compareByDescending { it.fiatBalanceValue?.value })
+                    .thenBy { it.token.coin.code }
+                    .thenBy { it.token.blockchainType.order }
+                    .thenBy { it.token.badge }
+            )
                 .let {
                     resultTokens.addAll(it)
                 }
