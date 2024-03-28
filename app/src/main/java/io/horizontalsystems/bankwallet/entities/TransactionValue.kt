@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.entities
 
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
@@ -13,6 +14,7 @@ sealed class TransactionValue {
     abstract val coinUid: String
     abstract val coinCode: String
     abstract val coin: Coin?
+    abstract val badge: String?
     abstract val coinIconUrl: String?
     abstract val coinIconPlaceholder: Int?
     abstract val decimalValue: BigDecimal?
@@ -26,6 +28,7 @@ sealed class TransactionValue {
 
     data class CoinValue(val token: Token, val value: BigDecimal) : TransactionValue() {
         override val coin: Coin = token.coin
+        override val badge: String? = token.badge
         override val coinIconUrl = token.coin.imageUrl
         override val coinIconPlaceholder = token.fullCoin.iconPlaceholder
         override val coinUid: String = coin.uid
@@ -47,6 +50,7 @@ sealed class TransactionValue {
     data class RawValue(val value: BigInteger) : TransactionValue() {
         override val coinUid: String = ""
         override val coin: Coin? = null
+        override val badge: String? = null
         override val coinIconUrl = null
         override val coinIconPlaceholder = null
         override val fullName: String = ""
@@ -72,6 +76,7 @@ sealed class TransactionValue {
     ) : TransactionValue() {
         override val coinUid: String = ""
         override val coin: Coin? = null
+        override val badge: String? = null
         override val coinIconUrl = null
         override val fullName: String
             get() = tokenName
@@ -98,6 +103,7 @@ sealed class TransactionValue {
     ) : TransactionValue() {
         override val coinUid: String = ""
         override val coin: Coin? = null
+        override val badge: String? = null
         override val coinIconUrl = null
         override val coinIconPlaceholder: Int? = null
         override val fullName: String

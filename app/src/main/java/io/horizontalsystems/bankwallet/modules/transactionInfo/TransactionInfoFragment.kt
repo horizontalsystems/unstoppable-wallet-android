@@ -14,6 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -120,12 +122,15 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.Amount -> {
                         add {
                             TransactionAmountCell(
+                                amountType = viewItem.amountType,
                                 fiatAmount = viewItem.fiatValue,
                                 coinAmount = viewItem.coinValue,
                                 coinIconUrl = viewItem.coinIconUrl,
+                                badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
-                                coinUid = viewItem.coinUid,
-                                navController = navController
+                                onClick = viewItem.coinUid?.let {
+                                    { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it, "transaction_info")) }
+                                }
                             )
                         }
                     }
@@ -133,12 +138,12 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.NftAmount -> {
                         add {
                             TransactionNftAmountCell(
+                                viewItem.title,
                                 viewItem.nftValue,
+                                viewItem.nftName,
                                 viewItem.iconUrl,
                                 viewItem.iconPlaceholder,
-                                viewItem.nftUid,
-                                viewItem.providerCollectionUid,
-                                navController
+                                viewItem.badge,
                             )
                         }
                     }
