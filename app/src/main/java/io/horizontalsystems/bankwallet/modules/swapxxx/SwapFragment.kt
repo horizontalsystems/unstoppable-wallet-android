@@ -51,6 +51,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -98,16 +99,16 @@ import java.net.UnknownHostException
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapScreen(navController)
+        SwapScreen(navController, navController.getInput())
     }
 }
 
 @Composable
-fun SwapScreen(navController: NavController) {
+fun SwapScreen(navController: NavController, tokenIn: Token?) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapViewModel.Factory()
+        factory = SwapViewModel.Factory(tokenIn)
     )
     val uiState = viewModel.uiState
 

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -46,9 +46,9 @@ class SwapSelectProviderFragment : BaseComposeFragment() {
 
 @Composable
 fun SwapSelectProviderScreen(navController: NavController) {
+    val previousBackStackEntry = remember { navController.previousBackStackEntry }
     val swapViewModel = viewModel<SwapViewModel>(
-        viewModelStoreOwner = navController.previousBackStackEntry!!,
-        factory = SwapViewModel.Factory()
+        viewModelStoreOwner = previousBackStackEntry!!,
     )
     val viewModel = viewModel<SwapSelectProviderViewModel>(
         factory = SwapSelectProviderViewModel.Factory(swapViewModel.uiState.quotes)

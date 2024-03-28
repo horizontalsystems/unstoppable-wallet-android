@@ -24,7 +24,8 @@ class SwapViewModel(
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
     private val timerService: TimerService,
-    private val networkAvailabilityService: NetworkAvailabilityService
+    private val networkAvailabilityService: NetworkAvailabilityService,
+    tokenIn: Token?
 ) : ViewModelUiState<SwapUiState>() {
 
     private val quoteLifetime = 20
@@ -90,6 +91,9 @@ class SwapViewModel(
         fiatServiceIn.setCurrency(currency)
         fiatServiceOut.setCurrency(currency)
         networkAvailabilityService.start(viewModelScope)
+        tokenIn?.let {
+            quoteService.setTokenIn(it)
+        }
     }
 
     override fun createState() = SwapUiState(
@@ -192,7 +196,7 @@ class SwapViewModel(
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
 
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = SwapQuoteService()
@@ -207,7 +211,8 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 FiatService(App.marketKit),
                 TimerService(),
-                NetworkAvailabilityService(App.connectivityManager)
+                NetworkAvailabilityService(App.connectivityManager),
+                tokenIn
             ) as T
         }
     }
