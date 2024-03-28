@@ -277,10 +277,8 @@ private fun TokenRow(
             }
 
             subhead2_leah(text = title)
-            token.badge?.let {
-                VSpacer(height = 1.dp)
-                caption_grey(text = it)
-            }
+            VSpacer(height = 1.dp)
+            caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 8.dp)
         Column(horizontalAlignment = Alignment.End) {
