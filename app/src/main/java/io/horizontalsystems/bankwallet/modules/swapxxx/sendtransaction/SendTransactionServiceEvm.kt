@@ -27,11 +27,11 @@ import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 
 class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService() {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
@@ -162,8 +162,8 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         val gasLimit = transaction.gasData.gasLimit
         val nonce = transaction.nonce
 
-        delay(2000)
-//        evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+//        delay(2000)
+        evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
     }
 
     @Composable
