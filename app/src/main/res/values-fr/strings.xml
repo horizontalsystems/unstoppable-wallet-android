@@ -584,7 +584,6 @@
     <string name="Transactions_ContractCreation">Création du contrat</string>
     <string name="Transactions_To">a %s</string>
     <string name="Transactions_From">de %s</string>
-    <string name="Transaction_Unlimited">%s illimité</string>
     <string name="Transactions_All">Tout</string>
     <string name="Transactions_Filter_Blockchain">Filtrer par blockchain</string>
     <string name="Transactions_Filter_Coin">Pièce</string>
@@ -629,6 +628,8 @@
     <string name="TransactionInfo_YouPaid">Vous avez payé</string>
     <string name="TransactionInfo_YouGet">Vous recevez</string>
     <string name="TransactionInfo_YouGot">Vous avez reçu</string>
+    <string name="TransactionInfo_Received">Reçue</string>
+    <string name="TransactionInfo_Sent">Envoyée</string>
     <string name="TransactionInfo_Resend">Réenvoyer</string>
     <string name="TransactionInfo_RevokeApproval">Révoquer l\'approbation</string>
     <string name="TransactionInfo_Options">Paramètres</string>
