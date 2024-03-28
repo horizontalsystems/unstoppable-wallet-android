@@ -166,7 +166,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     }
 
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetSettingsContent(navController: NavController) {
         val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {
             SendEvmNonceViewModel(nonceService)
         })
