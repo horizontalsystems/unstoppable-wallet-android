@@ -312,20 +312,20 @@
         android:id="@+id/swapTokenSelectFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swaptokenselect.SwapTokenSelectFragment" />
     <fragment
-        android:id="@+id/swapXxx"
-        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapFragment" />
+        android:id="@+id/multiswap"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment" />
     <fragment
         android:id="@+id/swapSelectProvider"
-        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapSelectProviderFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapSelectProviderFragment" />
     <fragment
         android:id="@+id/swapSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapSettingsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsFragment" />
     <fragment
         android:id="@+id/swapTransactionSettings"
-        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.settings.SwapTransactionSettingsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsFragment" />
     <fragment
         android:id="@+id/swapConfirm"
-        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapConfirmFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmFragment" />
     <fragment
         android:id="@+id/sendConfirmation"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
@@ -349,7 +349,7 @@
         android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment" />
     <fragment
         android:id="@+id/swapSelectCoinFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swapxxx.SwapSelectCoinFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapSelectCoinFragment" />
     <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment" />

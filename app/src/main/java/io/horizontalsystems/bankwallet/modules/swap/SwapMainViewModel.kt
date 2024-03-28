@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.evmfee.GasDataError
+import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.AmountTypeItem
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.ExactType
@@ -39,7 +40,6 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchTradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.IUniswapTradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.UniswapV2TradeService
 import io.horizontalsystems.bankwallet.modules.swap.uniswapv3.UniswapV3TradeService
-import io.horizontalsystems.bankwallet.modules.swapxxx.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.EthereumKit
