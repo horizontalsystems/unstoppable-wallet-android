@@ -366,7 +366,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     icon = R.drawable.ic_swap_24,
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
-                        navController.slideFromRight(R.id.swapXxx, viewItem.wallet.token)
+                        navController.slideFromRight(R.id.multiswap, viewItem.wallet.token)
                     },
                     enabled = viewItem.swapEnabled
                 )

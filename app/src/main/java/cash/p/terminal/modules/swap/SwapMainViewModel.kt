@@ -19,6 +19,7 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.GasDataError
+import cash.p.terminal.modules.multiswap.EvmBlockchainHelper
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.swap.SwapMainModule.AmountTypeItem
 import cash.p.terminal.modules.swap.SwapMainModule.ExactType
@@ -39,7 +40,6 @@ import cash.p.terminal.modules.swap.oneinch.OneInchTradeService
 import cash.p.terminal.modules.swap.uniswap.IUniswapTradeService
 import cash.p.terminal.modules.swap.uniswap.UniswapV2TradeService
 import cash.p.terminal.modules.swap.uniswapv3.UniswapV3TradeService
-import cash.p.terminal.modules.swapxxx.EvmBlockchainHelper
 import cash.p.terminal.ui.compose.Select
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.EthereumKit

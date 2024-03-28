@@ -309,20 +309,20 @@
         android:id="@+id/swapTokenSelectFragment"
         android:name="cash.p.terminal.modules.swaptokenselect.SwapTokenSelectFragment" />
     <fragment
-        android:id="@+id/swapXxx"
-        android:name="cash.p.terminal.modules.swapxxx.SwapFragment" />
+        android:id="@+id/multiswap"
+        android:name="cash.p.terminal.modules.multiswap.SwapFragment" />
     <fragment
         android:id="@+id/swapSelectProvider"
-        android:name="cash.p.terminal.modules.swapxxx.SwapSelectProviderFragment" />
+        android:name="cash.p.terminal.modules.multiswap.SwapSelectProviderFragment" />
     <fragment
         android:id="@+id/swapSettings"
-        android:name="cash.p.terminal.modules.swapxxx.settings.SwapSettingsFragment" />
+        android:name="cash.p.terminal.modules.multiswap.settings.SwapSettingsFragment" />
     <fragment
         android:id="@+id/swapTransactionSettings"
-        android:name="cash.p.terminal.modules.swapxxx.settings.SwapTransactionSettingsFragment" />
+        android:name="cash.p.terminal.modules.multiswap.settings.SwapTransactionSettingsFragment" />
     <fragment
         android:id="@+id/swapConfirm"
-        android:name="cash.p.terminal.modules.swapxxx.SwapConfirmFragment" />
+        android:name="cash.p.terminal.modules.multiswap.SwapConfirmFragment" />
     <fragment
         android:id="@+id/sendConfirmation"
         android:name="cash.p.terminal.modules.send.SendConfirmationFragment" />
@@ -346,7 +346,7 @@
         android:name="cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment" />
     <fragment
         android:id="@+id/swapSelectCoinFragment"
-        android:name="cash.p.terminal.modules.swapxxx.SwapSelectCoinFragment" />
+        android:name="cash.p.terminal.modules.multiswap.SwapSelectCoinFragment" />
     <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="cash.p.terminal.modules.balance.token.TokenBalanceFragment" />
