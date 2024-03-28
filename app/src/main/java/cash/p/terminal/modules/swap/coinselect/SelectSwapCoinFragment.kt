@@ -55,6 +55,7 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
                 )
             )
             SelectSwapCoinDialogScreen(
+                title = stringResource(id =R.string.Select_Coins),
                 coinBalanceItems = viewModel.coinItems,
                 onSearchTextChanged = viewModel::onEnterQuery,
                 onClose = navController::popBackStack
@@ -92,6 +93,7 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SelectSwapCoinDialogScreen(
+    title: String,
     coinBalanceItems: List<CoinBalanceItem>,
     onSearchTextChanged: (String) -> Unit,
     onClose: () -> Unit,
@@ -99,7 +101,7 @@ fun SelectSwapCoinDialogScreen(
 ) {
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         SearchBar(
-            title = stringResource(R.string.Select_Coins),
+            title = title,
             searchHintText = stringResource(R.string.ManageCoins_Search),
             onClose = onClose,
             onSearchTextChanged = onSearchTextChanged

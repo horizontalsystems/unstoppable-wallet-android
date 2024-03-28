@@ -686,6 +686,8 @@
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Coin</string>
     <string name="Swap_SwapRouteNotFound">Route not found</string>
+    <string name="Swap_YouPay">You Pay</string>
+    <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">Confirm</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
