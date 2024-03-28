@@ -1,48 +1,39 @@
 package io.horizontalsystems.bankwallet.modules.swapxxx.settings
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 
-class SwapSettingsViewModel(private val settingsService: SwapSettingsService) : ViewModel() {
-    var saveSettingsEnabled by mutableStateOf(settingsService.saveEnabledFlow.value)
+class SwapSettingsViewModel(settings: Map<String, Any?>) : ViewModelUiState<SwapSettingsUiState>() {
+    private var errors = mutableMapOf<String, Throwable>()
+    private val settings = settings.toMutableMap()
 
-    init {
-        viewModelScope.launch {
-            settingsService.saveEnabledFlow.collect {
-                saveSettingsEnabled = it
-            }
-        }
-    }
+    override fun createState() = SwapSettingsUiState(
+        applyEnabled = errors.isEmpty(),
+    )
 
     fun onSettingError(id: String, error: Throwable?) {
-        settingsService.onSettingError(id, error)
+        if (error == null) {
+            errors.remove(id)
+        } else {
+            errors[id] = error
+        }
+
+        emitState()
     }
 
     fun onSettingEnter(id: String, value: Any?) {
-        settingsService.setSetting(id, value)
+        settings[id] = value
     }
 
-    fun saveSettings() {
-        settingsService.save()
-    }
+    fun getSettings() = settings
 
-    fun getSettings(): Map<String, Any?> {
-        return settingsService.getSettings()
-    }
-
-
-    class Factory : ViewModelProvider.Factory {
+    class Factory(private val settings: Map<String, Any?>) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val swapSettingsService = SwapSettingsService()
-
-            return SwapSettingsViewModel(swapSettingsService) as T
+            return SwapSettingsViewModel(settings) as T
         }
     }
-
 }
+
+data class SwapSettingsUiState(val applyEnabled: Boolean)

@@ -17,11 +17,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swapxxx.SwapViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
 class SwapSettingsFragment : BaseComposeFragment() {
@@ -38,7 +36,9 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
         viewModelStoreOwner = previousBackStackEntry!!,
     )
 
-    val viewModel = viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory())
+    val viewModel = viewModel<SwapSettingsViewModel>(factory = SwapSettingsViewModel.Factory(swapViewModel.getSettings()))
+
+    val uiState = viewModel.uiState
 
     Scaffold(
         topBar = {
@@ -47,14 +47,6 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                 navigationIcon = {
                     HsBackButton(onClick = { navController.popBackStack() })
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Reset),
-                        onClick = {
-
-                        }
-                    )
-                ),
             )
         },
         bottomBar = {
@@ -64,9 +56,8 @@ private fun SwapProviderSettingsScreen(navController: NavController) {
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     title = stringResource(id = R.string.SwapSettings_Apply),
-                    enabled = viewModel.saveSettingsEnabled,
+                    enabled = uiState.applyEnabled,
                     onClick = {
-                        viewModel.saveSettings()
                         swapViewModel.onUpdateSettings(viewModel.getSettings())
                         navController.popBackStack()
                     }
