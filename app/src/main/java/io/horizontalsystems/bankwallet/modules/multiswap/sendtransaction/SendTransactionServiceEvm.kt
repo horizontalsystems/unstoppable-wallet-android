@@ -162,7 +162,6 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         val gasLimit = transaction.gasData.gasLimit
         val nonce = transaction.nonce
 
-//        delay(2000)
         evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
     }
 
