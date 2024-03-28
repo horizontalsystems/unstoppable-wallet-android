@@ -1017,7 +1017,7 @@ class TransactionViewItemFactory(
 
         if (value.isMaxValue) {
             primaryValueText = "∞"
-            secondaryValueText = if (value.coinCode.isEmpty()) "" else Translator.getString(R.string.Transaction_Unlimited, value.coinCode)
+            secondaryValueText = if (value.coinCode.isEmpty()) "" else Translator.getString(R.string.Transaction_Unlimited_CoinCode, value.coinCode)
         } else {
             primaryValueText = getCoinString(value, hideSign = true)
             secondaryValueText = currencyValue?.let { getCurrencyString(it) }

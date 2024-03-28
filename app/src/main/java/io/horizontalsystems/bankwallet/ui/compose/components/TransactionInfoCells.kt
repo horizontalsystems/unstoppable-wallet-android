@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -32,14 +33,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.nft.NftUid
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
+import io.horizontalsystems.bankwallet.modules.transactionInfo.AmountType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
@@ -98,26 +97,15 @@ fun WarningMessageCell(message: String) {
 
 @Composable
 fun TransactionNftAmountCell(
+    title: String,
     amount: ColoredValue,
+    nftName: String?,
     iconUrl: String?,
     iconPlaceholder: Int?,
-    nftUid: NftUid,
-    providerCollectionUid: String?,
-    navController: NavController
+    badge: String?,
 ) {
-    var modifier = Modifier.padding(horizontal = 16.dp)
-
-    if (nftUid.blockchainType !is BlockchainType.Solana) {
-        modifier = modifier.clickable {
-            navController.slideFromBottom(
-                    R.id.nftAssetFragment,
-                    NftAssetModule.Input(providerCollectionUid, nftUid)
-            )
-        }
-    }
-
     RowUniversal(
-        modifier = modifier,
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             iconUrl = iconUrl,
@@ -126,42 +114,70 @@ fun TransactionNftAmountCell(
                 .size(32.dp)
                 .clip(RoundedCornerShape(CornerSize(4.dp)))
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        SubHead1ColoredValue(value = amount)
-        Spacer(Modifier.weight(1f))
-        Icon(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(R.drawable.ic_info_20),
-            tint = ComposeAppTheme.colors.grey,
-            contentDescription = null
-        )
+        HSpacer(16.dp)
+        Column {
+            subhead2_leah(text = title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+        }
+        HSpacer(8.dp)
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.End
+        ) {
+            SubHead1ColoredValue(value = amount)
+            nftName?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(
+                    text = it,
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun TransactionAmountCell(
+    amountType: AmountType,
     fiatAmount: ColoredValue?,
     coinAmount: ColoredValue,
     coinIconUrl: String?,
+    badge: String?,
     coinIconPlaceholder: Int?,
-    coinUid: String?,
-    navController: NavController
+    onClick: (() -> Unit)? = null
 ) {
+    val title = when (amountType) {
+        AmountType.YouSent -> stringResource(R.string.TransactionInfo_YouSent)
+        AmountType.YouGot -> stringResource(R.string.TransactionInfo_YouGot)
+        AmountType.Received -> stringResource(R.string.TransactionInfo_Received)
+        AmountType.Sent -> stringResource(R.string.TransactionInfo_Sent)
+        AmountType.Approved -> stringResource(R.string.TransactionInfo_Approved)
+    }
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = coinUid?.let {
-            { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it, "transaction_info")) }
-        }
+        onClick = onClick
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier.size(32.dp)
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        SubHead1ColoredValue(value = coinAmount)
-        Spacer(Modifier.weight(1f))
-        fiatAmount?.let { SubHead2ColoredValue(value = it) }
+        HSpacer(16.dp)
+        Column {
+            subhead2_leah(text = title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+        }
+        HFillSpacer(minWidth = 8.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            SubHead1ColoredValue(value = coinAmount)
+            fiatAmount?.let {
+                VSpacer(height = 1.dp)
+                SubHead2ColoredValue(value = it)
+            }
+        }
     }
 }
 
