@@ -13,7 +13,7 @@ abstract class ISendTransactionService: ServiceState<SendTransactionServiceState
     abstract fun start(coroutineScope: CoroutineScope)
     abstract fun setSendTransactionData(data: SendTransactionData)
     @Composable
-    abstract fun GetContent(navController: NavController)
+    abstract fun GetSettingsContent(navController: NavController)
     abstract suspend fun sendTransaction()
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
 }

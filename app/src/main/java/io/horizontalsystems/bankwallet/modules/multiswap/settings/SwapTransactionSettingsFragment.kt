@@ -21,5 +21,5 @@ fun SwapTransactionSettingsScreen(navController: NavController) {
 
     val sendTransactionService = viewModel.sendTransactionService
 
-    sendTransactionService.GetContent(navController)
+    sendTransactionService.GetSettingsContent(navController)
 }
