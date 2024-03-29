@@ -239,7 +239,7 @@ fun SwapConfirmScreen(navController: NavController) {
 private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subvalue: String? = null) {
     CellUniversal(borderTop = borderTop) {
         subhead2_grey(text = title)
-        HFillSpacer(minWidth = 8.dp)
+        HFillSpacer(minWidth = 16.dp)
         Column(horizontalAlignment = Alignment.End) {
             subhead1_leah(text = value)
             subvalue?.let {
@@ -280,7 +280,7 @@ private fun TokenRow(
             VSpacer(height = 1.dp)
             caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
-        HFillSpacer(minWidth = 8.dp)
+        HFillSpacer(minWidth = 16.dp)
         Column(horizontalAlignment = Alignment.End) {
             val color = when (type) {
                 TokenRowType.In -> ComposeAppTheme.colors.leah
