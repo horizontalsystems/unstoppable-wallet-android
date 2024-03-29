@@ -83,7 +83,6 @@ import cash.p.terminal.ui.compose.components.TextImportantError
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_grey
-import cash.p.terminal.ui.compose.components.cell.CellUniversal
 import cash.p.terminal.ui.compose.components.headline1_grey
 import cash.p.terminal.ui.compose.components.headline1_leah
 import cash.p.terminal.ui.compose.components.micro_grey
@@ -475,7 +474,7 @@ private fun ProviderField(
             },
             onClickSelect = onClickProvider
         )
-        HFillSpacer(minWidth = 8.dp)
+        HFillSpacer(minWidth = 16.dp)
         Icon(
             modifier = Modifier.clickable(
                 onClick = onClickProviderSettings
@@ -516,18 +515,6 @@ fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut:
             )
         }
     )
-}
-
-@Composable
-fun QuoteInfoRow(
-    title: @Composable() (RowScope.() -> Unit),
-    value: @Composable() (RowScope.() -> Unit),
-) {
-    CellUniversal(borderTop = false) {
-        title.invoke(this)
-        HFillSpacer(minWidth = 8.dp)
-        value.invoke(this)
-    }
 }
 
 @Composable
