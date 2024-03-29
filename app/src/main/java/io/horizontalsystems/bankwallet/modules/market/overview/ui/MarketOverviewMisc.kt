@@ -8,18 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
-import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-
-fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
-    val arguments = CoinFragment.Input(marketViewItem.coinUid, "market_overview")
-    navController.slideFromRight(R.id.coinFragment, arguments)
-}
 
 @Composable
 fun SeeAllButton(onClick: () -> Unit) {
