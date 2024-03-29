@@ -27,6 +27,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -122,11 +123,22 @@ fun TransactionsScreen(
                             ) {
                                 LazyListState(0, 0)
                             }
+
+                            val onClick: (TransactionViewItem) -> Unit = remember {
+                                {
+                                    onTransactionClick(
+                                        it,
+                                        viewModel,
+                                        navController
+                                    )
+                                }
+                            }
+
                             LazyColumn(state = listState) {
                                 transactionList(
                                     transactionsMap = transactionItems,
                                     willShow = { viewModel.willShow(it) },
-                                    onClick = { onTransactionClick(it, viewModel, navController) },
+                                    onClick = onClick,
                                     onBottomReached = { viewModel.onBottomReached() }
                                 )
                             }
@@ -167,7 +179,12 @@ fun LazyListScope.transactionList(
         val itemsCount = transactions.size
         val singleElement = itemsCount == 1
 
-        itemsIndexed(transactions) { index, item ->
+        itemsIndexed(
+            items = transactions,
+            key = { _, item ->
+                item.uid
+            }
+        ) { index, item ->
             val position: SectionItemPosition = when {
                 singleElement -> SectionItemPosition.Single
                 index == 0 -> SectionItemPosition.First
