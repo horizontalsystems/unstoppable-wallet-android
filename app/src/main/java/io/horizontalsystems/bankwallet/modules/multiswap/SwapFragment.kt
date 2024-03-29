@@ -496,7 +496,7 @@ fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut:
             subhead2_grey(text = stringResource(R.string.Swap_Price))
         },
         value = {
-            subhead2_leah(
+            Row(
                 modifier = Modifier
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
@@ -505,14 +505,22 @@ fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut:
                             showRegularPrice = !showRegularPrice
                         }
                     ),
-                text = if (showRegularPrice) swapPriceUIHelper.priceStr else swapPriceUIHelper.priceInvStr
-            )
-            HSpacer(width = 8.dp)
-            Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
-                contentDescription = "invert price",
-                tint = ComposeAppTheme.colors.grey
-            )
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                subhead2_leah(
+                    text = if (showRegularPrice) {
+                        swapPriceUIHelper.priceStr
+                    } else {
+                        swapPriceUIHelper.priceInvStr
+                    }
+                )
+                HSpacer(width = 8.dp)
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_arrow_swap3_20),
+                    contentDescription = "invert price",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
     )
 }
