@@ -18,6 +18,7 @@ import cash.p.terminal.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class SwapConfirmViewModel(
@@ -204,7 +205,7 @@ class SwapConfirmViewModel(
         }
     }
 
-    suspend fun swap() {
+    suspend fun swap() = withContext(Dispatchers.Default) {
         sendTransactionService.sendTransaction()
     }
 
