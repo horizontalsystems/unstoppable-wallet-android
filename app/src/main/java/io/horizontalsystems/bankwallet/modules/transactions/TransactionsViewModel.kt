@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
@@ -204,6 +205,7 @@ data class TransactionItem(
     val createdAt = System.currentTimeMillis()
 }
 
+@Immutable
 data class TransactionViewItem(
     val uid: String,
     val progress: Float?,
