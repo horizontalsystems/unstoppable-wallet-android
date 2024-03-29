@@ -25,6 +25,8 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -53,6 +55,7 @@ class TransactionsViewModel(
     private var syncing = false
 
     private val disposables = CompositeDisposable()
+    private var refreshViewItemsJob: Job? = null
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
@@ -124,13 +127,7 @@ class TransactionsViewModel(
 
         service.itemsObservable
             .subscribeIO { items ->
-                val viewItems = items
-                    .map { transactionViewItem2Factory.convertToViewItemCached(it) }
-                    .groupBy { it.formattedDate }
-
-                transactions = viewItems
-                viewState = ViewState.Success
-                emitState()
+                handleUpdatedItems(items)
             }
             .let {
                 disposables.add(it)
@@ -141,6 +138,27 @@ class TransactionsViewModel(
                 transactionViewItem2Factory.updateCache()
                 service.refreshList()
             }
+        }
+    }
+
+    private fun handleUpdatedItems(items: List<TransactionItem>) {
+        refreshViewItemsJob?.cancel()
+        refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
+            val viewItems = items
+                .map {
+                    ensureActive()
+                    transactionViewItem2Factory.convertToViewItemCached(it)
+                }
+                .groupBy {
+                    ensureActive()
+                    it.formattedDate
+                }
+
+            transactions = viewItems
+            viewState = ViewState.Success
+
+            ensureActive()
+            emitState()
         }
     }
 
