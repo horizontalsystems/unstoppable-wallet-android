@@ -232,13 +232,17 @@ fun BalanceItems(
             item {
                 TotalBalanceRow(
                     totalState = totalState,
-                    onClickTitle = {
-                        viewModel.toggleBalanceVisibility()
-                        HudHelper.vibrate(context)
+                    onClickTitle = remember {
+                        {
+                            viewModel.toggleBalanceVisibility()
+                            HudHelper.vibrate(context)
+                        }
                     },
-                    onClickSubtitle = {
-                        viewModel.toggleTotalType()
-                        HudHelper.vibrate(context)
+                    onClickSubtitle = remember {
+                        {
+                            viewModel.toggleTotalType()
+                            HudHelper.vibrate(context)
+                        }
                     }
                 )
             }
