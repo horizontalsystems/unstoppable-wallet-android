@@ -593,32 +593,30 @@ class TransactionInfoViewItemFactory(
         rates: Map<String, CurrencyValue>,
         amount: SwapTransactionRecord.Amount?,
         hideAmount: Boolean,
-    ): List<TransactionInfoViewItem> {
-        val items: MutableList<TransactionInfoViewItem> = mutableListOf()
+    ) = buildList {
         valueIn?.let {
-            items.add(
+            add(
                 getAmount(
                     rates[valueIn.coinUid],
                     valueIn,
-                    true,
+                    false,
                     hideAmount,
-                    AmountType.YouGot,
+                    AmountType.YouSent,
                     amount
                 )
             )
         }
         valueOut?.let {
-            items.add(0,
+            add(
                 getAmount(
                     rates[valueOut.coinUid],
                     valueOut,
-                    false,
+                    true,
                     hideAmount,
-                    AmountType.YouSent
+                    AmountType.YouGot
                 )
             )
         }
-        return items
     }
 
     private fun getSwapDetailsSectionItems(
