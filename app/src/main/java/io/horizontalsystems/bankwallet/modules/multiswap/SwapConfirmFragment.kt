@@ -1,6 +1,9 @@
 package cash.p.terminal.modules.multiswap
 
 import android.os.Parcelable
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -28,12 +32,14 @@ import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.setNavigationResultX
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.Cautions
+import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -205,7 +211,7 @@ fun SwapConfirmScreen(navController: NavController) {
                         } ?: "---"
 
                         SwapInfoRow(
-                            borderTop = false,
+                            borderTop = true,
                             title = stringResource(id = R.string.Swap_MinimumReceived),
                             value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
                             subvalue = subvalue
@@ -218,11 +224,42 @@ fun SwapConfirmScreen(navController: NavController) {
             }
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
-                SwapInfoRow(
-                    borderTop = false,
-                    title = stringResource(id = R.string.FeeSettings_NetworkFee),
-                    value = uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
-                    subvalue = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+                QuoteInfoRow(
+                    title = {
+                        val title = stringResource(id = R.string.FeeSettings_NetworkFee)
+                        val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+
+                        subhead2_grey(text = title)
+
+                        Image(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .clickable(
+                                    onClick = {
+                                        navController.slideFromBottom(
+                                            R.id.feeSettingsInfoDialog,
+                                            FeeSettingsInfoDialog.Input(title, infoText)
+                                        )
+                                    },
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                )
+                            ,
+                            painter = painterResource(id = R.drawable.ic_info_20),
+                            contentDescription = ""
+                        )
+
+                    },
+                    value = {
+                        val primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---"
+                        val secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+
+                        Column(horizontalAlignment = Alignment.End) {
+                            subhead2_leah(text = primary)
+                            VSpacer(height = 1.dp)
+                            subhead2_grey(text = secondary)
+                        }
+                    }
                 )
             }
 
@@ -241,7 +278,7 @@ private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subval
         subhead2_grey(text = title)
         HFillSpacer(minWidth = 16.dp)
         Column(horizontalAlignment = Alignment.End) {
-            subhead1_leah(text = value)
+            subhead2_leah(text = value)
             subvalue?.let {
                 VSpacer(height = 1.dp)
                 caption_grey(text = it)
