@@ -46,128 +46,142 @@ class EvmSyncSourceManager(
         get() = syncSourceSubject
 
     fun defaultSyncSources(blockchainType: BlockchainType): List<EvmSyncSource> {
-        return when (val type = blockchainType) {
+        return when (blockchainType) {
             BlockchainType.Ethereum -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "BlocksDecoded",
                     RpcSource.Http(listOf(URI(appConfigProvider.blocksDecodedEthereumRpc)), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "LlamaNodes",
                     RpcSource.Http(listOf(URI("https://eth.llamarpc.com")), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             BlockchainType.BinanceSmartChain -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Binance",
                     RpcSource.binanceSmartChainHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "BSC RPC",
                     RpcSource.bscRpcHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Omnia",
                     RpcSource.Http(listOf(URI("https://endpoints.omniatech.io/v1/bsc/mainnet/public")), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             BlockchainType.Polygon -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Polygon RPC",
                     RpcSource.polygonRpcHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "LlamaNodes",
                     RpcSource.Http(listOf(URI("https://polygon.llamarpc.com")), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             BlockchainType.Avalanche -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Avax Network",
                     RpcSource.avaxNetworkHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "PublicNode",
                     RpcSource.Http(listOf(URI("https://avalanche-evm.publicnode.com")), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             BlockchainType.Optimism -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Optimism",
                     RpcSource.optimismRpcHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Omnia",
                     RpcSource.Http(
                         listOf(URI("https://endpoints.omniatech.io/v1/op/mainnet/public")),
                         null
                     ),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             BlockchainType.ArbitrumOne -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Arbitrum",
                     RpcSource.arbitrumOneRpcHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Omnia",
                     RpcSource.Http(listOf(URI("https://endpoints.omniatech.io/v1/arbitrum/one/public")), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             BlockchainType.Gnosis -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Gnosis Chain",
                     RpcSource.gnosisRpcHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Ankr",
                     RpcSource.Http(listOf(URI("https://rpc.ankr.com/gnosis")), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             BlockchainType.Fantom -> listOf(
                 evmSyncSource(
-                    type,
+                    blockchainType,
                     "Fantom Chain",
                     RpcSource.fantomRpcHttp(),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
-                    type,
+                    blockchainType,
+                    "Fantom Chain (Mirror)",
+                    RpcSource.Http(listOf(URI("https://rpcapi.fantom.network/")), null),
+                    defaultTransactionSource(blockchainType)
+                ),
+                evmSyncSource(
+                    blockchainType,
                     "Ankr",
                     RpcSource.Http(listOf(URI("https://rpc.ankr.com/fantom")), null),
-                    defaultTransactionSource(type)
+                    defaultTransactionSource(blockchainType)
                 )
             )
+
             else -> listOf()
         }
     }
@@ -180,8 +194,10 @@ class EvmSyncSourceManager(
                 val rpcSource = when (uri.scheme) {
                     "http",
                     "https" -> RpcSource.Http(listOf(URI(record.url)), record.auth)
+
                     "ws",
                     "wss" -> RpcSource.WebSocket(URI(record.url), record.auth)
+
                     else -> return@mapNotNull null
                 }
                 EvmSyncSource(
