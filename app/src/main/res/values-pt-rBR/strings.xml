@@ -522,6 +522,8 @@
     <string name="Swap_SelectSwapProvider_FeeInfo">Uma taxa de serviço para a ação de troca na plataforma normalmente 0,3% ou 0,6%</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moeda</string>
+    <string name="Swap_YouPay">Você Paga</string>
+    <string name="Swap_YouGet">Você recebe</string>
     <string name="Swap_Confirm_Title">Confirmar</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configurações de troca</string>
