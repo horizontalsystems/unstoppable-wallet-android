@@ -10,7 +10,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
-data class SwapDataFieldRecipient(val address: Address) : SwapDataField {
+data class DataFieldRecipient(val address: Address) : DataField {
     @Composable
     override fun GetContent(navController: NavController, borderTop: Boolean) {
         QuoteInfoRow(
