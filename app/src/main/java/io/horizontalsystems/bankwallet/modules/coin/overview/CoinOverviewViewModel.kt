@@ -210,7 +210,7 @@ class CoinOverviewViewModel(
                         canAddToWallet && activeWallets.any { it.token == token }
                     items.add(
                         TokenVariant(
-                            value = derivation.addressType,
+                            value = derivation.addressType + derivation.recommended,
                             copyValue = null,
                             imgUrl = token.blockchainType.imageUrl,
                             explorerUrl = null,
