@@ -547,6 +547,8 @@
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_AmountTypeCoin">Монета</string>
+    <string name="Swap_YouPay">Вы платите</string>
+    <string name="Swap_YouGet">Вы получите</string>
     <string name="Swap_Confirm_Title">Подтвердить</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Настройки обмена</string>
