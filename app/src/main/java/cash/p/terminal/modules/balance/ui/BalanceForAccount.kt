@@ -33,7 +33,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.backupalert.BackupAlert
@@ -46,8 +45,8 @@ import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.modules.walletconnect.WCManager
+import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -166,19 +165,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                 when (viewState) {
                     ViewState.Success -> {
                         val balanceViewItems = uiState.balanceViewItems
-
-                        if (balanceViewItems.isNotEmpty()) {
-                            BalanceItems(
-                                balanceViewItems,
-                                viewModel,
-                                accountViewItem,
-                                navController,
-                                uiState,
-                                viewModel.totalUiState
-                            )
-                        } else {
-                            BalanceItemsEmpty(navController)
-                        }
+                        BalanceItems(
+                            balanceViewItems,
+                            viewModel,
+                            accountViewItem,
+                            navController,
+                            uiState,
+                            viewModel.totalUiState
+                        )
                     }
 
                     ViewState.Loading,
