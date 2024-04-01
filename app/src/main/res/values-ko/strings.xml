@@ -304,6 +304,8 @@
     <string name="Balance_Receive_NotActive">비활성화됨</string>
     <string name="Balance_LockedAmount_Title">잠김</string>
     <string name="Balance_Error_InvalidQrCode">인식할 수 없음</string>
+    <string name="Balance_SendHint_CoinName">코인 이름</string>
+    <string name="Balance_ReceiveHint_Search">검색</string>
     <!--Send NFT-->
     <string name="SendNft_Title">전송</string>
     <string name="SendNft_Error_NotEnoughtBalance">잔고 부족</string>
