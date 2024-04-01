@@ -273,6 +273,16 @@ fun AdvancedSearchContent(
     }
     VSpacer(height = 32.dp)
 
+    HeaderText(stringResource(R.string.Market_FilterSection_Indicators))
+    SectionUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_TradingSignals,
+            value = uiState.filterTradingSignal.title,
+            onDropdownClick = { showBottomSheet(TradingSignals) }
+        )
+    }
+    VSpacer(32.dp)
+
     HeaderText(stringResource(R.string.Market_FilterSection_MarketParameters))
     SectionUniversalLawrence {
         AdvancedSearchDropdown(
@@ -321,16 +331,6 @@ fun AdvancedSearchContent(
         )
     }
     VSpacer(height = 32.dp)
-
-    HeaderText(stringResource(R.string.Market_FilterSection_Indicators))
-    SectionUniversalLawrence {
-        AdvancedSearchDropdown(
-            title = R.string.Market_Filter_TradingSignals,
-            value = uiState.filterTradingSignal.title,
-            onDropdownClick = { showBottomSheet(TradingSignals) }
-        )
-    }
-    VSpacer(32.dp)
 
     HeaderText(stringResource(R.string.Market_FilterSection_PriceParameters))
     SectionUniversalLawrence {
