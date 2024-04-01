@@ -184,7 +184,8 @@ fun TransactionAmountCell(
 @Composable
 fun TitleAndValueCell(
     title: String,
-    value: String
+    value: String,
+    valueIcon: Int? = null
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -192,6 +193,14 @@ fun TitleAndValueCell(
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
         Spacer(Modifier.weight(1f))
         subhead1_leah(text = value, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        valueIcon?.let {
+            HSpacer(8.dp)
+            Icon(
+                painter = painterResource(valueIcon),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
     }
 }
 
