@@ -33,7 +33,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.backupalert.BackupAlert
@@ -46,8 +45,8 @@ import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModu
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -166,19 +165,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                 when (viewState) {
                     ViewState.Success -> {
                         val balanceViewItems = uiState.balanceViewItems
-
-                        if (balanceViewItems.isNotEmpty()) {
-                            BalanceItems(
-                                balanceViewItems,
-                                viewModel,
-                                accountViewItem,
-                                navController,
-                                uiState,
-                                viewModel.totalUiState
-                            )
-                        } else {
-                            BalanceItemsEmpty(navController)
-                        }
+                        BalanceItems(
+                            balanceViewItems,
+                            viewModel,
+                            accountViewItem,
+                            navController,
+                            uiState,
+                            viewModel.totalUiState
+                        )
                     }
 
                     ViewState.Loading,

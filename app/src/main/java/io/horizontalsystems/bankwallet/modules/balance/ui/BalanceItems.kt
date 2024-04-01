@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -38,6 +40,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -72,6 +76,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -371,33 +376,39 @@ fun BalanceItems(
                 }
             }
 
-            wallets(
-                items = balanceViewItems,
-                key = {
-                    it.wallet.hashCode()
+            if (balanceViewItems.isEmpty()) {
+                item {
+                    NoCoinsBlock()
                 }
-            ) { item ->
-                BalanceCardSwipable(
-                    viewItem = item,
-                    revealed = revealedCardId == item.wallet.hashCode(),
-                    onReveal = { walletHashCode ->
-                        if (revealedCardId != walletHashCode) {
-                            revealedCardId = walletHashCode
-                        }
-                    },
-                    onConceal = {
-                        revealedCardId = null
-                    },
-                    onClick = {
-                        navigateToTokenBalance.invoke(item)
-                    },
-                    onClickSyncError = {
-                        onClickSyncError.invoke(item)
-                    },
-                    onDisable = {
-                        onDisable.invoke(item)
+            } else {
+                wallets(
+                    items = balanceViewItems,
+                    key = {
+                        it.wallet.hashCode()
                     }
-                )
+                ) { item ->
+                    BalanceCardSwipable(
+                        viewItem = item,
+                        revealed = revealedCardId == item.wallet.hashCode(),
+                        onReveal = { walletHashCode ->
+                            if (revealedCardId != walletHashCode) {
+                                revealedCardId = walletHashCode
+                            }
+                        },
+                        onConceal = {
+                            revealedCardId = null
+                        },
+                        onClick = {
+                            navigateToTokenBalance.invoke(item)
+                        },
+                        onClickSyncError = {
+                            onClickSyncError.invoke(item)
+                        },
+                        onDisable = {
+                            onDisable.invoke(item)
+                        }
+                    )
+                }
             }
         }
     }
@@ -412,6 +423,40 @@ fun BalanceItems(
             )
         )
         viewModel.onSendOpened()
+    }
+}
+
+@Composable
+private fun NoCoinsBlock() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        VSpacer(height = 100.dp)
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(
+                    color = ComposeAppTheme.colors.raina,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(R.drawable.ic_empty_wallet),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+        VSpacer(32.dp)
+        subhead2_grey(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.Balance_NoCoinsAlert),
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+        )
+        VSpacer(height = 32.dp)
     }
 }
 
