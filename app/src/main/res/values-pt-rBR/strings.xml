@@ -276,7 +276,6 @@
     <string name="Balance_ScanningBlocks">Verificando Blocos</string>
     <string name="Balance_Backup_Alert">Você precisa fazer um backup da carteira %1$s antes de poder receber %2$s.</string>
     <string name="Balance_NoWalletAlert">Você ainda não tem nenhuma carteira instalada.\nCrie uma nova carteira ou restaure uma já existente </string>
-    <string name="Balance_NoCoinsAlert">Você não tem moedas adicionadas.\nAdicione as moedas que você usará</string>
     <string name="Balance_WatchAccount_NoBalance">Este endereço da carteira não tem nenhum saldo</string>
     <string name="Balance_NoAssetsToSend">Você não tem ativos para enviar.</string>
     <string name="Balance_NoAssetsToSwap">Você não tem nenhum ativo para trocar.</string>
