@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.math.BigDecimal
 
 class SwapQuoteService {
@@ -128,8 +129,10 @@ class SwapQuoteService {
             .map { provider ->
                 async {
                     try {
-                        val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
-                        SwapProviderQuote(provider = provider, swapQuote = quote)
+                        withTimeout(5000) {
+                            val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
+                            SwapProviderQuote(provider = provider, swapQuote = quote)
+                        }
                     } catch (e: Throwable) {
                         Log.d("AAA", "fetchQuoteError: ${provider.id}", e)
                         null
