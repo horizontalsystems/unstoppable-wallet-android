@@ -144,6 +144,7 @@
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <string name="Balance_NoCoinsAlert">شما سکه اضافه ای ندارید.\nسکه هایی را که استفاده می کنید اضافه کنید</string>
     <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
+    <string name="Balance_SendHint_CoinName">نام سکه</string>
     <!--Send NFT-->
     <string name="SendNft_Title">ارسال</string>
     <!--Send-->
