@@ -20,13 +20,13 @@ interface ISwapQuote {
 }
 
 class SwapQuoteUniswap(
+    val tradeData: TradeData,
     override val fields: List<SwapDataField>,
     override val settings: List<ISwapSetting>,
     override val tokenIn: Token,
     override val tokenOut: Token,
     override val amountIn: BigDecimal,
-    override val actionRequired: ISwapProviderAction?,
-    val tradeData: TradeData
+    override val actionRequired: ISwapProviderAction?
 ) : ISwapQuote {
     override val amountOut: BigDecimal = tradeData.amountOut!!
     override val priceImpact: BigDecimal? = tradeData.priceImpact
