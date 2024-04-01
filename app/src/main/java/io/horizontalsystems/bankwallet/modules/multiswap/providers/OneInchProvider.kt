@@ -144,7 +144,7 @@ object OneInchProvider : EvmSwapProvider() {
 
         val fields = buildList {
             settingRecipient.value?.let {
-                add(SwapDataFieldRecipientExtended(it, blockchainType))
+                add(SwapDataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
