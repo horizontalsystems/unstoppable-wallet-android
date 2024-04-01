@@ -303,6 +303,8 @@
     <string name="Balance_Receive_NotActive">Non actif</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
+    <string name="Balance_SendHint_CoinName">Nom de la pièce</string>
+    <string name="Balance_ReceiveHint_Search">Chercher</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <string name="SendNft_Error_NotEnoughtBalance">Solde insuffisant</string>
