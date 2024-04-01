@@ -27,8 +27,9 @@ data class SwapDataFieldRecipientExtended(
     val blockchainType: BlockchainType
 ) : SwapDataField {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavController, borderTop: Boolean) {
         QuoteInfoRow(
+            borderTop = borderTop,
             title = {
                 subhead2_grey(text = stringResource(R.string.Swap_Recipient))
             },
@@ -58,6 +59,7 @@ data class SwapDataFieldRecipientExtended(
 
         contact?.name?.let { name ->
             QuoteInfoRow(
+                borderTop = borderTop,
                 title = {
                     subhead2_grey(text = stringResource(R.string.TransactionInfo_ContactName))
                 },
@@ -80,6 +82,6 @@ fun SwapDataFieldRecipientExtendedPreview() {
         SwapDataFieldRecipientExtended(
             Address("0x1234567890abcdef1234567890abcdef12345678"),
             BlockchainType.Bitcoin
-        ).GetContent(navController = navController)
+        ).GetContent(navController = navController, borderTop = true)
     }
 }

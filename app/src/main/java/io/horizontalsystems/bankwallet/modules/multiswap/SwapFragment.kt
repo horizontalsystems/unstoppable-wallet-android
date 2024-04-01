@@ -335,7 +335,7 @@ private fun SwapScreenInner(
                         PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
                         PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                         quote.fields.forEach {
-                            it.GetContent(navController)
+                            it.GetContent(navController, false)
                         }
                     }
                 } else {

@@ -12,8 +12,9 @@ import cash.p.terminal.ui.compose.components.subhead2_leah
 
 data class SwapDataFieldRecipient(val address: Address) : SwapDataField {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavController, borderTop: Boolean) {
         QuoteInfoRow(
+            borderTop = borderTop,
             title = {
                 subhead2_grey(text = stringResource(R.string.Swap_Recipient))
             },

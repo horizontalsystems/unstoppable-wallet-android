@@ -218,7 +218,7 @@ fun SwapConfirmScreen(navController: NavController) {
                         )
                     }
                     uiState.fields.forEach {
-                        it.GetContent(navController)
+                        it.GetContent(navController, true)
                     }
                 }
             }

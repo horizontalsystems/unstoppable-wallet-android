@@ -12,8 +12,9 @@ import java.math.BigDecimal
 
 data class SwapDataFieldSlippage(val slippage: BigDecimal) : SwapDataField {
     @Composable
-    override fun GetContent(navController: NavController) {
+    override fun GetContent(navController: NavController, borderTop: Boolean) {
         QuoteInfoRow(
+            borderTop = borderTop,
             title = {
                 subhead2_grey(text = stringResource(R.string.Swap_Slippage))
             },

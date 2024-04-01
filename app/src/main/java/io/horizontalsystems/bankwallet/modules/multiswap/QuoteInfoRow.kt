@@ -18,10 +18,11 @@ import cash.p.terminal.ui.compose.components.subhead2_leah
 
 @Composable
 fun QuoteInfoRow(
+    borderTop: Boolean = false,
     title: @Composable() (RowScope.() -> Unit),
     value: @Composable() (RowScope.() -> Unit),
 ) {
-    CellUniversal(borderTop = false) {
+    CellUniversal(borderTop = borderTop) {
         title.invoke(this)
         HSpacer(width = 16.dp)
         Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.End) {

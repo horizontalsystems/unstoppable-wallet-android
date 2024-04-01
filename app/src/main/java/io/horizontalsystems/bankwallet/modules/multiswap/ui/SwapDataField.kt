@@ -5,5 +5,5 @@ import androidx.navigation.NavController
 
 interface SwapDataField {
     @Composable
-    fun GetContent(navController: NavController)
+    fun GetContent(navController: NavController, borderTop: Boolean)
 }
