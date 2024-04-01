@@ -258,7 +258,6 @@
     <string name="Balance_ScanningBlocks">Bloques de escaneo</string>
     <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <string name="Balance_NoWalletAlert">Aún no tiene ninguna cartera instalada.\nCrear una nueva cartera o restaurar una existente </string>
-    <string name="Balance_NoCoinsAlert">No tienes monedas añadidas.\nAñade las monedas que usarás</string>
     <string name="Balance_WatchAccount_NoBalance">Esta dirección de billetera no tiene saldo</string>
     <string name="Balance_NoAssetsToSend">No tiene activos para enviar.</string>
     <string name="Balance_NoAssetsToSwap">No tiene activos para intercambiar.</string>
