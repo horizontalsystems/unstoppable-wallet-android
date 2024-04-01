@@ -466,6 +466,8 @@
     <string name="Swap_AmountEstimated">(tah)</string>
     <string name="Swap_AmountMin">(dk)</string>
     <string name="Swap_AmountMax">(azami)</string>
+    <string name="Swap_YouPay">Ödediğiniz</string>
+    <string name="Swap_YouGet">Kazandığınız</string>
     <string name="Swap_Confirm_Title">Onayla</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Ayarları</string>
