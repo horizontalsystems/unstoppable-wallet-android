@@ -3,7 +3,7 @@ package cash.p.terminal.modules.multiswap.providers
 import cash.p.terminal.modules.multiswap.EvmBlockchainHelper
 import cash.p.terminal.modules.multiswap.ISwapFinalQuote
 import cash.p.terminal.modules.multiswap.ISwapQuote
-import cash.p.terminal.modules.multiswap.SwapFinalQuoteUniswapV3
+import cash.p.terminal.modules.multiswap.SwapFinalQuoteEvm
 import cash.p.terminal.modules.multiswap.SwapQuoteUniswapV3
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -135,14 +135,14 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             }
         }
 
-        return SwapFinalQuoteUniswapV3(
+        return SwapFinalQuoteEvm(
             tokenIn,
             tokenOut,
             amountIn,
             amountOut,
             amountOutMin,
             SendTransactionData.Evm(transactionData, null),
-            swapQuote.tradeDataV3.priceImpact,
+            swapQuote.priceImpact,
             fields
         )
     }

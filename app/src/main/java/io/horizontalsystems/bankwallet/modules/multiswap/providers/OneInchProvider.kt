@@ -6,7 +6,7 @@ import cash.p.terminal.core.convertedError
 import cash.p.terminal.modules.multiswap.EvmBlockchainHelper
 import cash.p.terminal.modules.multiswap.ISwapFinalQuote
 import cash.p.terminal.modules.multiswap.ISwapQuote
-import cash.p.terminal.modules.multiswap.SwapFinalQuoteOneInch
+import cash.p.terminal.modules.multiswap.SwapFinalQuoteEvm
 import cash.p.terminal.modules.multiswap.SwapQuoteOneInch
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -151,7 +151,7 @@ object OneInchProvider : EvmSwapProvider() {
             }
         }
 
-        return SwapFinalQuoteOneInch(
+        return SwapFinalQuoteEvm(
             tokenIn,
             tokenOut,
             amountIn,
