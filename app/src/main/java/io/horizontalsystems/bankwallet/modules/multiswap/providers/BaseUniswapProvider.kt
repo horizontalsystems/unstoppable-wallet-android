@@ -10,10 +10,10 @@ import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTra
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingDeadline
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldAllowance
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldRecipient
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldRecipientExtended
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldSlippage
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.Token
@@ -40,13 +40,13 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
 
         val fields = buildList {
             bestTrade.settingRecipient.value?.let {
-                add(SwapDataFieldRecipient(it))
+                add(DataFieldRecipient(it))
             }
             bestTrade.settingSlippage.value?.let {
-                add(SwapDataFieldSlippage(it))
+                add(DataFieldSlippage(it))
             }
             if (allowance != null && allowance < amountIn) {
-                add(SwapDataFieldAllowance(allowance, tokenIn))
+                add(DataFieldAllowance(allowance, tokenIn))
             }
         }
 
@@ -89,10 +89,10 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
 
         val fields = buildList {
             bestTrade.settingRecipient.value?.let {
-                add(SwapDataFieldRecipientExtended(it, tokenOut.blockchainType))
+                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
             bestTrade.settingSlippage.value?.let {
-                add(SwapDataFieldSlippage(it))
+                add(DataFieldSlippage(it))
             }
         }
 

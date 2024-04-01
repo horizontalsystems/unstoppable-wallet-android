@@ -12,7 +12,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapPro
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.ISendTransactionService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataField
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
@@ -50,7 +50,7 @@ class SwapConfirmViewModel(
 
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
-    private var fields: List<SwapDataField> = listOf()
+    private var quoteFields: List<DataField> = listOf()
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -169,7 +169,8 @@ class SwapConfirmViewModel(
             validQuote = sendTransactionState.sendable,
             priceImpact = priceImpactState.priceImpact,
             priceImpactLevel = priceImpactState.priceImpactLevel,
-            fields = fields,
+            quoteFields = quoteFields,
+            transactionFields = sendTransactionState.fields,
         )
     }
 
@@ -191,7 +192,7 @@ class SwapConfirmViewModel(
 
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
-                fields = finalQuote.fields
+                quoteFields = finalQuote.fields
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -248,5 +249,6 @@ data class SwapConfirmUiState(
     val validQuote: Boolean,
     val priceImpact: BigDecimal?,
     val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
-    val fields: List<SwapDataField>,
+    val quoteFields: List<DataField>,
+    val transactionFields: List<DataField>,
 )
