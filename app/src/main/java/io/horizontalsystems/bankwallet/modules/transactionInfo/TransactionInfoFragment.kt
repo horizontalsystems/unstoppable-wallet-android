@@ -150,7 +150,11 @@ fun TransactionInfoSection(
 
                     is TransactionInfoViewItem.Value -> {
                         add {
-                            TitleAndValueCell(title = viewItem.title, value = viewItem.value)
+                            TitleAndValueCell(
+                                title = viewItem.title,
+                                value = viewItem.value,
+                                valueIcon = viewItem.valueIcon
+                            )
                         }
                     }
 
