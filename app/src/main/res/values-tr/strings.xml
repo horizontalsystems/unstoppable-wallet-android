@@ -242,6 +242,8 @@
     <string name="Balance_Receive_NotActive">Aktif değil</string>
     <string name="Balance_LockedAmount_Title">Kilitli</string>
     <string name="Balance_Error_InvalidQrCode">Tanıyamıyorum</string>
+    <string name="Balance_SendHint_CoinName">Kripto Para Adı</string>
+    <string name="Balance_ReceiveHint_Search">Ara</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Gönder</string>
     <string name="SendNft_Error_NotEnoughtBalance">Yetersiz bakiye</string>
