@@ -307,6 +307,8 @@
     <string name="Balance_Receive_NotActive">不活动</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
+    <string name="Balance_SendHint_CoinName">代币图片</string>
+    <string name="Balance_ReceiveHint_Search">查询</string>
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <string name="SendNft_Error_NotEnoughtBalance">余额不足</string>
