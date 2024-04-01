@@ -349,7 +349,7 @@ val TokenType.order: Int
     get() {
         return when (this) {
             TokenType.Native -> 0
-            is TokenType.Derived -> derivation.accountTypeDerivation.ordinal
+            is TokenType.Derived -> derivation.accountTypeDerivation.order
             is TokenType.AddressTyped -> type.bitcoinCashCoinType.ordinal
             else -> Int.MAX_VALUE
         }
@@ -516,7 +516,7 @@ val TokenType.title: String
 
 val TokenType.description: String
     get() = when (this) {
-        is TokenType.Derived -> derivation.accountTypeDerivation.addressType
+        is TokenType.Derived -> derivation.accountTypeDerivation.addressType + derivation.accountTypeDerivation.recommended
         is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.description)
         else -> ""
     }
