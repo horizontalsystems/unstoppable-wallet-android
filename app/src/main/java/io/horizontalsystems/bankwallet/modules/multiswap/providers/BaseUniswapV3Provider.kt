@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRec
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldRecipient
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldSlippage
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -118,11 +119,21 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             uniswapV3Kit.transactionData(receiveAddress, evmBlockchainHelper.chain, swapQuote.tradeDataV3)
         } ?: throw Exception("No Receive Address")
 
+        val settingRecipient = SwapSettingRecipient(swapSettings, blockchainType)
         val settingSlippage = SwapSettingSlippage(swapSettings, TradeOptions.defaultAllowedSlippage)
         val slippage = settingSlippage.valueOrDefault()
 
         val amountOut = swapQuote.amountOut
         val amountOutMin = amountOut - amountOut / BigDecimal(100) * slippage
+
+        val fields = buildList {
+            settingRecipient.value?.let {
+                add(SwapDataFieldRecipientExtended(it, blockchainType))
+            }
+            settingSlippage.value?.let {
+                add(SwapDataFieldSlippage(it))
+            }
+        }
 
         return SwapFinalQuoteUniswapV3(
             tokenIn,
@@ -132,7 +143,7 @@ abstract class BaseUniswapV3Provider(dexType: DexType) : EvmSwapProvider() {
             amountOutMin,
             SendTransactionData.Evm(transactionData, null),
             swapQuote.tradeDataV3.priceImpact,
-            swapQuote.fields
+            fields
         )
     }
 }

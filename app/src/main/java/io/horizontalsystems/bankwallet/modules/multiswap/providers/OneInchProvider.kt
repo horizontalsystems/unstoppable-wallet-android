@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRec
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingSlippage
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldRecipient
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.SwapDataFieldSlippage
 import io.horizontalsystems.bankwallet.modules.swap.scaleUp
 import io.horizontalsystems.ethereumkit.models.Address
@@ -143,7 +144,7 @@ object OneInchProvider : EvmSwapProvider() {
 
         val fields = buildList {
             settingRecipient.value?.let {
-                add(SwapDataFieldRecipient(it))
+                add(SwapDataFieldRecipientExtended(it, blockchainType))
             }
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
