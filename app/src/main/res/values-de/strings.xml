@@ -265,6 +265,8 @@
     <string name="Balance_Receive_NotActive">Nicht aktiv</string>
     <string name="Balance_LockedAmount_Title">Gesperrt</string>
     <string name="Balance_Error_InvalidQrCode">Kann nicht erkennen</string>
+    <string name="Balance_SendHint_CoinName">Name der Coin</string>
+    <string name="Balance_ReceiveHint_Search">Suchen</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <string name="SendNft_Error_NotEnoughtBalance">Nicht genügend Guthaben</string>
