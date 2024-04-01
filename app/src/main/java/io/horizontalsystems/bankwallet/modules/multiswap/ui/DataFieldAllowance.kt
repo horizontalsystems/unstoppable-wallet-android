@@ -21,7 +21,7 @@ import cash.p.terminal.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
-data class SwapDataFieldAllowance(val allowance: BigDecimal, val token: Token) : SwapDataField {
+data class DataFieldAllowance(val allowance: BigDecimal, val token: Token) : DataField {
     @Composable
     override fun GetContent(navController: NavController, borderTop: Boolean) {
         val infoTitle = stringResource(id = R.string.SwapInfo_AllowanceTitle)

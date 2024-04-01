@@ -217,11 +217,22 @@ fun SwapConfirmScreen(navController: NavController) {
                             subvalue = subvalue
                         )
                     }
-                    uiState.fields.forEach {
+                    uiState.quoteFields.forEach {
                         it.GetContent(navController, true)
                     }
                 }
             }
+
+            val transactionFields = uiState.transactionFields
+            if (transactionFields.isNotEmpty()) {
+                VSpacer(height = 16.dp)
+                SectionUniversalLawrence {
+                    transactionFields.forEachIndexed { index, field ->
+                        field.GetContent(navController, index != 0)
+                    }
+                }
+            }
+
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
                 QuoteInfoRow(

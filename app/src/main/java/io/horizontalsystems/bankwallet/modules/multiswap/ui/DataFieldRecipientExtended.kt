@@ -22,10 +22,10 @@ import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
-data class SwapDataFieldRecipientExtended(
+data class DataFieldRecipientExtended(
     val address: Address,
     val blockchainType: BlockchainType
-) : SwapDataField {
+) : DataField {
     @Composable
     override fun GetContent(navController: NavController, borderTop: Boolean) {
         QuoteInfoRow(
@@ -76,10 +76,10 @@ data class SwapDataFieldRecipientExtended(
 
 @Preview
 @Composable
-fun SwapDataFieldRecipientExtendedPreview() {
+fun DataFieldRecipientExtendedPreview() {
     val navController = rememberNavController()
     ComposeAppTheme {
-        SwapDataFieldRecipientExtended(
+        DataFieldRecipientExtended(
             Address("0x1234567890abcdef1234567890abcdef12345678"),
             BlockchainType.Bitcoin
         ).GetContent(navController = navController, borderTop = true)

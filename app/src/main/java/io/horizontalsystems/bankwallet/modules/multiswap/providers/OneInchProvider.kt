@@ -12,10 +12,10 @@ import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.settings.SwapSettingRecipient
 import cash.p.terminal.modules.multiswap.settings.SwapSettingSlippage
-import cash.p.terminal.modules.multiswap.ui.SwapDataFieldAllowance
-import cash.p.terminal.modules.multiswap.ui.SwapDataFieldRecipient
-import cash.p.terminal.modules.multiswap.ui.SwapDataFieldRecipientExtended
-import cash.p.terminal.modules.multiswap.ui.SwapDataFieldSlippage
+import cash.p.terminal.modules.multiswap.ui.DataFieldAllowance
+import cash.p.terminal.modules.multiswap.ui.DataFieldRecipient
+import cash.p.terminal.modules.multiswap.ui.DataFieldRecipientExtended
+import cash.p.terminal.modules.multiswap.ui.DataFieldSlippage
 import cash.p.terminal.modules.swap.scaleUp
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
@@ -76,13 +76,13 @@ object OneInchProvider : EvmSwapProvider() {
         val allowance = getAllowance(tokenIn, routerAddress)
         val fields = buildList {
             settingRecipient.value?.let {
-                add(SwapDataFieldRecipient(it))
+                add(DataFieldRecipient(it))
             }
             settingSlippage.value?.let {
-                add(SwapDataFieldSlippage(it))
+                add(DataFieldSlippage(it))
             }
             if (allowance != null && allowance < amountIn) {
-                add(SwapDataFieldAllowance(allowance, tokenIn))
+                add(DataFieldAllowance(allowance, tokenIn))
             }
         }
 
@@ -142,10 +142,10 @@ object OneInchProvider : EvmSwapProvider() {
 
         val fields = buildList {
             settingRecipient.value?.let {
-                add(SwapDataFieldRecipientExtended(it, tokenOut.blockchainType))
+                add(DataFieldRecipientExtended(it, tokenOut.blockchainType))
             }
             settingSlippage.value?.let {
-                add(SwapDataFieldSlippage(it))
+                add(DataFieldSlippage(it))
             }
         }
 

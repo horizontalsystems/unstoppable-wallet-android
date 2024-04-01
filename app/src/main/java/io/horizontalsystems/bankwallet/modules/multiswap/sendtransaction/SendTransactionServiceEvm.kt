@@ -15,6 +15,8 @@ import cash.p.terminal.modules.evmfee.EvmFeeService
 import cash.p.terminal.modules.evmfee.IEvmGasPriceService
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyGasPriceService
+import cash.p.terminal.modules.multiswap.ui.DataField
+import cash.p.terminal.modules.multiswap.ui.DataFieldNonce
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.settings.SendEvmFeeSettingsScreen
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
@@ -85,12 +87,14 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     private var cautions: List<CautionViewItem> = listOf()
     private var sendable = false
     private var loading = true
+    private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,
-        loading = loading
+        loading = loading,
+        fields = fields
     )
 
     override fun start(coroutineScope: CoroutineScope) {
@@ -109,6 +113,23 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
                 handleTransactionState(transactionState)
             }
         }
+        coroutineScope.launch {
+            nonceService.stateFlow.collect { nonceState ->
+                handleNonceState(nonceState)
+            }
+        }
+    }
+
+    private fun handleNonceState(nonceState: DataState<SendEvmNonceService.State>) {
+        fields = emptyList()
+
+        nonceState.dataOrNull?.let {
+            if (!it.default || it.fixed) {
+                fields = listOf(DataFieldNonce(it.nonce))
+            }
+        }
+
+        emitState()
     }
 
     private fun handleTransactionState(transactionState: DataState<SendEvmSettingsService.Transaction>) {

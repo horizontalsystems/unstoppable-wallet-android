@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import cash.p.terminal.core.ServiceState
 import cash.p.terminal.core.ethereum.CautionViewItem
+import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import java.util.UUID
 
 abstract class ISendTransactionService: ServiceState<SendTransactionServiceState>() {
     abstract fun start(coroutineScope: CoroutineScope)
@@ -23,5 +23,5 @@ data class SendTransactionServiceState(
     val cautions: List<CautionViewItem>,
     val sendable: Boolean,
     val loading: Boolean,
-    val uuid: String = UUID.randomUUID().toString()
+    val fields: List<DataField>
 )
