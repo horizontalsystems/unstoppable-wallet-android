@@ -109,6 +109,7 @@
     <!--TVL Rank-->
     <!--Balance-->
     <string name="Balance_Send">إرسال</string>
+    <string name="Balance_ReceiveHint_Search">بحث</string>
     <!--Send NFT-->
     <string name="SendNft_Title">إرسال</string>
     <!--Send-->
