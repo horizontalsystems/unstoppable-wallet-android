@@ -33,6 +33,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Balance_Send),
+            searchHintText = stringResource(R.string.Balance_SendHint_CoinName),
             onClickItem = {
                 when {
                     it.sendEnabled -> {

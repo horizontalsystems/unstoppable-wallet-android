@@ -55,7 +55,7 @@ fun ReceiveTokenSelectScreen(
         topBar = {
             SearchBar(
                 title = stringResource(R.string.Balance_Receive),
-                searchHintText = "",
+                searchHintText = stringResource(R.string.Balance_ReceiveHint_Search),
                 menuItems = listOf(),
                 onClose = onBackPress,
                 onSearchTextChanged = { text ->
