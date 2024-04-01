@@ -130,7 +130,6 @@ class TransactionFilterService(
     }
 
     fun reset() {
-        selectedTransactionType = FilterTransactionType.All
         selectedToken = null
         selectedBlockchain = null
         contact = null
@@ -143,7 +142,6 @@ class TransactionFilterService(
     private fun resetEnabled(): Boolean {
         return selectedToken != null
                 || selectedBlockchain != null
-                || selectedTransactionType != FilterTransactionType.All
                 || contact != null
                 || !hideSuspiciousTx
     }
