@@ -20,7 +20,7 @@ class DerivationSelectViewModel(coinUid: String, walletManager: IWalletManager) 
             val accountTypeDerivation = derivation.accountTypeDerivation
 
             AddressFormatItem(
-                title = accountTypeDerivation.addressType,
+                title = accountTypeDerivation.addressType + accountTypeDerivation.recommended,
                 subtitle = accountTypeDerivation.value.uppercase(),
                 wallet = wallet
             )
