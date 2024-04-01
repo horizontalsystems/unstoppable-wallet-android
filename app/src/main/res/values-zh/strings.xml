@@ -290,7 +290,6 @@
     <string name="Balance_ScanningBlocks">扫描块</string>
     <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">尚无钱包</string>
-    <string name="Balance_NoCoinsAlert">您没有添加的硬币。\n添加您将使用的硬币</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
     <string name="Balance_NoAssetsToSend">您没有要发送的资产。</string>
     <string name="Balance_NoAssetsToSwap">您目前没有可供交换的资产。</string>
