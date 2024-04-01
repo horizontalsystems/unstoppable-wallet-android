@@ -249,7 +249,6 @@
     <string name="Balance_ScanningBlocks">Scanne Blöcke</string>
     <string name="Balance_Backup_Alert">Sie müssen ein Backup des %s Wallet machen, bevor Sie %s erhalten können.</string>
     <string name="Balance_NoWalletAlert">Sie haben noch keine installierten Wallets.\nErstellen Sie eine neue Wallet oder stellen Sie eine vorhandene wieder her </string>
-    <string name="Balance_NoCoinsAlert">Sie haben keine Münzen hinzugefügt.\nFügen Sie die Münzen hinzu, die Sie verwenden werden</string>
     <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
     <string name="Balance_NoAssetsToSend">Sie haben keine Assets zu senden.</string>
     <string name="Balance_NoAssetsToSwap">Du hast keine Vermögenswerte zum Tauschen.</string>
