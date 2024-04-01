@@ -6,7 +6,7 @@ import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteOneInch
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteEvm
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteOneInch
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -151,7 +151,7 @@ object OneInchProvider : EvmSwapProvider() {
             }
         }
 
-        return SwapFinalQuoteOneInch(
+        return SwapFinalQuoteEvm(
             tokenIn,
             tokenOut,
             amountIn,
