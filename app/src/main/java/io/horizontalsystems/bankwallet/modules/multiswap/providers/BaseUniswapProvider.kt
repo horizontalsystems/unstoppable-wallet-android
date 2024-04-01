@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.providers
 import io.horizontalsystems.bankwallet.modules.multiswap.EvmBlockchainHelper
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
-import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteUniswapV3
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteEvm
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteUniswap
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
@@ -106,14 +106,14 @@ abstract class BaseUniswapProvider : EvmSwapProvider() {
             }
         }
 
-        return SwapFinalQuoteUniswapV3(
+        return SwapFinalQuoteEvm(
             tokenIn,
             tokenOut,
             amountIn,
             amountOut,
             amountOutMin,
             SendTransactionData.Evm(transactionData, null),
-            swapQuote.tradeData.priceImpact,
+            swapQuote.priceImpact,
             fields
         )
     }
