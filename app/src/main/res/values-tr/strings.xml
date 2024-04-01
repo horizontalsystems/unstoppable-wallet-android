@@ -225,7 +225,6 @@
     <string name="Balance_ScanningBlocks">Tarama Blokları</string>
     <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
     <string name="Balance_NoWalletAlert">Henüz cüzdan yok</string>
-    <string name="Balance_NoCoinsAlert">Eklenmiş jetonunuz yok.\nKullanacağınız jetonları ekleyin</string>
     <string name="Balance_WatchAccount_NoBalance">Bu cüzdan adresinde bakiye bulunmuyor</string>
     <string name="Balance_NoAssetsToSend">Gönderilecek öğeniz yok.</string>
     <string name="Balance_NoAssetsToSwap">Takas edilecek varlığınız yok.</string>
