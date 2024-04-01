@@ -120,15 +120,13 @@ object OneInchProvider : EvmSwapProvider() {
 
         val gasPrice = sendTransactionSettings.gasPriceInfo.gasPrice
 
-        val evmKitWrapper = evmBlockchainHelper.evmKitWrapper ?: throw NullPointerException()
-
         val settingRecipient = SwapSettingRecipient(swapSettings, blockchainType)
         val settingSlippage = SwapSettingSlippage(swapSettings, BigDecimal("1"))
         val slippage = settingSlippage.valueOrDefault()
 
         val swap = oneInchKit.getSwapAsync(
             chain = evmBlockchainHelper.chain,
-            receiveAddress = evmKitWrapper.evmKit.receiveAddress,
+            receiveAddress = sendTransactionSettings.receiveAddress,
             fromToken = getTokenAddress(tokenIn),
             toToken = getTokenAddress(tokenOut),
             amount = amountIn.scaleUp(tokenIn.decimals),
