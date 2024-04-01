@@ -531,6 +531,8 @@
     <string name="Swap_AmountMin">(분)</string>
     <string name="Swap_AmountMax">(최대)</string>
     <string name="Swap_AmountTypeCoin">코인</string>
+    <string name="Swap_YouPay">지불하기</string>
+    <string name="Swap_YouGet">얻기</string>
     <string name="Swap_Confirm_Title">확인</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">스왑 설정</string>
