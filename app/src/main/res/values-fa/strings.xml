@@ -295,6 +295,8 @@
     <string name="Swap_AmountEstimated">(تخمینی)</string>
     <string name="Swap_AmountMin">(دقیقه)</string>
     <string name="Swap_AmountMax">(حداکثر)</string>
+    <string name="Swap_YouPay">شما می پردازید</string>
+    <string name="Swap_YouGet">شما دریافت می کنید</string>
     <string name="Swap_Confirm_Title">تاييد</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Service">خدمات</string>
