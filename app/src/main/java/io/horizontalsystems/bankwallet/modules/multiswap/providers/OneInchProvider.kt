@@ -14,6 +14,7 @@ import cash.p.terminal.modules.multiswap.settings.SwapSettingRecipient
 import cash.p.terminal.modules.multiswap.settings.SwapSettingSlippage
 import cash.p.terminal.modules.multiswap.ui.SwapDataFieldAllowance
 import cash.p.terminal.modules.multiswap.ui.SwapDataFieldRecipient
+import cash.p.terminal.modules.multiswap.ui.SwapDataFieldRecipientExtended
 import cash.p.terminal.modules.multiswap.ui.SwapDataFieldSlippage
 import cash.p.terminal.modules.swap.scaleUp
 import io.horizontalsystems.ethereumkit.models.Address
@@ -143,7 +144,7 @@ object OneInchProvider : EvmSwapProvider() {
 
         val fields = buildList {
             settingRecipient.value?.let {
-                add(SwapDataFieldRecipient(it))
+                add(SwapDataFieldRecipientExtended(it, blockchainType))
             }
             settingSlippage.value?.let {
                 add(SwapDataFieldSlippage(it))
