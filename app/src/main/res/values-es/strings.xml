@@ -275,6 +275,8 @@
     <string name="Balance_Receive_NotActive">No activo</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
     <string name="Balance_Error_InvalidQrCode">No se puede reconocer</string>
+    <string name="Balance_SendHint_CoinName">Nombre de moneda</string>
+    <string name="Balance_ReceiveHint_Search">Buscar</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <string name="SendNft_Error_NotEnoughtBalance">Saldo insuficiente</string>
