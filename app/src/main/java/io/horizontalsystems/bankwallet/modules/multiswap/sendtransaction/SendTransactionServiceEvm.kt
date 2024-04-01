@@ -76,7 +76,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     private val cautionViewItemFactory by lazy { CautionViewItemFactory(baseCoinService) }
 
     private val _sendTransactionSettingsFlow = MutableStateFlow(
-        SendTransactionSettings.Evm(null)
+        SendTransactionSettings.Evm(null, evmKitWrapper.evmKit.receiveAddress)
     )
     override val sendTransactionSettingsFlow = _sendTransactionSettingsFlow.asStateFlow()
 
@@ -97,7 +97,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         coroutineScope.launch {
             gasPriceService.stateFlow.collect { gasPriceState ->
                 _sendTransactionSettingsFlow.update {
-                    SendTransactionSettings.Evm(gasPriceState.dataOrNull)
+                    SendTransactionSettings.Evm(gasPriceState.dataOrNull, evmKitWrapper.evmKit.receiveAddress)
                 }
             }
         }
