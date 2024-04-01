@@ -665,7 +665,8 @@ class TransactionInfoViewItemFactory(
         items.add(
             Value(
                 getString(R.string.TransactionInfo_Price),
-                priceValue
+                priceValue,
+                R.drawable.ic_arrow_swap3_20
             )
         )
 
