@@ -306,7 +306,6 @@
     <string name="Balance_ScanningBlocks">Сканирование блоков</string>
     <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
-    <string name="Balance_NoCoinsAlert">У вас нет добавленных монет.\nДобавьте монеты, которые вы будете использовать</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
     <string name="Balance_NoAssetsToSend">У вас нет активов для отправки.</string>
     <string name="Balance_NoAssetsToSwap">У вас нет активов для обмена.</string>
