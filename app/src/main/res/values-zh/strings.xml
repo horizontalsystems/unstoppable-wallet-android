@@ -530,6 +530,8 @@
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
     <string name="Swap_AmountTypeCoin">硬币</string>
+    <string name="Swap_YouPay">您支付</string>
+    <string name="Swap_YouGet">您获得</string>
     <string name="Swap_Confirm_Title">确认</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">掉期设置</string>
