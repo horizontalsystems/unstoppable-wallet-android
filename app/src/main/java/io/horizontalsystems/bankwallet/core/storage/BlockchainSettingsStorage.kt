@@ -13,7 +13,7 @@ class BlockchainSettingsStorage(appDatabase: AppDatabase) {
         const val keyEvmSyncSourceUrl: String = "evm-sync-source-url"
     }
 
-    private val dao = appDatabase.blockchainSettingDao()
+    private val dao by lazy { appDatabase.blockchainSettingDao() }
 
     fun btcRestoreMode(blockchainType: BlockchainType): BtcRestoreMode? {
         return dao.getBlockchainSetting(blockchainType.uid, keyBtcRestore)?.let { storedSetting ->

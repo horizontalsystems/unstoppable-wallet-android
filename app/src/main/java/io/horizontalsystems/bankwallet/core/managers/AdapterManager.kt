@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap
 class AdapterManager(
     private val walletManager: IWalletManager,
     private val adapterFactory: AdapterFactory,
-    btcBlockchainManager: BtcBlockchainManager,
+    private val btcBlockchainManager: BtcBlockchainManager,
     private val evmBlockchainManager: EvmBlockchainManager,
     private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
@@ -40,7 +40,9 @@ class AdapterManager(
     init {
         start()
         handler = Handler(looper)
+    }
 
+    override fun startAdapterManager() {
         disposables.add(walletManager.activeWalletsUpdatedObservable
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())

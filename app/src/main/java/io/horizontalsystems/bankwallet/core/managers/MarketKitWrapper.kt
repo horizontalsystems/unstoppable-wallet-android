@@ -29,14 +29,16 @@ class MarketKitWrapper(
     appConfigProvider: AppConfigProvider,
     private val subscriptionManager: SubscriptionManager
 ) {
-    private val marketKit: MarketKit = MarketKit.getInstance(
-        context = context,
-        hsApiBaseUrl = hsApiBaseUrl,
-        hsApiKey = hsApiKey,
-        cryptoCompareApiKey = cryptoCompareApiKey,
-        appVersion = appConfigProvider.appVersion,
-        appId = appConfigProvider.appId
-    )
+    private val marketKit: MarketKit by lazy {
+        MarketKit.getInstance(
+            context = context,
+            hsApiBaseUrl = hsApiBaseUrl,
+            hsApiKey = hsApiKey,
+            cryptoCompareApiKey = cryptoCompareApiKey,
+            appVersion = appConfigProvider.appVersion,
+            appId = appConfigProvider.appId
+        )
+    }
 
     private fun <T> requestWithAuthToken(f: (String) -> Single<T>) =
         subscriptionManager.authToken?.let { authToken ->
