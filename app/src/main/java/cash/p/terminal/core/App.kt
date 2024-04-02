@@ -100,9 +100,9 @@ import cash.p.terminal.modules.settings.appearance.AppIconService
 import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
-import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
+import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
 import cash.p.terminal.widgets.MarketWidgetManager
 import cash.p.terminal.widgets.MarketWidgetRepository
 import cash.p.terminal.widgets.MarketWidgetWorker
@@ -203,8 +203,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             Log.w("RxJava ErrorHandler", e)
         }
 
-        EthereumKit.init()
-
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
@@ -230,7 +228,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             appConfigProvider = appConfigProvider,
             subscriptionManager = subscriptionManager
         )
-        marketKit.sync()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
@@ -472,7 +469,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 Log.w("AAA", "error", error.throwable)
             },
         )
-
         Web3Wallet.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
             Log.e("AAA", "error", error.throwable)
         }
@@ -516,10 +512,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     private fun startTasks() {
         Thread {
+            EthereumKit.init()
+            adapterManager.startAdapterManager()
+            marketKit.sync()
             rateAppManager.onAppLaunch()
             nftMetadataSyncer.start()
             pinComponent.initDefaultPinLevel()
             accountManager.clearAccounts()
+            wcSessionManager.start()
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

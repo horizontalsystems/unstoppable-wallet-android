@@ -5,8 +5,8 @@ import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.subscribeIO
-import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
+import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ class WCSessionManager(
             return getSessions(accountId)
         }
 
-    init {
+    fun start() {
         syncSessions()
 
         coroutineScope.launch {

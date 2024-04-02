@@ -4,7 +4,11 @@ import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.nft.INftProvider
 import cash.p.terminal.core.providers.nft.OpenSeaNftProvider
 import cash.p.terminal.core.storage.NftStorage
-import cash.p.terminal.entities.nft.*
+import cash.p.terminal.entities.nft.NftAddressMetadata
+import cash.p.terminal.entities.nft.NftAssetBriefMetadata
+import cash.p.terminal.entities.nft.NftAssetShortMetadata
+import cash.p.terminal.entities.nft.NftKey
+import cash.p.terminal.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -15,9 +19,11 @@ class NftMetadataManager(
     appConfigProvider: AppConfigProvider,
     private val storage: NftStorage
 ) {
-    private val providerMap = mapOf<BlockchainType, INftProvider>(
-        BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider)
-    )
+    private val providerMap by lazy {
+        mapOf<BlockchainType, INftProvider>(
+            BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider)
+        )
+    }
 
     private val _addressMetadataFlow = MutableSharedFlow<Pair<NftKey, NftAddressMetadata>?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val addressMetadataFlow: Flow<Pair<NftKey, NftAddressMetadata>?> = _addressMetadataFlow
