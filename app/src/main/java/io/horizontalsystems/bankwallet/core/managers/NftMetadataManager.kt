@@ -4,7 +4,11 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.INftProvider
 import io.horizontalsystems.bankwallet.core.providers.nft.OpenSeaNftProvider
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
-import io.horizontalsystems.bankwallet.entities.nft.*
+import io.horizontalsystems.bankwallet.entities.nft.NftAddressMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftAssetShortMetadata
+import io.horizontalsystems.bankwallet.entities.nft.NftKey
+import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -15,9 +19,11 @@ class NftMetadataManager(
     appConfigProvider: AppConfigProvider,
     private val storage: NftStorage
 ) {
-    private val providerMap = mapOf<BlockchainType, INftProvider>(
-        BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider)
-    )
+    private val providerMap by lazy {
+        mapOf<BlockchainType, INftProvider>(
+            BlockchainType.Ethereum to OpenSeaNftProvider(marketKit, appConfigProvider)
+        )
+    }
 
     private val _addressMetadataFlow = MutableSharedFlow<Pair<NftKey, NftAddressMetadata>?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val addressMetadataFlow: Flow<Pair<NftKey, NftAddressMetadata>?> = _addressMetadataFlow

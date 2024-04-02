@@ -23,15 +23,17 @@ class BtcBlockchainManager(
 
     private val blockchairSyncEnabledBlockchains = listOf(BlockchainType.Bitcoin, BlockchainType.BitcoinCash)
 
-    val blockchainTypes = listOf(
-        BlockchainType.Bitcoin,
-        BlockchainType.BitcoinCash,
-        BlockchainType.Litecoin,
-        BlockchainType.Dash,
-        BlockchainType.ECash,
-    )
+    val blockchainTypes by lazy {
+        listOf(
+            BlockchainType.Bitcoin,
+            BlockchainType.BitcoinCash,
+            BlockchainType.Litecoin,
+            BlockchainType.Dash,
+            BlockchainType.ECash,
+        )
+    }
 
-    val allBlockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
+    val allBlockchains by lazy { marketKit.blockchains(blockchainTypes.map { it.uid }) }
 
     fun blockchain(blockchainType: BlockchainType) =
         allBlockchains.firstOrNull { blockchainType == it.type }

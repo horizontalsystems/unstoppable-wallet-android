@@ -5,8 +5,8 @@ import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ class WCSessionManager(
             return getSessions(accountId)
         }
 
-    init {
+    fun start() {
         syncSessions()
 
         coroutineScope.launch {

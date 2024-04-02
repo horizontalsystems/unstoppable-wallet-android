@@ -104,7 +104,7 @@ class BackupProvider(
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
     private val contactsRepository: ContactsRepository
 ) {
-    private val encryptDecryptManager = EncryptDecryptManager()
+    private val encryptDecryptManager by lazy { EncryptDecryptManager() }
     private val version = 2
 
     private val gson: Gson by lazy {
