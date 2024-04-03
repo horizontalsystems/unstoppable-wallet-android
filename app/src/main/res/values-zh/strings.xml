@@ -526,7 +526,6 @@
     <string name="Swap_MinimumGot">保证金额</string>
     <string name="Swap_PoweredBy">技术支持：</string>
     <string name="Swap_SelectSwapProvider_Title">掉期供应商</string>
-    <string name="Swap_SelectSwapProvider_FeeInfo">典型平台上交换动作的服务费：0.3% 或 0.6%</string>
     <string name="Swap_AmountEstimated">(预估金额)</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
