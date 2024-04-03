@@ -520,7 +520,6 @@
     <string name="Swap_MinimumGot">Valor garantido</string>
     <string name="Swap_PoweredBy">Fornecido por</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
-    <string name="Swap_SelectSwapProvider_FeeInfo">Uma taxa de serviço para a ação de troca na plataforma normalmente 0,3% ou 0,6%</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moeda</string>
     <string name="Swap_YouPay">Você Paga</string>
