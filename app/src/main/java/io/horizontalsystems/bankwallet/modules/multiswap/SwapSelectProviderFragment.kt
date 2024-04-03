@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_green50
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -142,14 +141,6 @@ private fun SwapSelectProviderScreenInner(
                         }
                     }
                 }
-            }
-
-            item {
-                VSpacer(height = 24.dp)
-            }
-
-            item {
-                TextImportantWarning(text = stringResource(R.string.Swap_SelectSwapProvider_FeeInfo))
             }
 
             item {
