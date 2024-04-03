@@ -527,7 +527,6 @@
     <string name="Swap_MinimumGot">보증 금액</string>
     <string name="Swap_PoweredBy">제공</string>
     <string name="Swap_SelectSwapProvider_Title">공급자 스왑</string>
-    <string name="Swap_SelectSwapProvider_FeeInfo">플랫폼에서 스왑 작업에 대한 서비스 수수료는 일반적으로 0.3% 또는 0.6%입니다.</string>
     <string name="Swap_AmountEstimated">(추정)</string>
     <string name="Swap_AmountMin">(분)</string>
     <string name="Swap_AmountMax">(최대)</string>
