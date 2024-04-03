@@ -23,6 +23,7 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.PriceWithToggleCell
 import cash.p.terminal.ui.compose.components.SectionTitleCell
 import cash.p.terminal.ui.compose.components.TitleAndValueCell
 import cash.p.terminal.ui.compose.components.TransactionAmountCell
@@ -153,7 +154,16 @@ fun TransactionInfoSection(
                             TitleAndValueCell(
                                 title = viewItem.title,
                                 value = viewItem.value,
-                                valueIcon = viewItem.valueIcon
+                            )
+                        }
+                    }
+
+                    is TransactionInfoViewItem.PriceWithToggle -> {
+                        add {
+                            PriceWithToggleCell(
+                                title = viewItem.title,
+                                valueOne = viewItem.valueTwo,
+                                valueTwo = viewItem.valueOne
                             )
                         }
                     }

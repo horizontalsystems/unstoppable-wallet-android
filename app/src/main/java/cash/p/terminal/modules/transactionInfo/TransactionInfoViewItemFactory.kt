@@ -179,6 +179,7 @@ class TransactionInfoViewItemFactory(
                         rates = rates,
                         amount = transaction.amountIn,
                         hideAmount = transactionItem.hideAmount,
+                        hasRecipient = transaction.recipient != null
                     )
                 )
 
@@ -200,6 +201,7 @@ class TransactionInfoViewItemFactory(
                         amount = null,
                         rates = rates,
                         hideAmount = transactionItem.hideAmount,
+                        hasRecipient = false
                     )
                 )
 
@@ -593,6 +595,7 @@ class TransactionInfoViewItemFactory(
         rates: Map<String, CurrencyValue>,
         amount: SwapTransactionRecord.Amount?,
         hideAmount: Boolean,
+        hasRecipient: Boolean
     ) = buildList {
         valueIn?.let {
             add(
@@ -613,7 +616,8 @@ class TransactionInfoViewItemFactory(
                     valueOut,
                     true,
                     hideAmount,
-                    AmountType.YouGot
+                    AmountType.YouGot,
+                    hasRecipient = hasRecipient,
                 )
             )
         }
@@ -645,7 +649,7 @@ class TransactionInfoViewItemFactory(
             return items
         }
 
-        val priceValue = if (decimalValueOut.compareTo(BigDecimal.ZERO) == 0) {
+        val priceValueOne = if (decimalValueOut.compareTo(BigDecimal.ZERO) == 0) {
             Translator.getString(R.string.NotAvailable)
         } else {
             val price = decimalValueIn.divide(
@@ -662,11 +666,28 @@ class TransactionInfoViewItemFactory(
             "${valueOut.coinCode} = $formattedPrice$formattedFiatPrice"
         }
 
+        val priceValueTwo = if (decimalValueIn.compareTo(BigDecimal.ZERO) == 0) {
+            Translator.getString(R.string.NotAvailable)
+        } else {
+            val price = decimalValueOut.divide(
+                decimalValueIn,
+                min(valueInDecimals, valueOutDecimals),
+                RoundingMode.HALF_EVEN
+            ).abs()
+            val formattedPrice = numberFormatter.formatCoinFull(price, valueOut.coinCode, 8)
+            val formattedFiatPrice = rates[valueOut.coinUid]?.let { rate ->
+                numberFormatter.formatFiatFull(price * rate.value, rate.currency.symbol).let {
+                    " ($it)"
+                }
+            } ?: ""
+            "${valueIn.coinCode} = $formattedPrice$formattedFiatPrice"
+        }
+
         items.add(
-            Value(
+            TransactionInfoViewItem.PriceWithToggle(
                 getString(R.string.TransactionInfo_Price),
-                priceValue,
-                R.drawable.ic_arrow_swap3_20
+                priceValueOne,
+                priceValueTwo,
             )
         )
 
@@ -887,7 +908,8 @@ class TransactionInfoViewItemFactory(
         incoming: Boolean?,
         hideAmount: Boolean,
         amountType: AmountType,
-        amount: SwapTransactionRecord.Amount? = null
+        amount: SwapTransactionRecord.Amount? = null,
+        hasRecipient: Boolean = false,
     ): TransactionInfoViewItem {
         val valueInFiat = if (hideAmount) "*****" else rate?.let {
             value.decimalValue?.let { decimalValue ->
@@ -913,7 +935,13 @@ class TransactionInfoViewItemFactory(
             }
         } ?: "---"
 
-        val coinValueColored = ColoredValue(coinValueFormatted, getAmountColor(incoming))
+        val color = if (hasRecipient && incoming == true) {
+            ColorName.Lucian
+        } else {
+            getAmountColor(incoming)
+        }
+
+        val coinValueColored = ColoredValue(coinValueFormatted, color)
         val coinUid = if (value is TransactionValue.CoinValue && !value.token.isCustom) {
             value.token.coin.uid
         } else {

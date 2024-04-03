@@ -29,7 +29,9 @@ sealed class TransactionInfoViewItem {
         val badge: String?,
     ) : TransactionInfoViewItem()
 
-    class Value(val title: String, val value: String, val valueIcon: Int? = null) : TransactionInfoViewItem()
+    class Value(val title: String, val value: String) : TransactionInfoViewItem()
+
+    class PriceWithToggle(val title: String, val valueOne: String, val valueTwo: String) : TransactionInfoViewItem()
 
     class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType) : TransactionInfoViewItem()
 
