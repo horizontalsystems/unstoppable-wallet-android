@@ -543,7 +543,6 @@
     <string name="Swap_MinimumGot">Гарантированная сумма</string>
     <string name="Swap_PoweredBy">При поддержке</string>
     <string name="Swap_SelectSwapProvider_Title">Смена провайдера</string>
-    <string name="Swap_SelectSwapProvider_FeeInfo">Комиссия за услугу обмена на платформе обычно 0.3% или 0.6%</string>
     <string name="Swap_AmountEstimated">(прим.)</string>
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
