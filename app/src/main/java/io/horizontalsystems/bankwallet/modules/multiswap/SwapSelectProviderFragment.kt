@@ -31,7 +31,6 @@ import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.subhead2_green50
 import cash.p.terminal.ui.compose.components.subhead2_grey
@@ -142,14 +141,6 @@ private fun SwapSelectProviderScreenInner(
                         }
                     }
                 }
-            }
-
-            item {
-                VSpacer(height = 24.dp)
-            }
-
-            item {
-                TextImportantWarning(text = stringResource(R.string.Swap_SelectSwapProvider_FeeInfo))
             }
 
             item {
