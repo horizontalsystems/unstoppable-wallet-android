@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -185,7 +186,6 @@ fun TransactionAmountCell(
 fun TitleAndValueCell(
     title: String,
     value: String,
-    valueIcon: Int? = null
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -193,12 +193,38 @@ fun TitleAndValueCell(
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
         Spacer(Modifier.weight(1f))
         subhead1_leah(text = value, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        valueIcon?.let {
-            HSpacer(8.dp)
+    }
+}
+
+@Composable
+fun PriceWithToggleCell(
+    title: String,
+    valueOne: String,
+    valueTwo: String,
+) {
+    var showValueOne by remember { mutableStateOf(true) }
+
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
+        subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
+        Spacer(Modifier.weight(1f))
+        subhead1_leah(
+            text = if (showValueOne) valueOne else valueTwo,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        HSpacer(8.dp)
+        HsIconButton(
+            onClick = { showValueOne = !showValueOne },
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape),
+        ) {
             Icon(
-                painter = painterResource(valueIcon),
+                painter = painterResource(R.drawable.ic_arrow_swap3_20),
                 contentDescription = null,
-                tint = ComposeAppTheme.colors.grey
+                tint = ComposeAppTheme.colors.grey,
             )
         }
     }
