@@ -196,29 +196,11 @@
         android:id="@+id/addTokenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
     <fragment
-        android:id="@+id/swapFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment"
-        android:label="@string/Swap" />
-    <fragment
         android:id="@+id/swapApproveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment" />
     <fragment
-        android:id="@+id/uniswapConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.uniswap.UniswapConfirmationFragment"/>
-    <fragment
-        android:id="@+id/oneInchConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.confirmation.oneinch.OneInchSwapConfirmationFragment"/>
-    <fragment
         android:id="@+id/swapApproveConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
-    <fragment
-        android:id="@+id/uniswapSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.UniswapSettingsFragment"
-        />
-    <fragment
-        android:id="@+id/oneinchSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.settings.oneinch.OneInchSettingsFragment"
-        />
     <fragment
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"/>
@@ -309,9 +291,6 @@
         android:id="@+id/sendTokenSelectFragment"
         android:name="io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment" />
     <fragment
-        android:id="@+id/swapTokenSelectFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swaptokenselect.SwapTokenSelectFragment" />
-    <fragment
         android:id="@+id/multiswap"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment" />
     <fragment
@@ -344,9 +323,6 @@
     <fragment
         android:id="@+id/statusInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment" />
-    <fragment
-        android:id="@+id/selectSwapCoinDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment" />
     <fragment
         android:id="@+id/swapSelectCoinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapSelectCoinFragment" />

@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.swap.coinselect
 
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,17 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
@@ -39,34 +31,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-
-class SelectSwapCoinFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        val dex = navController.getInput<SwapMainModule.Dex>()
-        if (dex == null) {
-            navController.popBackStack()
-        } else {
-            val viewModel = viewModel<SelectSwapCoinViewModel>(
-                factory = SelectSwapCoinModule.Factory(
-                    dex
-                )
-            )
-            SelectSwapCoinDialogScreen(
-                title = stringResource(id =R.string.Select_Coins),
-                coinBalanceItems = viewModel.coinItems,
-                onSearchTextChanged = viewModel::onEnterQuery,
-                onClose = navController::popBackStack
-            ) {
-                navController.setNavigationResultX(it)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    navController.popBackStack()
-                }, 100)
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

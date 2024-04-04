@@ -30,9 +30,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
-import io.horizontalsystems.bankwallet.modules.swap.settings.RecipientAddressViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
@@ -44,20 +41,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-
-@Composable
-fun SlippageAmount(
-    slippageViewModel: SwapSlippageViewModel
-) {
-    SlippageAmount(
-        slippageViewModel.inputFieldPlaceholder,
-        slippageViewModel.initialValue,
-        slippageViewModel.inputButtons,
-        slippageViewModel.errorState?.error
-    ) {
-        slippageViewModel.onChangeText(it)
-    }
-}
 
 @Composable
 fun SlippageAmount(
@@ -84,18 +67,6 @@ fun SlippageAmount(
 }
 
 @Composable
-fun TransactionDeadlineInput(deadlineViewModel: SwapDeadlineViewModel) {
-    TransactionDeadlineInput(
-        deadlineViewModel.inputFieldPlaceholder,
-        deadlineViewModel.initialValue,
-        deadlineViewModel.inputButtons,
-        deadlineViewModel.errorState?.error
-    ) {
-        deadlineViewModel.onChangeText(it)
-    }
-}
-
-@Composable
 fun TransactionDeadlineInput(
     hint: String,
     initial: String?,
@@ -117,27 +88,6 @@ fun TransactionDeadlineInput(
     InfoText(
         text = stringResource(R.string.SwapSettings_DeadlineDescription),
     )
-}
-
-@Composable
-fun RecipientAddress(
-    blockchainType: BlockchainType,
-    recipientAddressViewModel: RecipientAddressViewModel,
-    navController: NavController,
-) {
-    val tokenQuery = TokenQuery(blockchainType, TokenType.Native)
-    App.marketKit.token(tokenQuery)?.let { token ->
-        RecipientAddress(
-            blockchainType = blockchainType,
-            navController = navController,
-            initial = recipientAddressViewModel.initialAddress,
-            onError = {
-                recipientAddressViewModel.updateError(it)
-            }
-        ) {
-            recipientAddressViewModel.onChangeAddress(it)
-        }
-    }
 }
 
 @Composable

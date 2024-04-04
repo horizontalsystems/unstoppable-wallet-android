@@ -43,7 +43,6 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconService
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.toHexString
@@ -224,10 +223,6 @@ class BackupProvider(
         balanceHiddenManager.setBalanceAutoHidden(settings.balanceAutoHidden)
 
         settings.conversionTokenQueryId?.let { baseTokenManager.setBaseTokenQueryId(it) }
-
-        settings.swapProviders.forEach {
-            localStorage.setSwapProviderId(BlockchainType.fromUid(it.blockchainTypeId), it.provider)
-        }
 
         launchScreenService.setLaunchScreen(settings.launchScreen)
         localStorage.marketsTabEnabled = settings.marketsTabEnabled
@@ -432,11 +427,6 @@ class BackupProvider(
 
         val watchlist = marketFavoritesManager.getAll().map { it.coinUid }
 
-        val swapProviders = EvmBlockchainManager.blockchainTypes.map { blockchainType ->
-            val provider = localStorage.getSwapProviderId(blockchainType) ?: SwapMainModule.OneInchProvider.id
-            SwapProvider(blockchainType.uid, provider)
-        }
-
         val btcModes = btcBlockchainManager.allBlockchains.map { blockchain ->
             val restoreMode = btcBlockchainManager.restoreMode(blockchain.type)
             val sortMode = btcBlockchainManager.transactionSortMode(blockchain.type)
@@ -470,7 +460,6 @@ class BackupProvider(
             chartIndicators = chartIndicators,
             balanceAutoHidden = balanceHiddenManager.balanceAutoHidden,
             conversionTokenQueryId = baseTokenManager.token?.tokenQuery?.id,
-            swapProviders = swapProviders,
             language = languageManager.currentLocaleTag,
             launchScreen = launchScreenService.optionsFlow.value.selected,
             marketsTabEnabled = localStorage.marketsTabEnabled,
@@ -646,13 +635,6 @@ data class FullBackup(
     val id: String
 )
 
-data class SwapProvider(
-    @SerializedName("blockchain_type_id")
-    val blockchainTypeId: String,
-    @SerializedName("provider")
-    val provider: String
-)
-
 data class BtcMode(
     @SerializedName("blockchain_type_id")
     val blockchainTypeId: String,
@@ -719,8 +701,6 @@ data class Settings(
     val balanceAutoHidden: Boolean,
     @SerializedName("conversion_token_query_id")
     val conversionTokenQueryId: String?,
-    @SerializedName("swap_providers")
-    val swapProviders: List<SwapProvider>,
     val language: String,
     @SerializedName("launch_screen")
     val launchScreen: LaunchPage,
