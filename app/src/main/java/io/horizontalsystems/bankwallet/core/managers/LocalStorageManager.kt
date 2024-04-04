@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.horizontalsystems.core.IThirdKeyboard
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -64,7 +63,6 @@ class LocalStorageManager(
     private val CURRENT_THEME = "current_theme"
     private val CHANGELOG_SHOWN_FOR_APP_VERSION = "changelog_shown_for_app_version"
     private val IGNORE_ROOTED_DEVICE_WARNING = "ignore_rooted_device_warning"
-    private val SWAP_PROVIDER = "swap_provider_"
     private val LAUNCH_PAGE = "launch_page"
     private val APP_ICON = "app_icon"
     private val MAIN_TAB = "main_tab"
@@ -478,14 +476,6 @@ class LocalStorageManager(
             preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value).apply()
         }
 
-    override fun getSwapProviderId(blockchainType: BlockchainType): String? {
-        return preferences.getString(getSwapProviderKey(blockchainType), null)
-    }
-
-    override fun setSwapProviderId(blockchainType: BlockchainType, providerId: String) {
-        preferences.edit().putString(getSwapProviderKey(blockchainType), providerId).apply()
-    }
-
     override var autoLockInterval: AutoLockInterval
         get() = preferences.getString(APP_AUTO_LOCK_INTERVAL, null)?.let {
             AutoLockInterval.fromRaw(it)
@@ -508,9 +498,4 @@ class LocalStorageManager(
         set(value) {
             preferences.edit().putBoolean(RBF_ENABLED, value).apply()
         }
-
-    private fun getSwapProviderKey(blockchainType: BlockchainType): String {
-        return SWAP_PROVIDER + blockchainType.uid
-    }
-
 }
