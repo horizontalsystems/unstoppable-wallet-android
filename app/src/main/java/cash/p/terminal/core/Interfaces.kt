@@ -121,9 +121,6 @@ interface ILocalStorage {
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
 
-    fun getSwapProviderId(blockchainType: BlockchainType): String?
-    fun setSwapProviderId(blockchainType: BlockchainType, providerId: String)
-
     fun clear()
 }
 

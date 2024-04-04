@@ -1,7 +1,5 @@
 package cash.p.terminal.modules.swap.coinselect
 
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,17 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.badge
-import cash.p.terminal.core.getInput
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.setNavigationResultX
-import cash.p.terminal.modules.swap.SwapMainModule
 import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.B2
@@ -39,34 +31,6 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.VSpacer
-
-class SelectSwapCoinFragment : BaseComposeFragment() {
-
-    @Composable
-    override fun GetContent(navController: NavController) {
-        val dex = navController.getInput<SwapMainModule.Dex>()
-        if (dex == null) {
-            navController.popBackStack()
-        } else {
-            val viewModel = viewModel<SelectSwapCoinViewModel>(
-                factory = SelectSwapCoinModule.Factory(
-                    dex
-                )
-            )
-            SelectSwapCoinDialogScreen(
-                title = stringResource(id =R.string.Select_Coins),
-                coinBalanceItems = viewModel.coinItems,
-                onSearchTextChanged = viewModel::onEnterQuery,
-                onClose = navController::popBackStack
-            ) {
-                navController.setNavigationResultX(it)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    navController.popBackStack()
-                }, 100)
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

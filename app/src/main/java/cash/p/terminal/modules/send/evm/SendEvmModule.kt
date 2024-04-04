@@ -7,18 +7,14 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendEthereumAdapter
 import cash.p.terminal.core.Warning
 import cash.p.terminal.core.isNative
-import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
-import cash.p.terminal.modules.swap.SwapMainModule.PriceImpactViewItem
 import cash.p.terminal.modules.walletconnect.request.WCChainData
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
-import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
 
@@ -33,22 +29,10 @@ data class SendEvmData(
         class Send(val info: SendInfo) : AdditionalInfo()
 
         @Parcelize
-        class Uniswap(val info: UniswapInfo) : AdditionalInfo()
-
-        @Parcelize
-        class OneInchSwap(val info: OneInchSwapInfo) : AdditionalInfo()
-
-        @Parcelize
         class WalletConnectRequest(val info: WalletConnectInfo) : AdditionalInfo()
 
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
-
-        val uniswapInfo: UniswapInfo?
-            get() = (this as? Uniswap)?.info
-
-        val oneInchSwapInfo: OneInchSwapInfo?
-            get() = (this as? OneInchSwap)?.info
 
         val walletConnectInfo: WalletConnectInfo?
             get() = (this as? WalletConnectRequest)?.info
@@ -69,29 +53,6 @@ data class SendEvmData(
     data class WalletConnectInfo(
         val dAppName: String?,
         val chain: WCChainData?
-    ) : Parcelable
-
-    @Parcelize
-    data class UniswapInfo(
-        val estimatedOut: BigDecimal,
-        val estimatedIn: BigDecimal,
-        val slippage: String? = null,
-        val deadline: String? = null,
-        val recipientDomain: String? = null,
-        val price: String? = null,
-        val priceImpact: PriceImpactViewItem? = null,
-        val gasPrice: String? = null,
-    ) : Parcelable
-
-    @Parcelize
-    data class OneInchSwapInfo(
-        val tokenFrom: Token,
-        val tokenTo: Token,
-        val amountFrom: BigDecimal,
-        val estimatedAmountTo: BigDecimal,
-        val slippage: BigDecimal,
-        val recipient: Address?,
-        val price: String? = null
     ) : Parcelable
 }
 

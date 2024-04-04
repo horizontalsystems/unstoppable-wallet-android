@@ -8,7 +8,6 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.evmfee.FeeSettingsError
 import cash.p.terminal.modules.evmfee.FeeSettingsWarning
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
-import cash.p.terminal.modules.swap.SwapMainModule.UniswapWarnings
 
 class CautionViewItemFactory(
     private val baseCoinService: EvmCoinService
@@ -38,20 +37,6 @@ class CautionViewItemFactory(
                     Translator.getString(R.string.FeeSettings_Overpricing_Title),
                     Translator.getString(R.string.FeeSettings_Overpricing),
                     CautionViewItem.Type.Warning
-                )
-            }
-            is UniswapWarnings.PriceImpactForbidden -> {
-                CautionViewItem(
-                    Translator.getString(R.string.Swap_PriceImpact),
-                    Translator.getString(R.string.Swap_PriceImpactTooHigh, warning.providerName),
-                    CautionViewItem.Type.Error
-                )
-            }
-            UniswapWarnings.PriceImpactWarning -> {
-                CautionViewItem(
-                    Translator.getString(R.string.Swap_PriceImpact),
-                    Translator.getString(R.string.Swap_PriceImpactWarning),
-                    CautionViewItem.Type.Error
                 )
             }
             else -> {
