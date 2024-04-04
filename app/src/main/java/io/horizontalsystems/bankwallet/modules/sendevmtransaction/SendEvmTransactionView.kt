@@ -32,15 +32,19 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.NftIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -125,6 +129,7 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController)
             is ViewItem.ValueMulti -> TitleValueMulti(item)
             is ViewItem.AmountMulti -> AmountMulti(item)
             is ViewItem.Amount -> Amount(item)
+            is ViewItem.AmountWithTitle -> AmountWithTitle(item)
             is ViewItem.NftAmount -> NftAmount(item)
             is ViewItem.Address -> TransactionInfoAddressCell(item.title, item.value, item.showAdd, item.blockchainType, navController)
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
@@ -270,6 +275,38 @@ private fun Amount(item: ViewItem.Amount) {
         subhead2_grey(
             text = item.fiatAmount ?: ""
         )
+    }
+}
+
+@Composable
+private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        CoinImage(
+            modifier = Modifier.size(32.dp),
+            iconUrl = item.token.coin.imageUrl,
+            placeholder = item.token.iconPlaceholder
+        )
+        HSpacer(16.dp)
+        Column {
+            subhead2_leah(text = item.title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = item.badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+        }
+        HFillSpacer(minWidth = 8.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = item.coinAmount,
+                maxLines = 1,
+                style = ComposeAppTheme.typography.subhead1,
+                color = setColorByType(item.type)
+            )
+            item.fiatAmount?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(text = it)
+            }
+        }
     }
 }
 
