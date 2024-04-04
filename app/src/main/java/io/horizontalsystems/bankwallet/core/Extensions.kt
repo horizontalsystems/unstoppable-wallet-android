@@ -19,14 +19,12 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.Auditor
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.Locale
@@ -164,25 +162,6 @@ fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
         .subscribe(onNext)
-}
-
-@CheckResult
-fun <T> Single<T>.subscribeIO(
-    onSuccess: (t: T) -> Unit,
-    onError: (e: Throwable) -> Unit
-): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onSuccess, onError)
-}
-
-@CheckResult
-fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onSuccess)
 }
 
 fun String.shorten(): String {

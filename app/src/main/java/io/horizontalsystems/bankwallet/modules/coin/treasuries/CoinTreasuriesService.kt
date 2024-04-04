@@ -1,22 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.coin.treasuries
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.coin.treasuries.CoinTreasuriesModule.TreasuryTypeFilter
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 
 class CoinTreasuriesService(
     val coin: Coin,
     private val repository: CoinTreasuriesRepository,
     private val currencyManager: CurrencyManager
 ) {
-    private var disposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val stateSubject = BehaviorSubject.create<DataState<List<CoinTreasury>>>()
     val stateObservable: Observable<DataState<List<CoinTreasury>>>
@@ -47,14 +50,14 @@ class CoinTreasuriesService(
     }
 
     private fun fetch(forceRefresh: Boolean) {
-        disposable?.dispose()
-
-        repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh)
-            .subscribeIO({
-                stateSubject.onNext(DataState.Success(it))
-            }, {
-                stateSubject.onNext(DataState.Error(it))
-            }).let { disposable = it }
+        coroutineScope.launch {
+            try {
+                val coinTreasuries = repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh).await()
+                stateSubject.onNext(DataState.Success(coinTreasuries))
+            } catch (e: Throwable) {
+                stateSubject.onNext(DataState.Error(e))
+            }
+        }
     }
 
     fun start() {
@@ -66,6 +69,6 @@ class CoinTreasuriesService(
     }
 
     fun stop() {
-        disposable?.dispose()
+        coroutineScope.cancel()
     }
 }

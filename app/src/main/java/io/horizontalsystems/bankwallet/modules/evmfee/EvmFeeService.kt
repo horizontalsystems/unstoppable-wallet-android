@@ -2,20 +2,20 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 
 import io.horizontalsystems.bankwallet.core.EvmError
 import io.horizontalsystems.bankwallet.core.convertedError
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 import java.math.BigInteger
 
 class EvmFeeService(
@@ -28,7 +28,7 @@ class EvmFeeService(
     private var gasLimit: Long? = null
     private var gasPriceInfoState: DataState<GasPriceInfo> = DataState.Loading
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private var gasPriceInfoDisposable: Disposable? = null
+    private var gasPriceInfoJob: Job? = null
 
     private val evmBalance: BigInteger
         get() = evmKit.accountState?.balance ?: BigInteger.ZERO
@@ -52,7 +52,6 @@ class EvmFeeService(
 
     override fun clear() {
         coroutineScope.cancel()
-        gasPriceInfoDisposable?.dispose()
     }
 
     private fun sync() {
@@ -70,18 +69,18 @@ class EvmFeeService(
     }
 
     private fun sync(gasPriceInfo: GasPriceInfo) {
-        gasPriceInfoDisposable?.dispose()
-
+        gasPriceInfoJob?.cancel()
         val transactionData = transactionData
 
         if (transactionData != null) {
-            feeDataSingle(gasPriceInfo, transactionData)
-                .subscribeIO({ transaction ->
+            gasPriceInfoJob = coroutineScope.launch {
+                try {
+                    val transaction = feeDataSingle(gasPriceInfo, transactionData).await()
                     sync(transaction)
-                }, { error ->
-                    _transactionStatusFlow.tryEmit(DataState.Error(error))
-                })
-                .let { gasPriceInfoDisposable = it }
+                } catch (e: Throwable) {
+                    _transactionStatusFlow.tryEmit(DataState.Error(e))
+                }
+            }
         } else {
             _transactionStatusFlow.tryEmit(DataState.Loading)
         }

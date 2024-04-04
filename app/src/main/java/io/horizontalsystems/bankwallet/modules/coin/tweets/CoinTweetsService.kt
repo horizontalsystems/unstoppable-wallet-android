@@ -1,19 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.coin.tweets
 
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.marketkit.models.LinkType
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 
 class CoinTweetsService(
     private val coinUid: String,
     private val twitterProvider: TweetsProvider,
     private val marketKit: MarketKitWrapper,
 ) {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val disposables = CompositeDisposable()
 
     private val stateSubject = BehaviorSubject.create<DataState<List<Tweet>>>()
@@ -36,41 +39,35 @@ class CoinTweetsService(
     }
 
     private fun fetch() {
-        val tmpUser = user
+        coroutineScope.launch {
+            try {
+                val tmpUser = user
+                val twitterUser: TwitterUser
 
-        val twitterUserSingle = if (tmpUser != null) {
-            Single.just(tmpUser)
-        } else {
-            marketKit
-                .marketInfoOverviewSingle(coinUid, "USD", "en", "market_tweets")
-                .flatMap {
-                    val username = it.links[LinkType.Twitter]
-
+                if (tmpUser != null) {
+                    twitterUser = tmpUser
+                } else {
+                    val marketInfoOverview = marketKit.marketInfoOverviewSingle(
+                        coinUid,
+                        "USD",
+                        "en",
+                        "market_tweets"
+                    ).await()
+                    val username = marketInfoOverview.links[LinkType.Twitter]
                     if (username.isNullOrBlank()) {
-                        Single.error(TweetsProvider.UserNotFound())
+                        throw TweetsProvider.UserNotFound()
                     } else {
-                        twitterProvider.userRequestSingle(username)
+                        twitterUser = twitterProvider.userRequestSingle(username).await()
+                        user = twitterUser
                     }
                 }
-                .doOnSuccess {
-                    user = it
-                }
-        }
 
-        twitterUserSingle
-            .flatMap {
-                twitterProvider.tweetsSingle(it)
+                val tweets = twitterProvider.tweetsSingle(twitterUser).await()
+                stateSubject.onNext(DataState.Success(tweets))
+            } catch (e: Throwable) {
+                stateSubject.onNext(DataState.Error(e))
             }
-            .subscribeIO(
-                {
-                    stateSubject.onNext(DataState.Success(it))
-                },
-                {
-                    stateSubject.onNext(DataState.Error(it))
-                })
-            .let {
-                disposables.add(it)
-            }
+        }
     }
 }
 

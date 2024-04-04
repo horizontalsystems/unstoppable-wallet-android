@@ -1,20 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.market.tvl
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 
 class TvlService(
     private val currencyManager: CurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository
 ) {
-
-    private var currencyManagerDisposable: Disposable? = null
-    private var globalMarketPointsDisposable: Disposable? = null
-    private var tvlDataDisposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var tvlDataJob: Job? = null
 
     val currency by currencyManager::baseCurrency
 
@@ -46,22 +49,29 @@ class TvlService(
     }
 
     private fun updateTvlData(forceRefresh: Boolean) {
-        tvlDataDisposable?.dispose()
-        globalMarketRepository.getMarketTvlItems(currency, chain, chartInterval, sortDescending, forceRefresh)
-            .subscribeIO({
-                marketTvlItemsObservable.onNext(DataState.Success(it))
-            }, {
-                marketTvlItemsObservable.onNext(DataState.Error(it))
-            })
-            .let { tvlDataDisposable = it }
+        tvlDataJob?.cancel()
+        tvlDataJob = coroutineScope.launch {
+            try {
+                val items = globalMarketRepository.getMarketTvlItems(
+                    currency,
+                    chain,
+                    chartInterval,
+                    sortDescending,
+                    forceRefresh
+                ).await()
+                marketTvlItemsObservable.onNext(DataState.Success(items))
+            } catch (e: Throwable) {
+                marketTvlItemsObservable.onNext(DataState.Error(e))
+            }
+        }
     }
 
     fun start() {
-        currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO {
+        coroutineScope.launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
                 forceRefresh()
             }
-            .let { currencyManagerDisposable = it }
+        }
 
         forceRefresh()
     }
@@ -72,9 +82,7 @@ class TvlService(
     }
 
     fun stop() {
-        currencyManagerDisposable?.dispose()
-        globalMarketPointsDisposable?.dispose()
-        tvlDataDisposable?.dispose()
+        coroutineScope.cancel()
     }
 
     fun updateChartInterval(chartInterval: HsTimePeriod?) {
