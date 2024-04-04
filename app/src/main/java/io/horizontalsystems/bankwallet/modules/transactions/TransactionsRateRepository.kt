@@ -4,11 +4,15 @@ import android.util.Log
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 class TransactionsRateRepository(
@@ -16,8 +20,7 @@ class TransactionsRateRepository(
     private val marketKit: MarketKitWrapper,
 ) : Clearable {
     private val baseCurrency get() = currencyManager.baseCurrency
-
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val dataExpiredSubject = PublishSubject.create<Unit>()
     val dataExpiredObservable: Observable<Unit> = dataExpiredSubject
@@ -28,13 +31,11 @@ class TransactionsRateRepository(
     private val requestedXRates = mutableMapOf<HistoricalRateKey, Unit>()
 
     init {
-        currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO {
+        coroutineScope.launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
                 dataExpiredSubject.onNext(Unit)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
     }
 
     fun getHistoricalRate(key: HistoricalRateKey): CurrencyValue? {
@@ -48,24 +49,27 @@ class TransactionsRateRepository(
 
         requestedXRates[key] = Unit
 
-        marketKit.coinHistoricalPriceSingle(key.coinUid, baseCurrency.code, key.timestamp)
-            .doFinally {
-                requestedXRates.remove(key)
-            }
-            .subscribeIO({ rate ->
+        coroutineScope.launch {
+            try {
+                val rate = marketKit.coinHistoricalPriceSingle(
+                    key.coinUid,
+                    baseCurrency.code,
+                    key.timestamp
+                ).await()
+
                 if (rate.compareTo(BigDecimal.ZERO) != 0) {
                     historicalRateSubject.onNext(Pair(key, CurrencyValue(baseCurrency, rate)))
                 }
-            }, {
-                Log.w("XRate", "Could not fetch xrate for ${key.coinUid}:${key.timestamp}, ${it.javaClass.simpleName}:${it.message}")
-            })
-            .let {
-                disposables.add(it)
+            } catch (e: Throwable) {
+                Log.w("XRate", "Could not fetch xrate for ${key.coinUid}:${key.timestamp}, ${e.javaClass.simpleName}:${e.message}")
+            } finally {
+                requestedXRates.remove(key)
             }
+        }
     }
 
     override fun clear() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 }
 

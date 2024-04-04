@@ -1,13 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.core.BackgroundManager
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketFavoritesService(
     private val repository: MarketFavoritesRepository,
@@ -15,9 +19,8 @@ class MarketFavoritesService(
     private val currencyManager: CurrencyManager,
     private val backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
-    private var favoritesDisposable: Disposable? = null
-    private var repositoryDisposable: Disposable? = null
-    private var currencyManagerDisposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var favoritesJob: Job? = null
 
     private val marketItemsSubject: BehaviorSubject<DataState<List<MarketItemWrapper>>> =
         BehaviorSubject.create()
@@ -39,18 +42,18 @@ class MarketFavoritesService(
         }
 
     private fun fetch() {
-        favoritesDisposable?.dispose()
+        favoritesJob?.cancel()
+        favoritesJob = coroutineScope.launch {
+            try {
+                val marketItems = repository
+                    .get(sortDescending, period, currencyManager.baseCurrency)
+                    .map { MarketItemWrapper(it, true) }
 
-        repository.get(sortDescending, period, currencyManager.baseCurrency)
-            .subscribeIO({ marketItems ->
-                marketItemsSubject.onNext(DataState.Success(marketItems.map {
-                    MarketItemWrapper(it, true)
-                }))
-            }, { error ->
-                marketItemsSubject.onNext(DataState.Error(error))
-            }).let {
-                favoritesDisposable = it
+                marketItemsSubject.onNext(DataState.Success(marketItems))
+            } catch (e: Throwable) {
+                marketItemsSubject.onNext(DataState.Error(e))
             }
+        }
     }
 
     fun removeFavorite(uid: String) {
@@ -64,21 +67,24 @@ class MarketFavoritesService(
     fun start() {
         backgroundManager.registerListener(this)
 
-        currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO { fetch() }
-            .let { currencyManagerDisposable = it }
+        coroutineScope.launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+                fetch()
+            }
+        }
 
-        repository.dataUpdatedObservable
-            .subscribeIO { fetch() }
-            .let { repositoryDisposable = it }
+        coroutineScope.launch {
+            repository.dataUpdatedObservable.asFlow().collect {
+                fetch()
+            }
+        }
 
         fetch()
     }
 
     fun stop() {
         backgroundManager.unregisterListener(this)
-        favoritesDisposable?.dispose()
-        currencyManagerDisposable?.dispose()
+        coroutineScope.cancel()
     }
 
     override fun willEnterForeground() {

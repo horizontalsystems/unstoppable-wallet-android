@@ -4,14 +4,19 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.marketkit.models.CoinCategory
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 
 class MarketCategoryService(
     private val marketCategoryRepository: MarketCategoryRepository,
@@ -22,8 +27,8 @@ class MarketCategoryService(
     topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
 ) {
-    private var disposables = CompositeDisposable()
-    private var favoriteDisposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var syncJob: Job? = null
 
     private var marketItems: List<MarketItem> = listOf()
 
@@ -49,25 +54,24 @@ class MarketCategoryService(
     }
 
     private fun sync(forceRefresh: Boolean) {
-        disposables.clear()
-
-        marketCategoryRepository
-            .get(
-                coinCategory.uid,
-                topMarket.value,
-                sortingField,
-                topMarket.value,
-                currencyManager.baseCurrency,
-                forceRefresh
-            )
-            .subscribeIO({ items ->
-                marketItems = items
+        syncJob?.cancel()
+        syncJob = coroutineScope.launch {
+            try {
+                marketItems = marketCategoryRepository
+                    .get(
+                        coinCategory.uid,
+                        topMarket.value,
+                        sortingField,
+                        topMarket.value,
+                        currencyManager.baseCurrency,
+                        forceRefresh
+                    )
+                    .await()
                 syncItems()
-            }, {
-                stateObservable.onNext(DataState.Error(it))
-            }).let {
-                disposables.add(it)
+            } catch (e: Throwable) {
+                stateObservable.onNext(DataState.Error(e))
             }
+        }
     }
 
     private fun syncItems() {
@@ -77,14 +81,13 @@ class MarketCategoryService(
     }
 
     fun start() {
-        sync(true)
-
-        favoritesManager.dataUpdatedAsync
-            .subscribeIO {
+        coroutineScope.launch {
+            favoritesManager.dataUpdatedAsync.asFlow().collect {
                 syncItems()
-            }.let {
-                favoriteDisposables.add(it)
             }
+        }
+
+        sync(true)
     }
 
     fun refresh() {
@@ -92,8 +95,7 @@ class MarketCategoryService(
     }
 
     fun stop() {
-        disposables.clear()
-        favoriteDisposables.clear()
+        coroutineScope.cancel()
     }
 
     fun addFavorite(coinUid: String) {
