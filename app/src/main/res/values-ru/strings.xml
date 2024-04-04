@@ -1030,6 +1030,7 @@
     <string name="EvmPrivateKey_Warning">Этот ключ предназначен для всех EVM-совместимых блокчейнов. Не передавайте его никому.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Private Keys -->
@@ -1086,6 +1087,7 @@
     <string name="AddToken_Symbol">Символ</string>
     <string name="AddToken_CoinCode">Код токена</string>
     <string name="AddToken_Decimals">Десятичные знаки</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
     <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес контракта</string>
@@ -1338,8 +1340,16 @@
     <string name="Coin_Analytics_Indicators_Neutral">Нейтрально</string>
     <string name="Coin_Analytics_Indicators_NoData">Нет данных</string>
     <string name="CoinAnalytics_CountItems">%d Элементов</string>
+    <string name="TechnicalAdvice_StableAdvice">Цена возвращается к нейтральным показателям, однако есть еще потенциал движения вверх. Учитывайте, что RSI = 50 и середина Bollinger Bands являются довольно сильными сопротивлениями и возможными точками разворота тренда. Не забывайте про риск менеджмент.</string>
+    <string name="TechnicalAdvice_EmaAbove">выше</string>
+    <string name="TechnicalAdvice_EmaBelow">ниже</string>
+    <string name="TechnicalAdvice_EmaGrowth">рост</string>
+    <string name="TechnicalAdvice_MacdPositive">выше</string>
+    <string name="TechnicalAdvice_MacdNegative">ниже</string>
+    <string name="TechnicalAdvice_MacdAdvice">MACD. Оценивает силу тренда, учитывая среднее изменение цены. Ежедневное значение гистограммы составляет %1$s (%2$s). Цена актива в глобальном масштабе может измениться на %3$s.</string>
     <string name="TechnicalAdvice_InfoTitle">Технические индикаторы</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Нейтрально</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Сигнал на продажу</string>
     <string name="ActivateSubscription_Title">Активировать</string>
     <string name="ActivateSubscription_Wallet">Кошелек</string>
     <string name="ActivateSubscription_Address">Адрес</string>
@@ -1433,6 +1443,7 @@
     <string name="ReleaseNotes_FollowUs">Мы в соцсетях</string>
     <string name="CoinPage_Chart_Locked">Заблокировано</string>
     <string name="ProUsersInfo_Title">Pro-пользователь</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Дополнительная информация о токене</string>
     <string name="ProUsersInfo_Description">Чтобы включить эти данные, вы должны получить бронзовый уровень UW NFTs “Coin Info+”\n\nТакже вы получите доступ к данным ниже:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX объем и рейтинг</string>
