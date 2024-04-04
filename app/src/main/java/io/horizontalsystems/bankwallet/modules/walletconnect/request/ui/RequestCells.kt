@@ -12,9 +12,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,12 +28,16 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Token
@@ -100,6 +106,57 @@ fun AmountCell(
                 text = fiatAmount,
                 textAlign = TextAlign.End
             )
+        }
+    }
+}
+
+@Composable
+fun AmountWithTitleCell(
+    fiatAmount: String?,
+    coinAmount: String,
+    type: ValueType,
+    token: Token,
+    title: String,
+    subtitle: String?
+) {
+    val coinAmountColor = when (type) {
+        ValueType.Regular -> ComposeAppTheme.colors.bran
+        ValueType.Disabled -> ComposeAppTheme.colors.grey
+        ValueType.Outgoing -> ComposeAppTheme.colors.leah
+        ValueType.Incoming -> ComposeAppTheme.colors.remus
+        ValueType.Warning -> ComposeAppTheme.colors.jacob
+        ValueType.Forbidden -> ComposeAppTheme.colors.lucian
+    }
+    RowUniversal(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+    ) {
+        CoinImage(
+            iconUrl = token.coin.imageUrl,
+            placeholder = token.iconPlaceholder,
+            modifier = Modifier
+                .padding(end = 16.dp)
+                .size(32.dp)
+        )
+        HSpacer(16.dp)
+        Column {
+            subhead2_leah(text = title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = subtitle ?: stringResource(id =R.string.CoinPlatforms_Native))
+        }
+        HFillSpacer(minWidth = 8.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = coinAmount,
+                maxLines = 1,
+                style = ComposeAppTheme.typography.subhead1,
+                color = coinAmountColor
+            )
+            fiatAmount?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(text = it)
+            }
         }
     }
 }

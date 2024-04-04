@@ -37,9 +37,11 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
@@ -171,6 +173,13 @@ private fun SwapApproveConfirmationScreen(
                                 SendEvmSettingsFragment.Input(parentNavGraphId)
                             )
                         }
+                    ),
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.popBackStack(R.id.multiswap, false)
+                        }
                     )
                 )
             )
@@ -190,14 +199,24 @@ private fun SwapApproveConfirmationScreen(
                 )
             }
             ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Swap_Approve),
-                    onClick = onSendClick,
-                    enabled = enabled
-                )
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(R.string.Swap_Approve),
+                        onClick = onSendClick,
+                        enabled = enabled
+                    )
+                    VSpacer(16.dp)
+                    ButtonPrimaryDefault(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = stringResource(R.string.Button_Cancel),
+                        onClick = {
+                            navController.popBackStack(R.id.multiswap, false)
+                        }
+                    )
+                }
             }
         }
     }

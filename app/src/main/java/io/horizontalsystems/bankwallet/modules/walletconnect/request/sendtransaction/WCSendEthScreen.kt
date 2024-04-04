@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransac
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountMultiCell
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.AmountWithTitleCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.SubheadCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleHexValueCell
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.ui.TitleTypedValueCell
@@ -127,6 +128,15 @@ fun WCSendEthRequestScreen(
                                 item.coinAmount,
                                 item.type,
                                 item.token
+                            )
+
+                            is ViewItem.AmountWithTitle -> AmountWithTitleCell(
+                                item.fiatAmount,
+                                item.coinAmount,
+                                item.type,
+                                item.token,
+                                item.title,
+                                item.badge
                             )
 
                             is ViewItem.TokenItem -> TokenCell(item.token)

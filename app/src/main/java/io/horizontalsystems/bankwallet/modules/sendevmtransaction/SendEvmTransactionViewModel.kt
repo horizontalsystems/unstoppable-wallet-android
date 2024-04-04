@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.EvmError
+import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.convertedError
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
@@ -382,16 +383,13 @@ class SendEvmTransactionViewModel(
     ): List<SectionViewItem>? {
         val coinService = coinServiceFactory.getCoinService(contractAddress) ?: return null
 
-        val viewItems = mutableListOf(
-            ViewItem.Subhead(
-                Translator.getString(R.string.Send_Confirmation_YouSend),
-                coinService.token.coin.name,
-                R.drawable.ic_arrow_up_right_12
-            ),
-            getAmount(
+        val viewItems: MutableList<ViewItem> = mutableListOf(
+            getAmountWithTitle(
                 coinService.amountData(value),
                 ValueType.Outgoing,
-                coinService.token
+                coinService.token,
+                Translator.getString(R.string.Send_Confirmation_YouSend),
+                coinService.token.badge
             )
         )
         val addressValue = to.eip55
@@ -435,16 +433,12 @@ class SendEvmTransactionViewModel(
                 add(ViewItem.TokenItem(coinService.token))
             } else {
                 add(
-                    ViewItem.Subhead(
-                        Translator.getString(R.string.Approve_YouApprove),
-                        coinService.token.coin.name,
-                    )
-                )
-                add(
-                    getAmount(
+                    getAmountWithTitle(
                         coinService.amountData(value),
                         ValueType.Regular,
-                        coinService.token
+                        coinService.token,
+                        Translator.getString(R.string.Approve_YouApprove),
+                        coinService.token.badge
                     )
                 )
             }
@@ -538,17 +532,12 @@ class SendEvmTransactionViewModel(
 
         val viewItems = buildList {
             add(
-                ViewItem.Subhead(
-                    Translator.getString(R.string.Send_Confirmation_YouSend),
-                    baseCoinService.token.coin.name,
-                    R.drawable.ic_arrow_up_right_12
-                )
-            )
-            add(
-                getAmount(
+                getAmountWithTitle(
                     baseCoinService.amountData(value),
                     ValueType.Outgoing,
-                    baseCoinService.token
+                    baseCoinService.token,
+                    Translator.getString(R.string.Send_Confirmation_YouSend),
+                    baseCoinService.token.badge,
                 )
             )
             val contact = getContact(toValue)
@@ -593,6 +582,22 @@ class SendEvmTransactionViewModel(
             amountData.primary.getFormatted(),
             valueType,
             token
+        )
+
+    private fun getAmountWithTitle(
+        amountData: SendModule.AmountData,
+        valueType: ValueType,
+        token: Token,
+        title: String,
+        badge: String?
+    ) =
+        ViewItem.AmountWithTitle(
+            amountData.secondary?.getFormatted(),
+            amountData.primary.getFormatted(),
+            valueType,
+            token,
+            title,
+            badge
         )
 
     private fun getGuaranteedAmount(amountData: SendModule.AmountData, token: Token) =
@@ -675,6 +680,15 @@ sealed class ViewItem {
         val coinAmount: String,
         val type: ValueType,
         val token: Token
+    ) : ViewItem()
+
+    class AmountWithTitle(
+        val fiatAmount: String?,
+        val coinAmount: String,
+        val type: ValueType,
+        val token: Token,
+        val title: String,
+        val badge: String?
     ) : ViewItem()
 
     class NftAmount(
