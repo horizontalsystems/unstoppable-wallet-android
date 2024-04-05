@@ -35,9 +35,6 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val twitterBearerToken by lazy {
         Translator.getString(R.string.twitterBearerToken)
     }
-    val cryptoCompareApiKey by lazy {
-        Translator.getString(R.string.cryptoCompareApiKey)
-    }
     val etherscanApiKey by lazy {
         Translator.getString(R.string.etherscanKey)
     }
