@@ -6,19 +6,20 @@ import io.horizontalsystems.bankwallet.core.IAccountsStorage
 import io.horizontalsystems.bankwallet.entities.Account
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.launch
 
 class AccountManager(
     private val storage: IAccountsStorage,
     private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
-
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var accountsCache = mutableMapOf<String, Account>()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()
@@ -162,15 +163,11 @@ class AccountManager(
     }
 
     override fun clearAccounts() {
-        val clearAsync = Single.fromCallable {
+        coroutineScope.launch {
+            delay(3000)
             accountCleaner.clearAccounts(storage.getDeletedAccountIds())
             storage.clearDeleted()
         }
-
-        Single.timer(3, TimeUnit.SECONDS)
-            .flatMap { clearAsync }
-            .subscribeOn(Schedulers.io())
-            .subscribe()
     }
 
 }
