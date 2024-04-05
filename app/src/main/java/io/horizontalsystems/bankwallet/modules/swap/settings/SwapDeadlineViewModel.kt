@@ -5,13 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.getState
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.InputButton
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.util.Optional
 import kotlin.math.floor
 
@@ -30,8 +32,6 @@ interface ISwapDeadlineService {
 class SwapDeadlineViewModel(
     private val service: ISwapDeadlineService
 ) : ViewModel(), IVerifiedInputViewModel {
-
-    private val disposable = CompositeDisposable()
 
     var errorState by mutableStateOf<DataState.Error?>(null)
         private set
@@ -60,11 +60,11 @@ class SwapDeadlineViewModel(
         get() = service.initialDeadline?.let { toMinutes(it) }
 
     init {
-        service.deadlineErrorObservable
-            .subscribe { sync() }
-            .let {
-                disposable.add(it)
+        viewModelScope.launch {
+            service.deadlineErrorObservable.asFlow().collect {
+                sync()
             }
+        }
         sync()
     }
 
@@ -85,10 +85,6 @@ class SwapDeadlineViewModel(
 
     private fun toMinutes(seconds: Long): String {
         return floor(seconds / 60.0).toLong().toString()
-    }
-
-    override fun onCleared() {
-        disposable.clear()
     }
 }
 

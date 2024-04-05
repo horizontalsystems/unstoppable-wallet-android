@@ -2,13 +2,14 @@ package io.horizontalsystems.bankwallet.modules.coin.tweets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.twitter.twittertext.Extractor
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class CoinTweetsViewModel(
     private val service: CoinTweetsService,
@@ -20,11 +21,9 @@ class CoinTweetsViewModel(
     val itemsLiveData = MutableLiveData<List<TweetViewItem>>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
 
-    private val disposables = CompositeDisposable()
-
     init {
-        service.stateObservable
-            .subscribeIO { state ->
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect { state ->
                 isRefreshingLiveData.postValue(false)
 
                 state.dataOrNull?.let {
@@ -35,9 +34,7 @@ class CoinTweetsViewModel(
                     viewStateLiveData.postValue(it)
                 }
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         service.start()
     }
@@ -73,7 +70,6 @@ class CoinTweetsViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 }
 

@@ -4,12 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.swap.settings.ui.InputButton
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 interface ISwapSlippageService {
@@ -29,8 +31,6 @@ class SwapSlippageViewModel(
     private val service: ISwapSlippageService
 ) : ViewModel(), IVerifiedInputViewModel {
 
-    private val disposable = CompositeDisposable()
-
     override val inputButtons: List<InputButton>
         get() = service.recommendedSlippages.map {
             val slippageStr = it.toPlainString()
@@ -46,11 +46,11 @@ class SwapSlippageViewModel(
         private set
 
     init {
-        service.slippageChangeObservable
-            .subscribe { sync() }
-            .let {
-                disposable.add(it)
+        viewModelScope.launch {
+            service.slippageChangeObservable.asFlow().collect {
+                sync()
             }
+        }
         sync()
     }
 
@@ -66,10 +66,6 @@ class SwapSlippageViewModel(
             else -> null
         }
         errorState = SwapSettingsModule.getState(caution)
-    }
-
-    override fun onCleared() {
-        disposable.clear()
     }
 
     override fun onChangeText(text: String?) {

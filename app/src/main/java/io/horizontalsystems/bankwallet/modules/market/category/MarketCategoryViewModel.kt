@@ -3,21 +3,23 @@ package io.horizontalsystems.bankwallet.modules.market.category
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketCategoryViewModel(
     private val service: MarketCategoryService,
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
     private var marketItems: List<MarketItemWrapper> = listOf()
     private var marketField = MarketField.PriceDiff
@@ -33,12 +35,11 @@ class MarketCategoryViewModel(
         syncHeader()
         syncMenu()
 
-        service.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
                 syncState(it)
-            }.let {
-                disposables.add(it)
             }
+        }
 
         service.start()
     }
@@ -123,7 +124,6 @@ class MarketCategoryViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun onAddFavorite(uid: String) {

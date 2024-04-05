@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.core
 import android.content.Intent
 import android.os.Parcelable
 import android.widget.ImageView
-import androidx.annotation.CheckResult
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
@@ -23,9 +22,6 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import java.util.Locale
 import java.util.Optional
 
@@ -134,14 +130,6 @@ fun LockTimeInterval?.stringResId(): Int {
         LockTimeInterval.year -> R.string.Send_LockTime_Year
         null -> R.string.Send_LockTime_Off
     }
-}
-
-@CheckResult
-fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onNext)
 }
 
 fun String.shorten(): String {

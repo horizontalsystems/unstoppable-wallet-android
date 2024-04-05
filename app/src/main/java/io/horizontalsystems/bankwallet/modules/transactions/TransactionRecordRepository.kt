@@ -1,17 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.transactions
 
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -34,8 +39,8 @@ class TransactionRecordRepository(
     private var allLoaded = AtomicBoolean(false)
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
-    private val disposables = CompositeDisposable()
-    private var disposableUpdates: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var updatesJob: Job? = null
 
     private var transactionWallets: List<TransactionWallet> = listOf()
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
@@ -178,15 +183,18 @@ class TransactionRecordRepository(
     }
 
     private fun unsubscribeFromUpdates() {
-        disposableUpdates?.dispose()
+        updatesJob?.cancel()
     }
 
     private fun subscribeForUpdates() {
-        disposableUpdates = Observable
-            .merge(activeAdapters.map { it.updatedObservable })
-            .subscribeIO {
-                handleUpdates()
-            }
+        updatesJob = coroutineScope.launch {
+            activeAdapters
+                .map { it.updatedObservable.asFlow() }
+                .merge()
+                .collect {
+                    handleUpdates()
+                }
+        }
     }
 
     @Synchronized
@@ -201,33 +209,26 @@ class TransactionRecordRepository(
 
         val itemsCount = page * itemsPerPage
 
-        val sources = activeAdapters.map { it.get(itemsCount) }
-        val recordsObservable = when {
-            sources.isEmpty() -> Single.just(listOf())
-            else -> Single.zip(sources) {
-                it.filterIsInstance<List<TransactionRecord>>().toList().flatten()
-            }
-        }
+        coroutineScope.launch {
+            try {
+                val records = activeAdapters
+                    .map { async { it.get(itemsCount).await() } }
+                    .awaitAll()
+                    .flatten()
 
-        recordsObservable
-            .subscribeOn(Schedulers.computation())
-            .observeOn(Schedulers.computation())
-            .doFinally {
+                handleRecords(records, page)
+            } catch (e: Throwable) {
+
+            } finally {
                 loading.set(false)
             }
-            .subscribe { records ->
-                handleRecords(records, page)
-            }
-            .let {
-                disposables.add(it)
-            }
+        }
     }
 
     override fun clear() {
         adaptersMap.values.forEach(TransactionAdapterWrapper::clear)
         adaptersMap.clear()
-        disposables.clear()
-        disposableUpdates?.dispose()
+        coroutineScope.cancel()
     }
 
     @Synchronized

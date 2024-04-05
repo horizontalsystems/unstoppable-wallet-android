@@ -14,11 +14,13 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.asFlow
 
 class MainSettingsService(
     private val backupManager: IBackupManager,
@@ -53,8 +55,6 @@ class MainSettingsService(
     val hasNonStandardAccount: Boolean
         get() = accountManager.hasNonStandardAccount
 
-    private var disposables: CompositeDisposable = CompositeDisposable()
-
     val appVersion: String
         get() {
             var appVersion = systemInfoManager.appVersion
@@ -83,27 +83,30 @@ class MainSettingsService(
         get() = pinComponent.isPinSet
 
     fun start() {
-        disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            backedUpSubject.onNext(it)
-        })
-
+        coroutineScope.launch {
+            backupManager.allBackedUpFlowable.asFlow().collect {
+                backedUpSubject.onNext(it)
+            }
+        }
         coroutineScope.launch {
             wcSessionManager.sessionsFlow.collect{
                 walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
             }
         }
-
-        disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
-            baseCurrencySubject.onNext(currencyManager.baseCurrency)
-        })
-
-        disposables.add(pinComponent.pinSetFlowable.subscribe {
-            pinSetSubject.onNext(pinComponent.isPinSet)
-        })
+        coroutineScope.launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+                baseCurrencySubject.onNext(currencyManager.baseCurrency)
+            }
+        }
+        coroutineScope.launch {
+            pinComponent.pinSetFlowable.asFlow().collect {
+                pinSetSubject.onNext(pinComponent.isPinSet)
+            }
+        }
     }
 
     fun stop() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 
     fun getWalletConnectSupportState(): WCManager.SupportState {

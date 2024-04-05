@@ -7,15 +7,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainSettingsViewModel(
     private val service: BlockchainSettingsService
 ) : ViewModel() {
-
-    private var disposables: CompositeDisposable = CompositeDisposable()
 
     var btcLikeChains by mutableStateOf<List<BlockchainSettingsModule.BlockchainViewItem>>(listOf())
         private set
@@ -24,12 +21,11 @@ class BlockchainSettingsViewModel(
         private set
 
     init {
-        service.blockchainItemsObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.blockchainItemsObservable.asFlow().collect {
                 sync(it)
-            }.let {
-                disposables.add(it)
             }
+        }
 
         service.start()
         sync(service.blockchainItems)
@@ -37,7 +33,6 @@ class BlockchainSettingsViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     private fun sync(blockchainItems: List<BlockchainSettingsModule.BlockchainItem>) {

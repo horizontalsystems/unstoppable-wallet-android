@@ -3,18 +3,15 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MainSettingsViewModel(
     private val service: MainSettingsService,
     val companyWebPage: String
 ) : ViewModel() {
-
-    private var disposables: CompositeDisposable = CompositeDisposable()
 
     val manageWalletShowAlertLiveData = MutableLiveData(shouldShowAlertForManageWallet(service.allBackedUp, service.hasNonStandardAccount))
     val securityCenterShowAlertLiveData = MutableLiveData(!service.isPinSet)
@@ -34,26 +31,27 @@ class MainSettingsViewModel(
                 aboutAppShowAlertLiveData.postValue(!it)
             }
         }
-
-        service.backedUpObservable
-            .subscribeIO { manageWalletShowAlertLiveData.postValue(shouldShowAlertForManageWallet(it, service.hasNonStandardAccount)) }
-            .let { disposables.add(it) }
-
-        service.pinSetObservable
-            .subscribeIO { securityCenterShowAlertLiveData.postValue(!it) }
-            .let { disposables.add(it) }
-
-        service.baseCurrencyObservable
-            .subscribeIO { baseCurrencyLiveData.postValue(it) }
-            .let { disposables.add(it) }
-
-        service.walletConnectSessionCountObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.backedUpObservable.asFlow().collect {
+                manageWalletShowAlertLiveData.postValue(shouldShowAlertForManageWallet(it, service.hasNonStandardAccount))
+            }
+        }
+        viewModelScope.launch {
+            service.pinSetObservable.asFlow().collect {
+                securityCenterShowAlertLiveData.postValue(!it)
+            }
+        }
+        viewModelScope.launch {
+            service.baseCurrencyObservable.asFlow().collect {
+                baseCurrencyLiveData.postValue(it)
+            }
+        }
+        viewModelScope.launch {
+            service.walletConnectSessionCountObservable.asFlow().collect {
                 wcSessionsCount = it
                 syncCounter()
             }
-            .let { disposables.add(it) }
-
+        }
         viewModelScope.launch {
             service.pendingRequestCountFlow.collect {
                 wcPendingRequestCount = it
@@ -71,7 +69,6 @@ class MainSettingsViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun getWalletConnectSupportState(): WCManager.SupportState {

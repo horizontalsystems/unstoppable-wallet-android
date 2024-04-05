@@ -4,11 +4,14 @@ import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaRpcSourceManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.blockchainsettings.BlockchainSettingsModule.BlockchainItem
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainSettingsService(
     private val btcBlockchainManager: BtcBlockchainManager,
@@ -16,8 +19,7 @@ class BlockchainSettingsService(
     private val evmSyncSourceManager: EvmSyncSourceManager,
     private val solanaRpcSourceManager: SolanaRpcSourceManager,
 ) {
-
-    private var disposables: CompositeDisposable = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     var blockchainItems: List<BlockchainItem> = listOf()
         private set(value) {
@@ -31,39 +33,32 @@ class BlockchainSettingsService(
 
 
     fun start() {
-        btcBlockchainManager.restoreModeUpdatedObservable
-            .subscribeIO {
+        coroutineScope.launch {
+            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect {
                 syncBlockchainItems()
-            }.let {
-                disposables.add(it)
             }
-
-        btcBlockchainManager.transactionSortModeUpdatedObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            btcBlockchainManager.transactionSortModeUpdatedObservable.asFlow().collect {
                 syncBlockchainItems()
-            }.let {
-                disposables.add(it)
             }
-
-        evmSyncSourceManager.syncSourceObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            evmSyncSourceManager.syncSourceObservable.asFlow().collect {
                 syncBlockchainItems()
-            }.let {
-                disposables.add(it)
             }
-
-        solanaRpcSourceManager.rpcSourceUpdateObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            solanaRpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
                 syncBlockchainItems()
-            }.let {
-                disposables.add(it)
             }
+        }
 
         syncBlockchainItems()
     }
 
     fun stop() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 
     private fun syncBlockchainItems() {

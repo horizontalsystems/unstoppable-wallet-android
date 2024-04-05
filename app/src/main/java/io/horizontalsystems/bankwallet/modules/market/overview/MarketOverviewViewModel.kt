@@ -7,7 +7,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -43,10 +42,10 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketOverview
 import io.horizontalsystems.marketkit.models.NftPrice
 import io.horizontalsystems.marketkit.models.TopMovers
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 class MarketOverviewViewModel(
@@ -54,8 +53,6 @@ class MarketOverviewViewModel(
     private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory,
     private val currencyManager: CurrencyManager
 ) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
 
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val viewItem = MutableLiveData<MarketOverviewModule.ViewItem>()
@@ -94,14 +91,13 @@ class MarketOverviewViewModel(
 
 
     init {
-        Observable
-            .combineLatest(
-                service.topMoversObservable,
-                service.marketOverviewObservable
-            ) { t1, t2 ->
-                Pair(t1, t2)
-            }
-            .subscribeIO { overviewItems ->
+        viewModelScope.launch {
+            val overviewItemsFlow = service.topMoversObservable.asFlow()
+                .combine(service.marketOverviewObservable.asFlow()) { t1, t2 ->
+                    Pair(t1, t2)
+                }
+
+            overviewItemsFlow.collect { overviewItems ->
                 val error = listOfNotNull(
                     overviewItems.first.exceptionOrNull(),
                     overviewItems.second.exceptionOrNull(),
@@ -120,9 +116,8 @@ class MarketOverviewViewModel(
                         syncViewItems()
                     }
                 }
-            }.let {
-                disposables.add(it)
             }
+        }
 
         service.start()
     }
@@ -378,7 +373,6 @@ class MarketOverviewViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 }
 

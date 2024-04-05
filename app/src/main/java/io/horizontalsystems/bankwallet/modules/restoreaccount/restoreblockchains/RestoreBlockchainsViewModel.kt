@@ -7,15 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.toLiveData
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.BackpressureStrategy
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class RestoreBlockchainsViewModel(
     private val service: RestoreBlockchainsService,
@@ -29,16 +30,18 @@ class RestoreBlockchainsViewModel(
     val restoreEnabledLiveData: LiveData<Boolean>
         get() = service.canRestore.toFlowable(BackpressureStrategy.DROP).toLiveData()
 
-    private var disposables = CompositeDisposable()
-
     init {
-        service.itemsObservable
-            .subscribeIO { sync(it) }
-            .let { disposables.add(it) }
+        viewModelScope.launch {
+            service.itemsObservable.asFlow().collect {
+                sync(it)
+            }
+        }
 
-        service.cancelEnableBlockchainObservable
-            .subscribeIO { disableBlockchainLiveData.postValue(it.uid) }
-            .let { disposables.add(it) }
+        viewModelScope.launch {
+            service.cancelEnableBlockchainObservable.asFlow().collect {
+                disableBlockchainLiveData.postValue(it.uid)
+            }
+        }
 
         sync(service.items)
     }
@@ -79,6 +82,5 @@ class RestoreBlockchainsViewModel(
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
-        disposables.clear()
     }
 }
