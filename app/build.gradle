@@ -17,8 +17,8 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 99
-        versionName "0.37.5"
+        versionCode 100
+        versionName "0.37.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         kapt {
@@ -107,6 +107,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
+            resValue "string", "infuraProjectId", "fc344bd5cc7e4bd3bb356a68a831d1ea"
+            resValue "string", "infuraSecretKey", "g2a75Cb5qI8NKXSonkHjv1sjj2QGL9l8iMu0iGcw06+/hEKGeXPydg"
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
             resValue "string", "polygonscanKey", "2JM7USE5YRI59RWFZQI2RECAZSNI5QEQGV"
