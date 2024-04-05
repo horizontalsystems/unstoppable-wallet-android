@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -55,8 +54,6 @@ class CoinOverviewViewModel(
             enabled = chartIndicatorManager.isEnabledFlow.value
         )
     )
-
-    private val disposables = CompositeDisposable()
 
     private var hudMessage: HudMessage? = null
         set(value) {
