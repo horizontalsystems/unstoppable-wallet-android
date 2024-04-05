@@ -4,7 +4,6 @@ import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 import io.reactivex.disposables.CompositeDisposable
@@ -14,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class WCSessionManager(
     private val accountManager: IAccountManager,
@@ -54,11 +54,11 @@ class WCSessionManager(
             }
         }
 
-        accountManager.accountsDeletedFlowable
-            .subscribeIO {
+        coroutineScope.launch {
+            accountManager.accountsDeletedFlowable.asFlow().collect {
                 handleDeletedAccount()
             }
-            .let { disposable.add(it) }
+        }
 
         coroutineScope.launch {
             WCDelegate.walletEvents.collect {
