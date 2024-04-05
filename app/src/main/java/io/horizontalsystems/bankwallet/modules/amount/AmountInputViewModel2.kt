@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.reactivex.disposables.CompositeDisposable
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -33,15 +32,10 @@ class AmountInputViewModel2(
 
     private var rate: CurrencyValue? = null
     private var currencyAmount: BigDecimal? = null
-    private var disposables = CompositeDisposable()
 
     init {
         refreshHint()
         refreshInputPrefix()
-    }
-
-    override fun onCleared() {
-        disposables.clear()
     }
 
     fun onEnterAmount(text: String) {

@@ -4,10 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class SwapApproveViewModel(
@@ -20,19 +22,15 @@ class SwapApproveViewModel(
         coinService.convertToMonetaryValue(it).toPlainString()
     } ?: ""
 
-    private val disposables = CompositeDisposable()
-
     var approveAllowed by mutableStateOf(false)
     var amountError by mutableStateOf<Throwable?>(null)
 
     init {
-        service.stateObservable
-                .subscribe {
-                    handle(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
+                handle(it)
+            }
+        }
     }
 
     fun validateAmount(value: String): Boolean {
@@ -62,9 +60,5 @@ class SwapApproveViewModel(
             ?.let {
                 SendEvmData(it.transactionData)
             }
-    }
-
-    override fun onCleared() {
-        disposables.dispose()
     }
 }
