@@ -25,7 +25,6 @@ class MarketKitWrapper(
     context: Context,
     hsApiBaseUrl: String,
     hsApiKey: String,
-    cryptoCompareApiKey: String? = null,
     appConfigProvider: AppConfigProvider,
     private val subscriptionManager: SubscriptionManager
 ) {
@@ -34,7 +33,6 @@ class MarketKitWrapper(
             context = context,
             hsApiBaseUrl = hsApiBaseUrl,
             hsApiKey = hsApiKey,
-            cryptoCompareApiKey = cryptoCompareApiKey,
             appVersion = appConfigProvider.appVersion,
             appId = appConfigProvider.appId
         )
