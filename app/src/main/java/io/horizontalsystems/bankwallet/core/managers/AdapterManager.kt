@@ -8,15 +8,16 @@ import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.ConcurrentHashMap
 
 class AdapterManager(
@@ -30,7 +31,7 @@ class AdapterManager(
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
@@ -43,34 +44,28 @@ class AdapterManager(
     }
 
     override fun startAdapterManager() {
-        disposables.add(walletManager.activeWalletsUpdatedObservable
-            .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribe { wallets ->
+        coroutineScope.launch {
+            walletManager.activeWalletsUpdatedObservable.asFlow().collect { wallets ->
                 initAdapters(wallets)
             }
-        )
-
-        disposables.add(btcBlockchainManager.restoreModeUpdatedObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            btcBlockchainManager.restoreModeUpdatedObservable.asFlow().collect {
                 handleUpdatedRestoreMode(it)
             }
-        )
-
-        disposables.add(solanaKitManager.kitStoppedObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            solanaKitManager.kitStoppedObservable.asFlow().collect {
                 handleUpdatedKit(BlockchainType.Solana)
             }
-        )
-
+        }
         for (blockchain in evmBlockchainManager.allBlockchains) {
-            evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable
-                .subscribeIO {
-                    handleUpdatedKit(blockchain.type)
-                }
-                .let {
-                    disposables.add(it)
-                }
+            coroutineScope.launch {
+                evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitUpdatedObservable.asFlow()
+                    .collect {
+                        handleUpdatedKit(blockchain.type)
+                    }
+            }
         }
     }
 

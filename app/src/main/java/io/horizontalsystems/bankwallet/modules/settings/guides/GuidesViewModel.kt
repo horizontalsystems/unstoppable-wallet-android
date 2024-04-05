@@ -9,8 +9,8 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
 
@@ -24,24 +24,20 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
 
-    private var disposables = CompositeDisposable()
-
     init {
-        repository.guideCategories
-                .subscribe { dataState ->
-                    viewModelScope.launch {
-                        dataState.viewState?.let {
-                            viewState = it
-                        }
+        viewModelScope.launch {
+            repository.guideCategories.asFlow().collect { dataState ->
+                viewModelScope.launch {
+                    dataState.viewState?.let {
+                        viewState = it
+                    }
 
-                        if (dataState is DataState.Success) {
-                            didFetchGuideCategories(dataState.data)
-                        }
+                    if (dataState is DataState.Success) {
+                        didFetchGuideCategories(dataState.data)
                     }
                 }
-                .let {
-                    disposables.add(it)
-                }
+            }
+        }
     }
 
     fun onSelectCategory(category: GuideCategory) {
@@ -50,8 +46,6 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
     }
 
     override fun onCleared() {
-        disposables.dispose()
-
         repository.clear()
     }
 

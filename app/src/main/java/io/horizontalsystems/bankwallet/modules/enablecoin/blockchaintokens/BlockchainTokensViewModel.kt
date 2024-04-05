@@ -4,16 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorMultipleDialog
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetSelectorViewItem
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainTokensViewModel(
     private val service: BlockchainTokensService
@@ -25,13 +26,13 @@ class BlockchainTokensViewModel(
     var config: BottomSheetSelectorMultipleDialog.Config? = null
         private set
     private var currentRequest: BlockchainTokensService.Request? = null
-    private val disposable: Disposable
 
     init {
-        disposable = service.requestObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.requestObservable.asFlow().collect {
                 handle(it)
             }
+        }
     }
 
     private fun handle(request: BlockchainTokensService.Request) {

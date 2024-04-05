@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.supportedNftTypes
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -27,9 +26,12 @@ import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.net.URI
 
 class EvmKitManager(
@@ -37,19 +39,16 @@ class EvmKitManager(
     backgroundManager: BackgroundManager,
     private val syncSourceManager: EvmSyncSourceManager
 ) : BackgroundManager.Listener {
-
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     init {
         backgroundManager.registerListener(this)
 
-        syncSourceManager.syncSourceObservable
-            .subscribeIO { blockchain ->
+        coroutineScope.launch {
+            syncSourceManager.syncSourceObservable.asFlow().collect { blockchain ->
                 handleUpdateNetwork(blockchain)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
     }
 
     private fun handleUpdateNetwork(blockchainType: BlockchainType) {

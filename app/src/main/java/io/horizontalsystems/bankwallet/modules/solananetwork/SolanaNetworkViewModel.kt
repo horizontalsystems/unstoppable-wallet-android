@@ -5,14 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
 
     var closeScreen by mutableStateOf(false)
         private set
@@ -24,13 +21,11 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
     val blockchainType = BlockchainType.Solana
 
     init {
-        service.itemsObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.itemsObservable.asFlow().collect {
                 sync(it)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
     }
 
     private fun sync(items: List<SolanaNetworkService.Item>) {
@@ -56,7 +51,6 @@ class SolanaNetworkViewModel(private val service: SolanaNetworkService) : ViewMo
 
     override fun onCleared() {
         service.clear()
-        disposables.clear()
     }
 
     data class ViewItem(

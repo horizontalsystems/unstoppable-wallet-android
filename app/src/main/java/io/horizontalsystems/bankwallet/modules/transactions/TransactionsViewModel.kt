@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.ViewState
@@ -23,11 +22,11 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.util.Calendar
 import java.util.Date
 
@@ -54,7 +53,6 @@ class TransactionsViewModel(
     private var viewState: ViewState = ViewState.Loading
     private var syncing = false
 
-    private val disposables = CompositeDisposable()
     private var refreshViewItemsJob: Job? = null
 
     init {
@@ -116,22 +114,18 @@ class TransactionsViewModel(
             }
         }
 
-        service.syncingObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.syncingObservable.asFlow().collect {
                 syncing = it
                 emitState()
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
-        service.itemsObservable
-            .subscribeIO { items ->
+        viewModelScope.launch {
+            service.itemsObservable.asFlow().collect { items ->
                 handleUpdatedItems(items)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         viewModelScope.launch(Dispatchers.Default) {
             balanceHiddenManager.balanceHiddenFlow.collect {
@@ -203,7 +197,6 @@ class TransactionsViewModel(
 
     override fun onCleared() {
         service.clear()
-        disposables.clear()
     }
 
     fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)

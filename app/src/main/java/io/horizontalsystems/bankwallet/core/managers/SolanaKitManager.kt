@@ -5,17 +5,18 @@ import android.os.Looper
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.coroutines.rx2.asObservable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class SolanaKitManager(
     private val appConfigProvider: AppConfigProvider,
@@ -24,8 +25,8 @@ class SolanaKitManager(
     backgroundManager: BackgroundManager
 ) : BackgroundManager.Listener {
 
-    private val disposables = CompositeDisposable()
-    private var tokenAccountDisposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var tokenAccountJob: Job? = null
 
     var solanaKitWrapper: SolanaKitWrapper? = null
 
@@ -43,13 +44,11 @@ class SolanaKitManager(
     init {
         backgroundManager.registerListener(this)
 
-        rpcSourceManager.rpcSourceUpdateObservable
-                .subscribeIO {
-                    handleUpdateNetwork()
-                }
-                .let {
-                    disposables.add(it)
-                }
+        coroutineScope.launch {
+            rpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
+                handleUpdateNetwork()
+            }
+        }
     }
 
     private fun handleUpdateNetwork() {
@@ -135,19 +134,17 @@ class SolanaKitManager(
         solanaKitWrapper?.solanaKit?.stop()
         solanaKitWrapper = null
         currentAccount = null
-        tokenAccountDisposable?.dispose()
+        tokenAccountJob?.cancel()
     }
 
     private fun startKit() {
         solanaKitWrapper?.solanaKit?.let { kit ->
-            kit.start()
-            kit.fungibleTokenAccountsFlow.asObservable()
-                    .subscribeIO {
-                        walletManager.add(it)
-                    }
-                    .let {
-                        tokenAccountDisposable = it
-                    }
+            tokenAccountJob = coroutineScope.launch {
+                kit.start()
+                kit.fungibleTokenAccountsFlow.collect {
+                    walletManager.add(it)
+                }
+            }
         }
     }
 

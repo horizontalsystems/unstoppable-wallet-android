@@ -5,23 +5,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsModule.Menu
 import io.horizontalsystems.bankwallet.ui.compose.Select
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketTopCoinsViewModel(
     private val service: MarketTopCoinsService,
     private var marketField: MarketField
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
     private var marketItems: List<MarketItemWrapper> = listOf()
 
@@ -36,12 +39,11 @@ class MarketTopCoinsViewModel(
         syncHeader()
         syncMenu()
 
-        service.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
                 syncState(it)
-            }.let {
-                disposables.add(it)
             }
+        }
 
         service.start()
     }
@@ -123,7 +125,6 @@ class MarketTopCoinsViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun onSelectorDialogDismiss() {

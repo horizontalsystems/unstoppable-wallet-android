@@ -5,10 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.Clearable
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import kotlinx.parcelize.Parcelize
 
 class RestoreSettingsViewModel(
@@ -19,18 +20,14 @@ class RestoreSettingsViewModel(
     var openZcashConfigure by mutableStateOf<Token?>(null)
         private set
 
-    private var disposables = CompositeDisposable()
-
     private var currentRequest: RestoreSettingsService.Request? = null
 
     init {
-        service.requestObservable
-                .subscribeIO {
-                    handleRequest(it)
-                }
-                .let {
-                    disposables.add(it)
-                }
+        viewModelScope.launch {
+            service.requestObservable.asFlow().collect {
+                handleRequest(it)
+            }
+        }
     }
 
     private fun handleRequest(request: RestoreSettingsService.Request) {
@@ -61,7 +58,6 @@ class RestoreSettingsViewModel(
 
     override fun onCleared() {
         clearables.forEach(Clearable::clear)
-        disposables.clear()
     }
 
     fun zcashConfigureOpened() {

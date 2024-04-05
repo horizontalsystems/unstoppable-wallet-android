@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettings
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.restoreSettingTypes
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -18,10 +17,14 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class ManageWalletsService(
     private val walletManager: IWalletManager,
@@ -40,25 +43,21 @@ class ManageWalletsService(
     private var fullCoins = listOf<FullCoin>()
     private var items = listOf<Item>()
 
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var filter: String = ""
 
     init {
-        walletManager.activeWalletsUpdatedObservable
-            .subscribeIO {
+        coroutineScope.launch {
+            walletManager.activeWalletsUpdatedObservable.asFlow().collect {
                 handleUpdated(it)
             }
-            .let {
-                disposables.add(it)
-            }
-
-        restoreSettingsService.approveSettingsObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            restoreSettingsService.approveSettingsObservable.asFlow().collect {
                 enable(it.token, it.settings)
-            }.let {
-                disposables.add(it)
             }
+        }
 
         sync(walletManager.activeWallets)
         syncFullCoins()
@@ -209,7 +208,7 @@ class ManageWalletsService(
     }
 
     override fun clear() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 
     data class Item(
