@@ -146,17 +146,6 @@ fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
 }
 
 @CheckResult
-fun <T> Observable<T>.subscribeIO(
-    onSuccess: (t: T) -> Unit,
-    onError: (e: Throwable) -> Unit
-): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onSuccess, onError)
-}
-
-@CheckResult
 fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
     return this
         .subscribeOn(Schedulers.io())

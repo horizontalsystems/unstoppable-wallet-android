@@ -5,48 +5,48 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.IAppNumberFormatter
 import io.horizontalsystems.bankwallet.core.logoUrl
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.ViewItem
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.CoinInvestment
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class CoinInvestmentsViewModel(
     private val service: CoinInvestmentsService,
     private val numberFormatter: IAppNumberFormatter
 ) : ViewModel() {
-    private val disposables = CompositeDisposable()
-
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val viewItemsLiveData = MutableLiveData<List<ViewItem>>()
 
     init {
-        service.stateObservable
-            .subscribeIO({ state ->
-                when (state) {
-                    is DataState.Success -> {
-                        viewStateLiveData.postValue(ViewState.Success)
-
-                        sync(state.data)
-                    }
-                    is DataState.Error -> {
-                        viewStateLiveData.postValue(ViewState.Error(state.error))
-                    }
-                    DataState.Loading -> {}
+        viewModelScope.launch {
+            service.stateObservable.asFlow()
+                .catch {
+                    viewStateLiveData.postValue(ViewState.Error(it))
                 }
-            }, {
-                viewStateLiveData.postValue(ViewState.Error(it))
-            }).let {
-                disposables.add(it)
-            }
+                .collect { state ->
+                    handleServiceState(state)
+                }
+        }
 
         service.start()
+    }
+
+    private fun handleServiceState(state: DataState<List<CoinInvestment>>) {
+        state.dataOrNull?.let {
+            viewStateLiveData.postValue(ViewState.Success)
+            sync(it)
+        }
+
+        state.errorOrNull?.let {
+            viewStateLiveData.postValue(ViewState.Error(it))
+        }
     }
 
     fun refresh() {
@@ -58,7 +58,6 @@ class CoinInvestmentsViewModel(
     }
 
     override fun onCleared() {
-        disposables.clear()
         service.stop()
     }
 
