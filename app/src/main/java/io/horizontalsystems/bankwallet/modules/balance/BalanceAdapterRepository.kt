@@ -4,12 +4,15 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAdapterManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class BalanceAdapterRepository(
@@ -18,8 +21,9 @@ class BalanceAdapterRepository(
 ) : Clearable {
     private var wallets = listOf<Wallet>()
 
-    private val updatesDisposables = CompositeDisposable()
-    private var adapterReadyDisposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var balanceStateUpdatedJob: Job? = null
+    private var balanceUpdatedJob: Job? = null
 
     private val readySubject = PublishSubject.create<Unit>()
     val readyObservable: Observable<Unit> get() = readySubject
@@ -28,27 +32,8 @@ class BalanceAdapterRepository(
     val updatesObservable: Observable<Wallet> get() = updatesSubject
 
     init {
-        subscribeForAdapterReadyUpdate()
-    }
-
-    override fun clear() {
-        unsubscribeFromAdapterUpdates()
-        unsubscribeFromAdapterReadyUpdate()
-    }
-
-    fun setWallet(wallets: List<Wallet>) {
-        unsubscribeFromAdapterUpdates()
-        this.wallets = wallets
-        subscribeForAdapterUpdates()
-    }
-
-    private fun unsubscribeFromAdapterReadyUpdate() {
-        adapterReadyDisposable?.dispose()
-    }
-
-    private fun subscribeForAdapterReadyUpdate() {
-        adapterReadyDisposable = adapterManager.adaptersReadyObservable
-            .subscribeIO {
+        coroutineScope.launch {
+            adapterManager.adaptersReadyObservable.asFlow().collect {
                 unsubscribeFromAdapterUpdates()
                 readySubject.onNext(Unit)
 
@@ -62,33 +47,43 @@ class BalanceAdapterRepository(
 
                 subscribeForAdapterUpdates()
             }
+        }
     }
+
+    override fun clear() {
+        unsubscribeFromAdapterUpdates()
+        coroutineScope.cancel()
+    }
+
+    fun setWallet(wallets: List<Wallet>) {
+        unsubscribeFromAdapterUpdates()
+        this.wallets = wallets
+        subscribeForAdapterUpdates()
+    }
+
     private fun unsubscribeFromAdapterUpdates() {
-        updatesDisposables.clear()
+        balanceStateUpdatedJob?.cancel()
+        balanceUpdatedJob?.cancel()
     }
 
     private fun subscribeForAdapterUpdates() {
         wallets.forEach { wallet ->
             adapterManager.getBalanceAdapterForWallet(wallet)?.let { adapter ->
-                adapter.balanceStateUpdatedFlowable
-                    .subscribeIO {
+                balanceStateUpdatedJob = coroutineScope.launch {
+                    adapter.balanceStateUpdatedFlowable.asFlow().collect {
                         updatesSubject.onNext(wallet)
                     }
-                    .let {
-                        updatesDisposables.add(it)
-                    }
+                }
 
-                adapter.balanceUpdatedFlowable
-                    .subscribeIO {
+                balanceUpdatedJob = coroutineScope.launch {
+                    adapter.balanceUpdatedFlowable.asFlow().collect {
                         updatesSubject.onNext(wallet)
 
                         adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.let {
                             balanceCache.setCache(wallet, it)
                         }
                     }
-                    .let {
-                        updatesDisposables.add(it)
-                    }
+                }
             }
         }
     }

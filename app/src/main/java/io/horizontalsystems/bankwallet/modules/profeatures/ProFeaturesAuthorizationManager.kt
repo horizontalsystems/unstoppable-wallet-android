@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.orNull
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.SecretString
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
@@ -18,16 +17,18 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
 import java.net.URI
-import java.util.*
+import java.util.Optional
 
 class ProFeaturesAuthorizationManager(
     private val storage: ProFeaturesStorage,
@@ -40,7 +41,7 @@ class ProFeaturesAuthorizationManager(
         val address: Address
     )
 
-    private val disposable = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val contractAddress = Address("0x495f947276749ce646f68ac8c248420045cb7b5e")
 
     private val _sessionKeyFlow = MutableStateFlow<ProFeaturesSessionKey?>(null)
@@ -74,13 +75,11 @@ class ProFeaturesAuthorizationManager(
         }
 
     init {
-        accountManager.accountsDeletedFlowable
-            .subscribeIO {
+        coroutineScope.launch {
+            accountManager.accountsDeletedFlowable.asFlow().collect {
                 handleDeletedAccounts()
             }
-            .let {
-                disposable.add(it)
-            }
+        }
     }
 
     fun getSessionKey(nftType: ProNft): ProFeaturesSessionKey? =

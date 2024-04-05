@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -33,8 +32,8 @@ import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnoswapDecoration
 import io.horizontalsystems.uniswapkit.decorations.SwapDecoration
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigInteger
 
 class SendEvmTransactionViewModel(
@@ -44,8 +43,6 @@ class SendEvmTransactionViewModel(
     private val contactsRepo: ContactsRepository,
     private val blockchainType: BlockchainType
 ) : ViewModel() {
-    private val disposable = CompositeDisposable()
-
     val sendEnabledLiveData = MutableLiveData(false)
 
     val sendingLiveData = MutableLiveData<Unit>()
@@ -56,8 +53,16 @@ class SendEvmTransactionViewModel(
     val viewItemsLiveData = MutableLiveData<List<SectionViewItem>>()
 
     init {
-        service.stateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
-        service.sendStateObservable.subscribeIO { sync(it) }.let { disposable.add(it) }
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
+                sync(it)
+            }
+        }
+        viewModelScope.launch {
+            service.sendStateObservable.asFlow().collect {
+                sync(it)
+            }
+        }
 
         sync(service.state)
         sync(service.sendState)
@@ -77,7 +82,6 @@ class SendEvmTransactionViewModel(
     }
 
     override fun onCleared() {
-        disposable.clear()
         service.clear()
     }
 

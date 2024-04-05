@@ -4,11 +4,15 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class TransactionSyncStateRepository(
     private val adapterManager: TransactionAdapterManager
@@ -21,12 +25,12 @@ class TransactionSyncStateRepository(
     private val lastBlockInfoSubject = PublishSubject.create<Pair<TransactionSource, LastBlockInfo>>()
     val lastBlockInfoObservable: Observable<Pair<TransactionSource, LastBlockInfo>> get() = lastBlockInfoSubject
 
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     fun getLastBlockInfo(source: TransactionSource): LastBlockInfo? = adapters[source]?.lastBlockInfo
 
     fun setTransactionWallets(transactionWallets: List<TransactionWallet>) {
-        disposables.clear()
+        coroutineScope.coroutineContext.cancelChildren()
         adapters.clear()
 
         transactionWallets.distinctBy { it.source }.forEach {
@@ -39,23 +43,19 @@ class TransactionSyncStateRepository(
         emitSyncing()
 
         adapters.forEach { (source, adapter) ->
-            adapter.lastBlockUpdatedFlowable
-                .subscribeIO {
+            coroutineScope.launch {
+                adapter.lastBlockUpdatedFlowable.asFlow().collect {
                     adapter.lastBlockInfo?.let { lastBlockInfo ->
                         lastBlockInfoSubject.onNext(Pair(source, lastBlockInfo))
                     }
                 }
-                .let {
-                    disposables.add(it)
-                }
+            }
 
-            adapter.transactionsStateUpdatedFlowable
-                .subscribeIO {
+            coroutineScope.launch {
+                adapter.transactionsStateUpdatedFlowable.asFlow().collect {
                     emitSyncing()
                 }
-                .let {
-                    disposables.add(it)
-                }
+            }
         }
     }
 
@@ -67,6 +67,6 @@ class TransactionSyncStateRepository(
     }
 
     override fun clear() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 }

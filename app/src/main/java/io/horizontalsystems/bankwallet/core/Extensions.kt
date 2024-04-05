@@ -23,7 +23,6 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -139,14 +138,6 @@ fun LockTimeInterval?.stringResId(): Int {
 
 @CheckResult
 fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onNext)
-}
-
-@CheckResult
-fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
     return this
         .subscribeOn(Schedulers.io())
         .observeOn(Schedulers.io())
