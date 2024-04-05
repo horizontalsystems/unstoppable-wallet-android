@@ -4,7 +4,6 @@ import android.text.TextUtils
 import io.horizontalsystems.bankwallet.core.tor.ConnectionStatus
 import io.horizontalsystems.bankwallet.core.tor.Tor
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import net.freehaven.tor.control.EventHandler
 import net.freehaven.tor.control.TorControlConnection
 import java.io.*
@@ -66,7 +65,6 @@ class TorControl(
         eventMonitor(torInfo)
 
         return createControlConn(maxTries)
-            .subscribeOn(Schedulers.io())
             .map {
                 configConnection(it, torInfo)
             }.onErrorReturn {

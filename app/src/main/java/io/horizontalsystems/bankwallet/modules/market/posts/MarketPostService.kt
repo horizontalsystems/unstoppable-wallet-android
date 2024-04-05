@@ -5,16 +5,20 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.models.Post
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 
 class MarketPostService(
     private val marketKit: MarketKitWrapper,
     private val backgroundManager: BackgroundManager,
 ) : BackgroundManager.Listener {
-
-    private var disposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var xxxJob: Job? = null
 
     private val stateSubject = BehaviorSubject.create<DataState<List<Post>>>()
     val stateObservable: Observable<DataState<List<Post>>>
@@ -26,14 +30,15 @@ class MarketPostService(
     }
 
     private fun fetchPosts() {
-        disposable?.dispose()
-        disposable = marketKit.postsSingle()
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                stateSubject.onNext(DataState.Success(it))
-            }, {
-                stateSubject.onNext(DataState.Error(it))
-            })
+        xxxJob?.cancel()
+        xxxJob = coroutineScope.launch {
+            try {
+                val posts = marketKit.postsSingle().await()
+                stateSubject.onNext(DataState.Success(posts))
+            } catch (e: Throwable) {
+                stateSubject.onNext(DataState.Error(e))
+            }
+        }
     }
 
     override fun willEnterForeground() {
@@ -45,7 +50,7 @@ class MarketPostService(
     }
 
     fun stop() {
-        disposable?.dispose()
+        coroutineScope.cancel()
         backgroundManager.unregisterListener(this)
     }
 
