@@ -3,10 +3,10 @@ package io.horizontalsystems.bankwallet.modules.settings.faq
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.retryWhen
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.FaqMap
 import io.horizontalsystems.bankwallet.entities.FaqSection
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +15,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
-import java.util.concurrent.TimeUnit
 
 class FaqRepository(
     private val faqManager: FaqManager,
@@ -51,20 +50,12 @@ class FaqRepository(
 
         coroutineScope.launch {
             try {
-                val faqMaps = faqManager.getFaqList()
-                    .retryWhen { errors -> // retry on error java.lang.AssertionError: No System TLS
-                        errors.zipWith(
-                            Flowable.range(1, retryLimit + 1)
-                        ) { error: Throwable, retryCount: Int ->
-                            if (retryCount < retryLimit && (error is AssertionError)) {
-                                retryCount
-                            } else {
-                                throw error
-                            }
-                        }.flatMap {
-                            Flowable.timer(1, TimeUnit.SECONDS)
-                        }
-                    }.await()
+                val faqMaps = retryWhen(
+                    times = retryLimit,
+                    predicate = { it is AssertionError }
+                ) {
+                    faqManager.getFaqList().await()
+                }
 
                 val faqSections = getByLocalLanguage(
                     faqMaps,
