@@ -22,6 +22,7 @@ import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.FullCoin
+import kotlinx.coroutines.delay
 import java.util.Locale
 import java.util.Optional
 
@@ -199,4 +200,22 @@ fun NavGraphBuilder.composablePopup(
         },
         content = content
     )
+}
+
+suspend fun <T> retryWhen(
+    times: Int,
+    predicate: suspend (cause: Throwable) -> Boolean,
+    block: suspend () -> T
+): T {
+    repeat(times - 1) {
+        try {
+            return block()
+        } catch (e: Throwable) {
+            if (!predicate(e)) {
+                throw e
+            }
+        }
+        delay(1000)
+    }
+    return block()
 }
