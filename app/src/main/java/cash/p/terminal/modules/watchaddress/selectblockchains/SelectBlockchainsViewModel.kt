@@ -24,7 +24,6 @@ class SelectBlockchainsViewModel(
 
     init {
         val tokens = service.tokens(accountType)
-        selectedCoins = tokens.toSet()
 
         when (accountType) {
             is AccountType.SolanaAddress,
@@ -66,7 +65,7 @@ class SelectBlockchainsViewModel(
             imageSource = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
             title = blockchain.name,
             subtitle = blockchain.description,
-            enabled = true
+            enabled = false
         )
     }
 
@@ -76,7 +75,7 @@ class SelectBlockchainsViewModel(
             imageSource = ImageSource.Remote(token.fullCoin.coin.imageUrl, R.drawable.coin_placeholder),
             title = token.fullCoin.coin.code,
             subtitle = token.fullCoin.coin.name,
-            enabled = true,
+            enabled = false,
             label = label
         )
     }
