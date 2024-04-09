@@ -66,7 +66,7 @@ class EvmTransactionConverter(
             }
 
             is IncomingDecoration -> {
-                EvmIncomingTransactionRecord(transaction, baseToken, source, decoration.from.eip55, baseCoinValue(decoration.value, false))
+                EvmIncomingTransactionRecord(transaction, baseToken, source, spamManager, decoration.from.eip55, baseCoinValue(decoration.value, false))
             }
 
             is OutgoingDecoration -> {
