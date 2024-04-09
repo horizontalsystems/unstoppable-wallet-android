@@ -50,10 +50,10 @@ class BitcoinCashAdapter(
     //
 
     override val explorerTitle: String
-        get() = "btc.com"
+        get() = "blockchair.com"
 
     override fun getTransactionUrl(transactionHash: String): String =
-        "https://bch.btc.com/$transactionHash"
+        "https://blockchair.com/bitcoin-cash/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -91,7 +91,7 @@ class BitcoinCashAdapter(
     override val blockchainType = BlockchainType.BitcoinCash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
-        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://bch.btc.com/bch/address/${it.address}") }
+        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/bitcoin-cash/address/${it.address}") }
 
     companion object {
         private const val confirmationsThreshold = 3
