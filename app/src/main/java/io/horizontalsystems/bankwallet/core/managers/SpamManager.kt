@@ -44,6 +44,13 @@ class SpamManager(
         }
     }
 
+    fun isIncomingSpam(transactionValue: TransactionValue): Boolean {
+        return when(transactionValue) {
+            is TransactionValue.CoinValue -> transactionValue.value <= BigDecimal.ZERO
+            else -> false
+        }
+    }
+
     fun updateFilterHideSuspiciousTx(hide: Boolean) {
         localStorage.hideSuspiciousTransactions = hide
         hideSuspiciousTx = hide
