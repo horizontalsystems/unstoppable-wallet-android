@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
@@ -35,46 +34,19 @@ fun BottomSheetSelectorMultiple(
     onItemsSelected: (List<Int>) -> Unit,
     onCloseClick: () -> Unit,
 ) {
-    BottomSheetSelectorMultiple(
-        title = config.title,
-        icon = config.icon,
-        items = config.viewItems,
-        selectedIndexes = config.selectedIndexes,
-        warningTitle = config.descriptionTitle,
-        warning = config.description,
-        notifyUnchanged = true,
-        allowEmpty = config.allowEmpty,
-        onItemsSelected = onItemsSelected,
-        onCloseClick = onCloseClick,
-    )
-}
-
-@Composable
-fun BottomSheetSelectorMultiple(
-    title: String,
-    icon: ImageSource,
-    items: List<BottomSheetSelectorViewItem>,
-    selectedIndexes: List<Int>,
-    warningTitle: String?,
-    warning: String?,
-    notifyUnchanged: Boolean,
-    allowEmpty: Boolean,
-    onItemsSelected: (List<Int>) -> Unit,
-    onCloseClick: () -> Unit,
-) {
-    val selected = remember(selectedIndexes, items) { mutableStateListOf<Int>().apply { addAll(selectedIndexes) } }
+    val selected = remember(config.uuid) { mutableStateListOf<Int>().apply { addAll(config.selectedIndexes) } }
 
     ComposeAppTheme {
         BottomSheetHeader(
-            iconPainter = icon.painter(),
-            title = title,
+            iconPainter = config.icon.painter(),
+            title = config.title,
             onCloseClick = onCloseClick
         ) {
             val localView = LocalView.current
-            warning?.let {
+            config.description?.let {
                 TextImportantWarning(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    title = warningTitle,
+                    title = config.descriptionTitle,
                     text = it
                 )
             }
@@ -84,7 +56,7 @@ fun BottomSheetSelectorMultiple(
                     .clip(RoundedCornerShape(12.dp))
                     .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
             ) {
-                items.forEachIndexed { index, item ->
+                config.viewItems.forEachIndexed { index, item ->
                     val onClick = if (item.copyableString != null) {
                         {
                             HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
@@ -134,12 +106,10 @@ fun BottomSheetSelectorMultiple(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 32.dp),
                 title = stringResource(R.string.Button_Done),
                 onClick = {
-                    if (notifyUnchanged || !equals(selectedIndexes, selected)) {
-                        onItemsSelected(selected)
-                    }
+                    onItemsSelected(selected)
                     onCloseClick.invoke()
                 },
-                enabled = allowEmpty || selected.isNotEmpty()
+                enabled = config.allowEmpty || selected.isNotEmpty()
             )
         }
     }
