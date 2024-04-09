@@ -25,13 +25,11 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellFooter
 import cash.p.terminal.ui.compose.components.CellMultilineLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
@@ -141,8 +139,8 @@ fun CoinAudit(auditViewItem: CoinAuditsModule.AuditViewItem, onClick: () -> Unit
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .clickable(onClick = onClick, enabled = auditViewItem.reportUrl != null),
+            .clickable(onClick = onClick, enabled = auditViewItem.reportUrl != null)
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
