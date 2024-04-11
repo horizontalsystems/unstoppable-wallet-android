@@ -97,6 +97,14 @@ fun WarningMessageCell(message: String) {
 }
 
 @Composable
+fun DescriptionCell(text: String) {
+    subhead2_grey(
+        modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 12.dp),
+        text = text
+    )
+}
+
+@Composable
 fun TransactionNftAmountCell(
     title: String,
     amount: ColoredValue,

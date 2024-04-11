@@ -407,10 +407,8 @@
     <string name="StatusInfo_FailedDescription">تراکنش پردازش نشده است و هیچ انتقال ارزشی صورت نگرفته است. با توجه به به دلیل رد شدن، برخی از تراکنش های ناموفق ممکن است هزینه تراکنش را کسر کنند. تراکنش‌هایی که با تراکنش دیگری جایگزین یا کنسل شده‌اند، کارمزد تراکنش را کسر نمی‌کنند و همچنین به عنوان تراکنش ناموفق در نظر گرفته می شوند. برنامه غیرقابل توقف نمی تواند دلیل تراکنش های ناموفق را نشان دهد، اما خود کاربران می توانند آن را در یک کاوشگر بلوک عمومی برای مثال etherscan.io جستجو کنند.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">افزایش سرعت</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">این اقدام با ارسال مجدد تراکنش قبلی با کارمزد بالاتر، تلاش می‌کند تا تراکنش قبلی را باطل کند. اگر تراکنش اصلی هنگام ارسال تراکنش جدید معلق بماند، احتمال باطل شدن و جایگزینی آن زیاد است (تضمین نشده است). تنها یکی از این دو تراکنش در بلاک چین گنجانده خواهد شد.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">ارسال مجدد</string>
     <string name="TransactionInfoOptions_Cancel_Title">انصراف</string>
-    <string name="TransactionInfoOptions_Cancel_Description">این اقدام با ارسال مجدد به عنوان یک تراکنش %s جدید به خود، تراکنش قبلی را باطل می کند. اگر تراکنش اصلی هنگام ارسال تراکنش جدید معلق بماند، احتمال باطل شدن و جایگزینی آن زیاد است (تضمین نشده است). تنها یکی از این دو تراکنش در بلاک چین گنجانده خواهد شد.</string>
     <string name="TransactionInfoOptions_Cancel_Button">لغو تراکنش</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">تراکنش در حال حاضر در بلاک است</string>
     <!-- Info -->

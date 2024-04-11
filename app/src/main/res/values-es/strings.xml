@@ -658,10 +658,8 @@
     <string name="StatusInfo_FailedDescription">La transacción no se procesó y no hubo transferencia de valor. Dependiendo de la razón del fracaso, algunas transacciones fallidas pueden consumir comisiones de transacción. Las transacciones que fueron reemplazadas o canceladas por otra transacción no consumen comisiones de transacción y también aparecerán sa fallida. La aplicación imparable no puede mostrar la razón de las transacciones fallidas, pero los usuarios son capaces de buscarlo ellos mismos en un explorador público de bloques etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Acelerar</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">Esta acción intentará invalidar la transacción anterior reenviándola con una tarifa más alta. Si la transacción original permanece pendiente cuando se envía una nueva, hay una alta probabilidad (no garantizada) de que será invalidada y reemplazada. Sólo una de estas dos transacciones se incluirá en la cadena de bloques.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Reenviar</string>
     <string name="TransactionInfoOptions_Cancel_Title">Cancelar</string>
-    <string name="TransactionInfoOptions_Cancel_Description">Esta acción intentará invalidar la transacción anterior reenviándola como una nueva transacción de 0 %s . Si la transacción original permanece pendiente cuando se envía una nueva, hay una alta probabilidad (no garantizada) de que será invalidada y reemplazada. Sólo una de estas dos transacciones se incluirá en la cadena de bloques.</string>
     <string name="TransactionInfoOptions_Cancel_Button">Cancelar la transacción</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">La transacción ya está en bloque</string>
     <!-- Info -->

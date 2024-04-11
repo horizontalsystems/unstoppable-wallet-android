@@ -638,10 +638,8 @@
     <string name="StatusInfo_FailedDescription">İşlem gerçekleşmedi ve herhangi bir değer transferi yapılmadı. Başarısız olma nedenine bağlı olarak, bazı başarısız işlemler, işlem ücreti tüketebilir. Başka bir işlemle değiştirilen veya iptal edilen işlemler, işlem ücretini tüketmez ve başarısız olarak görüntülenir. Unstoppable uygulaması başarısız işlemlerin nedenini gösteremez, ancak kullanıcılar bunu örneğin etherscan.io gibi herkese açık bir blok gezgininde kendileri arayabilirler.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Hızlandır</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">Bunu yapmak, daha yüksek bir ücretle işlemi yeniden göndererek önceki işlemi geçersiz kılmaya çalışacaktır. Yeni bir işlem gönderildiğinde ilk işlem beklemede kalırsa, geçersiz olması ve değiştirilmesi olasılığı yüksektir (garanti edilmez). Bu iki işlemden sadece biri blok zincire eklenecektir.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Yeniden Gönder</string>
     <string name="TransactionInfoOptions_Cancel_Title">İptal</string>
-    <string name="TransactionInfoOptions_Cancel_Description">Bu eylem, kendine yeni bir %s işlemi olarak yeniden göndererek önceki işlemi geçersiz kılmaya çalışacak. Yeni bir işlem gönderildiğinde orijinal işlem beklemede kalırsa, geçersiz kılınması ve değiştirilmesi olasılığı yüksektir (garanti edilmez). Bu iki işlemden sadece biri blok zincirine dahil edilecektir.</string>
     <string name="TransactionInfoOptions_Cancel_Button">İşlemi İptal Et</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">İşlem zaten blokta</string>
     <!-- Info -->

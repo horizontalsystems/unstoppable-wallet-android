@@ -55,7 +55,6 @@ fun SendEvmTransactionView(
     feeCellViewModel: EvmFeeCellViewModel,
     nonceViewModel: SendEvmNonceViewModel,
     navController: NavController,
-    description: String? = null
 ) {
 
     val items by transactionViewModel.viewItemsLiveData.observeAsState(listOf())
@@ -63,12 +62,6 @@ fun SendEvmTransactionView(
     val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
 
     Column {
-        description?.let {
-            subhead2_grey(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                text = it
-            )
-        }
         items.forEach { sectionViewItem ->
             SectionView(sectionViewItem.viewItems, navController)
         }

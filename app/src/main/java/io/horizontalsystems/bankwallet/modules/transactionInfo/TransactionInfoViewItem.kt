@@ -54,6 +54,8 @@ sealed class TransactionInfoViewItem {
     class SpeedUpCancel(val transactionHash: String, val blockchainType: BlockchainType) : TransactionInfoViewItem()
 
     class WarningMessage(val message: String) : TransactionInfoViewItem()
+
+    class Description(val text: String) : TransactionInfoViewItem()
 }
 
 enum class AmountType {
