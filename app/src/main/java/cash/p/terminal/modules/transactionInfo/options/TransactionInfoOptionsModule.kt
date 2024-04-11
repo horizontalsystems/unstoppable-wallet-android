@@ -152,7 +152,6 @@ object TransactionInfoOptionsModule {
                 }
                 TransactionSpeedUpCancelViewModel::class.java -> {
                     TransactionSpeedUpCancelViewModel(
-                        baseToken,
                         optionType,
                         fullTransaction.transaction.blockNumber == null
                     ) as T

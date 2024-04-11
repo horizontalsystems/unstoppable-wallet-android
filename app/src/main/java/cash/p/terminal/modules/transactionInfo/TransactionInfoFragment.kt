@@ -22,6 +22,7 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.DescriptionCell
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.PriceWithToggleCell
 import cash.p.terminal.ui.compose.components.SectionTitleCell
@@ -103,11 +104,21 @@ fun TransactionInfoSection(
     navController: NavController,
     getRawTransaction: () -> String?
 ) {
-    if (section.size == 1 && section[0] is TransactionInfoViewItem.WarningMessage) {
-        (section[0] as? TransactionInfoViewItem.WarningMessage)?.let {
-            WarningMessageCell(it.message)
+    //items without background
+    if (section.size == 1) {
+        when (val item = section[0]) {
+            is TransactionInfoViewItem.WarningMessage -> {
+                WarningMessageCell(item.message)
+                return
+            }
+            is TransactionInfoViewItem.Description -> {
+                DescriptionCell(text = item.text)
+                return
+            }
+            else -> {
+                //do nothing
+            }
         }
-        return
     }
 
     CellUniversalLawrenceSection(
@@ -251,8 +262,8 @@ fun TransactionInfoSection(
                         }
                     }
 
-                    is TransactionInfoViewItem.WarningMessage -> {
-                        //already handled
+                    else -> {
+                        //do nothing
                     }
                 }
             }

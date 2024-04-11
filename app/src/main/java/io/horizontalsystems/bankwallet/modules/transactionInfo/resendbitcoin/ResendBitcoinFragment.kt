@@ -40,11 +40,11 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.SectionTitleCell
 import cash.p.terminal.ui.compose.components.TitleAndValueCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
+import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -142,9 +142,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = 106.dp)
             ) {
-                InfoText(text = stringResource(uiState.descriptionResId))
-                Spacer(modifier = Modifier.height(12.dp))
-
+                VSpacer(height = 12.dp)
                 val topSectionItems = buildList<@Composable () -> Unit> {
                     add {
                         SectionTitleCell(

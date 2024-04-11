@@ -44,7 +44,6 @@ class ResendBitcoinViewModel(
 ) : ViewModelUiState<ResendBitcoinUiState>() {
 
     private val titleResId: Int
-    private val descriptionResId: Int
     private val sendButtonTitleResId: Int
     private val addressTitleResId: Int
 
@@ -71,14 +70,12 @@ class ResendBitcoinViewModel(
         when (type) {
             TransactionInfoOptionsModule.Type.SpeedUp -> {
                 titleResId = R.string.TransactionInfoOptions_SpeedUp_Title
-                descriptionResId = R.string.TransactionInfoOptions_SpeedUp_Description
                 addressTitleResId = R.string.Send_Confirmation_To
                 sendButtonTitleResId = R.string.TransactionInfoOptions_SpeedUp_Button
             }
 
             TransactionInfoOptionsModule.Type.Cancel -> {
                 titleResId = R.string.TransactionInfoOptions_Cancel_Title
-                descriptionResId = R.string.TransactionInfoOptions_Rbf_Cancel_Description
                 addressTitleResId = R.string.Send_Confirmation_Own
                 sendButtonTitleResId = R.string.TransactionInfoOptions_Cancel_Button
             }
@@ -143,7 +140,6 @@ class ResendBitcoinViewModel(
 
         return ResendBitcoinUiState(
             titleResId = titleResId,
-            descriptionResId = descriptionResId,
             sendButtonTitleResId = sendButtonTitleResId,
             type = type,
 
@@ -220,7 +216,6 @@ class ResendBitcoinViewModel(
 data class ResendBitcoinUiState(
     @StringRes
     val titleResId: Int,
-    val descriptionResId: Int,
     val sendButtonTitleResId: Int,
     val type: TransactionInfoOptionsModule.Type,
 
