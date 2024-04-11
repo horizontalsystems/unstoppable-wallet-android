@@ -35,6 +35,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
+import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
@@ -50,6 +51,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import java.math.BigDecimal
@@ -99,6 +101,7 @@ fun SendBitcoinNavHost(
                 adapter = viewModel.adapter,
                 token = viewModel.wallet.token,
                 address = viewModel.uiState.address,
+                memo = viewModel.uiState.memo,
                 value = viewModel.uiState.amount,
                 feeRate = viewModel.uiState.feeRate,
                 customUnspentOutputs = viewModel.customUnspentOutputs,
@@ -208,6 +211,11 @@ fun SendBitcoinScreen(
                     ) {
                         viewModel.onEnterAddress(it)
                     }
+                }
+
+                VSpacer(12.dp)
+                HSMemoInput(maxLength = 120) {
+                    viewModel.onEnterMemo(it)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))

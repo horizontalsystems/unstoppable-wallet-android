@@ -265,6 +265,7 @@ abstract class BitcoinBaseAdapter(
     fun send(
         amount: BigDecimal,
         address: String,
+        memo: String?,
         feeRate: Int,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
@@ -278,6 +279,7 @@ abstract class BitcoinBaseAdapter(
                 logger.info("call btc-kit.send")
                 kit.send(
                     address = address,
+                    memo = memo,
                     value = (amount * satoshisInBitcoin).toLong(),
                     senderPay = true,
                     feeRate = feeRate,
@@ -296,11 +298,12 @@ abstract class BitcoinBaseAdapter(
     fun availableBalance(
         feeRate: Int,
         address: String?,
+        memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal {
         return try {
-            val maximumSpendableValue = kit.maximumSpendableValue(address, feeRate, unspentOutputs, pluginData
+            val maximumSpendableValue = kit.maximumSpendableValue(address, memo, feeRate, unspentOutputs, pluginData
                     ?: mapOf())
             satoshiToBTC(maximumSpendableValue, RoundingMode.CEILING)
         } catch (e: Exception) {
@@ -320,6 +323,7 @@ abstract class BitcoinBaseAdapter(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
+        memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
     ): BitcoinFeeInfo? {
@@ -328,6 +332,7 @@ abstract class BitcoinBaseAdapter(
             kit.sendInfo(
                 value = satoshiAmount,
                 address = address,
+                memo = memo,
                 senderPay = true,
                 feeRate = feeRate,
                 unspentOutputs = unspentOutputs,
@@ -368,6 +373,7 @@ abstract class BitcoinBaseAdapter(
                 )
             }
         }
+        val memo = transaction.outputs.firstOrNull { it.memo != null }?.memo
 
         return when (transaction.type) {
             TransactionType.Incoming -> {
@@ -386,7 +392,8 @@ abstract class BitcoinBaseAdapter(
                         conflictingHash = transaction.conflictingTxHash,
                         showRawTransaction = transaction.status == TransactionStatus.NEW || transaction.status == TransactionStatus.INVALID,
                         amount = satoshiToBTC(transaction.amount),
-                        from = from
+                        from = from,
+                        memo = memo
                 )
             }
             TransactionType.Outgoing -> {
@@ -408,6 +415,7 @@ abstract class BitcoinBaseAdapter(
                     amount = satoshiToBTC(transaction.amount).negate(),
                     to = to,
                     sentToSelf = false,
+                    memo = memo,
                     replaceable = transaction.rbfEnabled && transaction.blockHeight == null && transaction.conflictingTxHash == null
                 )
             }
@@ -430,6 +438,7 @@ abstract class BitcoinBaseAdapter(
                     amount = satoshiToBTC(transaction.amount).negate(),
                     to = to,
                     sentToSelf = true,
+                    memo = memo,
                     replaceable = transaction.rbfEnabled && transaction.blockHeight == null && transaction.conflictingTxHash == null
                 )
             }

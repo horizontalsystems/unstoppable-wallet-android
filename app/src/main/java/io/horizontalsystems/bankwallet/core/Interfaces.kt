@@ -321,6 +321,7 @@ interface ISendBitcoinAdapter {
     fun availableBalance(
         feeRate: Int,
         address: String?,
+        memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal
@@ -330,6 +331,7 @@ interface ISendBitcoinAdapter {
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
+        memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
     ): BitcoinFeeInfo?
@@ -338,6 +340,7 @@ interface ISendBitcoinAdapter {
     fun send(
         amount: BigDecimal,
         address: String,
+        memo: String?,
         feeRate: Int,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,
