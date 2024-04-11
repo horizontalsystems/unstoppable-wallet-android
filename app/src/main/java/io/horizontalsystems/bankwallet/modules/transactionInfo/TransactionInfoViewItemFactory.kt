@@ -861,6 +861,12 @@ class TransactionInfoViewItemFactory(
 
             is BinanceChainOutgoingTransactionRecord ->
                 items.add(getFee(transaction.fee, rates[transaction.fee.coinUid]))
+
+            is SolanaOutgoingTransactionRecord -> {
+                if (transaction.fee != null) {
+                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
+                }
+            }
         }
 
         items.add(TransactionHash(transaction.transactionHash))
