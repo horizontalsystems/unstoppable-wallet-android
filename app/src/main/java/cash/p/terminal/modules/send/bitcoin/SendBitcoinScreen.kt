@@ -35,6 +35,7 @@ import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.fee.HSFeeRaw
+import cash.p.terminal.modules.memo.HSMemoInput
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
@@ -50,6 +51,7 @@ import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_leah
 import java.math.BigDecimal
@@ -99,6 +101,7 @@ fun SendBitcoinNavHost(
                 adapter = viewModel.adapter,
                 token = viewModel.wallet.token,
                 address = viewModel.uiState.address,
+                memo = viewModel.uiState.memo,
                 value = viewModel.uiState.amount,
                 feeRate = viewModel.uiState.feeRate,
                 customUnspentOutputs = viewModel.customUnspentOutputs,
@@ -208,6 +211,11 @@ fun SendBitcoinScreen(
                     ) {
                         viewModel.onEnterAddress(it)
                     }
+                }
+
+                VSpacer(12.dp)
+                HSMemoInput(maxLength = 120) {
+                    viewModel.onEnterMemo(it)
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))

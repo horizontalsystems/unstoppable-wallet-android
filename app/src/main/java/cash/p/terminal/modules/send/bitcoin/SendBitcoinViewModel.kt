@@ -59,6 +59,7 @@ class SendBitcoinViewModel(
     private var pluginState = pluginService.stateFlow.value
     private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
     private var utxoData = SendBitcoinModule.UtxoData()
+    private var memo: String? = null
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
@@ -104,6 +105,7 @@ class SendBitcoinViewModel(
         amount = amountState.amount,
         feeRate = feeRateState.feeRate,
         address = addressState.validAddress,
+        memo = memo,
         fee = fee,
         lockTimeInterval = pluginState.lockTimeInterval,
         addressError = addressState.addressError,
@@ -120,6 +122,17 @@ class SendBitcoinViewModel(
 
     fun onEnterAddress(address: Address?) {
         addressService.setAddress(address)
+    }
+
+    fun onEnterMemo(memo: String) {
+        val memo = memo.ifBlank { null }
+
+        this.memo = memo
+
+        amountService.setMemo(memo)
+        feeService.setMemo(memo)
+
+        emitState()
     }
 
     fun reset() {
@@ -226,6 +239,7 @@ class SendBitcoinViewModel(
             coin = wallet.token.coin,
             feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval,
+            memo = memo,
             rbfEnabled = localStorage.rbfEnabled
         )
     }
@@ -246,6 +260,7 @@ class SendBitcoinViewModel(
             val send = adapter.send(
                 amountState.amount!!,
                 addressState.validAddress!!.hex,
+                memo,
                 feeRateState.feeRate!!,
                 customUnspentOutputs,
                 pluginState.pluginData,
@@ -276,6 +291,7 @@ data class SendBitcoinUiState(
     val fee: BigDecimal?,
     val feeRate: Int?,
     val address: Address?,
+    val memo: String?,
     val lockTimeInterval: LockTimeInterval?,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,

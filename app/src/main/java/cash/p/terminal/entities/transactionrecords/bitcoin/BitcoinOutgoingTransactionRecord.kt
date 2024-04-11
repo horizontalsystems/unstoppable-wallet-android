@@ -22,7 +22,7 @@ class BitcoinOutgoingTransactionRecord(
     amount: BigDecimal,
     val to: String?,
     val sentToSelf: Boolean,
-    memo: String? = null,
+    memo: String?,
     source: TransactionSource,
     val replaceable: Boolean
 ) : BitcoinTransactionRecord(

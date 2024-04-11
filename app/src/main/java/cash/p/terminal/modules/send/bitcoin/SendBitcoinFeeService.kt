@@ -19,6 +19,7 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
 
     private var amount: BigDecimal? = null
     private var validAddress: Address? = null
+    private var memo: String? = null
     private var pluginData: Map<Byte, IPluginData>? = null
 
     private var feeRate: Int? = null
@@ -30,7 +31,7 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
         bitcoinFeeInfo = when {
             tmpAmount == null -> null
             tmpFeeRate == null -> null
-            else -> adapter.bitcoinFeeInfo(tmpAmount, tmpFeeRate, validAddress?.hex, customUnspentOutputs, pluginData)
+            else -> adapter.bitcoinFeeInfo(tmpAmount, tmpFeeRate, validAddress?.hex, memo, customUnspentOutputs, pluginData)
         }
     }
 
@@ -68,6 +69,13 @@ class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
 
     fun setCustomUnspentOutputs(customUnspentOutputs: List<UnspentOutputInfo>?) {
         this.customUnspentOutputs = customUnspentOutputs
+        refreshFeeInfo()
+        emitState()
+    }
+
+    fun setMemo(memo: String?) {
+        this.memo = memo
+
         refreshFeeInfo()
         emitState()
     }
