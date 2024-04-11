@@ -223,7 +223,9 @@ fun FormsInput(
                 if (pasteEnabled) {
                     val clipboardManager = LocalClipboardManager.current
                     ButtonSecondaryDefault(
-                        modifier = Modifier.padding(end = 16.dp),
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .height(28.dp),
                         title = stringResource(id = R.string.Send_Button_Paste),
                         onClick = {
                             clipboardManager.getText()?.text?.let { textInClipboard ->
@@ -534,7 +536,9 @@ fun FormsInputMultiline(
                     if (pasteEnabled) {
                         val clipboardManager = LocalClipboardManager.current
                         ButtonSecondaryDefault(
-                            modifier = Modifier.padding(end = 16.dp),
+                            modifier = Modifier
+                                .padding(end = 16.dp)
+                                .height(28.dp),
                             title = stringResource(id = R.string.Send_Button_Paste),
                             onClick = {
                                 clipboardManager.getText()?.text?.let { textInClipboard ->
