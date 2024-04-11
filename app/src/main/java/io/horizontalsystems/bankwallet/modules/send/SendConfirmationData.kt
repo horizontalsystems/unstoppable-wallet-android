@@ -14,6 +14,6 @@ data class SendConfirmationData(
     val coin: Coin,
     val feeCoin: Coin,
     val lockTimeInterval: LockTimeInterval? = null,
-    val memo: String? = null,
+    val memo: String?,
     val rbfEnabled: Boolean? = null
 )
