@@ -648,10 +648,8 @@
     <string name="StatusInfo_FailedDescription">La transaction n\'a pas été traitée et aucun transfert de fonds n\'a eu lieu. En fonction de la raison de l\'échec, certaines transactions qui ont échoué peuvent entraîner des frais de transaction. Les transactions qui ont été remplacées ou annulées par une autre transaction ne génèrent pas de frais et apparaîtront également comme ayant échoué. L\'application Unstoppable n\'est pas en mesure d\'indiquer la raison de l\'échec des transactions, mais les utilisateurs peuvent en trouver eux-mêmes la raison sur un explorateur de blocs public, comme etherscan.io par exemple.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Accélérer</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">Cette action tentera d\'invalider la transaction précédente en la renvoyant avec des frais plus élevés. Si la transaction originale reste en attente lorsqu\'une nouvelle transaction est envoyée, il y a de fortes chances (non garanties) qu\'elle soit invalidée et remplacée. Seule une de ces deux transactions sera incluse dans la blockchain.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Réenvoyer</string>
     <string name="TransactionInfoOptions_Cancel_Title">Annuler</string>
-    <string name="TransactionInfoOptions_Cancel_Description">Cette action va tenter d\'invalider la transaction précédente en renvoyant une nouvelle transaction de 0 %s à soi. Si la transaction originale reste en attente quand une nouvelle a été envoyée, il y a une grande chance (non garantie) qu\'elle soit invalidée et remplacée. Seule une de ces deux transactions sera incluse dans la blockchain.</string>
     <string name="TransactionInfoOptions_Cancel_Button">Annuler la transaction</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaction déjà dans le block</string>
     <!-- Info -->
