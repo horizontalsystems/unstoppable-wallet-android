@@ -40,11 +40,11 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionTitleCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TitleAndValueCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoAddressCell
 import io.horizontalsystems.bankwallet.ui.compose.components.TransactionInfoContactCell
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -142,9 +142,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = 106.dp)
             ) {
-                InfoText(text = stringResource(uiState.descriptionResId))
-                Spacer(modifier = Modifier.height(12.dp))
-
+                VSpacer(height = 12.dp)
                 val topSectionItems = buildList<@Composable () -> Unit> {
                     add {
                         SectionTitleCell(

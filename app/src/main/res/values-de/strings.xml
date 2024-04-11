@@ -661,10 +661,8 @@
     <string name="StatusInfo_FailedDescription">Die Transaktion wurde nicht verarbeitet und es wurde kein Werttransfer durchgeführt. Abhängig vom Grund des Scheiterns können einige fehlgeschlagene Transaktionen Transaktionsgebühren kosten. Transaktionen, die durch eine andere Transaktion ersetzt oder storniert wurden, verbrauchen keine Transaktionsgebühren und scheinen ebenfalls fehlgeschlagen zu sein. Die unaufhaltsame App kann den Grund für fehlgeschlagene Transaktionen nicht anzeigen. aber Benutzer können es selbst auf einem öffentlichen Block-Explorer etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Beschleunigen</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">Mit dieser Aktion wird versucht, die vorherige Transaktion durch erneutes Senden mit einer höheren Gebühr ungültig zu machen. Wenn die ursprüngliche Transaktion noch aussteht, während eine neue gesendet wird, besteht eine hohe Wahrscheinlichkeit (nicht garantiert), dass sie für ungültig erklärt und ersetzt wird. Nur eine dieser beiden Transaktionen wird in die Blockchain aufgenommen.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Nochmal senden</string>
     <string name="TransactionInfoOptions_Cancel_Title">Abbrechen</string>
-    <string name="TransactionInfoOptions_Cancel_Description">Diese Aktion wird versuchen, die vorherige Transaktion durch erneutes Senden als eine neue 0 %s Transaktion an sich zu ungültigen. Wenn die ursprüngliche Transaktion noch aussteht, wenn eine neue gesendet wird, gibt es eine hohe Wahrscheinlichkeit (nicht garantiert), dass sie ungültig und ersetzt wird. Nur eine dieser beiden Transaktionen wird in die Blockchain aufgenommen.</string>
     <string name="TransactionInfoOptions_Cancel_Button">Transaktion abbrechen</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Transaktion bereits im Block</string>
     <!-- Info -->
