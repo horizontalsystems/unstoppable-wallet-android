@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.disposables.CompositeDisposable
 
@@ -144,141 +145,148 @@ class CoinOverviewViewModel(
             null
         }
 
-        fullCoin.tokens.sortedBy { it.blockchainType.order }.forEach { token ->
-            val canAddToWallet = accountTypeNotWatch != null
-                    && token.isSupported
-                    && token.blockchainType.supports(accountTypeNotWatch)
+        fullCoin.tokens.sortedWith(
+            compareBy<Token> { it.type.order }
+                .thenBy { it.blockchainType.order }
+        )
+            .forEach { token ->
+                val canAddToWallet = accountTypeNotWatch != null
+                        && token.isSupported
+                        && token.blockchainType.supports(accountTypeNotWatch)
 
-            when (val tokenType = token.type) {
-                is TokenType.Eip20 -> {
-                    val inWallet =
-                        canAddToWallet && activeWallets.any { it.token == token }
-                    items.add(
-                        TokenVariant(
-                            value = tokenType.address.shorten(),
-                            copyValue = tokenType.address,
-                            imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
-                            name = token.blockchain.name,
-                            token = token,
-                            canAddToWallet = canAddToWallet,
-                            inWallet = inWallet
+                when (val tokenType = token.type) {
+                    is TokenType.Eip20 -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.address.shorten(),
+                                copyValue = tokenType.address,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
                         )
-                    )
-                }
+                    }
 
-                is TokenType.Bep2 -> {
-                    val inWallet =
-                        canAddToWallet && activeWallets.any { it.token == token }
-                    items.add(
-                        TokenVariant(
-                            value = tokenType.symbol,
-                            copyValue = tokenType.symbol,
-                            imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = token.blockchain.bep2TokenUrl(tokenType.symbol),
-                            name = token.blockchain.name,
-                            token = token,
-                            canAddToWallet = canAddToWallet,
-                            inWallet = inWallet
+                    is TokenType.Bep2 -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.symbol,
+                                copyValue = tokenType.symbol,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.bep2TokenUrl(tokenType.symbol),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
                         )
-                    )
-                }
+                    }
 
-                is TokenType.Spl -> {
-                    val inWallet =
-                        canAddToWallet && activeWallets.any { it.token == token }
-                    items.add(
-                        TokenVariant(
-                            value = tokenType.address.shorten(),
-                            copyValue = tokenType.address,
-                            imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
-                            name = token.blockchain.name,
-                            token = token,
-                            canAddToWallet = canAddToWallet,
-                            inWallet = inWallet
+                    is TokenType.Spl -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.address.shorten(),
+                                copyValue = tokenType.address,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
                         )
-                    )
-                }
+                    }
 
-                is TokenType.Derived -> {
-                    type = TokenVariants.Type.Bips
+                    is TokenType.Derived -> {
+                        type = TokenVariants.Type.Bips
 
-                    val derivation = tokenType.derivation.accountTypeDerivation
+                        val derivation = tokenType.derivation.accountTypeDerivation
 
-                    val inWallet =
-                        canAddToWallet && activeWallets.any { it.token == token }
-                    items.add(
-                        TokenVariant(
-                            value = derivation.addressType + derivation.recommended,
-                            copyValue = null,
-                            imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = null,
-                            name = derivation.rawName,
-                            token = token,
-                            canAddToWallet = canAddToWallet,
-                            inWallet = inWallet,
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = derivation.addressType + derivation.recommended,
+                                copyValue = null,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = derivation.rawName,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet,
+                            )
                         )
-                    )
-                }
+                    }
 
-                is TokenType.AddressTyped -> {
-                    type = TokenVariants.Type.CoinTypes
+                    is TokenType.AddressTyped -> {
+                        type = TokenVariants.Type.CoinTypes
 
-                    val bchCoinType = tokenType.type.bitcoinCashCoinType
+                        val bchCoinType = tokenType.type.bitcoinCashCoinType
 
-                    val inWallet =
-                        canAddToWallet && activeWallets.any { it.token == token }
-                    items.add(
-                        TokenVariant(
-                            value = bchCoinType.title,
-                            copyValue = null,
-                            imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = null,
-                            name = bchCoinType.value,
-                            token = token,
-                            canAddToWallet = canAddToWallet,
-                            inWallet = inWallet
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = bchCoinType.title,
+                                copyValue = null,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = bchCoinType.value,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
                         )
-                    )
-                }
+                    }
 
-                TokenType.Native -> {
-                    val inWallet =
-                        canAddToWallet && activeWallets.any { it.token == token }
-                    items.add(
-                        TokenVariant(
-                            value = Translator.getString(R.string.CoinPlatforms_Native),
-                            copyValue = null,
-                            imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = null,
-                            name = token.blockchain.name,
-                            token = token,
-                            canAddToWallet = canAddToWallet,
-                            inWallet = inWallet
+                    TokenType.Native -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = Translator.getString(R.string.CoinPlatforms_Native),
+                                copyValue = null,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
                         )
-                    )
-                }
+                    }
 
-                is TokenType.Unsupported -> {
-                    items.add(
-                        TokenVariant(
-                            value = tokenType.reference.shorten(),
-                            copyValue = tokenType.reference,
-                            imgUrl = token.blockchainType.imageUrl,
-                            explorerUrl = when {
-                                tokenType.reference.isNotBlank() -> token.blockchain.eip20TokenUrl(tokenType.reference)
-                                else -> null
-                            },
-                            name = token.blockchain.name,
-                            token = token,
-                            canAddToWallet = false,
-                            inWallet = false
+                    is TokenType.Unsupported -> {
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.reference.shorten(),
+                                copyValue = tokenType.reference,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = when {
+                                    tokenType.reference.isNotBlank() -> token.blockchain.eip20TokenUrl(
+                                        tokenType.reference
+                                    )
+
+                                    else -> null
+                                },
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = false,
+                                inWallet = false
+                            )
                         )
-                    )
+                    }
                 }
             }
-        }
 
         return when {
             items.isNotEmpty() -> TokenVariants(items, type)

@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModul
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.BoxItem.TitleWithInfo
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.BoxItem.Value
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ChartViewItem
-import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.FooterType.DetectorFooterItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.FooterType.FooterItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.PreviewBlockViewItem
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.PreviewChartType
@@ -419,6 +418,64 @@ class CoinAnalyticsViewModel(
                 )
             )
         }
+        analytics.issues?.let { issues ->
+            val detectorFooterItems = mutableListOf<CoinAnalyticsModule.FooterType.DetectorFooterItem>()
+
+            val sortedList = issues.mapNotNull {
+                val blockchain = service.blockchain(it.blockchain) ?: return@mapNotNull null
+                CoinAnalyticsModule.BlockchainAndIssues(blockchain, it)
+            }.sortedBy { it.blockchain.type.order }
+
+            sortedList.forEach { blockchainAndIssues ->
+                val blockchain = blockchainAndIssues.blockchain
+                val blockchainTitle = blockchain.name
+                val icon =
+                    ImageSource.Remote(blockchain.type.imageUrl, R.drawable.coin_placeholder)
+                val blockchainIssues = blockchainAndIssues.issues
+                detectorFooterItems.add(
+                    CoinAnalyticsModule.FooterType.DetectorFooterItem(
+                        title = IconTitle(
+                            icon,
+                            TranslatableString.PlainString(blockchainTitle)
+                        ),
+                        value = Value(
+                            Translator.getString(
+                                R.string.CoinAnalytics_CountItems,
+                                blockchainIssues.issues.size
+                            )
+                        ),
+                        action = ActionType.OpenDetectorsDetails(
+                            title = blockchainTitle,
+                            issues = blockchainIssues.issues.map {
+                                IssueParcelable(
+                                    issue = it.issue,
+                                    title = it.title,
+                                    description = it.description,
+                                    issues = it.issues?.map { issueItem ->
+                                        IssueItemParcelable(
+                                            impact = issueItem.impact,
+                                            confidence = issueItem.confidence,
+                                            description = issueItem.description.trim()
+                                        )
+                                    }
+                                )
+                            }
+                        ),
+                        issues = getIssueSnippet(blockchainIssues.issues)
+                    )
+                )
+            }
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.CoinAnalytics_SmartContractAnalysis,
+                    info = null,
+                    analyticChart = null,
+                    footerItems = detectorFooterItems,
+                    sectionDescription = Translator.getString(R.string.CoinAnalytics_PoweredByDeFi)
+                )
+            )
+        }
+
         if (analytics.reports != null || analytics.fundsInvested != null || analytics.treasuries != null || analytics.audits != null) {
             val footerItems = mutableListOf<FooterItem>()
             analytics.reports?.let { reportsCount ->
@@ -445,58 +502,6 @@ class CoinAnalyticsViewModel(
                         title = Title(ResString(R.string.CoinAnalytics_Treasuries)),
                         value = Value(getFormattedValue(treasuries, currency)),
                         action = ActionType.OpenTreasuries(coin)
-                    )
-                )
-            }
-
-            analytics.issues?.let { issues ->
-                val detectorFooterItems = mutableListOf<DetectorFooterItem>()
-
-                val sortedList = issues.mapNotNull {
-                    val blockchain = service.blockchain(it.blockchain) ?: return@mapNotNull null
-                    CoinAnalyticsModule.BlockchainAndIssues(blockchain, it)
-                }.sortedBy { it.blockchain.type.order }
-
-                sortedList.forEach { blockchainAndIssues ->
-                    val blockchain = blockchainAndIssues.blockchain
-                    val blockchainTitle = blockchain.name
-                    val icon = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.coin_placeholder)
-                    val blockchainIssues = blockchainAndIssues.issues
-                    detectorFooterItems.add(
-                        DetectorFooterItem(
-                            title = IconTitle(
-                                icon,
-                                TranslatableString.PlainString(blockchainTitle)
-                            ),
-                            value = Value(Translator.getString(R.string.CoinAnalytics_CountItems, blockchainIssues.issues.size)),
-                            action = ActionType.OpenDetectorsDetails(
-                                title = blockchainTitle,
-                                issues = blockchainIssues.issues.map {
-                                    IssueParcelable(
-                                        issue = it.issue,
-                                        title = it.title,
-                                        description = it.description,
-                                        issues = it.issues?.map { issueItem ->
-                                            IssueItemParcelable(
-                                                impact = issueItem.impact,
-                                                confidence = issueItem.confidence,
-                                                description = issueItem.description.trim()
-                                            )
-                                        }
-                                    )
-                                }
-                            ),
-                            issues = getIssueSnippet(blockchainIssues.issues)
-                        )
-                    )
-                }
-                blocks.add(
-                    BlockViewItem(
-                        title = R.string.CoinAnalytics_SmartContractAnalysis,
-                        info = null,
-                        analyticChart = null,
-                        footerItems = detectorFooterItems,
-                        sectionDescription = Translator.getString(R.string.CoinAnalytics_PoweredByDeFi)
                     )
                 )
             }
