@@ -1719,7 +1719,7 @@
     <string name="CoinAnalytics_HighRiskItems">High Risk Items</string>
     <string name="CoinAnalytics_MediumRiskItems">Medium Risk Items</string>
     <string name="CoinAnalytics_AttentionRequired">Attention Required</string>
-    <string name="CoinAnalytics_PoweredByDeFi">Powered by De.Fi Yield App</string>
+    <string name="CoinAnalytics_PoweredByDeFi">Powered by De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Items</string>
 
     <string name="TechnicalAdvice_Title">Trading Assistant</string>
