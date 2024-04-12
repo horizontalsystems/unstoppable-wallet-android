@@ -544,14 +544,25 @@ class CoinAnalyticsViewModel(
         var medium = 0
         var low = 0
         issues.forEach { issue ->
+            var innerHigh = 0
+            var innerMedium = 0
+            var innerLow = 0
             issue.issues?.forEach { issueItem ->
                 when (issueItem.impact) {
-                    "Critical" -> high++
-                    "High" -> medium++
+                    "Critical",
+                    "High" -> innerHigh++
+                    "Medium" -> innerMedium++
                     "Low",
-                    "Informational",
-                    "Optimization" -> low++
+                    "Informational" -> innerLow++
+                    "Optimization" -> { /* ignore */}
                 }
+            }
+            if (innerHigh > 0) {
+                high++
+            } else if (innerMedium > 0) {
+                medium++
+            } else if (innerLow > 0) {
+                low++
             }
         }
         val snippets = mutableListOf<CoinAnalyticsModule.IssueSnippet>()
