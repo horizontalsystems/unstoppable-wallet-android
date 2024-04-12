@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsModule.VolumeMenuType
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketTicker
@@ -22,16 +21,9 @@ class CoinMarketsService(
     private var marketTickers = listOf<MarketTicker>()
     private val price = marketKit.coinPrice(fullCoin.coin.uid, currencyManager.baseCurrency.code)?.value ?: BigDecimal.ZERO
 
-    private val volumeOptions = listOf(
-        VolumeMenuType.Coin(fullCoin.coin.code),
-        VolumeMenuType.Currency(currency.code)
-    )
-
-    private var verifiedType: VerifiedType = VerifiedType.Verified
-    private var volumeType: VolumeMenuType = volumeOptions[0]
+    private var verifiedType: VerifiedType = VerifiedType.All
 
     val verifiedMenu = Select(verifiedType, VerifiedType.values().toList())
-    val volumeMenu = Select(volumeType, volumeOptions)
     val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> = BehaviorSubject.create()
 
     val currency get() = currencyManager.baseCurrency
@@ -59,12 +51,6 @@ class CoinMarketsService(
         emitItems()
     }
 
-    fun setVolumeType(volumeType: VolumeMenuType) {
-        this.volumeType = volumeType
-
-        emitItems()
-    }
-
     @Synchronized
     private fun emitItems() {
         val filtered = when (verifiedType) {
@@ -75,22 +61,14 @@ class CoinMarketsService(
         stateObservable.onNext(DataState.Success(filtered.map { createItem(it) }))
     }
 
-    private fun createItem(marketTicker: MarketTicker): MarketTickerItem {
-        val volume = when (volumeType) {
-            is VolumeMenuType.Coin -> marketTicker.volume
-            is VolumeMenuType.Currency -> marketTicker.volume.multiply(price)
-        }
-
-        return MarketTickerItem(
-            marketTicker.marketName,
-            marketTicker.marketImageUrl,
-            marketTicker.base,
-            marketTicker.target,
-            marketTicker.rate,
-            volume,
-            volumeType,
-            marketTicker.tradeUrl,
-            marketTicker.verified
-        )
-    }
+    private fun createItem(marketTicker: MarketTicker): MarketTickerItem = MarketTickerItem(
+        market = marketTicker.marketName,
+        marketImageUrl = marketTicker.marketImageUrl,
+        baseCoinCode = marketTicker.base,
+        targetCoinCode = marketTicker.target,
+        volumeFiat = marketTicker.volume.multiply(price),
+        volumeToken = marketTicker.volume,
+        tradeUrl = marketTicker.tradeUrl,
+        verified = marketTicker.verified
+    )
 }

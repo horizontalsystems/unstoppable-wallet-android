@@ -79,13 +79,10 @@ fun CoinMarketsScreen(
                             } else {
                                 CoinMarketsMenu(
                                     viewModel.verifiedMenu,
-                                    viewModel.volumeMenu,
-                                    {
-                                        viewModel.toggleVerifiedType(it)
-                                        scrollToTopAfterUpdate = true
-                                    },
-                                    { viewModel.toggleVolumeType(it) }
-                                )
+                                ) {
+                                    viewModel.toggleVerifiedType(it)
+                                    scrollToTopAfterUpdate = true
+                                }
                                 CoinMarketList(items, scrollToTopAfterUpdate)
                                 if (scrollToTopAfterUpdate) {
                                     scrollToTopAfterUpdate = false
@@ -103,30 +100,19 @@ fun CoinMarketsScreen(
 @Composable
 fun CoinMarketsMenu(
     menuVerified: Select<VerifiedType>,
-    menuVolumeType: Select<CoinMarketsModule.VolumeMenuType>,
     onToggleVerified: (VerifiedType) -> Unit,
-    onToggleVolumeType: (CoinMarketsModule.VolumeMenuType) -> Unit
 ) {
 
     var verifiedType by remember { mutableStateOf(menuVerified) }
-    var volumeType by remember { mutableStateOf(menuVolumeType) }
 
     HeaderSorting(borderTop = true, borderBottom = true) {
+        Spacer(Modifier.weight(1f))
         ButtonSecondaryToggle(
-            modifier = Modifier.padding(start = 16.dp),
+            modifier = Modifier.padding(end = 16.dp),
             select = verifiedType,
             onSelect = {
                 onToggleVerified.invoke(it)
                 verifiedType = Select(it, verifiedType.options)
-            }
-        )
-        Spacer(Modifier.weight(1f))
-        ButtonSecondaryToggle(
-            modifier = Modifier.padding(end = 16.dp),
-            select = volumeType,
-            onSelect = {
-                onToggleVolumeType.invoke(it)
-                volumeType = Select(it, volumeType.options)
             }
         )
     }
@@ -146,8 +132,8 @@ fun CoinMarketList(
                 item.market,
                 item.pair,
                 item.marketImageUrl ?: "",
-                item.rate,
-                MarketDataValue.Volume(item.volume),
+                item.volumeToken,
+                MarketDataValue.Volume(item.volumeFiat),
                 item.tradeUrl,
                 item.badge
             )
@@ -168,8 +154,8 @@ fun CoinMarketCell(
     name: String,
     subtitle: String,
     iconUrl: String,
-    coinRate: String? = null,
-    marketDataValue: MarketDataValue? = null,
+    volumeToken: String,
+    marketDataValue: MarketDataValue,
     tradeUrl: String?,
     badge: TranslatableString?
 ) {
@@ -194,7 +180,7 @@ fun CoinMarketCell(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(name, coinRate, badge?.getString())
+            MarketCoinFirstRow(name, volumeToken, badge?.getString())
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(subtitle, marketDataValue, null)
         }
