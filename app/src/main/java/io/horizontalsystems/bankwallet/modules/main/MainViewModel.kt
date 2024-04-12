@@ -1,8 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.main
 
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
+import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
@@ -20,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
@@ -92,7 +97,16 @@ class MainViewModel(
     val watchWallets: List<Account>
         get() = accountManager.accounts.filter { it.isWatchAccount }
 
+    var wcEvent: Wallet.Model? by mutableStateOf(null)
+        private set
+
     init {
+        viewModelScope.launch {
+            WCDelegate.walletEvents.collect { wcEvent ->
+                this@MainViewModel.wcEvent = wcEvent
+            }
+        }
+
         localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) {
             marketsTabEnabled = it
             syncNavigation()
