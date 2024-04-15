@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.main
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
@@ -22,6 +23,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
