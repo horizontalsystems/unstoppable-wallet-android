@@ -51,7 +51,6 @@ interface IPinComponent {
     fun initDefaultPinLevel()
     fun lock()
     fun updateLastExitDateBeforeRestart()
-    fun shouldShowPin(activity: Activity): Boolean
     fun isUnique(pin: String, forDuress: Boolean): Boolean
     fun keepUnlocked()
 }
