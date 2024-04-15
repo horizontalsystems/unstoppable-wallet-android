@@ -272,11 +272,12 @@ dependencies {
     implementation 'com.github.horizontalsystems:ethereum-kit-android:f4957a9'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
-    implementation 'com.github.horizontalsystems:market-kit-android:2d3cd5f'
+    implementation 'com.github.horizontalsystems:market-kit-android:ce358c3'
     implementation 'com.github.horizontalsystems:solana-kit-android:d8bb9f2'
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:2.0.1"
+    implementation 'com.github.horizontalsystems:market-kit-android:2d3cd5f'
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
