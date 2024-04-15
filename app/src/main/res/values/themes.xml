@@ -55,6 +55,6 @@
         <item name="windowSplashScreenBackground">@color/tyler</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
-        <item name="postSplashScreenTheme">@style/Theme.AppTheme</item>
+        <item name="postSplashScreenTheme">@style/Theme.AppTheme.DayNight</item>
     </style>
 </resources>
