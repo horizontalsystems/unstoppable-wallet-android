@@ -25,6 +25,7 @@
     <string name="Button_Add">추가</string>
     <string name="Button_Approve">승인</string>
     <string name="Button_Confirm">확인</string>
+    <string name="Button_Refresh">Refresh</string>
     <string name="Button_Connect">연결</string>
     <string name="Button_Reject">거절</string>
     <string name="Button_Disconnect">연결 해제</string>
@@ -62,7 +63,7 @@
     <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
     <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
-    <string name="NotAvailable">해당 없음 </string>
+    <string name="NotAvailable">n/a</string>
     <string name="Any">어떤</string>
     <string name="SyncError">동기화 오류입니다. 다시 시도하십시오</string>
     <string name="PercentTitle">퍼센트율</string>
@@ -130,8 +131,10 @@
     <string name="Restore_PhraseHint">12, 15, 18, 21 또는 24단어 입력</string>
     <string name="Restore_NonStandardRestore">비표준 복원</string>
     <string name="Restore_NonStandard_Description">이 페이지는 비표준 지갑을 가지고 있는 Unstoppable 사용자를 위한 특별한 지갑 복원 메커니즘을 제공합니다. 일반적으로 이러한 지갑은 Unstoppable 버전 0.27 - 0.28에서 영어가 아닌 니모닉 단어 목록 및/또는 지갑 암호의 특수 문자(예: 분음 부호)를 사용하여 생성되었을 수 있습니다.\n\n영향을 받는 사용자인 경우 버전 0.29로 업데이트하면 지갑 잔액이 0으로 표시됩니다. 이 페이지에서는 비표준 지갑에 대한 액세스를 복원할 수 있습니다. 복원되면 새 지갑(표준 준수)을 만들고 그곳으로 자금을 옮기는 것이 좋습니다.</string>
+    <string name="Restore_Bip_Recommended">(recommended)</string>
     <string name="Restore_PrivateKey_InvalidKey">잘못된 암호입니다</string>
     <string name="Select_Coins">코인 선택하기</string>
+    <string name="SelectContacts_All">All</string>
     <string name="Restore_BirthdayHeight">생일 신장</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Zcash 생일 높이</string>
@@ -161,6 +164,7 @@
     <string name="Market_FilterSection_MarketParameters">MARKET PARAMETERS</string>
     <string name="Market_FilterSection_PriceParameters">PRICE PARAMETERS</string>
     <string name="Market_FilterSection_NetworkParameters">NETWORK PARAMETERS</string>
+    <string name="Market_FilterSection_Indicators">INDICATORS</string>
     <string name="Market_Field_HighestCap">Highest Cap</string>
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
@@ -168,7 +172,7 @@
     <string name="Market_Field_HighestPrice">Highest Price</string>
     <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total Cap</string>
+    <string name="Market_TotalMarketCap">Total M.Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
     <string name="Market_Volume24h">24h Volume</string>
     <string name="Market_TvlDeFi">TVL in DeFi</string>
@@ -183,7 +187,10 @@
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
+    <string name="TopPairs_Title">Top Market Pairs</string>
+    <string name="TopPairs_Description">Top trading pairs by volume in every exchanges</string>
     <!--Market Overview-->
+    <string name="Market_Overview_TopPairs">Top Market Pairs</string>
     <string name="Market_Overview_TopSectors">Top Sectors</string>
     <string name="Market_Overview_Sectors">Sectors</string>
     <!--Market Top Platforms-->
@@ -195,7 +202,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
@@ -221,6 +228,7 @@
     <string name="Market_Filter_Volume">Trading Volume</string>
     <string name="Market_Filter_Volume24h">Trading Volume (24h)</string>
     <string name="Market_Filter_PricePeriod">Price Period</string>
+    <string name="Market_Filter_TradingSignals">Trading Signals</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">Outperformed BTC</string>
@@ -228,6 +236,19 @@
     <string name="Market_Filter_OutperformedBnb">Outperformed BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
+    <string name="Market_Filter_ListedOnTopExchanges">Listed on Top Exchanges</string>
+    <string name="Market_Filter_SolidCex">Good CEX Volume</string>
+    <string name="Market_Filter_SolidCex_Description">Overall Score is Good or Excellent</string>
+    <string name="Market_Filter_SolidDex">Good DEX Volume</string>
+    <string name="Market_Filter_SolidDex_Description">Overall Score is Good or Excellent</string>
+    <string name="Market_Filter_GoodDistribution">Good Distribution</string>
+    <string name="Market_Filter_GoodDistribution_Description">Overall Score is Good or Excellent</string>
+    <string name="Market_Filter_StrongBuy">Strong Buy</string>
+    <string name="Market_Filter_Buy">Buy</string>
+    <string name="Market_Filter_Neutral">Neutral</string>
+    <string name="Market_Filter_StrongSell">Strong Sell</string>
+    <string name="Market_Filter_Sell">Sell</string>
+    <string name="Market_Filter_RiskToTrade">Risk to Trade</string>
     <string name="Market_Filter_Top_100">상위 100</string>
     <string name="Market_Filter_Top_250">상위 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
@@ -295,7 +316,7 @@
     <string name="Balance_ScanningBlocks">스캐닝 블록</string>
     <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
     <string name="Balance_NoWalletAlert">아직 지갑이 없습니다</string>
-    <string name="Balance_NoCoinsAlert">추가된 코인이 없습니다.\n사용할 코인을 추가하세요.</string>
+    <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet.</string>
     <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
     <string name="Balance_NoAssetsToSend">You have no assets to send.</string>
     <string name="Balance_NoAssetsToSwap">You have no assets to swap.</string>
@@ -314,11 +335,17 @@
     <string name="Balance_Receive_SetAmount">Set Amount</string>
     <string name="Balance_Receive_AddressType">Address type</string>
     <string name="Balance_LockedAmount_Title">Locked</string>
+    <string name="Balance_NotRelayedAmount_Title">Broadcasting</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Can\'t recognize</string>
-    <string name="Balance_Receive_WatchAddressAlert">This address is the address of the watched account. Send only network-compatible tokens.</string>
-    <string name="Balance_Receive_AddressAlert">Network-compatible tokens only. Others will be lost.</string>
+    <string name="Balance_Receive_WatchAddressAlert">This address is the address of the watched account</string>
     <string name="Balance_Receive_AddressMemoAlert">Provide required Memo (Tag) and send only network-compatible tokens. Others will be lost.</string>
+    <string name="Balance_Receive_UsedAddresses">Used Addresses</string>
+    <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
+    <string name="Balance_Receive_ReceiveAddresses">Receive Addresses</string>
+    <string name="Balance_Receive_ChangeAddresses">Change Addresses</string>
+    <string name="Balance_SendHint_CoinName">Coin Name</string>
+    <string name="Balance_ReceiveHint_Search">Search</string>
     <!--Send NFT-->
     <string name="SendNft_Title">전송</string>
     <string name="SendNft_Error_NotEnoughtBalance">잔고 부족</string>
@@ -331,11 +358,20 @@
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
     <string name="Send_Hodler_Description">TimeLock은 BIP44 주소(1부터 시작)로 전송하는 경우에만 작동합니다.</string>
+    <string name="Send_UtxoExpertMode">UTxO Expert Mode</string>
+    <string name="Send_Utxo_Description">Manually select UTxO to spend the funds in the balance</string>
+    <string name="Send_Utxo_SendTo">Send To</string>
+    <string name="Send_Utxo_Change">Change</string>
+    <string name="Send_Rbf">Replace by Fee</string>
+    <string name="Send_Rbf_Description">This option allows you to resend a stuck transaction by increasing the amount of the fee.</string>
+    <string name="Send_RbfEnabled">Enabled</string>
+    <string name="Send_RbfDisabled">Disabled</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_Domain">도메인</string>
     <string name="Send_Confirmation_YouSend">보냅니다</string>
     <string name="Send_Confirmation_Amount">양</string>
     <string name="Send_Confirmation_To">에게</string>
+    <string name="Send_Confirmation_Own">Own</string>
     <string name="Send_Confirmation_Method">메소드</string>
     <string name="Send_Confirmation_Receiver">받는 사람</string>
     <string name="Send_Confirmation_EstimateTime">예상 소요시간:</string>
@@ -507,6 +543,7 @@
     <string name="EthereumTransaction_Error_ExecutionReverted">Unexpected error: %s</string>
     <!--Swap-->
     <string name="Swap">스왑</string>
+    <string name="Swap_BestPrice">Best Price</string>
     <string name="Swap_FromAmountTitle">지불하기</string>
     <string name="Swap_ToAmountTitle">얻기</string>
     <string name="Swap_Estimated">예상</string>
@@ -514,6 +551,7 @@
     <string name="Swap_Balance">사용 가능한 잔액</string>
     <string name="Swap_Allowance">허용량</string>
     <string name="Swap_Price">금액</string>
+    <string name="Swap_AvailableBalance">Available Balance</string>
     <string name="Swap_SellPrice">매도 가격</string>
     <string name="Swap_BuyPrice">구매 가격</string>
     <string name="Swap_PriceImpact">가격 영향</string>
@@ -523,25 +561,46 @@
     <string name="Swap_EstimatedFee">예상 수수료</string>
     <string name="Swap_MaxFee">최대 수수료</string>
     <string name="Swap_Fee">수수료</string>
+    <string name="Swap_Slippage">Slippage</string>
+    <string name="Swap_Recipient">Recipient</string>
+    <string name="Swap_ErrorNoProviders">No Providers</string>
+    <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">잔액이 부족합니다</string>
-    <string name="Swap_ErrorBalanceNotAvailable">균형 N/A</string>
+    <string name="Swap_ErrorBalanceNotAvailable">Balance n/a</string>
     <string name="Swap_ErrorNoLiquidity">이 토큰을 스왑할 수 없습니다</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">이 서비스는 래핑/언래핑을 허용하지 않습니다. 대신 1inch 를 사용하십시오.</string>
     <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
+    <string name="Swap_ErrorTokenNotEnabled">Token Not Enabled</string>
+    <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
+    <string name="Swap_ErrorWalletNotSynced">Wallet Not Synced</string>
     <string name="Swap_Proceed">다음</string>
+    <string name="Swap_SelectTokenIn">Select Token In</string>
+    <string name="Swap_SelectTokenOut">Select Token Out</string>
+    <string name="Swap_EnterAmount">Enter Amount</string>
+    <string name="Swap_Unlock">Unlock</string>
+    <string name="Swap_Unlocking">Unlocking...</string>
     <string name="Swap_Revoke">취소</string>
     <string name="Swap_Revoking">철회...</string>
     <string name="Swap_Approve">승인</string>
     <string name="Swap_Approving">승인 중</string>
     <string name="Swap_Swapping">스와핑</string>
+    <string name="Swap_Quoting">Quoting</string>
     <string name="Swap_MaximumPaid">최대 지불액</string>
     <string name="Swap_MinimumGot">보증 금액</string>
     <string name="Swap_PoweredBy">제공</string>
+    <string name="Swap_Provider">Provider</string>
+    <string name="Swap_Providers">Providers</string>
     <string name="Swap_SelectSwapProvider_Title">공급자 스왑</string>
     <string name="Swap_AmountEstimated">(추정)</string>
     <string name="Swap_AmountMin">(분)</string>
     <string name="Swap_AmountMax">(최대)</string>
     <string name="Swap_AmountTypeCoin">코인</string>
+    <string name="Swap_SwapRouteNotFound">Route not found</string>
+    <string name="Swap_YouPay">You Pay</string>
+    <string name="Swap_YouGet">You Get</string>
+    <string name="Swap_Confirm_Title">Confirm</string>
+    <string name="SwapConfirm_QuoteExpired">Quote expired</string>
+    <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">스왑 설정</string>
     <string name="SwapSettings_Service">서비스</string>
@@ -598,26 +657,29 @@
     <string name="Transactions_EmptyList">당신은 아직 보류 중 또는 과거에 완료된 거래가 없습니다</string>
     <string name="Transactions_WaitForSync">동기화가 끝날 때까지 기다려 주십시오.</string>
     <string name="Transactions_Pending">보류 중</string>
-    <string name="Transactions_Receive">수신</string>
+    <string name="Transactions_Receive">Received</string>
     <string name="Transactions_Completed">완료</string>
     <string name="Transactions_Processing">처리 중</string>
-    <string name="Transactions_Send">전송</string>
-    <string name="Transactions_Burn">번</string>
-    <string name="Transactions_Mint">민트</string>
-    <string name="Transactions_Approve">승인</string>
-    <string name="Transactions_Swap">스왑</string>
+    <string name="Transactions_Send">Sent</string>
+    <string name="Transactions_Burn">Burned</string>
+    <string name="Transactions_Mint">Minted</string>
+    <string name="Transactions_Approve">Approved</string>
+    <string name="Transactions_Swap">Swapped</string>
     <string name="Transactions_Failed">실패</string>
     <string name="Transactions_ContractCall">계약 콜</string>
     <string name="Transactions_ExternalContractCall">외부 콜</string>
     <string name="Transactions_ContractCreation">계약 생성</string>
     <string name="Transactions_To">%s에게</string>
     <string name="Transactions_From">%s부터</string>
-    <string name="Transaction_Unlimited">무제한 %s</string>
+    <string name="Transaction_Unlimited_CoinCode">unlimited %s</string>
+    <string name="Transaction_Unlimited">unlimited</string>
     <string name="Transactions_All">모든</string>
     <string name="Transactions_Filter_Blockchain">Blockchain</string>
     <string name="Transactions_Filter_Coin">Coin</string>
+    <string name="Transactions_Filter_Contacts">Contacts</string>
     <string name="Transactions_Filter_AllBlockchains">모든 블록체인</string>
     <string name="Transactions_Filter_AllCoins">모든코인</string>
+    <string name="Transactions_Filter_AllContacts">All Contacts</string>
     <string name="Transactions_Filter_ChooseCoin">코인 선택</string>
     <string name="Transactions_Filter_ChooseBlockchain">Choose Blockchain</string>
     <string name="Transactions_Incoming">수령됨</string>
@@ -630,6 +692,8 @@
     <string name="Transactions_Filter">Filter</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Hide suspicious tx</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Hiding incoming transactions with the dust amount in stablecoins, this partially solves the  address poisoning attack problems.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">Filtering by contacts works on the following blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton and ZCash. Below are the suitable contacts</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">You don\'t have any suitable contacts </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">거래기록</string>
     <string name="TransactionInfo_Title">거래 정보</string>
@@ -658,12 +722,17 @@
     <string name="TransactionInfo_YouPaid">지불한 금액</string>
     <string name="TransactionInfo_YouGet">얻기</string>
     <string name="TransactionInfo_YouGot">받았던 금액</string>
+    <string name="TransactionInfo_YouSent">You Sent</string>
+    <string name="TransactionInfo_Received">Received</string>
+    <string name="TransactionInfo_Sent">Sent</string>
+    <string name="TransactionInfo_Approved">Approved</string>
     <string name="TransactionInfo_Resend">재전송</string>
     <string name="TransactionInfo_RevokeApproval">승인 취소</string>
     <string name="TransactionInfo_Options">옵션</string>
     <string name="TransactionInfo_SpeedUp">가속</string>
     <string name="TransactionInfo_Cancel">취소</string>
     <string name="TransactionInfo_SpamWarning">This transaction is suspicious and can be a scam.\nPlease do not copy any addresses from this transaction.</string>
+    <string name="TransactionInfo_SpeedUpDescription">This action will attempt to invalidate the previous transaction by resending it with a higher fee.</string>
     <string name="StatusInfo_Pending">보류 중</string>
     <string name="StatusInfo_Processing">처리 중</string>
     <string name="StatusInfo_Confirmed">완료</string>
@@ -674,15 +743,20 @@
     <string name="StatusInfo_FailedDescription">거래가 처리되지 않았으며 가치 이전이 발생하지 않았습니다. 실패 원인에 따라 일부 실패한 거래는 거래 수수료를 소모할 수 있습니다. 다른 거래로 대체되거나 취소된 거래는 거래 수수료를 소비하지 않으며 실패한 것으로 표시됩니다. Unstoppable 앱은 거래 실패의 원인을 표시할 수 없지만 사용자는 etherscan.io와 같은 공개 블록 탐색기에서 직접 찾을 수 있습니다.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">가속</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">이 작업은 이전 거래를 더 높은 수수료로 다시 보내서 무효화하려고 시도합니다. 새 트랜잭션이 전송되었을 때 원래 트랜잭션이 보류 상태로 남아 있으면 해당 트랜잭션이 무효화되고 교체될 가능성이 높습니다(보장되지 않음). 이 두 트랜잭션 중 하나만 블록체인에 포함됩니다.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">재전송</string>
     <string name="TransactionInfoOptions_Cancel_Title">취소</string>
-    <string name="TransactionInfoOptions_Cancel_Description">이 작업은 자신에게 새로운 0 %s 트랜잭션으로 재전송하여 이전 트랜잭션을 무효화하려고 시도합니다. 새 트랜잭션이 전송될 때 원래 트랜잭션이 보류 상태로 남아 있으면 해당 트랜잭션이 무효화되고 교체될 가능성이 높습니다(보장되지 않음). 이 두 트랜잭션 중 하나만 블록체인에 포함됩니다.</string>
     <string name="TransactionInfoOptions_Cancel_Button">트랜잭션 취소</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">이미 차단된 거래</string>
+    <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Replaced Transactions</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTitle">Fee (Sat)</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTooLow">Fee Too Low</string>
+    <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF not enabled</string>
+    <string name="TransactionInfoOptions_Rbf_UnableToReplace">Unable to replace</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">발송자께서 이 자금을 %s에 만료되는 지출 잠금으로 보냈습니다. \n\n걱정하지 마십시오, 수신된 비트코인은 이미 귀하의 것 이지만 잠금 기간이 만료될 때까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
     <string name="Info_LockTime_Description_Static">The sender sent these funds with a spending lock that will expire on the shown date. \n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you cannot spend them on the Bitcoin network.</string>
+    <string name="Info_NotRelayed_Title">Broadcast</string>
+    <string name="Info_NotRelayed_Description">The transaction holding this amount is broadcasted but not yet accepted by the network.</string>
     <string name="Info_DoubleSpend_Title">이중 지출</string>
     <string name="Info_DoubleSpend_Description">이중 지출 위험! 블록 체인에 있는 거래에 지출된 정보를 사용하려는 또 다른 거래가 있습니다. 네트워크는 하나의 거래만 수용합니다</string>
     <string name="Info_DoubleSpend_ThisTx">이 Tx</string>
@@ -827,10 +901,10 @@
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
     <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
-    <string name="SettingsSecurity_SyncModeBlockchairDescription">Fast, Not Private</string>
-    <string name="SettingsSecurity_SyncModeHybridDescription">Slow, Not Private</string>
+    <string name="SettingsSecurity_SyncModeBlockchairDescription">Very Fast</string>
+    <string name="SettingsSecurity_SyncModeHybridDescription">Fast</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Slow, Private</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Slow. Highest Privacy.</string>
     <string name="SetDuressPin_Title">Duress Passcode</string>
     <string name="SetDuressPin_Description">Set a passcode for Duress Mode</string>
     <string name="EditDuressPin_Title">Edit Duress Passcode</string>
@@ -849,9 +923,9 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">Unstoppable 지갑은 개인적이고 독립적인 방식으로 암호화폐를 투자하고 보관하려는 사람들을 위해 만들어졌습니다.\n\n이는 오직 사용자만이 자금을 통제할 수 있는 비관세적인 P2P 지갑입니다. 데이터를 수집하지 않고 특정 지갑 앱에 지갑을 잠그지 않아 사용자의 독립성을 유지합니다.
-\n\nUnstoppable 지갑은 완전한 오픈소스여서 누구나 앱이 요구하는 대로 정확히 작동하는지 확인할 수 있습니다.
-\n\n귀사는 이용 가능한 해결책이 기대에 미치지 못했기 때문에 스스로 Unstoppable 을 구축했습니다. 엔지니어링과 사용 편의성 측면에서 모두 귀사는 이 지갑이 대체 제품보다 상당히 앞서 있다고 믿고 있습니다.</string>
+    <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
+\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
+\n\nThe Unstoppable wallet is fully open-source and anyone can confirm the app works exactly as it claims to.</string>
     <string name="SettingsTerms_Backup">지갑별 복구 문구를 안전하게 백업합니다. 앱이 오작동하는 경우 자금에 다시 액세스할 수 있는 유일한 방법입니다.</string>
     <string name="SettingsTerms_PrivateKeys">지갑 복구 문구는 설정 중에 장치에서 임의로 생성되며 다른 곳에 저장되지 않습니다.</string>
     <string name="SettingsTerms_DisablingPin">스마트폰에서 잠금 해제 PIN(코드)을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스를 복원하려면 복구 문구가 필요합니다.</string>
@@ -1100,7 +1174,7 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">%s 블록체인에서 계약 주소를 찾을 수 없습니다.</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">주소 형식</string>
-    <string name="AddressFormatSettings_Description">코인의 주소 형식을 선택합니다. 확실하지 않은 경우 권장 옵션을 진행합니다. 기존 지갑을 복원할 때 올바른 형식을 선택해야 합니다.</string>
+    <string name="AddressFormatSettings_Description">Select address format for receiving payments. A correct format should be chosen when restoring an existing wallet.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">네이티브</string>
     <string name="CoinPlatformsSelector_Title">코인 유형</string>
@@ -1139,6 +1213,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1Y</string>
     <string name="CoinPage_TimeDuration_Year2">2Y</string>
+    <string name="CoinPage_TimeDuration_Year5">5Y</string>
     <string name="CoinPage_TimeDuration_All">모든</string>
     <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
@@ -1337,12 +1412,60 @@
     <string name="Coin_Analytics_Period_8h">8 hours</string>
     <string name="Coin_Analytics_Period_1d">1 day</string>
     <string name="Coin_Analytics_Period_1w">1 week</string>
+    <string name="Coin_Analytics_Period_1m">1 month</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">Strong Buy</string>
     <string name="Coin_Analytics_Indicators_StrongSell">Strong Sell</string>
     <string name="Coin_Analytics_Indicators_Sell">Sell</string>
     <string name="Coin_Analytics_Indicators_Buy">Buy</string>
     <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
     <string name="Coin_Analytics_Indicators_NoData">No Data</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Smart Contract Analysis</string>
+    <string name="CoinAnalytics_HighRiskItems">High Risk Items</string>
+    <string name="CoinAnalytics_MediumRiskItems">Medium Risk Items</string>
+    <string name="CoinAnalytics_AttentionRequired">Attention Required</string>
+    <string name="CoinAnalytics_PoweredByDeFi">Powered by De.Fi</string>
+    <string name="CoinAnalytics_CountItems">%d Items</string>
+    <string name="TechnicalAdvice_Title">Trading Assistant</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">Always remember to apply risk management, and note that this is not financial advice.</string>
+    <string name="TechnicalAdvice_OverBought">overbought</string>
+    <string name="TechnicalAdvice_OverSold">oversold</string>
+    <string name="TechnicalAdvice_Down">down</string>
+    <string name="TechnicalAdvice_Up">up</string>
+    <string name="TechnicalAdvice_OverMain">The actions with the asset are risky.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">Starting from the %s</string>
+    <string name="TechnicalAdvice_OverIndicators">The asset is outside the Bollinger Band channel and %s.</string>
+    <string name="TechnicalAdvice_OverRsi"> RSI = %1$s, This also indicates that the asset is %2$s.</string>
+    <string name="TechnicalAdvice_OverAdvice"> There might be a strong %sward movement, so it\'s better to wait for the asset price to return to the channel.</string>
+    <string name="TechnicalAdvice_StrongIndicators">the asset was %s, but now it has returned to the Bollinger Band channel. This indicates a possible trend reversal.</string>
+    <string name="TechnicalAdvice_StrongRsi">Meanwhile, the RSI is %1$s, which still indicates that it is %2$s.</string>
+    <string name="TechnicalAdvice_StrongAdvice">This could be a very strong signal to enter the market. Keep in mind that there may be several attempts of %sward movement after returning to the channel, so do not forget about risk management.</string>
+    <string name="TechnicalAdvice_StableRsi">Meanwhile, the RSI is %s, which also indicates a trend reversal (RSI crossed the boundary at 70\%%).</string>
+    <string name="TechnicalAdvice_StableAdvice">The price is returning to neutral levels, however, there is still potential for upward movement. Keep in mind that RSI = 50 and the middle of the Bollinger Bands are strong resistances and possible trend reversal points. Do not forget about risk management.</string>
+    <string name="TechnicalAdvice_NeutralRsi">RSI = $s also confirms the absence of a strong trend.</string>
+    <string name="TechnicalAdvice_NeutralIndicators">the asset was in the overbought/oversold zone, but at the moment the price has returned to the Bollinger Band channel in the neutral zone. The RSI is %s also confirms the absence of a strong trend, so overall the asset price is moving towards averaging and further movement is possible in any direction.</string>
+    <string name="TechnicalAdvice_NeutralAdvice">In general, the asset price is moving towards averaging and further movement is possible in any direction.</string>
+    <string name="TechnicalAdvice_OtherTitle">Please note:</string>
+    <string name="TechnicalAdvice_EmaAbove">above</string>
+    <string name="TechnicalAdvice_EmaBelow">below</string>
+    <string name="TechnicalAdvice_EmaGrowth">growth</string>
+    <string name="TechnicalAdvice_EmaDecrease">decrease</string>
+    <string name="TechnicalAdvice_EmaAdvice">EMA 200. Determines the overall sentiment and trend. The daily price of the asset is located %1$s the EMA (%2$s). This means that globally the asset is set for %3$s.</string>
+    <string name="TechnicalAdvice_MacdPositive">above</string>
+    <string name="TechnicalAdvice_MacdNegative">below</string>
+    <string name="TechnicalAdvice_MacdAdvice">MACD. Assesses the strength of the trend considering the average price change. The daily value of the histogram is %1$s (%2$s). The price of the asset globally may move %3$s.</string>
+    <string name="TechnicalAdvice_InfoTitle">Technical Indicators</string>
+    <string name="TechnicalAdvice_InfoDescription">We use the Bollinger Bands + RSI strategy to determine trading signals. All calculations are based on daily candlesticks and provide advice for a moderately long term. The essence of the strategy is that the asset price should reach an extreme, breaking out of the Bollinger Bands channel, and the RSI should be in the overbought/oversold zone. After the price returns to the channel, there is a high probability of the price returning to the mean values or attempting to break the channel from the other side. Note that the strategy may give several false signals during strong market movements before a correct signal appears.\n\nPlease remember that it is very important to apply risk management to trading and remember to cut losses if the market situation changes!</string>
+    <string name="TechnicalAdvice_ShowDetails">Show Details</string>
+    <string name="TechnicalAdvice_HideDetails">Hide Details</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Buy Signal</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Good Time to Buy</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Good Time to Sell</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Sell Signal</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Very Risky to Trade</string>
+    <string name="Detectors_TokenDetectors">Token Detectors</string>
+    <string name="Detectors_GeneralDetectors">General Detectors</string>
+    <string name="Detectors_IssuesCount">Issues %d</string>
     <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">Address</string>
