@@ -161,6 +161,7 @@
     <string name="Market_Field_PriceDiff">Цена</string>
     <string name="Market_Title">Рынки</string>
     <string name="Market_Search">Поиск</string>
+    <string name="Market_Search_Sections_RecentTitle">Недавние</string>
     <string name="Market_Search_Sections_PopularTitle">ПОПУЛЯРНЫЕ</string>
     <string name="Market_FilterSection_MarketParameters">ПАРАМЕТРЫ РЫНКА</string>
     <string name="Market_FilterSection_PriceParameters">ПАРАМЕТРЫ ЦЕНЫ</string>
@@ -535,11 +536,13 @@
     <string name="Swap_ErrorHighPriceImpact">Высокое отклонение цены</string>
     <string name="Swap_Proceed">Далее</string>
     <string name="Swap_Unlock">Разблокировать</string>
+    <string name="Swap_Unlocking">Разблокировка...</string>
     <string name="Swap_Revoke">Отозвать</string>
     <string name="Swap_Revoking">Отзыв...</string>
     <string name="Swap_Approve">Разрешить</string>
     <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
+    <string name="Swap_Quoting">Котировка</string>
     <string name="Swap_MaximumPaid">Макс. сумма</string>
     <string name="Swap_MinimumGot">Гарантированная сумма</string>
     <string name="Swap_PoweredBy">При поддержке</string>
@@ -551,6 +554,7 @@
     <string name="Swap_YouPay">Вы платите</string>
     <string name="Swap_YouGet">Вы получите</string>
     <string name="Swap_Confirm_Title">Подтвердить</string>
+    <string name="SwapConfirm_QuoteExpired">Котировка истекла</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_Service">Сервис</string>
@@ -611,6 +615,8 @@
     <string name="Transactions_Completed">Завершено</string>
     <string name="Transactions_Processing">В процессе</string>
     <string name="Transactions_Send">Отправлено</string>
+    <string name="Transactions_Burn">Сжечь</string>
+    <string name="Transactions_Mint">Минт</string>
     <string name="Transactions_Failed">Не удалось</string>
     <string name="Transactions_ContractCall">Вызов контракта</string>
     <string name="Transactions_ExternalContractCall">Внешний вызов</string>
@@ -663,14 +669,17 @@
     <string name="TransactionInfo_YouPaid">Вы заплатили</string>
     <string name="TransactionInfo_YouGet">Вы получите</string>
     <string name="TransactionInfo_YouGot">Вы получили</string>
+    <string name="TransactionInfo_YouSent">Вы отправили</string>
     <string name="TransactionInfo_Received">Получено</string>
     <string name="TransactionInfo_Sent">Отправлено</string>
+    <string name="TransactionInfo_Approved">Разрешено</string>
     <string name="TransactionInfo_Resend">Отправить повторно</string>
     <string name="TransactionInfo_RevokeApproval">Отозвать потверждение</string>
     <string name="TransactionInfo_Options">Параметры</string>
     <string name="TransactionInfo_SpeedUp">Ускорение</string>
     <string name="TransactionInfo_Cancel">Отменить</string>
     <string name="TransactionInfo_SpamWarning">Эта транзакция подозрительна и может быть мошенничеством. \nПожалуйста, не копируйте никакие адреса из этой транзакции.</string>
+    <string name="TransactionInfo_SpeedUpDescription">Это действие попытается аннулировать предыдущую транзакцию, переотправив ее с более высокой комиссией.</string>
     <string name="StatusInfo_Pending">В ожидании</string>
     <string name="StatusInfo_Processing">В процессе</string>
     <string name="StatusInfo_Confirmed">Выполнено</string>
@@ -685,9 +694,16 @@
     <string name="TransactionInfoOptions_Cancel_Title">Отменить</string>
     <string name="TransactionInfoOptions_Cancel_Button">Отменить транзакцию</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">Транзакция уже в блоке</string>
+    <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Замененные транзакции</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTitle">Комиссия (Sat)</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTooLow">Комиссия слишком низкая</string>
+    <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF (Replace-By-Fee) не активирован</string>
+    <string name="TransactionInfoOptions_Rbf_UnableToReplace">Не удается заменить</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <string name="Info_LockTime_Description_Static">Эти средства были отправлены с временной блокировкой, которая истекает в указанную дату.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете их потратить в сети Bitcoin.</string>
+    <string name="Info_NotRelayed_Title">Передача</string>
+    <string name="Info_NotRelayed_Description">Транзакция, содержащая эту сумму, транслирована, но еще не принята сетью.</string>
     <string name="Info_DoubleSpend_Title">Двойная трата</string>
     <string name="Info_DoubleSpend_Description">Риск двойной траты! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
@@ -724,6 +740,7 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
     <string name="Settings_PersonalSupport_Account">Аккаунт</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Запрошено</string>
     <string name="Settings_PersonalSupport_Request">Запрос</string>
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
@@ -735,6 +752,7 @@
     <string name="Settings_DonateWith">Поддержи нас</string>
     <string name="Settings_Donate_GetAddress">Получить адрес</string>
     <string name="Settings_Donate_Addresses">Адреса</string>
+    <string name="Settings_Donate_OrSelectCoinToDonate">Или выберите монету для пожертвования</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Немедленно</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 минута</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 минут</string>
@@ -789,6 +807,7 @@
     <string name="EvmNetwork_Added">Добавлено</string>
     <string name="EvmNetwork_SyncMode">Режим синхронизации</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
@@ -824,9 +843,11 @@
     <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Быстрый, Конфиденциальный, Централизованный</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Медленно, приватно</string>
     <string name="SetDuressPin_Title">Duress код</string>
     <string name="SetDuressPin_Description">Установите код для режима Duress</string>
     <string name="EditDuressPin_Title">Изменить Duress код</string>
@@ -957,6 +978,7 @@
     <string name="Watch_Address_Watch">Смотреть</string>
     <string name="Watch_Select_Blockchains">Блокчейны</string>
     <string name="Watch_Select_Coins">Выберите токены</string>
+    <string name="Watch_Error_InvalidAddressFormat">Формат адреса не поддерживается</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">Название</string>
     <string name="ManageAccount_Save">Сохранить</string>
@@ -1099,6 +1121,7 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Адрес контракта не найден в %s блокчейне </string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Формат адреса</string>
+    <string name="AddressFormatSettings_Description">Выберите формат адреса для получения средств. Правильный формат должен быть выбран при восстановлении существующего кошелька.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Нативный</string>
     <string name="CoinPlatformsSelector_Title">Тип токена</string>
@@ -1137,6 +1160,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6М</string>
     <string name="CoinPage_TimeDuration_Year">1Г</string>
     <string name="CoinPage_TimeDuration_Year2">2Г</string>
+    <string name="CoinPage_TimeDuration_Year5">5Г</string>
     <string name="CoinPage_TimeDuration_All">Все</string>
     <string name="CoinPage_Markets">Рынки</string>
     <string name="CoinPage_TradingVolume">Объем торговли</string>
@@ -1231,6 +1255,9 @@
     <string name="CoinPage_Type">Тип</string>
     <string name="CoinPage_Period">Период</string>
     <string name="CoinPage_RsiLength">Длина RSI</string>
+    <string name="CoinPage_FastLength">Fast Length</string>
+    <string name="CoinPage_SlowLength">Slow Length</string>
+    <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей Unstoppable кошелька.</string>
     <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Подтверждено</string>
@@ -1338,11 +1365,37 @@
     <string name="Coin_Analytics_Indicators_Buy">Покупать</string>
     <string name="Coin_Analytics_Indicators_Neutral">Нейтрально</string>
     <string name="Coin_Analytics_Indicators_NoData">Нет данных</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Анализ смарт-контрактов</string>
+    <string name="CoinAnalytics_HighRiskItems">Предметы высокого риска</string>
+    <string name="CoinAnalytics_MediumRiskItems">Элементы среднего риска</string>
+    <string name="CoinAnalytics_AttentionRequired">Требуется внимание</string>
+    <string name="CoinAnalytics_PoweredByDeFi">При поддержке De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Элементов</string>
+    <string name="TechnicalAdvice_Title">Технические индикаторы</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">Всегда помните о применении управления рисками, и обратите внимание, что это не финансовый совет.</string>
+    <string name="TechnicalAdvice_OverBought">перекупленный</string>
+    <string name="TechnicalAdvice_OverSold">перепроданный</string>
+    <string name="TechnicalAdvice_Down">вниз</string>
+    <string name="TechnicalAdvice_Up">вверх</string>
+    <string name="TechnicalAdvice_OverMain">Действия с активом опасны.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">Начиная с %s</string>
+    <string name="TechnicalAdvice_OverIndicators">Актив находится за границей канала Bollinger Band и %s.</string>
+    <string name="TechnicalAdvice_OverRsi"> RSI = %1$s, что также говорит о том, что актив %2$s.</string>
+    <string name="TechnicalAdvice_OverAdvice"> Возможно сильное движение %s, поэтому лучше дождаться возвращения цены актива в канал.</string>
+    <string name="TechnicalAdvice_StrongIndicators">актив был %s, но сейчас вернулся в канал Bollinger Band. Это говорит о возможной смене треда.</string>
+    <string name="TechnicalAdvice_StrongRsi">При этом RSI = %1$s, что все еще говорит о том, что он %2$s.</string>
+    <string name="TechnicalAdvice_StrongAdvice">Это может являться очень сильным сигналом для входа в рынок. Учитывайте, что возможны несколько попыток движения %s после возвращения в канал, поэтому не забывайте о риск менеджменте.</string>
+    <string name="TechnicalAdvice_StableRsi">При этом RSI = %s, что тоже говорит об развороте тренда (RSI пересек границу в 70\%%).</string>
     <string name="TechnicalAdvice_StableAdvice">Цена возвращается к нейтральным показателям, однако есть еще потенциал движения вверх. Учитывайте, что RSI = 50 и середина Bollinger Bands являются довольно сильными сопротивлениями и возможными точками разворота тренда. Не забывайте про риск менеджмент.</string>
+    <string name="TechnicalAdvice_NeutralRsi">RSI = $s также подтверждает отсутствие сильного тренда.</string>
+    <string name="TechnicalAdvice_NeutralIndicators">актив находился в зоне перекупленности/перепроданности, однако в текущий момент цена вернулась в канал Bollinger Band в нейтральную зону. RSI = %s также подтверждает отсутствие сильного тренда, поэтому в целом цена актива стремится к усреднению и дальнейшее движение возможно в любую сторону.</string>
+    <string name="TechnicalAdvice_NeutralAdvice">В целом цена актива стремится к усреднению и дальнейшее движение возможно в любую сторону.</string>
+    <string name="TechnicalAdvice_OtherTitle">Пожалуйста, обратите внимание:</string>
     <string name="TechnicalAdvice_EmaAbove">выше</string>
     <string name="TechnicalAdvice_EmaBelow">ниже</string>
     <string name="TechnicalAdvice_EmaGrowth">рост</string>
+    <string name="TechnicalAdvice_EmaDecrease">уменьшение</string>
+    <string name="TechnicalAdvice_EmaAdvice">EMA 200. Определяет общий настрой и тренд. Суточная цена актива находится %1$s от EMA (%2$s). Это означает, что глобально актив настроен на %3$s.</string>
     <string name="TechnicalAdvice_MacdPositive">выше</string>
     <string name="TechnicalAdvice_MacdNegative">ниже</string>
     <string name="TechnicalAdvice_MacdAdvice">MACD. Оценивает силу тренда, учитывая среднее изменение цены. Ежедневное значение гистограммы составляет %1$s (%2$s). Цена актива в глобальном масштабе может измениться на %3$s.</string>
