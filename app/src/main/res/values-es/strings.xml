@@ -202,7 +202,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Límite de mercado de todos los protocolos en la cadena %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Diagrama</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Capitalización Total</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Cap. de mdo. total.</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominio Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volumen</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap. DeFi</string>
@@ -237,8 +237,11 @@
     <string name="Market_Filter_PriceCloseToAth">Precio cercano a ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Precio cercano a ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listado en las principales bolsas</string>
+    <string name="Market_Filter_SolidCex">Buen volumen en CEX</string>
     <string name="Market_Filter_SolidCex_Description">La puntuación general es Buena o Excelente</string>
+    <string name="Market_Filter_SolidDex">Buen volumen en DEX</string>
     <string name="Market_Filter_SolidDex_Description">La puntuación general es Buena o Excelente</string>
+    <string name="Market_Filter_GoodDistribution">Buena Distribución</string>
     <string name="Market_Filter_GoodDistribution_Description">La puntuación general es Buena o Excelente</string>
     <string name="Market_Filter_StrongBuy">Compra fuerte</string>
     <string name="Market_Filter_Buy">Comprar</string>
@@ -335,7 +338,7 @@
     <string name="Balance_NotRelayedAmount_Title">Transmisión</string>
     <string name="Balance_Receive_Memo">Memo (Etiqueta)</string>
     <string name="Balance_Error_InvalidQrCode">No se puede reconocer</string>
-    <string name="Balance_Receive_WatchAddressAlert">Esta dirección es la dirección de la cuenta vigilada. Enviar sólo tokens compatibles con la red.</string>
+    <string name="Balance_Receive_WatchAddressAlert">Esta dirección es la dirección de la cuenta observada</string>
     <string name="Balance_Receive_AddressMemoAlert">Proporcionar memo requerido (Tag) y enviar sólo tokens compatibles con la red. Otros se perderán.</string>
     <string name="Balance_Receive_UsedAddresses">Direcciones Utilizadas</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s direcciones cambian por privacidad y seguridad. A continuación, una lista de las direcciones utilizadas en esta billetera.</string>
@@ -355,6 +358,8 @@
     <string name="Send_Button_Max">Máx.</string>
     <string name="Send_Advanced">Avanzado</string>
     <string name="Send_Hodler_Description">TimeLock sólo funciona para enviar a direcciones BIP44 (comenzando con 1)</string>
+    <string name="Send_UtxoExpertMode">Modo experto UTxO</string>
+    <string name="Send_Utxo_Description">Seleccione manualmente UTxO para gastar los fondos en el saldo</string>
     <string name="Send_Utxo_SendTo">Enviar a</string>
     <string name="Send_Utxo_Change">Cambiar</string>
     <string name="Send_Rbf">Reemplazar por tarifa</string>
@@ -555,6 +560,7 @@
     <string name="Swap_Slippage">Deslizamiento</string>
     <string name="Swap_Recipient">Destinatario</string>
     <string name="Swap_ErrorNoProviders">No hay proveedores</string>
+    <string name="Swap_ErrorNoQuote">Sin ofertas</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorBalanceNotAvailable">Saldo N/A</string>
     <string name="Swap_ErrorNoLiquidity">No se pueden permutar estos tokens</string>
@@ -585,9 +591,12 @@
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moneda</string>
+    <string name="Swap_SwapRouteNotFound">Ruta no localizada</string>
     <string name="Swap_YouPay">Usted paga</string>
     <string name="Swap_YouGet">Obtienes</string>
     <string name="Swap_Confirm_Title">Confirmar</string>
+    <string name="SwapConfirm_QuoteExpired">Cotización expirada</string>
+    <string name="SwapConfirm_FetchingFinalQuote">Recuperando la comilla final</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Ajustes de intercambio</string>
     <string name="SwapSettings_Service">Servicio</string>
@@ -680,6 +689,7 @@
     <string name="Transactions_Filter_HideSuspiciousTx">Ocultar Transacciones Sospechosas</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Ocultando transacciones entrantes con montos mínimos en stablecoins, esto resuelve parcialmente los problemas de ataques de envenenamiento de direcciones.</string>
     <string name="Transactions_Filter_ChooseContact_Hint">El filtrado de contactos es compatible con las siguientes blockchains: Ethereum, BNB Smart Chain, Poligono, Avalanche, Gnosis, Fantom, Arbitrum, Optism, Tron, Ton y ZCash. Debajo están los contactos adecuados</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">No tienes ninguna persona agendada</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transacción</string>
     <string name="TransactionInfo_Title">Información de la transacción</string>
@@ -708,6 +718,7 @@
     <string name="TransactionInfo_YouPaid">Has pagado</string>
     <string name="TransactionInfo_YouGet">Obtienes</string>
     <string name="TransactionInfo_YouGot">Tienes</string>
+    <string name="TransactionInfo_YouSent">Usted envía</string>
     <string name="TransactionInfo_Received">Recibido</string>
     <string name="TransactionInfo_Sent">Enviado</string>
     <string name="TransactionInfo_Approved">Aprobar</string>
@@ -904,13 +915,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">MONEDEROS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">VER MONEDEROS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">El monedero P.CASH fue creado para aquellos que buscan invertir y almacenar criptomonedas de forma privada e independiente.
-
-\n\nEs un monedero peer-to-peer sin custodio, donde sólo el usuario tiene control sobre los fondos. No recopila ningún dato y mantiene al usuario independiente al no enlazar su cartera a un único monedero.
-
-\n\nEl monedero P.CASH es completamente de código abierto y cualquiera puede verificar que la aplicación funciona exactamente como se afirma.
-
-\n\nDesarrollamos P.CASH para nosotros mismos ya que las soluciones disponibles no estaban a la altura. Desde una perspectiva de ingenieria y practicidad, creemos que este monedero está significativamente por delante de los productos alternativos.</string>
+    <string name="SettingsTerms_Text">La cartera imparable está construida para aquellos que buscan invertir y almacenar criptomonedas de forma privada e independiente.\n\nEs un monedero peer-to-peer no custodial, donde solo el usuario tiene control sobre los fondos. No recopila ningún dato y mantiene al usuario independiente al no bloquear los fondos del usuario a una aplicación de cartera específica.\n\nEl monedero imparable es completamente de código abierto y cualquiera puede confirmar que la aplicación funciona exactamente como afirma.</string>
     <string name="SettingsTerms_Backup">Copia de seguridad frases de recuperación para cada cartera. Es la única manera de recuperar el acceso a los fondos si la aplicación no funciona correctamente.</string>
     <string name="SettingsTerms_PrivateKeys">Las frases de recuperación del monedero se generan aleatoriamente en el dispositivo durante la instalación y no se almacenan en ningún otro lugar.</string>
     <string name="SettingsTerms_DisablingPin">Desactivar el PIN de desbloqueo (código) en el smartphone elimina todas las carteras de la aplicación. Se necesitarán frases de recuperación para restaurar el acceso a los fondos.</string>

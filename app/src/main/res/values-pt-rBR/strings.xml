@@ -202,7 +202,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Valor de mercado de todos procolos na cadeia %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Gráfico</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Valor total de mercado</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Valor Total de M.</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominação Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volume em 24h</string>
     <string name="MarketGlobalMetrics_DefiCap">Mercado de DeFi</string>
@@ -237,7 +237,9 @@
     <string name="Market_Filter_PriceCloseToAth">Preço próximo a ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Preço próximo a ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listado nas principais trocas</string>
+    <string name="Market_Filter_SolidCex">Bom Volume de CEX</string>
     <string name="Market_Filter_SolidCex_Description">A Pontuação Geral é Boa ou Excelente</string>
+    <string name="Market_Filter_SolidDex">Bom Volume de DEX</string>
     <string name="Market_Filter_SolidDex_Description">A Pontuação Geral é Boa ou Excelente</string>
     <string name="Market_Filter_GoodDistribution">Boa Distribuição</string>
     <string name="Market_Filter_GoodDistribution_Description">A Pontuação Geral é Boa ou Excelente</string>
@@ -336,7 +338,7 @@
     <string name="Balance_NotRelayedAmount_Title">Transmissão</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
-    <string name="Balance_Receive_WatchAddressAlert">Esse endereço é o endereço da conta observada. Envie apenas tokens compatíveis com a rede.</string>
+    <string name="Balance_Receive_WatchAddressAlert">Este endereço é o endereço da conta monitorada</string>
     <string name="Balance_Receive_AddressMemoAlert">Forneça o Memo necessário (Tag) e envie apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
     <string name="Balance_Receive_UsedAddresses">Endereços Usados</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">O número de endereços %s muda para privacidade e segurança. Abaixo está uma lista de endereços usados neste carteira.</string>
@@ -356,6 +358,8 @@
     <string name="Send_Button_Max">Máximo</string>
     <string name="Send_Advanced">Avançado</string>
     <string name="Send_Hodler_Description">TimeLock funciona apenas para enviar para endereços BIP44 (começando com 1)</string>
+    <string name="Send_UtxoExpertMode">Modo Especialista UTxO</string>
+    <string name="Send_Utxo_Description">Selecionar manualmente UTxO para gastar os fundos no saldo</string>
     <string name="Send_Utxo_SendTo">Enviar para</string>
     <string name="Send_Utxo_Change">Alterar</string>
     <string name="Send_Rbf">Substituir pela taxa</string>
@@ -560,6 +564,7 @@
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Destinatário</string>
     <string name="Swap_ErrorNoProviders">Sem provedores</string>
+    <string name="Swap_ErrorNoQuote">Sem ofertas</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorBalanceNotAvailable">Saldo N/A</string>
     <string name="Swap_ErrorNoLiquidity">Não é possível trocar esses tokens</string>
@@ -717,6 +722,7 @@
     <string name="TransactionInfo_YouPaid">Você Paga</string>
     <string name="TransactionInfo_YouGet">Você recebe</string>
     <string name="TransactionInfo_YouGot">Você Tem</string>
+    <string name="TransactionInfo_YouSent">Enviar</string>
     <string name="TransactionInfo_Received">Recebido</string>
     <string name="TransactionInfo_Sent">Enviado</string>
     <string name="TransactionInfo_Approved">Aprovado</string>
@@ -913,10 +919,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CARTEIRAS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ASSISTA CARTEIRAS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">A carteira P.CASH foi criada para quem deseja investir e armazenar criptomoedas de maneira privada e independente.
-\n\nÉ uma carteira peer-to-peer sem custódia, onde apenas o usuário tem controle sobre os fundos. A carteira não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do mesmo em um aplicativo de carteira específico.
-\n\nA carteira P.CASH é totalmente de código aberto e qualquer pessoa pode confirmar se o aplicativo funciona exatamente como afirma.
-\n\nConstruímos a P.CASH para nós mesmos, pois as outras soluções disponíveis não estavam à altura. Tanto do ponto de vista da engenharia quanto da usabilidade, acreditamos que esta carteira está significativamente à frente dos produtos alternativos.</string>
+    <string name="SettingsTerms_Text">A carteira P.CASH foi construída para aqueles que buscam investir e armazenar criptomoedas de forma privada e independente.\n\nÉ uma carteira não-custódia, peer-to-peer onde apenas o usuário tem controle sobre os fundos. Não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do usuário para um aplicativo específico de carteira.\n\nA carteira P.CASH é totalmente de código aberto e qualquer um pode confirmar que o aplicativo funciona exatamente como afirma.</string>
     <string name="SettingsTerms_Backup">Frases de recuperação de backup seguros para cada carteira. É a única maneira de recuperar o acesso a fundos se o aplicativo não funcionar.</string>
     <string name="SettingsTerms_PrivateKeys">As frases de recuperação de carteira são geradas aleatoriamente no dispositivo durante a configuração e não são armazenadas em outro lugar.</string>
     <string name="SettingsTerms_DisablingPin">Desabilitando o PIN (código) no smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para restaurar o acesso aos fundos.</string>
@@ -1365,6 +1368,7 @@
     <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
     <string name="CoinAnalytics_TransactionCountRank">Ranking de Contador Tx</string>
     <string name="CoinAnalytics_TransactionCountRank_Description">Tokens classificados por número de transações em uma blockchain.</string>
+    <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Projeto TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projeto TVB (Total de Valor Bloqueado)</string>
     <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / TVB</string>
@@ -1414,6 +1418,7 @@
     <string name="Coin_Analytics_Indicators_Buy">Comprar</string>
     <string name="Coin_Analytics_Indicators_Neutral">Neutra</string>
     <string name="Coin_Analytics_Indicators_NoData">Sem dados</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Análise de Contrato Inteligente</string>
     <string name="CoinAnalytics_HighRiskItems">Itens de Alto Risco</string>
     <string name="CoinAnalytics_MediumRiskItems">Itens de Risco Médio</string>
     <string name="CoinAnalytics_AttentionRequired">Atenção Requerida</string>
@@ -1425,6 +1430,8 @@
     <string name="TechnicalAdvice_OverSold">sobrevendido</string>
     <string name="TechnicalAdvice_Down">down</string>
     <string name="TechnicalAdvice_Up">up</string>
+    <string name="TechnicalAdvice_OverMain">The actions with the asset are risky.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">Starting from the %s</string>
     <string name="TechnicalAdvice_InfoTitle">Indicadores Técnicos</string>
     <string name="TechnicalAdvice_ShowDetails">Mostrar detalhes</string>
     <string name="TechnicalAdvice_HideDetails">Ocultar detalhes</string>

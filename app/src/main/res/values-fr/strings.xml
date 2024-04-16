@@ -202,7 +202,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Capitalisation boursière de tous les protocoles de la chaîne %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Cap totale</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Cap Totale</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominance Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volume des dernières 24h</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap DeFi</string>
@@ -237,7 +237,9 @@
     <string name="Market_Filter_PriceCloseToAth">Prix proche d\'ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Prix proche d\'ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listé sur les meilleures bourses</string>
+    <string name="Market_Filter_SolidCex">Bon volume CEX</string>
     <string name="Market_Filter_SolidCex_Description">Le score global est bon ou excellent</string>
+    <string name="Market_Filter_SolidDex">Bon volume DEX</string>
     <string name="Market_Filter_SolidDex_Description">Le score global est bon ou excellent</string>
     <string name="Market_Filter_GoodDistribution">Bonne distribution</string>
     <string name="Market_Filter_GoodDistribution_Description">Le score global est bon ou excellent</string>
@@ -336,7 +338,7 @@
     <string name="Balance_NotRelayedAmount_Title">Diffusion</string>
     <string name="Balance_Receive_Memo">Mémo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
-    <string name="Balance_Receive_WatchAddressAlert">Cette adresse est l\'adresse du compte surveillé. N\'envoyer que des jetons compatibles avec le réseau.</string>
+    <string name="Balance_Receive_WatchAddressAlert">Cette adresse est l\'adresse du compte surveillé</string>
     <string name="Balance_Receive_AddressMemoAlert">Fournissez le Mémo requis (Tag) et envoyez uniquement des jetons compatibles avec le réseau. D\'autres seront perdus.</string>
     <string name="Balance_Receive_UsedAddresses">Adresses utilisées</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s adresses changent pour des raisons de confidentialité et de sécurité. Ci-dessous, une liste des adresses utilisées dans ce portefeuille.</string>
@@ -356,6 +358,8 @@
     <string name="Send_Button_Max">Montant maximal</string>
     <string name="Send_Advanced">Avancé</string>
     <string name="Send_Hodler_Description">Le TimeLock ne fonctionne que pour les envois vers les adresses du BIP44 (commençant par 1)</string>
+    <string name="Send_UtxoExpertMode">Mode Expert UTxO</string>
+    <string name="Send_Utxo_Description">Sélectionnez manuellement UTxO pour dépenser les fonds dans la balance</string>
     <string name="Send_Utxo_SendTo">Envoyer à</string>
     <string name="Send_Utxo_Change">Changer</string>
     <string name="Send_Rbf">Remplacer par frais</string>
@@ -367,6 +371,7 @@
     <string name="Send_Confirmation_YouSend">Vous envoyez</string>
     <string name="Send_Confirmation_Amount">Montant</string>
     <string name="Send_Confirmation_To">À</string>
+    <string name="Send_Confirmation_Own">Propriétaire</string>
     <string name="Send_Confirmation_Method">Méthode</string>
     <string name="Send_Confirmation_Receiver">Récepteur</string>
     <string name="Send_Confirmation_EstimateTime">Durée</string>
@@ -562,6 +567,7 @@
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Ce service n\'autorise pas l\'emballage/déballage. Utilisez 1inch à la place.</string>
     <string name="Swap_ErrorHighPriceImpact">Impact élevé sur les prix</string>
     <string name="Swap_ErrorTokenNotEnabled">Token non activés</string>
+    <string name="Swap_ErrorWalletSyncing">Le portefeuille est en cours de synchronisation</string>
     <string name="Swap_ErrorWalletNotSynced">Portefeuille non synchronisé</string>
     <string name="Swap_Proceed">Suivant</string>
     <string name="Swap_SelectTokenIn">Sélectionner le token</string>
@@ -578,14 +584,19 @@
     <string name="Swap_MaximumPaid">Montant maximum payé</string>
     <string name="Swap_MinimumGot">Montant garanti</string>
     <string name="Swap_PoweredBy">Propulsé par</string>
+    <string name="Swap_Provider">Service</string>
+    <string name="Swap_Providers">Service</string>
     <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(montant minimal)</string>
     <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Pièce</string>
+    <string name="Swap_SwapRouteNotFound">Route inconnue</string>
     <string name="Swap_YouPay">Vous payez</string>
     <string name="Swap_YouGet">Vous recevez</string>
     <string name="Swap_Confirm_Title">Confirmer</string>
+    <string name="SwapConfirm_QuoteExpired">Devis expiré</string>
+    <string name="SwapConfirm_FetchingFinalQuote">Récupération du devis final</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
     <string name="SwapSettings_Service">Service</string>
@@ -677,6 +688,8 @@
     <string name="Transactions_Filter">Filtre</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Masquer les transactions suspectes</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Masquer les transactions entrantes avec des montants infimes en stablecoins, cela résout partiellement les problèmes d\'attaques de poisoning d\'adresse.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">Filtrer par contacts fonctionne sur les blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton et ZCash. Ci-dessous sont les contacts appropriés</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Vous n\'avez aucun contact adapté </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Opération</string>
     <string name="TransactionInfo_Title">Informations sur la transaction</string>
@@ -705,6 +718,7 @@
     <string name="TransactionInfo_YouPaid">Vous avez payé</string>
     <string name="TransactionInfo_YouGet">Vous recevez</string>
     <string name="TransactionInfo_YouGot">Vous avez reçu</string>
+    <string name="TransactionInfo_YouSent">Vous avez envoyé</string>
     <string name="TransactionInfo_Received">Reçue</string>
     <string name="TransactionInfo_Sent">Envoyée</string>
     <string name="TransactionInfo_Approved">Approuvé</string>
@@ -901,13 +915,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">REGARDER LES WALLETS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">P.CASH Wallet est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.
-
-\n\nIl s\'agit d\'un portefeuille non privatif de liberté, de type pair à pair, où seul l\'utilisateur a le contrôle des fonds. Il ne collecte aucune donnée et permet à l\'utilisateur de rester indépendant en ne verrouillant pas son portefeuille à une application de portefeuille spécifique.
-
-\n\nL\'application P.CASH Wallet est entièrement open-source et tout le monde peut confirmer que l\'application fonctionne exactement comme elle le prétend.
-
-\n\nNous avons construit P.CASH à notre intention car les solutions disponibles n\'étaient pas à la hauteur de nos attentes. Tant du point de vue de l\'ingénierie que de la convivialité, nous pensons que ce portefeuille a une avance considérable sur les produits alternatifs.</string>
+    <string name="SettingsTerms_Text">Le portefeuille P,CASH est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.\n\nC\'est un portefeuille non-dépositaire, peer-to-peer où seul l\'utilisateur a le contrôle sur les fonds. Il ne collecte aucune donnée et garde l\'utilisateur indépendant en ne verrouillant pas les fonds de l\'utilisateur sur une application spécifique de portefeuille.\n\nLe portefeuille P,CASH est entièrement open-source et tout le monde peut confirmer que l\'application fonctionne exactement comme il le prétend.</string>
     <string name="SettingsTerms_Backup">Sauvegarde sécurisée des phrases de récupération pour chaque portefeuille. C\'est le seul moyen de récupérer l\'accès aux fonds si l\'application ne fonctionne pas.</string>
     <string name="SettingsTerms_PrivateKeys">Les phrases de récupération du portefeuille sont générées aléatoirement sur l\'appareil lors de l\'installation et ne sont pas stockées ailleurs.</string>
     <string name="SettingsTerms_DisablingPin">La désactivation du code PIN (code) sur le smartphone supprime tous les portefeuilles de l\'application. Des phrases de récupération seront nécessaires pour restaurer l\'accès aux fonds.</string>
