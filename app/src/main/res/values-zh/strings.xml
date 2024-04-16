@@ -237,7 +237,9 @@
     <string name="Market_Filter_PriceCloseToAth">接近历史最高价</string>
     <string name="Market_Filter_PriceCloseToAtl">接近历史最低价</string>
     <string name="Market_Filter_ListedOnTopExchanges">列在顶级交易所上</string>
+    <string name="Market_Filter_SolidCex">良好的中心化交易所（CEX）交易量</string>
     <string name="Market_Filter_SolidCex_Description">总体得分是良好或优秀</string>
+    <string name="Market_Filter_SolidDex">良好的去中心化交易所（DEX）交易量</string>
     <string name="Market_Filter_SolidDex_Description">总体得分是良好或优秀</string>
     <string name="Market_Filter_GoodDistribution">良好的分布</string>
     <string name="Market_Filter_GoodDistribution_Description">总体得分是良好或优秀</string>
@@ -334,7 +336,9 @@
     <string name="Balance_Receive_AddressType">地址类型</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
     <string name="Balance_NotRelayedAmount_Title">广播</string>
+    <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
+    <string name="Balance_Receive_WatchAddressAlert">该地址是被监视账户的地址</string>
     <string name="Balance_Receive_AddressMemoAlert">提供必需的备忘录（标签），并仅发送兼容网络的代币。其他将会丢失。</string>
     <string name="Balance_Receive_UsedAddresses">已使用地址</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s 地址用于隐私和安全。以下是此钱包中已使用的地址列表。</string>
@@ -354,6 +358,8 @@
     <string name="Send_Button_Max">最多</string>
     <string name="Send_Advanced">高级</string>
     <string name="Send_Hodler_Description">时间锁（TimeLock）只适用于发送到BIP44地址（从1开始)</string>
+    <string name="Send_UtxoExpertMode">UTxO 专家模式</string>
+    <string name="Send_Utxo_Description">手动选择 UTxO 将资金花在余额中</string>
     <string name="Send_Utxo_SendTo">发送至</string>
     <string name="Send_Utxo_Change">更改</string>
     <string name="Send_Rbf">替换交易</string>
@@ -562,6 +568,7 @@
     <string name="Swap_ErrorHighPriceImpact">高价格影响</string>
     <string name="Swap_ErrorTokenNotEnabled">代币未启用</string>
     <string name="Swap_ErrorWalletSyncing">正在同步钱包</string>
+    <string name="Swap_ErrorWalletNotSynced">钱包未同步</string>
     <string name="Swap_Proceed">继续</string>
     <string name="Swap_SelectTokenIn">选择代币输入</string>
     <string name="Swap_SelectTokenOut">选择代币输出</string>
@@ -577,15 +584,19 @@
     <string name="Swap_MaximumPaid">最大支付金额</string>
     <string name="Swap_MinimumGot">保证金额</string>
     <string name="Swap_PoweredBy">技术支持：</string>
+    <string name="Swap_Provider">供应商</string>
     <string name="Swap_Providers">服务提供商</string>
     <string name="Swap_SelectSwapProvider_Title">掉期供应商</string>
     <string name="Swap_AmountEstimated">(预估金额)</string>
     <string name="Swap_AmountMin">(最小金额)</string>
     <string name="Swap_AmountMax">(最大金额)</string>
     <string name="Swap_AmountTypeCoin">硬币</string>
+    <string name="Swap_SwapRouteNotFound">路线未找到</string>
     <string name="Swap_YouPay">您支付</string>
     <string name="Swap_YouGet">您获得</string>
     <string name="Swap_Confirm_Title">确认</string>
+    <string name="SwapConfirm_QuoteExpired">报价已过期</string>
+    <string name="SwapConfirm_FetchingFinalQuote">正在获取最终报价</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">掉期设置</string>
     <string name="SwapSettings_Service">服务</string>
@@ -677,6 +688,7 @@
     <string name="Transactions_Filter">筛选器</string>
     <string name="Transactions_Filter_HideSuspiciousTx">隐藏可疑Txs</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">隐藏到达的沙尘群交易，这部分解决了地址中毒攻击问题。</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">通过联系人过滤在以下区块链上起作用: Etherum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton和ZCash。 以下是合适的联系人</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">您没有任何合适的联系人 </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">交易</string>
@@ -706,6 +718,7 @@
     <string name="TransactionInfo_YouPaid">您已支付</string>
     <string name="TransactionInfo_YouGet">您获得</string>
     <string name="TransactionInfo_YouGot">您已获得</string>
+    <string name="TransactionInfo_YouSent">您已支出</string>
     <string name="TransactionInfo_Received">已收到</string>
     <string name="TransactionInfo_Sent">已发送</string>
     <string name="TransactionInfo_Approved">批准</string>
@@ -731,6 +744,7 @@
     <string name="TransactionInfoOptions_Cancel_Button">取消交易</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">交易已在区块中</string>
     <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">已替换的交易</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTitle">手续费 (Sat)</string>
     <string name="TransactionInfoOptions_Rbf_FeeTooLow">费用过低</string>
     <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF(替换交易) 未启用</string>
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">无法替换</string>
@@ -901,6 +915,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">战利品</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">观看战利品</string>
     <!--Setting_Terms-->
+    <string name="SettingsTerms_Text">不可阻挡的钱包是为那些寻求投资和以私人和独立方式存储加密货币的人建造的。\n\n它是一个非保管的、对等的钱包，在那里只有用户能够控制资金。 它不收集任何数据，并且通过不将用户的资金锁定到特定的钱包应用程序来保持用户独立。\n\n不可阻挡的钱包是完全开源的，任何人都可以确认应用程序正像它所声称的那样工作。</string>
     <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
     <string name="SettingsTerms_PrivateKeys">钱包恢复短语在安装过程中在设备上随机生成，并且不存储在其他地方。</string>
     <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
@@ -1006,6 +1021,7 @@
     <string name="Watch_Address_Watch">观察</string>
     <string name="Watch_Select_Blockchains">选择区块链</string>
     <string name="Watch_Select_Coins">选择货币</string>
+    <string name="Watch_Error_InvalidAddressFormat">不支持的地址格式</string>
     <!--Manage Account-->
     <string name="ManageAccount_Name">名称</string>
     <string name="ManageAccount_Save">保存</string>
@@ -1148,6 +1164,7 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">在 %s 区块链中找不到合同地址</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">地址格式</string>
+    <string name="AddressFormatSettings_Description">选择接收付款的地址格式。恢复现有钱包时应选择正确的格式。</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">原生</string>
     <string name="CoinPlatformsSelector_Title">代币平台选择</string>
