@@ -18,6 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
@@ -29,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTor
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -115,12 +116,9 @@ private fun SecurityCenterScreen(
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
 ) {
-
-    DisposableLifecycleCallbacks(
-        onResume = {
-            securitySettingsViewModel.update()
-        },
-    )
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        securitySettingsViewModel.update()
+    }
 
     if (torViewModel.restartApp) {
         restartApp()
