@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
+    <string name="Error_ParameterNotSet">Parámetro no establecido</string>
     <string name="LargeNumberFormat">%s%s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
@@ -9,10 +10,13 @@
     <string name="Alert_Restart">Reiniciar</string>
     <string name="Suspended">SUSPENDADO</string>
     <string name="Action_Undo">DESHACER</string>
+    <string name="Button_Show">Mostrar</string>
+    <string name="Button_Hide">Ocultar</string>
     <string name="Button_Cancel">Cancelar</string>
     <string name="Button_Next">Siguiente</string>
     <string name="Button_Enable">Habilitar</string>
     <string name="Button_Disable">Desactivar</string>
+    <string name="Button_ScanQr">Escanee el código QR</string>
     <string name="Button_Close">Cerrar</string>
     <string name="Button_Ok">Aceptar</string>
     <string name="Button_Done">Listo</string>
