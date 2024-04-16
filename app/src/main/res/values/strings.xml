@@ -237,7 +237,7 @@
 
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">Bitcoin Dominance</string>
     <string name="MarketGlobalMetrics_Volume">24h Volume</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
@@ -273,9 +273,9 @@
     <string name="Market_Filter_PriceCloseToAth">Price Close To ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Price Close To ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listed on Top Exchanges</string>
-    <string name="Market_Filter_SolidCex">Good Cex Volume</string>
+    <string name="Market_Filter_SolidCex">Good CEX Volume</string>
     <string name="Market_Filter_SolidCex_Description">Overall Score is Good or Excellent</string>
-    <string name="Market_Filter_SolidDex">Good Dex Volume</string>
+    <string name="Market_Filter_SolidDex">Good DEX Volume</string>
     <string name="Market_Filter_SolidDex_Description">Overall Score is Good or Excellent</string>
     <string name="Market_Filter_GoodDistribution">Good Distribution</string>
     <string name="Market_Filter_GoodDistribution_Description">Overall Score is Good or Excellent</string>
@@ -393,7 +393,7 @@
     <string name="Balance_NotRelayedAmount_Title">Broadcasting</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Can\'t recognize</string>
-    <string name="Balance_Receive_WatchAddressAlert">This address is the address of the watched account. Send only network-compatible tokens.</string>
+    <string name="Balance_Receive_WatchAddressAlert">This address is the address of the watched account</string>
     <string name="Balance_Receive_AddressMemoAlert">Provide required Memo (Tag) and send only network-compatible tokens. Others will be lost.</string>
     <string name="Balance_Receive_UsedAddresses">Used Addresses</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s addresses change for privacy and security. Below a list of used addresses in this wallet.</string>
@@ -796,7 +796,7 @@
     <string name="Transactions_Filter">Filter</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Hide suspicious tx</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Hiding incoming transactions with the dust amount in stablecoins, this partially solves the  address poisoning attack problems.</string>
-    <string name="Transactions_Filter_ChooseContact_Hint">Contact filtering is supported on the following blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton and ZCash. Below are the suitable contacts</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">Filtering by contacts works on the following blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton and ZCash. Below are the suitable contacts</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">You don\'t have any suitable contacts </string>
 
     <!--Transaction Info-->
@@ -1088,13 +1088,9 @@
 
     <!--Setting_Terms-->
 
-    <string name="SettingsTerms_Text">The P.CASH terminal is designed to access PirateCash and Cosanta Network services.
-\nTerminal functions:
-\n- Use PirateCash and Cosanta cryptocurrencies privately and independently. It\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds.
-\n- Decentralized messenger (in active development tage);
-\nIt doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
-\n\nThe P.CASH wallet is fully open-source and anyone can confirm the app works exactly as it claims to.
-\n\nWe built P.CASH for ourselves as the other available solutions were not up to par. Both from an engineering and usability perspective, we believe this wallet to be significantly ahead of alternative products.</string>
+    <string name="SettingsTerms_Text">The P.CASH wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
+\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
+\n\nThe P.CASH wallet is fully open-source and anyone can confirm the app works exactly as it claims to.</string>
     <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
     <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
     <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
