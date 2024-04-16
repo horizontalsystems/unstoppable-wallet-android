@@ -202,7 +202,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Valor de mercado de todos procolos na cadeia %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Gráfico</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Valor total de mercado</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Valor Total de M.</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominação Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volume em 24h</string>
     <string name="MarketGlobalMetrics_DefiCap">Mercado de DeFi</string>
@@ -336,7 +336,6 @@
     <string name="Balance_NotRelayedAmount_Title">Transmissão</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
-    <string name="Balance_Receive_WatchAddressAlert">Esse endereço é o endereço da conta observada. Envie apenas tokens compatíveis com a rede.</string>
     <string name="Balance_Receive_AddressMemoAlert">Forneça o Memo necessário (Tag) e envie apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
     <string name="Balance_Receive_UsedAddresses">Endereços Usados</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">O número de endereços %s muda para privacidade e segurança. Abaixo está uma lista de endereços usados neste carteira.</string>
@@ -687,7 +686,6 @@
     <string name="Transactions_Filter">Filtro</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Ocultar Transações Suspeitas</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Ocultando transações de entrada com montantes ínfimos em stablecoins, isso resolve parcialmente os problemas de ataques de envenenamento de endereço.</string>
-    <string name="Transactions_Filter_ChooseContact_Hint">A filtragem de contato é suportada nas seguintes blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Opbitrum, Tron, Ton e ZCash. Abaixo estão os contatos adequados</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Você não tem nenhum contato adequado </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transação</string>
@@ -913,10 +911,6 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CARTEIRAS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ASSISTA CARTEIRAS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">A carteira Unstoppable foi criada para quem deseja investir e armazenar criptomoedas de maneira privada e independente.
-\n\nÉ uma carteira peer-to-peer sem custódia, onde apenas o usuário tem controle sobre os fundos. A carteira não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do mesmo em um aplicativo de carteira específico.
-\n\nA carteira Unstoppable é totalmente de código aberto e qualquer pessoa pode confirmar se o aplicativo funciona exatamente como afirma.
-\n\nConstruímos a Unstoppable para nós mesmos, pois as outras soluções disponíveis não estavam à altura. Tanto do ponto de vista da engenharia quanto da usabilidade, acreditamos que esta carteira está significativamente à frente dos produtos alternativos.</string>
     <string name="SettingsTerms_Backup">Frases de recuperação de backup seguros para cada carteira. É a única maneira de recuperar o acesso a fundos se o aplicativo não funcionar.</string>
     <string name="SettingsTerms_PrivateKeys">As frases de recuperação de carteira são geradas aleatoriamente no dispositivo durante a configuração e não são armazenadas em outro lugar.</string>
     <string name="SettingsTerms_DisablingPin">Desabilitando o PIN (código) no smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para restaurar o acesso aos fundos.</string>
