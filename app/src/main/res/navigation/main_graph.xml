@@ -4,20 +4,12 @@
     android:id="@+id/main_graph"
     app:startDestination="@id/mainFragment">
 
-    <include app:graph="@navigation/wallet_connect_graph" />
-
     <fragment
         android:id="@+id/mainFragment"
         android:name="io.horizontalsystems.bankwallet.modules.main.MainFragment"/>
     <fragment
         android:id="@+id/depositCexFragment"
         android:name="io.horizontalsystems.bankwallet.modules.depositcex.DepositCexFragment"/>
-    <fragment
-        android:id="@+id/wc2SessionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.v2.WC2SessionFragment"/>
-    <fragment
-        android:id="@+id/wc2RequestFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WC2RequestFragment"/>
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
@@ -39,6 +31,9 @@
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"/>
+    <fragment
+        android:id="@+id/resendBitcoinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment"/>
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.managewallets.ManageWalletsFragment"/>
@@ -120,12 +115,6 @@
         android:id="@+id/aboutAppFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.AboutFragment"/>
     <fragment
-        android:id="@+id/experimentalFeaturesFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.ExperimentalFeaturesFragment"/>
-    <fragment
-        android:id="@+id/timeLockFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.experimental.timelock.TimeLockFragment"/>
-    <fragment
         android:id="@+id/donateAddressesFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.donate.DonateAddressesFragment"/>
     <fragment
@@ -137,9 +126,6 @@
     <fragment
         android:id="@+id/coinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.CoinFragment" />
-    <fragment
-        android:id="@+id/technicalIndicatorsDetailsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment" />
     <fragment
         android:id="@+id/indicatorsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorsFragment" />
@@ -176,6 +162,9 @@
     <fragment
         android:id="@+id/coinReportsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.reports.CoinReportsFragment" />
+ <fragment
+     android:id="@+id/coinDetectorsFragment"
+     android:name="io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment" />
     <fragment
         android:id="@+id/setPinFragment"
         android:name="io.horizontalsystems.bankwallet.modules.pin.SetPinFragment" />
@@ -323,6 +312,21 @@
         android:id="@+id/swapTokenSelectFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swaptokenselect.SwapTokenSelectFragment" />
     <fragment
+        android:id="@+id/multiswap"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapFragment" />
+    <fragment
+        android:id="@+id/swapSelectProvider"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapSelectProviderFragment" />
+    <fragment
+        android:id="@+id/swapSettings"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsFragment" />
+    <fragment
+        android:id="@+id/swapTransactionSettings"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapTransactionSettingsFragment" />
+    <fragment
+        android:id="@+id/swapConfirm"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapConfirmFragment" />
+    <fragment
         android:id="@+id/sendConfirmation"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment" />
     <fragment
@@ -335,23 +339,23 @@
         android:id="@+id/chooseContact"
         android:name="io.horizontalsystems.bankwallet.modules.contacts.ChooseContactFragment"/>
     <fragment
+        android:id="@+id/selectContact"
+        android:name="io.horizontalsystems.bankwallet.modules.transactions.SelectContactFragment"/>
+    <fragment
         android:id="@+id/statusInfoDialog"
         android:name="io.horizontalsystems.bankwallet.modules.info.TransactionStatusInfoFragment" />
     <fragment
         android:id="@+id/selectSwapCoinDialog"
         android:name="io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinFragment" />
     <fragment
+        android:id="@+id/swapSelectCoinFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.multiswap.SwapSelectCoinFragment" />
+    <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.token.TokenBalanceFragment" />
     <fragment
         android:id="@+id/cexAssetFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.cex.asset.CexAssetFragment" />
-    <dialog
-        android:id="@+id/wcErrorNoAccountFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
-    <dialog
-        android:id="@+id/wcAccountTypeNotSupportedDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
     <dialog
         android:id="@+id/contactOptionsDialog"
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.ContactOptionsDialog" />
@@ -391,4 +395,24 @@
     <dialog
         android:id="@+id/periodSelectDialog"
         android:name="io.horizontalsystems.bankwallet.ui.compose.components.PeriodSelectDialog" />
+
+    <!--Wallet Connect-->
+    <fragment
+        android:id="@+id/wcSessionFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.session.WCSessionFragment"/>
+    <fragment
+        android:id="@+id/wcRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
+    <fragment
+        android:id="@+id/wcListFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment"/>
+    <fragment
+        android:id="@+id/wcPairingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.pairing.WCPairingsFragment"/>
+    <dialog
+        android:id="@+id/wcErrorNoAccountFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCErrorNoAccountFragment" />
+    <dialog
+        android:id="@+id/wcAccountTypeNotSupportedDialog"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
 </navigation>

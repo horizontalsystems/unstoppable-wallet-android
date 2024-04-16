@@ -18,8 +18,8 @@ import io.horizontalsystems.bankwallet.modules.pin.core.Pin
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesDao
 import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSessionKey
-import io.horizontalsystems.bankwallet.modules.walletconnect.entity.WalletConnectV2Session
-import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionDao
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 
 @Database(version = 58, exportSchema = false, entities = [
     EnabledWallet::class,
@@ -59,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun restoreSettingDao(): RestoreSettingDao
     abstract fun logsDao(): LogsDao
     abstract fun marketFavoritesDao(): MarketFavoritesDao
-    abstract fun wc2SessionDao(): WC2SessionDao
+    abstract fun wcSessionDao(): WCSessionDao
     abstract fun nftDao(): NftDao
     abstract fun proFeaturesDao(): ProFeaturesDao
     abstract fun evmAddressLabelDao(): EvmAddressLabelDao

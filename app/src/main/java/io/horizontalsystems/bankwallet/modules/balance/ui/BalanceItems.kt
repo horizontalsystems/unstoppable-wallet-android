@@ -6,25 +6,42 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -33,14 +50,34 @@ import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.balance.*
+import io.horizontalsystems.bankwallet.modules.balance.AccountViewItem
+import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceUiState
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem2
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
+import io.horizontalsystems.bankwallet.modules.balance.HeaderNote
+import io.horizontalsystems.bankwallet.modules.balance.ReceiveAllowedState
+import io.horizontalsystems.bankwallet.modules.balance.TotalUIState
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppModule
 import io.horizontalsystems.bankwallet.modules.rateapp.RateAppViewModel
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.SendTokenSelectFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.DoubleText
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
+import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -154,7 +191,34 @@ fun BalanceItems(
     }
 
     val context = LocalContext.current
+    val view = LocalView.current
     var revealedCardId by remember { mutableStateOf<Int?>(null) }
+
+    val navigateToTokenBalance: (BalanceViewItem2) -> Unit = remember {
+        {
+            navController.slideFromRight(
+                R.id.tokenBalanceFragment,
+                it.wallet
+            )
+        }
+    }
+
+    val onClickSyncError: (BalanceViewItem2) -> Unit = remember {
+        {
+            onSyncErrorClicked(
+                it,
+                viewModel,
+                navController,
+                view
+            )
+        }
+    }
+
+    val onDisable: (BalanceViewItem2) -> Unit = remember {
+        {
+            viewModel.disable(it)
+        }
+    }
 
     HSSwipeRefresh(
         refreshing = uiState.isRefreshing,
@@ -173,13 +237,17 @@ fun BalanceItems(
             item {
                 TotalBalanceRow(
                     totalState = totalState,
-                    onClickTitle = {
-                        viewModel.toggleBalanceVisibility()
-                        HudHelper.vibrate(context)
+                    onClickTitle = remember {
+                        {
+                            viewModel.toggleBalanceVisibility()
+                            HudHelper.vibrate(context)
+                        }
                     },
-                    onClickSubtitle = {
-                        viewModel.toggleTotalType()
-                        HudHelper.vibrate(context)
+                    onClickSubtitle = remember {
+                        {
+                            viewModel.toggleTotalType()
+                            HudHelper.vibrate(context)
+                        }
                     }
                 )
             }
@@ -190,18 +258,16 @@ fun BalanceItems(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        ButtonPrimaryYellowWithIcon(
+                        ButtonPrimaryYellow(
                             modifier = Modifier.weight(1f),
-                            icon = R.drawable.ic_arrow_up_right_24,
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
                             }
                         )
                         HSpacer(8.dp)
-                        ButtonPrimaryDefaultWithIcon(
+                        ButtonPrimaryDefault(
                             modifier = Modifier.weight(1f),
-                            icon = R.drawable.ic_arrow_down_left_24,
                             title = stringResource(R.string.Balance_Receive),
                             onClick = {
                                 when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
@@ -230,7 +296,7 @@ fun BalanceItems(
                             icon = R.drawable.ic_swap_24,
                             contentDescription = stringResource(R.string.Swap),
                             onClick = {
-                                navController.slideFromRight(R.id.swapTokenSelectFragment)
+                                navController.slideFromRight(R.id.multiswap)
                             }
                         )
                     }
@@ -310,26 +376,39 @@ fun BalanceItems(
                 }
             }
 
-            wallets(
-                items = balanceViewItems,
-                key = {
-                    it.wallet.hashCode()
+            if (balanceViewItems.isEmpty()) {
+                item {
+                    NoCoinsBlock()
                 }
-            ) { item ->
-                BalanceCardSwipable(
-                    viewItem = item,
-                    viewModel = viewModel,
-                    navController = navController,
-                    revealed = revealedCardId == item.wallet.hashCode(),
-                    onReveal = { walletHashCode ->
-                        if (revealedCardId != walletHashCode) {
-                            revealedCardId = walletHashCode
-                        }
-                    },
-                    onConceal = {
-                        revealedCardId = null
+            } else {
+                wallets(
+                    items = balanceViewItems,
+                    key = {
+                        it.wallet.hashCode()
                     }
-                )
+                ) { item ->
+                    BalanceCardSwipable(
+                        viewItem = item,
+                        revealed = revealedCardId == item.wallet.hashCode(),
+                        onReveal = { walletHashCode ->
+                            if (revealedCardId != walletHashCode) {
+                                revealedCardId = walletHashCode
+                            }
+                        },
+                        onConceal = {
+                            revealedCardId = null
+                        },
+                        onClick = {
+                            navigateToTokenBalance.invoke(item)
+                        },
+                        onClickSyncError = {
+                            onClickSyncError.invoke(item)
+                        },
+                        onDisable = {
+                            onDisable.invoke(item)
+                        }
+                    )
+                }
             }
         }
     }
@@ -344,6 +423,40 @@ fun BalanceItems(
             )
         )
         viewModel.onSendOpened()
+    }
+}
+
+@Composable
+private fun NoCoinsBlock() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        VSpacer(height = 100.dp)
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .background(
+                    color = ComposeAppTheme.colors.raina,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.size(48.dp),
+                painter = painterResource(R.drawable.ic_empty_wallet),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey
+            )
+        }
+        VSpacer(32.dp)
+        subhead2_grey(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = stringResource(R.string.Balance_NoCoinsAlert),
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+        )
+        VSpacer(height = 32.dp)
     }
 }
 

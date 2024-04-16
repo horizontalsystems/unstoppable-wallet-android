@@ -1,10 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.contacts.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule.ContactValidationException
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
@@ -18,7 +15,7 @@ class ContactViewModel(
     private val repository: ContactsRepository,
     existingContact: Contact?,
     newAddress: ContactAddress?
-) : ViewModel() {
+) : ViewModelUiState<ContactViewModel.UiState>() {
 
     val contact = existingContact ?: Contact(UUID.randomUUID().toString(), "", listOf())
     private val title = if (existingContact == null)
@@ -32,15 +29,23 @@ class ContactViewModel(
     private val isNewContact = existingContact == null
     private var closeAfterSave = false
     private var error: ContactValidationException? = null
-
-    var uiState by mutableStateOf(uiState())
-        private set
-
+    
     init {
         newAddress?.let {
             setAddress(it)
         }
     }
+
+    override fun createState() = UiState(
+        headerTitle = title,
+        addressViewItems = addressViewItems,
+        saveEnabled = isSaveEnabled(),
+        confirmBack = hasChanges(),
+        showDelete = !isNewContact,
+        focusOnContactName = isNewContact,
+        closeWithSuccess = closeAfterSave,
+        error = error
+    )
 
     fun onNameChange(name: String) {
         contactName = name
@@ -52,7 +57,7 @@ class ContactViewModel(
             ex
         }
 
-        emitUiState()
+        emitState()
     }
 
     fun onSave() {
@@ -64,7 +69,7 @@ class ContactViewModel(
 
         closeAfterSave = true
 
-        emitUiState()
+        emitState()
     }
 
     fun onDelete() {
@@ -72,21 +77,21 @@ class ContactViewModel(
 
         closeAfterSave = true
 
-        emitUiState()
+        emitState()
     }
 
     fun setAddress(address: ContactAddress) {
         addresses[address.blockchain] = address
         addressViewItems = addressViewItems()
 
-        emitUiState()
+        emitState()
     }
 
     fun deleteAddress(address: ContactAddress) {
         addresses.remove(address.blockchain)
         addressViewItems = addressViewItems()
 
-        emitUiState()
+        emitState()
     }
 
     private fun hasChanges(): Boolean {
@@ -101,10 +106,6 @@ class ContactViewModel(
         return addresses.isNotEmpty() && error == null && contactName.isNotBlank() && hasChanges()
     }
 
-    private fun emitUiState() {
-        uiState = uiState()
-    }
-
     private fun addressViewItems(): List<AddressViewItem> {
         val sortedAddresses = addresses.values.sortedBy { it.blockchain.type.order }
         val savedAddresses = contact.addresses.associateBy { it.blockchain }
@@ -112,17 +113,6 @@ class ContactViewModel(
             it.edited
         }
     }
-
-    private fun uiState() = UiState(
-        headerTitle = title,
-        addressViewItems = addressViewItems,
-        saveEnabled = isSaveEnabled(),
-        confirmBack = hasChanges(),
-        showDelete = !isNewContact,
-        focusOnContactName = isNewContact,
-        closeWithSuccess = closeAfterSave,
-        error = error
-    )
 
     data class UiState(
         val headerTitle: TranslatableString,

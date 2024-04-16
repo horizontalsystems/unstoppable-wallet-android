@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,7 +30,13 @@ fun CellUniversal(
     onClick: (() -> Unit)? = null,
     content: @Composable() (RowScope.() -> Unit),
 ) {
-    Box {
+    val modifierClickable = if (onClick != null) {
+        Modifier.clickable(onClick = onClick)
+    } else {
+        Modifier
+    }
+
+    Box(modifier = modifierClickable) {
         if (borderTop) {
             Divider(
                 thickness = 1.dp,
@@ -38,15 +45,9 @@ fun CellUniversal(
             )
         }
 
-        val modifierClickable = if (onClick != null) {
-            Modifier.clickable(onClick = onClick)
-        } else {
-            Modifier
-        }
-
         Row(
             modifier = Modifier
-                .then(modifierClickable)
+                .defaultMinSize(minHeight = 48.dp)
                 .padding(vertical = paddingVertical, horizontal = paddingHorizontal),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,

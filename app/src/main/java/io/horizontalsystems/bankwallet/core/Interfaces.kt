@@ -58,6 +58,7 @@ import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 interface IAdapterManager {
     val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>>
+    fun startAdapterManager()
     fun refresh()
     fun getAdapterForWallet(wallet: Wallet): IAdapter?
     fun getAdapterForToken(token: Token): IAdapter?
@@ -87,7 +88,6 @@ interface ILocalStorage {
     var sortType: BalanceSortType
     var appVersions: List<AppVersion>
     var isAlertNotificationOn: Boolean
-    var isLockTimeEnabled: Boolean
     var encryptedSampleText: String?
     var bitcoinDerivation: AccountType.Derivation?
     var torEnabled: Boolean
@@ -253,19 +253,22 @@ interface ITransactionsAdapter {
 
     val lastBlockInfo: LastBlockInfo?
     val lastBlockUpdatedFlowable: Flowable<Unit>
+    val additionalTokenQueries: List<TokenQuery> get() = listOf()
 
     fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        address: String?,
     ): Single<List<TransactionRecord>>
 
     fun getRawTransaction(transactionHash: String): String? = null
 
     fun getTransactionRecordsFlowable(
         token: Token?,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        address: String?
     ): Flowable<List<TransactionRecord>>
 
     fun getTransactionUrl(transactionHash: String): String
@@ -283,16 +286,21 @@ interface IBalanceAdapter {
     fun sendAllowed() = balanceState is AdapterState.Synced
 }
 
-data class BalanceData(val available: BigDecimal, val locked: BigDecimal = BigDecimal.ZERO) {
-    val total get() = available + locked
+data class BalanceData(
+    val available: BigDecimal,
+    val timeLocked: BigDecimal = BigDecimal.ZERO,
+    val notRelayed: BigDecimal = BigDecimal.ZERO
+) {
+    val total get() = available + timeLocked + notRelayed
 }
 
 interface IReceiveAdapter {
     val receiveAddress: String
     val isMainNet: Boolean
 
-    val isAccountActive: Boolean
-        get() = true
+    suspend fun isAddressActive(address: String): Boolean {
+        return true
+    }
 
     fun usedAddresses(change: Boolean): List<UsedAddress> {
         return listOf()
@@ -313,6 +321,7 @@ interface ISendBitcoinAdapter {
     fun availableBalance(
         feeRate: Int,
         address: String?,
+        memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
     ): BigDecimal
@@ -322,6 +331,7 @@ interface ISendBitcoinAdapter {
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
+        memo: String?,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?
     ): BitcoinFeeInfo?
@@ -330,6 +340,7 @@ interface ISendBitcoinAdapter {
     fun send(
         amount: BigDecimal,
         address: String,
+        memo: String?,
         feeRate: Int,
         unspentOutputs: List<UnspentOutputInfo>?,
         pluginData: Map<Byte, IPluginData>?,

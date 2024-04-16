@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.send.zcash
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
@@ -12,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendZcashAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -35,7 +35,7 @@ class SendZCashViewModel(
     private val memoService: SendZCashMemoService,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean
-) : ViewModel() {
+) : ViewModelUiState<SendZCashUiState>() {
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -45,19 +45,6 @@ class SendZCashViewModel(
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
     private var memoState = memoService.stateFlow.value
-
-    var uiState by mutableStateOf(
-        SendZCashUiState(
-            fee = fee,
-            availableBalance = amountState.availableBalance,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            memoIsAllowed = memoState.memoIsAllowed,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
@@ -80,6 +67,16 @@ class SendZCashViewModel(
             handleUpdatedMemoState(it)
         }
     }
+
+    override fun createState() = SendZCashUiState(
+        fee = fee,
+        availableBalance = amountState.availableBalance,
+        addressError = addressState.addressError,
+        amountCaution = amountState.amountCaution,
+        memoIsAllowed = memoState.memoIsAllowed,
+        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        showAddressInput = showAddressInput,
+    )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -113,18 +110,6 @@ class SendZCashViewModel(
         this.memoState = memoState
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = SendZCashUiState(
-            availableBalance = amountState.availableBalance,
-            fee = fee,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            memoIsAllowed = memoState.memoIsAllowed,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
     }
 
     fun getConfirmationData(): SendConfirmationData {

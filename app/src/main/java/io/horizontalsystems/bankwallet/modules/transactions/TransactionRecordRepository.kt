@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
@@ -22,6 +23,7 @@ class TransactionRecordRepository(
 
     private var selectedWallet: TransactionWallet? = null
     private var selectedBlockchain: Blockchain? = null
+    private var contact: Contact? = null
 
     private val itemsSubject = PublishSubject.create<List<TransactionRecord>>()
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
@@ -35,6 +37,7 @@ class TransactionRecordRepository(
     private val disposables = CompositeDisposable()
     private var disposableUpdates: Disposable? = null
 
+    private var transactionWallets: List<TransactionWallet> = listOf()
     private var walletsGroupedBySource: List<TransactionWallet> = listOf()
 
     private val activeAdapters: List<TransactionAdapterWrapper>
@@ -86,31 +89,40 @@ class TransactionRecordRepository(
 
     }
 
-    override fun setWallets(
+    override fun set(
         transactionWallets: List<TransactionWallet>,
         wallet: TransactionWallet?,
         transactionType: FilterTransactionType,
         blockchain: Blockchain?,
+        contact: Contact?,
     ) {
-        this.walletsGroupedBySource = groupWalletsBySource(transactionWallets)
+        if (this.transactionWallets != transactionWallets || adaptersMap.isEmpty()) {
+            this.transactionWallets = transactionWallets
+            walletsGroupedBySource = groupWalletsBySource(transactionWallets)
 
-        // update list of adapters based on wallets
-        val currentAdapters = adaptersMap.toMutableMap()
-        adaptersMap.clear()
-        (transactionWallets + this.walletsGroupedBySource).distinct().forEach { transactionWallet ->
-            var adapter = currentAdapters.remove(transactionWallet)
-            if (adapter == null) {
-                adapterManager.getAdapter(transactionWallet.source)?.let {
-                    adapter = TransactionAdapterWrapper(it, transactionWallet, selectedFilterTransactionType)
+            // update list of adapters based on wallets
+            val currentAdapters = adaptersMap.toMutableMap()
+            adaptersMap.clear()
+            (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
+                var adapter = currentAdapters.remove(transactionWallet)
+                if (adapter == null) {
+                    adapterManager.getAdapter(transactionWallet.source)?.let {
+                        adapter = TransactionAdapterWrapper(
+                            it,
+                            transactionWallet,
+                            selectedFilterTransactionType,
+                            contact
+                        )
+                    }
+                }
+
+                adapter?.let {
+                    adaptersMap[transactionWallet] = it
                 }
             }
-
-            adapter?.let {
-                adaptersMap[transactionWallet] = it
-            }
+            currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
+            currentAdapters.clear()
         }
-        currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
-        currentAdapters.clear()
 
         var reload = false
 
@@ -133,35 +145,20 @@ class TransactionRecordRepository(
             reload = true
         }
 
+        if (this.contact != contact) {
+            this.contact = contact
+            adaptersMap.forEach { (_, transactionAdapterWrapper) ->
+                transactionAdapterWrapper.setContact(contact)
+            }
+            reload = true
+        }
+
         if (reload) {
             unsubscribeFromUpdates()
             allLoaded.set(false)
             loadItems(1)
             subscribeForUpdates()
         }
-    }
-
-    override fun setWalletAndBlockchain(transactionWallet: TransactionWallet?, blockchain: Blockchain?) {
-        selectedWallet = transactionWallet
-        this.selectedBlockchain = blockchain
-
-        unsubscribeFromUpdates()
-        allLoaded.set(false)
-        loadItems(1)
-        subscribeForUpdates()
-    }
-
-    override fun setTransactionType(transactionType: FilterTransactionType) {
-        selectedFilterTransactionType = transactionType
-
-        adaptersMap.forEach { (_, transactionAdapterWrapper) ->
-            transactionAdapterWrapper.setTransactionType(transactionType)
-        }
-
-        unsubscribeFromUpdates()
-        allLoaded.set(false)
-        loadItems(1)
-        subscribeForUpdates()
     }
 
     override fun loadNext() {

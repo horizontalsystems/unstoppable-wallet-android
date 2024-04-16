@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.receive.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.UsedAddress
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.factories.uriScheme
@@ -19,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule
 import io.horizontalsystems.bankwallet.modules.receive.ReceiveModule.AdditionalData
 import io.horizontalsystems.marketkit.models.TokenType
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
@@ -26,7 +24,7 @@ import java.math.BigDecimal
 class ReceiveAddressViewModel(
     private val wallet: Wallet,
     private val adapterManager: IAdapterManager
-) : ViewModel() {
+) : ViewModelUiState<ReceiveModule.UiState>() {
 
     private var viewState: ViewState = ViewState.Loading
     private var address = ""
@@ -38,34 +36,33 @@ class ReceiveAddressViewModel(
     private var networkName = ""
     private var mainNet = true
     private var watchAccount = wallet.account.isWatchAccount
-    private var alertText: ReceiveModule.AlertText = getAlertText(watchAccount)
-
-    var uiState by mutableStateOf(
-        ReceiveModule.UiState(
-            viewState = viewState,
-            address = address,
-            usedAddresses = usedAddresses,
-            usedChangeAddresses = usedChangeAddresses,
-            uri = uri,
-            networkName = networkName,
-            watchAccount = watchAccount,
-            additionalItems = getAdditionalData(),
-            amount = amount,
-            alertText = alertText,
-        )
-    )
-        private set
+    private var alertText: ReceiveModule.AlertText? = getAlertText(watchAccount)
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             adapterManager.adaptersReadyObservable.asFlow()
                 .collect {
                     setData()
                 }
         }
-        setData()
+        viewModelScope.launch(Dispatchers.IO) {
+            setData()
+        }
         setNetworkName()
     }
+
+    override fun createState() = ReceiveModule.UiState(
+        viewState = viewState,
+        address = address,
+        usedAddresses = usedAddresses,
+        usedChangeAddresses = usedChangeAddresses,
+        uri = uri,
+        networkName = networkName,
+        watchAccount = watchAccount,
+        additionalItems = getAdditionalData(),
+        amount = amount,
+        alertText = alertText,
+    )
 
     private fun setNetworkName() {
         when (val tokenType = wallet.token.type) {
@@ -87,34 +84,30 @@ class ReceiveAddressViewModel(
         if (!mainNet) {
             networkName += " (TestNet)"
         }
-        syncState()
+        emitState()
     }
 
-    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText {
-        return when {
-            watchAccount -> ReceiveModule.AlertText.Normal(
-                Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
-            )
-            else -> ReceiveModule.AlertText.Normal(
-                Translator.getString(R.string.Balance_Receive_AddressAlert)
-            )
-        }
+    private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? {
+        return if (watchAccount) ReceiveModule.AlertText.Normal(
+            Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
+        )
+        else null
     }
 
-    private fun setData() {
+    private suspend fun setData() {
         val adapter = adapterManager.getReceiveAdapterForWallet(wallet)
         if (adapter != null) {
             address = adapter.receiveAddress
             usedAddresses = adapter.usedAddresses(false)
             usedChangeAddresses = adapter.usedAddresses(true)
             uri = getUri()
-            accountActive = adapter.isAccountActive
+            accountActive = adapter.isAddressActive(adapter.receiveAddress)
             mainNet = adapter.isMainNet
             viewState = ViewState.Success
         } else {
             viewState = ViewState.Error(NullPointerException())
         }
-        syncState()
+        emitState()
     }
 
     private fun getUri(): String {
@@ -132,21 +125,6 @@ class ReceiveAddressViewModel(
         }
 
         return newUri
-    }
-
-    private fun syncState() {
-        uiState = ReceiveModule.UiState(
-            viewState = viewState,
-            address = address,
-            usedAddresses = usedAddresses,
-            usedChangeAddresses = usedChangeAddresses,
-            uri = uri,
-            networkName = networkName,
-            watchAccount = watchAccount,
-            additionalItems = getAdditionalData(),
-            amount = amount,
-            alertText = alertText,
-        )
     }
 
     private fun getAdditionalData(): List<AdditionalData> {
@@ -168,20 +146,22 @@ class ReceiveAddressViewModel(
     }
 
     fun onErrorClick() {
-        setData()
+        viewModelScope.launch(Dispatchers.IO) {
+            setData()
+        }
     }
 
     fun setAmount(amount: BigDecimal?) {
         amount?.let {
             if (it <= BigDecimal.ZERO) {
                 this.amount = null
-                syncState()
+                emitState()
                 return
             }
         }
         this.amount = amount
         uri = getUri()
-        syncState()
+        emitState()
     }
 
 }

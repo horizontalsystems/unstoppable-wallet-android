@@ -22,8 +22,9 @@ class BitcoinOutgoingTransactionRecord(
     amount: BigDecimal,
     val to: String?,
     val sentToSelf: Boolean,
-    memo: String? = null,
-    source: TransactionSource
+    memo: String?,
+    source: TransactionSource,
+    val replaceable: Boolean
 ) : BitcoinTransactionRecord(
     uid = uid,
     transactionHash = transactionHash,

@@ -7,7 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinSet
 
-class EditPinFragment : BaseComposeFragment() {
+class EditPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

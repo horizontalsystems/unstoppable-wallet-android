@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
 import kotlin.math.absoluteValue
 
 object SwapMainModule {
@@ -332,7 +331,7 @@ object SwapMainModule {
 
     @Parcelize
     data class ApproveData(
-        val dex: Dex,
+        val blockchainType: BlockchainType,
         val token: Token,
         val spenderAddress: String,
         val amount: BigDecimal,

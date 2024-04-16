@@ -1,29 +1,35 @@
 package io.horizontalsystems.bankwallet.modules.evmfee.eip1559
 
 import io.horizontalsystems.bankwallet.core.Warning
-import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.evmfee.*
+import io.horizontalsystems.bankwallet.modules.evmfee.Bound
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsError
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsWarning
+import io.horizontalsystems.bankwallet.modules.evmfee.GasPriceInfo
+import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.FeeHistory
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.GasPrice
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 import kotlin.math.max
 import kotlin.math.min
 
 class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
-    evmKit: EthereumKit,
+    refreshSignalFlowable: Flowable<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
     initialGasPrice: GasPrice.Eip1559? = null
-) : IEvmGasPriceService {
+) : IEvmGasPriceService() {
 
-    private val disposable = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val blocksCount: Long = 10
     private val rewardPercentile = listOf(50)
     private val lastNRecommendedBaseFees = 2
@@ -38,15 +44,9 @@ class Eip1559GasPriceService(
 
     private var recommendedGasPrice: GasPrice.Eip1559? = null
 
-    override var state: DataState<GasPriceInfo> = DataState.Loading
-        private set(value) {
-            field = value
-            stateSubject.onNext(value)
-        }
+    private var state: DataState<GasPriceInfo> = DataState.Loading
 
-    private val stateSubject = PublishSubject.create<DataState<GasPriceInfo>>()
-    override val stateObservable: Observable<DataState<GasPriceInfo>>
-        get() = stateSubject
+    override fun createState() = state
 
     private var recommendedGasPriceSelected = true
 
@@ -56,6 +56,13 @@ class Eip1559GasPriceService(
     var currentPriorityFee: Long? = null
         private set
 
+    constructor(
+        gasProvider: Eip1559GasPriceProvider,
+        evmKit: EthereumKit,
+        minGasPrice: GasPrice.Eip1559? = null,
+        initialGasPrice: GasPrice.Eip1559? = null
+    ) : this(gasProvider, evmKit.lastBlockHeightFlowable, minGasPrice, initialGasPrice)
+
     init {
         if (initialBaseFee != null && initialPriorityFee != null) {
             setGasPrice(initialBaseFee, initialPriorityFee)
@@ -63,27 +70,35 @@ class Eip1559GasPriceService(
             setRecommended()
         }
 
-        evmKit.lastBlockHeightFlowable
-            .subscribeIO {
+        coroutineScope.launch {
+            refreshSignalFlowable.asFlow().collect {
                 syncRecommended()
             }
-            .let { disposable.add(it) }
+        }
     }
 
     override fun setRecommended() {
         recommendedGasPriceSelected = true
 
-        recommendedGasPrice?.let {
+        val recommendedGasPrice = recommendedGasPrice
+
+        if (recommendedGasPrice == null) {
+            coroutineScope.launch {
+                syncRecommended()
+            }
+        } else {
             state = DataState.Success(
                 GasPriceInfo(
-                    gasPrice = it,
-                    gasPriceDefault = it,
+                    gasPrice = recommendedGasPrice,
+                    gasPriceDefault = recommendedGasPrice,
                     default = true,
                     warnings = listOf(),
                     errors = listOf()
                 )
             )
-        } ?: syncRecommended()
+
+            emitState()
+        }
     }
 
     fun setGasPrice(maxFee: Long, priorityFee: Long) {
@@ -91,6 +106,8 @@ class Eip1559GasPriceService(
 
         val newGasPrice = GasPrice.Eip1559(maxFee, priorityFee)
         state = validatedGasPriceInfoState(newGasPrice)
+
+        emitState()
     }
 
     private fun validatedGasPriceInfoState(gasPrice: GasPrice): DataState<GasPriceInfo> {
@@ -133,20 +150,21 @@ class Eip1559GasPriceService(
         )
     }
 
-    private fun syncRecommended() {
-        gasProvider.feeHistorySingle(blocksCount, DefaultBlockParameter.Latest, rewardPercentile)
-            .subscribeIO({ feeHistory ->
-                handle(feeHistory)
-            }, { error ->
-                handle(error)
-            })
-            .let { disposable.add(it) }
+    private suspend fun syncRecommended() {
+        try {
+            val feeHistory = gasProvider.feeHistorySingle(blocksCount, DefaultBlockParameter.Latest, rewardPercentile).await()
+            handle(feeHistory)
+        } catch (error: Throwable) {
+            handle(error)
+        }
     }
 
     private fun handle(error: Throwable) {
         currentBaseFee = null
         currentPriorityFee = null
         state = DataState.Error(error)
+
+        emitState()
     }
 
     private fun handle(feeHistory: FeeHistory) {
@@ -167,11 +185,13 @@ class Eip1559GasPriceService(
                 state = validatedGasPriceInfoState(it.gasPrice)
             }
         }
+
+        emitState()
     }
 
     private fun recommendedBaseFee(feeHistory: FeeHistory): Long {
         val lastNRecommendedBaseFeesList = feeHistory.baseFeePerGas.takeLast(lastNRecommendedBaseFees)
-        return java.util.Collections.max(lastNRecommendedBaseFeesList)
+        return lastNRecommendedBaseFeesList.max()
     }
 
     private fun recommendedPriorityFee(feeHistory: FeeHistory): Long {

@@ -1,14 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.send.bitcoin.utxoexpert
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.entities.Address
@@ -23,11 +21,12 @@ class UtxoExpertModeViewModel(
     private val adapter: ISendBitcoinAdapter,
     private val token: Token,
     private val address: Address?,
+    private val memo: String?,
     private val feeRate: Int?,
     initialValue: BigDecimal?,
     initialCustomUnspentOutputs: List<UnspentOutputInfo>?,
     xRateService: XRateService,
-) : ViewModel() {
+) : ViewModelUiState<UtxoExpertModeModule.UiState>() {
 
     private var value = initialValue ?: BigDecimal.ZERO
     private var unspentOutputViewItems = listOf<UtxoExpertModeModule.UnspentOutputViewItem>()
@@ -50,15 +49,6 @@ class UtxoExpertModeViewModel(
     val customOutputs: List<UnspentOutputInfo>
         get() = adapter.unspentOutputs.filter { selectedUnspentOutputs.contains(getUnspentId(it)) }
 
-    var uiState by mutableStateOf(
-        UtxoExpertModeModule.UiState(
-            sendToInfo = sendToInfo,
-            changeInfo = changeInfo,
-            feeInfo = feeInfo,
-            utxoItems = unspentOutputViewItems,
-        )
-    )
-
     init {
         initialCustomUnspentOutputs?.forEach {
             selectedUnspentOutputs = selectedUnspentOutputs + getUnspentId(it)
@@ -71,8 +61,15 @@ class UtxoExpertModeViewModel(
         if (selectedUnspentOutputs.isNotEmpty()) {
             updateFee()
         }
-        sync()
+        emitState()
     }
+
+    override fun createState() = UtxoExpertModeModule.UiState(
+        sendToInfo = sendToInfo,
+        changeInfo = changeInfo,
+        feeInfo = feeInfo,
+        utxoItems = unspentOutputViewItems,
+    )
 
     private fun getUnspentId(unspentOutputInfo: UnspentOutputInfo) = "${unspentOutputInfo.transactionHash.toHexString()}-${unspentOutputInfo.outputIndex}"
 
@@ -86,7 +83,7 @@ class UtxoExpertModeViewModel(
             utxo.copy(selected = selectedUnspentOutputs.contains(utxo.id))
         }
         updateFee()
-        sync()
+        emitState()
     }
 
     private fun updateFee() {
@@ -95,6 +92,7 @@ class UtxoExpertModeViewModel(
             amount = value,
             feeRate = feeRateNonNull,
             address = address?.hex,
+            memo = memo,
             unspentOutputs = customOutputs,
             pluginData = null,
         )
@@ -125,16 +123,7 @@ class UtxoExpertModeViewModel(
         } else {
             null
         }
-        sync()
-    }
-
-    private fun sync() {
-        uiState = uiState.copy(
-            sendToInfo = sendToInfo,
-            changeInfo = changeInfo,
-            feeInfo = feeInfo,
-            utxoItems = unspentOutputViewItems,
-        )
+        emitState()
     }
 
     private fun setUnspentOutputViewItems() {
@@ -164,6 +153,7 @@ object UtxoExpertModeModule {
         private val adapter: ISendBitcoinAdapter,
         private val token: Token,
         private val address: Address?,
+        private val memo: String?,
         private val value: BigDecimal?,
         private val feeRate: Int?,
         private val customUnspentOutputs: List<UnspentOutputInfo>?,
@@ -173,6 +163,7 @@ object UtxoExpertModeModule {
                 adapter = adapter,
                 token = token,
                 address = address,
+                memo = memo,
                 feeRate = feeRate,
                 initialValue = value,
                 initialCustomUnspentOutputs = customUnspentOutputs,

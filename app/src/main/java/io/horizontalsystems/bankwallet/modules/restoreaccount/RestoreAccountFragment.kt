@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonic.Re
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigureScreen
 
-class RestoreAccountFragment : BaseComposeFragment() {
+class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

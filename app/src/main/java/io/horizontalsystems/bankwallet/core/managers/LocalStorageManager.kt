@@ -48,7 +48,6 @@ class LocalStorageManager(
     private val SORT_TYPE = "balance_sort_type"
     private val APP_VERSIONS = "app_versions"
     private val ALERT_NOTIFICATION_ENABLED = "alert_notification"
-    private val LOCK_TIME_ENABLED = "lock_time_enabled"
     private val ENCRYPTION_CHECKER_TEXT = "encryption_checker_text"
     private val BITCOIN_DERIVATION = "bitcoin_derivation"
     private val TOR_ENABLED = "tor_enabled"
@@ -207,12 +206,6 @@ class LocalStorageManager(
         get() = preferences.getBoolean(ALERT_NOTIFICATION_ENABLED, true)
         set(enabled) {
             preferences.edit().putBoolean(ALERT_NOTIFICATION_ENABLED, enabled).apply()
-        }
-
-    override var isLockTimeEnabled: Boolean
-        get() = preferences.getBoolean(LOCK_TIME_ENABLED, false)
-        set(enabled) {
-            preferences.edit().putBoolean(LOCK_TIME_ENABLED, enabled).apply()
         }
 
     override var encryptedSampleText: String?

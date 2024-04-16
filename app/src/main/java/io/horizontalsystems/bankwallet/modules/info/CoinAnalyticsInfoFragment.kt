@@ -140,9 +140,7 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
         }
 
         AnalyticInfo.TechnicalIndicatorsInfo -> {
-            BulletedText(R.string.CoinAnalytics_TechIndicators_Info1)
-            BulletedText(R.string.CoinAnalytics_TechIndicators_Info2)
-            BulletedText(R.string.CoinAnalytics_TechIndicators_Info3)
+            InfoBody(R.string.TechnicalAdvice_InfoDescription)
         }
     }
 }

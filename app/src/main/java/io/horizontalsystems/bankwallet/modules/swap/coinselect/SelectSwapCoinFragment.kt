@@ -4,7 +4,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -15,11 +20,25 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.B2
+import io.horizontalsystems.bankwallet.ui.compose.components.Badge
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.D1
+import io.horizontalsystems.bankwallet.ui.compose.components.MultitextM1
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
+import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
 class SelectSwapCoinFragment : BaseComposeFragment() {
 
@@ -29,16 +48,22 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
         if (dex == null) {
             navController.popBackStack()
         } else {
-            SelectSwapCoinDialogScreen(
-                navController = navController,
-                dex = dex,
-                onClickItem = {
-                    navController.setNavigationResultX(it)
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        navController.popBackStack()
-                    }, 100)
-                }
+            val viewModel = viewModel<SelectSwapCoinViewModel>(
+                factory = SelectSwapCoinModule.Factory(
+                    dex
+                )
             )
+            SelectSwapCoinDialogScreen(
+                title = stringResource(id =R.string.Select_Coins),
+                coinBalanceItems = viewModel.coinItems,
+                onSearchTextChanged = viewModel::onEnterQuery,
+                onClose = navController::popBackStack
+            ) {
+                navController.setNavigationResultX(it)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    navController.popBackStack()
+                }, 100)
+            }
         }
     }
 }
@@ -46,25 +71,22 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SelectSwapCoinDialogScreen(
-    navController: NavController,
-    dex: SwapMainModule.Dex,
+    title: String,
+    coinBalanceItems: List<CoinBalanceItem>,
+    onSearchTextChanged: (String) -> Unit,
+    onClose: () -> Unit,
     onClickItem: (CoinBalanceItem) -> Unit
 ) {
-    val viewModel = viewModel<SelectSwapCoinViewModel>(factory = SelectSwapCoinModule.Factory(dex))
-    val coinItems = viewModel.coinItems
-
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         SearchBar(
-            title = stringResource(R.string.Select_Coins),
+            title = title,
             searchHintText = stringResource(R.string.ManageCoins_Search),
-            onClose = { navController.popBackStack() },
-            onSearchTextChanged = {
-                viewModel.onEnterQuery(it)
-            }
+            onClose = onClose,
+            onSearchTextChanged = onSearchTextChanged
         )
 
         LazyColumn {
-            items(coinItems) { coinItem ->
+            items(coinBalanceItems) { coinItem ->
                 SectionUniversalItem(borderTop = true) {
                     RowUniversal(
                         modifier = Modifier
@@ -81,23 +103,35 @@ fun SelectSwapCoinDialogScreen(
                         )
                         Spacer(modifier = Modifier.size(16.dp))
                         MultitextM1(
-                            title = { B2(text = coinItem.token.coin.name) },
-                            subtitle = { D1(text = coinItem.token.coin.code) }
+                            title = {
+                                Row {
+                                    B2(text = coinItem.token.coin.code)
+                                    coinItem.token.badge?.let {
+                                        Badge(text = it)
+                                    }
+                                }
+                            },
+                            subtitle = { D1(text = coinItem.token.coin.name) }
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         MultitextM1(
                             title = {
                                 coinItem.balance?.let {
-                                    App.numberFormatter.formatCoinFull(it, coinItem.token.coin.code, 8)
+                                    App.numberFormatter.formatCoinShort(
+                                        it,
+                                        coinItem.token.coin.code,
+                                        8
+                                    )
                                 }?.let {
                                     B2(text = it)
                                 }
                             },
                             subtitle = {
                                 coinItem.fiatBalanceValue?.let { fiatBalanceValue ->
-                                    App.numberFormatter.formatFiatFull(
+                                    App.numberFormatter.formatFiatShort(
                                         fiatBalanceValue.value,
-                                        fiatBalanceValue.currency.symbol
+                                        fiatBalanceValue.currency.symbol,
+                                        2
                                     )
                                 }?.let {
                                     D1(
@@ -109,6 +143,9 @@ fun SelectSwapCoinDialogScreen(
                         )
                     }
                 }
+            }
+            item {
+                VSpacer(height = 32.dp)
             }
         }
     }

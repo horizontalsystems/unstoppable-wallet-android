@@ -13,6 +13,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -30,6 +32,7 @@ import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListModule
+import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListUiState
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -62,7 +65,7 @@ fun WCSessionsScreen(
         }
     }
 
-    val uiState = viewModel.uiState
+    val uiState by viewModel.uiState.collectAsState(initial = WalletConnectListUiState())
 
     when (viewModel.connectionResult) {
         ConnectionResult.Error -> {
@@ -72,7 +75,7 @@ fun WCSessionsScreen(
                     invalidUrlBottomSheetState.show()
                 }
             }
-            viewModel.onHandleRoute()
+            viewModel.onRouteHandled()
         }
 
         else -> Unit
@@ -81,16 +84,12 @@ fun WCSessionsScreen(
     LaunchedEffect(Unit) {
         if (deepLinkUri != null) {
             viewModel.setConnectionUri(deepLinkUri)
-        } else if (!viewModel.initialConnectionPrompted && uiState.v2SectionItem == null) {
-            delay(300)
-            viewModel.initialConnectionPrompted = true
-            qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
         }
     }
 
     DisposableLifecycleCallbacks(
         onResume = {
-            viewModel.refreshPairingsNumber()
+            viewModel.refreshList()
         }
     )
 
@@ -140,7 +139,7 @@ fun WCSessionsScreen(
         ) {
             Column(modifier = Modifier.padding(it)) {
                 Column(modifier = Modifier.weight(1f)) {
-                    if (uiState.emptyScreen) {
+                    if (uiState.sessionViewItems.isEmpty() && uiState.pairingsNumber == 0) {
                         ListEmptyView(
                             text = stringResource(R.string.WalletConnect_NoConnection),
                             icon = R.drawable.ic_wallet_connet_48

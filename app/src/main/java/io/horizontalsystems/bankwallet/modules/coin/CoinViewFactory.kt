@@ -28,8 +28,8 @@ data class MarketTickerViewItem(
     val market: String,
     val marketImageUrl: String?,
     val pair: String,
-    val rate: String,
-    val volume: String,
+    val volumeFiat: String,
+    val volumeToken: String,
     val tradeUrl: String?,
     val badge: TranslatableString?
 )

@@ -15,7 +15,7 @@ import io.horizontalsystems.bankwallet.modules.info.ErrorDisplayDialogFragment
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.core.helpers.HudHelper
 
-class ImportCexAccountFragment : BaseComposeFragment() {
+class ImportCexAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import kotlinx.parcelize.Parcelize
 
 object MainModule {
@@ -26,8 +26,8 @@ object MainModule {
                 App.accountManager,
                 App.releaseNotesManager,
                 App.localStorage,
-                App.wc2SessionManager,
-                App.wc2Manager,
+                App.wcSessionManager,
+                App.wcManager,
                 wcDeepLink
             ) as T
         }
@@ -82,7 +82,7 @@ object MainModule {
         val showWhatsNew: Boolean,
         val activeWallet: Account?,
         val torEnabled: Boolean,
-        val wcSupportState: WC2Manager.SupportState?
+        val wcSupportState: WCManager.SupportState?
     )
 }
 

@@ -15,11 +15,17 @@ import io.horizontalsystems.bankwallet.modules.swap.oneinch.OneInchKitHelper
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.oneinchkit.Swap
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.transformWhile
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
@@ -30,6 +36,7 @@ class OneInchFeeService(
     private val gasPriceService: IEvmGasPriceService,
     parameters: OneInchSwapParameters,
 ) : IEvmFeeService {
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val disposable = CompositeDisposable()
     private var gasPriceInfoDisposable: Disposable? = null
 
@@ -42,23 +49,19 @@ class OneInchFeeService(
     var parameters: OneInchSwapParameters = parameters
         private set
 
-    override var transactionStatus: DataState<Transaction> = DataState.Error(GasDataError.NoTransactionData)
-        private set(value) {
-            field = value
-            transactionStatusSubject.onNext(value)
-        }
-    private val transactionStatusSubject = PublishSubject.create<DataState<Transaction>>()
-    override val transactionStatusObservable: Observable<DataState<Transaction>> = transactionStatusSubject
+    private val _transactionStatusFlow = MutableStateFlow<DataState<Transaction>>(DataState.Error(GasDataError.NoTransactionData))
+    override val transactionStatusFlow = _transactionStatusFlow.asStateFlow()
 
     init {
-        val gasPriceServiceState = gasPriceService.state
-        sync(gasPriceServiceState)
-        if (gasPriceServiceState.dataOrNull == null) {
-            gasPriceService.stateObservable
-                .subscribeIO {
+        coroutineScope.launch {
+            gasPriceService.stateFlow
+                .transformWhile { gasPriceServiceState ->
+                    emit(gasPriceServiceState)
+                    gasPriceServiceState.dataOrNull == null
+                }
+                .collect {
                     sync(it)
                 }
-                .let { disposable.add(it) }
         }
     }
 
@@ -67,6 +70,7 @@ class OneInchFeeService(
     }
 
     override fun clear() {
+        coroutineScope.cancel()
         disposable.clear()
         gasPriceInfoDisposable?.dispose()
         retryDisposable?.dispose()
@@ -75,10 +79,10 @@ class OneInchFeeService(
     private fun sync(gasPriceServiceState: DataState<GasPriceInfo>) {
         when (gasPriceServiceState) {
             is DataState.Error -> {
-                transactionStatus = gasPriceServiceState
+                _transactionStatusFlow.update { gasPriceServiceState }
             }
             DataState.Loading -> {
-                transactionStatus = DataState.Loading
+                _transactionStatusFlow.update { DataState.Loading }
             }
             is DataState.Success -> {
                 sync(gasPriceServiceState.data)
@@ -120,21 +124,23 @@ class OneInchFeeService(
         val transactionData = TransactionData(swapTx.to, swapTx.value, swapTx.data)
         val transaction = Transaction(transactionData, gasData, gasPriceInfo.default, gasPriceInfo.warnings, gasPriceInfo.errors)
 
-        transactionStatus = if (transaction.totalAmount > evmBalance) {
-            DataState.Success(
-                transaction.copy(
-                    warnings = gasPriceInfo.warnings,
-                    errors = gasPriceInfo.errors + FeeSettingsError.InsufficientBalance
+        _transactionStatusFlow.update {
+            if (transaction.totalAmount > evmBalance) {
+                DataState.Success(
+                    transaction.copy(
+                        warnings = gasPriceInfo.warnings,
+                        errors = gasPriceInfo.errors + FeeSettingsError.InsufficientBalance
+                    )
                 )
-            )
-        } else {
-            DataState.Success(transaction)
+            } else {
+                DataState.Success(transaction)
+            }
         }
     }
 
     private fun onError(error: Throwable, gasPriceInfo: GasPriceInfo) {
         parameters = parameters.copy(amountTo = BigDecimal.ZERO)
-        transactionStatus = DataState.Error(error)
+        _transactionStatusFlow.update { DataState.Error(error) }
 
         if (error is EvmError.CannotEstimateSwap) {
             retryDisposable = Single.timer(retryDelayTimeInSeconds, TimeUnit.SECONDS)

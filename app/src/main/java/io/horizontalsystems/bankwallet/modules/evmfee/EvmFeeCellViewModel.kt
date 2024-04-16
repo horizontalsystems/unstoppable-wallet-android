@@ -2,11 +2,12 @@ package io.horizontalsystems.bankwallet.modules.evmfee
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinService
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.fee.FeeItem
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class EvmFeeCellViewModel(
     val feeService: IEvmFeeService,
@@ -14,20 +15,15 @@ class EvmFeeCellViewModel(
     val coinService: EvmCoinService
 ) : ViewModel() {
 
-    private val disposable = CompositeDisposable()
-
     val feeLiveData = MutableLiveData<FeeItem?>()
     val viewStateLiveData = MutableLiveData<ViewState>()
 
     init {
-        syncTransactionStatus(feeService.transactionStatus)
-        feeService.transactionStatusObservable
-            .subscribe { syncTransactionStatus(it) }
-            .let { disposable.add(it) }
-    }
-
-    override fun onCleared() {
-        disposable.clear()
+        viewModelScope.launch {
+            feeService.transactionStatusFlow.collect {
+                syncTransactionStatus(it)
+            }
+        }
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {

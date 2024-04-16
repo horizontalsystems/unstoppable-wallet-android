@@ -1,20 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.coin.indicators
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorSetting
-import kotlinx.coroutines.launch
 
 class MacdSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,
     private val chartIndicatorManager: ChartIndicatorManager
-) : ViewModel() {
+) : ViewModelUiState<MacdSettingUiState>() {
     val name = indicatorSetting.name
     val defaultFast = indicatorSetting.defaultData["fast"]
     val defaultSlow = indicatorSetting.defaultData["slow"]
@@ -27,20 +23,17 @@ class MacdSettingViewModel(
     private var signalError: Throwable? = null
     private var finish = false
 
-    var uiState by mutableStateOf(
-        MacdSettingUiState(
-            fast = fast,
-            slow = slow,
-            signal = signal,
-            fastError = fastError,
-            slowError = slowError,
-            signalError = signalError,
-            applyEnabled = applyEnabled(),
-            finish = finish,
-            resetEnabled = resetEnabled()
-        )
+    override fun createState() = MacdSettingUiState(
+        fast = fast,
+        slow = slow,
+        signal = signal,
+        fastError = fastError,
+        slowError = slowError,
+        signalError = signalError,
+        applyEnabled = applyEnabled(),
+        finish = finish,
+        resetEnabled = resetEnabled()
     )
-        private set
 
     private fun applyEnabled(): Boolean {
         if (fastError != null || slowError != null || signalError != null)
@@ -53,22 +46,6 @@ class MacdSettingViewModel(
 
     private fun resetEnabled(): Boolean {
         return fast != null || slow != null || signal != null
-    }
-
-    private fun emitState() {
-        viewModelScope.launch {
-            uiState = MacdSettingUiState(
-                fast = fast,
-                slow = slow,
-                signal = signal,
-                fastError = fastError,
-                slowError = slowError,
-                signalError = signalError,
-                applyEnabled = applyEnabled(),
-                finish = finish,
-                resetEnabled = resetEnabled()
-            )
-        }
     }
 
     fun onEnterFast(v: String) {

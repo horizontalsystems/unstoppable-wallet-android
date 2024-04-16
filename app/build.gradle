@@ -17,7 +17,7 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 98
+        versionCode 101
         versionName "0.38.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -68,10 +68,7 @@ android {
             minifyEnabled false
             applicationIdSuffix ".dev"
             resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
-            resValue "string", "cryptoCompareApiKey", "2b08fe1dba559ca6acf5e1897b6de8749cee0ace6052d7aa7fccf6aa9f1b3255"
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
-            resValue "string", "infuraProjectId", "2a1306f1d12f4c109a4d4fb9be46b02e"
-            resValue "string", "infuraSecretKey", "fc479a9290b64a84a15fa6544a130218"
             resValue "string", "etherscanKey", "GKNHXT22ED7PRVCKZATFZQD1YI7FK9AAYE"
             resValue "string", "bscscanKey", "5ZGSHWYHZVA8XZHB8PF6UUTRNNB4KT43ZZ"
             resValue "string", "polygonscanKey", "TNQ44BCF1MS3S75Y6A2B6SN88I8UYFJFRM"
@@ -80,7 +77,6 @@ android {
             resValue "string", "arbiscanApiKey", "Z43JN5434XVNA5D73UGPWKF26G5D9MGDPZ"
             resValue "string", "gnosisscanApiKey", "V2J8YU15ZX9S1W3GTUV2HXM11TP2TUBRW4"
             resValue "string", "ftmscanApiKey", "57YQ2GIRAZNV6M5HIJYYG3XQGGNIPVV8MF"
-            resValue "string", "defiyieldProviderApiKey", "bc3a9319-b115-4673-ace9-03228c11d026"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/develop/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json"
@@ -94,7 +90,7 @@ android {
             resValue "string", "trongridApiKeys", "33374494-8060-447e-8367-90c5efd4ed95"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
-            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
+            resValue "string", "blocksDecodedEthereumRpc", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet"
         }
 
         appcenterdebug {
@@ -110,10 +106,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue "string", "twitterBearerToken", "AAAAAAAAAAAAAAAAAAAAAJgeNwEAAAAA6xVpR6xLKTrxIA3kkSyRA92LDpA%3Da6auybDwcymUyh2BcS6zZwicUdxGtrzJC0qvOSdRwKLeqBGhwB"
-            resValue "string", "cryptoCompareApiKey", ""
             resValue "string", "uniswapGraphUrl", "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2"
-            resValue "string", "infuraProjectId", "5bf760228fcd47bb8d277dba49b7b369"
-            resValue "string", "infuraSecretKey", "7b81c992c98d4e60aaa8a0ef9acff2be"
             resValue "string", "etherscanKey", "TTH1114D5VD5ZMCJZ4B74SGIDRCGSKWGX9"
             resValue "string", "bscscanKey", "HBQQN4GTKCHYSRZCKFVQJ3FWGPY4T8237Y"
             resValue "string", "polygonscanKey", "2JM7USE5YRI59RWFZQI2RECAZSNI5QEQGV"
@@ -122,7 +115,6 @@ android {
             resValue "string", "arbiscanApiKey", "4QWW522BV13BJCZMXH1JIB2ESJ7MZTSJYI"
             resValue "string", "gnosisscanApiKey", "KEXFAQKDUENZ5U9CW3ZKYJEJ84ZIHH9QTY"
             resValue "string", "ftmscanApiKey", "JAWRPW27KEMVXMJJ9UKY63CVPH3X5V9SMP"
-            resValue "string", "defiyieldProviderApiKey", "bc3a9319-b115-4673-ace9-03228c11d026"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/blockchain-crypto-guides/v1.2/index.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.3/src/faq.json"
@@ -136,7 +128,7 @@ android {
             resValue "string", "trongridApiKeys", "8f5ae2c8-8012-42a8-b0ca-ffc2741f6a29,578aa64f-a79f-4ee8-86e9-e9860e2d050a,1e92f1fc-41f8-401f-a7f6-5b719b6f1280"
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "ElyK7s22HR0JD78CEXVPnpZA8UyuUwIl"
-            resValue "string", "blockchairApiKey", "M___unstoppn7jfFpe40X___________"
+            resValue "string", "blocksDecodedEthereumRpc", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet"
         }
 
         appcenterrelease {
@@ -275,23 +267,24 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:ton-kit-kmm:90f9c77'
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:1cc8b7d'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:3a02f3a'
+    implementation 'com.github.horizontalsystems:ton-kit-kmm:2b7df9d'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:80fd413'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:f4957a9'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
-    implementation 'com.github.horizontalsystems:market-kit-android:e480847'
-    implementation 'com.github.horizontalsystems:solana-kit-android:6401968'
-    implementation 'com.github.horizontalsystems:tron-kit-android:f2f7c9a'
+    implementation 'com.github.horizontalsystems:market-kit-android:ce358c3'
+    implementation 'com.github.horizontalsystems:solana-kit-android:d8bb9f2'
+    implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK
     implementation "cash.z.ecc.android:zcash-android-sdk:2.0.1"
+    implementation 'com.github.horizontalsystems:market-kit-android:2d3cd5f'
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
 
     // WalletConnect V2
     implementation(platform("com.walletconnect:android-bom:1.15.0"))
-    implementation 'com.walletconnect:sign'
+    implementation 'com.walletconnect:web3wallet'
     implementation 'com.walletconnect:android-core'
 
     // Unstoppable Domains

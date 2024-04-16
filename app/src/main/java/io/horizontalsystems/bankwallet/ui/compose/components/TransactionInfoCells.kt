@@ -2,7 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import android.content.Intent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -32,19 +34,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.nft.NftUid
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.info.TransactionDoubleSpendInfoFragment
 import io.horizontalsystems.bankwallet.modules.info.TransactionLockTimeInfoFragment
-import io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetModule
+import io.horizontalsystems.bankwallet.modules.transactionInfo.AmountType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
+import io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
@@ -96,27 +97,24 @@ fun WarningMessageCell(message: String) {
 }
 
 @Composable
+fun DescriptionCell(text: String) {
+    subhead2_grey(
+        modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 12.dp),
+        text = text
+    )
+}
+
+@Composable
 fun TransactionNftAmountCell(
+    title: String,
     amount: ColoredValue,
+    nftName: String?,
     iconUrl: String?,
     iconPlaceholder: Int?,
-    nftUid: NftUid,
-    providerCollectionUid: String?,
-    navController: NavController
+    badge: String?,
 ) {
-    var modifier = Modifier.padding(horizontal = 16.dp)
-
-    if (nftUid.blockchainType !is BlockchainType.Solana) {
-        modifier = modifier.clickable {
-            navController.slideFromBottom(
-                    R.id.nftAssetFragment,
-                    NftAssetModule.Input(providerCollectionUid, nftUid)
-            )
-        }
-    }
-
     RowUniversal(
-        modifier = modifier,
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
             iconUrl = iconUrl,
@@ -125,54 +123,77 @@ fun TransactionNftAmountCell(
                 .size(32.dp)
                 .clip(RoundedCornerShape(CornerSize(4.dp)))
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        SubHead1ColoredValue(value = amount)
-        Spacer(Modifier.weight(1f))
-        Icon(
-            modifier = Modifier.size(20.dp),
-            painter = painterResource(R.drawable.ic_info_20),
-            tint = ComposeAppTheme.colors.grey,
-            contentDescription = null
-        )
+        HSpacer(16.dp)
+        Column {
+            subhead2_leah(text = title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+        }
+        HSpacer(8.dp)
+        Column(
+            modifier = Modifier.weight(1f),
+            horizontalAlignment = Alignment.End
+        ) {
+            SubHead1ColoredValue(value = amount)
+            nftName?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(
+                    text = it,
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun TransactionAmountCell(
+    amountType: AmountType,
     fiatAmount: ColoredValue?,
     coinAmount: ColoredValue,
     coinIconUrl: String?,
+    badge: String?,
     coinIconPlaceholder: Int?,
-    coinUid: String?,
-    navController: NavController
+    onClick: (() -> Unit)? = null
 ) {
-    val clickable = coinUid?.let {
-        Modifier.clickable {
-            navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it, "transaction_info"))
-        }
-    } ?: Modifier
-
+    val title = when (amountType) {
+        AmountType.YouSent -> stringResource(R.string.TransactionInfo_YouSent)
+        AmountType.YouGot -> stringResource(R.string.TransactionInfo_YouGot)
+        AmountType.Received -> stringResource(R.string.TransactionInfo_Received)
+        AmountType.Sent -> stringResource(R.string.TransactionInfo_Sent)
+        AmountType.Approved -> stringResource(R.string.TransactionInfo_Approved)
+    }
     RowUniversal(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .then(clickable)
+        modifier = Modifier.padding(horizontal = 16.dp),
+        onClick = onClick
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier.size(32.dp)
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        SubHead1ColoredValue(value = coinAmount)
-        Spacer(Modifier.weight(1f))
-        fiatAmount?.let { SubHead2ColoredValue(value = it) }
+        HSpacer(16.dp)
+        Column {
+            subhead2_leah(text = title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+        }
+        HFillSpacer(minWidth = 8.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            SubHead1ColoredValue(value = coinAmount)
+            fiatAmount?.let {
+                VSpacer(height = 1.dp)
+                SubHead2ColoredValue(value = it)
+            }
+        }
     }
 }
 
 @Composable
 fun TitleAndValueCell(
     title: String,
-    value: String
+    value: String,
 ) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -180,6 +201,40 @@ fun TitleAndValueCell(
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
         Spacer(Modifier.weight(1f))
         subhead1_leah(text = value, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+@Composable
+fun PriceWithToggleCell(
+    title: String,
+    valueOne: String,
+    valueTwo: String,
+) {
+    var showValueOne by remember { mutableStateOf(true) }
+
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
+        subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
+        Spacer(Modifier.weight(1f))
+        subhead1_leah(
+            text = if (showValueOne) valueOne else valueTwo,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        HSpacer(8.dp)
+        HsIconButton(
+            onClick = { showValueOne = !showValueOne },
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape),
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_arrow_swap3_20),
+                contentDescription = null,
+                tint = ComposeAppTheme.colors.grey,
+            )
+        }
     }
 }
 
@@ -315,6 +370,7 @@ fun TransactionInfoStatusCell(
 @Composable
 fun TransactionInfoSpeedUpCell(
     transactionHash: String,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
     RowUniversal(
@@ -323,6 +379,7 @@ fun TransactionInfoSpeedUpCell(
             openTransactionOptionsModule(
                 TransactionInfoOptionsModule.Type.SpeedUp,
                 transactionHash,
+                blockchainType,
                 navController
             )
         }
@@ -340,6 +397,7 @@ fun TransactionInfoSpeedUpCell(
 @Composable
 fun TransactionInfoCancelCell(
     transactionHash: String,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
     RowUniversal(
@@ -348,6 +406,7 @@ fun TransactionInfoCancelCell(
             openTransactionOptionsModule(
                 TransactionInfoOptionsModule.Type.Cancel,
                 transactionHash,
+                blockchainType,
                 navController
             )
         }
@@ -358,7 +417,7 @@ fun TransactionInfoCancelCell(
             tint = ComposeAppTheme.colors.redL
         )
         Spacer(Modifier.width(16.dp))
-        body_lucian(text = stringResource(R.string.TransactionInfo_Cancel))
+        body_lucian(text = stringResource(R.string.TransactionInfoOptions_Cancel_Button))
     }
 }
 
@@ -582,11 +641,45 @@ fun TransactionInfoCell(title: String, value: String) {
     }
 }
 
-private fun openTransactionOptionsModule(type: TransactionInfoOptionsModule.Type, transactionHash: String, navController: NavController) {
-    navController.slideFromRight(
-        R.id.transactionSpeedUpCancelFragment,
-        TransactionSpeedUpCancelFragment.Input(type, transactionHash)
-    )
+private fun openTransactionOptionsModule(
+    type: TransactionInfoOptionsModule.Type,
+    transactionHash: String,
+    blockchainType: BlockchainType,
+    navController: NavController
+) {
+    when (blockchainType) {
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash -> {
+            navController.slideFromRight(
+                R.id.resendBitcoinFragment,
+                ResendBitcoinFragment.Input(type)
+            )
+        }
+
+        BlockchainType.Ethereum,
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.BinanceChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne -> {
+            navController.slideFromRight(
+                R.id.transactionSpeedUpCancelFragment,
+                TransactionSpeedUpCancelFragment.Input(type, transactionHash)
+            )
+        }
+
+        BlockchainType.Zcash,
+        BlockchainType.Solana,
+        BlockchainType.Gnosis,
+        BlockchainType.Fantom,
+        BlockchainType.Tron,
+        BlockchainType.Ton,
+        is BlockchainType.Unsupported -> Unit
+    }
 }
 
 private fun statusTitle(status: TransactionStatus) = when (status) {

@@ -8,9 +8,10 @@ import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.util.concurrent.ConcurrentHashMap
 
 class TransactionAdapterManager(
@@ -19,10 +20,14 @@ class TransactionAdapterManager(
 ) {
     private val disposables = CompositeDisposable()
 
-    private val adaptersReadySubject = BehaviorSubject.create<Unit>()
-    val adaptersReadyObservable: Observable<Unit> get() = adaptersReadySubject
+    private val _adaptersReadyFlow =
+        MutableSharedFlow<Map<TransactionSource, ITransactionsAdapter>>(
+            replay = 1,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
+    val adaptersReadyFlow get() = _adaptersReadyFlow.asSharedFlow()
 
-    private val adaptersMap = ConcurrentHashMap<TransactionSource, ITransactionsAdapter>()
+    val adaptersMap = ConcurrentHashMap<TransactionSource, ITransactionsAdapter>()
 
     init {
         adapterManager.adaptersReadyObservable
@@ -76,7 +81,6 @@ class TransactionAdapterManager(
             adapterFactory.unlinkAdapter(it.key)
         }
 
-        adaptersReadySubject.onNext(Unit)
-
+        _adaptersReadyFlow.tryEmit(this.adaptersMap)
     }
 }

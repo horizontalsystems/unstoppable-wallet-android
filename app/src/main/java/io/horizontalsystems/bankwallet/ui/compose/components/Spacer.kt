@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -17,7 +16,8 @@ fun HSpacer(width: Dp) {
 
 @Composable
 fun RowScope.HFillSpacer(minWidth: Dp) {
-    Spacer(modifier = Modifier.defaultMinSize(minWidth = minWidth).weight(1f))
+    Spacer(modifier = Modifier.width(minWidth))
+    Spacer(modifier = Modifier.weight(1f))
 }
 
 @Composable
@@ -27,5 +27,6 @@ fun VSpacer(height: Dp) {
 
 @Composable
 fun ColumnScope.VFillSpacer(minHeight: Dp) {
-    Spacer(modifier = Modifier.defaultMinSize(minHeight = minHeight).weight(1f))
+    Spacer(modifier = Modifier.height(minHeight))
+    Spacer(modifier = Modifier.weight(1f))
 }

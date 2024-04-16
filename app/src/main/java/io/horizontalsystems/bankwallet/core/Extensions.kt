@@ -50,9 +50,6 @@ val CoinInvestment.Fund.logoUrl: String
 val CoinTreasury.logoUrl: String
     get() = "https://cdn.blocksdecoded.com/treasury-icons/$fundUid@3x.png"
 
-val Auditor.logoUrl: String
-    get() = "https://cdn.blocksdecoded.com/auditor-icons/$name@3x.png"
-
 fun List<FullCoin>.sortedByFilter(filter: String): List<FullCoin> {
     val baseComparator = compareBy<FullCoin> {
         it.coin.marketCapRank ?: Int.MAX_VALUE

@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinConfirm
 import kotlinx.parcelize.Parcelize
 
-class ConfirmPinFragment : BaseComposeFragment() {
+class ConfirmPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

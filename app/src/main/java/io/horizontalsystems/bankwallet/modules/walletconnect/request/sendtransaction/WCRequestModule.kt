@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
+import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
@@ -19,27 +21,37 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceVie
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestChain
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.v2.WC2SendEthereumTransactionRequestService
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.ethereumkit.spv.core.toBigInteger
+import io.horizontalsystems.ethereumkit.spv.core.toLong
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigInteger
 
 object WCRequestModule {
 
-    class FactoryV2(private val requestData: WC2SessionManager.RequestData) : ViewModelProvider.Factory {
-        private val service by lazy {
-            WC2SendEthereumTransactionRequestService(requestData, App.wc2SessionManager)
+    class FactoryV2(
+        private val evmKitWrapper: EvmKitWrapper,
+        private val transaction: WalletConnectTransaction,
+        peerName: String
+    ) : ViewModelProvider.Factory {
+
+        private val chain: WCChainData by lazy {
+            val ethereumKit = evmKitWrapper.evmKit
+            val chain = ethereumKit.chain
+            val address = ethereumKit.receiveAddress.eip55.shorten()
+            WCChainData(chain, address)
         }
-        private val blockchainType = when (service.evmKitWrapper.evmKit.chain) {
+
+        private val blockchainType = when (evmKitWrapper.evmKit.chain) {
             Chain.BinanceSmartChain -> BlockchainType.BinanceSmartChain
             Chain.Polygon -> BlockchainType.Polygon
             Chain.Avalanche -> BlockchainType.Avalanche
@@ -52,14 +64,17 @@ object WCRequestModule {
         private val token by lazy {
             getToken(blockchainType)
         }
-        private val transaction = service.transactionRequest.transaction
         private val transactionData =
-            TransactionData(transaction.to, transaction.value, transaction.data)
+            TransactionData(
+                transaction.to,
+                transaction.value,
+                transaction.data
+            )
 
         private val gasPrice by lazy { getGasPrice(transaction) }
 
         private val gasPriceService by lazy {
-            getGasPriceService(gasPrice, service.evmKitWrapper.evmKit)
+            getGasPriceService(gasPrice, evmKitWrapper.evmKit)
         }
 
         private val coinServiceFactory by lazy {
@@ -71,7 +86,6 @@ object WCRequestModule {
             )
         }
         private val feeService by lazy {
-            val evmKitWrapper = service.evmKitWrapper
             val gasDataService = EvmCommonGasDataService.instance(
                 evmKitWrapper.evmKit,
                 evmKitWrapper.blockchainType
@@ -79,14 +93,20 @@ object WCRequestModule {
             EvmFeeService(evmKitWrapper.evmKit, gasPriceService, gasDataService, transactionData)
         }
         private val cautionViewItemFactory by lazy { CautionViewItemFactory(coinServiceFactory.baseCoinService) }
-        private val additionalInfo = AdditionalInfo.WalletConnectRequest(WalletConnectInfo(service.transactionRequest.dAppName, service.chain))
-        private val nonceService by lazy { SendEvmNonceService(service.evmKitWrapper.evmKit, transaction.nonce) }
+        private val additionalInfo =
+            AdditionalInfo.WalletConnectRequest(WalletConnectInfo(peerName, chain))
+        private val nonceService by lazy {
+            SendEvmNonceService(
+                evmKitWrapper.evmKit,
+                transaction.nonce
+            )
+        }
         private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
 
         private val sendService by lazy {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
-                service.evmKitWrapper,
+                evmKitWrapper,
                 settingsService,
                 App.evmLabelManager
             )
@@ -96,8 +116,9 @@ object WCRequestModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 WCSendEthereumTransactionRequestViewModel::class.java -> {
-                    WCSendEthereumTransactionRequestViewModel(service) as T
+                    WCSendEthereumTransactionRequestViewModel() as T
                 }
+
                 EvmFeeCellViewModel::class.java -> {
                     EvmFeeCellViewModel(
                         feeService,
@@ -105,6 +126,7 @@ object WCRequestModule {
                         coinServiceFactory.baseCoinService
                     ) as T
                 }
+
                 SendEvmTransactionViewModel::class.java -> {
                     SendEvmTransactionViewModel(
                         sendService,
@@ -114,9 +136,11 @@ object WCRequestModule {
                         contactsRepo = App.contactsRepository
                     ) as T
                 }
+
                 SendEvmNonceViewModel::class.java -> {
                     SendEvmNonceViewModel(nonceService) as T
                 }
+
                 else -> throw IllegalArgumentException()
             }
         }
@@ -130,6 +154,7 @@ object WCRequestModule {
         transaction.maxFeePerGas != null && transaction.maxPriorityFeePerGas != null -> {
             GasPrice.Eip1559(transaction.maxFeePerGas, transaction.maxPriorityFeePerGas)
         }
+
         else -> {
             transaction.gasPrice?.let { GasPrice.Legacy(it) }
         }
@@ -144,6 +169,7 @@ object WCRequestModule {
                     initialGasPrice = (gasPrice as? GasPrice.Legacy)?.legacyGasPrice
                 )
             }
+
             else -> {
                 val gasPriceProvider = Eip1559GasPriceProvider(evmKit)
                 Eip1559GasPriceService(
@@ -153,13 +179,6 @@ object WCRequestModule {
                 )
             }
         }
-    }
-
-    interface RequestAction {
-        val chain: WCRequestChain?
-
-        fun approve(transactionHash: ByteArray)
-        fun reject()
     }
 
 }
@@ -175,3 +194,40 @@ data class WalletConnectTransaction(
     val value: BigInteger,
     val data: ByteArray
 )
+
+data class WCEthereumTransaction(
+    val from: String,
+    val to: String?,
+    val nonce: String?,
+    val gasPrice: String?,
+    val gas: String?,
+    val gasLimit: String?,
+    val maxPriorityFeePerGas: String?,
+    val maxFeePerGas: String?,
+    val value: String?,
+    val data: String
+){
+    fun getWCTransaction(): WalletConnectTransaction {
+        val transaction = this
+        val to = transaction.to
+        checkNotNull(to) {
+            throw TransactionError.NoRecipient()
+        }
+
+        return WalletConnectTransaction(
+            from = Address(transaction.from),
+            to = Address(to),
+            nonce = transaction.nonce?.hexStringToByteArray()?.toLong(),
+            gasPrice = transaction.gasPrice?.hexStringToByteArray()?.toLong(),
+            gasLimit = (transaction.gas ?: transaction.gasLimit)?.hexStringToByteArray()?.toLong(),
+            maxPriorityFeePerGas = transaction.maxPriorityFeePerGas?.hexStringToByteArray()?.toLong(),
+            maxFeePerGas = transaction.maxFeePerGas?.hexStringToByteArray()?.toLong(),
+            value = transaction.value?.hexStringToByteArray()?.toBigInteger() ?: BigInteger.ZERO,
+            data = transaction.data.hexStringToByteArray()
+        )
+    }
+
+    sealed class TransactionError : Exception() {
+        class NoRecipient : TransactionError()
+    }
+}

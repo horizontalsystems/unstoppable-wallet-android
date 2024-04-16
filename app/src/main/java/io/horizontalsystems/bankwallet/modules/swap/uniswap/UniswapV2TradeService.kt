@@ -6,6 +6,8 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapData.Unis
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultState
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -24,7 +26,9 @@ import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
 class UniswapV2TradeService(
-    private val uniswapKit: UniswapKit
+    private val uniswapKit: UniswapKit,
+    private val evmKit: EthereumKit,
+    private val rpcSourceHttp: RpcSource.Http
 ) : IUniswapTradeService {
 
     private var swapDataDisposable: Disposable? = null
@@ -93,7 +97,7 @@ class UniswapV2TradeService(
 
     @Throws
     override fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
-        return uniswapKit.transactionData(tradeData.getTradeDataV2())
+        return uniswapKit.transactionData(evmKit.receiveAddress, evmKit.chain, tradeData.getTradeDataV2())
     }
 
     private fun clearDisposables() {
@@ -132,7 +136,7 @@ class UniswapV2TradeService(
             val uniswapTokenIn = uniswapToken(tokenIn)
             val uniswapTokenOut = uniswapToken(tokenOut)
 
-            uniswapKit.swapData(uniswapTokenIn, uniswapTokenOut)
+            uniswapKit.swapData(rpcSourceHttp, evmKit.chain, uniswapTokenIn, uniswapTokenOut)
         } catch (error: Throwable) {
             Single.error(error)
         }
@@ -157,7 +161,7 @@ class UniswapV2TradeService(
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
-            BlockchainType.ArbitrumOne -> uniswapKit.etherToken()
+            BlockchainType.ArbitrumOne -> uniswapKit.etherToken(evmKit.chain)
             else -> throw Exception("Invalid coin for swap: $token")
         }
         is TokenType.Eip20 -> uniswapKit.token(
@@ -168,7 +172,7 @@ class UniswapV2TradeService(
     }
 
     private val TokenType.isWeth: Boolean
-        get() = this is TokenType.Eip20 && address.equals(uniswapKit.etherToken().address.hex, true)
+        get() = this is TokenType.Eip20 && address.equals(uniswapKit.etherToken(evmKit.chain).address.hex, true)
     private val Token.isWeth: Boolean
         get() = type.isWeth
     private val Token.isNative: Boolean

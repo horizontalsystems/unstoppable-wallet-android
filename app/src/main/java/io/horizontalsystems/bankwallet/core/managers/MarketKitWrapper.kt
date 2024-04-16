@@ -25,20 +25,18 @@ class MarketKitWrapper(
     context: Context,
     hsApiBaseUrl: String,
     hsApiKey: String,
-    cryptoCompareApiKey: String? = null,
-    defiYieldApiKey: String? = null,
     appConfigProvider: AppConfigProvider,
     private val subscriptionManager: SubscriptionManager
 ) {
-    private val marketKit: MarketKit = MarketKit.getInstance(
-        context = context,
-        hsApiBaseUrl = hsApiBaseUrl,
-        hsApiKey = hsApiKey,
-        cryptoCompareApiKey = cryptoCompareApiKey,
-        defiYieldApiKey = defiYieldApiKey,
-        appVersion = appConfigProvider.appVersion,
-        appId = appConfigProvider.appId
-    )
+    private val marketKit: MarketKit by lazy {
+        MarketKit.getInstance(
+            context = context,
+            hsApiBaseUrl = hsApiBaseUrl,
+            hsApiKey = hsApiKey,
+            appVersion = appConfigProvider.appVersion,
+            appId = appConfigProvider.appId
+        )
+    }
 
     private fun <T> requestWithAuthToken(f: (String) -> Single<T>) =
         subscriptionManager.authToken?.let { authToken ->
@@ -82,7 +80,7 @@ class MarketKitWrapper(
 
     fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean, apiTag: String) = marketKit.marketInfosSingle(top, currencyCode, defi, apiTag)
 
-    fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String, apiTag: String) = marketKit.advancedMarketInfosSingle(top, currencyCode, apiTag)
+    fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
 
     fun marketInfosSingle(coinUids: List<String>, currencyCode: String, apiTag: String): Single<List<MarketInfo>> =
         marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode, apiTag)
@@ -171,8 +169,6 @@ class MarketKitWrapper(
     fun investmentsSingle(coinUid: String) = marketKit.investmentsSingle(coinUid)
 
     fun coinReportsSingle(coinUid: String) = marketKit.coinReportsSingle(coinUid)
-
-    fun auditReportsSingle(addresses: List<String>) = marketKit.auditReportsSingle(addresses)
 
     // Pro Details
 

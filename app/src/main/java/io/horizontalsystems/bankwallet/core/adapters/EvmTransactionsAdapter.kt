@@ -14,6 +14,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.TransactionTag
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -48,14 +49,20 @@ class EvmTransactionsAdapter(
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = evmKit.transactionsSyncStateFlowable.map {}
 
+    override val additionalTokenQueries: List<TokenQuery>
+        get() = evmKit.getTagTokenContractAddresses().map { address ->
+            TokenQuery(evmKitWrapper.blockchainType, TokenType.Eip20(address))
+        }
+
     override fun getTransactionsAsync(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        address: String?,
     ): Single<List<TransactionRecord>> {
         return evmKit.getFullTransactionsAsync(
-            getFilters(token, transactionType),
+            getFilters(token, transactionType, address?.lowercase()),
             from?.transactionHash?.hexStringToByteArray(),
             limit
         ).map {
@@ -65,9 +72,10 @@ class EvmTransactionsAdapter(
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        address: String?,
     ): Flowable<List<TransactionRecord>> {
-        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType)).map {
+        return evmKit.getFullTransactionsFlowable(getFilters(token, transactionType, address)).map {
             it.map { tx -> transactionConverter.transactionRecord(tx) }
         }
     }
@@ -85,12 +93,16 @@ class EvmTransactionsAdapter(
         else -> ""
     }
 
-    private fun getFilters(token: Token?, filter: FilterTransactionType): List<List<String>> {
-        val filterCoin = token?.let {
-            coinTagName(it)
+    private fun getFilters(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ) = buildList {
+        token?.let {
+            add(listOf(coinTagName(it)))
         }
 
-        val filterTag = when (filter) {
+        val filterType = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> when {
                 token != null -> TransactionTag.tokenIncoming(coinTagName(token))
@@ -104,6 +116,12 @@ class EvmTransactionsAdapter(
             FilterTransactionType.Approve -> TransactionTag.EIP20_APPROVE
         }
 
-        return listOfNotNull(filterCoin, filterTag).map { listOf(it) }
+        filterType?.let {
+            add(listOf(it))
+        }
+
+        if (!address.isNullOrBlank()) {
+            add(listOf("from_$address", "to_$address"))
+        }
     }
 }

@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.send.solana
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
@@ -11,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -41,24 +41,13 @@ class SendSolanaViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
-) : ViewModel() {
+) : ViewModelUiState<SendUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-
-    var uiState by mutableStateOf(
-        SendUiState(
-            availableBalance = amountState.availableBalance,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
         private set
@@ -84,6 +73,14 @@ class SendSolanaViewModel(
         }
     }
 
+    override fun createState() = SendUiState(
+        availableBalance = amountState.availableBalance,
+        amountCaution = amountState.amountCaution,
+        addressError = addressState.addressError,
+        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        showAddressInput = showAddressInput,
+    )
+
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
     }
@@ -104,7 +101,8 @@ class SendSolanaViewModel(
             address = address,
             contact = contact,
             coin = wallet.coin,
-            feeCoin = feeToken.coin
+            feeCoin = feeToken.coin,
+            memo = null
         )
     }
 
@@ -151,16 +149,6 @@ class SendSolanaViewModel(
         this.addressState = addressState
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = SendUiState(
-            availableBalance = amountState.availableBalance,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
     }
 
 }

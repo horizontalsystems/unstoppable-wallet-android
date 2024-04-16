@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,11 +42,11 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
+import io.horizontalsystems.bankwallet.modules.balance.DeemedValue
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainFragment
 import io.horizontalsystems.bankwallet.modules.syncerror.SyncErrorDialog
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -56,7 +55,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithIcon
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -150,7 +149,9 @@ private fun TokenBalanceHeader(
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         VSpacer(height = (24.dp))
@@ -162,7 +163,6 @@ private fun TokenBalanceHeader(
         VSpacer(height = 12.dp)
         Text(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
@@ -192,51 +192,71 @@ private fun TokenBalanceHeader(
         }
         VSpacer(height = 24.dp)
         ButtonsRow(viewItem = balanceViewItem, navController = navController, viewModel = viewModel)
-        LockedBalanceCell(balanceViewItem, navController)
+        LockedBalanceSection(balanceViewItem, navController)
     }
 }
 
 @Composable
-private fun LockedBalanceCell(balanceViewItem: BalanceViewItem, navController: NavController) {
-    if (balanceViewItem.coinValueLocked.value != null) {
-        val infoTitle = stringResource(R.string.Info_LockTime_Title)
-        val infoText = stringResource(R.string.Info_LockTime_Description_Static)
-        VSpacer(height = 8.dp)
-        RowUniversal(
+private fun LockedBalanceSection(balanceViewItem: BalanceViewItem, navController: NavController) {
+    if (balanceViewItem.lockedValues.isNotEmpty()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
-                .padding(horizontal = 16.dp),
         ) {
-            subhead2_grey(
-                text = stringResource(R.string.Balance_LockedAmount_Title),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            HSpacer(8.dp)
-            HsIconButton(
-                modifier = Modifier.size(20.dp),
-                onClick = {
-                    navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(infoTitle, infoText))
-                }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_info_20),
-                    contentDescription = "info button",
-                    tint = ComposeAppTheme.colors.grey
+            balanceViewItem.lockedValues.forEach { lockedValue ->
+                LockedBalanceCell(
+                    title = lockedValue.title.getString(),
+                    infoTitle = lockedValue.infoTitle.getString(),
+                    infoText = lockedValue.info.getString(),
+                    lockedAmount = lockedValue.coinValue,
+                    navController = navController
                 )
             }
-            Spacer(Modifier.weight(1f))
-            Text(
-                modifier = Modifier.padding(start = 6.dp),
-                text = if (balanceViewItem.coinValueLocked.visible) balanceViewItem.coinValueLocked.value else "*****",
-                color = if (balanceViewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
-                style = ComposeAppTheme.typography.subhead2,
-                maxLines = 1,
+        }
+        VSpacer(height = 18.dp)
+    }
+}
+
+@Composable
+private fun LockedBalanceCell(
+    title: String,
+    infoTitle: String,
+    infoText: String,
+    lockedAmount: DeemedValue<String>,
+    navController: NavController
+) {
+
+    RowUniversal(
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
+    ) {
+        subhead2_grey(
+            text = title,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        HSpacer(8.dp)
+        HsIconButton(
+            modifier = Modifier.size(20.dp),
+            onClick = {
+                navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(infoTitle, infoText))
+            }
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_info_20),
+                contentDescription = "info button",
+                tint = ComposeAppTheme.colors.grey
             )
         }
-        VSpacer(height = 16.dp)
+        Spacer(Modifier.weight(1f))
+        Text(
+            modifier = Modifier.padding(start = 6.dp),
+            text = if (lockedAmount.visible) lockedAmount.value else "*****",
+            color = if (lockedAmount.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
+            style = ComposeAppTheme.typography.subhead2,
+            maxLines = 1,
+        )
     }
 }
 
@@ -314,7 +334,7 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: TokenBalanceViewModel) {
     val onClickReceive = {
         try {
-            navController.slideFromRight(R.id.receiveFragment, viewModel.getWalletForReceive(viewItem))
+            navController.slideFromRight(R.id.receiveFragment, viewModel.getWalletForReceive())
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
@@ -329,7 +349,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
     }
 
     Row(
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 16.dp)
+        modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 16.dp)
     ) {
         if (viewItem.isWatchAccount) {
             ButtonPrimaryDefault(
@@ -338,9 +358,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 onClick = onClickReceive,
             )
         } else {
-            ButtonPrimaryYellowWithIcon(
+            ButtonPrimaryYellow(
                 modifier = Modifier.weight(1f),
-                icon = R.drawable.ic_arrow_up_right_24,
                 title = stringResource(R.string.Balance_Send),
                 onClick = {
                     val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
@@ -351,28 +370,33 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 },
                 enabled = viewItem.sendEnabled
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            ButtonPrimaryCircle(
-                icon = R.drawable.ic_arrow_down_left_24,
-                contentDescription = stringResource(R.string.Balance_Receive),
-                onClick = onClickReceive,
-            )
+            HSpacer(8.dp)
+            if (!viewItem.swapVisible) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.Balance_Receive),
+                    onClick =  onClickReceive,
+                )
+            } else {
+                ButtonPrimaryCircle(
+                    icon = R.drawable.ic_arrow_down_left_24,
+                    contentDescription = stringResource(R.string.Balance_Receive),
+                    onClick = onClickReceive,
+                )
+            }
             if (viewItem.swapVisible) {
-                Spacer(modifier = Modifier.width(8.dp))
+                HSpacer(8.dp)
                 ButtonPrimaryCircle(
                     icon = R.drawable.ic_swap_24,
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.swapFragment,
-                            SwapMainFragment.Input(viewItem.wallet.token)
-                        )
+                        navController.slideFromRight(R.id.multiswap, viewItem.wallet.token)
                     },
                     enabled = viewItem.swapEnabled
                 )
             }
         }
-        Spacer(modifier = Modifier.width(8.dp))
+        HSpacer(8.dp)
         ButtonPrimaryCircle(
             icon = R.drawable.ic_chart_24,
             contentDescription = stringResource(R.string.Coin_Info),

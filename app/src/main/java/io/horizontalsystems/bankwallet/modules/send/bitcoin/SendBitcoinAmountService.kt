@@ -23,6 +23,7 @@ class SendBitcoinAmountService(
     private var minimumSendAmount: BigDecimal? = null
     private var availableBalance: BigDecimal? = null
     private var validAddress: Address? = null
+    private var memo: String? = null
     private var feeRate: Int? = null
     private var pluginData: Map<Byte, IPluginData>? = null
 
@@ -55,7 +56,7 @@ class SendBitcoinAmountService(
     }
 
     private fun refreshAvailableBalance() {
-        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, customUnspentOutputs, pluginData) }
+        availableBalance = feeRate?.let { adapter.availableBalance(it, validAddress?.hex, memo, customUnspentOutputs, pluginData) }
     }
 
     private fun refreshMinimumSendAmount() {
@@ -111,6 +112,15 @@ class SendBitcoinAmountService(
         this.customUnspentOutputs = customUnspentOutputs
         refreshAvailableBalance()
         validateAmount()
+        emitState()
+    }
+
+    fun setMemo(memo: String?) {
+        this.memo = memo
+
+        refreshAvailableBalance()
+        validateAmount()
+
         emitState()
     }
 

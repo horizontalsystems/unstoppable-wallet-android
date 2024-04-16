@@ -38,7 +38,9 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -123,7 +125,11 @@ private fun CoinRankScreen(
 
                 ViewState.Success -> {
                     var periodSelect by remember { mutableStateOf(uiState.periodSelect) }
-                    val listState = rememberSaveable(uiState.periodSelect?.selected, uiState.sortDescending, saver = LazyListState.Saver) {
+                    val listState = rememberSaveable(
+                        uiState.periodSelect?.selected,
+                        uiState.sortDescending,
+                        saver = LazyListState.Saver
+                    ) {
                         LazyListState()
                     }
                     LazyColumn(
@@ -136,36 +142,28 @@ private fun CoinRankScreen(
                                 DescriptionCard(header.title, header.description, header.icon)
                             }
                         }
-                        if (viewItems.isEmpty()) {
-                            item {
-                                ListEmptyView(
-                                    text = stringResource(R.string.CoinPage_NoDataAvailable),
-                                    icon = R.drawable.ic_no_data
+
+                        stickyHeader {
+                            HeaderSorting {
+                                ButtonSecondaryCircle(
+                                    modifier = Modifier.padding(start = 16.dp),
+                                    icon = if (uiState.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
+                                    onClick = { viewModel.toggleSortType() }
                                 )
-                            }
-                        } else {
-                            stickyHeader {
-                                HeaderSorting {
-                                    ButtonSecondaryCircle(
-                                        modifier = Modifier.padding(start = 16.dp),
-                                        icon = if (uiState.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
-                                        onClick = { viewModel.toggleSortType() }
+                                Spacer(Modifier.weight(1f))
+                                periodSelect?.let {
+                                    ButtonSecondaryToggle(
+                                        modifier = Modifier.padding(end = 16.dp),
+                                        select = it,
+                                        onSelect = { selectedDuration ->
+                                            viewModel.toggle(selectedDuration)
+                                            periodSelect = Select(selectedDuration, it.options)
+                                        }
                                     )
-                                    Spacer(Modifier.weight(1f))
-                                    periodSelect?.let {
-                                        ButtonSecondaryToggle(
-                                            modifier = Modifier.padding(end = 16.dp),
-                                            select = it,
-                                            onSelect = { selectedDuration ->
-                                                viewModel.toggle(selectedDuration)
-                                                periodSelect = Select(selectedDuration, it.options)
-                                            }
-                                        )
-                                    }
                                 }
                             }
-                            coinRankList(viewItems)
                         }
+                        coinRankList(viewItems, navController)
                     }
                 }
             }
@@ -174,7 +172,8 @@ private fun CoinRankScreen(
 }
 
 private fun LazyListScope.coinRankList(
-    items: List<CoinRankModule.RankViewItem>
+    items: List<CoinRankModule.RankViewItem>,
+    navController: NavController
 ) {
     item {
         Divider(
@@ -184,11 +183,15 @@ private fun LazyListScope.coinRankList(
     }
     items(items) { item ->
         CoinRankCell(
-            item.rank,
-            item.title,
-            item.subTitle,
-            item.iconUrl,
-            item.value
+            rank = item.rank,
+            name = item.title,
+            subtitle = item.subTitle,
+            iconUrl = item.iconUrl,
+            value = item.value,
+            onClick = {
+                val arguments = CoinFragment.Input(item.coinUid, "coin_rank")
+                navController.slideFromRight(R.id.coinFragment, arguments)
+            }
         )
     }
     item {
@@ -203,9 +206,12 @@ private fun CoinRankCell(
     subtitle: String,
     iconUrl: String?,
     value: String? = null,
+    onClick: () -> Unit = {}
 ) {
     Column {
-        RowUniversal {
+        RowUniversal(
+            onClick = onClick,
+        ) {
             captionSB_grey(
                 modifier = Modifier.width(56.dp),
                 textAlign = TextAlign.Center,

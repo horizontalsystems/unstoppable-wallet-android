@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.modules.settings.main.MainSettingsModule.CounterType
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
 
@@ -26,7 +26,7 @@ class MainSettingsViewModel(
     val appWebPageLink by service::appWebPageLink
 
     private var wcSessionsCount = service.walletConnectSessionCount
-    private var wc2PendingRequestCount = 0
+    private var wcPendingRequestCount = 0
 
     init {
         viewModelScope.launch {
@@ -56,7 +56,7 @@ class MainSettingsViewModel(
 
         viewModelScope.launch {
             service.pendingRequestCountFlow.collect {
-                wc2PendingRequestCount = it
+                wcPendingRequestCount = it
                 syncCounter()
             }
         }
@@ -74,13 +74,13 @@ class MainSettingsViewModel(
         disposables.clear()
     }
 
-    fun getWalletConnectSupportState(): WC2Manager.SupportState {
+    fun getWalletConnectSupportState(): WCManager.SupportState {
         return service.getWalletConnectSupportState()
     }
 
     private fun syncCounter() {
-        if (wc2PendingRequestCount > 0) {
-            wcCounterLiveData.postValue(CounterType.PendingRequestCounter(wc2PendingRequestCount))
+        if (wcPendingRequestCount > 0) {
+            wcCounterLiveData.postValue(CounterType.PendingRequestCounter(wcPendingRequestCount))
         } else if (wcSessionsCount > 0) {
             wcCounterLiveData.postValue(CounterType.SessionCounter(wcSessionsCount))
         } else {

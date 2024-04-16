@@ -95,31 +95,27 @@ val TokenQuery.protocolType: String?
     get() = when (tokenType) {
         is TokenType.Native -> {
             when (blockchainType) {
-                BlockchainType.Optimism -> "Optimism"
-                BlockchainType.ArbitrumOne -> "Arbitrum"
+                BlockchainType.Ethereum,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Tron,
+                BlockchainType.Ton -> null
+
                 BlockchainType.BinanceChain -> "BEP2"
-                BlockchainType.Gnosis -> "Gnosis"
-                BlockchainType.Fantom -> "Fantom"
-                else -> null
+                else -> blockchainType.title
             }
         }
+
         is TokenType.Eip20 -> {
             when (blockchainType) {
                 BlockchainType.Ethereum -> "ERC20"
                 BlockchainType.BinanceSmartChain -> "BEP20"
                 BlockchainType.Tron -> "TRC20"
-                BlockchainType.Polygon -> "Polygon"
-                BlockchainType.Avalanche -> "Avalanche"
-                BlockchainType.Optimism -> "Optimism"
-                BlockchainType.ArbitrumOne -> "Arbitrum"
-                BlockchainType.Gnosis -> "Gnosis"
-                BlockchainType.Fantom -> "Fantom"
-                else -> null
+                else -> blockchainType.title
             }
         }
+
         is TokenType.Bep2 -> "BEP2"
-        is TokenType.Spl -> "Solana"
-        else -> null
+        else -> blockchainType.title
     }
 
 val TokenQuery.Companion.customCoinPrefix: String
@@ -211,6 +207,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.BinanceSmartChain,
         BlockchainType.Tron,
         BlockchainType.Ton,
+        BlockchainType.Solana,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Zcash,
@@ -223,7 +220,6 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
-        BlockchainType.Solana,
     ).forEachIndexed { index, blockchainType ->
         map[blockchainType] = index
     }
@@ -353,7 +349,7 @@ val TokenType.order: Int
     get() {
         return when (this) {
             TokenType.Native -> 0
-            is TokenType.Derived -> derivation.accountTypeDerivation.ordinal
+            is TokenType.Derived -> derivation.accountTypeDerivation.order
             is TokenType.AddressTyped -> type.bitcoinCashCoinType.ordinal
             else -> Int.MAX_VALUE
         }
@@ -497,6 +493,20 @@ val BlockchainType.nativeTokenQueries: List<TokenQuery>
         }
     }
 
+val BlockchainType.defaultTokenQuery: TokenQuery
+    get() = when (this) {
+        BlockchainType.Bitcoin,
+        BlockchainType.Litecoin -> {
+            TokenQuery(this, TokenType.Derived(TokenType.Derivation.Bip84))
+        }
+        BlockchainType.BitcoinCash -> {
+            TokenQuery(this, TokenType.AddressTyped(TokenType.AddressType.Type145))
+        }
+        else -> {
+            TokenQuery(this, TokenType.Native)
+        }
+    }
+
 val TokenType.title: String
     get() = when (this) {
         is TokenType.Derived -> derivation.accountTypeDerivation.rawName
@@ -506,7 +516,7 @@ val TokenType.title: String
 
 val TokenType.description: String
     get() = when (this) {
-        is TokenType.Derived -> derivation.accountTypeDerivation.addressType
+        is TokenType.Derived -> derivation.accountTypeDerivation.addressType + derivation.accountTypeDerivation.recommended
         is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.description)
         else -> ""
     }

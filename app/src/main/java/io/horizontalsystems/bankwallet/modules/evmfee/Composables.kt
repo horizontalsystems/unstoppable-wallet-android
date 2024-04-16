@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -248,7 +249,7 @@ private fun NumberInputWithButtons(
     var playShakeAnimation by remember { mutableStateOf(false) }
 
     LaunchedEffect(value) {
-        textState = textState.copy(text = value.toString())
+        textState = textState.copy(text = value.toString(), selection = TextRange("$value".length))
     }
 
     Row(

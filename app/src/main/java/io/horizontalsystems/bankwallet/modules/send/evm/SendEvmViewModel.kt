@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.send.evm
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -27,22 +27,11 @@ class SendEvmViewModel(
     val coinMaxAllowedDecimals: Int,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager
-) : ViewModel() {
+) : ViewModelUiState<SendUiState>() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-
-    var uiState by mutableStateOf(
-        SendUiState(
-            availableBalance = amountState.availableBalance,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
         private set
@@ -58,6 +47,14 @@ class SendEvmViewModel(
             coinRate = it
         }
     }
+
+    override fun createState() = SendUiState(
+        availableBalance = amountState.availableBalance,
+        amountCaution = amountState.amountCaution,
+        addressError = addressState.addressError,
+        canBeSend = amountState.canBeSend && addressState.canBeSend,
+        showAddressInput = showAddressInput,
+    )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -77,16 +74,6 @@ class SendEvmViewModel(
         this.addressState = addressState
 
         emitState()
-    }
-
-    private fun emitState() {
-        uiState = SendUiState(
-            availableBalance = amountState.availableBalance,
-            amountCaution = amountState.amountCaution,
-            addressError = addressState.addressError,
-            canBeSend = amountState.canBeSend && addressState.canBeSend,
-            showAddressInput = showAddressInput,
-        )
     }
 
     fun getSendData(): SendEvmData? {

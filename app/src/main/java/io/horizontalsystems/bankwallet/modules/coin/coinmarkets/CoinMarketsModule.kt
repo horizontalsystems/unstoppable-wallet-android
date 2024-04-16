@@ -44,9 +44,8 @@ data class MarketTickerItem(
     val marketImageUrl: String?,
     val baseCoinCode: String,
     val targetCoinCode: String,
-    val rate: BigDecimal,
-    val volume: BigDecimal,
-    val volumeType: CoinMarketsModule.VolumeMenuType,
+    val volumeFiat: BigDecimal,
+    val volumeToken: BigDecimal,
     val tradeUrl: String?,
     val verified: Boolean
 )

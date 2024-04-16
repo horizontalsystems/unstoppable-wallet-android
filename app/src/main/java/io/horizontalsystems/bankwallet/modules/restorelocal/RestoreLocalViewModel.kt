@@ -1,13 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.restorelocal
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -31,7 +28,7 @@ class RestoreLocalViewModel(
     private val backupProvider: BackupProvider,
     private val backupViewItemFactory: BackupViewItemFactory,
     fileName: String?,
-) : ViewModel() {
+) : ViewModelUiState<UiState>() {
 
     private var passphrase = ""
     private var passphraseState: DataState.Error? = null
@@ -58,21 +55,6 @@ class RestoreLocalViewModel(
         accountFactory.getNextAccountName()
     }
 
-    var uiState by mutableStateOf(
-        UiState(
-            passphraseState = null,
-            showButtonSpinner = showButtonSpinner,
-            parseError = parseError,
-            showSelectCoins = showSelectCoins,
-            manualBackup = manualBackup,
-            restored = restored,
-            walletBackupViewItems = walletBackupViewItems,
-            otherBackupViewItems = otherBackupViewItems,
-            showBackupItems = showBackupItems
-        )
-    )
-        private set
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -93,15 +75,27 @@ class RestoreLocalViewModel(
                 manualBackup = walletBackup?.manualBackup ?: false
             } catch (e: Exception) {
                 parseError = e
-                syncState()
+                emitState()
             }
         }
     }
 
+    override fun createState() = UiState(
+        passphraseState = passphraseState,
+        showButtonSpinner = showButtonSpinner,
+        parseError = parseError,
+        showSelectCoins = showSelectCoins,
+        manualBackup = manualBackup,
+        restored = restored,
+        walletBackupViewItems = walletBackupViewItems,
+        otherBackupViewItems = otherBackupViewItems,
+        showBackupItems = showBackupItems
+    )
+
     fun onChangePassphrase(v: String) {
         passphrase = v
         passphraseState = null
-        syncState()
+        emitState()
     }
 
     fun onImportClick() {
@@ -118,7 +112,7 @@ class RestoreLocalViewModel(
 
     private fun showFullBackupItems(it: FullBackup): Job {
         showButtonSpinner = true
-        syncState()
+        emitState()
 
         return viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -140,7 +134,7 @@ class RestoreLocalViewModel(
 
             withContext(Dispatchers.Main) {
                 showButtonSpinner = false
-                syncState()
+                emitState()
             }
         }
     }
@@ -155,7 +149,7 @@ class RestoreLocalViewModel(
 
     private fun restoreFullBackup(decryptedFullBackup: DecryptedFullBackup) {
         showButtonSpinner = true
-        syncState()
+        emitState()
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -171,7 +165,7 @@ class RestoreLocalViewModel(
 
             showButtonSpinner = false
             withContext(Dispatchers.Main) {
-                syncState()
+                emitState()
             }
         }
     }
@@ -179,7 +173,7 @@ class RestoreLocalViewModel(
     @Throws
     private fun restoreSingleWallet(backup: WalletBackup, accountName: String) {
         showButtonSpinner = true
-        syncState()
+        emitState()
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val type = backupProvider.accountType(backup, passphrase)
@@ -201,33 +195,19 @@ class RestoreLocalViewModel(
             }
             showButtonSpinner = false
             withContext(Dispatchers.Main) {
-                syncState()
+                emitState()
             }
         }
     }
 
     fun onSelectCoinsShown() {
         showSelectCoins = null
-        syncState()
+        emitState()
     }
 
     fun onBackupItemsShown() {
         showBackupItems = false
-        syncState()
-    }
-
-    private fun syncState() {
-        uiState = UiState(
-            passphraseState = passphraseState,
-            showButtonSpinner = showButtonSpinner,
-            parseError = parseError,
-            showSelectCoins = showSelectCoins,
-            manualBackup = manualBackup,
-            restored = restored,
-            walletBackupViewItems = walletBackupViewItems,
-            otherBackupViewItems = otherBackupViewItems,
-            showBackupItems = showBackupItems
-        )
+        emitState()
     }
 
 }

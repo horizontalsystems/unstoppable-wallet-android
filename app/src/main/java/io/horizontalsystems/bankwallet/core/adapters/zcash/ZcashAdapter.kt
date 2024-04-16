@@ -206,14 +206,14 @@ class ZcashAdapter(
         from: TransactionRecord?,
         token: Token?,
         limit: Int,
-        transactionType: FilterTransactionType
+        transactionType: FilterTransactionType,
+        address: String?,
     ): Single<List<TransactionRecord>> {
         val fromParams = from?.let {
             val transactionHash = it.transactionHash.fromHex().reversedArray()
             Triple(transactionHash, it.timestamp, it.transactionIndex)
         }
-
-        return transactionsProvider.getTransactions(fromParams, transactionType, limit)
+        return transactionsProvider.getTransactions(fromParams, transactionType, address, limit)
             .map { transactions ->
                 transactions.map {
                     getTransactionRecord(it)
@@ -221,10 +221,15 @@ class ZcashAdapter(
             }
     }
 
-    override fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
-        return transactionsProvider.getNewTransactionsFlowable(transactionType).map { transactions ->
-            transactions.map { getTransactionRecord(it) }
-        }
+    override fun getTransactionRecordsFlowable(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ): Flowable<List<TransactionRecord>> {
+        return transactionsProvider.getNewTransactionsFlowable(transactionType, address)
+            .map { transactions ->
+                transactions.map { getTransactionRecord(it) }
+            }
     }
 
     override fun getTransactionUrl(transactionHash: String): String =
@@ -351,7 +356,8 @@ class ZcashAdapter(
                 to = transaction.toAddress,
                 sentToSelf = false,
                 memo = transaction.memo,
-                source = wallet.transactionSource
+                source = wallet.transactionSource,
+                replaceable = false
             )
         }
     }

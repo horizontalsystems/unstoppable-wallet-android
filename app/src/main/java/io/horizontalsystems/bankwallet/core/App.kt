@@ -15,8 +15,8 @@ import coil.decode.SvgDecoder
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.android.relay.ConnectionType
-import com.walletconnect.sign.client.Sign
-import com.walletconnect.sign.client.SignClient
+import com.walletconnect.web3.wallet.client.Wallet
+import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
@@ -100,10 +100,9 @@ import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIconServic
 import io.horizontalsystems.bankwallet.modules.settings.appearance.LaunchScreenService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
-import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WC2SessionStorage
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Manager
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2Service
-import io.horizontalsystems.bankwallet.modules.walletconnect.version2.WC2SessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
@@ -164,9 +163,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var accountCleaner: IAccountCleaner
         lateinit var rateAppManager: IRateAppManager
         lateinit var coinManager: ICoinManager
-        lateinit var wc2Service: WC2Service
-        lateinit var wc2SessionManager: WC2SessionManager
-        lateinit var wc2Manager: WC2Manager
+        lateinit var wcSessionManager: WCSessionManager
+        lateinit var wcManager: WCManager
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
@@ -205,8 +203,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             Log.w("RxJava ErrorHandler", e)
         }
 
-        EthereumKit.init()
-
         instance = this
         preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
@@ -228,12 +224,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             context = this,
             hsApiBaseUrl = appConfig.marketApiBaseUrl,
             hsApiKey = appConfig.marketApiKey,
-            cryptoCompareApiKey = appConfig.cryptoCompareApiKey,
-            defiYieldApiKey = appConfig.defiyieldProviderApiKey,
             appConfigProvider = appConfigProvider,
             subscriptionManager = subscriptionManager
         )
-        marketKit.sync()
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)
@@ -244,7 +237,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
         evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, appConfigProvider, marketKit)
+        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
         binanceKitManager = BinanceKitManager()
 
@@ -368,7 +361,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
-        wc2Manager = WC2Manager(accountManager, evmBlockchainManager)
+        wcManager = WCManager(accountManager)
 
         termsManager = TermsManager(localStorage)
 
@@ -396,8 +389,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         initializeWalletConnectV2(appConfig)
 
-        wc2Service = WC2Service()
-        wc2SessionManager = WC2SessionManager(accountManager, WC2SessionStorage(appDatabase), wc2Service, wc2Manager)
+        wcSessionManager = WCSessionManager(accountManager, WCSessionStorage(appDatabase))
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
@@ -476,10 +468,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 Log.w("AAA", "error", error.throwable)
             },
         )
-
-        val init = Sign.Params.Init(core = CoreClient)
-        SignClient.initialize(init) { error ->
-            Log.w("AAA", "error", error.throwable)
+        Web3Wallet.initialize(Wallet.Params.Init(core = CoreClient)) { error ->
+            Log.e("AAA", "error", error.throwable)
         }
     }
 
@@ -521,10 +511,14 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     private fun startTasks() {
         Thread {
+            EthereumKit.init()
+            adapterManager.startAdapterManager()
+            marketKit.sync()
             rateAppManager.onAppLaunch()
             nftMetadataSyncer.start()
             pinComponent.initDefaultPinLevel()
             accountManager.clearAccounts()
+            wcSessionManager.start()
 
             AppVersionManager(systemInfoManager, localStorage).apply { storeAppVersion() }
 

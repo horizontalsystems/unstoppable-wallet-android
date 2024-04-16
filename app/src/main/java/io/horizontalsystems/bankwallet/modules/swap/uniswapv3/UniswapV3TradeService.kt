@@ -7,6 +7,8 @@ import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.SwapResultSta
 import io.horizontalsystems.bankwallet.modules.swap.UniversalSwapTradeData
 import io.horizontalsystems.bankwallet.modules.swap.settings.uniswap.SwapTradeOptions
 import io.horizontalsystems.bankwallet.modules.swap.uniswap.IUniswapTradeService
+import io.horizontalsystems.ethereumkit.core.EthereumKit
+import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -27,7 +29,9 @@ import kotlin.coroutines.cancellation.CancellationException
 import io.horizontalsystems.uniswapkit.models.Token as UniswapToken
 
 class UniswapV3TradeService(
-    private val uniswapV3Kit: UniswapV3Kit
+    private val uniswapV3Kit: UniswapV3Kit,
+    private val evmKit: EthereumKit,
+    private val rpcSourceHttp: RpcSource.Http
 ) : IUniswapTradeService {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -90,7 +94,7 @@ class UniswapV3TradeService(
 
     @Throws
     override fun transactionData(tradeData: UniversalSwapTradeData): TransactionData {
-        return uniswapV3Kit.transactionData(tradeData.getTradeDataV3())
+        return uniswapV3Kit.transactionData(evmKit.receiveAddress, evmKit.chain, tradeData.getTradeDataV3())
     }
 
     private fun syncTradeData(exactType: ExactType, amountFrom: BigDecimal?, amountTo: BigDecimal?, tokenFrom: Token, tokenTo: Token) {
@@ -135,10 +139,10 @@ class UniswapV3TradeService(
     ): UniversalSwapTradeData {
         val tradeDataV3 = when (tradeType) {
             TradeType.ExactIn -> {
-                uniswapV3Kit.bestTradeExactIn(tokenIn, tokenOut, amount, tradeOptions)
+                uniswapV3Kit.bestTradeExactIn(rpcSourceHttp, evmKit.chain, tokenIn, tokenOut, amount, tradeOptions)
             }
             TradeType.ExactOut -> {
-                uniswapV3Kit.bestTradeExactOut(tokenIn, tokenOut, amount, tradeOptions)
+                uniswapV3Kit.bestTradeExactOut(rpcSourceHttp, evmKit.chain, tokenIn, tokenOut, amount, tradeOptions)
             }
         }
         return UniversalSwapTradeData.buildFromTradeDataV3(tradeDataV3)
@@ -151,7 +155,7 @@ class UniswapV3TradeService(
             BlockchainType.BinanceSmartChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
-            BlockchainType.ArbitrumOne -> uniswapV3Kit.etherToken()
+            BlockchainType.ArbitrumOne -> uniswapV3Kit.etherToken(evmKit.chain)
             else -> throw Exception("Invalid coin for swap: $token")
         }
         is TokenType.Eip20 -> uniswapV3Kit.token(
@@ -162,7 +166,7 @@ class UniswapV3TradeService(
     }
 
     private val TokenType.isWeth: Boolean
-        get() = this is TokenType.Eip20 && address.equals(uniswapV3Kit.etherToken().address.hex, true)
+        get() = this is TokenType.Eip20 && address.equals(uniswapV3Kit.etherToken(evmKit.chain).address.hex, true)
     private val Token.isWeth: Boolean
         get() = type.isWeth
     private val Token.isNative: Boolean

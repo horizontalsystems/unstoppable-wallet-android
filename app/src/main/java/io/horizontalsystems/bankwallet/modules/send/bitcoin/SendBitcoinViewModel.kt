@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.send.bitcoin
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
@@ -13,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.entities.Address
@@ -43,7 +43,7 @@ class SendBitcoinViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
-) : ViewModel() {
+) : ViewModelUiState<SendBitcoinUiState>() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -59,6 +59,7 @@ class SendBitcoinViewModel(
     private var pluginState = pluginService.stateFlow.value
     private var fee: BigDecimal? = feeService.bitcoinFeeInfoFlow.value?.fee
     private var utxoData = SendBitcoinModule.UtxoData()
+    private var memo: String? = null
 
     private val logger = AppLogger("Send-${wallet.coin.code}")
 
@@ -66,24 +67,6 @@ class SendBitcoinViewModel(
         private set
 
     var sendResult by mutableStateOf<SendResult?>(null)
-
-    var uiState by mutableStateOf(
-        SendBitcoinUiState(
-            availableBalance = amountState.availableBalance,
-            amount = amountState.amount,
-            feeRate = feeRateState.feeRate,
-            address = addressState.validAddress,
-            fee = fee,
-            lockTimeInterval = pluginState.lockTimeInterval,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            feeRateCaution = feeRateState.feeRateCaution,
-            canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-            showAddressInput = showAddressInput,
-            utxoData = if (utxoExpertModeEnabled) utxoData else null,
-        )
-    )
-        private set
 
     var coinRate by mutableStateOf(xRateService.getRate(wallet.coin.uid))
         private set
@@ -117,26 +100,21 @@ class SendBitcoinViewModel(
         }
     }
 
-    private fun emitState() {
-        val newUiState = SendBitcoinUiState(
-            availableBalance = amountState.availableBalance,
-            amount = amountState.amount,
-            feeRate = feeRateState.feeRate,
-            address = addressState.validAddress,
-            fee = fee,
-            lockTimeInterval = pluginState.lockTimeInterval,
-            addressError = addressState.addressError,
-            amountCaution = amountState.amountCaution,
-            feeRateCaution = feeRateState.feeRateCaution,
-            canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
-            showAddressInput = showAddressInput,
-            utxoData = if (utxoExpertModeEnabled) utxoData else null,
-        )
-
-        viewModelScope.launch {
-            uiState = newUiState
-        }
-    }
+    override fun createState() = SendBitcoinUiState(
+        availableBalance = amountState.availableBalance,
+        amount = amountState.amount,
+        feeRate = feeRateState.feeRate,
+        address = addressState.validAddress,
+        memo = memo,
+        fee = fee,
+        lockTimeInterval = pluginState.lockTimeInterval,
+        addressError = addressState.addressError,
+        amountCaution = amountState.amountCaution,
+        feeRateCaution = feeRateState.feeRateCaution,
+        canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
+        showAddressInput = showAddressInput,
+        utxoData = if (utxoExpertModeEnabled) utxoData else null,
+    )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
@@ -144,6 +122,17 @@ class SendBitcoinViewModel(
 
     fun onEnterAddress(address: Address?) {
         addressService.setAddress(address)
+    }
+
+    fun onEnterMemo(memo: String) {
+        val memo = memo.ifBlank { null }
+
+        this.memo = memo
+
+        amountService.setMemo(memo)
+        feeService.setMemo(memo)
+
+        emitState()
     }
 
     fun reset() {
@@ -250,6 +239,7 @@ class SendBitcoinViewModel(
             coin = wallet.token.coin,
             feeCoin = wallet.token.coin,
             lockTimeInterval = pluginState.lockTimeInterval,
+            memo = memo,
             rbfEnabled = localStorage.rbfEnabled
         )
     }
@@ -270,6 +260,7 @@ class SendBitcoinViewModel(
             val send = adapter.send(
                 amountState.amount!!,
                 addressState.validAddress!!.hex,
+                memo,
                 feeRateState.feeRate!!,
                 customUnspentOutputs,
                 pluginState.pluginData,
@@ -300,6 +291,7 @@ data class SendBitcoinUiState(
     val fee: BigDecimal?,
     val feeRate: Int?,
     val address: Address?,
+    val memo: String?,
     val lockTimeInterval: LockTimeInterval?,
     val addressError: Throwable?,
     val amountCaution: HSCaution?,

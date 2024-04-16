@@ -600,7 +600,7 @@
     <string name="Transactions_ContractCreation">Criação de contrato</string>
     <string name="Transactions_To">para %s</string>
     <string name="Transactions_From">de %s</string>
-    <string name="Transaction_Unlimited">ilimitado %s</string>
+    <string name="Transaction_Unlimited_CoinCode">ilimitado %s</string>
     <string name="Transactions_All">Todas</string>
     <string name="Transactions_Filter_Blockchain">Filtrar por blockchain</string>
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
@@ -656,10 +656,8 @@
     <string name="StatusInfo_FailedDescription">A transação não foi processada e nenhuma transferência de valor ocorreu. Dependendo do motivo, algumas transações com falha podem consumir taxas de transação. As transações que foram substituídas ou canceladas por outra transação não consomem taxas de transação e também aparecerão com falha. O aplicativo Unstoppable não consegue mostrar o motivo das transações com falha, mas os usuários podem procurá-lo em um explorador de blocos público, como o etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Acelerar</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">Esta ação tentará invalidar a transação anterior, reenviando-a com uma taxa maior. Se a transação original permanecer pendente quando uma nova foi enviada há uma alta chance (não garantida) de que ela seja invalidada e substituída. Apenas uma dessas duas transações será incluída no blockchain.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Enviar novamente</string>
     <string name="TransactionInfoOptions_Cancel_Title">Cancelar</string>
-    <string name="TransactionInfoOptions_Cancel_Description">Esta ação tentará invalidar a transação anterior reenviando como uma nova transação 0 %s para si mesmo. Se a transação original permanecer pendente quando uma nova for enviada, há uma grande chance (não garantida) de que ela seja invalidada e substituída. Apenas uma dessas duas transações será incluída na blockchain.</string>
     <string name="TransactionInfoOptions_Cancel_Button">Cancelar transação</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">A transação já foi confirmada</string>
     <!-- Info -->
