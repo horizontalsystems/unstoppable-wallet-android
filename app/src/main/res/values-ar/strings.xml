@@ -53,7 +53,6 @@
     <string name="Button_Submit">قدِّم</string>
     <string name="Button_TryAgain">حاول مرة أخرى</string>
     <string name="Error">خطأ</string>
-    <string name="NotAvailable">غير متوفر</string>
     <string name="Any">أي واحد</string>
     <string name="SyncError">خطأ في المزامنة. حاول مرة أخرى</string>
     <string name="PercentTitle">نسبة مئوية</string>
@@ -110,10 +109,12 @@
     <!--TVL Rank-->
     <!--Balance-->
     <string name="Balance_Send">إرسال</string>
+    <string name="Balance_ReceiveHint_Search">بحث</string>
     <!--Send NFT-->
     <string name="SendNft_Title">إرسال</string>
     <!--Send-->
     <string name="Send_Advanced">إعدادات متقدمة</string>
+    <string name="Send_Utxo_Change">تغيير</string>
     <string name="Send_Confirmation_Title">تأكيد</string>
     <string name="Send_Confirmation_Send_Button">إرسال</string>
     <string name="Send_DialogProceed">التالي</string>
@@ -135,6 +136,7 @@
     <!--Swap-->
     <string name="Swap_Proceed">التالي</string>
     <string name="Swap_Approve">قبول</string>
+    <string name="Swap_Confirm_Title">تأكيد</string>
     <!-- Swap Settings -->
     <!-- Swap Confirmation -->
     <!--Approve-->
@@ -142,8 +144,6 @@
     <!--Uniswap Info -->
     <!--Deposit-->
     <!--Transactions-->
-    <string name="Transactions_Send">إرسال</string>
-    <string name="Transactions_Approve">قبول</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Cancel">إلغاء</string>
     <!-- Transaction Info Options -->
