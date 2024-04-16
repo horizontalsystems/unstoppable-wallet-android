@@ -49,7 +49,9 @@
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Löschen</string>
     <string name="Button_LearnMore">Mehr erfahren</string>
+    <string name="Button_Activate">Aktivieren</string>
     <string name="Button_Sign">Signieren</string>
+    <string name="Button_Activating">Aktivierung</string>
     <string name="Button_GetApiKeys">Hol Dir Deine Schlüssel API</string>
     <string name="Button_Login">Anmelden</string>
     <string name="Button_SignUp">Lege ein Benutzerkonto an</string>
@@ -57,6 +59,7 @@
     <string name="Button_TryAgain">Bitte versuche es noch einmal</string>
     <string name="Button_Share">Teilen</string>
     <string name="Button_Apply">Übernehmen</string>
+    <string name="Button_SetAmount">Setze Betrag</string>
     <string name="Error_OutOfRange">Es muss mindestens %1$s enthalten und darf maximal %2$s Zeichen lang sein</string>
     <string name="Error_NotInteger">Die von Dir angegebenen Zahlen sind nicht richtig</string>
     <string name="Error">Fehler</string>
@@ -235,7 +238,9 @@
     <string name="Market_Filter_PriceCloseToAth">Preis nahe an ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Preis nahe zum ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listé sur les principales bourses</string>
+    <string name="Market_Filter_SolidCex">Gutes CEX-Volume</string>
     <string name="Market_Filter_SolidCex_Description">Gesamtbewertung ist Gut oder Ausgezeichnet</string>
+    <string name="Market_Filter_SolidDex">Gutes DEX-Volume</string>
     <string name="Market_Filter_SolidDex_Description">Gesamtbewertung ist Gut oder Ausgezeichnet</string>
     <string name="Market_Filter_GoodDistribution">Bonne distribution</string>
     <string name="Market_Filter_GoodDistribution_Description">Gesamtbewertung ist Gut oder Ausgezeichnet</string>
@@ -334,6 +339,7 @@
     <string name="Balance_NotRelayedAmount_Title">Übertragung</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Kann nicht erkennen</string>
+    <string name="Balance_Receive_WatchAddressAlert">Diese Adresse ist die Adresse des überwachten Kontos</string>
     <string name="Balance_Receive_AddressMemoAlert">Benötigte Memo (Tag) bereitstellen und nur Netzwerk-kompatible Token senden. Andere gehen verloren.</string>
     <string name="Balance_Receive_UsedAddresses">Verwendete Adressen</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s Adressen werden aus Datenschutz- und Sicherheitsgründen geändert. Unten finden Sie eine Liste der verwendeten Adressen in diesem Wallet.</string>
@@ -353,6 +359,8 @@
     <string name="Send_Button_Max">Max.</string>
     <string name="Send_Advanced">Erweitert</string>
     <string name="Send_Hodler_Description">TimeLock funktioniert nur beim Senden an BIP44 Adressen (ab 1)</string>
+    <string name="Send_UtxoExpertMode">UTxO-Experten-Modus</string>
+    <string name="Send_Utxo_Description">Wähle UTxO manuell aus, um das Guthaben im Guthaben auszugeben</string>
     <string name="Send_Utxo_SendTo">Senden an</string>
     <string name="Send_Utxo_Change">Ändern</string>
     <string name="Send_Rbf">Ersetzen durch Gebühr</string>
@@ -553,6 +561,7 @@
     <string name="Swap_Slippage">Preisabweichung</string>
     <string name="Swap_Recipient">Empfänger</string>
     <string name="Swap_ErrorNoProviders">Keine Anbieter</string>
+    <string name="Swap_ErrorNoQuote">Keine Angebote</string>
     <string name="Swap_ErrorInsufficientBalance">Ungenügendes Guthaben</string>
     <string name="Swap_ErrorBalanceNotAvailable">Saldo N/A</string>
     <string name="Swap_ErrorNoLiquidity">Diese Token sind nicht tauschbar</string>
@@ -588,6 +597,7 @@
     <string name="Swap_YouGet">Sie erhalten</string>
     <string name="Swap_Confirm_Title">Bestätigen</string>
     <string name="SwapConfirm_QuoteExpired">Angebot abgelaufen</string>
+    <string name="SwapConfirm_FetchingFinalQuote">Abrufen des endgültigen Angebots</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap-Einstellungen</string>
     <string name="SwapSettings_Service">Dienst</string>
@@ -679,6 +689,8 @@
     <string name="Transactions_Filter">Filtern</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Verdächtige tx ausblenden</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Das Verstecken eingehender Transaktionen mit dem Staub in Stablecoins löst teilweise die Adressenvergiftungsprobleme.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">Das Filtern nach Kontakten funktioniert an den folgenden Blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimismus, Tron, Ton und ZCash. Unten sind die passenden Kontakte</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Sie haben keine passenden Kontakte </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transaktion</string>
     <string name="TransactionInfo_Title">Transaktionsdaten</string>
@@ -707,6 +719,7 @@
     <string name="TransactionInfo_YouPaid">Du hast gezahlt</string>
     <string name="TransactionInfo_YouGet">Sie erhalten</string>
     <string name="TransactionInfo_YouGot">Du bekommst</string>
+    <string name="TransactionInfo_YouSent">Sie Senden</string>
     <string name="TransactionInfo_Received">Erhalten</string>
     <string name="TransactionInfo_Sent">Gesendet</string>
     <string name="TransactionInfo_Approved">Bestätigt</string>
@@ -907,6 +920,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
+    <string name="SettingsTerms_Text">Die unaufhaltsame Brieftasche ist für diejenigen gedacht, die Kryptowährungen auf private und unabhängige Weise investieren und speichern möchten.\n\nEs ist eine nicht-Custodial, Peer-to-Peer-Wallet, bei der nur der Benutzer die Kontrolle über das Guthaben hat. Es sammelt keine Daten und hält den Benutzer unabhängig, indem er das Guthaben des Benutzers nicht an eine bestimmte Wallet-App sperrt.\n\nDie unaufhaltsame Brieftasche ist vollständig Open-Source und jeder kann bestätigen, dass die App genau so funktioniert, wie sie es vorgibt.</string>
     <string name="SettingsTerms_Backup">Sicheres Backup der Wiederherstellungsausdrücke für jede Wallet. Dies ist die einzige Möglichkeit, den Zugriff auf Gelder zurückzugewinnen, wenn die App nicht funktioniert.</string>
     <string name="SettingsTerms_PrivateKeys">Die Wallet-Wiederherstellungs-Phrasen werden während des Setups zufällig auf dem Gerät generiert und werden an anderer Stelle nicht gespeichert.</string>
     <string name="SettingsTerms_DisablingPin">Das Deaktivieren der PIN (Code) auf dem Smartphone löscht alle Brieftaschen aus der App. Wiederherstellungs-Phrasen werden benötigt, um den Zugriff auf Gelder wiederherzustellen.</string>
@@ -1216,6 +1230,8 @@
     <string name="CoinPage_SecurityParams_Issuance">Ausgabe</string>
     <string name="CoinPage_SecurityParams_Centralized">Zentralisiert</string>
     <string name="CoinPage_SecurityParams_Decentralized">Dezentralisiert</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance">Confiscation-resistance</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance">Censorship-resistance</string>
     <string name="CoinPage_SecurityParams_Audits">Prüfungen</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">Info</string>
