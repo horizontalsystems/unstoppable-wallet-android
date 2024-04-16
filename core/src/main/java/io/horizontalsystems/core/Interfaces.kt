@@ -1,7 +1,6 @@
 package io.horizontalsystems.core
 
 import android.app.Activity
-import io.horizontalsystems.core.security.KeyStoreValidationResult
 import io.reactivex.Flowable
 import java.util.Date
 import javax.crypto.SecretKey
@@ -70,7 +69,7 @@ interface IThirdKeyboard {
 }
 
 interface IKeyStoreManager {
-    fun validateKeyStore(): KeyStoreValidationResult
+    fun validateKeyStore()
     fun removeKey()
     fun resetApp(reason: String)
 }

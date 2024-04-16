@@ -19,7 +19,7 @@ class MainActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        handlePage(viewModel.getPage())
+        validate()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,31 +45,21 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun handlePage(page: MainActivityViewModel.Page) = when (page) {
-        MainActivityViewModel.Page.NoSystemLock -> {
-            KeyStoreActivity.startForNoSystemLock(this)
-            finish()
-        }
-
-        MainActivityViewModel.Page.KeyInvalidated -> {
-            KeyStoreActivity.startForInvalidKey(this)
-            finish()
-        }
-
-        MainActivityViewModel.Page.UserAuthentication -> {
-            KeyStoreActivity.startForUserAuthentication(this)
-            finish()
-        }
-
-        MainActivityViewModel.Page.Welcome -> {
-            IntroActivity.start(this)
-            finish()
-        }
-
-        MainActivityViewModel.Page.Unlock -> {
-            LockScreenActivity.start(this)
-        }
-
-        MainActivityViewModel.Page.Main -> Unit
+    private fun validate() = try {
+        viewModel.validate()
+    } catch (e: MainScreenValidationError.NoSystemLock) {
+        KeyStoreActivity.startForNoSystemLock(this)
+        finish()
+    } catch (e: MainScreenValidationError.KeyInvalidated) {
+        KeyStoreActivity.startForInvalidKey(this)
+        finish()
+    } catch (e: MainScreenValidationError.UserAuthentication) {
+        KeyStoreActivity.startForUserAuthentication(this)
+        finish()
+    } catch (e: MainScreenValidationError.Welcome) {
+        IntroActivity.start(this)
+        finish()
+    } catch (e: MainScreenValidationError.Unlock) {
+        LockScreenActivity.start(this)
     }
 }

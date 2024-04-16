@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
-import io.horizontalsystems.core.security.KeyStoreValidationResult
+import io.horizontalsystems.core.security.KeyStoreValidationError
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -33,30 +33,30 @@ class MainActivityViewModel(
         }
     }
 
-    fun getPage() = when {
-        systemInfoManager.isSystemLockOff -> Page.NoSystemLock
-        else -> when (keyStoreManager.validateKeyStore()) {
-            KeyStoreValidationResult.UserNotAuthenticated -> Page.UserAuthentication
-            KeyStoreValidationResult.KeyIsInvalid -> Page.KeyInvalidated
-            KeyStoreValidationResult.KeyIsValid -> when {
-                accountManager.isAccountsEmpty && !localStorage.mainShowedOnce -> Page.Welcome
-                pinComponent.isLocked -> Page.Unlock
-                else -> Page.Main
-            }
+    fun validate() {
+        if (systemInfoManager.isSystemLockOff) {
+            throw MainScreenValidationError.NoSystemLock()
+        }
+
+        try {
+            keyStoreManager.validateKeyStore()
+        } catch (e: KeyStoreValidationError.UserNotAuthenticated) {
+            throw MainScreenValidationError.UserAuthentication()
+        } catch (e: KeyStoreValidationError.KeyIsInvalid) {
+            throw MainScreenValidationError.KeyInvalidated()
+        }
+
+        if (accountManager.isAccountsEmpty && !localStorage.mainShowedOnce) {
+            throw MainScreenValidationError.Welcome()
+        }
+
+        if (pinComponent.isLocked) {
+            throw MainScreenValidationError.Unlock()
         }
     }
 
     fun onNavigatedToMain() {
         navigateToMainLiveData.postValue(false)
-    }
-
-    enum class Page {
-        Welcome,
-        Main,
-        Unlock,
-        NoSystemLock,
-        KeyInvalidated,
-        UserAuthentication
     }
 
     class Factory : ViewModelProvider.Factory {
@@ -65,4 +65,12 @@ class MainActivityViewModel(
             return MainActivityViewModel(App.userManager, App.accountManager, App.pinComponent, App.systemInfoManager, App.keyStoreManager, App.localStorage) as T
         }
     }
+}
+
+sealed class MainScreenValidationError : Exception() {
+    class Welcome : MainScreenValidationError()
+    class Unlock : MainScreenValidationError()
+    class NoSystemLock : MainScreenValidationError()
+    class KeyInvalidated : MainScreenValidationError()
+    class UserAuthentication : MainScreenValidationError()
 }
