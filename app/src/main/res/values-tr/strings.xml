@@ -8,6 +8,7 @@
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
+    <string name="Suspended">SUSPENDED</string>
     <string name="Action_Undo">GERİ ALMA</string>
     <string name="Button_Show">Göster</string>
     <string name="Button_Hide">Gizle</string>
@@ -24,6 +25,7 @@
     <string name="Button_Add">Ekle</string>
     <string name="Button_Approve">Onayla</string>
     <string name="Button_Confirm">Onayla</string>
+    <string name="Button_Refresh">Yenile</string>
     <string name="Button_Connect">Bağlan</string>
     <string name="Button_Reject">Reddet</string>
     <string name="Button_Disconnect">Bağlantıyı Kes</string>
@@ -55,7 +57,9 @@
     <string name="Button_TryAgain">Tekrar deneyin</string>
     <string name="Button_Share">Paylaş</string>
     <string name="Button_Apply">Uygula</string>
+    <string name="Button_SetAmount">Miktarı Ayarla</string>
     <string name="Error">Hata</string>
+    <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
     <string name="SyncError">Senkronizasyon hatası. Tekrar deneyin</string>
     <string name="PercentTitle">Yüzde</string>
@@ -64,6 +68,7 @@
     <string name="AccountRecovery_MigrationRecommended">Bu cüzdan, gizli sözcükler listesinde ve/veya bir şifrede standart olmayan bir karakter kullanıyor gibi görünüyor. Bir bakiye veya işlem göremiyorsanız lütfen bilgi için aşağıya bakınız.\n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYINIZ</string>
     <string name="AccountRecovery_MigrationRequired">Bu standart olmayan bir cüzdandır. \n\nDAHA FAZLA BİLGİ ALMAK İÇİN TIKLAYIN</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Varlıkları Serbest Bırak</string>
     <string name="Intro_Wallet_Screen2Description">Kendinizi kilitlemeyin ve başkalarının bunu sizin için yapmasına izin vermeyin.</string>
     <string name="Intro_Wallet_Screen3Title">Sınırları Kaldırın</string>
@@ -122,6 +127,7 @@
     <string name="Restore_PhraseHint">12, 15, 18, 21 veya 24 kelime girin</string>
     <string name="Restore_NonStandardRestore">Standart Olmayan Geri Yükleme</string>
     <string name="Restore_NonStandard_Description">Bu sayfa, standart olmayan bir cüzdanı olan Unstoppable kullanıcıları için özel geri yükleme mekanizması sağlar. Genel olarak, bu tür cüzdanlar, İngilizce olmayan bir anımsatma kelimeleri listesi ve/veya cüzdan şifresinde özel bir karakter (yani aksan simgesi) kullanılarak Unstoppable 0.27 - 0.28 sürümünde oluşturulmuş olabilir.\n\n Bu durumdan etkilenen bir kullanıcıysanız, 0.29 sürümüne güncelledikten sonra cüzdan bakiyeniz 0 olarak görüntülenir. Bu sayfa, standart olmayan cüzdanınıza erişimi geri yüklemenizi sağlayacaktır. Geri yüklendikten sonra, yeni bir cüzdan oluşturmanız (standartlarla uyumlu) ve paranızı oraya taşımanız önerilir.</string>
+    <string name="Restore_Bip_Recommended">(ortalama)</string>
     <string name="Restore_PrivateKey_InvalidKey">Geçersiz Anahtar</string>
     <string name="Select_Coins">Kripto Parayı Seç</string>
     <string name="SelectContacts_All">Hepsi</string>
@@ -192,6 +198,13 @@
     <string name="Market_Filter_OutperformedEth">ETH\'yi Geride Bıraktı</string>
     <string name="Market_Filter_OutperformedBnb">BNB\'yi Geride Bıraktı</string>
     <string name="Market_Filter_PriceCloseToAth">ATH\'ye Yakın Fiyat</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
     <string name="Market_Filter_TimePeriod_1D">1 Gün</string>
     <string name="Market_Filter_TimePeriod_1W">1 Hafta</string>
     <string name="Market_Filter_TimePeriod_2W">2 Hafta</string>
@@ -239,6 +252,7 @@
     <string name="Balance_Receive_AddressFormat_RecommendedDerivation">Bitcoin\'de daha iyi bir verimlilik ve güvenlik için yerel SegWit formatı tercih edilir. Tüm adres formatları (Taproot, SegWit, Legacy), gönderenin adres formatına bakılmaksızın BTC almak için birbirinin yerine kullanılabilir ve farklı para birimlerinde kesintisiz işlemlere olanak tanır.</string>
     <string name="Balance_Receive_Account">Hesap</string>
     <string name="Balance_Receive_NotActive">Aktif değil</string>
+    <string name="Balance_Receive_SetAmount">Miktarı Ayarla</string>
     <string name="Balance_LockedAmount_Title">Kilitli</string>
     <string name="Balance_Error_InvalidQrCode">Tanıyamıyorum</string>
     <string name="Balance_SendHint_CoinName">Kripto Para Adı</string>
@@ -766,6 +780,7 @@
     <string name="SettingsTerms_Bugs">Bu uygulamaya güç veren kodda, uygulamanın arızalanmasına neden olabilecek keşfedilmemiş yazılım sorunları olabilir.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Paylaş</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <!--Setting_Notifications-->
     <string name="SettingsNotifications_Description">İzlemek istediğiniz paralar için fiyat değişikliği uyarılarını ayarlayın\n\nSon 24 saatteki fiyat değişikliği seçilen eşiği aştığında uyarı alırsınız. \n\nFiyat Trendi Uyarısı, 6 ay boyunca, 1 haftalık kısa bir süre için bir trend değişikliği durumunu uyarır.</string>
