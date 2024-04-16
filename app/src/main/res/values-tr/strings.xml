@@ -303,7 +303,6 @@
     <string name="Balance_NotRelayedAmount_Title">Broadcasting</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Tanıyamıyorum</string>
-    <string name="Balance_Receive_WatchAddressAlert">Bu adres, izlenen hesabın adresidir. Yalnızca ağla uyumlu tokenleri gönderin.</string>
     <string name="Balance_Receive_AddressMemoAlert">Gerekli Memo (Etiket) sağlayın ve yalnızca ağ uyumlu jetonları gönderin. Diğerleri kaybolur.</string>
     <string name="Balance_Receive_UsedAddresses">Kullanılan Adresler</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s adresi gizlilik ve güvenlik nedeniyle değişiyor. Bu cüzdanın kullanılan adreslerinin bir listesi aşağıda verilmiştir.</string>
@@ -659,12 +658,14 @@
     <string name="TransactionInfo_YouGot">Aldığınız Tutar</string>
     <string name="TransactionInfo_Received">Alındı</string>
     <string name="TransactionInfo_Sent">Gönderildi</string>
+    <string name="TransactionInfo_Approved">Onayla</string>
     <string name="TransactionInfo_Resend">Yeniden Gönder</string>
     <string name="TransactionInfo_RevokeApproval">Onayı İptal Et</string>
     <string name="TransactionInfo_Options">Seçenekler</string>
     <string name="TransactionInfo_SpeedUp">Hızlandır</string>
     <string name="TransactionInfo_Cancel">İptal</string>
     <string name="TransactionInfo_SpamWarning">Bu işlem şüpheli ve dolandırıcılık olabilir. \nLütfen bu işlemden herhangi bir adres kopyalamayın.</string>
+    <string name="TransactionInfo_SpeedUpDescription">Bu işlem, önceki işlemi geçersiz kılmak için onu daha yüksek bir ücretle yeniden göndermeye çalışacaktır.</string>
     <string name="StatusInfo_Pending">Devam ediyor</string>
     <string name="StatusInfo_Processing">İşleniyor</string>
     <string name="StatusInfo_Confirmed">Tamamlandı</string>
@@ -679,6 +680,9 @@
     <string name="TransactionInfoOptions_Cancel_Title">İptal</string>
     <string name="TransactionInfoOptions_Cancel_Button">İşlemi İptal Et</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">İşlem zaten blokta</string>
+    <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Değiştirilmiş İşlemler</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTooLow">Ücret Çok Düşük</string>
+    <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF (Ücretle Değiştir) etkin değil</string>
     <string name="TransactionInfoOptions_Rbf_UnableToReplace">Değiştirilemiyor</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">Gönderici bu fonları %s.\n\n tarihte sona erecek şekilde bir harcama kilidiyle gönderdi. Endişelenmeyin, alınan Bitcoin\'ler zaten sizindir ancak kilitleme süresi sona erene kadar bunları harcayamazsınız.</string>
@@ -846,13 +850,6 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CÜZDANLAR</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">CÜZDANLARI İZLE</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">Durdurulamaz cüzdan, kripto para birimlerine özel ve bağımsız bir şekilde yatırım yapmak ve biriktirmek isteyenler için üretilmiştir.
-
-\n\nBu, yalnızca kullanıcının fonlar üzerinde kontrol sahibi olduğu, gözetim dışı, uçtan uca bir cüzdandır. Herhangi bir veri toplamaz ve kullanıcının cüzdanını belirli bir cüzdan uygulamasına bağlamadan kullanıcıyı bağımsız tutar.
-
-\n\nDurdurulamaz cüzdan tamamen açık kaynaklıdır ve herkes uygulamanın tam olarak iddia edildiği gibi çalıştığını doğrulayabilir.
-
-\n\nMevcut çözümler yeterli olmadığından kendimiz için Durdurulamaz\'ı geliştirdik. Hem mühendislik hem de kullanılabilirlik açısından bu cüzdanın alternatif ürünlerin çok önünde olduğuna inanıyoruz.</string>
     <string name="SettingsTerms_Backup">Her cüzdan için kurtarma ifadelerini güvenli bir şekilde yedekleyin. Uygulama arızalanırsa fonlara yeniden erişmenin tek yolu budur.</string>
     <string name="SettingsTerms_PrivateKeys">Cüzdan kurtarma ifadeleri kurulum sırasında cihazda rastgele oluşturulur ve başka bir yerde saklanmaz.</string>
     <string name="SettingsTerms_DisablingPin">Akıllı telefon kilit açma PIN\'ini devre dışı bırakmak, tüm cüzdanları uygulamadan siler. Fonlara yeniden erişim sağlamak için kurtarma ifadelerine ihtiyaç duyulacaktır.</string>
@@ -1160,18 +1157,32 @@
     <string name="CoinPage_SecurityParams_Medium">Ortadüzey</string>
     <string name="CoinPage_SecurityParams_High">Hızlı</string>
     <string name="CoinPage_SecurityParams_Audits">Denetimler</string>
+    <string name="CoinPage_Range24">24 Saatlik Aralık</string>
+    <string name="CoinPage_About">Hakkında</string>
     <string name="CoinPage_Overview">İzleme</string>
+    <string name="CoinPage_Category">Kategori</string>
+    <string name="CoinPage_Categories">Kategoriler</string>
+    <string name="CoinPage_Contracts">Kişiler</string>
     <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Coin çeşitleri</string>
+    <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Kılavuzu</string>
     <string name="CoinPage_Website">Web sitesi</string>
+    <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">Twitter mevcut değil</string>
     <string name="CoinPage_Twitter_NoTweets">Henüz tweet yok</string>
+    <string name="CoinPage_Twitter_Quoted">Alıntılandı%s</string>
+    <string name="CoinPage_Twitter_Retweeted">Yeniden Tweetlendi%s</string>
+    <string name="CoinPage_Twitter_Replied">Yanıtlanıyor%s</string>
     <string name="CoinPage_Twitter_SeeOnTwitter">Twitter\'da görün</string>
     <string name="CoinPage_MarketCap">Piyasa Değeri</string>
     <string name="CoinPage_DilutedMarketCap">Seyreltilmiş P. Değeri</string>
     <string name="CoinPage_inCirculation">Dolaşımda</string>
     <string name="CoinPage_TotalSupply">Toplam arz</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
+    <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_Volume">Birim</string>
     <string name="CoinPage_NoData">Veri Yok</string>
     <string name="CoinPage_NoDataAvailable">Veri yok</string>
@@ -1182,9 +1193,12 @@
     <string name="CoinPage_ReadMore">Daha Fazla Oku</string>
     <string name="CoinPage_ShowMore">Daha Fazlası</string>
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
+    <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_Description">Yukarıdaki grafik, ilk 10 cüzdan tarafından tutulan dolaşımdaki tüm tokenlerin \%%\'sini göstermektedir. \%% ne kadar düşük olursa, madeni para o kadar fazla dağıtılır.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">ilk 10 sahibinde</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Toplam Sahip: %s</string>
+    <string name="CoinPage_OscillatorsSettings">Osilatörler</string>
+    <string name="CoinPage_EmaSettingsDescription">EMA, SMA ve WMA, teknik analizde kullanılan hareketli ortalamalardır:\n\nEMA, daha hızlı tepkiler için yakın dönem fiyatlarına vurgu yapar.\nSMA, genel bir trend görünümü için fiyat verilerini ortalayır.\nWMA, yakın dönem verilerini lineer olarak ağırlıklandırarak hassasiyeti ve gürültü azaltmayı dengelemektedir.</string>
     <string name="CoinPage_RsiSettingsDescription">Göreceli Güç Endeksi (RSI), fiyat hızını ve değişimini ölçen, aşırı alım (70 üzeri) veya aşırı satım (30 altı) piyasa koşullarını tanımlayan bir momentum osilatörüdür. Ayrıca fiyat ters dönüşlerini değişimler yoluyla tespit edebilir.</string>
     <string name="CoinPage_MacdSettingsDescription">Hareketli Ortalama Yakınsama Iraksama (MACD), bir güvenliğin fiyatının iki EMA\'sı arasındaki ilişkiyi izleyen bir momentum göstergesidir. MACD çizgisi (12 dönemlik EMA eksi 26 dönemlik EMA), sinyal çizgisi olarak bilinen 9 dönemlik EMA\'yı kestiğinde, alım veya satım fırsatlarını sinyalize eder.</string>
     <string name="CoinPage_InsufficientData">Yetersiz Veri</string>
@@ -1303,6 +1317,7 @@
     <string name="Coin_Analytics_Indicators_Buy">Al</string>
     <string name="Coin_Analytics_Indicators_Neutral">Tarafsız</string>
     <string name="Coin_Analytics_Indicators_NoData">Veri Yok</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Smart Contract Analysis</string>
     <string name="CoinAnalytics_PoweredByDeFi">De.Fi tarafından desteklenmektedir</string>
     <string name="CoinAnalytics_CountItems">%d adet</string>
     <string name="TechnicalAdvice_Title">Teknik Göstergeleri</string>
@@ -1355,7 +1370,9 @@
     <string name="NftCollection_AveragePrice">Tüm Zamanların Ortalaması</string>
     <string name="NftCollection_ItemsCount">%d adet</string>
     <string name="NftCollection_TodaysSales">Bugünün Satıcıları</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">NFT başına ~%s</string>
+    <string name="NftCollection_Royalty">Royalty</string>
     <string name="NftCollection_InceptionDate">Başlangıç ​​tarihi</string>
     <!-- NFT Collection Events -->
     <string name="NftCollection_EventType_SelectorTitle">Etkinlik Türü Seç</string>
@@ -1371,6 +1388,7 @@
     <string name="NftCollection_EventType_Custom">Özel</string>
     <string name="NftCollection_EventType_Payout">Ödeme</string>
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">En Kazançlılar</string>
@@ -1385,13 +1403,24 @@
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">Bizi Takip Et</string>
     <string name="CoinPage_Chart_Locked">Kilitli</string>
+    <string name="ProUsersInfo_Title">Pro Users</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
+    <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
+    <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
+    <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
+    <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
+    <string name="ProUsersInfo_Features_ActiveAddresses">Active Addresses</string>
     <string name="ProUsersInfo_Features_TxCount">İşlem Sayısı</string>
+    <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
     <string name="ProUsersInfo_Features_Authenticating">Doğrulanıyor...</string>
     <string name="Hud_Text_LearnMore">Çok Yakında</string>
+    <string name="Hud_Text_Activate">Activate</string>
+    <string name="ProUsersActivate_Title">Activate the Pass</string>
     <string name="ProUsersActivate_Description">Mountain Yak - Go borderless. Will show you important market data, analytical tools, and useful charts based on on-chain data that will help give you a clear view of projects</string>
     <!--Widget-->
     <string name="WidgetList_Config_Title">Türü Seç</string>
     <string name="NftAssetActivity_Empty">Henüz öğe etkinliği yok</string>
+    <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
