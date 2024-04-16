@@ -335,7 +335,6 @@
     <string name="Balance_LockedAmount_Title">锁住</string>
     <string name="Balance_NotRelayedAmount_Title">广播</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
-    <string name="Balance_Receive_WatchAddressAlert">此地址是监视帐户的地址。仅发送网络兼容的令牌。</string>
     <string name="Balance_Receive_AddressMemoAlert">提供必需的备忘录（标签），并仅发送兼容网络的代币。其他将会丢失。</string>
     <string name="Balance_Receive_UsedAddresses">已使用地址</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s 地址用于隐私和安全。以下是此钱包中已使用的地址列表。</string>
@@ -678,7 +677,6 @@
     <string name="Transactions_Filter">筛选器</string>
     <string name="Transactions_Filter_HideSuspiciousTx">隐藏可疑Txs</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">隐藏到达的沙尘群交易，这部分解决了地址中毒攻击问题。</string>
-    <string name="Transactions_Filter_ChooseContact_Hint">以下区块链支持联系过滤：Etherum、BNB Smart Chain、Polygon、Avalanche、Gnosis、Fantom、Arbitrum、Optimism、Tron、Ton和ZCash。 以下是合适的联系人</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">您没有任何合适的联系人 </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">交易</string>
@@ -903,13 +901,6 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">战利品</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">观看战利品</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">Unstoppable钱包是为寻求以私密和独立的方式投资和储存加密货币的人士而创立。
-
-\n\n这是一个非监护式对等钱包，只有用户能够对资金进行控制。它不收集任何数据并通过不把用户钱包锁定至特定的钱包应用来保证他/她的独立性。
-
-\n\nUnstoppable钱包完全开源且任何人都可以确定应用按照其宣称的方式运行。
-
-\n\n我们为我们自己创立了Unstoppable作为符合标准的可用的解决方案。从工程和可用性角度而言，我们相信此钱包远远领先于其他产品。\n</string>
     <string name="SettingsTerms_Backup">安全地备份每个钱包的恢复短语。这是在应用程序发生故障时重新获得资金的唯一途径。</string>
     <string name="SettingsTerms_PrivateKeys">钱包恢复短语在安装过程中在设备上随机生成，并且不存储在其他地方。</string>
     <string name="SettingsTerms_DisablingPin">在智能手机上禁用解锁 PIN (代码)会删除应用程序中的所有钱包。恢复资金访问将需要恢复短语。</string>
