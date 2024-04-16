@@ -41,7 +41,6 @@
     <string name="Button_Sign">نشانه</string>
     <string name="Button_Apply">درخواست دادن</string>
     <string name="Error">خطا</string>
-    <string name="NotAvailable">مربوط نیست</string>
     <string name="Any">هرکدام</string>
     <string name="SyncError">خطای همگام سازی دوباره امتحان کنید</string>
     <string name="PercentTitle">درصد</string>
@@ -100,7 +99,6 @@
     <!--Market-->
     <string name="Market_Field_PriceDiff">قیمت</string>
     <string name="Market_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
-    <string name="Market_TotalMarketCap">آستانه کل</string>
     <string name="Market_Volume24h">۲۴ ساعته</string>
     <string name="Market_SeeAll">همه</string>
     <string name="Market_Tab_Overview">نمای کلی</string>
@@ -144,8 +142,8 @@
     <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <string name="Balance_Hidden">پنهان</string>
     <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
-    <string name="Balance_NoCoinsAlert">شما سکه اضافه ای ندارید.\nسکه هایی را که استفاده می کنید اضافه کنید</string>
     <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
+    <string name="Balance_SendHint_CoinName">نام سکه</string>
     <!--Send NFT-->
     <string name="SendNft_Title">ارسال</string>
     <!--Send-->
@@ -154,6 +152,7 @@
     <string name="Send_Fee">هزينه</string>
     <string name="Send_Button_Paste">چسباندن</string>
     <string name="Send_Button_Max">حداکثر</string>
+    <string name="Send_Utxo_Change">تغییر</string>
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_Domain">دامنه</string>
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
@@ -273,6 +272,7 @@
     <string name="Swap_TokenSelectorTitle">انتخاب</string>
     <string name="Swap_Allowance">کمک هزینه</string>
     <string name="Swap_Price">قیمت</string>
+    <string name="Swap_AvailableBalance">موجودی در دسترس</string>
     <string name="Swap_SellPrice">قیمت فروش</string>
     <string name="Swap_BuyPrice">خرید قیمت</string>
     <string name="Swap_PriceImpact">تأثیر قیمت</string>
@@ -281,6 +281,7 @@
     <string name="Swap_EstimatedFee">هزینه تخمینی</string>
     <string name="Swap_MaxFee">حداکثر هزینه</string>
     <string name="Swap_Fee">هزینه</string>
+    <string name="Swap_Recipient">گیرنده</string>
     <string name="Swap_ErrorInsufficientBalance">موجودی ناکافی</string>
     <string name="Swap_ErrorNoLiquidity">نمی توان این نشانه ها را عوض کر</string>
     <string name="Swap_ErrorHighPriceImpact">تأثیر بالای قیمت</string>
@@ -294,6 +295,9 @@
     <string name="Swap_AmountEstimated">(تخمینی)</string>
     <string name="Swap_AmountMin">(دقیقه)</string>
     <string name="Swap_AmountMax">(حداکثر)</string>
+    <string name="Swap_YouPay">شما می پردازید</string>
+    <string name="Swap_YouGet">شما دریافت می کنید</string>
+    <string name="Swap_Confirm_Title">تاييد</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Service">خدمات</string>
     <string name="SwapSettings_SlippageTitle">تحمل لغزش</string>
@@ -342,20 +346,15 @@
     <string name="Transactions_EmptyList">شما هيچ گونه معاملات يا قرارداد نداريد تا هنوز</string>
     <string name="Transactions_WaitForSync">لطفا منتظر بمانید تا همگام سازی تمام شود.</string>
     <string name="Transactions_Pending">در حالت معلق</string>
-    <string name="Transactions_Receive">دريافت</string>
+    <string name="Transactions_Receive">دريافت شد</string>
     <string name="Transactions_Completed">انجام شد</string>
     <string name="Transactions_Processing">پردازش</string>
-    <string name="Transactions_Send">ارسال</string>
-    <string name="Transactions_Burn">آتش سوزی</string>
-    <string name="Transactions_Mint">نعناع</string>
-    <string name="Transactions_Approve">تایید</string>
-    <string name="Transactions_Swap">جابجایی</string>
+    <string name="Transactions_Send">ارسال شد</string>
     <string name="Transactions_Failed">ناموفق</string>
     <string name="Transactions_ContractCall">تماس قرارداد</string>
     <string name="Transactions_ContractCreation">ایجاد قرارداد</string>
     <string name="Transactions_To">به %s</string>
     <string name="Transactions_From">از %s</string>
-    <string name="Transaction_Unlimited_CoinCode">نامحدود %s</string>
     <string name="Transactions_All">همه</string>
     <string name="Transactions_Filter_ChooseCoin">سکه را انتخاب کنید</string>
     <string name="Transactions_Filter_ChooseBlockchain">انتخاب زنجیره بلوکی</string>
@@ -392,6 +391,8 @@
     <string name="TransactionInfo_YouPaid">شما پرداخت کردید</string>
     <string name="TransactionInfo_YouGet">شما دریافت می کنید</string>
     <string name="TransactionInfo_YouGot">شما دریافت می کنید</string>
+    <string name="TransactionInfo_Received">دريافت شد</string>
+    <string name="TransactionInfo_Sent">ارسال شد</string>
     <string name="TransactionInfo_Resend">ارسال مجدد</string>
     <string name="TransactionInfo_RevokeApproval">لغو تصویب</string>
     <string name="TransactionInfo_Options">گزينه ها</string>
@@ -644,7 +645,6 @@
     <string name="AddToken_AddressOrSymbol">آدرس قرارداد</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">ساختار آدرس</string>
-    <string name="AddressFormatSettings_Description">قالب آدرس را برای سکه انتخاب کنید. اگر مطمئن نیستید گزینه پیشنهادی را ادامه دهید. هنگام بازیابی کیف پول موجود باید یک قالب صحیح انتخاب شود.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">بومی</string>
     <string name="CoinPlatformsSelector_Title">نوع سکه</string>
@@ -653,7 +653,6 @@
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">بازیابی منبع</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">بعد از این تغییر، کیف پول مجبور است خود را با زنجیره بلوکی %s مجدداً همزمان سازی کند.</string>
     <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">ارتباطات</string>
-    <string name="CoinSettings_BitcoinCashCoinType_Type145_Title">آدرس نقد (توصیه شده)</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">رایج قبل از ۲۰۱۸</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">رایج بعد از ۲۰۱۸</string>
     <!-- Tor -->
@@ -680,6 +679,8 @@
     <string name="CoinPage_Performance_Month"> 1Month </string>
     <string name="Coin_Analytics_Details">جزئیات</string>
     <string name="Coin_Analytics_Period_1h">۱ ساعت</string>
+    <string name="Coin_Analytics_Period_1m">۱ ماه</string>
+    <string name="CoinAnalytics_CountItems">%d مورد</string>
     <string name="ActivateSubscription_Address">آدرس</string>
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
     <string name="Nfts_PriceType_Days_30">30 دی اوت</string>
