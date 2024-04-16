@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
@@ -30,7 +32,6 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.hodler.HSHodler
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.DisposableLifecycleCallbacks
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -113,14 +114,11 @@ fun SendConfirmationScreen(
         }
     }
 
-    DisposableLifecycleCallbacks(
-        //additional close for cases when user closes app immediately after sending
-        onResume = {
-            if (sendResult == SendResult.Sent) {
-                navController.popBackStack(closeUntilDestId, true)
-            }
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        if (sendResult == SendResult.Sent) {
+            navController.popBackStack(closeUntilDestId, true)
         }
-    )
+    }
 
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
