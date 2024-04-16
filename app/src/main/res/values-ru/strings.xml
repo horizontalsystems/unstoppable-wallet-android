@@ -166,6 +166,7 @@
     <string name="Market_FilterSection_MarketParameters">ПАРАМЕТРЫ РЫНКА</string>
     <string name="Market_FilterSection_PriceParameters">ПАРАМЕТРЫ ЦЕНЫ</string>
     <string name="Market_FilterSection_NetworkParameters">ПАРАМЕТРЫ СЕТИ</string>
+    <string name="Market_FilterSection_Indicators">ИНДИКАТОРЫ</string>
     <string name="Market_Field_HighestCap">Наивысшей кап.</string>
     <string name="Market_Field_LowestCap">Наименьшей кап.</string>
     <string name="Market_Field_HighestVolume">Наивысшему обьему</string>
@@ -173,6 +174,7 @@
     <string name="Market_Field_HighestPrice">Самая высокая цена</string>
     <string name="Market_Field_LowestPrice">Самая низкая цена</string>
     <string name="Market_Sort_PopupTitle">Сортировать по</string>
+    <string name="Market_TotalMarketCap">Общая капитализация</string>
     <string name="Market_BtcDominance">Доминирование BTC</string>
     <string name="Market_Volume24h">Объем торгов (24ч)</string>
     <string name="Market_TvlDeFi">TVL в DeFi</string>
@@ -236,7 +238,10 @@
     <string name="Market_Filter_OutperformedBnb">Обошел BNB</string>
     <string name="Market_Filter_PriceCloseToAth">Цена Близка к ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Цена Близка к ATL</string>
+    <string name="Market_Filter_ListedOnTopExchanges">Размещены на ведущих биржах</string>
+    <string name="Market_Filter_SolidCex">Хороший объем CEX</string>
     <string name="Market_Filter_SolidCex_Description">Общая оценка хорошая или отличная</string>
+    <string name="Market_Filter_SolidDex">Хороший объем DEX</string>
     <string name="Market_Filter_SolidDex_Description">Общая оценка хорошая или отличная</string>
     <string name="Market_Filter_GoodDistribution">Хорошее распределение</string>
     <string name="Market_Filter_GoodDistribution_Description">Общая оценка хорошая или отличная</string>
@@ -335,6 +340,7 @@
     <string name="Balance_NotRelayedAmount_Title">Трансляция</string>
     <string name="Balance_Receive_Memo">Memo(Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
+    <string name="Balance_Receive_WatchAddressAlert">Этот адрес является адресом наблюдаемого аккаунта</string>
     <string name="Balance_Receive_AddressMemoAlert">Укажите необходимое мемо (тэг) и отправьте только токены, совместимые с сетью. Другие токены будут потеряны.</string>
     <string name="Balance_Receive_UsedAddresses">Использованные адреса</string>
     <string name="Balance_Receive_UsedAddressesDescriptoin">%s адресов изменены для повышения конфиденциальности и безопасности. Ниже приведен список использованных адресов в этом кошельке.</string>
@@ -354,6 +360,8 @@
     <string name="Send_Button_Max">Макс.</string>
     <string name="Send_Advanced">Доп. настройки</string>
     <string name="Send_Hodler_Description">TimeLock работает только для отправки на адреса BIP44 (начинаются с 1)</string>
+    <string name="Send_UtxoExpertMode">Режим эксперта UTxO</string>
+    <string name="Send_Utxo_Description">Вручную выбрать UTxO для траты средств</string>
     <string name="Send_Utxo_SendTo">Отправить</string>
     <string name="Send_Utxo_Change">Изменить</string>
     <string name="Send_Rbf">Изменить комиссию</string>
@@ -585,10 +593,12 @@
     <string name="Swap_AmountMin">(мин)</string>
     <string name="Swap_AmountMax">(макс)</string>
     <string name="Swap_AmountTypeCoin">Монета</string>
+    <string name="Swap_SwapRouteNotFound">Маршрут не найден</string>
     <string name="Swap_YouPay">Вы платите</string>
     <string name="Swap_YouGet">Вы получите</string>
     <string name="Swap_Confirm_Title">Подтвердить</string>
     <string name="SwapConfirm_QuoteExpired">Котировка истекла</string>
+    <string name="SwapConfirm_FetchingFinalQuote">Получение котировки</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_Service">Сервис</string>
@@ -680,6 +690,7 @@
     <string name="Transactions_Filter">Фильтр</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Скрыть подозрительные транзакции</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Скрытие входящих транзакций с незначительной суммой в стабильных монетах частично решает проблемы атаки на загрязнение адреса.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">Фильтрация по контактам работает на блокчейнах: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Optimism, Tron, Ton и ZCash. Ниже приведены подходящие контакты</string>
     <string name="Transactions_Filter_ChooseContact_NoSuitableContact">У вас нет подходящих контактов </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Транзакция</string>
@@ -906,13 +917,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">КОШЕЛЬКИ</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ПРОСМОТР КОШЕЛЬКА</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">Кошелек Unstoppable предназначен для тех, кто хочет инвестировать и хранить криптовалюты частным и независимым образом.
-
-\n\nЭто некастодиальный децентрализованный кошелек, в котором только пользователь может контролировать свои средства. Кошелек не собирает какие-либо данные и позволяет пользователю сохранять независимость, не завязывая учетную запись под одно приложение-кошелек.
-
-\n\nКошелек Unstoppable имеет открытый исходный программный код, и любой может убедиться в том, что приложение работает должным образом.
-
-\n\nМы создали кошелек Unstoppable для себя, так как доступные в сети решения не предлагают необходимый функционал на должном уровне. С точки зрения инженерии и простоты использования, мы считаем, что этот кошелек значительно опережает альтернативные продукты.</string>
+    <string name="SettingsTerms_Text">Кошелек Unstoppable создан для тех, кто хочет инвестировать и хранить криптовалюты частным и независимым образом.\n\nЭто одноранговый кошелек, где только пользователь имеет контроль над средствами. Он не собирает никаких данных и обеспечивает независимость пользователя, не привязывая средства пользователя к определенному приложению.\n\nКошелек Unstoppable имеет полностью открытый исходный код, и любой может подтвердить, что приложение работает именно так, как заявлено.</string>
     <string name="SettingsTerms_Backup">Безопасное резервное копирование фраз для каждого кошелька. Это единственный способ восстановить доступ к средствам, если приложение не работает.</string>
     <string name="SettingsTerms_PrivateKeys">Фразы восстановления кошелька генерируются случайным образом на устройстве во время установки и не хранятся в другом месте.</string>
     <string name="SettingsTerms_DisablingPin">Отключение PIN-кода разблокировки на смартфоне удаляет все кошельки из приложения. Для восстановления доступа к средствам потребуется восстановление фраз.</string>
@@ -1300,6 +1305,7 @@
     <string name="CoinPage_SignalSmoothing">Signal Smoothing</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей Unstoppable кошелька.</string>
     <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
+    <string name="CoinPage_MarketsLabel_Verified">Подтверждено</string>
     <string name="CoinPage_MarketsVerifiedMenu_Verified">Подтверждено</string>
     <string name="CoinPage_MarketsVerifiedMenu_All">Все</string>
     <string name="CoinAnalytics_CexVolume_Info1">Общий объем торгов по токену на ведущих централизованных биржах за 30-дневный период.</string>
