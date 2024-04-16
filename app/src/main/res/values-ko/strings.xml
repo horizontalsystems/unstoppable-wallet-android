@@ -357,6 +357,8 @@
     <string name="Send_Button_Max">최대</string>
     <string name="Send_Advanced">고급의</string>
     <string name="Send_Hodler_Description">TimeLock은 BIP44 주소(1부터 시작)로 전송하는 경우에만 작동합니다.</string>
+    <string name="Send_UtxoExpertMode">UTxO 전문가 모드</string>
+    <string name="Send_Utxo_Description">잔액에서 자금을 사용하기 위해 수동으로 UTxO를 선택하세요.</string>
     <string name="Send_Utxo_SendTo">보내기</string>
     <string name="Send_Utxo_Change">변경하기</string>
     <string name="Send_Rbf">수수료로 대체</string>
@@ -569,6 +571,7 @@
     <string name="Swap_ErrorHighPriceImpact">높은 가격 영향</string>
     <string name="Swap_ErrorTokenNotEnabled">토큰 활성화되지 않음</string>
     <string name="Swap_ErrorWalletSyncing">지갑 동기화 중</string>
+    <string name="Swap_ErrorWalletNotSynced">지갑이 동기화되지 않음</string>
     <string name="Swap_Proceed">다음</string>
     <string name="Swap_SelectTokenIn">토큰 인 선택</string>
     <string name="Swap_SelectTokenOut">토큰 아웃 선택</string>
@@ -596,6 +599,7 @@
     <string name="Swap_YouGet">얻기</string>
     <string name="Swap_Confirm_Title">확인</string>
     <string name="SwapConfirm_QuoteExpired">견적이 만료되었습니다</string>
+    <string name="SwapConfirm_FetchingFinalQuote">최종 견적을 가져오는 중</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">스왑 설정</string>
     <string name="SwapSettings_Service">서비스</string>
@@ -687,6 +691,8 @@
     <string name="Transactions_Filter">필터</string>
     <string name="Transactions_Filter_HideSuspiciousTx">의심스러운 거래 숨기기</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Dust 양의 안정화된 암호화폐를 사용하여 수신 거래를 숨기면 주소 독성 공격 문제의 일부를 해결할 수 있습니다.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">다음 블록체인에서 연락처 필터링이 작동합니다: 이더리움, BNB 스마트 체인, 폴리곤, 아발란체, 그노시스, 팬텀, 아비트럼, 옵티미즘, 트론, 톤, 그리고 지캐시. 아래에 적합한 연락처가 나열되어 있습니다.</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">적합한 연락처가 없습니다</string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">거래기록</string>
     <string name="TransactionInfo_Title">거래 정보</string>
@@ -715,6 +721,7 @@
     <string name="TransactionInfo_YouPaid">지불한 금액</string>
     <string name="TransactionInfo_YouGet">얻기</string>
     <string name="TransactionInfo_YouGot">받았던 금액</string>
+    <string name="TransactionInfo_YouSent">보냄</string>
     <string name="TransactionInfo_Received">수령됨</string>
     <string name="TransactionInfo_Sent">전송됨</string>
     <string name="TransactionInfo_Approved">승인됨</string>
@@ -915,6 +922,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">지갑</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">관찰 주소</string>
     <!--Setting_Terms-->
+    <string name="SettingsTerms_Text">Unstoppable 지갑은 개인적이고 독립적인 방식으로 암호화폐를 투자하고 저장하려는 사람들을 위해 만들어졌습니다.\n\n사용자만 자금을 제어할 수 있는 비 보관 P2P 지갑입니다. 데이터를 수집하지 않으며 사용자의 자금을 특정 지갑 앱에 잠그지 않음으로써 사용자를 독립적으로 유지합니다.\n\n언스톱퍼블 지갑은 완전히 오픈 소스이며 누구나 앱이 주장하는 대로 정확하게 작동하는지 확인할 수 있습니다.</string>
     <string name="SettingsTerms_Backup">지갑별 복구 문구를 안전하게 백업합니다. 앱이 오작동하는 경우 자금에 다시 액세스할 수 있는 유일한 방법입니다.</string>
     <string name="SettingsTerms_PrivateKeys">지갑 복구 문구는 설정 중에 장치에서 임의로 생성되며 다른 곳에 저장되지 않습니다.</string>
     <string name="SettingsTerms_DisablingPin">스마트폰에서 잠금 해제 PIN(코드)을 비활성화하면 앱에서 모든 지갑이 삭제됩니다. 자금에 대한 액세스를 복원하려면 복구 문구가 필요합니다.</string>
@@ -1407,6 +1415,7 @@
     <string name="Coin_Analytics_Indicators_Buy">매수</string>
     <string name="Coin_Analytics_Indicators_Neutral">보통</string>
     <string name="Coin_Analytics_Indicators_NoData">데이터 없음</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">스마트 계약 분석</string>
     <string name="CoinAnalytics_HighRiskItems">고위험 품목</string>
     <string name="CoinAnalytics_MediumRiskItems">중위험 품목</string>
     <string name="CoinAnalytics_AttentionRequired">주의 필요</string>
