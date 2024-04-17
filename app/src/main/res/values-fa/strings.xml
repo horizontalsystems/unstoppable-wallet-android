@@ -329,6 +329,7 @@
     <string name="Approve_Error_AlreadyApproved">شما از قبل مبلغی را برای این مستمری در نظر گرفته اید</string>
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
+    <!--Swap Unlock Access-->
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">مستمری</string>
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
