@@ -51,7 +51,6 @@
     <string name="Button_LearnMore">자세히 보기</string>
     <string name="Button_Activate">활성화</string>
     <string name="Button_Sign">가입</string>
-    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">API 키 가져오기</string>
     <string name="Button_Login">로그인</string>
     <string name="Button_SignUp">회원가입</string>
@@ -60,8 +59,6 @@
     <string name="Button_Share">공유</string>
     <string name="Button_Apply">적용</string>
     <string name="Button_SetAmount">금액 설정</string>
-    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
-    <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">어떤</string>
@@ -72,7 +69,6 @@
     <string name="AccountRecovery_MigrationRecommended">이 지갑은 비밀 단어 목록 및/또는 암호 문구에 비표준 문자를 사용하는 것 같습니다. 잔액이나 거래 내역이 보이지 않으면 아래에서 자세한 내용을 읽어보세요.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <string name="AccountRecovery_MigrationRequired">비표준 호환 지갑입니다. 자세한 내용은 아래를 참조하십시오.\n\n더 많은 정보를 얻으려면 클릭하십시오</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">풀린 자산</string>
     <string name="Intro_Wallet_Screen2Description">자신을 잠금하지 말고 다른 사람들이 귀하에게 그렇게 하도록 두지 마십시오.</string>
     <string name="Intro_Wallet_Screen3Title">무경계로</string>
@@ -301,7 +297,6 @@
     <string name="Balance_SyncedUntil">%s 까지</string>
     <string name="Balance_Syncing">동기화...</string>
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
     <string name="Balance_AddCoins">코인 추가</string>
     <string name="Balance_AddCoin">코인 추가</string>
@@ -335,7 +330,6 @@
     <string name="Balance_Receive_AddressType">주소 유형</string>
     <string name="Balance_LockedAmount_Title">잠김</string>
     <string name="Balance_NotRelayedAmount_Title">방송</string>
-    <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">인식할 수 없음</string>
     <string name="Balance_Receive_WatchAddressAlert">이 주소는 관찰 중인 계정의 주소입니다</string>
     <string name="Balance_Receive_AddressMemoAlert">필요한 메모 (태그)를 제공하고 호환되는 네트워크 토큰만 보내십시오. 그렇지 않으면 소멸됩니다.</string>
@@ -560,7 +554,6 @@
     <string name="Swap_EstimatedFee">예상 수수료</string>
     <string name="Swap_MaxFee">최대 수수료</string>
     <string name="Swap_Fee">수수료</string>
-    <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">수령인</string>
     <string name="Swap_ErrorNoProviders">제공자 없음</string>
     <string name="Swap_ErrorNoQuote">제안이 없습니다</string>
@@ -638,6 +631,7 @@
     <string name="Approve_Spender">스펜더</string>
     <string name="Approve_YouApprove">승인합니다</string>
     <string name="Approve_YouRevoke">당신은 취소</string>
+    <!--Swap Unlock Access-->
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">허용량</string>
     <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 거래소가 사용자를 대신하여 지출할 수 있는 금액. 실제 스왑 거래가 발생하기 전에 선행 거래 설정 충분한 여유가 필요합니다.</string>
@@ -660,7 +654,6 @@
     <string name="Transactions_Completed">완료</string>
     <string name="Transactions_Processing">처리 중</string>
     <string name="Transactions_Send">전송됨</string>
-    <string name="Transactions_Burn">Burned</string>
     <string name="Transactions_Mint">민트</string>
     <string name="Transactions_Approve">승인됨</string>
     <string name="Transactions_Swap">스왑됨</string>
@@ -792,7 +785,6 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">이미 비공개 채팅을 요청하셨습니다. Telegram에서 찾아보세요.</string>
     <string name="Settings_PersonalSupport_Account">계정</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">신청 완료</string>
     <string name="Settings_PersonalSupport_Request">요청</string>
     <string name="Settings_PersonalSupport_NewRequest">요청</string>
@@ -859,7 +851,6 @@
     <string name="EvmNetwork_Added">추가됨</string>
     <string name="EvmNetwork_SyncMode">동기화 모드</string>
     <!--Add RPC Source-->
-    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">RPC 소스 추가</string>
     <string name="AddEvmSyncSource_Name">이름</string>
     <string name="AddEvmSyncSource_BasicAuthentication">기본 인증(선택 사항)</string>
@@ -896,10 +887,8 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">Unstoppable 지갑 앱을 위한 알림이 불가능합니다. 귀하께서는 가격 변동 알림을 받으시려면 앱을 켜놓는걸 필요로 합니다.</string>
     <string name="SettingsSecurity_SortingShuffle">셔플</string>
     <string name="SettingsSecurity_SortingShuffleDescription">랜덤 인덱싱</string>
-    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">사전 색인 작성</string>
-    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">빠르고 비공개, 중앙집중화</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">블록체인으로 필터링</string>
@@ -930,7 +919,6 @@
     <string name="SettingsTerms_Bugs">이 앱을 구동하는 코드에 발견되지 않은 소프트웨어 문제가 있을 수 있으며 이로 인해 앱이 오작동할 수 있습니다.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">공유</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">문의하기</string>
     <!--Setting_Notifications-->
@@ -1101,7 +1089,6 @@
     <string name="EvmPrivateKey_Warning">이 키는 모든 EVM 호환 블록체인용입니다. 누구와도 공유하지 마십시오.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">개인 키 보기</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">개인 키 보기</string>
     <!-- Private Keys -->
@@ -1109,7 +1096,6 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM 개인 키</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">각 지갑 내에서 EVM 기반 암호화, 즉 이더리움, 바이낸스 스마트 체인 등에 대한 완전한 제어 권한을 부여합니다.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">각 지갑의 자산에 대한 모든 권한을 부여합니다.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">각 지갑 내에서 비트코인 및 기타 UTXO 기반 암호화, 즉 라이트코인, 비트코인 캐시, 대시 등을 완벽하게 제어할 수 있습니다.</string>
     <string name="PrivateKeys_NeverShareWarning">복구 문구를 누구와도 공유하지 마십시오. Unstoppable 팀은 복구 문구를 요구하지 않습니다.</string>
     <!-- Public Keys -->
@@ -1158,7 +1144,6 @@
     <string name="AddToken_Symbol">심볼</string>
     <string name="AddToken_CoinCode">코인 코드</string>
     <string name="AddToken_Decimals">소수점</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">코인 유형</string>
     <string name="AddToken_AlreadyAdded">이미 추가됨</string>
     <string name="AddToken_AddressOrSymbol">계약 주소</string>
@@ -1242,7 +1227,6 @@
     <string name="CoinPage_Categories">카테고리들</string>
     <string name="CoinPage_Contracts">계약</string>
     <string name="CoinPage_Blockchains">블록체인</string>
-    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">코인 유형</string>
     <string name="CoinPage_Links">링크</string>
     <string name="CoinPage_Guide">가이드</string>
@@ -1438,15 +1422,7 @@
     <string name="ActivateSubscription_MessageToSign">서명할 메시지</string>
     <string name="ActivateSubscription_SignMessageDescription">귀하는 구독을 활성화하려면 이 메시지에 서명해야 합니다.</string>
     <string name="ActivateSubscription_NoSubscriptionError">귀하의 월렛 주소는 프리미엄 기능을 구독하지 않았습니다. 구독을 활성화하려면 구매해야 합니다.</string>
-    <string name="SubscriptionInfo_Title">Premium Features</string>
-    <string name="SubscriptionInfo_Analytics_Title">Cryptocurrency Analytics</string>
-    <string name="SubscriptionInfo_Analytics_Info">Access comprehensive market and on-chain stats about each token.</string>
-    <string name="SubscriptionInfo_Indicators_Title">Price Trend Indicators</string>
-    <string name="SubscriptionInfo_Indicators_Info">Discover uptrending tokens based on technical analysis indicators.</string>
     <string name="SubscriptionInfo_PersonalSupport_Title">개인 지원</string>
-    <string name="SubscriptionInfo_PersonalSupport_Info">Contact our team directly over Telegram for personal assistance.</string>
-    <string name="SubscriptionInfo_GetPremium">Get Premium</string>
-    <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
     <string name="Nfts_PriceType_Days_7">평균 7일</string>
     <string name="Nfts_PriceType_Days_30">평균 30일</string>
     <string name="Nfts_PriceType_LastSale">마지막 판매</string>
@@ -1488,7 +1464,6 @@
     <string name="NftCollection_AveragePrice">모든 시간 평균</string>
     <string name="NftCollection_ItemsCount">%d 아이템</string>
     <string name="NftCollection_TodaysSales">오늘의 판매자</string>
-    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">NFT당 ~%s</string>
     <string name="NftCollection_Royalty">고귀함</string>
     <string name="NftCollection_InceptionDate">개시일</string>
@@ -1524,7 +1499,6 @@
     <!--Release notes-->
     <string name="ReleaseNotes_FollowUs">팔로우</string>
     <string name="CoinPage_Chart_Locked">잠김</string>
-    <string name="ProUsersInfo_Title">Pro Users</string>
     <string name="ProUsersInfo_UnstoppablePass">Unstoppable 패스</string>
     <string name="ProUsersInfo_SubTitle">추가 토큰 정보</string>
     <string name="ProUsersInfo_Description">이 데이터를 활성화하려면 브론즈 레벨 UW NFTs \'Coin Info+\'를 획득해야 합니다.
