@@ -2,28 +2,28 @@ package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
 import io.horizontalsystems.bankwallet.core.UnsupportedException
 import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
 
 object SendTransactionServiceFactory {
-    fun create(tokenIn: Token): ISendTransactionService = when (val blockchainType = tokenIn.blockchainType) {
-        BlockchainType.Bitcoin -> TODO()
-        BlockchainType.BitcoinCash -> TODO()
-        BlockchainType.ECash -> TODO()
-        BlockchainType.Litecoin -> TODO()
-        BlockchainType.Dash -> TODO()
-        BlockchainType.Zcash -> TODO()
+    fun create(blockchainType: BlockchainType): ISendTransactionService = when (blockchainType) {
         BlockchainType.Ethereum,
-        BlockchainType.BinanceSmartChain -> SendTransactionServiceEvm(blockchainType)
-        BlockchainType.BinanceChain -> TODO()
-        BlockchainType.Polygon -> TODO()
-        BlockchainType.Avalanche -> TODO()
-        BlockchainType.Optimism -> TODO()
-        BlockchainType.ArbitrumOne -> TODO()
-        BlockchainType.Solana -> TODO()
-        BlockchainType.Gnosis -> TODO()
-        BlockchainType.Fantom -> TODO()
-        BlockchainType.Tron -> TODO()
-        BlockchainType.Ton -> TODO()
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Polygon,
+        BlockchainType.Avalanche,
+        BlockchainType.Optimism,
+        BlockchainType.ArbitrumOne,
+        BlockchainType.Gnosis,
+        BlockchainType.Fantom -> SendTransactionServiceEvm(blockchainType)
+
+        BlockchainType.Bitcoin,
+        BlockchainType.BitcoinCash,
+        BlockchainType.ECash,
+        BlockchainType.Litecoin,
+        BlockchainType.Dash,
+        BlockchainType.Zcash,
+        BlockchainType.BinanceChain,
+        BlockchainType.Solana,
+        BlockchainType.Tron,
+        BlockchainType.Ton,
         is BlockchainType.Unsupported -> throw UnsupportedException("")
     }
 }
