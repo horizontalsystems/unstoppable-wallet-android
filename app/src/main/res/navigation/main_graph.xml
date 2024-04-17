@@ -332,6 +332,9 @@
     <fragment
         android:id="@+id/cexAssetFragment"
         android:name="io.horizontalsystems.bankwallet.modules.balance.cex.asset.CexAssetFragment" />
+    <fragment
+        android:id="@+id/кeyAccountInfoFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />
     <dialog
         android:id="@+id/contactOptionsDialog"
         android:name="io.horizontalsystems.bankwallet.modules.settings.about.ContactOptionsDialog" />

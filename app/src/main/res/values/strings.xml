@@ -1340,6 +1340,7 @@
     <string name="ExtendedKey_Purpose" translatable="false">Purpose</string>
     <string name="ExtendedKey_Account" translatable="false">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
+    <string name="ExtendedKey_AccountInfo">To do</string>
 
     <string name="AccountExtendedPrivateKey" translatable="false">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey" translatable="false">Account Extended Public Key</string>
