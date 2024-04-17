@@ -212,7 +212,7 @@ class SwapConfirmViewModel(
 
     companion object {
         fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
-            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
+            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn.blockchainType)
 
             SwapConfirmViewModel(
                 quote.provider,
