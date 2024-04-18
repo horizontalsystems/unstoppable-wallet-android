@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
+import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
@@ -50,8 +51,15 @@ fun SwapApproveScreen(
     navController: NavController,
     approveData: SwapMainModule.ApproveData
 ) {
-    val swapApproveViewModel =
-        viewModel<SwapApproveViewModel>(factory = SwapApproveModule.Factory(approveData))
+    val viewModel = viewModel<ApproveViewModel>(
+        factory = ApproveViewModel.Factory(
+            approveData.token,
+            approveData.amount,
+            approveData.spenderAddress,
+        )
+    )
+
+    val uiState = viewModel.uiState
 
     Scaffold(
         topBar = {
@@ -74,17 +82,15 @@ fun SwapApproveScreen(
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        swapApproveViewModel.getSendEvmData()?.let { sendEvmData ->
-                            navController.slideFromRightForResult<SwapApproveConfirmationFragment.Result>(
-                                R.id.swapApproveConfirmationFragment,
-                                SwapApproveConfirmationModule.Input(
-                                    sendEvmData,
-                                    swapApproveViewModel.blockchainType
-                                )
-                            ) {
-                                navController.setNavigationResultX(it)
-                                navController.popBackStack()
-                            }
+                        navController.slideFromRightForResult<SwapApproveConfirmationFragment.Result>(
+                            R.id.swapApproveConfirmationFragment,
+                            SwapApproveConfirmationModule.Input(
+                                viewModel.getSendEvmData(),
+                                viewModel.blockchainType
+                            )
+                        ) {
+                            navController.setNavigationResultX(it)
+                            navController.popBackStack()
                         }
                     },
                 )
@@ -105,19 +111,31 @@ fun SwapApproveScreen(
             VSpacer(height = 24.dp)
 
             SectionUniversalLawrence {
-                CellUniversal {
-                    HsCheckbox(checked = true) {
-
-                    }
-                    HSpacer(width = 16.dp)
-                    subhead2_leah(text = swapApproveViewModel.initialAmount)
-                }
+                val setOnlyRequired = { viewModel.setAllowanceMode(AllowanceMode.OnlyRequired) }
                 CellUniversal(
-                    borderTop = true
+                    onClick = setOnlyRequired
                 ) {
-                    HsCheckbox(checked = false) {
+                    HsCheckbox(
+                        checked = uiState.allowanceMode == AllowanceMode.OnlyRequired,
+                        onCheckedChange = { setOnlyRequired.invoke() }
+                    )
+                    HSpacer(width = 16.dp)
+                    val coinValue = CoinValue(
+                        uiState.token,
+                        uiState.requiredAllowance
+                    ).getFormattedFull()
+                    subhead2_leah(text = coinValue)
+                }
 
-                    }
+                val setUnlimited = { viewModel.setAllowanceMode(AllowanceMode.Unlimited) }
+                CellUniversal(
+                    borderTop = true,
+                    onClick = setUnlimited
+                ) {
+                    HsCheckbox(
+                        checked = uiState.allowanceMode == AllowanceMode.Unlimited,
+                        onCheckedChange = { setUnlimited.invoke() }
+                    )
                     HSpacer(width = 16.dp)
                     subhead2_leah(text = stringResource(id = R.string.Swap_Unlock_Unlimited))
                 }
