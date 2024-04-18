@@ -58,12 +58,12 @@ class ApproveViewModel(
 
     class Factory(
         private val token: Token,
-        private val amount: BigDecimal,
+        private val requiredAllowance: BigDecimal,
         private val spenderAddress: String,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ApproveViewModel(token, amount, spenderAddress, App.walletManager) as T
+            return ApproveViewModel(token, requiredAllowance, spenderAddress, App.walletManager) as T
         }
     }
 }

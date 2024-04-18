@@ -62,7 +62,6 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
                 amountIn,
                 routerAddress,
                 token,
-                allowance,
                 approveInProgress
             )
         }

@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.modules.swap.coinselect.SelectSwapCoinDialogScreen
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 
