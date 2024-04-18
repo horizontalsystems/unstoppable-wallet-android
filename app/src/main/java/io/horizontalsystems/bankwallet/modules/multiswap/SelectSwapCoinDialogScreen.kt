@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.coinselect
+package io.horizontalsystems.bankwallet.modules.multiswap
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background

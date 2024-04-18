@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
@@ -62,8 +63,6 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
-import io.horizontalsystems.bankwallet.modules.swap.getPriceImpactColor
-import io.horizontalsystems.bankwallet.modules.swap.ui.SuggestionsBar
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Keyboard
@@ -844,4 +843,15 @@ private fun AmountInput(
             innerTextField()
         },
     )
+}
+
+@Composable
+fun getPriceImpactColor(priceImpactLevel: SwapMainModule.PriceImpactLevel?): Color {
+    return when (priceImpactLevel) {
+        SwapMainModule.PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
+        SwapMainModule.PriceImpactLevel.Warning,
+        SwapMainModule.PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+
+        else -> ComposeAppTheme.colors.grey
+    }
 }

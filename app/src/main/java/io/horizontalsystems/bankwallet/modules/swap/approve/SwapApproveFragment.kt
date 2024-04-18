@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.swap.approve
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,6 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -35,27 +35,32 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
+import io.horizontalsystems.marketkit.models.Token
+import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 
 class SwapApproveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val approveData = navController.requireInput<SwapMainModule.ApproveData>()
-        SwapApproveScreen(navController, approveData)
+        SwapApproveScreen(navController, navController.requireInput())
     }
 
+    @Parcelize
+    data class Input(
+        val token: Token,
+        val requiredAllowance: BigDecimal,
+        val spenderAddress: String
+    ) : Parcelable
 }
 
 @Composable
-fun SwapApproveScreen(
-    navController: NavController,
-    approveData: SwapMainModule.ApproveData
-) {
+fun SwapApproveScreen(navController: NavController, input: SwapApproveFragment.Input) {
     val viewModel = viewModel<ApproveViewModel>(
         factory = ApproveViewModel.Factory(
-            approveData.token,
-            approveData.amount,
-            approveData.spenderAddress,
+            input.token,
+            input.requiredAllowance,
+            input.spenderAddress,
         )
     )
 

@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.swap
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -10,15 +9,6 @@ import java.math.BigInteger
 import kotlin.math.absoluteValue
 
 object SwapMainModule {
-
-    @Parcelize
-    data class ApproveData(
-        val blockchainType: BlockchainType,
-        val token: Token,
-        val spenderAddress: String,
-        val amount: BigDecimal,
-        val allowance: BigDecimal
-    ) : Parcelable
 
     @Parcelize
     enum class PriceImpactLevel : Parcelable {
