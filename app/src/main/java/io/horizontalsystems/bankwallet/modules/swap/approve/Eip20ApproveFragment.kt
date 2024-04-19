@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -20,8 +21,6 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -39,11 +38,11 @@ import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
-class SwapApproveFragment : BaseComposeFragment() {
+class Eip20ApproveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapApproveScreen(navController, navController.requireInput())
+        Eip20ApproveScreen(navController, navController.requireInput())
     }
 
     @Parcelize
@@ -55,9 +54,15 @@ class SwapApproveFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun SwapApproveScreen(navController: NavController, input: SwapApproveFragment.Input) {
-    val viewModel = viewModel<ApproveViewModel>(
-        factory = ApproveViewModel.Factory(
+fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment.Input) {
+    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(R.id.eip20ApproveFragment)
+    }
+
+
+    val viewModel = viewModel<Eip20ApproveViewModel>(
+        viewModelStoreOwner = viewModelStoreOwner,
+        factory = Eip20ApproveViewModel.Factory(
             input.token,
             input.requiredAllowance,
             input.spenderAddress,
@@ -87,13 +92,8 @@ fun SwapApproveScreen(navController: NavController, input: SwapApproveFragment.I
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        navController.slideFromRightForResult<SwapApproveConfirmationFragment.Result>(
-                            R.id.swapApproveConfirmationFragment,
-                            SwapApproveConfirmationModule.Input(
-                                viewModel.getSendEvmData(),
-                                viewModel.blockchainType
-                            )
-                        ) {
+                        viewModel.freeze()
+                        navController.slideFromRightForResult<Eip20ApproveConfirmFragment.Result>(R.id.eip20ApproveConfirmFragment) {
                             navController.setNavigationResultX(it)
                             navController.popBackStack()
                         }

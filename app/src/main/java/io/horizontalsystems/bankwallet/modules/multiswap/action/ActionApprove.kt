@@ -1,13 +1,12 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.action
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
+import io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveConfirmFragment
+import io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveFragment
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
@@ -26,17 +25,16 @@ class ActionApprove(
     override fun getTitleInProgress() = stringResource(R.string.Swap_Unlocking)
 
     override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
-        val approveData = SwapApproveFragment.Input(
+        val approveData = Eip20ApproveFragment.Input(
             tokenIn,
             requiredAllowance,
             spenderAddress.eip55
         )
 
-        navController.slideFromBottomForResult<SwapApproveConfirmationFragment.Result>(
-            R.id.swapApproveFragment,
+        navController.slideFromBottomForResult<Eip20ApproveConfirmFragment.Result>(
+            R.id.eip20ApproveFragment,
             approveData
         ) {
-            Log.e("AAA", "result: $it")
             onActionCompleted.invoke()
         }
     }
