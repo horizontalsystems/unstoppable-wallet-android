@@ -20,6 +20,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -197,8 +198,23 @@ fun SwapConfirmScreen(navController: NavController) {
         ) {
             VSpacer(height = 12.dp)
             SectionUniversalLawrence {
-                TokenRow(uiState.tokenIn, uiState.amountIn, uiState.fiatAmountIn, uiState.currency, TokenRowType.In, false,)
-                TokenRow(uiState.tokenOut, uiState.amountOut, uiState.fiatAmountOut, uiState.currency, TokenRowType.Out)
+                TokenRow(
+                    token = uiState.tokenIn,
+                    amount = uiState.amountIn,
+                    fiatAmount = uiState.fiatAmountIn,
+                    currency = uiState.currency,
+                    borderTop = false,
+                    title = stringResource(R.string.Send_Confirmation_YouSend),
+                    amountColor = ComposeAppTheme.colors.leah,
+                )
+                TokenRow(
+                    token = uiState.tokenOut,
+                    amount = uiState.amountOut,
+                    fiatAmount = uiState.fiatAmountOut,
+                    currency = uiState.currency,
+                    title = stringResource(R.string.Swap_ToAmountTitle),
+                    amountColor = ComposeAppTheme.colors.remus,
+                )
             }
             uiState.amountOut?.let { amountOut ->
                 VSpacer(height = 16.dp)
@@ -298,18 +314,15 @@ private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subval
     }
 }
 
-enum class TokenRowType {
-    In, Out;
-}
-
 @Composable
-private fun TokenRow(
+fun TokenRow(
     token: Token,
     amount: BigDecimal?,
     fiatAmount: BigDecimal?,
     currency: Currency,
-    type: TokenRowType,
     borderTop: Boolean = true,
+    title: String,
+    amountColor: Color,
 ) {
     CellUniversal(borderTop = borderTop) {
         CoinImage(
@@ -319,30 +332,53 @@ private fun TokenRow(
         )
         HSpacer(width = 16.dp)
         Column {
-            val title = when (type) {
-                TokenRowType.In -> stringResource(R.string.Send_Confirmation_YouSend)
-                TokenRowType.Out -> stringResource(R.string.Swap_ToAmountTitle)
-            }
-
             subhead2_leah(text = title)
             VSpacer(height = 1.dp)
             caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 16.dp)
         Column(horizontalAlignment = Alignment.End) {
-            val color = when (type) {
-                TokenRowType.In -> ComposeAppTheme.colors.leah
-                TokenRowType.Out -> ComposeAppTheme.colors.remus
-            }
             Text(
                 text = amount?.let { CoinValue(token, it).getFormattedFull() } ?: "---",
                 style = ComposeAppTheme.typography.subhead1,
-                color = color,
+                color = amountColor,
             )
             fiatAmount?.let {
                 VSpacer(height = 1.dp)
                 caption_grey(text = CurrencyValue(currency, fiatAmount).getFormattedFull())
             }
+        }
+    }
+}
+
+@Composable
+fun TokenRowUnlimited(
+    token: Token,
+    borderTop: Boolean = true,
+    title: String,
+    amountColor: Color,
+) {
+    CellUniversal(borderTop = borderTop) {
+        CoinImage(
+            iconUrl = token.coin.imageUrl,
+            placeholder = token.iconPlaceholder,
+            modifier = Modifier.size(32.dp)
+        )
+        HSpacer(width = 16.dp)
+        Column {
+            subhead2_leah(text = title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+        }
+        HFillSpacer(minWidth = 16.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = "∞ ${token.coin.code}",
+                style = ComposeAppTheme.typography.subhead1,
+                color = amountColor,
+            )
+            VSpacer(height = 1.dp)
+            caption_grey(text = stringResource(id = R.string.Transaction_Unlimited))
         }
     }
 }

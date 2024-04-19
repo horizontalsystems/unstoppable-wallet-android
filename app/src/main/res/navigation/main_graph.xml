@@ -196,8 +196,14 @@
         android:id="@+id/addTokenFragment"
         android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
     <fragment
-        android:id="@+id/swapApproveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.SwapApproveFragment" />
+        android:id="@+id/eip20ApproveFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveFragment" />
+    <fragment
+        android:id="@+id/eip20ApproveConfirmFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveConfirmFragment" />
+    <fragment
+        android:id="@+id/eip20ApproveTransactionSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveTransactionSettingsFragment" />
     <fragment
         android:id="@+id/swapApproveConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
