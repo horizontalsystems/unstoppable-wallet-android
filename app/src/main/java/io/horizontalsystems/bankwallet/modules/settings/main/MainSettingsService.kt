@@ -4,11 +4,8 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
-import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
-import io.horizontalsystems.bankwallet.core.managers.LanguageManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.providers.Translator
-import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
@@ -20,13 +17,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
-import kotlinx.coroutines.rx2.asFlow
 
 class MainSettingsService(
     private val backupManager: IBackupManager,
-    private val languageManager: LanguageManager,
     private val systemInfoManager: ISystemInfoManager,
-    private val currencyManager: CurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
     private val wcSessionManager: WCSessionManager,
@@ -45,9 +39,6 @@ class MainSettingsService(
 
     val termsAccepted by termsManager::allTermsAccepted
     val termsAcceptedFlow by termsManager::termsAcceptedSignalFlow
-
-    private val baseCurrencySubject = BehaviorSubject.create<Currency>()
-    val baseCurrencyObservable: Observable<Currency> get() = baseCurrencySubject
 
     private val walletConnectSessionCountSubject = BehaviorSubject.create<Int>()
     val walletConnectSessionCountObservable: Observable<Int> get() = walletConnectSessionCountSubject
@@ -73,12 +64,6 @@ class MainSettingsService(
     val walletConnectSessionCount: Int
         get() = wcSessionManager.sessions.count()
 
-    val currentLanguageDisplayName: String
-        get() = languageManager.currentLanguageName
-
-    val baseCurrency: Currency
-        get() = currencyManager.baseCurrency
-
     val isPinSet: Boolean
         get() = pinComponent.isPinSet
 
@@ -91,11 +76,6 @@ class MainSettingsService(
         coroutineScope.launch {
             wcSessionManager.sessionsFlow.collect{
                 walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
-            }
-        }
-        coroutineScope.launch {
-            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
-                baseCurrencySubject.onNext(currencyManager.baseCurrency)
             }
         }
         coroutineScope.launch {

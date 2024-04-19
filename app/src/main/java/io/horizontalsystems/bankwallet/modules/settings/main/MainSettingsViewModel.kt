@@ -17,8 +17,6 @@ class MainSettingsViewModel(
     val securityCenterShowAlertLiveData = MutableLiveData(!service.isPinSet)
     val aboutAppShowAlertLiveData = MutableLiveData(!service.termsAccepted)
     val wcCounterLiveData = MutableLiveData<CounterType?>(null)
-    val baseCurrencyLiveData = MutableLiveData(service.baseCurrency)
-    val languageLiveData = MutableLiveData(service.currentLanguageDisplayName)
     val appVersion by service::appVersion
     val appWebPageLink by service::appWebPageLink
 
@@ -39,11 +37,6 @@ class MainSettingsViewModel(
         viewModelScope.launch {
             service.pinSetObservable.asFlow().collect {
                 securityCenterShowAlertLiveData.postValue(!it)
-            }
-        }
-        viewModelScope.launch {
-            service.baseCurrencyObservable.asFlow().collect {
-                baseCurrencyLiveData.postValue(it)
             }
         }
         viewModelScope.launch {

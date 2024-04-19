@@ -11,9 +11,7 @@ object MainSettingsModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = MainSettingsService(
                 App.backupManager,
-                App.languageManager,
                 App.systemInfoManager,
-                App.currencyManager,
                 App.termsManager,
                 App.pinComponent,
                 App.wcSessionManager,
