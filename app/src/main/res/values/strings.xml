@@ -933,6 +933,8 @@
     <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
+    <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
+    <string name="Settings_JoinUnstoppables_Description">Stay on top of Unstoppable happenings. Be the first to know about new features, user reported issues and things we work on!</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
