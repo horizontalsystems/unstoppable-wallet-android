@@ -145,7 +145,12 @@ class CoinOverviewViewModel(
             null
         }
 
-        fullCoin.tokens.sortedWith(
+        fullCoin.tokens
+            .filter { when(val tokenType = it.type){
+                is TokenType.Unsupported -> tokenType.reference.isNotBlank()
+                else -> true
+            } }
+            .sortedWith(
             compareBy<Token> { it.type.order }
                 .thenBy { it.blockchainType.order }
         )
