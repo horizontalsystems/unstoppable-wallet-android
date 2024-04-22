@@ -61,11 +61,10 @@ import io.horizontalsystems.marketkit.models.LinkType
 
 @Composable
 fun CoinOverviewScreen(
-    apiTag: String,
     fullCoin: FullCoin,
     navController: NavController
 ) {
-    val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin, apiTag) }
+    val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin) }
     val viewModel = viewModel<CoinOverviewViewModel>(factory = vmFactory)
     val chartViewModel = viewModel<ChartViewModel>(factory = vmFactory)
 

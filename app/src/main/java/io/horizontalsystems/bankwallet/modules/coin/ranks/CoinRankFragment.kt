@@ -53,7 +53,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryTogg
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -189,7 +188,7 @@ private fun LazyListScope.coinRankList(
             iconUrl = item.iconUrl,
             value = item.value,
             onClick = {
-                val arguments = CoinFragment.Input(item.coinUid, "coin_rank")
+                val arguments = CoinFragment.Input(item.coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
             }
         )

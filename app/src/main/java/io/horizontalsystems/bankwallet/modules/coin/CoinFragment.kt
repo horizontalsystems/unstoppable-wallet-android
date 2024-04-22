@@ -23,7 +23,12 @@ import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScree
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
+import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -35,11 +40,9 @@ class CoinFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val input = navController.getInput<Input>()
         val coinUid = input?.coinUid ?: ""
-        val apiTag = input?.apiTag ?: ""
 
         CoinScreen(
             coinUid,
-            apiTag,
             coinViewModel(coinUid),
             navController,
             childFragmentManager
@@ -56,19 +59,18 @@ class CoinFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val coinUid: String, val apiTag: String) : Parcelable
+    data class Input(val coinUid: String) : Parcelable
 }
 
 @Composable
 fun CoinScreen(
     coinUid: String,
-    apiTag: String,
     coinViewModel: CoinViewModel?,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
     if (coinViewModel != null) {
-        CoinTabs(apiTag, coinViewModel, navController, fragmentManager)
+        CoinTabs(coinViewModel, navController, fragmentManager)
     } else {
         CoinNotFound(coinUid, navController)
     }
@@ -77,7 +79,6 @@ fun CoinScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CoinTabs(
-    apiTag: String,
     viewModel: CoinViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
@@ -141,7 +142,6 @@ fun CoinTabs(
             when (tabs[page]) {
                 CoinModule.Tab.Overview -> {
                     CoinOverviewScreen(
-                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController
                     )
@@ -153,7 +153,6 @@ fun CoinTabs(
 
                 CoinModule.Tab.Details -> {
                     CoinAnalyticsScreen(
-                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController,
                         fragmentManager = fragmentManager

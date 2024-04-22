@@ -77,7 +77,7 @@ fun MarketFavoritesScreen(
                                 onAddFavorite = { /*not used */ },
                                 onRemoveFavorite = { uid -> viewModel.removeFromFavorites(uid) },
                                 onCoinClick = { coinUid ->
-                                    val arguments = CoinFragment.Input(coinUid, "market_watchlist")
+                                    val arguments = CoinFragment.Input(coinUid)
                                     navController.slideFromRight(R.id.coinFragment, arguments)
                                 },
                                 preItems = {
