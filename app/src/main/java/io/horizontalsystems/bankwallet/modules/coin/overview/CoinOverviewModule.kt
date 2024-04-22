@@ -6,14 +6,17 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.chart.ChartCurrencyValueFormatterSignificant
 import io.horizontalsystems.bankwallet.modules.chart.ChartModule
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
-import io.horizontalsystems.bankwallet.modules.coin.*
+import io.horizontalsystems.bankwallet.modules.coin.CoinDataItem
+import io.horizontalsystems.bankwallet.modules.coin.CoinLink
+import io.horizontalsystems.bankwallet.modules.coin.CoinViewFactory
+import io.horizontalsystems.bankwallet.modules.coin.RoiViewItem
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
 import io.horizontalsystems.marketkit.models.Token
 
 object CoinOverviewModule {
 
-    class Factory(private val fullCoin: FullCoin, private val apiTag: String) : ViewModelProvider.Factory {
+    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
@@ -22,7 +25,6 @@ object CoinOverviewModule {
                     val currency = App.currencyManager.baseCurrency
                     val service = CoinOverviewService(
                         fullCoin,
-                        apiTag,
                         App.marketKit,
                         App.currencyManager,
                         App.appConfigProvider,
