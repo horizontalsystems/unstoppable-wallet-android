@@ -23,7 +23,7 @@ class MarketFavoritesRepository(
         var marketItems = listOf<MarketItem>()
         if (favoriteCoins.isNotEmpty()) {
             val favoriteCoinUids = favoriteCoins.map { it.coinUid }
-            marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code, "watchlist").blockingGet()
+            marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code).blockingGet()
                 .map { marketInfo ->
                     MarketItem.createFromCoinMarket(
                         marketInfo = marketInfo,

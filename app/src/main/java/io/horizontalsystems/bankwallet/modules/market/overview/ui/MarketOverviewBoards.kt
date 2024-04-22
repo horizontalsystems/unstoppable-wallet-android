@@ -41,7 +41,7 @@ fun BoardsView(
         {
             navController.slideFromRight(
                 R.id.coinFragment,
-                CoinFragment.Input(it.coinUid, "market_overview")
+                CoinFragment.Input(it.coinUid)
             )
         }
     }

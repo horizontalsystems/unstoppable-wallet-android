@@ -141,7 +141,7 @@ fun TransactionInfoSection(
                                 badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
                                 onClick = viewItem.coinUid?.let {
-                                    { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it, "transaction_info")) }
+                                    { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it)) }
                                 }
                             )
                         }
