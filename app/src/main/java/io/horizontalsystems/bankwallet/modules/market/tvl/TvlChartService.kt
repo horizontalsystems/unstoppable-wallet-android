@@ -15,7 +15,15 @@ class TvlChartService(
 
     override val initialChartInterval = HsTimePeriod.Day1
 
-    override val chartIntervals = HsTimePeriod.values().toList()
+    override val chartIntervals = listOf(
+        HsTimePeriod.Day1,
+        HsTimePeriod.Week1,
+        HsTimePeriod.Month1,
+        HsTimePeriod.Month3,
+        HsTimePeriod.Month6,
+        HsTimePeriod.Year1,
+        HsTimePeriod.Year2,
+    )
     override val chartViewType = ChartViewType.Line
 
     var chain: TvlModule.Chain = TvlModule.Chain.All
