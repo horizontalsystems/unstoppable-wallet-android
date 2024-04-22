@@ -3,7 +3,11 @@ package cash.p.terminal.modules.market.metricspage
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -17,7 +21,11 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.requireInput
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
@@ -27,7 +35,14 @@ import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.MarketCoinClear
+import cash.p.terminal.ui.compose.components.MenuItem
 
 class MetricsPageFragment : BaseComposeFragment() {
 
@@ -42,7 +57,7 @@ class MetricsPageFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.Input(coinUid, "market_metrics")
+        val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
     }

@@ -55,7 +55,7 @@ class MarketCategoryFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.Input(coinUid, "market_category")
+        val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
     }

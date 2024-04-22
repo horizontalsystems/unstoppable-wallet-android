@@ -6,14 +6,17 @@ import cash.p.terminal.core.App
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterSignificant
 import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
-import cash.p.terminal.modules.coin.*
+import cash.p.terminal.modules.coin.CoinDataItem
+import cash.p.terminal.modules.coin.CoinLink
+import cash.p.terminal.modules.coin.CoinViewFactory
+import cash.p.terminal.modules.coin.RoiViewItem
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
 import io.horizontalsystems.marketkit.models.Token
 
 object CoinOverviewModule {
 
-    class Factory(private val fullCoin: FullCoin, private val apiTag: String) : ViewModelProvider.Factory {
+    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
@@ -22,7 +25,6 @@ object CoinOverviewModule {
                     val currency = App.currencyManager.baseCurrency
                     val service = CoinOverviewService(
                         fullCoin,
-                        apiTag,
                         App.marketKit,
                         App.currencyManager,
                         App.appConfigProvider,

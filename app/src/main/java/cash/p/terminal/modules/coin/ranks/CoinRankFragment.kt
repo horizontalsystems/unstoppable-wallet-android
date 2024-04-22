@@ -53,7 +53,6 @@ import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
 import cash.p.terminal.ui.compose.components.DescriptionCard
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HeaderSorting
-import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
@@ -189,7 +188,7 @@ private fun LazyListScope.coinRankList(
             iconUrl = item.iconUrl,
             value = item.value,
             onClick = {
-                val arguments = CoinFragment.Input(item.coinUid, "coin_rank")
+                val arguments = CoinFragment.Input(item.coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
             }
         )

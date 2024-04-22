@@ -52,13 +52,12 @@ import io.horizontalsystems.marketkit.models.FullCoin
 
 @Composable
 fun CoinAnalyticsScreen(
-    apiTag: String,
     fullCoin: FullCoin,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
     val viewModel =
-        viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin, apiTag))
+        viewModel<CoinAnalyticsViewModel>(factory = CoinAnalyticsModule.Factory(fullCoin))
     val uiState = viewModel.uiState
 
     HSSwipeRefresh(
