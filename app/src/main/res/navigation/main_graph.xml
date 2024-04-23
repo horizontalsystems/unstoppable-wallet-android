@@ -211,9 +211,6 @@
         android:id="@+id/eip20ApproveTransactionSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveTransactionSettingsFragment" />
     <fragment
-        android:id="@+id/swapApproveConfirmationFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
-    <fragment
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"/>
     <fragment
