@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,19 +35,15 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -97,204 +90,170 @@ fun SwapConfirmScreen(navController: NavController) {
 
     val uiState = viewModel.uiState
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Swap_Confirm_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = navController::popBackStack)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Settings_Title),
-                        icon = R.drawable.ic_manage_2_24,
-                        onClick = {
-                            navController.slideFromRight(R.id.swapTransactionSettings)
+    ConfirmTransactionScreen(
+        onClickBack = navController::popBackStack,
+        onClickSettings = {
+            navController.slideFromRight(R.id.swapTransactionSettings)
+        },
+        onClickClose = null,
+        buttonsSlot = {
+            if (uiState.loading) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Alert_Loading),
+                    enabled = false,
+                    onClick = { },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
+            } else if (!uiState.validQuote) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Refresh),
+                    onClick = {
+                        viewModel.refresh()
+                    },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = "Quote is invalid")
+            } else if (uiState.expired) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Refresh),
+                    onClick = {
+                        viewModel.refresh()
+                    },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
+            } else {
+                var buttonEnabled by remember { mutableStateOf(true) }
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Swap),
+                    enabled = buttonEnabled,
+                    onClick = {
+                        coroutineScope.launch {
+                            buttonEnabled = false
+                            HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
+
+                            val result = try {
+                                viewModel.swap()
+
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                delay(1200)
+                                SwapConfirmFragment.Result(true)
+                            } catch (t: Throwable) {
+                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                SwapConfirmFragment.Result(false)
+                            }
+
+                            buttonEnabled = true
+                            navController.setNavigationResultX(result)
+                            navController.popBackStack()
                         }
-                    )
-                ),
-            )
-        },
-        bottomBar = {
-            ButtonsGroupWithShade {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    if (uiState.loading) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Alert_Loading),
-                            enabled = false,
-                            onClick = { },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
-                    } else if (!uiState.validQuote) {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Button_Refresh),
-                            onClick = {
-                                viewModel.refresh()
-                            },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Quote is invalid")
-                    } else if (uiState.expired) {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Button_Refresh),
-                            onClick = {
-                                viewModel.refresh()
-                            },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
-                    } else {
-                        var buttonEnabled by remember { mutableStateOf(true) }
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Swap),
-                            enabled = buttonEnabled,
-                            onClick = {
-                                coroutineScope.launch {
-                                    buttonEnabled = false
-                                    HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
-
-                                    val result = try {
-                                        viewModel.swap()
-
-                                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                                        delay(1200)
-                                        SwapConfirmFragment.Result(true)
-                                    } catch (t: Throwable) {
-                                        HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                                        SwapConfirmFragment.Result(false)
-                                    }
-
-                                    buttonEnabled = true
-                                    navController.setNavigationResultX(result)
-                                    navController.popBackStack()
-                                }
-                            },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
-                    }
-                }
+                    },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
             }
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
-        ) {
-            VSpacer(height = 12.dp)
-            SectionUniversalLawrence {
-                TokenRow(
-                    token = uiState.tokenIn,
-                    amount = uiState.amountIn,
-                    fiatAmount = uiState.fiatAmountIn,
-                    currency = uiState.currency,
-                    borderTop = false,
-                    title = stringResource(R.string.Send_Confirmation_YouSend),
-                    amountColor = ComposeAppTheme.colors.leah,
-                )
-                TokenRow(
-                    token = uiState.tokenOut,
-                    amount = uiState.amountOut,
-                    fiatAmount = uiState.fiatAmountOut,
-                    currency = uiState.currency,
-                    title = stringResource(R.string.Swap_ToAmountTitle),
-                    amountColor = ComposeAppTheme.colors.remus,
-                )
-            }
-            uiState.amountOut?.let { amountOut ->
-                VSpacer(height = 16.dp)
-                SectionUniversalLawrence {
-                    PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut)
-                    PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
-                    uiState.amountOutMin?.let { amountOutMin ->
-                        val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
-                            CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
-                        } ?: "---"
-
-                        SwapInfoRow(
-                            borderTop = true,
-                            title = stringResource(id = R.string.Swap_MinimumReceived),
-                            value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
-                            subvalue = subvalue
-                        )
-                    }
-                    uiState.quoteFields.forEach {
-                        it.GetContent(navController, true)
-                    }
-                }
-            }
-
-            val transactionFields = uiState.transactionFields
-            if (transactionFields.isNotEmpty()) {
-                VSpacer(height = 16.dp)
-                SectionUniversalLawrence {
-                    transactionFields.forEachIndexed { index, field ->
-                        field.GetContent(navController, index != 0)
-                    }
-                }
-            }
-
+        SectionUniversalLawrence {
+            TokenRow(
+                token = uiState.tokenIn,
+                amount = uiState.amountIn,
+                fiatAmount = uiState.fiatAmountIn,
+                currency = uiState.currency,
+                borderTop = false,
+                title = stringResource(R.string.Send_Confirmation_YouSend),
+                amountColor = ComposeAppTheme.colors.leah,
+            )
+            TokenRow(
+                token = uiState.tokenOut,
+                amount = uiState.amountOut,
+                fiatAmount = uiState.fiatAmountOut,
+                currency = uiState.currency,
+                title = stringResource(R.string.Swap_ToAmountTitle),
+                amountColor = ComposeAppTheme.colors.remus,
+            )
+        }
+        uiState.amountOut?.let { amountOut ->
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
-                QuoteInfoRow(
-                    title = {
-                        val title = stringResource(id = R.string.FeeSettings_NetworkFee)
-                        val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+                PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut)
+                PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
+                uiState.amountOutMin?.let { amountOutMin ->
+                    val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
+                        CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
+                    } ?: "---"
 
-                        subhead2_grey(text = title)
+                    SwapInfoRow(
+                        borderTop = true,
+                        title = stringResource(id = R.string.Swap_MinimumReceived),
+                        value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
+                        subvalue = subvalue
+                    )
+                }
+                uiState.quoteFields.forEach {
+                    it.GetContent(navController, true)
+                }
+            }
+        }
 
-                        Image(
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .clickable(
-                                    onClick = {
-                                        navController.slideFromBottom(
-                                            R.id.feeSettingsInfoDialog,
-                                            FeeSettingsInfoDialog.Input(title, infoText)
-                                        )
-                                    },
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                )
-                            ,
-                            painter = painterResource(id = R.drawable.ic_info_20),
-                            contentDescription = ""
-                        )
+        val transactionFields = uiState.transactionFields
+        if (transactionFields.isNotEmpty()) {
+            VSpacer(height = 16.dp)
+            SectionUniversalLawrence {
+                transactionFields.forEachIndexed { index, field ->
+                    field.GetContent(navController, index != 0)
+                }
+            }
+        }
 
-                    },
-                    value = {
-                        val primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---"
-                        val secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+        VSpacer(height = 16.dp)
+        SectionUniversalLawrence {
+            QuoteInfoRow(
+                title = {
+                    val title = stringResource(id = R.string.FeeSettings_NetworkFee)
+                    val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
 
-                        Column(horizontalAlignment = Alignment.End) {
-                            subhead2_leah(text = primary)
-                            VSpacer(height = 1.dp)
-                            subhead2_grey(text = secondary)
-                        }
+                    subhead2_grey(text = title)
+
+                    Image(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .clickable(
+                                onClick = {
+                                    navController.slideFromBottom(
+                                        R.id.feeSettingsInfoDialog,
+                                        FeeSettingsInfoDialog.Input(title, infoText)
+                                    )
+                                },
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            )
+                        ,
+                        painter = painterResource(id = R.drawable.ic_info_20),
+                        contentDescription = ""
+                    )
+
+                },
+                value = {
+                    val primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---"
+                    val secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+
+                    Column(horizontalAlignment = Alignment.End) {
+                        subhead2_leah(text = primary)
+                        VSpacer(height = 1.dp)
+                        subhead2_grey(text = secondary)
                     }
-                )
-            }
+                }
+            )
+        }
 
-            if (uiState.cautions.isNotEmpty()) {
-                Cautions(cautions = uiState.cautions)
-            }
-
-            VSpacer(height = 32.dp)
+        if (uiState.cautions.isNotEmpty()) {
+            Cautions(cautions = uiState.cautions)
         }
     }
 }
