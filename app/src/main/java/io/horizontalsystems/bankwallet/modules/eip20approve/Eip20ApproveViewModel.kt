@@ -75,14 +75,7 @@ class Eip20ApproveViewModel(
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
                 sendTransactionState = transactionState
-
-//                loading = transactionState.loading
-
                 emitState()
-
-//                if (sendTransactionState.sendable) {
-//                    timerService.start(10)
-//                }
             }
         }
 
