@@ -7,6 +7,7 @@ import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Single
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -77,6 +78,8 @@ class EvmFeeService(
                 try {
                     val transaction = feeDataSingle(gasPriceInfo, transactionData).await()
                     sync(transaction)
+                } catch (e: CancellationException) {
+                    // do nothing
                 } catch (e: Throwable) {
                     _transactionStatusFlow.tryEmit(DataState.Error(e))
                 }
