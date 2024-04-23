@@ -24,6 +24,9 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -101,13 +104,19 @@ private fun SearchResultsScreen(
                             scrollToTop = scrollToTopAfterUpdate,
                             onAddFavorite = { uid ->
                                 viewModel.onAddFavorite(uid)
+
+                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.AddToWatchlist(uid))
                             },
                             onRemoveFavorite = { uid ->
                                 viewModel.onRemoveFavorite(uid)
+
+                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.RemoveFromWatchlist(uid))
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragment.Input(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.OpenCoin(coinUid))
                             },
                             preItems = {
                                 stickyHeader {
