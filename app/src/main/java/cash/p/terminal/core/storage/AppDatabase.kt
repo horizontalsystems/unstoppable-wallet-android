@@ -6,8 +6,46 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import cash.p.terminal.core.providers.CexAssetRaw
-import cash.p.terminal.core.storage.migrations.*
-import cash.p.terminal.entities.*
+import cash.p.terminal.core.storage.migrations.Migration_31_32
+import cash.p.terminal.core.storage.migrations.Migration_32_33
+import cash.p.terminal.core.storage.migrations.Migration_33_34
+import cash.p.terminal.core.storage.migrations.Migration_34_35
+import cash.p.terminal.core.storage.migrations.Migration_35_36
+import cash.p.terminal.core.storage.migrations.Migration_36_37
+import cash.p.terminal.core.storage.migrations.Migration_37_38
+import cash.p.terminal.core.storage.migrations.Migration_38_39
+import cash.p.terminal.core.storage.migrations.Migration_39_40
+import cash.p.terminal.core.storage.migrations.Migration_40_41
+import cash.p.terminal.core.storage.migrations.Migration_41_42
+import cash.p.terminal.core.storage.migrations.Migration_42_43
+import cash.p.terminal.core.storage.migrations.Migration_43_44
+import cash.p.terminal.core.storage.migrations.Migration_44_45
+import cash.p.terminal.core.storage.migrations.Migration_45_46
+import cash.p.terminal.core.storage.migrations.Migration_46_47
+import cash.p.terminal.core.storage.migrations.Migration_47_48
+import cash.p.terminal.core.storage.migrations.Migration_48_49
+import cash.p.terminal.core.storage.migrations.Migration_49_50
+import cash.p.terminal.core.storage.migrations.Migration_50_51
+import cash.p.terminal.core.storage.migrations.Migration_51_52
+import cash.p.terminal.core.storage.migrations.Migration_52_53
+import cash.p.terminal.core.storage.migrations.Migration_53_54
+import cash.p.terminal.core.storage.migrations.Migration_54_55
+import cash.p.terminal.core.storage.migrations.Migration_55_56
+import cash.p.terminal.core.storage.migrations.Migration_56_57
+import cash.p.terminal.core.storage.migrations.Migration_57_58
+import cash.p.terminal.core.storage.migrations.Migration_58_59
+import cash.p.terminal.entities.ActiveAccount
+import cash.p.terminal.entities.BlockchainSettingRecord
+import cash.p.terminal.entities.EnabledWallet
+import cash.p.terminal.entities.EnabledWalletCache
+import cash.p.terminal.entities.EvmAddressLabel
+import cash.p.terminal.entities.EvmMethodLabel
+import cash.p.terminal.entities.EvmSyncSourceRecord
+import cash.p.terminal.entities.LogEntry
+import cash.p.terminal.entities.RestoreSettingRecord
+import cash.p.terminal.entities.StatRecord
+import cash.p.terminal.entities.SyncerState
+import cash.p.terminal.entities.TokenAutoEnabledBlockchain
 import cash.p.terminal.entities.nft.NftAssetBriefMetadataRecord
 import cash.p.terminal.entities.nft.NftAssetRecord
 import cash.p.terminal.entities.nft.NftCollectionRecord
@@ -18,10 +56,10 @@ import cash.p.terminal.modules.pin.core.Pin
 import cash.p.terminal.modules.pin.core.PinDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
-import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
+import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 58, exportSchema = false, entities = [
+@Database(version = 59, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -44,6 +82,7 @@ import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
     CexAssetRaw::class,
     ChartIndicatorSetting::class,
     Pin::class,
+    StatRecord::class
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -67,6 +106,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun syncerStateDao(): SyncerStateDao
     abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
     abstract fun pinDao(): PinDao
+    abstract fun statsDao(): StatsDao
 
     companion object {
 
@@ -111,6 +151,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_55_56,
                             Migration_56_57,
                             Migration_57_58,
+                            Migration_58_59
                     )
                     .build()
         }

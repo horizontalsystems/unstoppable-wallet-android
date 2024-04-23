@@ -268,4 +268,10 @@ class MarketKitWrapper(
     fun requestPersonalSupport(username: String): Single<Response<Void>> =
         requestWithAuthToken { marketKit.requestPersonalSupport(it, username) }
 
+    // Stats
+
+    fun sendStats(stats: String, appVersion: String, appId: String?): Single<Unit> {
+        return marketKit.sendStats(stats, appVersion, appId)
+    }
+
 }

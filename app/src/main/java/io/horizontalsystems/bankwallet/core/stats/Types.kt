@@ -1,8 +1,8 @@
-package io.horizontalsystems.bankwallet.core.stats
+package cash.p.terminal.core.stats
 
-import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
-import io.horizontalsystems.bankwallet.core.derivation
-import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
+import cash.p.terminal.core.bitcoinCashCoinType
+import cash.p.terminal.core.derivation
+import cash.p.terminal.entities.BtcRestoreMode
 import io.horizontalsystems.marketkit.models.Token
 
 enum class StatPage(val key: String) {

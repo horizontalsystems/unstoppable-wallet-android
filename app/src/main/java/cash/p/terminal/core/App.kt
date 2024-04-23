@@ -74,6 +74,7 @@ import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.EvmLabelProvider
 import cash.p.terminal.core.providers.FeeRateProvider
 import cash.p.terminal.core.providers.FeeTokenProvider
+import cash.p.terminal.core.stats.StatsManager
 import cash.p.terminal.core.storage.AccountsStorage
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
@@ -189,6 +190,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
         lateinit var spamManager: SpamManager
+        lateinit var statsManager: StatsManager
     }
 
     override fun onCreate() {
@@ -354,7 +356,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             pinDbStorage = PinDbStorage(appDatabase.pinDao())
         )
 
-        backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {
+        statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider)
+        backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent, statsManager).apply {
             backgroundManager.registerListener(this)
         }
 
