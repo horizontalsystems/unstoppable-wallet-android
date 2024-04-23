@@ -6,15 +6,13 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.entities.CoinValue
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import io.horizontalsystems.bankwallet.modules.swap.approve.Eip20RevokeConfirmFragment
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class ActionRevoke(
     private val token: Token,
-    private val sendEvmData: SendEvmData,
+    private val spenderAddress: String,
     override val inProgress: Boolean,
     private val allowance: BigDecimal
 ) : ISwapProviderAction {
@@ -30,9 +28,9 @@ class ActionRevoke(
         stringResource(R.string.Approve_RevokeAndApproveInfo, CoinValue(token, allowance).getFormattedFull())
 
     override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
-        navController.slideFromBottomForResult<SwapApproveConfirmationFragment.Result>(
-            R.id.swapApproveConfirmationFragment,
-            SwapApproveConfirmationModule.Input(sendEvmData, token.blockchainType, false)
+        navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
+            R.id.eip20RevokeConfirmFragment,
+            Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
         ) {
             onActionCompleted.invoke()
         }

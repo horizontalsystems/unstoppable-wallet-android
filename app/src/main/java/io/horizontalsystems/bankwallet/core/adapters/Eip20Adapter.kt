@@ -87,6 +87,10 @@ class Eip20Adapter(
                 }
     }
 
+    fun buildRevokeTransactionData(spenderAddress: Address): TransactionData {
+        return eip20Kit.buildApproveTransactionData(spenderAddress, BigInteger.ZERO)
+    }
+
     fun buildApproveTransactionData(spenderAddress: Address, amount: BigDecimal): TransactionData {
         val amountBigInt = amount.movePointRight(decimal).toBigInteger()
         return eip20Kit.buildApproveTransactionData(spenderAddress, amountBigInt)

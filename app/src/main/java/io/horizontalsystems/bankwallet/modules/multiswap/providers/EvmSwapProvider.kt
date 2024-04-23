@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTr
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionApprove
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ActionRevoke
 import io.horizontalsystems.bankwallet.modules.multiswap.action.ISwapProviderAction
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -14,7 +13,6 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
-import java.math.BigInteger
 
 abstract class EvmSwapProvider : IMultiSwapProvider {
     protected suspend fun getAllowance(token: Token, spenderAddress: Address): BigDecimal? {
@@ -45,14 +43,10 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
         val revoke = allowance > BigDecimal.ZERO && isUsdt(token)
 
         return if (revoke) {
-            val sendEvmData = SendEvmData(
-                eip20Adapter.eip20Kit.buildApproveTransactionData(routerAddress, BigInteger.ZERO)
-            )
-
             val revokeInProgress = approveTransaction != null && approveTransaction.value.zeroValue
             ActionRevoke(
                 token,
-                sendEvmData,
+                routerAddress.eip55,
                 revokeInProgress,
                 allowance
             )
@@ -60,7 +54,7 @@ abstract class EvmSwapProvider : IMultiSwapProvider {
             val approveInProgress = approveTransaction != null && !approveTransaction.value.zeroValue
             ActionApprove(
                 amountIn,
-                routerAddress,
+                routerAddress.eip55,
                 token,
                 approveInProgress
             )
