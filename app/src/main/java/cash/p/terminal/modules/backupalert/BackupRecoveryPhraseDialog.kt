@@ -26,6 +26,9 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Account
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimary
@@ -85,6 +88,8 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 iconTint = ComposeAppTheme.colors.dark,
                 onClick = {
                     navController.slideFromBottom(R.id.backupKeyFragment, account)
+
+                    stat(page = StatPage.BackupPromptAfterCreate, event = StatEvent.Open(StatPage.ManualBackup))
                 }
             )
             VSpacer(12.dp)
@@ -97,6 +102,8 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 iconTint = ComposeAppTheme.colors.claude,
                 onClick = {
                     navController.slideFromBottom(R.id.backupLocalFragment, account)
+
+                    stat(page = StatPage.BackupPromptAfterCreate, event = StatEvent.Open(StatPage.FileBackup))
                 }
             )
             VSpacer(12.dp)

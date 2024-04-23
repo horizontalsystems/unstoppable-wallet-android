@@ -41,6 +41,9 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -253,6 +256,8 @@ private fun MainScreen(
                     R.id.backupRequiredDialog,
                     BackupRequiredDialog.Input(wcSupportState.account, text)
                 )
+
+                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
             }
 
             is SupportState.NotSupported -> {

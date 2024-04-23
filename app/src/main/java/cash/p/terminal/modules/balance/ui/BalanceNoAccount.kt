@@ -24,6 +24,9 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
@@ -63,6 +66,8 @@ fun BalanceNoAccount(navController: NavController) {
             onClick = {
                 navController.navigateWithTermsAccepted {
                     navController.slideFromRight(R.id.createAccountFragment)
+
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
                 }
             }
         )
@@ -75,6 +80,8 @@ fun BalanceNoAccount(navController: NavController) {
             onClick = {
                 navController.navigateWithTermsAccepted {
                     navController.slideFromRight(R.id.importWalletFragment)
+
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
                 }
             }
         )
@@ -86,6 +93,8 @@ fun BalanceNoAccount(navController: NavController) {
             title = stringResource(R.string.ManageAccounts_WatchAddress),
             onClick = {
                 navController.slideFromRight(R.id.watchAddressFragment)
+
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
             }
         )
 

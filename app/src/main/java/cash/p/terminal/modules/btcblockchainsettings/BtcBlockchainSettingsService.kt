@@ -1,6 +1,9 @@
 package cash.p.terminal.modules.btcblockchainsettings
 
 import cash.p.terminal.core.managers.BtcBlockchainManager
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.BtcRestoreMode
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
@@ -24,6 +27,8 @@ class BtcBlockchainSettingsService(
     fun save() {
         if (restoreMode != btcBlockchainManager.restoreMode(blockchain.type)) {
             btcBlockchainManager.save(restoreMode, blockchain.type)
+
+            stat(page = StatPage.BlockchainSettingsBtc, event = StatEvent.SwitchBtcSource(blockchain.uid, restoreMode))
         }
     }
 

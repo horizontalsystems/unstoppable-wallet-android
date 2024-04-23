@@ -22,6 +22,9 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -100,14 +103,20 @@ private fun onClick(
     when (item.blockchainItem) {
         is BlockchainSettingsModule.BlockchainItem.Btc -> {
             navController.slideFromBottom(R.id.btcBlockchainSettingsFragment, item.blockchainItem.blockchain)
+
+            stat(page = StatPage.BlockchainSettings, event = StatEvent.OpenBlockchainSettingsBtc(item.blockchainItem.blockchain.uid))
         }
 
         is BlockchainSettingsModule.BlockchainItem.Evm -> {
             navController.slideFromBottom(R.id.evmNetworkFragment, item.blockchainItem.blockchain)
+
+            stat(page = StatPage.BlockchainSettings, event = StatEvent.OpenBlockchainSettingsEvm(item.blockchainItem.blockchain.uid))
         }
 
         is BlockchainSettingsModule.BlockchainItem.Solana -> {
             navController.slideFromBottom(R.id.solanaNetworkFragment)
+
+            stat(page = StatPage.BlockchainSettings, event = StatEvent.Open(StatPage.BlockchainSettingsSolana))
         }
     }
 }

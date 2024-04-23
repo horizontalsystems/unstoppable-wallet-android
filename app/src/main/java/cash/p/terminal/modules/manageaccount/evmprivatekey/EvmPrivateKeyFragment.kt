@@ -1,10 +1,20 @@
 package cash.p.terminal.modules.manageaccount.evmprivatekey
 
 import android.os.Parcelable
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -14,12 +24,19 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.managers.FaqManager
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.manageaccount.ui.ActionButton
 import cash.p.terminal.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import cash.p.terminal.modules.manageaccount.ui.HidableContent
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -62,6 +79,8 @@ private fun EvmPrivateKeyScreen(
                         TextHelper.copyText(evmPrivateKey)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
+
+                        stat(page = StatPage.EvmPrivateKey, event = StatEvent.Copy(StatEntity.EvmPrivateKey))
                     }
                 },
                 onCancel = {
@@ -84,6 +103,8 @@ private fun EvmPrivateKeyScreen(
                         icon = R.drawable.ic_info_24,
                         onClick = {
                             FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+
+                            stat(page = StatPage.EvmPrivateKey, event = StatEvent.Open(StatPage.Info))
                         }
                     )
                 )
@@ -101,7 +122,9 @@ private fun EvmPrivateKeyScreen(
                     text = stringResource(R.string.PrivateKeys_NeverShareWarning)
                 )
                 Spacer(Modifier.height(24.dp))
-                HidableContent(evmPrivateKey, stringResource(R.string.EvmPrivateKey_ShowPrivateKey))
+                HidableContent(evmPrivateKey, stringResource(R.string.EvmPrivateKey_ShowPrivateKey)) {
+                    stat(page = StatPage.EvmPrivateKey, event = StatEvent.ToggleHidden)
+                }
             }
             ActionButton(R.string.Alert_Copy) {
                 coroutineScope.launch {

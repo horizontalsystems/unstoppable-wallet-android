@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.swap.settings.Caution
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
@@ -64,6 +67,8 @@ class AddRpcViewModel(
         evmSyncSourceManager.saveSyncSource(blockchain.type, url, auth)
 
         viewState = AddRpcViewState(null, true)
+
+        stat(page = StatPage.BlockchainSettingsEvmAdd, event = StatEvent.AddEvmSource(blockchain.uid))
     }
 
     private fun syncState() {

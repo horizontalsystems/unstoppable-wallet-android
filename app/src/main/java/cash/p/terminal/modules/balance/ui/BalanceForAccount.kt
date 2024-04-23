@@ -33,6 +33,9 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.backupalert.BackupAlert
@@ -131,6 +134,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                     when (val state = viewModel.getWalletConnectSupportState()) {
                                         WCManager.SupportState.Supported -> {
                                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
+
+                                            stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ScanQrCode))
                                         }
 
                                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
@@ -143,6 +148,8 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                                 R.id.backupRequiredDialog,
                                                 BackupRequiredDialog.Input(state.account, text)
                                             )
+
+                                            stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.BackupRequired))
                                         }
 
                                         is WCManager.SupportState.NotSupported -> {
@@ -200,6 +207,8 @@ fun BalanceTitleRow(
                     R.id.manageAccountsFragment,
                     ManageAccountsModule.Mode.Switcher
                 )
+
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ManageWallets))
             },
         verticalAlignment = Alignment.CenterVertically
     ) {

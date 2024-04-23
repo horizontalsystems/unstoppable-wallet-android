@@ -12,6 +12,9 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.core.utils.AddressUriResult
@@ -157,6 +160,8 @@ class BalanceViewModel(
             return
         }
 
+        stat(page = StatPage.Balance, event = StatEvent.Refresh)
+
         viewModelScope.launch {
             isRefreshing = true
             emitState()
@@ -185,6 +190,8 @@ class BalanceViewModel(
 
     fun disable(viewItem: BalanceViewItem2) {
         service.disable(viewItem.wallet)
+
+        stat(page = StatPage.Balance, event = StatEvent.DisableToken(viewItem.wallet.token))
     }
 
     fun getSyncErrorDetails(viewItem: BalanceViewItem2): SyncError = when {

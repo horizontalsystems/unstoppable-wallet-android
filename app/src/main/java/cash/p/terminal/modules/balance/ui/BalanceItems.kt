@@ -50,6 +50,9 @@ import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceSortType
 import cash.p.terminal.modules.balance.BalanceUiState
@@ -200,6 +203,8 @@ fun BalanceItems(
                 R.id.tokenBalanceFragment,
                 it.wallet
             )
+
+            stat(page = StatPage.Balance, event = StatEvent.OpenTokenPage(it.wallet.token))
         }
     }
 
@@ -241,12 +246,16 @@ fun BalanceItems(
                         {
                             viewModel.toggleBalanceVisibility()
                             HudHelper.vibrate(context)
+
+                            stat(page = StatPage.Balance, event = StatEvent.ToggleBalanceHidden)
                         }
                     },
                     onClickSubtitle = remember {
                         {
                             viewModel.toggleTotalType()
                             HudHelper.vibrate(context)
+
+                            stat(page = StatPage.Balance, event = StatEvent.ToggleConversionCoin)
                         }
                     }
                 )
@@ -263,6 +272,8 @@ fun BalanceItems(
                             title = stringResource(R.string.Balance_Send),
                             onClick = {
                                 navController.slideFromRight(R.id.sendTokenSelectFragment)
+
+                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.SendTokenList))
                             }
                         )
                         HSpacer(8.dp)
@@ -273,6 +284,8 @@ fun BalanceItems(
                                 when (val receiveAllowedState = viewModel.getReceiveAllowedState()) {
                                     ReceiveAllowedState.Allowed -> {
                                         navController.slideFromRight(R.id.receiveFragment)
+
+                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ReceiveTokenList))
                                     }
 
                                     is ReceiveAllowedState.BackupRequired -> {
@@ -285,6 +298,8 @@ fun BalanceItems(
                                             R.id.backupRequiredDialog,
                                             BackupRequiredDialog.Input(account, text)
                                         )
+
+                                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.BackupRequired))
                                     }
 
                                     null -> Unit
@@ -297,6 +312,8 @@ fun BalanceItems(
                             contentDescription = stringResource(R.string.Swap),
                             onClick = {
                                 navController.slideFromRight(R.id.multiswap)
+
+                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
                             }
                         )
                     }
@@ -335,6 +352,8 @@ fun BalanceItems(
                         contentDescription = stringResource(R.string.ManageCoins_title),
                         onClick = {
                             navController.slideFromRight(R.id.manageWalletsFragment)
+
+                            stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.CoinManager))
                         }
                     )
 

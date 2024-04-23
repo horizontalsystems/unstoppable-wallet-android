@@ -6,6 +6,10 @@ import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.isNative
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
@@ -38,6 +42,8 @@ class BalanceService(
             localStorage.sortType = value
 
             sortAndEmitItems()
+
+            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(value.statSortType))
         }
 
     var isWatchAccount = false

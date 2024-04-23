@@ -68,6 +68,7 @@ fun ActionButton(title: Int, onClick: () -> Unit) {
 fun HidableContent(
     content: String,
     hideScreenText: String? = null,
+    onToggleHidden: (() -> Unit)? = null
 ) {
     var hidden by remember { mutableStateOf(hideScreenText != null) }
     Box(
@@ -76,7 +77,10 @@ fun HidableContent(
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
             .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
-            .clickable(enabled = hideScreenText != null, onClick = { hidden = !hidden })
+            .clickable(enabled = hideScreenText != null, onClick = {
+                hidden = !hidden
+                onToggleHidden?.invoke()
+            })
     ) {
 
         D2(

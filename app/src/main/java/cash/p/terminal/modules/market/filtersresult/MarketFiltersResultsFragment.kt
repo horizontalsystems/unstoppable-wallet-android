@@ -24,6 +24,9 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -101,13 +104,19 @@ private fun SearchResultsScreen(
                             scrollToTop = scrollToTopAfterUpdate,
                             onAddFavorite = { uid ->
                                 viewModel.onAddFavorite(uid)
+
+                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.AddToWatchlist(uid))
                             },
                             onRemoveFavorite = { uid ->
                                 viewModel.onRemoveFavorite(uid)
+
+                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.RemoveFromWatchlist(uid))
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragment.Input(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.OpenCoin(coinUid))
                             },
                             preItems = {
                                 stickyHeader {

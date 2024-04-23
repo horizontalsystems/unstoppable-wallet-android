@@ -356,6 +356,18 @@ val TokenType.order: Int
     }
 
 
+val TokenType.derivation: TokenType.Derivation?
+    get() = when (this) {
+        is TokenType.Derived -> this.derivation
+        else -> null
+    }
+
+val TokenType.bitcoinCashCoinType: TokenType.AddressType?
+    get() = when (this) {
+        is TokenType.AddressTyped -> this.type
+        else -> null
+    }
+
 val Coin.imageUrl: String
     get() {
         var pirate: String = "piratecash"
