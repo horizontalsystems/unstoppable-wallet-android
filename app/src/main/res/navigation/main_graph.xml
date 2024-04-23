@@ -199,6 +199,12 @@
         android:id="@+id/eip20ApproveFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveFragment" />
     <fragment
+        android:id="@+id/eip20RevokeTransactionSettingsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20RevokeTransactionSettingsFragment" />
+    <fragment
+        android:id="@+id/eip20RevokeConfirmFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20RevokeConfirmFragment" />
+    <fragment
         android:id="@+id/eip20ApproveConfirmFragment"
         android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveConfirmFragment" />
     <fragment
