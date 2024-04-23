@@ -8,7 +8,6 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ISwapFinalQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.ISwapQuote
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapFinalQuoteEvm
 import io.horizontalsystems.bankwallet.modules.multiswap.SwapQuoteOneInch
-import io.horizontalsystems.bankwallet.modules.multiswap.scaleUp
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionSettings
 import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingRecipient
@@ -17,6 +16,7 @@ import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldAllowance
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipient
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldRecipientExtended
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldSlippage
+import io.horizontalsystems.core.scaleUp
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType

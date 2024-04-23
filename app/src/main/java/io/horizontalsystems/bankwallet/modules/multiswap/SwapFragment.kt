@@ -270,7 +270,7 @@ private fun SwapScreenInner(
 
                     is SwapStep.Error -> {
                         val errorText = when (val error = currentStep.error) {
-                            SwapMainModule.SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
+                            SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
                             is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
@@ -403,7 +403,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 @Composable
 fun PriceImpactField(
     priceImpact: BigDecimal?,
-    priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    priceImpactLevel: PriceImpactLevel?,
     navController: NavController
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
@@ -531,7 +531,7 @@ private fun SwapInput(
     amountOut: BigDecimal?,
     fiatAmountOut: BigDecimal?,
     fiatPriceImpact: BigDecimal?,
-    fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    fiatPriceImpactLevel: PriceImpactLevel?,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
     onClickCoinFrom: () -> Unit,
@@ -625,7 +625,7 @@ private fun SwapCoinInputTo(
     coinAmount: BigDecimal?,
     fiatAmount: BigDecimal?,
     fiatPriceImpact: BigDecimal?,
-    fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    fiatPriceImpactLevel: PriceImpactLevel?,
     currency: Currency,
     token: Token?,
     onClickCoin: () -> Unit,
@@ -845,11 +845,11 @@ private fun AmountInput(
 }
 
 @Composable
-fun getPriceImpactColor(priceImpactLevel: SwapMainModule.PriceImpactLevel?): Color {
+fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
-        SwapMainModule.PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
-        SwapMainModule.PriceImpactLevel.Warning,
-        SwapMainModule.PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Warning,
+        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
 
         else -> ComposeAppTheme.colors.grey
     }

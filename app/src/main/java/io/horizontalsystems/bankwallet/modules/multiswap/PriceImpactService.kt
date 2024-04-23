@@ -17,10 +17,10 @@ class PriceImpactService {
     private var fiatAmountIn: BigDecimal? = null
     private var fiatAmountOut: BigDecimal? = null
     private var fiatPriceImpact: BigDecimal? = null
-    private var fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel? = null
+    private var fiatPriceImpactLevel: PriceImpactLevel? = null
 
     private var priceImpact: BigDecimal? = null
-    private var priceImpactLevel: SwapMainModule.PriceImpactLevel? = null
+    private var priceImpactLevel: PriceImpactLevel? = null
     private var priceImpactCaution: HSCaution? = null
     private var error: Throwable? = null
 
@@ -45,20 +45,20 @@ class PriceImpactService {
             this.priceImpact = priceImpact
 
             priceImpactLevel = when {
-                priceImpact < warningPriceImpact -> SwapMainModule.PriceImpactLevel.Normal
-                priceImpact < forbiddenPriceImpact -> SwapMainModule.PriceImpactLevel.Warning
-                else -> SwapMainModule.PriceImpactLevel.Forbidden
+                priceImpact < warningPriceImpact -> PriceImpactLevel.Normal
+                priceImpact < forbiddenPriceImpact -> PriceImpactLevel.Warning
+                else -> PriceImpactLevel.Forbidden
             }
 
             priceImpactCaution = when (priceImpactLevel) {
-                SwapMainModule.PriceImpactLevel.Forbidden -> {
+                PriceImpactLevel.Forbidden -> {
                     HSCaution(
                         s = TranslatableString.ResString(R.string.Swap_PriceImpact),
                         type = HSCaution.Type.Error,
                         description = TranslatableString.ResString(R.string.Swap_PriceImpactTooHigh, providerTitle ?: "")
                     )
                 }
-                SwapMainModule.PriceImpactLevel.Warning -> {
+                PriceImpactLevel.Warning -> {
                     HSCaution(
                         s = TranslatableString.ResString(R.string.Swap_PriceImpact),
                         type = HSCaution.Type.Warning,
@@ -71,7 +71,7 @@ class PriceImpactService {
             }
         }
 
-        error = if (priceImpactLevel == SwapMainModule.PriceImpactLevel.Forbidden) {
+        error = if (priceImpactLevel == PriceImpactLevel.Forbidden) {
             PriceImpactTooHigh(providerTitle)
         } else {
             null
@@ -106,9 +106,9 @@ class PriceImpactService {
         } else {
             this.fiatPriceImpact = fiatPriceImpact
             fiatPriceImpactLevel = when {
-                fiatPriceImpactAbs < warningPriceImpact -> SwapMainModule.PriceImpactLevel.Normal
-                fiatPriceImpactAbs < forbiddenPriceImpact -> SwapMainModule.PriceImpactLevel.Warning
-                else -> SwapMainModule.PriceImpactLevel.Forbidden
+                fiatPriceImpactAbs < warningPriceImpact -> PriceImpactLevel.Normal
+                fiatPriceImpactAbs < forbiddenPriceImpact -> PriceImpactLevel.Warning
+                else -> PriceImpactLevel.Forbidden
             }
         }
     }
@@ -141,10 +141,10 @@ class PriceImpactService {
 
     data class State(
         val priceImpact: BigDecimal?,
-        val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+        val priceImpactLevel: PriceImpactLevel?,
         val priceImpactCaution: HSCaution?,
         val fiatPriceImpact: BigDecimal?,
-        val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+        val fiatPriceImpactLevel: PriceImpactLevel?,
         val error: Throwable?
     )
 }
