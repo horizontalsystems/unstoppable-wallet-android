@@ -53,7 +53,7 @@ class Eip20RevokeConfirmViewModel(
         fiatAmount = fiatAmount,
         spenderAddress = spenderAddress,
         contact = contact,
-        approveEnabled = sendTransactionState.sendable
+        revokeEnabled = sendTransactionState.sendable
     )
 
     val uuid = UUID.randomUUID().toString()
@@ -134,5 +134,5 @@ data class Eip20RevokeUiState(
     val fiatAmount: BigDecimal?,
     val spenderAddress: String,
     val contact: Contact?,
-    val approveEnabled: Boolean,
+    val revokeEnabled: Boolean,
 )
