@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings.ui
+package io.horizontalsystems.bankwallet.modules.multiswap.settings.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

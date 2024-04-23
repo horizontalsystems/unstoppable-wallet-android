@@ -5,10 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapSlippageService
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSlippageViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.ui.SlippageAmount
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.ui.SlippageAmount
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal

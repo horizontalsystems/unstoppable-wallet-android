@@ -16,8 +16,8 @@ import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.multiswap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.bankwallet.modules.receive.FullCoinsProvider
-import io.horizontalsystems.bankwallet.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery

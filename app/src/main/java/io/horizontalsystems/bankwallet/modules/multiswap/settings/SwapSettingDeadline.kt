@@ -5,10 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.modules.swap.settings.ISwapDeadlineService
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapDeadlineViewModel
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule
-import io.horizontalsystems.bankwallet.modules.swap.settings.ui.TransactionDeadlineInput
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.ui.TransactionDeadlineInput
 import io.reactivex.subjects.PublishSubject
 import java.util.Optional
 

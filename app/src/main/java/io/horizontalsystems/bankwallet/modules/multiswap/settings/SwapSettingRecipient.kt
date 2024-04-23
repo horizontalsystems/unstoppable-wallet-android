@@ -3,7 +3,7 @@ package io.horizontalsystems.bankwallet.modules.multiswap.settings
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.entities.Address
-import io.horizontalsystems.bankwallet.modules.swap.settings.ui.RecipientAddress
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.ui.RecipientAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 data class SwapSettingRecipient(

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.eip20approve
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

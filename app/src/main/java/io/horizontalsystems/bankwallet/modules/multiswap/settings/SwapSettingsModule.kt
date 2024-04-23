@@ -1,6 +1,7 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings
+package io.horizontalsystems.bankwallet.modules.multiswap.settings
 
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputStateWarning

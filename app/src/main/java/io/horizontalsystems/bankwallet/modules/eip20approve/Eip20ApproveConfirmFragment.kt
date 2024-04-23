@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.eip20approve
 
 import android.os.Parcelable
 import androidx.compose.foundation.Image
@@ -29,14 +29,14 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.OnlyRequired
+import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.multiswap.TokenRow
 import io.horizontalsystems.bankwallet.modules.multiswap.TokenRowUnlimited
-import io.horizontalsystems.bankwallet.modules.swap.approve.AllowanceMode.OnlyRequired
-import io.horizontalsystems.bankwallet.modules.swap.approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar

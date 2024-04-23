@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.eip20approve
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +13,8 @@ import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
+import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.OnlyRequired
+import io.horizontalsystems.bankwallet.modules.eip20approve.AllowanceMode.Unlimited
 import io.horizontalsystems.bankwallet.modules.multiswap.FiatService
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceEvm
@@ -23,11 +25,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
-import java.util.UUID
 
-class Eip20RevokeConfirmViewModel(
+class Eip20ApproveViewModel(
     private val token: Token,
-    private val allowance: BigDecimal,
+    private val requiredAllowance: BigDecimal,
     private val spenderAddress: String,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
@@ -35,8 +36,9 @@ class Eip20RevokeConfirmViewModel(
     private val currencyManager: CurrencyManager,
     private val fiatService: FiatService,
     private val contactsRepository: ContactsRepository,
-) : ViewModelUiState<Eip20RevokeUiState>() {
+) : ViewModelUiState<Eip20ApproveUiState>() {
     private val currency = currencyManager.baseCurrency
+    private var allowanceMode = OnlyRequired
     private var sendTransactionState = sendTransactionService.stateFlow.value
     private var fiatAmount: BigDecimal? = null
     private val contact = contactsRepository.getContactsFiltered(
@@ -44,9 +46,10 @@ class Eip20RevokeConfirmViewModel(
         addressQuery = spenderAddress
     ).firstOrNull()
 
-    override fun createState() = Eip20RevokeUiState(
+    override fun createState() = Eip20ApproveUiState(
         token = token,
-        allowance = allowance,
+        requiredAllowance = requiredAllowance,
+        allowanceMode = allowanceMode,
         networkFee = sendTransactionState.networkFee,
         cautions = sendTransactionState.cautions,
         currency = currency,
@@ -56,12 +59,11 @@ class Eip20RevokeConfirmViewModel(
         approveEnabled = sendTransactionState.sendable
     )
 
-    val uuid = UUID.randomUUID().toString()
-
     init {
+
         fiatService.setCurrency(currency)
         fiatService.setToken(token)
-        fiatService.setAmount(allowance)
+        fiatService.setAmount(requiredAllowance)
 
         viewModelScope.launch {
             fiatService.stateFlow.collect {
@@ -85,7 +87,15 @@ class Eip20RevokeConfirmViewModel(
         }
 
         sendTransactionService.start(viewModelScope)
+    }
 
+    fun setAllowanceMode(allowanceMode: AllowanceMode) {
+        this.allowanceMode = allowanceMode
+
+        emitState()
+    }
+
+    fun freeze() {
         val eip20Adapter =
             walletManager.activeWallets.firstOrNull { it.token == token }?.let { wallet ->
                 adapterManager.getAdapterForWallet(wallet) as? Eip20Adapter
@@ -93,26 +103,34 @@ class Eip20RevokeConfirmViewModel(
 
         checkNotNull(eip20Adapter)
 
-        val transactionData = eip20Adapter.buildRevokeTransactionData(Address(spenderAddress))
+        val transactionData = when (allowanceMode) {
+            OnlyRequired -> eip20Adapter.buildApproveTransactionData(
+                Address(spenderAddress),
+                requiredAllowance
+            )
+
+            Unlimited -> eip20Adapter.buildApproveUnlimitedTransactionData(Address(spenderAddress))
+        }
+
         sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
     }
 
-    suspend fun revoke() = withContext(Dispatchers.Default) {
+    suspend fun approve() = withContext(Dispatchers.Default) {
         sendTransactionService.sendTransaction()
     }
 
     class Factory(
         private val token: Token,
+        private val requiredAllowance: BigDecimal,
         private val spenderAddress: String,
-        private val allowance: BigDecimal,
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val sendTransactionService = SendTransactionServiceEvm(token.blockchainType)
 
-            return Eip20RevokeConfirmViewModel(
+            return Eip20ApproveViewModel(
                 token,
-                allowance,
+                requiredAllowance,
                 spenderAddress,
                 App.walletManager,
                 App.adapterManager,
@@ -125,9 +143,10 @@ class Eip20RevokeConfirmViewModel(
     }
 }
 
-data class Eip20RevokeUiState(
+data class Eip20ApproveUiState(
     val token: Token,
-    val allowance: BigDecimal,
+    val requiredAllowance: BigDecimal,
+    val allowanceMode: AllowanceMode,
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
     val currency: Currency,
@@ -136,3 +155,8 @@ data class Eip20RevokeUiState(
     val contact: Contact?,
     val approveEnabled: Boolean,
 )
+
+enum class AllowanceMode {
+    OnlyRequired, Unlimited
+}
+
