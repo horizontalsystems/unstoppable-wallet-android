@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.approve
+package io.horizontalsystems.bankwallet.modules.eip20revoke
 
 import android.os.Parcelable
 import androidx.compose.foundation.Image

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap
+package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.os.Parcelable
 import io.horizontalsystems.bankwallet.entities.CurrencyValue

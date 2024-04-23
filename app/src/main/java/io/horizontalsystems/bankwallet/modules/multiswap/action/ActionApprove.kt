@@ -5,8 +5,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
-import io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveConfirmFragment
-import io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveFragment
+import io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveConfirmFragment
+import io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveFragment
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 

@@ -197,19 +197,19 @@
         android:name="io.horizontalsystems.bankwallet.modules.addtoken.AddTokenFragment"/>
     <fragment
         android:id="@+id/eip20ApproveFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveFragment" />
     <fragment
         android:id="@+id/eip20RevokeTransactionSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20RevokeTransactionSettingsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.eip20revoke.Eip20RevokeTransactionSettingsFragment" />
     <fragment
         android:id="@+id/eip20RevokeConfirmFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20RevokeConfirmFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.eip20revoke.Eip20RevokeConfirmFragment" />
     <fragment
         android:id="@+id/eip20ApproveConfirmFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveConfirmFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveConfirmFragment" />
     <fragment
         android:id="@+id/eip20ApproveTransactionSettingsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.swap.approve.Eip20ApproveTransactionSettingsFragment" />
+        android:name="io.horizontalsystems.bankwallet.modules.eip20approve.Eip20ApproveTransactionSettingsFragment" />
     <fragment
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"/>

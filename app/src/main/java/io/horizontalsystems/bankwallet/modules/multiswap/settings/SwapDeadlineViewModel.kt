@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.swap.settings
+package io.horizontalsystems.bankwallet.modules.multiswap.settings
 
 import android.util.Range
 import androidx.compose.runtime.getValue
@@ -7,10 +7,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.swap.settings.SwapSettingsModule.getState
-import io.horizontalsystems.bankwallet.modules.swap.settings.ui.InputButton
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.SwapSettingsModule.getState
+import io.horizontalsystems.bankwallet.modules.multiswap.settings.ui.InputButton
 import io.reactivex.Observable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -96,10 +97,4 @@ interface IVerifiedInputViewModel {
 
     fun onChangeText(text: String?) = Unit
     fun isValid(text: String?): Boolean = true
-}
-
-data class Caution(val text: String, val type: Type) {
-    enum class Type {
-        Error, Warning
-    }
 }
