@@ -247,7 +247,7 @@ data class SwapConfirmUiState(
     val cautions: List<CautionViewItem>,
     val validQuote: Boolean,
     val priceImpact: BigDecimal?,
-    val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,
     val transactionFields: List<DataField>,
 )

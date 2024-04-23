@@ -50,7 +50,7 @@ class TokenBalanceService(
             is AdapterState.NotSynced -> WalletNotSynced()
             AdapterState.Synced -> {
                 if (amount > balance) {
-                    SwapMainModule.SwapError.InsufficientBalanceFrom
+                    SwapError.InsufficientBalanceFrom
                 } else {
                     null
                 }
