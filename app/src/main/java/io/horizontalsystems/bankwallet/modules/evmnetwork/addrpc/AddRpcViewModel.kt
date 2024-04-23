@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.swap.settings.Caution
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
@@ -64,6 +67,8 @@ class AddRpcViewModel(
         evmSyncSourceManager.saveSyncSource(blockchain.type, url, auth)
 
         viewState = AddRpcViewState(null, true)
+
+        stat(page = StatPage.BlockchainSettingsEvmAdd, event = StatEvent.AddEvmSource(blockchain.uid))
     }
 
     private fun syncState() {

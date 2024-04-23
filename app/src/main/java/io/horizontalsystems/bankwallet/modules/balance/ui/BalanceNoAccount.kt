@@ -24,6 +24,9 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -63,6 +66,8 @@ fun BalanceNoAccount(navController: NavController) {
             onClick = {
                 navController.navigateWithTermsAccepted {
                     navController.slideFromRight(R.id.createAccountFragment)
+
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.NewWallet))
                 }
             }
         )
@@ -75,6 +80,8 @@ fun BalanceNoAccount(navController: NavController) {
             onClick = {
                 navController.navigateWithTermsAccepted {
                     navController.slideFromRight(R.id.importWalletFragment)
+
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ImportWallet))
                 }
             }
         )
@@ -86,6 +93,8 @@ fun BalanceNoAccount(navController: NavController) {
             title = stringResource(R.string.ManageAccounts_WatchAddress),
             onClick = {
                 navController.slideFromRight(R.id.watchAddressFragment)
+
+                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.WatchWallet))
             }
         )
 

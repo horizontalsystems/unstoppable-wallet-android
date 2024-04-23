@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.btcblockchainsettings
 
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.BtcRestoreMode
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Observable
@@ -24,6 +27,8 @@ class BtcBlockchainSettingsService(
     fun save() {
         if (restoreMode != btcBlockchainManager.restoreMode(blockchain.type)) {
             btcBlockchainManager.save(restoreMode, blockchain.type)
+
+            stat(page = StatPage.BlockchainSettingsBtc, event = StatEvent.SwitchBtcSource(blockchain.uid, restoreMode))
         }
     }
 

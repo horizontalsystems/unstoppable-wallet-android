@@ -39,6 +39,9 @@ import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
@@ -345,6 +348,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 R.id.backupRequiredDialog,
                 BackupRequiredDialog.Input(e.account, text)
             )
+
+            stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
         }
     }
 
