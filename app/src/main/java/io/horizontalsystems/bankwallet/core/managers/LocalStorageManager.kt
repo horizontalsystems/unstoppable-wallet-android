@@ -81,6 +81,7 @@ class LocalStorageManager(
     private val PIN_RANDOMIZED = "pin_randomized"
     private val UTXO_EXPERT_MODE = "utxo_expert_mode"
     private val RBF_ENABLED = "rbf_enabled"
+    private val STATS_SYNC_TIME = "stats_sync_time"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -513,4 +514,9 @@ class LocalStorageManager(
         return SWAP_PROVIDER + blockchainType.uid
     }
 
+    override var statsLastSyncTime: Long
+        get() = preferences.getLong(STATS_SYNC_TIME, 0)
+        set(value) {
+            preferences.edit().putLong(STATS_SYNC_TIME, value).apply()
+        }
 }

@@ -74,6 +74,7 @@ import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
 import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
+import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
@@ -189,6 +190,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
         lateinit var spamManager: SpamManager
+        lateinit var statsManager: StatsManager
     }
 
     override fun onCreate() {
@@ -354,7 +356,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             pinDbStorage = PinDbStorage(appDatabase.pinDao())
         )
 
-        backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent).apply {
+        statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider)
+        backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent, statsManager).apply {
             backgroundManager.registerListener(this)
         }
 

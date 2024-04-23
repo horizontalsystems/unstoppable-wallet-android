@@ -118,6 +118,7 @@ interface ILocalStorage {
     var pinRandomized: Boolean
     var utxoExpertModeEnabled: Boolean
     var rbfEnabled: Boolean
+    var statsLastSyncTime: Long
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
 
