@@ -24,7 +24,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 fun ConfirmTransactionScreen(
     onClickBack: () -> Unit,
     onClickSettings: () -> Unit,
-    onClickClose: () -> Unit,
+    onClickClose: (() -> Unit)?,
     buttonsSlot: @Composable() (ColumnScope.() -> Unit),
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
@@ -35,18 +35,24 @@ fun ConfirmTransactionScreen(
                 navigationIcon = {
                     HsBackButton(onClick = onClickBack)
                 },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Settings_Title),
-                        icon = R.drawable.ic_manage_2_24,
-                        onClick = onClickSettings
-                    ),
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onClickClose
+                menuItems = buildList<MenuItem> {
+                    add(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Settings_Title),
+                            icon = R.drawable.ic_manage_2_24,
+                            onClick = onClickSettings
+                        )
                     )
-                ),
+                    onClickClose?.let<() -> Unit, Unit> {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Close),
+                                icon = R.drawable.ic_close,
+                                onClick = it
+                            )
+                        )
+                    }
+                },
             )
         },
         bottomBar = {
