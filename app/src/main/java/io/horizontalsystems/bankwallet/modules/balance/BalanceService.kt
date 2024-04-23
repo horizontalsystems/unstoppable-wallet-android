@@ -6,6 +6,10 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -38,6 +42,8 @@ class BalanceService(
             localStorage.sortType = value
 
             sortAndEmitItems()
+
+            stat(page = StatPage.Balance, event = StatEvent.SwitchSortType(value.statSortType))
         }
 
     var isWatchAccount = false

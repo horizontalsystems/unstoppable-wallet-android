@@ -26,6 +26,9 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimary
@@ -85,6 +88,8 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 iconTint = ComposeAppTheme.colors.dark,
                 onClick = {
                     navController.slideFromBottom(R.id.backupKeyFragment, account)
+
+                    stat(page = StatPage.BackupPromptAfterCreate, event = StatEvent.Open(StatPage.ManualBackup))
                 }
             )
             VSpacer(12.dp)
@@ -97,6 +102,8 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 iconTint = ComposeAppTheme.colors.claude,
                 onClick = {
                     navController.slideFromBottom(R.id.backupLocalFragment, account)
+
+                    stat(page = StatPage.BackupPromptAfterCreate, event = StatEvent.Open(StatPage.FileBackup))
                 }
             )
             VSpacer(12.dp)

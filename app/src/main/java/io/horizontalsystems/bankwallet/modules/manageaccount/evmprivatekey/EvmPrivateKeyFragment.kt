@@ -1,10 +1,20 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.evmprivatekey
 
 import android.os.Parcelable
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -14,12 +24,19 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.HidableContent
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -62,6 +79,8 @@ private fun EvmPrivateKeyScreen(
                         TextHelper.copyText(evmPrivateKey)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
+
+                        stat(page = StatPage.EvmPrivateKey, event = StatEvent.Copy(StatEntity.EvmPrivateKey))
                     }
                 },
                 onCancel = {
@@ -84,6 +103,8 @@ private fun EvmPrivateKeyScreen(
                         icon = R.drawable.ic_info_24,
                         onClick = {
                             FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+
+                            stat(page = StatPage.EvmPrivateKey, event = StatEvent.Open(StatPage.Info))
                         }
                     )
                 )
@@ -101,7 +122,9 @@ private fun EvmPrivateKeyScreen(
                     text = stringResource(R.string.PrivateKeys_NeverShareWarning)
                 )
                 Spacer(Modifier.height(24.dp))
-                HidableContent(evmPrivateKey, stringResource(R.string.EvmPrivateKey_ShowPrivateKey))
+                HidableContent(evmPrivateKey, stringResource(R.string.EvmPrivateKey_ShowPrivateKey)) {
+                    stat(page = StatPage.EvmPrivateKey, event = StatEvent.ToggleHidden)
+                }
             }
             ActionButton(R.string.Alert_Copy) {
                 coroutineScope.launch {

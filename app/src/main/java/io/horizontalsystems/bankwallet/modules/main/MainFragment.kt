@@ -41,6 +41,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -253,6 +256,8 @@ private fun MainScreen(
                     R.id.backupRequiredDialog,
                     BackupRequiredDialog.Input(wcSupportState.account, text)
                 )
+
+                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
             }
 
             is SupportState.NotSupported -> {
