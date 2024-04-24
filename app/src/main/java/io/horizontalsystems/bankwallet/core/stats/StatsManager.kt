@@ -102,7 +102,7 @@ val ProChartModule.ChartType.statPage
         ProChartModule.ChartType.Tvl -> StatPage.CoinAnalyticsTvl
     }
 
-val HsTimePeriod.statPeriod: StatPeriod
+val HsTimePeriod?.statPeriod: StatPeriod
     get() = when (this) {
         HsTimePeriod.Day1 -> StatPeriod.Day1
         HsTimePeriod.Week1 -> StatPeriod.Week1
@@ -113,6 +113,7 @@ val HsTimePeriod.statPeriod: StatPeriod
         HsTimePeriod.Year1 -> StatPeriod.Year1
         HsTimePeriod.Year2 -> StatPeriod.Year2
         HsTimePeriod.Year5 -> StatPeriod.Year5
+        null -> StatPeriod.All
     }
 
 val MarketField.statField: StatField

@@ -31,6 +31,10 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinLink
@@ -155,6 +159,8 @@ fun CoinOverviewScreen(
                                                     title = stringResource(id = R.string.Button_Hide),
                                                     onClick = {
                                                         viewModel.disableChartIndicators()
+
+                                                        stat(page = StatPage.CoinOverview, event = StatEvent.ToggleIndicators(false))
                                                     }
                                                 )
                                             } else {
@@ -162,6 +168,8 @@ fun CoinOverviewScreen(
                                                     title = stringResource(id = R.string.Button_Show),
                                                     onClick = {
                                                         viewModel.enableChartIndicators()
+
+                                                        stat(page = StatPage.CoinOverview, event = StatEvent.ToggleIndicators(true))
                                                     }
                                                 )
                                             }
@@ -170,6 +178,8 @@ fun CoinOverviewScreen(
                                                 icon = R.drawable.ic_setting_20
                                             ) {
                                                 navController.slideFromRight(R.id.indicatorsFragment)
+
+                                                stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.Indicators))
                                             }
                                         }
                                     }
@@ -191,16 +201,24 @@ fun CoinOverviewScreen(
                                         tokenVariants = tokenVariants,
                                         onClickAddToWallet = {
                                             manageWalletsViewModel.enable(it)
+
+                                            stat(page = StatPage.CoinOverview, event = StatEvent.AddToWallet)
                                         },
                                         onClickRemoveWallet = {
                                             manageWalletsViewModel.disable(it)
+
+                                            stat(page = StatPage.CoinOverview, event = StatEvent.RemoveFromWallet)
                                         },
                                         onClickCopy = {
                                             TextHelper.copyText(it)
                                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                                            stat(page = StatPage.CoinOverview, event = StatEvent.Copy(StatEntity.ContractAddress))
                                         },
                                         onClickExplorer = {
                                             LinkHelper.openLinkInAppBrowser(context, it)
+
+                                            stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalBlockExplorer))
                                         },
                                     )
                                 }
@@ -245,6 +263,16 @@ private fun onClick(coinLink: CoinLink, context: Context, navController: NavCont
             )
         }
         else -> LinkHelper.openLinkInAppBrowser(context, absoluteUrl)
+    }
+
+    when(coinLink.linkType) {
+        LinkType.Guide -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.Guide))
+        LinkType.Website -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalCoinWebsite))
+        LinkType.Whitepaper -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalCoinWhitePaper))
+        LinkType.Twitter -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalTwitter))
+        LinkType.Telegram -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalTelegram))
+        LinkType.Reddit -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalReddit))
+        LinkType.Github -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalGithub))
     }
 }
 
