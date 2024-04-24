@@ -21,6 +21,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
@@ -58,6 +61,8 @@ class MarketCategoryFragment : BaseComposeFragment() {
         val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.OpenCoin(coinUid))
     }
 }
 

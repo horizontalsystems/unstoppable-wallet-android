@@ -2,6 +2,10 @@ package cash.p.terminal.modules.market.category
 
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statPeriod
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
@@ -33,4 +37,11 @@ class CoinCategoryMarketDataChartService(
         Single.error(e)
     }
 
+    override fun updateChartInterval(chartInterval: HsTimePeriod?) {
+        super.updateChartInterval(chartInterval)
+
+        chartInterval?.let {
+            stat(page = StatPage.CoinCategory, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
+        }
+    }
 }

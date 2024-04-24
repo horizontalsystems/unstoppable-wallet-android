@@ -6,9 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatField
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statField
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
@@ -85,12 +85,7 @@ class MarketFiltersResultViewModel(
         syncMarketViewItems()
         syncMenu()
 
-        val statField = when (marketField) {
-            MarketField.PriceDiff -> StatField.Price
-            MarketField.MarketCap -> StatField.MarketCap
-            MarketField.Volume -> StatField.Volume
-        }
-        stat(page = StatPage.AdvancedSearchResults, event = StatEvent.SwitchField(statField))
+        stat(page = StatPage.AdvancedSearchResults, event = StatEvent.SwitchField(marketField.statField))
     }
 
     fun onAddFavorite(uid: String) {

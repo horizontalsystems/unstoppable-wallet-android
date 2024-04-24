@@ -3,10 +3,19 @@ package cash.p.terminal.modules.market.category
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statField
+import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.*
+import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.modules.market.MarketField
+import cash.p.terminal.modules.market.MarketModule
+import cash.p.terminal.modules.market.MarketViewItem
+import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.ui.compose.Select
 import io.reactivex.disposables.CompositeDisposable
@@ -94,6 +103,8 @@ class MarketCategoryViewModel(
     fun onSelectSortingField(sortingField: SortingField) {
         service.setSortingField(sortingField)
         selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchSortType(sortingField.statSortType))
     }
 
     fun onSelectMarketField(marketField: MarketField) {
@@ -101,6 +112,8 @@ class MarketCategoryViewModel(
 
         syncMarketViewItems()
         syncMenu()
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchField(marketField.statField))
     }
 
     fun onSelectorDialogDismiss() {
@@ -128,9 +141,13 @@ class MarketCategoryViewModel(
 
     fun onAddFavorite(uid: String) {
         service.addFavorite(uid)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.AddToWatchlist(uid))
     }
 
     fun onRemoveFavorite(uid: String) {
         service.removeFavorite(uid)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.RemoveFromWatchlist(uid))
     }
 }
