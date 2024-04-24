@@ -20,6 +20,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.title
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
@@ -71,7 +74,8 @@ fun DonateScreen(
                     DonateAddress(
                         coinImageUrl = blockchainType.imageUrl,
                         coinName = blockchainType.title,
-                        address = address
+                        address = address,
+                        chainUid = blockchainType.uid
                     )
                     VSpacer(24.dp)
                 }
@@ -86,7 +90,8 @@ fun DonateScreen(
 private fun DonateAddress(
     coinImageUrl: String,
     coinName: String,
-    address: String
+    address: String,
+    chainUid: String
 ) {
     val localView = LocalView.current
 
@@ -97,6 +102,8 @@ private fun DonateAddress(
             onClick = {
                 TextHelper.copyText(address)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
             }
         ) {
             Image(
@@ -120,6 +127,8 @@ private fun DonateAddress(
                 onClick = {
                     TextHelper.copyText(address)
                     HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                    stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
                 }
             )
         }

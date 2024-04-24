@@ -20,6 +20,9 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
@@ -48,6 +51,8 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                         donateAddress,
                     )
                 )
+
+                stat(page = StatPage.Donate, event = StatEvent.OpenSend(it.wallet.token))
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
             emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
@@ -78,6 +83,8 @@ private fun DonateHeader(navController: NavController) {
 
     GetAddressCell {
         navController.slideFromRight(R.id.donateAddressesFragment)
+
+        stat(page = StatPage.Donate, event = StatEvent.Open(StatPage.DonateAddressList))
     }
 }
 
