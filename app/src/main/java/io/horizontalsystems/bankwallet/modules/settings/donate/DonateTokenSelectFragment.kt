@@ -20,6 +20,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
@@ -48,6 +51,8 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                         donateAddress,
                     )
                 )
+
+                stat(page = StatPage.Donate, event = StatEvent.OpenSend(it.wallet.token))
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
             emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
@@ -78,6 +83,8 @@ private fun DonateHeader(navController: NavController) {
 
     GetAddressCell {
         navController.slideFromRight(R.id.donateAddressesFragment)
+
+        stat(page = StatPage.Donate, event = StatEvent.Open(StatPage.DonateAddressList))
     }
 }
 
