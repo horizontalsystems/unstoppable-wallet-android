@@ -10,6 +10,7 @@ import cash.p.terminal.core.storage.StatsDao
 import cash.p.terminal.entities.StatRecord
 import cash.p.terminal.modules.balance.BalanceSortType
 import cash.p.terminal.modules.coin.CoinModule
+import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.metricchart.ProChartModule
@@ -140,4 +141,16 @@ val CoinModule.Tab.statTab: StatTab
         CoinModule.Tab.Overview -> StatTab.Overview
         CoinModule.Tab.Details -> StatTab.Analytics
         CoinModule.Tab.Market -> StatTab.Markets
+    }
+
+val CoinAnalyticsModule.RankType.statPage: StatPage
+    get() = when (this) {
+        CoinAnalyticsModule.RankType.CexVolumeRank -> StatPage.CoinRankCexVolume
+        CoinAnalyticsModule.RankType.DexVolumeRank -> StatPage.CoinRankDexVolume
+        CoinAnalyticsModule.RankType.DexLiquidityRank -> StatPage.CoinRankDexLiquidity
+        CoinAnalyticsModule.RankType.AddressesRank -> StatPage.CoinRankAddress
+        CoinAnalyticsModule.RankType.TransactionCountRank -> StatPage.CoinRankTxCount
+        CoinAnalyticsModule.RankType.RevenueRank -> StatPage.CoinRankRevenue
+        CoinAnalyticsModule.RankType.FeeRank -> StatPage.CoinRankFee
+        CoinAnalyticsModule.RankType.HoldersRank -> StatPage.CoinRankHolders
     }

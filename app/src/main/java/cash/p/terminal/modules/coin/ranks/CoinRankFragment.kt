@@ -39,6 +39,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statPage
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
@@ -162,7 +165,7 @@ private fun CoinRankScreen(
                                 }
                             }
                         }
-                        coinRankList(viewItems, navController)
+                        coinRankList(viewItems, type, navController)
                     }
                 }
             }
@@ -172,6 +175,7 @@ private fun CoinRankScreen(
 
 private fun LazyListScope.coinRankList(
     items: List<CoinRankModule.RankViewItem>,
+    type: RankType,
     navController: NavController
 ) {
     item {
@@ -190,6 +194,8 @@ private fun LazyListScope.coinRankList(
             onClick = {
                 val arguments = CoinFragment.Input(item.coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                stat(page = type.statPage, event = StatEvent.OpenCoin(item.coinUid))
             }
         )
     }

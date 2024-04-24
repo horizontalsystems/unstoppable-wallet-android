@@ -160,10 +160,10 @@ class CoinRankViewModel(
             RankType.CexVolumeRank,
             RankType.DexVolumeRank,
             RankType.DexLiquidityRank,
-            RankType.HoldersRank,
             RankType.RevenueRank,
             RankType.FeeRank -> numberFormatter.formatFiatShort(value, currency.symbol, 2)
 
+            RankType.HoldersRank,
             RankType.AddressesRank,
             RankType.TransactionCountRank -> numberFormatter.formatNumberShort(value, 0)
         }
