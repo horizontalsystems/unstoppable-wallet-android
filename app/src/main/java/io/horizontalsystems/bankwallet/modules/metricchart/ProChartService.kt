@@ -60,9 +60,7 @@ class ProChartService(
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
 
-        chartInterval?.let {
-            stat(chartType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
-        }
+        stat(chartType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 
     override fun getItems(
