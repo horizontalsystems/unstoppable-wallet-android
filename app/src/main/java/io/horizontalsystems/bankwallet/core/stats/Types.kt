@@ -20,6 +20,7 @@ enum class StatPage(val key: String) {
     BackupRequired("backup_required"),
     Balance("balance"),
     BaseCurrency("base_currency"),
+    BirthdayInput("birthday_input"),
     Bip32RootKey("bip32_root_key"),
     BlockchainSettings("blockchain_settings"),
     BlockchainSettingsBtc("blockchain_settings_btc"),
@@ -133,6 +134,8 @@ sealed class StatEvent {
 
     data class AddEvmSource(val chainUid: String) : StatEvent()
     data class DeleteCustomEvmSource(val chainUid: String) : StatEvent()
+    data class DisableToken(val token: Token) : StatEvent()
+    data class EnableToken(val token: Token) : StatEvent()
 
     data class OpenBlockchainSettingsBtc(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvm(val chainUid: String) : StatEvent()
@@ -144,6 +147,7 @@ sealed class StatEvent {
     data class OpenReceive(val token: Token) : StatEvent()
     data class OpenSend(val token: Token) : StatEvent()
     data class OpenTokenPage(val token: Token?, val assetId: String? = null) : StatEvent()
+    data class OpenTokenInfo(val token: Token): StatEvent()
     data class Open(val page: StatPage) : StatEvent()
 
     data class SwitchBaseCurrency(val code: String) : StatEvent()
@@ -164,7 +168,7 @@ sealed class StatEvent {
 
     object ToggleBalanceHidden : StatEvent()
     object ToggleConversionCoin : StatEvent()
-    class DisableToken(val token: Token) : StatEvent()
+
 
     data class AddToWatchlist(val coinUid: String) : StatEvent()
     data class RemoveFromWatchlist(val coinUid: String) : StatEvent()
@@ -202,6 +206,8 @@ sealed class StatEvent {
         get() = when (this) {
             is AddEvmSource -> "add_evm_source"
             is DeleteCustomEvmSource -> "delete_custom_evm_source"
+            is DisableToken -> "disable_token"
+            is EnableToken -> "enable_token"
 
             is OpenBlockchainSettingsBtc,
             is OpenBlockchainSettingsEvm,
@@ -213,6 +219,8 @@ sealed class StatEvent {
             is OpenSend,
             is OpenTokenPage,
             is Open -> "open_page"
+
+            is OpenTokenInfo -> "open_token_info"
 
             is SwitchBaseCurrency -> "switch_base_currency"
             is SwitchBtcSource -> "switch_btc_source"
@@ -230,7 +238,7 @@ sealed class StatEvent {
             is Refresh -> "refresh"
             is ToggleBalanceHidden -> "toggle_balance_hidden"
             is ToggleConversionCoin -> "toggle_conversion_coin"
-            is DisableToken -> "disable_token"
+
             is AddToWatchlist -> "add_to_watchlist"
             is RemoveFromWatchlist -> "remove_from_watchlist"
             is ToggleIndicators -> "toggle_indicators"
@@ -266,6 +274,10 @@ sealed class StatEvent {
             is DeleteCustomEvmSource -> mapOf(
                 StatParam.ChainUid to chainUid
             )
+
+            is DisableToken -> tokenParams(token)
+
+            is EnableToken -> tokenParams(token)
 
             is OpenBlockchainSettingsBtc -> mapOf(
                 StatParam.Page to StatPage.BlockchainSettingsBtc.key,
@@ -306,6 +318,8 @@ sealed class StatEvent {
                 putAll(tokenParams(token))
                 assetId?.let { put(StatParam.AssetId, it) }
             }
+
+            is OpenTokenInfo -> tokenParams(token)
 
             is Open -> mapOf(StatParam.Page to page.key)
 

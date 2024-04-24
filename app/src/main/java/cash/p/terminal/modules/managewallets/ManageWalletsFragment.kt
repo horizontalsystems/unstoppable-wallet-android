@@ -3,7 +3,14 @@ package cash.p.terminal.modules.managewallets
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,12 +33,23 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.SearchBar
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
@@ -70,6 +88,8 @@ private fun ManageWalletsScreen(
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
         }
+
+        stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
     }
 
     Column(
@@ -85,6 +105,8 @@ private fun ManageWalletsScreen(
                         icon = R.drawable.ic_add_yellow,
                         onClick = {
                             navController.slideFromRight(R.id.addTokenFragment)
+
+                            stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.AddToken))
                         }
                     ))
             } else {
@@ -117,12 +139,18 @@ private fun ManageWalletsScreen(
                             onItemClick = {
                                 if (viewItem.enabled) {
                                     viewModel.disable(viewItem.item)
+
+                                    stat(page = StatPage.CoinManager, event = StatEvent.DisableToken(viewItem.item))
                                 } else {
                                     viewModel.enable(viewItem.item)
+
+                                    stat(page = StatPage.CoinManager, event = StatEvent.EnableToken(viewItem.item))
                                 }
                             },
                             onInfoClick = {
                                 navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
+
+                                stat(page = StatPage.CoinManager, event = StatEvent.OpenTokenInfo(viewItem.item))
                             }
                         )
                     }
