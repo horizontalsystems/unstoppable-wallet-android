@@ -18,6 +18,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsScreen
 import io.horizontalsystems.bankwallet.modules.coin.coinmarkets.CoinMarketsScreen
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.CoinOverviewScreen
@@ -102,7 +106,11 @@ fun CoinTabs(
                                 title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
                                 icon = R.drawable.ic_filled_star_24,
                                 tint = ComposeAppTheme.colors.jacob,
-                                onClick = { viewModel.onUnfavoriteClick() }
+                                onClick = {
+                                    viewModel.onUnfavoriteClick()
+
+                                    stat(page = StatPage.CoinPage, event = StatEvent.RemoveFromWatchlist(viewModel.fullCoin.coin.uid))
+                                }
                             )
                         )
                     } else {
@@ -110,7 +118,11 @@ fun CoinTabs(
                             MenuItem(
                                 title = TranslatableString.ResString(R.string.CoinPage_Favorite),
                                 icon = R.drawable.ic_star_24,
-                                onClick = { viewModel.onFavoriteClick() }
+                                onClick = {
+                                    viewModel.onFavoriteClick()
+
+                                    stat(page = StatPage.CoinPage, event = StatEvent.AddToWatchlist(viewModel.fullCoin.coin.uid))
+                                }
                             )
                         )
                     }
@@ -125,6 +137,8 @@ fun CoinTabs(
         Tabs(tabItems, onClick = { tab ->
             coroutineScope.launch {
                 pagerState.scrollToPage(tab.ordinal)
+
+                stat(page = StatPage.CoinPage, event = StatEvent.SwitchTab(tab.statTab))
 
                 if (tab == CoinModule.Tab.Details && viewModel.shouldShowSubscriptionInfo()) {
                     viewModel.subscriptionInfoShown()
