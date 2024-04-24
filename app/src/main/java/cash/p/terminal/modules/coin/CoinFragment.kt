@@ -18,6 +18,10 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
 import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
@@ -102,7 +106,11 @@ fun CoinTabs(
                                 title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
                                 icon = R.drawable.ic_filled_star_24,
                                 tint = ComposeAppTheme.colors.jacob,
-                                onClick = { viewModel.onUnfavoriteClick() }
+                                onClick = {
+                                    viewModel.onUnfavoriteClick()
+
+                                    stat(page = StatPage.CoinPage, event = StatEvent.RemoveFromWatchlist(viewModel.fullCoin.coin.uid))
+                                }
                             )
                         )
                     } else {
@@ -110,7 +118,11 @@ fun CoinTabs(
                             MenuItem(
                                 title = TranslatableString.ResString(R.string.CoinPage_Favorite),
                                 icon = R.drawable.ic_star_24,
-                                onClick = { viewModel.onFavoriteClick() }
+                                onClick = {
+                                    viewModel.onFavoriteClick()
+
+                                    stat(page = StatPage.CoinPage, event = StatEvent.AddToWatchlist(viewModel.fullCoin.coin.uid))
+                                }
                             )
                         )
                     }
@@ -125,6 +137,8 @@ fun CoinTabs(
         Tabs(tabItems, onClick = { tab ->
             coroutineScope.launch {
                 pagerState.scrollToPage(tab.ordinal)
+
+                stat(page = StatPage.CoinPage, event = StatEvent.SwitchTab(tab.statTab))
 
                 if (tab == CoinModule.Tab.Details && viewModel.shouldShowSubscriptionInfo()) {
                     viewModel.subscriptionInfoShown()

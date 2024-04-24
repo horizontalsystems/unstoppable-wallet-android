@@ -9,6 +9,7 @@ import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.storage.StatsDao
 import cash.p.terminal.entities.StatRecord
 import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.modules.coin.CoinModule
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.metricchart.ProChartModule
@@ -131,4 +132,12 @@ val SortingField.statSortType: StatSortType
         SortingField.LowestVolume -> StatSortType.LowestVolume
         SortingField.TopGainers -> StatSortType.TopGainers
         SortingField.TopLosers -> StatSortType.TopLosers
+    }
+
+
+val CoinModule.Tab.statTab: StatTab
+    get() = when (this) {
+        CoinModule.Tab.Overview -> StatTab.Overview
+        CoinModule.Tab.Details -> StatTab.Analytics
+        CoinModule.Tab.Market -> StatTab.Markets
     }
