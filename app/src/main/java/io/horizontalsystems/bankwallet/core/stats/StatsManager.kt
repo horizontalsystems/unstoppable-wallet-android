@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.StatsDao
 import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.coin.CoinModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
@@ -127,4 +128,12 @@ val SortingField.statSortType: StatSortType
         SortingField.LowestVolume -> StatSortType.LowestVolume
         SortingField.TopGainers -> StatSortType.TopGainers
         SortingField.TopLosers -> StatSortType.TopLosers
+    }
+
+
+val CoinModule.Tab.statTab: StatTab
+    get() = when (this) {
+        CoinModule.Tab.Overview -> StatTab.Overview
+        CoinModule.Tab.Details -> StatTab.Analytics
+        CoinModule.Tab.Market -> StatTab.Markets
     }
