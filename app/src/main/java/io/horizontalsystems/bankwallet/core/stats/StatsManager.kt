@@ -9,6 +9,10 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.StatsDao
 import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
+import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -24,7 +28,7 @@ class StatsManager(
 ) {
     private val gson by lazy { Gson() }
     private val executor = Executors.newCachedThreadPool()
-    private val syncInterval = 60 * 60 // 1H in seconds
+    private val syncInterval = 0 //60 * 60 // 1H in seconds
 
     fun logStat(eventPage: StatPage, eventSection: StatSection? = null, event: StatEvent) {
         executor.submit {
@@ -58,13 +62,16 @@ class StatsManager(
                 if (currentTime - statLastSyncTime < syncInterval) return@submit
 
                 val stats = statsDao.getAll()
-                val statsArray = "[${stats.joinToString { it.json }}]"
+                if (stats.isNotEmpty()) {
+                    val statsArray = "[${stats.joinToString { it.json }}]"
 
-                Log.e("e", "send $statsArray")
-                marketKit.sendStats(statsArray, appConfigProvider.appVersion, appConfigProvider.appId).blockingGet()
+                    Log.e("e", "send $statsArray")
 
-                statsDao.delete(stats.map { it.id })
-                localStorage.statsLastSyncTime = currentTime
+                    marketKit.sendStats(statsArray, appConfigProvider.appVersion, appConfigProvider.appId).blockingGet()
+
+                    statsDao.delete(stats.map { it.id })
+                    localStorage.statsLastSyncTime = currentTime
+                }
 
             } catch (error: Throwable) {
                 Log.e("e", "sendStats error", error)
@@ -79,4 +86,44 @@ val BalanceSortType.statSortType
         BalanceSortType.Name -> StatSortType.Name
         BalanceSortType.PercentGrowth -> StatSortType.PriceChange
         BalanceSortType.Value -> StatSortType.Balance
+    }
+
+val ProChartModule.ChartType.statPage
+    get() = when (this) {
+        ProChartModule.ChartType.CexVolume -> StatPage.CoinAnalyticsCexVolume
+        ProChartModule.ChartType.DexVolume -> StatPage.CoinAnalyticsDexVolume
+        ProChartModule.ChartType.DexLiquidity -> StatPage.CoinAnalyticsDexLiquidity
+        ProChartModule.ChartType.TxCount -> StatPage.CoinAnalyticsTxCount
+        ProChartModule.ChartType.AddressesCount -> StatPage.CoinAnalyticsActiveAddresses
+        ProChartModule.ChartType.Tvl -> StatPage.CoinAnalyticsTvl
+    }
+
+val HsTimePeriod.statPeriod: StatPeriod
+    get() = when (this) {
+        HsTimePeriod.Day1 -> StatPeriod.Day1
+        HsTimePeriod.Week1 -> StatPeriod.Week1
+        HsTimePeriod.Week2 -> StatPeriod.Week2
+        HsTimePeriod.Month1 -> StatPeriod.Month1
+        HsTimePeriod.Month3 -> StatPeriod.Month3
+        HsTimePeriod.Month6 -> StatPeriod.Month6
+        HsTimePeriod.Year1 -> StatPeriod.Year1
+        HsTimePeriod.Year2 -> StatPeriod.Year2
+        HsTimePeriod.Year5 -> StatPeriod.Year5
+    }
+
+val MarketField.statField: StatField
+    get() = when (this) {
+        MarketField.PriceDiff -> StatField.Price
+        MarketField.MarketCap -> StatField.MarketCap
+        MarketField.Volume -> StatField.Volume
+    }
+
+val SortingField.statSortType: StatSortType
+    get() = when (this) {
+        SortingField.HighestCap -> StatSortType.HighestCap
+        SortingField.LowestCap -> StatSortType.LowestCap
+        SortingField.HighestVolume -> StatSortType.HighestVolume
+        SortingField.LowestVolume -> StatSortType.LowestVolume
+        SortingField.TopGainers -> StatSortType.TopGainers
+        SortingField.TopLosers -> StatSortType.TopLosers
     }
