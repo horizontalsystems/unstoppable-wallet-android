@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.core.storage.StatsDao
 import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.coin.CoinModule
+import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
@@ -136,4 +137,16 @@ val CoinModule.Tab.statTab: StatTab
         CoinModule.Tab.Overview -> StatTab.Overview
         CoinModule.Tab.Details -> StatTab.Analytics
         CoinModule.Tab.Market -> StatTab.Markets
+    }
+
+val CoinAnalyticsModule.RankType.statPage: StatPage
+    get() = when (this) {
+        CoinAnalyticsModule.RankType.CexVolumeRank -> StatPage.CoinRankCexVolume
+        CoinAnalyticsModule.RankType.DexVolumeRank -> StatPage.CoinRankDexVolume
+        CoinAnalyticsModule.RankType.DexLiquidityRank -> StatPage.CoinRankDexLiquidity
+        CoinAnalyticsModule.RankType.AddressesRank -> StatPage.CoinRankAddress
+        CoinAnalyticsModule.RankType.TransactionCountRank -> StatPage.CoinRankTxCount
+        CoinAnalyticsModule.RankType.RevenueRank -> StatPage.CoinRankRevenue
+        CoinAnalyticsModule.RankType.FeeRank -> StatPage.CoinRankFee
+        CoinAnalyticsModule.RankType.HoldersRank -> StatPage.CoinRankHolders
     }
