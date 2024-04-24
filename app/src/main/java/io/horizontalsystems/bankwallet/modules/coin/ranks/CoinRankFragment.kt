@@ -39,6 +39,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statPage
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.RankType
@@ -162,7 +165,7 @@ private fun CoinRankScreen(
                                 }
                             }
                         }
-                        coinRankList(viewItems, navController)
+                        coinRankList(viewItems, type, navController)
                     }
                 }
             }
@@ -172,6 +175,7 @@ private fun CoinRankScreen(
 
 private fun LazyListScope.coinRankList(
     items: List<CoinRankModule.RankViewItem>,
+    type: RankType,
     navController: NavController
 ) {
     item {
@@ -190,6 +194,8 @@ private fun LazyListScope.coinRankList(
             onClick = {
                 val arguments = CoinFragment.Input(item.coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                stat(page = type.statPage, event = StatEvent.OpenCoin(item.coinUid))
             }
         )
     }
