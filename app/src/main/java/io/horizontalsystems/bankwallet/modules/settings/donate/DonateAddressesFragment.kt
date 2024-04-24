@@ -20,6 +20,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -71,7 +74,8 @@ fun DonateScreen(
                     DonateAddress(
                         coinImageUrl = blockchainType.imageUrl,
                         coinName = blockchainType.title,
-                        address = address
+                        address = address,
+                        chainUid = blockchainType.uid
                     )
                     VSpacer(24.dp)
                 }
@@ -86,7 +90,8 @@ fun DonateScreen(
 private fun DonateAddress(
     coinImageUrl: String,
     coinName: String,
-    address: String
+    address: String,
+    chainUid: String
 ) {
     val localView = LocalView.current
 
@@ -97,6 +102,8 @@ private fun DonateAddress(
             onClick = {
                 TextHelper.copyText(address)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
             }
         ) {
             Image(
@@ -120,6 +127,8 @@ private fun DonateAddress(
                 onClick = {
                     TextHelper.copyText(address)
                     HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                    stat(page = StatPage.DonateAddressList, event = StatEvent.CopyAddress(chainUid))
                 }
             )
         }
