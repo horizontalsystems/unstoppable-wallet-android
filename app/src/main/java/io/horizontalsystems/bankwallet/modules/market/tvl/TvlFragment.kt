@@ -32,6 +32,9 @@ import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -73,6 +76,8 @@ class TvlFragment : BaseComposeFragment() {
         if (coinUid != null) {
             val arguments = CoinFragment.Input(coinUid)
             navController.slideFromRight(R.id.coinFragment, arguments)
+
+            stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
         } else {
             HudHelper.showWarningMessage(requireView(), R.string.MarketGlobalMetrics_NoCoin)
         }
