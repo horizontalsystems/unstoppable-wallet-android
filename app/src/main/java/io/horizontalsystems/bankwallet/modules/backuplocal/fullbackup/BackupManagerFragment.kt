@@ -27,6 +27,9 @@ import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.importwallet.getFileName
 import io.horizontalsystems.bankwallet.modules.restorelocal.RestoreLocalFragment
@@ -56,14 +59,19 @@ class BackupManagerFragment : BaseComposeFragment() {
                             R.id.backupManagerFragment,
                             false,
                             jsonString,
-                            fileName
+                            fileName,
+                            StatPage.ImportFullFromFiles
                         )
                     )
+
+                    stat(page = StatPage.BackupManager, event = StatEvent.Open(StatPage.ImportFullFromFiles))
                 }
             },
             onCreateBackup = {
                 navController.authorizedAction {
                     navController.slideFromRight(R.id.backupLocalFragment)
+
+                    stat(page = StatPage.BackupManager, event = StatEvent.Open(StatPage.ExportFullToFiles))
                 }
             }
         )

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.restorelocal
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupViewItemFactory
@@ -11,10 +12,21 @@ import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.SelectBack
 
 object RestoreLocalModule {
 
-    class Factory(private val backupJsonString: String?, private val fileName: String?) : ViewModelProvider.Factory {
+    class Factory(
+        private val backupJsonString: String?,
+        private val fileName: String?,
+        private val statPage: StatPage
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return RestoreLocalViewModel(backupJsonString, App.accountFactory, App.backupProvider, BackupViewItemFactory(), fileName) as T
+            return RestoreLocalViewModel(
+                backupJsonString = backupJsonString,
+                accountFactory = App.accountFactory,
+                backupProvider = App.backupProvider,
+                backupViewItemFactory = BackupViewItemFactory(),
+                statPage = statPage,
+                fileName = fileName
+            ) as T
         }
     }
 

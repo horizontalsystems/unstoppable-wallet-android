@@ -55,6 +55,9 @@ enum class StatPage(val key: String) {
     DonateAddressList("donate_address_list"),
     EvmAddress("evm_address"),
     EvmPrivateKey("evm_private_key"),
+    ExportFull("export_full"),
+    ExportFullToFiles("export_full_to_files"),
+    ExportWalletToFiles("export_wallet_to_files"),
     ExternalBlockExplorer("external_block_explorer"),
     ExternalCoinWebsite("external_coin_website"),
     ExternalCoinWhitePaper("external_coin_white_paper"),
@@ -71,6 +74,8 @@ enum class StatPage(val key: String) {
     GlobalMetricsDefiCap("global_metrics_defi_cap"),
     GlobalMetricsTvlInDefi("global_metrics_tvl_in_defi"),
     Guide("guide"),
+    ImportFull("import_full"),
+    ImportFullFromFiles("import_full_from_files"),
     ImportWallet("import_wallet"),
     ImportWalletFromKey("import_wallet_from_key"),
     ImportWalletFromKeyAdvanced("import_wallet_from_key_advanced"),
@@ -137,6 +142,12 @@ sealed class StatEvent {
     data class DisableToken(val token: Token) : StatEvent()
     data class EnableToken(val token: Token) : StatEvent()
 
+    data class ImportWallet(val walletType: String) : StatEvent()
+    object ImportFull: StatEvent()
+
+    data class ExportWallet(val walletType: String): StatEvent()
+    object ExportFull: StatEvent()
+
     data class OpenBlockchainSettingsBtc(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvm(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvmAdd(val chainUid: String) : StatEvent()
@@ -196,7 +207,6 @@ sealed class StatEvent {
     data class Clear(val entity: StatEntity) : StatEvent()
 
     data class CreateWallet(val walletType: String) : StatEvent()
-    data class ImportWallet(val walletType: String) : StatEvent()
     data class WatchWallet(val walletType: String) : StatEvent()
 
     data class Add(val entity: StatEntity) : StatEvent()
@@ -208,6 +218,12 @@ sealed class StatEvent {
             is DeleteCustomEvmSource -> "delete_custom_evm_source"
             is DisableToken -> "disable_token"
             is EnableToken -> "enable_token"
+
+            is ImportFull -> "import_full"
+            is ImportWallet -> "import_wallet"
+
+            is ExportFull -> "export_full"
+            is ExportWallet -> "export_wallet"
 
             is OpenBlockchainSettingsBtc,
             is OpenBlockchainSettingsEvm,
@@ -258,7 +274,6 @@ sealed class StatEvent {
             is Paste -> "paste"
             is Clear -> "clear"
             is CreateWallet -> "create_wallet"
-            is ImportWallet -> "import_wallet"
             is WatchWallet -> "watch_wallet"
             is Add -> "add"
             is AddToken -> "add_token"
@@ -369,7 +384,7 @@ sealed class StatEvent {
 
             is CreateWallet -> mapOf(StatParam.WalletType to walletType)
 
-            is DisableToken -> tokenParams(token)
+            is ExportWallet -> mapOf(StatParam.WalletType to walletType)
 
             is ImportWallet -> mapOf(StatParam.WalletType to walletType)
 
