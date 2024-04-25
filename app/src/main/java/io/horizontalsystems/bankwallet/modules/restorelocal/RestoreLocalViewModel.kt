@@ -6,6 +6,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountFactory
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.backuplocal.BackupLocalModule.WalletBackup
@@ -27,6 +31,7 @@ class RestoreLocalViewModel(
     private val accountFactory: IAccountFactory,
     private val backupProvider: BackupProvider,
     private val backupViewItemFactory: BackupViewItemFactory,
+    private val statPage: StatPage,
     fileName: String?,
 ) : ViewModelUiState<UiState>() {
 
@@ -155,6 +160,8 @@ class RestoreLocalViewModel(
             try {
                 backupProvider.restoreFullBackup(decryptedFullBackup, passphrase)
                 restored = true
+
+                stat(page = statPage, event = StatEvent.ImportFull)
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
@@ -186,6 +193,8 @@ class RestoreLocalViewModel(
                     backupProvider.restoreSingleWalletBackup(type, accountName, backup)
                     restored = true
                 }
+
+                stat(page = statPage, event = StatEvent.ImportWallet(type.statAccountType))
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
