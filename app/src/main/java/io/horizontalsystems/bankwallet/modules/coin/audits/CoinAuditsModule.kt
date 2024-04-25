@@ -36,10 +36,10 @@ object CoinAuditsModule {
 
     @Parcelize
     data class AuditParcelable(
-        val date: String,
-        val name: String,
-        val auditUrl: String,
+        val date: String?,
+        val name: String?,
+        val auditUrl: String?,
         val techIssues: Int,
-        val partnerName: String
+        val partnerName: String?
     ) : Parcelable
 }
