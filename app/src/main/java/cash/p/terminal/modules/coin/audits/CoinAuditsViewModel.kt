@@ -39,14 +39,14 @@ class CoinAuditsViewModel(
         groupedByAuditor.forEach { (auditor, reports) ->
             auditorViewItems.add(
                 AuditorViewItem(
-                    name = auditor,
-                    logoUrl = logoUrl(auditor),
+                    name = auditor ?: "",
+                    logoUrl = auditor?.let { logoUrl(it) } ?: "",
                     auditViewItems = reports.map { report ->
                         AuditViewItem(
-                            date = formatter.parse(report.date)?.let { date ->
+                            date = report.date?.let { formatter.parse(it) }?.let { date ->
                                 DateHelper.formatDate(date, "MMM dd, yyyy")
                             },
-                            name = report.name,
+                            name = report.name ?: "",
                             issues = TranslatableString.ResString(
                                 R.string.CoinPage_Audits_Issues,
                                 report.techIssues
