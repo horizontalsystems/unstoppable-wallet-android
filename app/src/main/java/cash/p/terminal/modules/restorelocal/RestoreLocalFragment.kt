@@ -41,7 +41,8 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
-import cash.p.terminal.core.getInput
+import cash.p.terminal.core.requireInput
+import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.modules.backuplocal.fullbackup.OtherBackupItems
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -75,13 +76,14 @@ class RestoreLocalFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
+        val input = navController.requireInput<Input>()
         RestoreLocalNavHost(
-            input?.jsonFile,
-            input?.fileName,
+            input.jsonFile,
+            input.fileName,
+            input.statPage,
             navController,
-            input?.popOffOnSuccess ?: R.id.restoreAccountFragment,
-            input?.popOffInclusive ?: false
+            input.popOffOnSuccess,
+            input.popOffInclusive
         ) { activity?.let { MainModule.startAsNewTask(it) } }
     }
 
@@ -91,6 +93,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
         val popOffInclusive: Boolean,
         val jsonFile: String,
         val fileName: String?,
+        val statPage: StatPage
     ) : Parcelable
 }
 
@@ -98,6 +101,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
 private fun RestoreLocalNavHost(
     backupJsonString: String?,
     fileName: String?,
+    statPage: StatPage,
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
     popUpInclusive: Boolean,
@@ -105,7 +109,7 @@ private fun RestoreLocalNavHost(
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName))
+    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName, statPage))
     NavHost(
         navController = navController,
         startDestination = "restore_local",

@@ -7,6 +7,7 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.storage.StatsDao
+import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.StatRecord
 import cash.p.terminal.modules.balance.BalanceSortType
 import cash.p.terminal.modules.coin.CoinModule
@@ -14,6 +15,7 @@ import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.metricchart.ProChartModule
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.time.Instant
 import java.util.concurrent.Executors
@@ -153,4 +155,43 @@ val CoinAnalyticsModule.RankType.statPage: StatPage
         CoinAnalyticsModule.RankType.RevenueRank -> StatPage.CoinRankRevenue
         CoinAnalyticsModule.RankType.FeeRank -> StatPage.CoinRankFee
         CoinAnalyticsModule.RankType.HoldersRank -> StatPage.CoinRankHolders
+    }
+
+val AccountType.statAccountType: String
+    get() = when(this) {
+        is AccountType.Mnemonic -> {
+            if (passphrase.isEmpty()) "mnemonic_${words.size}" else "mnemonic_with_passphrase_${words.size}"
+        }
+        is AccountType.BitcoinAddress -> {
+            "btc_address"
+        }
+        is AccountType.Cex -> {
+            "cex"
+        }
+        is AccountType.EvmAddress -> {
+            "evm_address"
+        }
+        is AccountType.EvmPrivateKey -> {
+            "evm_private_key"
+        }
+        is AccountType.HdExtendedKey -> {
+            if (hdExtendedKey.isPublic) {
+                "account_x_pub_key"
+            } else {
+                when(hdExtendedKey.derivedType) {
+                    HDExtendedKey.DerivedType.Bip32 -> "bip32"
+                    HDExtendedKey.DerivedType.Master -> "bip32_root_key"
+                    HDExtendedKey.DerivedType.Account -> "account_x_priv_key"
+                }
+            }
+        }
+        is AccountType.SolanaAddress -> {
+            "sol_address"
+        }
+        is AccountType.TonAddress -> {
+            "ton_address"
+        }
+        is AccountType.TronAddress -> {
+            "tron_address"
+        }
     }
