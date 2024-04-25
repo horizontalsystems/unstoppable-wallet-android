@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinModule
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -154,40 +155,58 @@ val CoinAnalyticsModule.RankType.statPage: StatPage
     }
 
 val AccountType.statAccountType: String
-    get() = when(this) {
+    get() = when (this) {
         is AccountType.Mnemonic -> {
             if (passphrase.isEmpty()) "mnemonic_${words.size}" else "mnemonic_with_passphrase_${words.size}"
         }
+
         is AccountType.BitcoinAddress -> {
             "btc_address"
         }
+
         is AccountType.Cex -> {
             "cex"
         }
+
         is AccountType.EvmAddress -> {
             "evm_address"
         }
+
         is AccountType.EvmPrivateKey -> {
             "evm_private_key"
         }
+
         is AccountType.HdExtendedKey -> {
             if (hdExtendedKey.isPublic) {
                 "account_x_pub_key"
             } else {
-                when(hdExtendedKey.derivedType) {
+                when (hdExtendedKey.derivedType) {
                     HDExtendedKey.DerivedType.Bip32 -> "bip32"
                     HDExtendedKey.DerivedType.Master -> "bip32_root_key"
                     HDExtendedKey.DerivedType.Account -> "account_x_priv_key"
                 }
             }
         }
+
         is AccountType.SolanaAddress -> {
             "sol_address"
         }
+
         is AccountType.TonAddress -> {
             "ton_address"
         }
+
         is AccountType.TronAddress -> {
             "tron_address"
         }
+    }
+
+
+val MetricsType.statPage: StatPage
+    get() = when (this) {
+        MetricsType.TotalMarketCap -> StatPage.GlobalMetricsMarketCap
+        MetricsType.BtcDominance -> StatPage.GlobalMetricsMarketCap
+        MetricsType.Volume24h -> StatPage.GlobalMetricsVolume
+        MetricsType.DefiCap -> StatPage.GlobalMetricsDefiCap
+        MetricsType.TvlInDefi -> StatPage.GlobalMetricsTvlInDefi
     }

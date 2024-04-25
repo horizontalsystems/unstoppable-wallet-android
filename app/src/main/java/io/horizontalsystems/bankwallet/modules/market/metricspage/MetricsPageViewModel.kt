@@ -4,6 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statField
+import io.horizontalsystems.bankwallet.core.stats.statPage
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -24,6 +29,8 @@ class MetricsPageViewModel(
     private val marketFields = MarketField.values().toList()
     private var marketField: MarketField
     private var marketItems: List<MarketItem> = listOf()
+    private val metricsType: MetricsType = service.metricsType
+    private val statPage: StatPage =  metricsType.statPage
 
     val isRefreshingLiveData = MutableLiveData<Boolean>()
     val marketLiveData = MutableLiveData<MetricsPageModule.MarketData>()
@@ -33,9 +40,6 @@ class MetricsPageViewModel(
         description = Translator.getString(metricsType.description),
         icon = metricsType.headerIcon
     )
-
-    val metricsType: MetricsType
-        get() = service.metricsType
 
     init {
         marketField = when (metricsType) {
@@ -83,15 +87,21 @@ class MetricsPageViewModel(
 
     fun onToggleSortType() {
         service.sortDescending = !service.sortDescending
+
+        stat(page = statPage, event = StatEvent.ToggleSortDirection)
     }
 
     fun onSelectMarketField(marketField: MarketField) {
         this.marketField = marketField
         syncMarketItems(marketItems)
+
+        stat(page = statPage, event = StatEvent.SwitchField(marketField.statField))
     }
 
     fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
+
+        stat(page = statPage, event = StatEvent.Refresh)
     }
 
     fun onErrorClick() {

@@ -4,6 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
@@ -77,14 +80,20 @@ class TvlViewModel(
     fun onSelectChain(chain: TvlModule.Chain) {
         service.chain = chain
         chainSelectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
+
+        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.SwitchTvlChain(chain.name))
     }
 
     fun onToggleSortType() {
         service.sortDescending = !service.sortDescending
+
+        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleSortDirection)
     }
 
     fun onToggleTvlDiffType() {
         tvlDiffType = if (tvlDiffType == TvlDiffType.Percent) TvlDiffType.Currency else TvlDiffType.Percent
+
+        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField)
     }
 
     fun onClickChainSelector() {
