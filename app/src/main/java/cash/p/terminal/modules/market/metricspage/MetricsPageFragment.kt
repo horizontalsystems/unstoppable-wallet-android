@@ -26,12 +26,16 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statPage
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketField
+import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.TranslatableString
@@ -48,11 +52,14 @@ class MetricsPageFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val factory = MetricsPageModule.Factory(navController.requireInput())
+        val metricsType = navController.requireInput<MetricsType>()
+        val factory = MetricsPageModule.Factory(metricsType)
         val chartViewModel by viewModels<ChartViewModel> { factory }
         val viewModel by viewModels<MetricsPageViewModel> { factory }
         MetricsPage(viewModel, chartViewModel, navController) {
             onCoinClick(it, navController)
+
+            stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
         }
     }
 

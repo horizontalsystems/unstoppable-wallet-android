@@ -1,6 +1,10 @@
 package cash.p.terminal.modules.market.tvl
 
 import cash.p.terminal.core.managers.CurrencyManager
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statPeriod
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartPointsWrapper
@@ -44,5 +48,11 @@ class TvlChartService(
         ).map {
             ChartPointsWrapper(it)
         }
+    }
+
+    override fun updateChartInterval(chartInterval: HsTimePeriod?) {
+        super.updateChartInterval(chartInterval)
+
+        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 }
