@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.StatsDao
+import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.coin.CoinModule
@@ -14,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModul
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
+import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.time.Instant
 import java.util.concurrent.Executors
@@ -149,4 +151,43 @@ val CoinAnalyticsModule.RankType.statPage: StatPage
         CoinAnalyticsModule.RankType.RevenueRank -> StatPage.CoinRankRevenue
         CoinAnalyticsModule.RankType.FeeRank -> StatPage.CoinRankFee
         CoinAnalyticsModule.RankType.HoldersRank -> StatPage.CoinRankHolders
+    }
+
+val AccountType.statAccountType: String
+    get() = when(this) {
+        is AccountType.Mnemonic -> {
+            if (passphrase.isEmpty()) "mnemonic_${words.size}" else "mnemonic_with_passphrase_${words.size}"
+        }
+        is AccountType.BitcoinAddress -> {
+            "btc_address"
+        }
+        is AccountType.Cex -> {
+            "cex"
+        }
+        is AccountType.EvmAddress -> {
+            "evm_address"
+        }
+        is AccountType.EvmPrivateKey -> {
+            "evm_private_key"
+        }
+        is AccountType.HdExtendedKey -> {
+            if (hdExtendedKey.isPublic) {
+                "account_x_pub_key"
+            } else {
+                when(hdExtendedKey.derivedType) {
+                    HDExtendedKey.DerivedType.Bip32 -> "bip32"
+                    HDExtendedKey.DerivedType.Master -> "bip32_root_key"
+                    HDExtendedKey.DerivedType.Account -> "account_x_priv_key"
+                }
+            }
+        }
+        is AccountType.SolanaAddress -> {
+            "sol_address"
+        }
+        is AccountType.TonAddress -> {
+            "ton_address"
+        }
+        is AccountType.TronAddress -> {
+            "tron_address"
+        }
     }
