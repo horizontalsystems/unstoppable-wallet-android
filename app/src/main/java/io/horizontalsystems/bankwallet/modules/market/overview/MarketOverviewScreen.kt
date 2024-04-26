@@ -17,6 +17,13 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statMarketTop
+import io.horizontalsystems.bankwallet.core.stats.statPeriod
+import io.horizontalsystems.bankwallet.core.stats.statSection
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.BoardsView
@@ -46,6 +53,8 @@ fun MarketOverviewScreen(
         refreshing = isRefreshing,
         onRefresh = {
             viewModel.refresh()
+
+            stat(page = StatPage.MarketOverview, event = StatEvent.Refresh)
         }
     ) {
         Crossfade(viewState, label = "") { viewState ->
@@ -80,9 +89,13 @@ fun MarketOverviewScreen(
                                             marketField
                                         )
                                     )
+
+                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.Open(StatPage.TopCoins))
                                 },
                                 onSelectTopMarket = { topMarket, listType ->
                                     viewModel.onSelectTopMarket(topMarket, listType)
+
+                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.SwitchMarketTop(topMarket.statMarketTop))
                                 }
                             )
 
@@ -91,19 +104,27 @@ fun MarketOverviewScreen(
                                 onItemClick = {
                                     it.tradeUrl?.let {
                                         LinkHelper.openLinkInAppBrowser(context, it)
+
+                                        stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.ExternalMarketPair))
                                     }
                                 }
                             ) {
                                 navController.slideFromBottom(R.id.topPairsFragment)
+
+                                stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopMarketPairs))
                             }
 
                             TopPlatformsBoardView(
                                 viewItem.topPlatformsBoard,
                                 onSelectTimeDuration = { timeDuration ->
                                     viewModel.onSelectTopPlatformsTimeDuration(timeDuration)
+
+                                    stat(page = StatPage.MarketOverview, section = StatSection.TopPlatforms, event = StatEvent.SwitchPeriod(timeDuration.statPeriod))
                                 },
                                 onItemClick = {
                                     navController.slideFromRight(R.id.marketPlatformFragment, it)
+
+                                    stat(page = StatPage.MarketOverview, event = StatEvent.OpenPlatform(it.uid))
                                 },
                                 onClickSeeAll = {
                                     val timeDuration = viewModel.topPlatformsTimeDuration
@@ -112,6 +133,8 @@ fun MarketOverviewScreen(
                                         R.id.marketTopPlatformsFragment,
                                         timeDuration
                                     )
+
+                                    stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopPlatforms))
                                 }
                             )
 
@@ -122,6 +145,8 @@ fun MarketOverviewScreen(
                                     R.id.marketCategoryFragment,
                                     coinCategory
                                 )
+
+                                stat(page = StatPage.MarketOverview, event = StatEvent.OpenCategory(coinCategory.uid))
                             }
 
                             VSpacer(height = 32.dp)
