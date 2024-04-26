@@ -135,10 +135,10 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 modifier = Modifier.padding(horizontal = 16.dp),
                 hint = stringResource(id = R.string.Watch_Address_Hint),
                 qrScannerEnabled = true,
-                state = uiState.inputState
-            ) {
-                viewModel.onEnterInput(it)
-            }
+                state = uiState.inputState,
+                onValueChange = {
+                    viewModel.onEnterInput(it)
+                })
             Spacer(Modifier.height(32.dp))
         }
     }
