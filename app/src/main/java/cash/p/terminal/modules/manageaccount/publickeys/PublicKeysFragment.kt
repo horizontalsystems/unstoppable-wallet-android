@@ -19,6 +19,9 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
@@ -73,6 +76,8 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         R.id.evmAddressFragment,
                         EvmAddressFragment.Input(evmAddress)
                     )
+
+                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
                 }
             }
             viewModel.viewState.extendedPublicKey?.let { publicKey ->
@@ -87,6 +92,8 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             publicKey.accountPublicKey
                         )
                     )
+
+                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.AccountExtendedPublicKey))
                 }
             }
         }

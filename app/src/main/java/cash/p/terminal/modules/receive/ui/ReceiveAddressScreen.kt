@@ -59,6 +59,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import cash.p.terminal.R
 import cash.p.terminal.core.UsedAddress
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.receive.ReceiveModule
@@ -185,6 +189,8 @@ fun ReceiveAddressScreen(
                                                 .clickable {
                                                     TextHelper.copyText(uiState.uri)
                                                     HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                                                    stat(page = StatPage.Receive, event = StatEvent.Copy(StatEntity.ReceiveAddress))
                                                 },
                                             horizontalAlignment = Alignment.CenterHorizontally,
                                         ) {
@@ -240,7 +246,11 @@ fun ReceiveAddressScreen(
                                         if (uiState.additionalItems.isNotEmpty()) {
                                             AdditionalDataSection(
                                                 items = uiState.additionalItems,
-                                                onClearAmount = { setAmount(null) },
+                                                onClearAmount = {
+                                                    setAmount(null)
+
+                                                    stat(page = StatPage.Receive, event = StatEvent.RemoveAmount)
+                                                },
                                                 showAccountNotActiveWarningDialog = {
                                                     scope.launch { sheetState.show() }
                                                 }
@@ -298,6 +308,8 @@ fun ReceiveAddressScreen(
                         onAmountConfirm = { amount ->
                             setAmount(amount)
                             openAmountDialog.value = false
+
+                            stat(page = StatPage.Receive, event = StatEvent.SetAmount)
                         }
                     )
                 }
@@ -341,7 +353,7 @@ private fun ActionButtonsRow(
             .padding(horizontal = 48.dp),
         horizontalArrangement = if (watchAccount) Arrangement.Center else Arrangement.SpaceBetween,
     ) {
-        val itemModifier = if(watchAccount) Modifier else Modifier.weight(1f)
+        val itemModifier = if (watchAccount) Modifier else Modifier.weight(1f)
         if (!watchAccount) {
             ReceiveActionButton(
                 modifier = itemModifier,
@@ -358,6 +370,8 @@ private fun ActionButtonsRow(
             buttonText = stringResource(R.string.Button_Share),
             onClick = {
                 onShareClick.invoke(uri)
+
+                stat(page = StatPage.Receive, event = StatEvent.Share(StatEntity.ReceiveAddress))
             },
         )
         if (watchAccount) {
@@ -370,6 +384,8 @@ private fun ActionButtonsRow(
             onClick = {
                 TextHelper.copyText(uri)
                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                stat(page = StatPage.Receive, event = StatEvent.Copy(StatEntity.ReceiveAddress))
             },
         )
     }

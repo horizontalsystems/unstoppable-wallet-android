@@ -20,6 +20,9 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.manageaccount.evmprivatekey.EvmPrivateKeyFragment
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
@@ -74,6 +77,8 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             R.id.evmPrivateKeyFragment,
                             EvmPrivateKeyFragment.Input(key)
                         )
+
+                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.EvmPrivateKey))
                     }
                 }
             }
@@ -90,6 +95,8 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                                 key.displayKeyType
                             )
                         )
+
+                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.Bip32RootKey))
                     }
                 }
             }
@@ -103,6 +110,8 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             R.id.showExtendedKeyFragment,
                             ShowExtendedKeyFragment.Input(key.hdKey, key.displayKeyType)
                         )
+
+                        stat(page = StatPage.PrivateKeys, event = StatEvent.Open(StatPage.AccountExtendedPrivateKey))
                     }
                 }
             }

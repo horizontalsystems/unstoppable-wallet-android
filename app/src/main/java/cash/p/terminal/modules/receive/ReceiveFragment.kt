@@ -19,6 +19,9 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.getInput
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.ReceiveRoutes.BCH_ADDRESS_FORMAT_SCREEN
 import cash.p.terminal.modules.receive.ReceiveRoutes.COIN_SELECT_SCREEN
@@ -139,8 +142,7 @@ fun ReceiveScreen(
                         navController.navigate(NETWORK_SELECT_SCREEN)
                     },
                     onCoinClick = { wallet ->
-                        viewModel.wallet = wallet
-                        navController.navigate(RECEIVE_ADDRESS_SCREEN)
+                        onSelectWallet(wallet, viewModel, navController)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController),
                 )
@@ -159,8 +161,7 @@ fun ReceiveScreen(
                     addressFormatItems = bchAddressViewModel.items,
                     description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedAddressType),
                     onSelect = { wallet ->
-                        viewModel.wallet = wallet
-                        navController.navigate(RECEIVE_ADDRESS_SCREEN)
+                        onSelectWallet(wallet, viewModel, navController)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
@@ -179,8 +180,7 @@ fun ReceiveScreen(
                     addressFormatItems = derivationViewModel.items,
                     description = stringResource(R.string.Balance_Receive_AddressFormat_RecommendedDerivation),
                     onSelect = { wallet ->
-                        viewModel.wallet = wallet
-                        navController.navigate(RECEIVE_ADDRESS_SCREEN)
+                        onSelectWallet(wallet, viewModel, navController)
                     },
                     onBackPress = navigateBack(fragmentNavController, navController)
                 )
@@ -198,13 +198,19 @@ fun ReceiveScreen(
                     activeAccount = activeAccount,
                     fullCoin = fullCoin,
                     onSelect = { wallet ->
-                        viewModel.wallet = wallet
-                        navController.navigate(RECEIVE_ADDRESS_SCREEN)
+                        onSelectWallet(wallet, viewModel, navController)
                     }
                 )
             }
         }
     }
+}
+
+private fun onSelectWallet(wallet: Wallet, viewModel: ReceiveSharedViewModel, navController: NavController) {
+    viewModel.wallet = wallet
+    navController.navigate(RECEIVE_ADDRESS_SCREEN)
+
+    stat(page = StatPage.ReceiveTokenList, event = StatEvent.OpenReceive(wallet.token))
 }
 
 @Composable

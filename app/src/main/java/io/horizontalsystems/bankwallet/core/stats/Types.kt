@@ -191,7 +191,7 @@ sealed class StatEvent {
     data class Copy(val entity: StatEntity) : StatEvent()
     data class CopyAddress(val chainUid: String) : StatEvent()
 
-    object Share : StatEvent()
+    data class Share(val entity: StatEntity) : StatEvent()
 
     object SetAmount : StatEvent()
     object RemoveAmount : StatEvent()
@@ -393,6 +393,8 @@ sealed class StatEvent {
             is Add -> mapOf(StatParam.Entity to entity.key)
 
             is AddToken -> tokenParams(token) + mapOf(StatParam.Entity to StatEntity.Token.key)
+
+            is Share -> mapOf(StatParam.Entity to StatEntity.ReceiveAddress.key)
 
             else -> null
         }
