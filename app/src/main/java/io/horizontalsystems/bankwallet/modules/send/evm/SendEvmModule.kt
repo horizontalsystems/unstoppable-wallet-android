@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
-import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
@@ -21,8 +20,7 @@ import java.math.RoundingMode
 
 data class SendEvmData(
     val transactionData: TransactionData,
-    val additionalInfo: AdditionalInfo? = null,
-    val warnings: List<Warning> = listOf()
+    val additionalInfo: AdditionalInfo? = null
 ) {
     sealed class AdditionalInfo : Parcelable {
         @Parcelize

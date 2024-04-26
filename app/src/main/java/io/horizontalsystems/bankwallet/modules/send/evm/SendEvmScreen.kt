@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
@@ -24,7 +24,7 @@ import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationModule
+import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -36,7 +36,6 @@ fun SendEvmScreen(
     navController: NavController,
     viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
 ) {
     val wallet = viewModel.wallet
@@ -116,10 +115,17 @@ fun SendEvmScreen(
                 onClick = {
                     if (viewModel.hasConnection()) {
                         viewModel.getSendData()?.let {
-                            navController.slideFromRight(
+                            navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
                                 R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationModule.Input(it, R.id.sendXFragment, sendEntryPointDestId)
-                            )
+                                SendEvmConfirmationFragment.Input(
+                                    sendData = it,
+                                    blockchainType = viewModel.wallet.token.blockchainType
+                                )
+                            ) {
+                                if (it.success) {
+                                    navController.popBackStack()
+                                }
+                            }
                         }
                     } else {
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)

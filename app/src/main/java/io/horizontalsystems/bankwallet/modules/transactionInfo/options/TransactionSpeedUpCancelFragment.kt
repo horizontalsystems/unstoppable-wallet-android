@@ -174,11 +174,14 @@ private fun TransactionSpeedUpCancelScreen(
                     .weight(1f)
                     .verticalScroll(rememberScrollState())
             ) {
+                val items by sendEvmTransactionViewModel.viewItemsLiveData.observeAsState(listOf())
+                val cautions by sendEvmTransactionViewModel.cautionsLiveData.observeAsState()
                 SendEvmTransactionView(
-                    sendEvmTransactionViewModel,
                     feeViewModel,
                     nonceViewModel,
                     navController,
+                    items,
+                    cautions
                 )
             }
             ButtonsGroupWithShade {

@@ -1,186 +1,147 @@
 package io.horizontalsystems.bankwallet.modules.send.evm.confirmation
 
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.View
-import androidx.compose.foundation.layout.Column
+import android.os.Parcelable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInputX
+import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
+import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
-import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewNew
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
+import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class SendEvmConfirmationFragment : BaseComposeFragment() {
 
-    private val logger = AppLogger("send-evm")
-
-    private val input by lazy {
-        arguments?.getInputX<SendEvmConfirmationModule.Input>()!!
-    }
-
-    private val vmFactory by lazy {
-        val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(sendNavGraphId)
-        SendEvmConfirmationModule.Factory(
-            evmKitWrapperViewModel.evmKitWrapper,
-            SendEvmData(transactionData, additionalInfo)
-        )
-    }
-    private val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
-    private val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
-    private val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.sendEvmConfirmationFragment) { vmFactory }
-
-    private var snackbarInProcess: CustomSnackbar? = null
-
-    private val sendNavGraphId: Int by lazy { input.sendNavId }
-    private val sendEntryPointDestId: Int by lazy { input.sendEntryPointDestId }
-    private val closeUntilDestId: Int by lazy {
-        if (sendEntryPointDestId == 0) {
-            sendNavGraphId
-        } else {
-            sendEntryPointDestId
-        }
-    }
-
-
-    private val transactionData: TransactionData
-        get() = input.transactionData
-    private val additionalInfo: SendEvmData.AdditionalInfo?
-        get() = input.additionalInfo
-
     @Composable
     override fun GetContent(navController: NavController) {
-        SendEvmConfirmationScreen(
-            sendEvmTransactionViewModel = sendEvmTransactionViewModel,
-            feeViewModel = feeViewModel,
-            nonceViewModel = nonceViewModel,
-            parentNavGraphId = R.id.sendEvmConfirmationFragment,
-            navController = navController,
-            onSendClick = {
-                logger.info("click send button")
-                sendEvmTransactionViewModel.send(logger)
-            })
+        SendEvmConfirmationScreen(navController, navController.requireInput())
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        sendEvmTransactionViewModel.sendingLiveData.observe(viewLifecycleOwner) {
-            snackbarInProcess = HudHelper.showInProcessMessage(
-                requireView(),
-                R.string.Send_Sending,
-                SnackbarDuration.INDEFINITE
+    @Parcelize
+    data class Input(
+        val transactionDataParcelable: SendEvmModule.TransactionDataParcelable,
+        val additionalInfo: SendEvmData.AdditionalInfo?,
+        val blockchainType: BlockchainType
+    ) : Parcelable {
+        val transactionData: TransactionData
+            get() = TransactionData(
+                Address(transactionDataParcelable.toAddress),
+                transactionDataParcelable.value,
+                transactionDataParcelable.input
             )
-        }
 
-        sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showSuccessMessage(
-                requireActivity().findViewById(android.R.id.content),
-                R.string.Hud_Text_Done
-            )
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().popBackStack(closeUntilDestId, true)
-            }, 1200)
-        }
-
-        sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
-            HudHelper.showErrorMessage(requireActivity().findViewById(android.R.id.content), it)
-
-            findNavController().popBackStack()
-        }
+        constructor(
+            sendData: SendEvmData,
+            blockchainType: BlockchainType
+        ) : this(
+            SendEvmModule.TransactionDataParcelable(sendData.transactionData),
+            sendData.additionalInfo,
+            blockchainType
+        )
     }
 
+    @Parcelize
+    data class Result(val success: Boolean) : Parcelable
 }
 
 @Composable
 private fun SendEvmConfirmationScreen(
-    sendEvmTransactionViewModel: SendEvmTransactionViewModel,
-    feeViewModel: EvmFeeCellViewModel,
-    nonceViewModel: SendEvmNonceViewModel,
-    parentNavGraphId: Int,
     navController: NavController,
-    onSendClick: () -> Unit
+    input: SendEvmConfirmationFragment.Input
 ) {
-    val enabled by sendEvmTransactionViewModel.sendEnabledLiveData.observeAsState(false)
+    val logger = remember { AppLogger("send-evm") }
 
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Send_Confirmation_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.SendEvmSettings_Title),
-                        icon = R.drawable.ic_manage_2,
-                        tint = ComposeAppTheme.colors.jacob,
-                        onClick = {
-                            navController.slideFromBottom(
-                                R.id.sendEvmSettingsFragment,
-                                SendEvmSettingsFragment.Input(parentNavGraphId)
-                            )
+    val viewModel = viewModel<SendEvmConfirmationViewModel>(
+        factory = SendEvmConfirmationViewModel.Factory(
+            input.transactionData,
+            input.additionalInfo,
+            input.blockchainType,
+        )
+    )
+    val uiState = viewModel.uiState
+
+    ConfirmTransactionScreen(
+        onClickBack = { navController.popBackStack() },
+        onClickSettings = {
+            navController.slideFromBottom(
+                R.id.sendEvmSettingsFragment,
+                SendEvmSettingsFragment.Input(R.id.sendEvmConfirmationFragment)
+            )
+        },
+        onClickClose = null,
+        buttonsSlot = {
+            val coroutineScope = rememberCoroutineScope()
+            val view = LocalView.current
+
+            var buttonEnabled by remember { mutableStateOf(true) }
+
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                title = stringResource(R.string.Send_Confirmation_Send_Button),
+                onClick = {
+                    logger.info("click send button")
+
+                    coroutineScope.launch {
+                        buttonEnabled = false
+                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+
+                        val result = try {
+                            logger.info("sending tx")
+                            viewModel.send()
+                            logger.info("success")
+
+                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                            delay(1200)
+                            SendEvmConfirmationFragment.Result(true)
+                        } catch (t: Throwable) {
+                            logger.warning("failed", t)
+                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                            SendEvmConfirmationFragment.Result(false)
                         }
-                    )
-                )
+
+                        buttonEnabled = true
+                        navController.setNavigationResultX(result)
+                        navController.popBackStack()
+                    }
+                },
+                enabled = uiState.sendEnabled && buttonEnabled
             )
         }
     ) {
-        Column(modifier = Modifier.padding(it)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                SendEvmTransactionView(
-                    sendEvmTransactionViewModel,
-                    feeViewModel,
-                    nonceViewModel,
-                    navController
-                )
-            }
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Send_Confirmation_Send_Button),
-                    onClick = onSendClick,
-                    enabled = enabled
-                )
-            }
-        }
+        SendEvmTransactionViewNew(
+            navController,
+            uiState.sectionViewItems,
+            uiState.cautions,
+            uiState.transactionFields,
+            uiState.networkFee,
+        )
     }
 }

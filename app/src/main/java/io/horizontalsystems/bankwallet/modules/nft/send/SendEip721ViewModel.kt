@@ -62,6 +62,8 @@ class SendEip721ViewModel(
         return SendEvmData(transactionData, additionalInfo)
     }
 
+    fun getBlockchainType() = nftUid.blockchainType
+
     private fun handleUpdatedAddressState(addressState: SendEvmAddressService.State) {
         this.addressState = addressState
         val sendEvmData = getSendData()

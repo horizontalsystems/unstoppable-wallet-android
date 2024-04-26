@@ -26,6 +26,8 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettings
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsViewModel
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
+import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
+import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
@@ -184,6 +186,10 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         val nonce = transaction.nonce
 
         evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+    }
+
+    fun decorate(transactionData: TransactionData): TransactionDecoration? {
+        return evmKitWrapper.evmKit.decorate(transactionData)
     }
 
     @Composable

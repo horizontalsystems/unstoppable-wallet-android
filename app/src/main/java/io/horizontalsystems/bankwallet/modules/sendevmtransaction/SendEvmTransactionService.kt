@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
@@ -37,15 +36,13 @@ interface ISendEvmTransactionService {
 
     suspend fun start()
     fun send(logger: AppLogger)
-    fun methodName(input: ByteArray): String?
     fun clear()
 }
 
 class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
     private val evmKitWrapper: EvmKitWrapper,
-    override val settingsService: SendEvmSettingsService,
-    private val evmLabelManager: EvmLabelManager
+    override val settingsService: SendEvmSettingsService
 ) : Clearable, ISendEvmTransactionService {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -99,7 +96,7 @@ class SendEvmTransactionService(
             is DataState.Success -> {
                 syncTxDataState(settingsState.data)
 
-                val warnings = settingsState.data.warnings + sendEvmData.warnings
+                val warnings = settingsState.data.warnings
                 state = if (settingsState.data.errors.isNotEmpty()) {
                     State.NotReady(warnings, settingsState.data.errors)
                 } else {
@@ -136,9 +133,6 @@ class SendEvmTransactionService(
             }
         }
     }
-
-    override fun methodName(input: ByteArray): String? =
-        evmLabelManager.methodLabel(input)
 
     override fun clear() {
         coroutineScope.cancel()

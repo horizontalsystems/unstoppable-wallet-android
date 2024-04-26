@@ -20,6 +20,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSer
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -107,8 +108,7 @@ object WCRequestModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
                 evmKitWrapper,
-                settingsService,
-                App.evmLabelManager
+                settingsService
             )
         }
 
@@ -132,8 +132,13 @@ object WCRequestModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = blockchainType,
-                        contactsRepo = App.contactsRepository
+                        contactsRepo = App.contactsRepository,
+                        SendEvmTransactionViewItemFactory(
+                            App.evmLabelManager,
+                            coinServiceFactory,
+                            App.contactsRepository,
+                            blockchainType
+                        )
                     ) as T
                 }
 

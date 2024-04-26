@@ -142,7 +142,6 @@ class SendFragment : BaseFragment() {
                                 findNavController(),
                                 sendEvmViewModel,
                                 amountInputModeViewModel,
-                                sendEntryPointDestId,
                                 prefilledData,
                             )
                         }

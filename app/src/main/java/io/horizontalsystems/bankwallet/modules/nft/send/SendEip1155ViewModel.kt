@@ -112,5 +112,7 @@ class SendEip1155ViewModel(
         return amount
     }
 
+    fun getBlockchainType() = nftUid.blockchainType
+
     class InsufficientNftBalance : Exception()
 }

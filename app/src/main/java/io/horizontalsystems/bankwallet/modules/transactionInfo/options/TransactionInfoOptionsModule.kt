@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceSer
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionService
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
@@ -130,8 +131,7 @@ object TransactionInfoOptionsModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,
-                settingsService,
-                App.evmLabelManager
+                settingsService
             )
         }
 
@@ -143,8 +143,13 @@ object TransactionInfoOptionsModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = source.blockchain.type,
-                        contactsRepo = App.contactsRepository
+                        contactsRepo = App.contactsRepository,
+                        SendEvmTransactionViewItemFactory(
+                            App.evmLabelManager,
+                            coinServiceFactory,
+                            App.contactsRepository,
+                            source.blockchain.type
+                        )
                     ) as T
                 }
                 EvmFeeCellViewModel::class.java -> {
