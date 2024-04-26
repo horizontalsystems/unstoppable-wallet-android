@@ -42,7 +42,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.OtherBackupItems
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -118,6 +120,7 @@ private fun RestoreLocalNavHost(
             RestoreLocalScreen(
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
+                statPage = statPage,
                 onBackClick = { fragmentNavController.popBackStack() },
                 close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
                 openSelectCoins = { navController.navigate("restore_select_coins") },
@@ -159,6 +162,7 @@ private fun RestoreLocalNavHost(
 private fun RestoreLocalScreen(
     viewModel: RestoreLocalViewModel,
     mainViewModel: RestoreViewModel,
+    statPage: StatPage,
     onBackClick: () -> Unit,
     close: () -> Unit,
     openSelectCoins: () -> Unit,
@@ -191,11 +195,13 @@ private fun RestoreLocalScreen(
 
     LaunchedEffect(uiState.showSelectCoins) {
         uiState.showSelectCoins?.let { accountType ->
-            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
+            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true, statPage)
             keyboardController?.hide()
             delay(300)
             openSelectCoins.invoke()
             viewModel.onSelectCoinsShown()
+
+            stat(page = statPage, event = StatEvent.Open(StatPage.RestoreSelect))
         }
     }
 
