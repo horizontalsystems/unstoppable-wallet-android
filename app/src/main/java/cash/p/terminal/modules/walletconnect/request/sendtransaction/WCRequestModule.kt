@@ -20,6 +20,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
+import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -107,8 +108,7 @@ object WCRequestModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData, additionalInfo),
                 evmKitWrapper,
-                settingsService,
-                App.evmLabelManager
+                settingsService
             )
         }
 
@@ -132,8 +132,13 @@ object WCRequestModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = blockchainType,
-                        contactsRepo = App.contactsRepository
+                        contactsRepo = App.contactsRepository,
+                        SendEvmTransactionViewItemFactory(
+                            App.evmLabelManager,
+                            coinServiceFactory,
+                            App.contactsRepository,
+                            blockchainType
+                        )
                     ) as T
                 }
 

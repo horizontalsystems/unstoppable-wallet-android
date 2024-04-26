@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
@@ -24,7 +24,7 @@ import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.send.SendScreen
-import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationModule
+import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -36,7 +36,6 @@ fun SendEvmScreen(
     navController: NavController,
     viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
-    sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
 ) {
     val wallet = viewModel.wallet
@@ -116,10 +115,17 @@ fun SendEvmScreen(
                 onClick = {
                     if (viewModel.hasConnection()) {
                         viewModel.getSendData()?.let {
-                            navController.slideFromRight(
+                            navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
                                 R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationModule.Input(it, R.id.sendXFragment, sendEntryPointDestId)
-                            )
+                                SendEvmConfirmationFragment.Input(
+                                    sendData = it,
+                                    blockchainType = viewModel.wallet.token.blockchainType
+                                )
+                            ) {
+                                if (it.success) {
+                                    navController.popBackStack()
+                                }
+                            }
                         }
                     } else {
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)

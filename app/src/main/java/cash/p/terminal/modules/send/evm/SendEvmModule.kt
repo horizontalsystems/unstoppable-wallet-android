@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendEthereumAdapter
-import cash.p.terminal.core.Warning
 import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
@@ -21,8 +20,7 @@ import java.math.RoundingMode
 
 data class SendEvmData(
     val transactionData: TransactionData,
-    val additionalInfo: AdditionalInfo? = null,
-    val warnings: List<Warning> = listOf()
+    val additionalInfo: AdditionalInfo? = null
 ) {
     sealed class AdditionalInfo : Parcelable {
         @Parcelize

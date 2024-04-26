@@ -18,6 +18,7 @@ import cash.p.terminal.modules.send.evm.settings.SendEvmNonceService
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
+import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
@@ -130,8 +131,7 @@ object TransactionInfoOptionsModule {
             SendEvmTransactionService(
                 SendEvmData(transactionData),
                 evmKitWrapper,
-                settingsService,
-                App.evmLabelManager
+                settingsService
             )
         }
 
@@ -143,8 +143,13 @@ object TransactionInfoOptionsModule {
                         sendService,
                         coinServiceFactory,
                         cautionViewItemFactory,
-                        blockchainType = source.blockchain.type,
-                        contactsRepo = App.contactsRepository
+                        contactsRepo = App.contactsRepository,
+                        SendEvmTransactionViewItemFactory(
+                            App.evmLabelManager,
+                            coinServiceFactory,
+                            App.contactsRepository,
+                            source.blockchain.type
+                        )
                     ) as T
                 }
                 EvmFeeCellViewModel::class.java -> {

@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.AddressViewModel
 import cash.p.terminal.modules.address.HSAddressInput
-import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationModule
+import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AdditionalDataCell2
@@ -126,13 +126,17 @@ fun SendEip1155Screen(
                     title = stringResource(R.string.Button_Next),
                     onClick = {
                         viewModel.getSendData()?.let { sendData ->
-                            navController.slideFromRight(
+                            navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
                                 R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationModule.Input(
-                                    sendData,
-                                    nftSendFragment
+                                SendEvmConfirmationFragment.Input(
+                                    sendData = sendData,
+                                    blockchainType = viewModel.getBlockchainType()
                                 )
-                            )
+                            ) {
+                                if (it.success) {
+                                    navController.popBackStack()
+                                }
+                            }
                         }
                     },
                     enabled = viewModel.uiState.canBeSend

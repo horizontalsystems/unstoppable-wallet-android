@@ -4,8 +4,6 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.Warning
 import cash.p.terminal.core.managers.EvmKitWrapper
-import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsService
@@ -36,15 +34,13 @@ interface ISendEvmTransactionService {
 
     suspend fun start()
     fun send(logger: AppLogger)
-    fun methodName(input: ByteArray): String?
     fun clear()
 }
 
 class SendEvmTransactionService(
     private val sendEvmData: SendEvmData,
     private val evmKitWrapper: EvmKitWrapper,
-    override val settingsService: SendEvmSettingsService,
-    private val evmLabelManager: EvmLabelManager
+    override val settingsService: SendEvmSettingsService
 ) : Clearable, ISendEvmTransactionService {
     private val disposable = CompositeDisposable()
 
@@ -98,7 +94,7 @@ class SendEvmTransactionService(
             is DataState.Success -> {
                 syncTxDataState(settingsState.data)
 
-                val warnings = settingsState.data.warnings + sendEvmData.warnings
+                val warnings = settingsState.data.warnings
                 state = if (settingsState.data.errors.isNotEmpty()) {
                     State.NotReady(warnings, settingsState.data.errors)
                 } else {
@@ -133,9 +129,6 @@ class SendEvmTransactionService(
             })
             .let { disposable.add(it) }
     }
-
-    override fun methodName(input: ByteArray): String? =
-        evmLabelManager.methodLabel(input)
 
     override fun clear() {
         disposable.clear()
