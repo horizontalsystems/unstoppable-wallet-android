@@ -11,6 +11,10 @@ import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
 import io.horizontalsystems.bankwallet.core.nativeTokenQueries
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.restoreSettingTypes
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.core.subscribeIO
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.supports
@@ -37,7 +41,8 @@ class RestoreBlockchainsService(
     private val marketKit: MarketKitWrapper,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
     private val blockchainTokensService: BlockchainTokensService,
-    private val restoreSettingsService: RestoreSettingsService
+    private val restoreSettingsService: RestoreSettingsService,
+    private val statPage: StatPage
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -205,6 +210,8 @@ class RestoreBlockchainsService(
 
         val wallets = enabledTokens.map { Wallet(it, account) }
         walletManager.save(wallets)
+
+        stat(page = statPage, event = StatEvent.ImportWallet(accountType.statAccountType))
     }
 
     override fun clear() = disposables.clear()

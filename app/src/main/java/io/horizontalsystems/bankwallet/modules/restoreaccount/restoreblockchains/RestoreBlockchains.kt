@@ -35,6 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
@@ -67,10 +70,17 @@ fun ManageWalletsScreen(
         onBackClick.invoke()
         return
     }
+
+    val statPage = mainViewModel.statPage ?: run {
+        Toast.makeText(App.instance, "Error: statPage is NULL", Toast.LENGTH_SHORT).show()
+        onBackClick.invoke()
+        return
+    }
+
     val manualBackup = mainViewModel.manualBackup
     val fileBackup = mainViewModel.fileBackup
 
-    val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType, manualBackup, fileBackup)
+    val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType, manualBackup, fileBackup, statPage)
     val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
     val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
     val blockchainTokensViewModel: BlockchainTokensViewModel = viewModel(factory = factory)
@@ -94,6 +104,8 @@ fun ManageWalletsScreen(
     if (restoreSettingsViewModel.openZcashConfigure != null) {
         restoreSettingsViewModel.zcashConfigureOpened()
         openZCashConfigure.invoke()
+
+        stat(page = StatPage.RestoreSelect, event = StatEvent.Open(StatPage.BirthdayInput))
     }
 
     LaunchedEffect(restored) {
