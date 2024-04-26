@@ -28,6 +28,10 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.getInput
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -89,11 +93,11 @@ private fun CreateAccountIntroScreen(
     val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
 
-    LaunchedEffect(viewModel.successMessage) {
-        viewModel.successMessage?.let {
+    LaunchedEffect(viewModel.success) {
+        viewModel.success?.let { accountType ->
             HudHelper.showSuccessMessage(
                 contenView = view,
-                resId = it,
+                resId = R.string.Hud_Text_Created,
                 icon = R.drawable.icon_add_to_wallet_24,
                 iconTint = R.color.white
             )
@@ -101,6 +105,8 @@ private fun CreateAccountIntroScreen(
 
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
+
+            stat(page = StatPage.NewWallet, event = StatEvent.CreateWallet(accountType.statAccountType))
         }
     }
 
@@ -138,6 +144,8 @@ private fun CreateAccountIntroScreen(
                         .fillMaxSize()
                         .clickable {
                             openCreateAdvancedScreen.invoke()
+
+                            stat(page = StatPage.NewWallet, event = StatEvent.Open(StatPage.NewWalletAdvanced))
                         }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,

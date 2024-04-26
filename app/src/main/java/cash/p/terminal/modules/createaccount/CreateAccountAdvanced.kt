@@ -26,6 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.displayNameStringRes
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -55,17 +59,19 @@ fun CreateAccountAdvancedScreen(
     val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
 
-    LaunchedEffect(viewModel.successMessage) {
-        viewModel.successMessage?.let {
+    LaunchedEffect(viewModel.success) {
+        viewModel.success?.let { accountType ->
             HudHelper.showSuccessMessage(
                 contenView = view,
-                resId = it,
+                resId = R.string.Hud_Text_Created,
                 icon = R.drawable.icon_add_to_wallet_24,
                 iconTint = R.color.white
             )
             delay(300)
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
+
+            stat(page = StatPage.NewWalletAdvanced, event = StatEvent.CreateWallet(accountType.statAccountType))
         }
     }
 

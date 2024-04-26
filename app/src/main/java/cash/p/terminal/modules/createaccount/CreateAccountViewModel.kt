@@ -53,7 +53,7 @@ class CreateAccountViewModel(
     var passphraseState by mutableStateOf<DataState.Error?>(null)
         private set
 
-    var successMessage by mutableStateOf<Int?>(null)
+    var success by mutableStateOf<AccountType?>(null)
         private set
 
     fun createAccount() {
@@ -73,7 +73,7 @@ class CreateAccountViewModel(
         accountManager.save(account)
         activateDefaultWallets(account)
         predefinedBlockchainSettingsProvider.prepareNew(account, BlockchainType.Zcash)
-        successMessage = R.string.Hud_Text_Created
+        success = accountType
     }
 
     fun onChangeAccountName(name: String) {
@@ -111,7 +111,7 @@ class CreateAccountViewModel(
     }
 
     fun onSuccessMessageShown() {
-        successMessage = null
+        success = null
     }
 
     private fun passphraseIsInvalid(): Boolean {
