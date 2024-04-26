@@ -13,6 +13,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
 import cash.p.terminal.modules.market.overview.MarketOverviewScreen
 import cash.p.terminal.modules.market.posts.MarketPostsScreen
@@ -41,6 +45,8 @@ fun MarketScreen(navController: NavController) {
                     icon = R.drawable.icon_search,
                     onClick = {
                         navController.slideFromRight(R.id.marketSearchFragment)
+
+                        stat(page = StatPage.Markets, event = StatEvent.Open(StatPage.MarketSearch))
                     }
                 ),
                 MenuItem(
@@ -48,6 +54,8 @@ fun MarketScreen(navController: NavController) {
                     icon = R.drawable.ic_manage_2_24,
                     onClick = {
                         navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+
+                        stat(page = StatPage.Markets, event = StatEvent.Open(StatPage.AdvancedSearch))
                     }
                 ),
             )
@@ -61,6 +69,8 @@ fun MarketScreen(navController: NavController) {
         }
         Tabs(tabItems, onClick = {
             marketViewModel.onSelect(it)
+
+            stat(page = StatPage.Markets, event = StatEvent.SwitchTab(it.statTab))
         })
 
         HorizontalPager(

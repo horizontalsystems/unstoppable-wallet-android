@@ -18,6 +18,7 @@ import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
+import cash.p.terminal.modules.market.search.MarketSearchSection
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.modules.metricchart.ProChartModule
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -246,4 +247,18 @@ val TimeDuration.statPeriod: StatPeriod
         TimeDuration.SevenDay -> StatPeriod.Week1
         TimeDuration.ThirtyDay -> StatPeriod.Month1
         TimeDuration.ThreeMonths -> StatPeriod.Month3
+    }
+
+val MarketModule.Tab.statTab: StatTab
+    get() = when (this) {
+        MarketModule.Tab.Overview -> StatTab.Overview
+        MarketModule.Tab.Posts -> StatTab.News
+        MarketModule.Tab.Watchlist -> StatTab.Watchlist
+    }
+
+val MarketSearchSection.statSection: StatSection
+    get() = when (this) {
+        MarketSearchSection.Recent -> StatSection.Recent
+        MarketSearchSection.Popular -> StatSection.Popular
+        MarketSearchSection.SearchResults -> StatSection.SearchResults
     }

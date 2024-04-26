@@ -41,6 +41,10 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statSection
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
@@ -57,7 +61,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Optional
-import kotlin.jvm.optionals.getOrDefault
+import kotlin.jvm.optionals.getOrNull
 
 class MarketSearchFragment : BaseComposeFragment() {
     @Composable
@@ -94,14 +98,14 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
         val itemSections = when (uiState.page) {
             is MarketSearchViewModel.Page.Discovery -> {
                 mapOf(
-                    Optional.of(stringResource(R.string.Market_Search_Sections_RecentTitle)) to uiState.page.recent,
-                    Optional.of(stringResource(R.string.Market_Search_Sections_PopularTitle)) to uiState.page.popular,
+                    MarketSearchSection.Recent to uiState.page.recent,
+                    MarketSearchSection.Popular to uiState.page.popular,
                 )
             }
 
             is MarketSearchViewModel.Page.SearchResults -> {
                 mapOf(
-                    Optional.ofNullable<String>(null) to uiState.page.items
+                    MarketSearchSection.SearchResults to uiState.page.items
                 )
             }
         }
@@ -109,12 +113,14 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
         MarketSearchResults(
             uiState.listId,
             itemSections = itemSections,
-            onCoinClick = { coin ->
+            onCoinClick = { coin, section ->
                 viewModel.onCoinOpened(coin)
                 navController.slideFromRight(
                     R.id.coinFragment,
                     CoinFragment.Input(coin.uid)
                 )
+
+                stat(page = StatPage.MarketSearch, section = section.statSection, event = StatEvent.OpenCoin(coin.uid))
             }
         ) { favorited, coinUid ->
             viewModel.onFavoriteClick(favorited, coinUid)
@@ -122,12 +128,18 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
     }
 }
 
+enum class MarketSearchSection(val title: Optional<Int>) {
+    Recent(Optional.of(R.string.Market_Search_Sections_RecentTitle)),
+    Popular(Optional.of(R.string.Market_Search_Sections_PopularTitle)),
+    SearchResults(Optional.empty())
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketSearchResults(
     vararg inputs: Any?,
-    itemSections: Map<Optional<String>, List<CoinItem>>,
-    onCoinClick: (Coin) -> Unit,
+    itemSections: Map<MarketSearchSection, List<CoinItem>>,
+    onCoinClick: (Coin, MarketSearchSection) -> Unit,
     onFavoriteClick: (Boolean, String) -> Unit,
 ) {
     if (itemSections.all { (_, items) -> items.isEmpty() }) {
@@ -147,12 +159,12 @@ fun MarketSearchResults(
                 LazyListState()
             }
         ) {
-            itemSections.forEach { (title, coinItems) ->
-                title.ifPresent {
+            itemSections.forEach { (section, coinItems) ->
+                section.title.ifPresent {
                     stickyHeader {
                         HeaderStick(
                             borderTop = true,
-                            text = title.get()
+                            text = stringResource(id = section.title.get())
                         )
                     }
                 }
@@ -189,7 +201,7 @@ fun MarketSearchResults(
                                 contentDescription = stringResource(if (item.favourited) R.string.CoinPage_Unfavorite else R.string.CoinPage_Favorite),
                             )
                         }
-                        val cardId = title.getOrDefault("") + coin.uid
+                        val cardId = (section.title.getOrNull()?.let { stringResource(id = it) } ?: "") + coin.uid
                         DraggableCardSimple(
                             key = cardId,
                             isRevealed = revealedCardId == cardId,
@@ -209,7 +221,7 @@ fun MarketSearchResults(
                                         coinName = coin.name,
                                         coinIconUrl = coin.imageUrl,
                                         coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                                        onClick = { onCoinClick(coin) }
+                                        onClick = { onCoinClick(coin, section) }
                                     )
                                 }
                             }
