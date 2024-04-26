@@ -24,6 +24,11 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.getInputX
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.StatSection
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
@@ -171,7 +176,16 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                             value = uiState.address.hex,
                             showAdd = uiState.contact == null,
                             blockchainType = uiState.blockchainType,
-                            navController = navController
+                            navController = navController,
+                            onCopy = {
+                                stat(page = StatPage.Resend, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
+                            },
+                            onAddToExisting = {
+                                stat(page = StatPage.Resend, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                            },
+                            onAddToNew = {
+                                stat(page = StatPage.Resend, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
+                            }
                         )
                     }
                     uiState.contact?.let {

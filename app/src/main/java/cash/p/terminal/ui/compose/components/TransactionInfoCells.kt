@@ -239,7 +239,16 @@ fun PriceWithToggleCell(
 }
 
 @Composable
-fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, blockchainType: BlockchainType?, navController: NavController? = null) {
+fun TransactionInfoAddressCell(
+    title: String,
+    value: String,
+    showAdd: Boolean,
+    blockchainType: BlockchainType?,
+    navController: NavController? = null,
+    onCopy: (() -> Unit)? = null,
+    onAddToExisting: (() -> Unit)? = null,
+    onAddToNew: (() -> Unit)? = null,
+) {
     val view = LocalView.current
     var showSaveAddressDialog by remember { mutableStateOf(false) }
     RowUniversal(
@@ -268,6 +277,8 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, b
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                onCopy?.invoke()
             }
         )
     }
@@ -285,10 +296,11 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, b
                 blockchainType?.let {
                     val args = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
+                            onAddToNew?.invoke()
                             ContactsFragment.Input(Mode.AddAddressToNewContact(blockchainType, value))
-
                         }
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
+                            onAddToExisting?.invoke()
                             ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
                         }
                     }
