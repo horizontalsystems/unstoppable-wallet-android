@@ -28,6 +28,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -89,11 +93,11 @@ private fun CreateAccountIntroScreen(
     val viewModel = viewModel<CreateAccountViewModel>(factory = CreateAccountModule.Factory())
     val view = LocalView.current
 
-    LaunchedEffect(viewModel.successMessage) {
-        viewModel.successMessage?.let {
+    LaunchedEffect(viewModel.success) {
+        viewModel.success?.let { accountType ->
             HudHelper.showSuccessMessage(
                 contenView = view,
-                resId = it,
+                resId = R.string.Hud_Text_Created,
                 icon = R.drawable.icon_add_to_wallet_24,
                 iconTint = R.color.white
             )
@@ -101,6 +105,8 @@ private fun CreateAccountIntroScreen(
 
             onFinish.invoke()
             viewModel.onSuccessMessageShown()
+
+            stat(page = StatPage.NewWallet, event = StatEvent.CreateWallet(accountType.statAccountType))
         }
     }
 
@@ -138,6 +144,8 @@ private fun CreateAccountIntroScreen(
                         .fillMaxSize()
                         .clickable {
                             openCreateAdvancedScreen.invoke()
+
+                            stat(page = StatPage.NewWallet, event = StatEvent.Open(StatPage.NewWalletAdvanced))
                         }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
