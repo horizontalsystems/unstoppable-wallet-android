@@ -50,6 +50,8 @@ enum class StatPage(val key: String) {
     CoinRankRevenue("coin_rank_revenue"),
     CoinRankTxCount("coin_rank_tx_count"),
     Contacts("contacts"),
+    ContactAddToExisting("contact_add_to_existing"),
+    ContactNew("contact_new"),
     ContactUs("contact_us"),
     Donate("donate"),
     DonateAddressList("donate_address_list"),
@@ -102,6 +104,7 @@ enum class StatPage(val key: String) {
     Receive("receive"),
     ReceiveTokenList("receive_token_list"),
     RecoveryPhrase("recovery_phrase"),
+    Resend("resend"),
     ScanQrCode("scan_qr_code"),
     Security("security"),
     Send("send"),
@@ -127,6 +130,11 @@ enum class StatPage(val key: String) {
 }
 
 enum class StatSection(val key: String) {
+    AddressFrom("address_from"),
+    AddressRecipient("address_recipient"),
+    AddressSpender("address_spender"),
+    AddressTo("address_to"),
+    Input("input"),
     Popular("popular"),
     Recent("recent"),
     SearchResults("search_results"),
