@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchSection
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
@@ -257,4 +258,11 @@ val MarketSearchSection.statSection: StatSection
         MarketSearchSection.Recent -> StatSection.Recent
         MarketSearchSection.Popular -> StatSection.Popular
         MarketSearchSection.SearchResults -> StatSection.SearchResults
+    }
+
+val MarketFavoritesModule.Period.statPeriod: StatPeriod
+    get() = when (this) {
+        MarketFavoritesModule.Period.OneDay -> StatPeriod.Day1
+        MarketFavoritesModule.Period.SevenDay -> StatPeriod.Week1
+        MarketFavoritesModule.Period.ThirtyDay -> StatPeriod.Month1
     }
