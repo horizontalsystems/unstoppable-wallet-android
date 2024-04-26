@@ -21,6 +21,10 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.manageaccount.ManageAccountFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem
@@ -91,13 +95,19 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                     ActionViewItem(R.drawable.ic_plus, R.string.ManageAccounts_CreateNewWallet) {
                         navController.navigateWithTermsAccepted {
                             navController.slideFromRight(R.id.createAccountFragment, args)
+
+                            stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.NewWallet))
                         }
                     },
                     ActionViewItem(R.drawable.ic_download_20, R.string.ManageAccounts_ImportWallet) {
                         navController.slideFromRight(R.id.importWalletFragment, args)
+
+                        stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ImportWallet))
                     },
                     ActionViewItem(R.drawable.icon_binocule_20, R.string.ManageAccounts_WatchAddress) {
                         navController.slideFromRight(R.id.watchAddressFragment, args)
+
+                        stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.WatchWallet))
                     }
                 )
                 CellUniversalLawrenceSection(actions) {
@@ -124,7 +134,11 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
 private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAccountsViewModel, navController: NavController) {
     CellUniversalLawrenceSection(items = accounts) { accountViewItem ->
         RowUniversal(
-            onClick = { viewModel.onSelect(accountViewItem) }
+            onClick = {
+                viewModel.onSelect(accountViewItem)
+
+                stat(page = StatPage.ManageWallets, event = StatEvent.Select(StatEntity.Wallet))
+            }
         ) {
             if (accountViewItem.selected) {
                 Icon(
@@ -182,6 +196,8 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                     R.id.manageAccountFragment,
                     ManageAccountFragment.Input(accountViewItem.accountId)
                 )
+
+                stat(page = StatPage.ManageWallets, event = StatEvent.Open(StatPage.ManageWallet))
             }
         }
     }

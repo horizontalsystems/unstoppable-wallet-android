@@ -11,6 +11,9 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.getInput
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuModule
@@ -65,7 +68,11 @@ private fun RestoreAccountNavHost(
                 restoreMenuViewModel = restoreMenuViewModel,
                 mainViewModel = mainViewModel,
                 openSelectCoinsScreen = { navController.navigate("restore_select_coins") },
-                openNonStandardRestore = { navController.navigate("restore_phrase_nonstandard") },
+                openNonStandardRestore = {
+                    navController.navigate("restore_phrase_nonstandard")
+
+                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.ImportWalletNonStandard))
+                },
                 onBackClick = { navController.popBackStack() }
             )
         }
