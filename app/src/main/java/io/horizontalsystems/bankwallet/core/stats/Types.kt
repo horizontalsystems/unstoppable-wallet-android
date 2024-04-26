@@ -105,6 +105,7 @@ enum class StatPage(val key: String) {
     ReceiveTokenList("receive_token_list"),
     RecoveryPhrase("recovery_phrase"),
     Resend("resend"),
+    RestoreSelect("restore_select"),
     ScanQrCode("scan_qr_code"),
     Security("security"),
     Send("send"),

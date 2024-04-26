@@ -17,7 +17,6 @@ import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreByMenu
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuViewModel
@@ -52,10 +51,10 @@ fun RestorePrivateKey(
                         title = TranslatableString.ResString(R.string.Button_Next),
                         onClick = {
                             viewModel.resolveAccountType()?.let { accountType ->
-                                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
+                                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletFromKeyAdvanced)
                                 openSelectCoinsScreen.invoke()
 
-                                stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.ImportWallet(accountType.statAccountType))
+                                stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.RestoreSelect))
                             }
                         }
                     )

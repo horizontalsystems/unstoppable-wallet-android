@@ -42,7 +42,9 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.requireInput
+import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.backuplocal.fullbackup.OtherBackupItems
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
@@ -118,6 +120,7 @@ private fun RestoreLocalNavHost(
             RestoreLocalScreen(
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
+                statPage = statPage,
                 onBackClick = { fragmentNavController.popBackStack() },
                 close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
                 openSelectCoins = { navController.navigate("restore_select_coins") },
@@ -159,6 +162,7 @@ private fun RestoreLocalNavHost(
 private fun RestoreLocalScreen(
     viewModel: RestoreLocalViewModel,
     mainViewModel: RestoreViewModel,
+    statPage: StatPage,
     onBackClick: () -> Unit,
     close: () -> Unit,
     openSelectCoins: () -> Unit,
@@ -191,11 +195,13 @@ private fun RestoreLocalScreen(
 
     LaunchedEffect(uiState.showSelectCoins) {
         uiState.showSelectCoins?.let { accountType ->
-            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
+            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true, statPage)
             keyboardController?.hide()
             delay(300)
             openSelectCoins.invoke()
             viewModel.onSelectCoinsShown()
+
+            stat(page = statPage, event = StatEvent.Open(StatPage.RestoreSelect))
         }
     }
 

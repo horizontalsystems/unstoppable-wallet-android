@@ -11,6 +11,10 @@ import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.nativeTokenQueries
 import cash.p.terminal.core.order
 import cash.p.terminal.core.restoreSettingTypes
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
@@ -37,7 +41,8 @@ class RestoreBlockchainsService(
     private val marketKit: MarketKitWrapper,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
     private val blockchainTokensService: BlockchainTokensService,
-    private val restoreSettingsService: RestoreSettingsService
+    private val restoreSettingsService: RestoreSettingsService,
+    private val statPage: StatPage
 ) : Clearable {
 
     private val disposables = CompositeDisposable()
@@ -205,6 +210,8 @@ class RestoreBlockchainsService(
 
         val wallets = enabledTokens.map { Wallet(it, account) }
         walletManager.save(wallets)
+
+        stat(page = statPage, event = StatEvent.ImportWallet(accountType.statAccountType))
     }
 
     override fun clear() = disposables.clear()
