@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
@@ -91,8 +94,12 @@ class MarketSearchViewModel(
     fun onFavoriteClick(favourited: Boolean, coinUid: String) {
         if (favourited) {
             marketFavoritesManager.remove(coinUid)
+
+            stat(page = StatPage.MarketSearch, event = StatEvent.RemoveFromWatchlist(coinUid))
         } else {
             marketFavoritesManager.add(coinUid)
+
+            stat(page = StatPage.MarketSearch, event = StatEvent.AddToWatchlist(coinUid))
         }
     }
 
