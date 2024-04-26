@@ -41,9 +41,11 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -140,6 +142,8 @@ private fun MainScreen(
                     coroutineScope.launch {
                         modalBottomSheetState.hide()
                         viewModel.onSelect(it)
+
+                        stat(page = StatPage.Main, event = StatEvent.Select(StatEntity.Wallet))
                     }
                 },
                 onCancelClick = {
@@ -176,11 +180,17 @@ private fun MainScreen(
                                     enabled = item.enabled,
                                     selectedContentColor = ComposeAppTheme.colors.jacob,
                                     unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
-                                    onClick = { viewModel.onSelect(item.mainNavItem) },
+                                    onClick = {
+                                        viewModel.onSelect(item.mainNavItem)
+
+                                        stat(page = StatPage.Main, event = StatEvent.SwitchTab(item.mainNavItem.statTab))
+                                    },
                                     onLongClick = {
                                         if (item.mainNavItem == MainNavigation.Balance) {
                                             coroutineScope.launch {
                                                 modalBottomSheetState.show()
+
+                                                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.SwitchWallet))
                                             }
                                         }
                                     }

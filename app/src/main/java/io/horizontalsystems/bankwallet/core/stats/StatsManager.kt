@@ -12,6 +12,7 @@ import cash.p.terminal.entities.StatRecord
 import cash.p.terminal.modules.balance.BalanceSortType
 import cash.p.terminal.modules.coin.CoinModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
+import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.metricchart.MetricsType
@@ -213,4 +214,12 @@ val MetricsType.statPage: StatPage
         MetricsType.Volume24h -> StatPage.GlobalMetricsVolume
         MetricsType.DefiCap -> StatPage.GlobalMetricsDefiCap
         MetricsType.TvlInDefi -> StatPage.GlobalMetricsTvlInDefi
+    }
+
+val MainModule.MainNavigation.statTab: StatTab
+    get() = when(this) {
+        MainModule.MainNavigation.Market -> StatTab.Markets
+        MainModule.MainNavigation.Balance -> StatTab.Balance
+        MainModule.MainNavigation.Transactions -> StatTab.Transactions
+        MainModule.MainNavigation.Settings -> StatTab.Settings
     }
