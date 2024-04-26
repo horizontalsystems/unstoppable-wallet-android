@@ -19,6 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statSection
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.MarketViewItem
@@ -63,7 +67,11 @@ fun BoardsView(
                 .background(ComposeAppTheme.colors.lawrence)
         ){
             boardItem.marketViewItems.forEach { coin ->
-                MarketCoinWithBackground(coin) { onItemClick.invoke(coin) }
+                MarketCoinWithBackground(coin) {
+                    onItemClick.invoke(coin)
+
+                    stat(page = StatPage.MarketOverview, section = boardItem.type.statSection, event = StatEvent.OpenCoin(coin.coinUid))
+                }
             }
 
             SeeAllButton { onClickSeeAll(boardItem.type) }

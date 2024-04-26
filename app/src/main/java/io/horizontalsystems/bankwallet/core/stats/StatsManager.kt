@@ -14,7 +14,10 @@ import cash.p.terminal.modules.coin.CoinModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketField
+import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField
+import cash.p.terminal.modules.market.TimeDuration
+import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.modules.metricchart.ProChartModule
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
@@ -217,9 +220,30 @@ val MetricsType.statPage: StatPage
     }
 
 val MainModule.MainNavigation.statTab: StatTab
-    get() = when(this) {
+    get() = when (this) {
         MainModule.MainNavigation.Market -> StatTab.Markets
         MainModule.MainNavigation.Balance -> StatTab.Balance
         MainModule.MainNavigation.Transactions -> StatTab.Transactions
         MainModule.MainNavigation.Settings -> StatTab.Settings
+    }
+
+val TopMarket.statMarketTop: StatMarketTop
+    get() = when (this) {
+        TopMarket.Top100 -> StatMarketTop.Top100
+        TopMarket.Top200 -> StatMarketTop.Top200
+        TopMarket.Top300 -> StatMarketTop.Top300
+    }
+
+val MarketModule.ListType.statSection: StatSection
+    get() = when (this) {
+        MarketModule.ListType.TopGainers -> StatSection.TopGainers
+        MarketModule.ListType.TopLosers -> StatSection.TopLosers
+    }
+
+val TimeDuration.statPeriod: StatPeriod
+    get() = when (this) {
+        TimeDuration.OneDay -> StatPeriod.Day1
+        TimeDuration.SevenDay -> StatPeriod.Week1
+        TimeDuration.ThirtyDay -> StatPeriod.Month1
+        TimeDuration.ThreeMonths -> StatPeriod.Month3
     }
