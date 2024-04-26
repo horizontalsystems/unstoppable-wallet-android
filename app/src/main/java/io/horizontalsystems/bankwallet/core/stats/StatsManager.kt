@@ -18,6 +18,7 @@ import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
+import cash.p.terminal.modules.market.favorites.MarketFavoritesModule
 import cash.p.terminal.modules.market.search.MarketSearchSection
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.modules.metricchart.ProChartModule
@@ -261,4 +262,11 @@ val MarketSearchSection.statSection: StatSection
         MarketSearchSection.Recent -> StatSection.Recent
         MarketSearchSection.Popular -> StatSection.Popular
         MarketSearchSection.SearchResults -> StatSection.SearchResults
+    }
+
+val MarketFavoritesModule.Period.statPeriod: StatPeriod
+    get() = when (this) {
+        MarketFavoritesModule.Period.OneDay -> StatPeriod.Day1
+        MarketFavoritesModule.Period.SevenDay -> StatPeriod.Week1
+        MarketFavoritesModule.Period.ThirtyDay -> StatPeriod.Month1
     }

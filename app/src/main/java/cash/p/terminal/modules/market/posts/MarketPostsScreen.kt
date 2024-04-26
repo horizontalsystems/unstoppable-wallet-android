@@ -16,6 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -35,6 +38,8 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
         refreshing = isRefreshing,
         onRefresh = {
             viewModel.refresh()
+
+            stat(page = StatPage.News, event = StatEvent.Refresh)
         }
     ) {
         Crossfade(viewState) { viewState ->
@@ -56,6 +61,8 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
                                 date = postItem.timeAgo,
                             ) {
                                 LinkHelper.openLinkInAppBrowser(context, postItem.url)
+
+                                stat(page = StatPage.News, event = StatEvent.Open(StatPage.ExternalNews))
                             }
                         }
                         item {
