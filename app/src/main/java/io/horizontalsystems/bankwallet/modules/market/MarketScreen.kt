@@ -13,6 +13,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
@@ -41,6 +45,8 @@ fun MarketScreen(navController: NavController) {
                     icon = R.drawable.icon_search,
                     onClick = {
                         navController.slideFromRight(R.id.marketSearchFragment)
+
+                        stat(page = StatPage.Markets, event = StatEvent.Open(StatPage.MarketSearch))
                     }
                 ),
                 MenuItem(
@@ -48,6 +54,8 @@ fun MarketScreen(navController: NavController) {
                     icon = R.drawable.ic_manage_2_24,
                     onClick = {
                         navController.slideFromRight(R.id.marketAdvancedSearchFragment)
+
+                        stat(page = StatPage.Markets, event = StatEvent.Open(StatPage.AdvancedSearch))
                     }
                 ),
             )
@@ -61,6 +69,8 @@ fun MarketScreen(navController: NavController) {
         }
         Tabs(tabItems, onClick = {
             marketViewModel.onSelect(it)
+
+            stat(page = StatPage.Markets, event = StatEvent.SwitchTab(it.statTab))
         })
 
         HorizontalPager(
