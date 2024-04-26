@@ -11,6 +11,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuModule
@@ -65,7 +68,11 @@ private fun RestoreAccountNavHost(
                 restoreMenuViewModel = restoreMenuViewModel,
                 mainViewModel = mainViewModel,
                 openSelectCoinsScreen = { navController.navigate("restore_select_coins") },
-                openNonStandardRestore = { navController.navigate("restore_phrase_nonstandard") },
+                openNonStandardRestore = {
+                    navController.navigate("restore_phrase_nonstandard")
+
+                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.ImportWalletNonStandard))
+                },
                 onBackClick = { navController.popBackStack() }
             )
         }
