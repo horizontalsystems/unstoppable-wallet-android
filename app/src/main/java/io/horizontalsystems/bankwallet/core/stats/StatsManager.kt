@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.coin.CoinModule
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
+import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
@@ -209,4 +210,12 @@ val MetricsType.statPage: StatPage
         MetricsType.Volume24h -> StatPage.GlobalMetricsVolume
         MetricsType.DefiCap -> StatPage.GlobalMetricsDefiCap
         MetricsType.TvlInDefi -> StatPage.GlobalMetricsTvlInDefi
+    }
+
+val MainModule.MainNavigation.statTab: StatTab
+    get() = when(this) {
+        MainModule.MainNavigation.Market -> StatTab.Markets
+        MainModule.MainNavigation.Balance -> StatTab.Balance
+        MainModule.MainNavigation.Transactions -> StatTab.Transactions
+        MainModule.MainNavigation.Settings -> StatTab.Settings
     }
