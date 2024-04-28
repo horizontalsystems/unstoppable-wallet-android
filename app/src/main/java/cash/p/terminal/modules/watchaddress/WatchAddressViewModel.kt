@@ -4,6 +4,10 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.BitcoinAddress
@@ -177,6 +181,8 @@ class WatchAddressViewModel(
 
             accountCreated = true
             emitState()
+
+            stat(page = StatPage.WatchWallet, event = StatEvent.WatchWallet(accountType.statAccountType))
         } catch (_: Exception) {
 
         }

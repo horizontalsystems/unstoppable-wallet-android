@@ -42,6 +42,10 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.balance.BalanceAccountsViewModel
 import cash.p.terminal.modules.balance.BalanceModule
@@ -89,6 +93,8 @@ fun TransactionsScreen(
                         showAlertDot = showFilterAlertDot,
                         onClick = {
                             navController.slideFromRight(R.id.transactionFilterFragment)
+
+                            stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionFilter))
                         },
                     )
                 )
@@ -96,7 +102,11 @@ fun TransactionsScreen(
             filterTypes?.let { filterTypes ->
                 FilterTypeTabs(
                     filterTypes = filterTypes,
-                    onTransactionTypeClick = viewModel::setFilterTransactionType
+                    onTransactionTypeClick = {
+                        viewModel.setFilterTransactionType(it)
+
+                        stat(page = StatPage.Transactions, event = StatEvent.SwitchTab(it.statTab))
+                    }
                 )
             }
 
@@ -160,6 +170,8 @@ private fun onTransactionClick(
     viewModel.tmpItemToShow = transactionItem
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
+
+    stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
 @OptIn(ExperimentalFoundationApi::class)

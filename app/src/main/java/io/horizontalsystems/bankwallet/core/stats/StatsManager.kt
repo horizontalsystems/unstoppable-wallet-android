@@ -22,6 +22,7 @@ import cash.p.terminal.modules.market.favorites.MarketFavoritesModule
 import cash.p.terminal.modules.market.search.MarketSearchSection
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.modules.metricchart.ProChartModule
+import cash.p.terminal.modules.transactions.FilterTransactionType
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.time.Instant
@@ -269,4 +270,13 @@ val MarketFavoritesModule.Period.statPeriod: StatPeriod
         MarketFavoritesModule.Period.OneDay -> StatPeriod.Day1
         MarketFavoritesModule.Period.SevenDay -> StatPeriod.Week1
         MarketFavoritesModule.Period.ThirtyDay -> StatPeriod.Month1
+    }
+
+val FilterTransactionType.statTab: StatTab
+    get() = when (this) {
+        FilterTransactionType.All -> StatTab.All
+        FilterTransactionType.Incoming -> StatTab.Incoming
+        FilterTransactionType.Outgoing -> StatTab.Outgoing
+        FilterTransactionType.Swap -> StatTab.Swap
+        FilterTransactionType.Approve -> StatTab.Approve
     }

@@ -13,6 +13,9 @@ import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LaunchPage
@@ -290,6 +293,8 @@ class MainViewModel(
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
                             deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it))
+
+                            stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
                         }
                     }
 

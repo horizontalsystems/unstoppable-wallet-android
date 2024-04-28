@@ -21,6 +21,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.requireInput
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Account
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryRed
@@ -111,6 +115,8 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
                 viewModel.onUnlink()
                 HudHelper.showSuccessMessage(view, doneConfirmationMessage)
                 navController.popBackStack()
+
+                stat(page = StatPage.UnlinkWallet, event = StatEvent.Delete(StatEntity.Wallet))
             },
             enabled = unlinkEnabled
         )
