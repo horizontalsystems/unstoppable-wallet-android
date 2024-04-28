@@ -5,6 +5,10 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.description
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statAccountType
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
@@ -97,6 +101,8 @@ class SelectBlockchainsViewModel(
         service.watchTokens(accountType, selectedCoins.toList(), accountName)
         accountCreated = true
         emitState()
+
+        stat(page = StatPage.WatchWallet, event = StatEvent.WatchWallet(accountType.statAccountType))
     }
 
 }
