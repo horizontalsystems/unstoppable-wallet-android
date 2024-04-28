@@ -29,6 +29,11 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statField
+import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
@@ -69,6 +74,8 @@ class MarketPlatformFragment : BaseComposeFragment() {
             onCoinClick = { coinUid ->
                 val arguments = CoinFragment.Input(coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
             }
         )
     }
@@ -94,6 +101,8 @@ private fun PlatformScreen(
                 refreshing = viewModel.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
+
+                    stat(page = StatPage.TopPlatform, event = StatEvent.Refresh)
                 }
             ) {
                 Crossfade(viewModel.viewState) { state ->
@@ -116,9 +125,13 @@ private fun PlatformScreen(
                                     scrollToTop = scrollToTopAfterUpdate,
                                     onAddFavorite = { uid ->
                                         viewModel.onAddFavorite(uid)
+
+                                        stat(page = StatPage.TopPlatform, event = StatEvent.AddToWatchlist(uid))
                                     },
                                     onRemoveFavorite = { uid ->
                                         viewModel.onRemoveFavorite(uid)
+
+                                        stat(page = StatPage.TopPlatform, event = StatEvent.RemoveFromWatchlist(uid))
                                     },
                                     onCoinClick = onCoinClick,
                                     preItems = {
@@ -146,7 +159,11 @@ private fun PlatformScreen(
                                                 ) {
                                                     ButtonSecondaryToggle(
                                                         select = viewModel.menu.marketFieldSelect,
-                                                        onSelect = viewModel::onSelectMarketField
+                                                        onSelect = {
+                                                            viewModel.onSelectMarketField(it)
+
+                                                            stat(page = StatPage.TopPlatform, event = StatEvent.SwitchField(it.statField))
+                                                        }
                                                     )
                                                 }
                                             }
@@ -171,6 +188,8 @@ private fun PlatformScreen(
                     { selected ->
                         viewModel.onSelectSortingField(selected)
                         scrollToTopAfterUpdate = true
+
+                        stat(page = StatPage.TopPlatform, event = StatEvent.SwitchSortType(selected.statSortType))
                     },
                     { viewModel.onSelectorDialogDismiss() }
                 )

@@ -26,6 +26,12 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statField
+import cash.p.terminal.core.stats.statMarketTop
+import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -68,6 +74,8 @@ class MarketTopCoinsFragment : BaseComposeFragment() {
         val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
+
+        stat(page = StatPage.TopCoins, event = StatEvent.OpenCoin(coinUid))
     }
 
     @Parcelize
@@ -118,8 +126,16 @@ fun TopCoinsScreen(
                                 CoinList(
                                     items = it,
                                     scrollToTop = scrollToTopAfterUpdate,
-                                    onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
-                                    onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
+                                    onAddFavorite = { uid ->
+                                        viewModel.onAddFavorite(uid)
+
+                                        stat(page = StatPage.TopCoins, event = StatEvent.AddToWatchlist(uid))
+                                    },
+                                    onRemoveFavorite = { uid ->
+                                        viewModel.onRemoveFavorite(uid)
+
+                                        stat(page = StatPage.TopCoins, event = StatEvent.RemoveFromWatchlist(uid))
+                                    },
                                     onCoinClick = onCoinClick,
                                     preItems = {
                                         header?.let { header ->
@@ -158,6 +174,8 @@ fun TopCoinsScreen(
                                                                         viewModel.onSelectTopMarket(
                                                                             topMarket
                                                                         )
+
+                                                                        stat(page = StatPage.TopCoins, event = StatEvent.SwitchMarketTop(topMarket.statMarketTop))
                                                                     }
                                                                 )
                                                             }
@@ -166,7 +184,11 @@ fun TopCoinsScreen(
                                                         Box(modifier = Modifier.padding(start = 8.dp)) {
                                                             ButtonSecondaryToggle(
                                                                 select = menu.marketFieldSelect,
-                                                                onSelect = viewModel::onSelectMarketField
+                                                                onSelect = {
+                                                                    viewModel.onSelectMarketField(it)
+
+                                                                    stat(page = StatPage.TopCoins, event = StatEvent.SwitchField(it.statField))
+                                                                }
                                                             )
                                                         }
                                                     }
@@ -195,6 +217,8 @@ fun TopCoinsScreen(
                     { selected ->
                         scrollToTopAfterUpdate = true
                         viewModel.onSelectSortingField(selected)
+
+                        stat(page = StatPage.TopCoins, event = StatEvent.SwitchSortType(selected.statSortType))
                     },
                     { viewModel.onSelectorDialogDismiss() }
                 )

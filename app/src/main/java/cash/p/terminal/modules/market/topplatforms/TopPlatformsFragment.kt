@@ -33,6 +33,11 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statPeriod
+import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.ImageSource
@@ -117,6 +122,8 @@ fun TopPlatformsScreen(
                                             R.id.marketPlatformFragment,
                                             it
                                         )
+
+                                        stat(page = StatPage.TopPlatforms, event = StatEvent.OpenPlatform(it.uid))
                                     },
                                     preItems = {
                                         item {
@@ -146,6 +153,8 @@ fun TopPlatformsScreen(
                                                             it,
                                                             viewModel.periodOptions
                                                         )
+
+                                                        stat(page = StatPage.TopPlatforms, event = StatEvent.SwitchPeriod(it.statPeriod))
                                                     }
                                                 )
                                                 Spacer(modifier = Modifier.width(16.dp))
@@ -167,6 +176,8 @@ fun TopPlatformsScreen(
                     option.select,
                     { selected ->
                         viewModel.onSelectSortingField(selected)
+
+                        stat(page = StatPage.TopPlatforms, event = StatEvent.SwitchSortType(selected.statSortType))
                     },
                     { viewModel.onSelectorDialogDismiss() }
                 )

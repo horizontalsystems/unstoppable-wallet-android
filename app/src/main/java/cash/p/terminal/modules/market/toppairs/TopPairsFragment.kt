@@ -16,6 +16,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.ImageSource
@@ -56,12 +59,14 @@ fun TopPairsScreen(navController: NavController) {
                         ViewState.Loading -> {
                             Loading()
                         }
+
                         is ViewState.Error -> {
                             ListErrorView(
                                 stringResource(R.string.SyncError),
                                 viewModel::onErrorClick
                             )
                         }
+
                         ViewState.Success -> {
                             LazyColumn(
                                 modifier = Modifier.fillMaxSize()
@@ -77,6 +82,8 @@ fun TopPairsScreen(navController: NavController) {
                                     TopPairItem(item, borderTop = i == 0, borderBottom = true) {
                                         it.tradeUrl?.let {
                                             LinkHelper.openLinkInAppBrowser(context, it)
+
+                                            stat(page = StatPage.TopMarketPairs, event = StatEvent.Open(StatPage.ExternalMarketPair))
                                         }
                                     }
                                 }
