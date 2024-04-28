@@ -141,6 +141,8 @@ private fun onTransactionClick(
     transactionsViewModel.tmpItemToShow = transactionItem
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
+
+    stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
 @Composable
@@ -172,6 +174,8 @@ private fun TokenBalanceHeader(
                     onClick = {
                         viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
+
+                        stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
                     }
                 ),
             text = if (balanceViewItem.primaryValue.visible) balanceViewItem.primaryValue.value else "*****",
@@ -337,7 +341,10 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: TokenBalanceViewModel) {
     val onClickReceive = {
         try {
-            navController.slideFromRight(R.id.receiveFragment, viewModel.getWalletForReceive())
+            val wallet = viewModel.getWalletForReceive()
+            navController.slideFromRight(R.id.receiveFragment, wallet)
+
+            stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
@@ -372,6 +379,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                         R.id.sendXFragment,
                         SendFragment.Input(viewItem.wallet, sendTitle)
                     )
+
+                    stat(page = StatPage.TokenPage, event = StatEvent.OpenSend(viewItem.wallet.token))
                 },
                 enabled = viewItem.sendEnabled
             )
@@ -396,6 +405,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
                         navController.slideFromRight(R.id.multiswap, viewItem.wallet.token)
+
+                        stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                     },
                     enabled = viewItem.swapEnabled
                 )
@@ -411,6 +422,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 val arguments = CoinFragment.Input(coinUid)
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
             },
         )
     }
