@@ -13,6 +13,9 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.LaunchPage
@@ -290,6 +293,8 @@ class MainViewModel(
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
                             deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it))
+
+                            stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
                         }
                     }
 

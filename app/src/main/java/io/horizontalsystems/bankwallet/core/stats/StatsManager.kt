@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesM
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchSection
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
+import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import java.time.Instant
@@ -265,4 +266,13 @@ val MarketFavoritesModule.Period.statPeriod: StatPeriod
         MarketFavoritesModule.Period.OneDay -> StatPeriod.Day1
         MarketFavoritesModule.Period.SevenDay -> StatPeriod.Week1
         MarketFavoritesModule.Period.ThirtyDay -> StatPeriod.Month1
+    }
+
+val FilterTransactionType.statTab: StatTab
+    get() = when (this) {
+        FilterTransactionType.All -> StatTab.All
+        FilterTransactionType.Incoming -> StatTab.Incoming
+        FilterTransactionType.Outgoing -> StatTab.Outgoing
+        FilterTransactionType.Swap -> StatTab.Swap
+        FilterTransactionType.Approve -> StatTab.Approve
     }
