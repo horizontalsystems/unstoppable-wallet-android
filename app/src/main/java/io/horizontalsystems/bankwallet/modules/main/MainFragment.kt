@@ -143,7 +143,7 @@ private fun MainScreen(
                         modalBottomSheetState.hide()
                         viewModel.onSelect(it)
 
-                        stat(page = StatPage.Main, event = StatEvent.Select(StatEntity.Wallet))
+                        stat(page = StatPage.SwitchWallet, event = StatEvent.Select(StatEntity.Wallet))
                     }
                 },
                 onCancelClick = {
