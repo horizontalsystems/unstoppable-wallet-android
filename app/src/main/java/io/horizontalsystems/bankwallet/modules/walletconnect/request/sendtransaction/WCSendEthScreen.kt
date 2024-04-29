@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewNew
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -34,12 +33,15 @@ import kotlinx.coroutines.launch
 fun WCSendEthRequestScreen(
     navController: NavController,
     logger: AppLogger,
-    parentNavGraphId: Int,
     blockchainType: BlockchainType,
     transaction: WalletConnectTransaction,
     peerName: String,
 ) {
+    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(R.id.wcRequestFragment)
+    }
     val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
+        viewModelStoreOwner = viewModelStoreOwner,
         factory = WCSendEthereumTransactionRequestViewModel.Factory(
             blockchainType = blockchainType,
             transaction = transaction,
@@ -51,10 +53,7 @@ fun WCSendEthRequestScreen(
     ConfirmTransactionScreen(
         onClickBack = navController::popBackStack,
         onClickSettings = {
-            navController.slideFromBottom(
-                R.id.sendEvmSettingsFragment,
-                SendEvmSettingsFragment.Input(parentNavGraphId)
-            )
+            navController.slideFromBottom(R.id.wcSendEvmTransactionSettings)
         },
         onClickClose = null,
         buttonsSlot = {

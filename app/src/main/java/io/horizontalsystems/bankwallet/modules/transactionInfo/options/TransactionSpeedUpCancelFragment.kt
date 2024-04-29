@@ -28,7 +28,6 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
-import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
@@ -73,7 +72,6 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
             sendEvmTransactionViewModel = sendEvmTransactionViewModel,
             feeViewModel = feeViewModel,
             nonceViewModel = nonceViewModel,
-            parentNavGraphId = R.id.transactionSpeedUpCancelFragment,
             speedUpCancelViewModel = speedUpCancelViewModel,
             navController = navController,
             onSendClick = {
@@ -138,7 +136,6 @@ private fun TransactionSpeedUpCancelScreen(
     feeViewModel: EvmFeeCellViewModel,
     nonceViewModel: SendEvmNonceViewModel,
     speedUpCancelViewModel: TransactionSpeedUpCancelViewModel,
-    parentNavGraphId: Int,
     navController: NavController,
     onSendClick: () -> Unit
 ) {
@@ -160,7 +157,6 @@ private fun TransactionSpeedUpCancelScreen(
                         onClick = {
                             navController.slideFromBottom(
                                 R.id.sendEvmSettingsFragment,
-                                SendEvmSettingsFragment.Input(parentNavGraphId)
                             )
                         }
                     )

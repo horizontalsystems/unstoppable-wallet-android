@@ -1,29 +1,52 @@
 package io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItemFactory
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
 import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
+import io.horizontalsystems.bankwallet.modules.evmfee.Eip1559FeeSettings
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmCommonGasDataService
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeModule
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeService
+import io.horizontalsystems.bankwallet.modules.evmfee.EvmSettingsInput
 import io.horizontalsystems.bankwallet.modules.evmfee.IEvmGasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.LegacyFeeSettings
+import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.eip1559.Eip1559GasPriceService
+import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.legacy.LegacyGasPriceService
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldNonce
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmFeeSettingsScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceService
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmNonceViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsModule
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsService
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsViewModel
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.ethereumkit.core.LegacyGasPriceProvider
 import io.horizontalsystems.ethereumkit.core.eip1559.Eip1559GasPriceProvider
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
@@ -36,6 +59,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
+import java.math.BigDecimal
 
 class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransactionService() {
     private val token by lazy { App.evmBlockchainManager.getBaseToken(blockchainType)!! }
@@ -216,5 +240,73 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
             nonceViewModel = nonceViewModel,
             navController = navController
         )
+    }
+}
+
+@Composable
+fun SendEvmFeeSettingsScreen(
+    viewModel: SendEvmSettingsViewModel,
+    feeSettingsViewModel: ViewModel,
+    nonceViewModel: SendEvmNonceViewModel,
+    navController: NavController
+) {
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
+            .background(color = ComposeAppTheme.colors.tyler)
+    ) {
+        AppBar(
+            title = stringResource(R.string.SendEvmSettings_Title),
+            navigationIcon = {
+                HsIconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_back),
+                        contentDescription = "back button",
+                        tint = ComposeAppTheme.colors.jacob
+                    )
+                }
+            },
+            menuItems = listOf(
+                MenuItem(
+                    title = TranslatableString.ResString(R.string.Button_Reset),
+                    enabled = !viewModel.isRecommendedSettingsSelected,
+                    onClick = { viewModel.onClickReset() }
+                )
+            )
+        )
+
+        when (feeSettingsViewModel) {
+            is LegacyFeeSettingsViewModel -> {
+                LegacyFeeSettings(feeSettingsViewModel, navController)
+            }
+
+            is Eip1559FeeSettingsViewModel -> {
+                Eip1559FeeSettings(feeSettingsViewModel, navController)
+            }
+        }
+
+        val nonceUiState = nonceViewModel.uiState
+        if (nonceUiState.showInSettings) {
+            Spacer(modifier = Modifier.height(24.dp))
+            EvmSettingsInput(
+                title = stringResource(id = R.string.SendEvmSettings_Nonce),
+                info = stringResource(id = R.string.SendEvmSettings_Nonce_Info),
+                value = nonceUiState.nonce?.toBigDecimal() ?: BigDecimal.ZERO,
+                decimals = 0,
+                navController = navController,
+                warnings = nonceUiState.warnings,
+                errors = nonceUiState.errors,
+                onValueChange = {
+                    nonceViewModel.onEnterNonce(it.toLong())
+                },
+                onClickIncrement = nonceViewModel::onIncrementNonce,
+                onClickDecrement = nonceViewModel::onDecrementNonce
+            )
+        }
+
+        Cautions(viewModel.cautions)
+
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }

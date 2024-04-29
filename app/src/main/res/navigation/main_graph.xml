@@ -392,6 +392,9 @@
         android:id="@+id/wcRequestFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCRequestFragment"/>
     <fragment
+        android:id="@+id/wcSendEvmTransactionSettings"
+        android:name="io.horizontalsystems.bankwallet.modules.walletconnect.request.WCEvmTransactionSettingsFragment"/>
+    <fragment
         android:id="@+id/wcListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment"/>
     <fragment

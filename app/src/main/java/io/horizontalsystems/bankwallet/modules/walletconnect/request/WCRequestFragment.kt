@@ -63,7 +63,6 @@ class WCRequestFragment : BaseComposeFragment() {
                     WCSendEthRequestScreen(
                         navController,
                         logger,
-                        R.id.wcRequestFragment,
                         blockchainType,
                         transaction,
                         sessionRequestUI.peerUI.peerName
