@@ -25,37 +25,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.shorten
-import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
-import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.fee.FeeCell
-import cash.p.terminal.modules.multiswap.QuoteInfoRow
-import cash.p.terminal.modules.multiswap.ui.DataField
-import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HFillSpacer
-import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.NftIcon
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
-import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.caption_grey
-import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
 import cash.p.terminal.ui.compose.components.headline2_leah
 import cash.p.terminal.ui.compose.components.subhead1_grey
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -138,15 +131,14 @@ fun SendEvmTransactionView(
     feeCellViewModel: EvmFeeCellViewModel,
     nonceViewModel: SendEvmNonceViewModel,
     navController: NavController,
-    items: List<SectionViewItem>,
-    cautions: List<CautionViewItem>?,
+    statPage: StatPage
 ) {
     val fee by feeCellViewModel.feeLiveData.observeAsState(null)
     val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
 
     Column {
         items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController)
+            SectionView(sectionViewItem.viewItems, navController, statPage)
         }
 
         NonceView(nonceViewModel)
@@ -198,7 +190,7 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
 }
 
 @Composable
-private fun SectionView(viewItems: List<ViewItem>, navController: NavController) {
+private fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
     Spacer(Modifier.height(16.dp))
     CellUniversalLawrenceSection(viewItems) { item ->
         when (item) {
@@ -208,7 +200,24 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController)
             is ViewItem.AmountMulti -> AmountMulti(item)
             is ViewItem.Amount -> Amount(item)
             is ViewItem.NftAmount -> NftAmount(item)
-            is ViewItem.Address -> TransactionInfoAddressCell(item.title, item.value, item.showAdd, item.blockchainType, navController)
+            is ViewItem.Address -> {
+                TransactionInfoAddressCell(
+                    title = item.title,
+                    value = item.value,
+                    showAdd = item.showAdd,
+                    blockchainType = item.blockchainType,
+                    navController = navController,
+                    onCopy = {
+                        stat(page = statPage, section = item.statSection, event = StatEvent.Copy(StatEntity.Address))
+                    },
+                    onAddToExisting = {
+                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                    },
+                    onAddToNew = {
+                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactNew))
+                    }
+                )
+            }
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
             is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
             is ViewItem.TokenItem -> Token(item)

@@ -23,6 +23,11 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.StatSection
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
@@ -167,7 +172,16 @@ fun SendConfirmationScreen(
                             value = address.hex,
                             showAdd = contact == null,
                             blockchainType = blockchainType,
-                            navController = navController
+                            navController = navController,
+                            onCopy = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
+                            },
+                            onAddToExisting = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                            },
+                            onAddToNew = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
+                            }
                         )
                     }
                     contact?.let {

@@ -27,6 +27,7 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInputX
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
 import cash.p.terminal.modules.send.evm.SendEvmData
@@ -186,7 +187,8 @@ private fun SwapApproveConfirmationScreen(
                     sendEvmTransactionViewModel,
                     feeViewModel,
                     nonceViewModel,
-                    navController
+                    navController,
+                    StatPage.SwapApproveConfirmation
                 )
             }
             ButtonsGroupWithShade {

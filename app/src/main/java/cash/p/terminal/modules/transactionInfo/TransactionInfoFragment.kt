@@ -15,6 +15,10 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
@@ -141,7 +145,11 @@ fun TransactionInfoSection(
                                 badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
                                 onClick = viewItem.coinUid?.let {
-                                    { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it)) }
+                                    {
+                                        navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it))
+
+                                        stat(page = StatPage.TransactionInfo, event = StatEvent.OpenCoin(it))
+                                    }
                                 }
                             )
                         }
@@ -186,7 +194,16 @@ fun TransactionInfoSection(
                                 value = viewItem.value,
                                 showAdd = viewItem.showAdd,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                navController = navController,
+                                onCopy = {
+                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Copy(StatEntity.Address))
+                                },
+                                onAddToExisting = {
+                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                                },
+                                onAddToNew = {
+                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactNew))
+                                }
                             )
                         }
                     }

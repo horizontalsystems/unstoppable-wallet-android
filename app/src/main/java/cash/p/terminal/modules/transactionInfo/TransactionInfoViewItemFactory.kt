@@ -6,6 +6,7 @@ import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
@@ -532,7 +533,7 @@ class TransactionInfoViewItemFactory(
         if (!mint && fromAddress != null) {
             val contact = getContact(fromAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_From), fromAddress, contact == null, blockchainType)
+                Address(getString(R.string.TransactionInfo_From), fromAddress, contact == null, blockchainType, StatSection.AddressFrom)
             )
             contact?.let {
                 items.add(
@@ -578,7 +579,7 @@ class TransactionInfoViewItemFactory(
         if (!burn && toAddress != null) {
             val contact = getContact(toAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_To), toAddress, contact == null, blockchainType)
+                Address(getString(R.string.TransactionInfo_To), toAddress, contact == null, blockchainType, StatSection.AddressTo)
             )
 
             contact?.let {
@@ -757,7 +758,7 @@ class TransactionInfoViewItemFactory(
                 value.badge,
                 AmountType.Approved
             ),
-            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, contact == null, blockchainType)
+            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, contact == null, blockchainType, StatSection.AddressSpender)
         )
 
         contact?.let {
@@ -831,7 +832,8 @@ class TransactionInfoViewItemFactory(
                                 getString(R.string.TransactionInfo_RecipientHash),
                                 recipient,
                                 contact == null,
-                                blockchainType
+                                blockchainType,
+                                StatSection.AddressRecipient
                             )
                         )
 

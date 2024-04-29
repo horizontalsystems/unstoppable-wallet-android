@@ -55,6 +55,7 @@ enum class StatPage(val key: String) {
     ContactUs("contact_us"),
     Donate("donate"),
     DonateAddressList("donate_address_list"),
+    DoubleSpend("double_spend"),
     EvmAddress("evm_address"),
     EvmPrivateKey("evm_private_key"),
     ExportFull("export_full"),
@@ -110,8 +111,11 @@ enum class StatPage(val key: String) {
     Security("security"),
     Send("send"),
     SendTokenList("send_token_list"),
+    SendConfirmation("send_confirmation"),
     Settings("settings"),
     Swap("swap"),
+    SwapApproveConfirmation("swap_approve_confirmation"),
+    SwapConfirmation("swap_confirmation"),
     SwitchWallet("switch_wallet"),
     TellFriends("tell_friends"),
     TopCoins("top_coins"),
@@ -139,6 +143,8 @@ enum class StatSection(val key: String) {
     Popular("popular"),
     Recent("recent"),
     SearchResults("search_results"),
+    Status("status"),
+    TimeLock("time_lock"),
     TopGainers("top_gainers"),
     TopLosers("top_losers"),
     TopPlatforms("top_platforms"),
@@ -152,10 +158,10 @@ sealed class StatEvent {
     data class EnableToken(val token: Token) : StatEvent()
 
     data class ImportWallet(val walletType: String) : StatEvent()
-    object ImportFull: StatEvent()
+    object ImportFull : StatEvent()
 
-    data class ExportWallet(val walletType: String): StatEvent()
-    object ExportFull: StatEvent()
+    data class ExportWallet(val walletType: String) : StatEvent()
+    object ExportFull : StatEvent()
 
     data class OpenBlockchainSettingsBtc(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvm(val chainUid: String) : StatEvent()
@@ -165,9 +171,10 @@ sealed class StatEvent {
     data class OpenCoin(val coinUid: String) : StatEvent()
     data class OpenPlatform(val chainUid: String) : StatEvent()
     data class OpenReceive(val token: Token) : StatEvent()
+    data class OpenResend(val chainUid: String, val type: StatResendType) : StatEvent()
     data class OpenSend(val token: Token) : StatEvent()
     data class OpenTokenPage(val token: Token?, val assetId: String? = null) : StatEvent()
-    data class OpenTokenInfo(val token: Token): StatEvent()
+    data class OpenTokenInfo(val token: Token) : StatEvent()
     data class Open(val page: StatPage) : StatEvent()
 
     data class SwitchBaseCurrency(val code: String) : StatEvent()
@@ -206,6 +213,7 @@ sealed class StatEvent {
     object RemoveAmount : StatEvent()
 
     object ToggleHidden : StatEvent()
+    object TogglePrice : StatEvent()
 
     data class Select(val entity: StatEntity) : StatEvent()
     data class Edit(val entity: StatEntity) : StatEvent()
@@ -243,6 +251,7 @@ sealed class StatEvent {
             is OpenReceive,
             is OpenSend,
             is OpenTokenPage,
+            is OpenResend,
             is Open -> "open_page"
 
             is OpenTokenInfo -> "open_token_info"
@@ -263,6 +272,7 @@ sealed class StatEvent {
             is Refresh -> "refresh"
             is ToggleBalanceHidden -> "toggle_balance_hidden"
             is ToggleConversionCoin -> "toggle_conversion_coin"
+            is TogglePrice -> "toggle_price"
 
             is AddToWatchlist -> "add_to_watchlist"
             is RemoveFromWatchlist -> "remove_from_watchlist"
@@ -344,6 +354,8 @@ sealed class StatEvent {
             }
 
             is OpenTokenInfo -> tokenParams(token)
+
+            is OpenResend -> mapOf(StatParam.Page to StatPage.Resend.key, StatParam.ChainUid to chainUid, StatParam.Type to type.key)
 
             is Open -> mapOf(StatParam.Page to page.key)
 
@@ -505,7 +517,14 @@ enum class StatEntity(val key: String) {
     Passphrase("passphrase"),
     ReceiveAddress("receive_address"),
     RecoveryPhrase("recovery_phrase"),
+    RawTransaction("raw_transaction"),
     Token("token"),
+    TransactionId("transaction_id"),
     Wallet("wallet"),
     WalletName("wallet_name")
+}
+
+enum class StatResendType(val key: String) {
+    SpeedUp("speed_up"),
+    Cancel("cancel")
 }
