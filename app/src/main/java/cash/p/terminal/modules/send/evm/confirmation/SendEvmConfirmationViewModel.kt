@@ -34,18 +34,6 @@ class SendEvmConfirmationViewModel(
         sendTransactionService.decorate(transactionData)
     )
 
-    override fun createState() = SendEvmConfirmationUiState(
-        networkFee = sendTransactionState.networkFee,
-        cautions = sendTransactionState.cautions,
-        sendEnabled = sendTransactionState.sendable,
-        transactionFields = sendTransactionState.fields,
-        sectionViewItems = sectionViewItems
-    )
-
-    suspend fun send() = withContext(Dispatchers.Default) {
-        sendTransactionService.sendTransaction()
-    }
-
     init {
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
@@ -57,6 +45,18 @@ class SendEvmConfirmationViewModel(
         sendTransactionService.start(viewModelScope)
 
         sendTransactionService.setSendTransactionData(SendTransactionData.Evm(transactionData, null))
+    }
+
+    override fun createState() = SendEvmConfirmationUiState(
+        networkFee = sendTransactionState.networkFee,
+        cautions = sendTransactionState.cautions,
+        sendEnabled = sendTransactionState.sendable,
+        transactionFields = sendTransactionState.fields,
+        sectionViewItems = sectionViewItems
+    )
+
+    suspend fun send() = withContext(Dispatchers.Default) {
+        sendTransactionService.sendTransaction()
     }
 
     class Factory(

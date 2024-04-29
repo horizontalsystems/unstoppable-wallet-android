@@ -18,9 +18,7 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
-import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewNew
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
@@ -28,7 +26,6 @@ import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.VSpacer
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -42,22 +39,11 @@ fun WCSendEthRequestScreen(
     transaction: WalletConnectTransaction,
     peerName: String,
 ) {
-    val transactionRequestViewModel = viewModel<WCSendEthereumTransactionRequestViewModel>()
-
-    val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        factory = SendEvmConfirmationViewModel.Factory(
-            transactionData = TransactionData(
-                transaction.to,
-                transaction.value,
-                transaction.data
-            ),
-            additionalInfo = SendEvmData.AdditionalInfo.WalletConnectRequest(
-                SendEvmData.WalletConnectInfo(
-                    dAppName = peerName,
-                    chain = null // todo: need to implement it
-                )
-            ),
-            blockchainType
+    val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
+        factory = WCSendEthereumTransactionRequestViewModel.Factory(
+            blockchainType = blockchainType,
+            transaction = transaction,
+            peerName = peerName
         )
     )
     val uiState = viewModel.uiState
@@ -87,9 +73,8 @@ fun WCSendEthRequestScreen(
                         HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
 
                         val result = try {
-                            logger.info("click send button")
-                            val sendResult = viewModel.send()
-                            transactionRequestViewModel.approve(sendResult.fullTransaction.transaction.hash)
+                            logger.info("click confirm button")
+                            viewModel.confirm()
                             logger.info("success")
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
@@ -112,7 +97,7 @@ fun WCSendEthRequestScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Reject),
                 onClick = {
-                    transactionRequestViewModel.reject()
+                    viewModel.reject()
                     navController.popBackStack()
                 }
             )
