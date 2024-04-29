@@ -3,18 +3,22 @@ package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransa
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.ethereum.EvmCoinServiceFactory
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionData
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.SendTransactionServiceEvm
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ValueType
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -25,16 +29,16 @@ import kotlinx.coroutines.withContext
 class WCSendEthereumTransactionRequestViewModel(
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
     private val sendTransactionService: SendTransactionServiceEvm,
-    private val transactionData: TransactionData,
-    private val additionalInfo: SendEvmData.AdditionalInfo?
+    private val dAppName: String,
+    transaction: WalletConnectTransaction
 ) : ViewModelUiState<WCSendEthereumTransactionRequestUiState>() {
-    private var sendTransactionState = sendTransactionService.stateFlow.value
-
-    private val sectionViewItems = sendEvmTransactionViewItemFactory.getItems(
-        transactionData,
-        additionalInfo,
-        sendTransactionService.decorate(transactionData)
+    private val transactionData = TransactionData(
+        transaction.to,
+        transaction.value,
+        transaction.data
     )
+
+    private var sendTransactionState = sendTransactionService.stateFlow.value
 
     init {
         viewModelScope.launch {
@@ -54,8 +58,39 @@ class WCSendEthereumTransactionRequestViewModel(
         cautions = sendTransactionState.cautions,
         sendEnabled = sendTransactionState.sendable,
         transactionFields = sendTransactionState.fields,
-        sectionViewItems = sectionViewItems
+        sectionViewItems = getSectionViewItems()
     )
+
+    private fun getSectionViewItems(): List<SectionViewItem> {
+        val items = sendEvmTransactionViewItemFactory.getItems(
+            transactionData,
+            null,
+            sendTransactionService.decorate(transactionData)
+        ) + SectionViewItem(
+            buildList {
+                add(
+                    ViewItem.Value(
+                        Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
+                        dAppName,
+                        ValueType.Regular
+                    )
+                )
+
+                val chain: WCChainData? = null // todo: need to implement it
+                chain?.let {
+                    add(
+                        ViewItem.Value(
+                            it.chain.name,
+                            it.address ?: "",
+                            ValueType.Regular
+                        )
+                    )
+                }
+            }
+        )
+
+        return items
+    }
 
     suspend fun confirm() = withContext(Dispatchers.Default) {
         val sendResult = sendTransactionService.sendTransaction()
@@ -95,24 +130,11 @@ class WCSendEthereumTransactionRequestViewModel(
                 blockchainType
             )
 
-            val transactionData = TransactionData(
-                transaction.to,
-                transaction.value,
-                transaction.data
-            )
-
-            val additionalInfo = SendEvmData.AdditionalInfo.WalletConnectRequest(
-                SendEvmData.WalletConnectInfo(
-                    dAppName = peerName,
-                    chain = null // todo: need to implement it
-                )
-            )
-
             return WCSendEthereumTransactionRequestViewModel(
                 sendEvmTransactionViewItemFactory,
                 sendTransactionService,
-                transactionData,
-                additionalInfo
+                peerName,
+                transaction
             ) as T
         }
     }

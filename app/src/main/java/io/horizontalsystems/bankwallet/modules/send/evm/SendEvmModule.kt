@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
-import io.horizontalsystems.bankwallet.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.parcelize.Parcelize
@@ -26,14 +25,8 @@ data class SendEvmData(
         @Parcelize
         class Send(val info: SendInfo) : AdditionalInfo()
 
-        @Parcelize
-        class WalletConnectRequest(val info: WalletConnectInfo) : AdditionalInfo()
-
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
-
-        val walletConnectInfo: WalletConnectInfo?
-            get() = (this as? WalletConnectRequest)?.info
     }
 
     @Parcelize
@@ -45,12 +38,6 @@ data class SendEvmData(
     data class NftShortMeta(
         val nftName: String,
         val previewImageUrl: String?
-    ) : Parcelable
-
-    @Parcelize
-    data class WalletConnectInfo(
-        val dAppName: String?,
-        val chain: WCChainData?
     ) : Parcelable
 }
 
