@@ -7,6 +7,9 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.CurrencyManager
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
@@ -184,9 +187,22 @@ class SwapViewModel(
 
         quoteService.setAmount(amount)
     }
-    fun onSelectTokenIn(token: Token) = quoteService.setTokenIn(token)
-    fun onSelectTokenOut(token: Token) = quoteService.setTokenOut(token)
-    fun onSwitchPairs() = quoteService.switchPairs()
+    fun onSelectTokenIn(token: Token)  {
+        quoteService.setTokenIn(token)
+
+        stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenIn(token))
+    }
+    fun onSelectTokenOut(token: Token) {
+        quoteService.setTokenOut(token)
+
+        stat(page = StatPage.Swap, event = StatEvent.SwapSelectTokenOut(token))
+    }
+    fun onSwitchPairs() {
+        quoteService.switchPairs()
+
+        stat(page = StatPage.Swap, event = StatEvent.SwapSwitchPairs)
+    }
+
     fun onUpdateSettings(settings: Map<String, Any?>) = quoteService.setSwapSettings(settings)
     fun onEnterFiatAmount(v: BigDecimal?) = fiatServiceIn.setFiatAmount(v)
     fun reQuote() = quoteService.reQuote()

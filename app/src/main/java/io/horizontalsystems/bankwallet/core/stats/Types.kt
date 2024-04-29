@@ -116,6 +116,8 @@ enum class StatPage(val key: String) {
     Swap("swap"),
     SwapApproveConfirmation("swap_approve_confirmation"),
     SwapConfirmation("swap_confirmation"),
+    SwapSettings("swap_settings"),
+    SwapProvider("swap_provider"),
     SwitchWallet("switch_wallet"),
     TellFriends("tell_friends"),
     TopCoins("top_coins"),
@@ -151,6 +153,8 @@ enum class StatSection(val key: String) {
 }
 
 sealed class StatEvent {
+
+    object Send : StatEvent()
 
     data class AddEvmSource(val chainUid: String) : StatEvent()
     data class DeleteCustomEvmSource(val chainUid: String) : StatEvent()
@@ -215,6 +219,11 @@ sealed class StatEvent {
     object ToggleHidden : StatEvent()
     object TogglePrice : StatEvent()
 
+    data class SwapSelectTokenIn(val token: Token) : StatEvent()
+    data class SwapSelectTokenOut(val token: Token) : StatEvent()
+    data class SwapSelectProvider(val uid: String) : StatEvent()
+    object SwapSwitchPairs : StatEvent()
+
     data class Select(val entity: StatEntity) : StatEvent()
     data class Edit(val entity: StatEntity) : StatEvent()
     data class Delete(val entity: StatEntity) : StatEvent()
@@ -256,6 +265,12 @@ sealed class StatEvent {
 
             is OpenTokenInfo -> "open_token_info"
 
+            is SwapSelectTokenIn -> "swap_select_token_in"
+            is SwapSelectTokenOut -> "swap_select_token_out"
+            is SwapSelectProvider -> "swap_select_provider"
+            is SwapSwitchPairs -> "swap_switch_pairs"
+
+            is Send -> "send"
             is SwitchBaseCurrency -> "switch_base_currency"
             is SwitchBtcSource -> "switch_btc_source"
             is SwitchEvmSource -> "switch_evm_source"
@@ -359,6 +374,12 @@ sealed class StatEvent {
 
             is Open -> mapOf(StatParam.Page to page.key)
 
+            is SwapSelectTokenIn -> tokenParams(token)
+
+            is SwapSelectTokenOut -> tokenParams(token)
+
+            is SwapSelectProvider -> mapOf(StatParam.Provider to uid)
+
             is SwitchBaseCurrency -> mapOf(StatParam.CurrencyCode to code)
 
             is SwitchBtcSource -> mapOf(StatParam.ChainUid to chainUid, StatParam.Type to type.raw)
@@ -444,6 +465,7 @@ enum class StatParam(val key: String) {
     MarketTop("market_top"),
     Page("page"),
     Period("period"),
+    Provider("provider"),
     Shown("shown"),
     Tab("tab"),
     TvlChain("tvl_chain"),

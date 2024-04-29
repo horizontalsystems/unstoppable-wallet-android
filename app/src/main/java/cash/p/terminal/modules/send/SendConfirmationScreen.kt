@@ -233,7 +233,11 @@ fun SendConfirmationScreen(
                     .align(Alignment.BottomCenter)
                     .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
                 sendResult = sendResult,
-                onClickSend = onClickSend
+                onClickSend = {
+                    onClickSend()
+
+                    stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
+                }
             )
         }
     }

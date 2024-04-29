@@ -34,6 +34,9 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
@@ -109,6 +112,8 @@ fun SwapConfirmScreen(navController: NavController) {
                         icon = R.drawable.ic_manage_2_24,
                         onClick = {
                             navController.slideFromRight(R.id.swapTransactionSettings)
+
+                            stat(page = StatPage.SwapConfirmation, event = StatEvent.Open(StatPage.SwapSettings))
                         }
                     )
                 ),
@@ -203,7 +208,7 @@ fun SwapConfirmScreen(navController: NavController) {
             uiState.amountOut?.let { amountOut ->
                 VSpacer(height = 16.dp)
                 SectionUniversalLawrence {
-                    PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut)
+                    PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut, StatPage.SwapConfirmation)
                     PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                     uiState.amountOutMin?.let { amountOutMin ->
                         val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->

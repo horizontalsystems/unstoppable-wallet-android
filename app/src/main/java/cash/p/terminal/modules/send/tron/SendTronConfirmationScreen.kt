@@ -99,7 +99,6 @@ fun SendTronConfirmationScreen(
     val activationFee = confirmationData.activationFee
     val resourcesConsumed = confirmationData.resourcesConsumed
     val memo = confirmationData.memo
-    val onClickSend = sendViewModel::onClickSend
 
     val view = LocalView.current
     when (sendResult) {
@@ -277,7 +276,11 @@ fun SendTronConfirmationScreen(
                     .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
 
                 sendResult = sendResult,
-                onClickSend = onClickSend,
+                onClickSend = {
+                    sendViewModel.onClickSend()
+
+                    stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
+                },
                 enabled = sendEnabled
             )
         }

@@ -7,6 +7,9 @@ import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.managers.CurrencyManager
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
@@ -183,6 +186,8 @@ class SwapConfirmViewModel(
         emitState()
 
         fetchFinalQuote()
+
+        stat(page = StatPage.SwapConfirmation, event = StatEvent.Refresh)
     }
 
     private fun fetchFinalQuote() {
@@ -207,6 +212,8 @@ class SwapConfirmViewModel(
     }
 
     suspend fun swap() = withContext(Dispatchers.Default) {
+        stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
+
         sendTransactionService.sendTransaction()
     }
 
