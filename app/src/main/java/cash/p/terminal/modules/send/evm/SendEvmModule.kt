@@ -10,7 +10,6 @@ import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
-import cash.p.terminal.modules.walletconnect.request.WCChainData
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.parcelize.Parcelize
@@ -26,14 +25,8 @@ data class SendEvmData(
         @Parcelize
         class Send(val info: SendInfo) : AdditionalInfo()
 
-        @Parcelize
-        class WalletConnectRequest(val info: WalletConnectInfo) : AdditionalInfo()
-
         val sendInfo: SendInfo?
             get() = (this as? Send)?.info
-
-        val walletConnectInfo: WalletConnectInfo?
-            get() = (this as? WalletConnectRequest)?.info
     }
 
     @Parcelize
@@ -45,12 +38,6 @@ data class SendEvmData(
     data class NftShortMeta(
         val nftName: String,
         val previewImageUrl: String?
-    ) : Parcelable
-
-    @Parcelize
-    data class WalletConnectInfo(
-        val dAppName: String?,
-        val chain: WCChainData?
     ) : Parcelable
 }
 

@@ -38,7 +38,7 @@ class SendEvmTransactionViewItemFactory(
         additionalInfo: AdditionalInfo?,
         decoration: TransactionDecoration?
     ): List<SectionViewItem> {
-        var sections: List<SectionViewItem> = decoration?.let {
+        var sections = decoration?.let {
             getViewItems(it, additionalInfo)
         } ?: listOf()
 
@@ -49,10 +49,6 @@ class SendEvmTransactionViewItemFactory(
                     evmLabelManager.methodLabel(transactionData.input)
                 )
             }
-        }
-
-        additionalInfo?.walletConnectInfo?.let {
-            sections = sections + getWalletConnectSectionView(it)
         }
 
         return sections
@@ -387,31 +383,6 @@ class SendEvmTransactionViewItemFactory(
 
         return listOf(SectionViewItem(viewItems))
     }
-
-    private fun getWalletConnectSectionView(
-        info: SendEvmData.WalletConnectInfo
-    ) = SectionViewItem(
-        buildList {
-            info.dAppName?.let {
-                add(
-                    ViewItem.Value(
-                        Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
-                        it,
-                        ValueType.Regular
-                    )
-                )
-            }
-            info.chain?.let {
-                add(
-                    ViewItem.Value(
-                        it.chain.name,
-                        it.address ?: "",
-                        ValueType.Regular
-                    )
-                )
-            }
-        }
-    )
 
     private fun getUnknownMethodItems(
         transactionData: TransactionData,
