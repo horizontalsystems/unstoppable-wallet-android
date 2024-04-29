@@ -12,10 +12,11 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.toHexString
-import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
 import io.horizontalsystems.ethereumkit.models.Chain
+import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import kotlin.coroutines.resume
@@ -32,6 +33,12 @@ class WCNewRequestViewModel(
     private val accountManager: IAccountManager,
     private val evmBlockchainManager: EvmBlockchainManager,
 ) : ViewModel() {
+
+    val blockchain: Blockchain? by lazy {
+        val sessionChainId = WCDelegate.sessionRequestEvent?.chainId ?: return@lazy null
+        val chainId = getChainData(sessionChainId)?.chain?.id ?: return@lazy null
+        evmBlockchainManager.getBlockchain(chainId)
+    }
 
     val evmKitWrapper: EvmKitWrapper? = getEthereumKitWrapper()
     var sessionRequest: SessionRequestUI = generateSessionRequestUI()
@@ -94,10 +101,11 @@ class WCNewRequestViewModel(
     }
 
     private fun getEthereumKitWrapper(): EvmKitWrapper? {
+        val blockchain = blockchain ?: return null
         val sessionChainId = WCDelegate.sessionRequestEvent?.chainId ?: return null
         val chainId = getChainData(sessionChainId)?.chain?.id ?: return null
+
         val account = accountManager.activeAccount ?: return null
-        val blockchain = evmBlockchainManager.getBlockchain(chainId) ?: return null
         val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchain.type)
         val evmKitWrapper = evmKitManager.getEvmKitWrapper(account, blockchain.type)
 

@@ -241,7 +241,7 @@ private fun Subhead(item: ViewItem.Subhead) {
 }
 
 @Composable
-private fun TitleValue(item: ViewItem.Value) {
+fun TitleValue(item: ViewItem.Value) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
