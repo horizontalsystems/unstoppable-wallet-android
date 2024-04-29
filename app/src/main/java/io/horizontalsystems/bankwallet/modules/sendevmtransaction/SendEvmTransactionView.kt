@@ -24,6 +24,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.shorten
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.fee.FeeCell
@@ -55,6 +59,7 @@ fun SendEvmTransactionView(
     feeCellViewModel: EvmFeeCellViewModel,
     nonceViewModel: SendEvmNonceViewModel,
     navController: NavController,
+    statPage: StatPage
 ) {
 
     val items by transactionViewModel.viewItemsLiveData.observeAsState(listOf())
@@ -63,7 +68,7 @@ fun SendEvmTransactionView(
 
     Column {
         items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController)
+            SectionView(sectionViewItem.viewItems, navController, statPage)
         }
 
         NonceView(nonceViewModel)
@@ -116,7 +121,7 @@ private fun NonceView(nonceViewModel: SendEvmNonceViewModel) {
 }
 
 @Composable
-private fun SectionView(viewItems: List<ViewItem>, navController: NavController) {
+private fun SectionView(viewItems: List<ViewItem>, navController: NavController, statPage: StatPage) {
     Spacer(Modifier.height(16.dp))
     CellUniversalLawrenceSection(viewItems) { item ->
         when (item) {
@@ -126,7 +131,24 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController)
             is ViewItem.AmountMulti -> AmountMulti(item)
             is ViewItem.Amount -> Amount(item)
             is ViewItem.NftAmount -> NftAmount(item)
-            is ViewItem.Address -> TransactionInfoAddressCell(item.title, item.value, item.showAdd, item.blockchainType, navController)
+            is ViewItem.Address -> {
+                TransactionInfoAddressCell(
+                    title = item.title,
+                    value = item.value,
+                    showAdd = item.showAdd,
+                    blockchainType = item.blockchainType,
+                    navController = navController,
+                    onCopy = {
+                        stat(page = statPage, section = item.statSection, event = StatEvent.Copy(StatEntity.Address))
+                    },
+                    onAddToExisting = {
+                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                    },
+                    onAddToNew = {
+                        stat(page = statPage, section = item.statSection, event = StatEvent.Open(StatPage.ContactNew))
+                    }
+                )
+            }
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
             is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
             is ViewItem.TokenItem -> Token(item)
