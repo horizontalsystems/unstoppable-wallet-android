@@ -24,6 +24,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -63,6 +66,8 @@ fun SwapSelectProviderScreen(navController: NavController) {
     ) {
         swapViewModel.onSelectQuote(it)
         navController.popBackStack()
+
+        stat(page = StatPage.SwapProvider, event = StatEvent.SwapSelectProvider(it.provider.id))
     }
 }
 
