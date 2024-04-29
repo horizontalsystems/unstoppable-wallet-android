@@ -23,6 +23,11 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
@@ -167,7 +172,16 @@ fun SendConfirmationScreen(
                             value = address.hex,
                             showAdd = contact == null,
                             blockchainType = blockchainType,
-                            navController = navController
+                            navController = navController,
+                            onCopy = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
+                            },
+                            onAddToExisting = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                            },
+                            onAddToNew = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
+                            }
                         )
                     }
                     contact?.let {
