@@ -15,6 +15,10 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsModule
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionsViewModel
@@ -141,7 +145,11 @@ fun TransactionInfoSection(
                                 badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
                                 onClick = viewItem.coinUid?.let {
-                                    { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it)) }
+                                    {
+                                        navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it))
+
+                                        stat(page = StatPage.TransactionInfo, event = StatEvent.OpenCoin(it))
+                                    }
                                 }
                             )
                         }
@@ -186,7 +194,16 @@ fun TransactionInfoSection(
                                 value = viewItem.value,
                                 showAdd = viewItem.showAdd,
                                 blockchainType = viewItem.blockchainType,
-                                navController = navController
+                                navController = navController,
+                                onCopy = {
+                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Copy(StatEntity.Address))
+                                },
+                                onAddToExisting = {
+                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                                },
+                                onAddToNew = {
+                                    stat(page = StatPage.TransactionInfo, section = viewItem.statSection, event = StatEvent.Open(StatPage.ContactNew))
+                                }
                             )
                         }
                     }
