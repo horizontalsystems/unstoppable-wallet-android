@@ -11,24 +11,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import com.google.gson.Gson
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
-import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
-import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCRequestModule
-import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthereumTransactionRequestViewModel
-import cash.p.terminal.modules.walletconnect.request.ui.TitleTypedValueCell
-import cash.p.terminal.modules.walletconnect.session.ui.BlockchainCell
+import cash.p.terminal.modules.sendevmtransaction.TitleValue
+import cash.p.terminal.modules.sendevmtransaction.ValueType
+import cash.p.terminal.modules.sendevmtransaction.ViewItem
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCEthereumTransaction
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
+import cash.p.terminal.modules.walletconnect.session.ui.BlockchainCell
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -53,7 +48,7 @@ class WCRequestFragment : BaseComposeFragment() {
         when (val sessionRequestUI = wcRequestViewModel.sessionRequest) {
             is SessionRequestUI.Content -> {
                 if (sessionRequestUI.method == "eth_sendTransaction") {
-                    val evmKitWrapper = wcRequestViewModel.evmKitWrapper ?: return
+                    val blockchainType = wcRequestViewModel.blockchain?.type ?: return
                     val transaction =
                         try {
                             val ethTransaction = Gson().fromJson(
@@ -64,46 +59,15 @@ class WCRequestFragment : BaseComposeFragment() {
                         } catch (e: Throwable) {
                             return
                         }
-                    val vmFactory by lazy {
-                        WCRequestModule.FactoryV2(
-                            evmKitWrapper,
-                            transaction,
-                            sessionRequestUI.peerUI.peerName
-                        )
-                    }
-                    val viewModel by viewModels<WCSendEthereumTransactionRequestViewModel> { vmFactory }
-                    val sendEvmTransactionViewModel by navGraphViewModels<SendEvmTransactionViewModel>(
-                        R.id.wcRequestFragment
-                    ) { vmFactory }
-                    val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(R.id.wcRequestFragment) { vmFactory }
-                    val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(R.id.wcRequestFragment) { vmFactory }
-
-                    val cachedNonceViewModel = nonceViewModel //needed in SendEvmSettingsFragment
-
-                    sendEvmTransactionViewModel.sendSuccessLiveData.observe(viewLifecycleOwner) { transactionHash ->
-                        viewModel.approve(transactionHash)
-                        HudHelper.showSuccessMessage(
-                            requireActivity().findViewById(android.R.id.content),
-                            R.string.Hud_Text_Done
-                        )
-                        navController.popBackStack()
-                    }
-
-                    sendEvmTransactionViewModel.sendFailedLiveData.observe(viewLifecycleOwner) {
-                        HudHelper.showErrorMessage(
-                            requireActivity().findViewById(android.R.id.content),
-                            it
-                        )
-                    }
 
                     WCSendEthRequestScreen(
                         navController,
-                        viewModel,
-                        sendEvmTransactionViewModel,
-                        feeViewModel,
                         logger,
-                        R.id.wcRequestFragment
-                    ) { navController.popBackStack() }
+                        R.id.wcRequestFragment,
+                        blockchainType,
+                        transaction,
+                        sessionRequestUI.peerUI.peerName
+                    )
                 } else {
                     WCNewSignRequestScreen(
                         sessionRequestUI,
@@ -237,9 +201,12 @@ private fun MessageContent(
 ) {
     SectionUniversalLawrence {
         dAppName?.let { dApp ->
-            TitleTypedValueCell(
-                stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
-                dApp
+            TitleValue(
+                ViewItem.Value(
+                    title = stringResource(R.string.WalletConnect_SignMessageRequest_dApp),
+                    value = dApp,
+                    type = ValueType.Regular
+                )
             )
         }
         wcChainData?.let {

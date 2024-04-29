@@ -176,7 +176,7 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         feeService.setTransactionData(data.transactionData)
     }
 
-    override suspend fun sendTransaction() {
+    override suspend fun sendTransaction() : SendTransactionResult.Evm {
         val transaction = transaction ?: throw Exception()
         if (transaction.errors.isNotEmpty()) throw Exception()
 
@@ -185,7 +185,9 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         val gasLimit = transaction.gasData.gasLimit
         val nonce = transaction.nonce
 
-        evmKitWrapper.sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+        val fullTransaction = evmKitWrapper
+            .sendSingle(transactionData, gasPrice, gasLimit, nonce).await()
+        return SendTransactionResult.Evm(fullTransaction)
     }
 
     fun decorate(transactionData: TransactionData): TransactionDecoration? {

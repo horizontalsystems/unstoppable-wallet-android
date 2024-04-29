@@ -14,7 +14,7 @@ abstract class ISendTransactionService: ServiceState<SendTransactionServiceState
     abstract fun setSendTransactionData(data: SendTransactionData)
     @Composable
     abstract fun GetSettingsContent(navController: NavController)
-    abstract suspend fun sendTransaction()
+    abstract suspend fun sendTransaction() : SendTransactionResult
     abstract val sendTransactionSettingsFlow: StateFlow<SendTransactionSettings>
 }
 
