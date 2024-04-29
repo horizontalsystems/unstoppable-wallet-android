@@ -27,7 +27,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInputX
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
@@ -90,6 +92,8 @@ class SwapApproveConfirmationFragment : BaseComposeFragment() {
             onSendClick = {
                 logger.info("click approve button")
                 sendEvmTransactionViewModel.send(logger)
+
+                stat(page = StatPage.SwapApproveConfirmation, event = StatEvent.Send)
             },
             backButton = backButton
         )
