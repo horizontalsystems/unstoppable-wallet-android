@@ -241,7 +241,7 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
             jsonRpcResponse = Wallet.Model.JsonRpcResponse.JsonRpcError(
                 id = requestId,
                 code = 500,
-                message = "Unstoppable Wallet Error"
+                message = "Rejected by user"
             )
         )
 
