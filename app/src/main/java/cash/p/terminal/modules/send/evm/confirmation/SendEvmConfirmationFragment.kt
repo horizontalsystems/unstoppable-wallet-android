@@ -24,7 +24,6 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmModule
-import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewNew
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.SnackbarDuration
@@ -77,7 +76,11 @@ private fun SendEvmConfirmationScreen(
 ) {
     val logger = remember { AppLogger("send-evm") }
 
+    val currentBackStackEntry = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(R.id.sendEvmConfirmationFragment)
+    }
     val viewModel = viewModel<SendEvmConfirmationViewModel>(
+        viewModelStoreOwner = currentBackStackEntry,
         factory = SendEvmConfirmationViewModel.Factory(
             input.transactionData,
             input.additionalInfo,
@@ -89,10 +92,7 @@ private fun SendEvmConfirmationScreen(
     ConfirmTransactionScreen(
         onClickBack = { navController.popBackStack() },
         onClickSettings = {
-            navController.slideFromBottom(
-                R.id.sendEvmSettingsFragment,
-                SendEvmSettingsFragment.Input(R.id.sendEvmConfirmationFragment)
-            )
+            navController.slideFromBottom(R.id.sendEvmSettingsFragment)
         },
         onClickClose = null,
         buttonsSlot = {

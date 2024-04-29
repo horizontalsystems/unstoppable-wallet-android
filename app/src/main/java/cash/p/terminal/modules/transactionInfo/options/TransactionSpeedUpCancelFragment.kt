@@ -28,7 +28,6 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
-import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewModel
@@ -73,7 +72,6 @@ class TransactionSpeedUpCancelFragment : BaseComposeFragment() {
             sendEvmTransactionViewModel = sendEvmTransactionViewModel,
             feeViewModel = feeViewModel,
             nonceViewModel = nonceViewModel,
-            parentNavGraphId = R.id.transactionSpeedUpCancelFragment,
             speedUpCancelViewModel = speedUpCancelViewModel,
             navController = navController,
             onSendClick = {
@@ -138,7 +136,6 @@ private fun TransactionSpeedUpCancelScreen(
     feeViewModel: EvmFeeCellViewModel,
     nonceViewModel: SendEvmNonceViewModel,
     speedUpCancelViewModel: TransactionSpeedUpCancelViewModel,
-    parentNavGraphId: Int,
     navController: NavController,
     onSendClick: () -> Unit
 ) {
@@ -160,7 +157,6 @@ private fun TransactionSpeedUpCancelScreen(
                         onClick = {
                             navController.slideFromBottom(
                                 R.id.sendEvmSettingsFragment,
-                                SendEvmSettingsFragment.Input(parentNavGraphId)
                             )
                         }
                     )

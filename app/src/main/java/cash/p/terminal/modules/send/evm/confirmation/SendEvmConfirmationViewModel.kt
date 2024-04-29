@@ -22,7 +22,7 @@ import kotlinx.coroutines.withContext
 
 class SendEvmConfirmationViewModel(
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
-    private val sendTransactionService: SendTransactionServiceEvm,
+    val sendTransactionService: SendTransactionServiceEvm,
     private val transactionData: TransactionData,
     private val additionalInfo: SendEvmData.AdditionalInfo?
 ) : ViewModelUiState<SendEvmConfirmationUiState>() {

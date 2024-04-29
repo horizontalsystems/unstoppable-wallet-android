@@ -380,6 +380,9 @@
         android:id="@+id/wcRequestFragment"
         android:name="cash.p.terminal.modules.walletconnect.request.WCRequestFragment"/>
     <fragment
+        android:id="@+id/wcSendEvmTransactionSettings"
+        android:name="cash.p.terminal.modules.walletconnect.request.WCEvmTransactionSettingsFragment"/>
+    <fragment
         android:id="@+id/wcListFragment"
         android:name="cash.p.terminal.modules.walletconnect.list.WCListFragment"/>
     <fragment

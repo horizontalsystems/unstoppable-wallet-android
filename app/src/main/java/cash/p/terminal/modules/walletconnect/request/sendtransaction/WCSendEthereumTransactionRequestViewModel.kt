@@ -28,7 +28,7 @@ import kotlinx.coroutines.withContext
 
 class WCSendEthereumTransactionRequestViewModel(
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
-    private val sendTransactionService: SendTransactionServiceEvm,
+    val sendTransactionService: SendTransactionServiceEvm,
     private val dAppName: String,
     transaction: WalletConnectTransaction
 ) : ViewModelUiState<WCSendEthereumTransactionRequestUiState>() {

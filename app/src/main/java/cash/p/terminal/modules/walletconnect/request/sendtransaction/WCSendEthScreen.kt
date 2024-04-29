@@ -19,7 +19,6 @@ import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewNew
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -34,12 +33,15 @@ import kotlinx.coroutines.launch
 fun WCSendEthRequestScreen(
     navController: NavController,
     logger: AppLogger,
-    parentNavGraphId: Int,
     blockchainType: BlockchainType,
     transaction: WalletConnectTransaction,
     peerName: String,
 ) {
+    val viewModelStoreOwner = remember(navController.currentBackStackEntry) {
+        navController.getBackStackEntry(R.id.wcRequestFragment)
+    }
     val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
+        viewModelStoreOwner = viewModelStoreOwner,
         factory = WCSendEthereumTransactionRequestViewModel.Factory(
             blockchainType = blockchainType,
             transaction = transaction,
@@ -51,10 +53,7 @@ fun WCSendEthRequestScreen(
     ConfirmTransactionScreen(
         onClickBack = navController::popBackStack,
         onClickSettings = {
-            navController.slideFromBottom(
-                R.id.sendEvmSettingsFragment,
-                SendEvmSettingsFragment.Input(parentNavGraphId)
-            )
+            navController.slideFromBottom(R.id.wcSendEvmTransactionSettings)
         },
         onClickClose = null,
         buttonsSlot = {
