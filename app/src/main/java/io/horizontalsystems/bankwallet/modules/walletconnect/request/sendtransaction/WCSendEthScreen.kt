@@ -18,9 +18,7 @@ import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewNew
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -28,7 +26,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -42,22 +39,11 @@ fun WCSendEthRequestScreen(
     transaction: WalletConnectTransaction,
     peerName: String,
 ) {
-    val transactionRequestViewModel = viewModel<WCSendEthereumTransactionRequestViewModel>()
-
-    val viewModel = viewModel<SendEvmConfirmationViewModel>(
-        factory = SendEvmConfirmationViewModel.Factory(
-            transactionData = TransactionData(
-                transaction.to,
-                transaction.value,
-                transaction.data
-            ),
-            additionalInfo = SendEvmData.AdditionalInfo.WalletConnectRequest(
-                SendEvmData.WalletConnectInfo(
-                    dAppName = peerName,
-                    chain = null // todo: need to implement it
-                )
-            ),
-            blockchainType
+    val viewModel = viewModel<WCSendEthereumTransactionRequestViewModel>(
+        factory = WCSendEthereumTransactionRequestViewModel.Factory(
+            blockchainType = blockchainType,
+            transaction = transaction,
+            peerName = peerName
         )
     )
     val uiState = viewModel.uiState
@@ -87,9 +73,8 @@ fun WCSendEthRequestScreen(
                         HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
 
                         val result = try {
-                            logger.info("click send button")
-                            val sendResult = viewModel.send()
-                            transactionRequestViewModel.approve(sendResult.fullTransaction.transaction.hash)
+                            logger.info("click confirm button")
+                            viewModel.confirm()
                             logger.info("success")
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
@@ -112,7 +97,7 @@ fun WCSendEthRequestScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Button_Reject),
                 onClick = {
-                    transactionRequestViewModel.reject()
+                    viewModel.reject()
                     navController.popBackStack()
                 }
             )
