@@ -1,6 +1,5 @@
 package cash.p.terminal.core.stats
 
-import android.util.Log
 import com.google.gson.Gson
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
@@ -59,11 +58,10 @@ class StatsManager(
                 }
 
                 val json = gson.toJson(eventMap)
-                Log.e("e", json)
-
+//                Log.e("e", json)
                 statsDao.insert(StatRecord(json))
             } catch (error: Throwable) {
-                Log.e("e", "logStat error", error)
+//                Log.e("e", "logStat error", error)
             }
         }
     }
@@ -81,9 +79,7 @@ class StatsManager(
                 val stats = statsDao.getAll()
                 if (stats.isNotEmpty()) {
                     val statsArray = "[${stats.joinToString { it.json }}]"
-
-                    Log.e("e", "send $statsArray")
-
+//                    Log.e("e", "send $statsArray")
                     marketKit.sendStats(statsArray, appConfigProvider.appVersion, appConfigProvider.appId).blockingGet()
 
                     statsDao.delete(stats.map { it.id })
@@ -91,7 +87,7 @@ class StatsManager(
                 }
 
             } catch (error: Throwable) {
-                Log.e("e", "sendStats error", error)
+//                Log.e("e", "sendStats error", error)
             }
         }
     }
