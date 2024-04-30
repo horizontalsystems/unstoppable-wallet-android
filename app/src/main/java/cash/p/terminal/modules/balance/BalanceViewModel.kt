@@ -3,11 +3,13 @@ package cash.p.terminal.modules.balance
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
+import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.R
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.supported
@@ -19,16 +21,16 @@ import cash.p.terminal.entities.AddressUri
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.address.AddressHandlerFactory
+import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
-import cash.p.terminal.modules.walletconnect.version2.WC2Service
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class BalanceViewModel(
@@ -37,10 +39,9 @@ class BalanceViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val totalBalance: TotalBalance,
     private val localStorage: ILocalStorage,
-    private val wc2Service: WC2Service,
-    private val wC2Manager: WC2Manager,
+    private val wCManager: WCManager,
     private val addressHandlerFactory: AddressHandlerFactory,
-) : ViewModel(), ITotalBalance by totalBalance {
+) : ViewModelUiState<BalanceUiState>(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
     private var viewState: ViewState? = null
@@ -49,26 +50,17 @@ class BalanceViewModel(
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var errorMessage: String? = null
 
-    var uiState by mutableStateOf(
-        BalanceUiState(
-            balanceViewItems = balanceViewItems,
-            viewState = viewState,
-            isRefreshing = isRefreshing,
-            headerNote = HeaderNote.None,
-            errorMessage = errorMessage,
-            openSend = openSendTokenSelect
-        )
-    )
-        private set
-
-    val sortTypes = listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
+    val sortTypes =
+        listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
     var sortType by service::sortType
 
     var connectionResult by mutableStateOf<WalletConnectListViewModel.ConnectionResult?>(null)
         private set
 
+    private var refreshViewItemsJob: Job? = null
+
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             service.balanceItemsFlow
                 .collect { items ->
                     totalBalance.setTotalServiceItems(items?.map {
@@ -100,6 +92,15 @@ class BalanceViewModel(
         totalBalance.start(viewModelScope)
     }
 
+    override fun createState()= BalanceUiState(
+        balanceViewItems = balanceViewItems,
+        viewState = viewState,
+        isRefreshing = isRefreshing,
+        headerNote = headerNote(),
+        errorMessage = errorMessage,
+        openSend = openSendTokenSelect
+    )
+
     private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
 
@@ -108,33 +109,21 @@ class BalanceViewModel(
         }
     }
 
-    private fun emitState() {
-        val newUiState = BalanceUiState(
-            balanceViewItems = balanceViewItems,
-            viewState = viewState,
-            isRefreshing = isRefreshing,
-            headerNote = headerNote(),
-            errorMessage = errorMessage,
-            openSend = openSendTokenSelect
-        )
-
-        viewModelScope.launch {
-            uiState = newUiState
-        }
-    }
-
     private fun headerNote(): HeaderNote {
         val account = service.account ?: return HeaderNote.None
-        val nonRecommendedDismissed = localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id)
+        val nonRecommendedDismissed =
+            localStorage.nonRecommendedAccountAlertDismissedAccounts.contains(account.id)
 
         return account.headerNote(nonRecommendedDismissed)
     }
 
-    private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
-        withContext(Dispatchers.IO) {
+    private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
+        refreshViewItemsJob?.cancel()
+        refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
             if (balanceItems != null) {
                 viewState = ViewState.Success
                 balanceViewItems = balanceItems.map { balanceItem ->
+                    ensureActive()
                     balanceViewItemFactory.viewItem2(
                         balanceItem,
                         service.baseCurrency,
@@ -149,6 +138,7 @@ class BalanceViewModel(
                 balanceViewItems = listOf()
             }
 
+            ensureActive()
             emitState()
         }
     }
@@ -210,8 +200,8 @@ class BalanceViewModel(
         }
     }
 
-    fun getWalletConnectSupportState(): WC2Manager.SupportState {
-        return wC2Manager.getWalletConnectSupportState()
+    fun getWalletConnectSupportState(): WCManager.SupportState {
+        return wCManager.getWalletConnectSupportState()
     }
 
     fun handleScannedData(scannedText: String) {
@@ -228,7 +218,8 @@ class BalanceViewModel(
             val abstractUriParse = AddressUriParser(null, null)
             return when (val result = abstractUriParse.parse(text)) {
                 is AddressUriResult.Uri -> {
-                    if (BlockchainType.supported.map { it.uriScheme }.contains(result.addressUri.scheme))
+                    if (BlockchainType.supported.map { it.uriScheme }
+                            .contains(result.addressUri.scheme))
                         result.addressUri
                     else
                         null
@@ -291,14 +282,14 @@ class BalanceViewModel(
     }
 
     private fun handleWalletConnectUri(scannedText: String) {
-        wc2Service.pair(
-            uri = scannedText,
+        Web3Wallet.pair(Pair(scannedText.trim()),
             onSuccess = {
                 connectionResult = null
             },
             onError = {
                 connectionResult = WalletConnectListViewModel.ConnectionResult.Error
-            })
+            }
+        )
     }
 
     fun onSendOpened() {

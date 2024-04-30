@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.watchaddress.selectblockchains
 
+import android.os.Parcelable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,8 +30,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.entities.AccountType
-import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -41,31 +42,34 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
+import kotlinx.parcelize.Parcelize
 
 class SelectBlockchainsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val popUpToInclusiveId =
-            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.selectBlockchainsFragment) ?: R.id.selectBlockchainsFragment
-        val inclusive =
-            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
-        val accountType = arguments?.parcelable<AccountType>(SelectBlockchainsModule.accountTypeKey)
-        val accountName = arguments?.getString(SelectBlockchainsModule.accountNameKey)
-        if (accountType != null) {
+        val input = navController.getInput<Input>()
+        if (input != null) {
             SelectBlockchainsScreen(
-                accountType,
-                accountName,
+                input.accountType,
+                input.accountName,
                 navController,
-                popUpToInclusiveId,
-                inclusive
+                input.popOffOnSuccess,
+                input.popOffInclusive
             )
         } else {
             navController.popBackStack()
         }
     }
+
+    @Parcelize
+    data class Input(
+        val popOffOnSuccess: Int,
+        val popOffInclusive: Boolean,
+        val accountType: AccountType,
+        val accountName: String?,
+    ) : Parcelable
 
 }
 

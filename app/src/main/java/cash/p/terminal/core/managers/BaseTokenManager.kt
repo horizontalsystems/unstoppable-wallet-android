@@ -14,12 +14,14 @@ class BaseTokenManager(
     private val coinManager: ICoinManager,
     private val localStorage: ILocalStorage,
 ) {
-    val tokens = listOf(
-        TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
-        TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-        TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
-    ).mapNotNull {
-        coinManager.getToken(it)
+    val tokens by lazy {
+        listOf(
+            TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
+            TokenQuery(BlockchainType.Ethereum, TokenType.Native),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
+        ).mapNotNull {
+            coinManager.getToken(it)
+        }
     }
 
     var token = localStorage.balanceTotalCoinUid?.let { balanceTotalCoinUid ->

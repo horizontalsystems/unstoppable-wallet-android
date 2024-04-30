@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
+import java.net.URI
 import java.util.*
 
 class ProFeaturesAuthorizationManager(
@@ -94,7 +95,7 @@ class ProFeaturesAuthorizationManager(
 
     suspend fun getNFTHolderAccountData(nftType: ProNft): AccountData? = withContext(Dispatchers.IO) {
         val accounts = getAllAccountData
-        val provider = Eip1155Provider.instance(RpcSource.ethereumInfuraHttp(appConfigProvider.infuraProjectId, appConfigProvider.infuraProjectSecret))
+        val provider = Eip1155Provider.instance(RpcSource.Http(listOf(URI(appConfigProvider.blocksDecodedEthereumRpc)), null))
 
         return@withContext first1155TokenHolder(provider, nftType.tokenId, accounts).await().orNull
     }

@@ -25,6 +25,7 @@
     <string name="Button_Add">Adicionar</string>
     <string name="Button_Approve">Aprovar</string>
     <string name="Button_Confirm">Confirmar</string>
+    <string name="Button_Refresh">Atualizar</string>
     <string name="Button_Connect">Conectar</string>
     <string name="Button_Reject">Rejeitar</string>
     <string name="Button_Disconnect">Desconectar</string>
@@ -130,8 +131,10 @@
     <string name="Restore_PhraseHint">Insira 12, 15, 18, 21 ou 24 palavras</string>
     <string name="Restore_NonStandardRestore">Restauração Não-Padrão</string>
     <string name="Restore_NonStandard_Description">Esta página fornece um mecanismo especial de restauração de carteira para usuários do P.CASH que possuem uma carteira fora do padrão. Essas carteiras podem ter sido criadas na versão P.CASH 0.27 - 0.28 usando uma frase de recuperação diferente do inglês e/ou um caractere especial na senha da carteira (ou seja, símbolo diacrítico).\n\nSe você for um usuário afetado, o saldo da sua carteira será ser mostrado 0 após restaurar tal carteira na versão 0.29 ou superior. Esta página permitirá que você restaure o acesso à sua carteira não padrão. Uma vez restaurado, é recomendável criar uma nova carteira (que será compatível com o padrão) e mover fundos para lá.</string>
+    <string name="Restore_Bip_Recommended">(recomendado)</string>
     <string name="Restore_PrivateKey_InvalidKey">Chave Inválida</string>
     <string name="Select_Coins">Escolher Moedas</string>
+    <string name="SelectContacts_All">Todas</string>
     <string name="Restore_BirthdayHeight">Altura de aniversário</string>
     <string name="Restore_ZCash">Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight">Birthday Height</string>
@@ -161,6 +164,7 @@
     <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
     <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
     <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
+    <string name="Market_FilterSection_Indicators">INDICADORES</string>
     <string name="Market_Field_HighestCap">Maior capitalização</string>
     <string name="Market_Field_LowestCap">Menor capitalização</string>
     <string name="Market_Field_HighestVolume">Maior volume</string>
@@ -168,7 +172,7 @@
     <string name="Market_Field_HighestPrice">Maior preço</string>
     <string name="Market_Field_LowestPrice">Menor preço</string>
     <string name="Market_Sort_PopupTitle">Organizar por</string>
-    <string name="Market_TotalMarketCap">Valor total de mercado</string>
+    <string name="Market_TotalMarketCap">Valor Total de M.</string>
     <string name="Market_BtcDominance">Dominação BTC</string>
     <string name="Market_Volume24h">Volume em 24h</string>
     <string name="Market_TvlDeFi">TVL no DeFi</string>
@@ -183,7 +187,10 @@
     <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
     <string name="Market_Category_TopCoins">Top Moedas</string>
     <string name="Market_Category_TopCoins_Description">Top moedas por classificação de capitalização de mercado</string>
+    <string name="TopPairs_Title">Principais Pares de Mercado</string>
+    <string name="TopPairs_Description">Principais pares de negociação por volume em todas as bolsas</string>
     <!--Market Overview-->
+    <string name="Market_Overview_TopPairs">Principais Pares de Mercado</string>
     <string name="Market_Overview_TopSectors">Principais Setores</string>
     <string name="Market_Overview_Sectors">Setores</string>
     <!--Market Top Platforms-->
@@ -195,7 +202,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Valor de mercado de todos procolos na cadeia %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Gráfico</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Valor total de mercado</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Valor Total de M.</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominação Bitcoin</string>
     <string name="MarketGlobalMetrics_Volume">Volume em 24h</string>
     <string name="MarketGlobalMetrics_DefiCap">Mercado de DeFi</string>
@@ -221,6 +228,7 @@
     <string name="Market_Filter_Volume">Volume de Operações</string>
     <string name="Market_Filter_Volume24h">Volume de Operações (24h)</string>
     <string name="Market_Filter_PricePeriod">Período de Preço</string>
+    <string name="Market_Filter_TradingSignals">Sinais de negociação</string>
     <string name="Market_Filter_PriceChange">Mudança de Preço</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">BTC superado</string>
@@ -228,6 +236,19 @@
     <string name="Market_Filter_OutperformedBnb">BNB superado</string>
     <string name="Market_Filter_PriceCloseToAth">Preço próximo a ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Preço próximo a ATL</string>
+    <string name="Market_Filter_ListedOnTopExchanges">Listado nas principais trocas</string>
+    <string name="Market_Filter_SolidCex">Bom Volume de CEX</string>
+    <string name="Market_Filter_SolidCex_Description">A Pontuação Geral é Boa ou Excelente</string>
+    <string name="Market_Filter_SolidDex">Bom Volume de DEX</string>
+    <string name="Market_Filter_SolidDex_Description">A Pontuação Geral é Boa ou Excelente</string>
+    <string name="Market_Filter_GoodDistribution">Boa Distribuição</string>
+    <string name="Market_Filter_GoodDistribution_Description">A Pontuação Geral é Boa ou Excelente</string>
+    <string name="Market_Filter_StrongBuy">Compra forte</string>
+    <string name="Market_Filter_Buy">Comprar</string>
+    <string name="Market_Filter_Neutral">Neutra</string>
+    <string name="Market_Filter_StrongSell">Venda forte</string>
+    <string name="Market_Filter_Sell">Irá vender</string>
+    <string name="Market_Filter_RiskToTrade">Risco de Negociação</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
@@ -295,7 +316,7 @@
     <string name="Balance_ScanningBlocks">Verificando Blocos</string>
     <string name="Balance_Backup_Alert">Você precisa fazer um backup da carteira %1$s antes de poder receber %2$s.</string>
     <string name="Balance_NoWalletAlert">Você ainda não tem nenhuma carteira instalada.\nCrie uma nova carteira ou restaure uma já existente </string>
-    <string name="Balance_NoCoinsAlert">Você não tem moedas adicionadas.\nAdicione as moedas que você usará</string>
+    <string name="Balance_NoCoinsAlert">Você não adicionou nenhuma moeda nesta carteira.</string>
     <string name="Balance_WatchAccount_NoBalance">Este endereço da carteira não tem nenhum saldo</string>
     <string name="Balance_NoAssetsToSend">Você não tem ativos para enviar.</string>
     <string name="Balance_NoAssetsToSwap">Você não tem nenhum ativo para trocar.</string>
@@ -314,11 +335,17 @@
     <string name="Balance_Receive_SetAmount">Definir Quantidade</string>
     <string name="Balance_Receive_AddressType">Tipo de endereço</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
+    <string name="Balance_NotRelayedAmount_Title">Transmissão</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
-    <string name="Balance_Receive_WatchAddressAlert">Esse endereço é o endereço da conta observada. Envie apenas tokens compatíveis com a rede.</string>
-    <string name="Balance_Receive_AddressAlert">Apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
+    <string name="Balance_Receive_WatchAddressAlert">Este endereço é o endereço da conta monitorada</string>
     <string name="Balance_Receive_AddressMemoAlert">Forneça o Memo necessário (Tag) e envie apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
+    <string name="Balance_Receive_UsedAddresses">Endereços Usados</string>
+    <string name="Balance_Receive_UsedAddressesDescriptoin">O número de endereços %s muda para privacidade e segurança. Abaixo está uma lista de endereços usados neste carteira.</string>
+    <string name="Balance_Receive_ReceiveAddresses">Endereços de Recebimento</string>
+    <string name="Balance_Receive_ChangeAddresses">Endereço de troco</string>
+    <string name="Balance_SendHint_CoinName">Nome da Moeda</string>
+    <string name="Balance_ReceiveHint_Search">Buscar</string>
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <string name="SendNft_Error_NotEnoughtBalance">Saldo insuficiente</string>
@@ -331,11 +358,20 @@
     <string name="Send_Button_Max">Máximo</string>
     <string name="Send_Advanced">Avançado</string>
     <string name="Send_Hodler_Description">TimeLock funciona apenas para enviar para endereços BIP44 (começando com 1)</string>
+    <string name="Send_UtxoExpertMode">Modo Especialista UTxO</string>
+    <string name="Send_Utxo_Description">Selecionar manualmente UTxO para gastar os fundos no saldo</string>
+    <string name="Send_Utxo_SendTo">Enviar para</string>
+    <string name="Send_Utxo_Change">Alterar</string>
+    <string name="Send_Rbf">Substituir pela taxa</string>
+    <string name="Send_Rbf_Description">Essa opção permite que você reenvie uma transação travada aumentando o valor da taxa.</string>
+    <string name="Send_RbfEnabled">Ativado</string>
+    <string name="Send_RbfDisabled">Desativado</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_Domain">Domínio</string>
     <string name="Send_Confirmation_YouSend">Enviar</string>
     <string name="Send_Confirmation_Amount">Montante</string>
     <string name="Send_Confirmation_To">Para</string>
+    <string name="Send_Confirmation_Own">Próprio</string>
     <string name="Send_Confirmation_Method">Método</string>
     <string name="Send_Confirmation_Receiver">Destinatário</string>
     <string name="Send_Confirmation_EstimateTime">Duração</string>
@@ -507,6 +543,7 @@
     <string name="EthereumTransaction_Error_ExecutionReverted">Erro inesperado: %s</string>
     <!--Swap-->
     <string name="Swap">Trocar</string>
+    <string name="Swap_BestPrice">Melhor Preço</string>
     <string name="Swap_FromAmountTitle">Você Paga</string>
     <string name="Swap_ToAmountTitle">Você recebe</string>
     <string name="Swap_Estimated">ESTIMADO</string>
@@ -514,6 +551,7 @@
     <string name="Swap_Balance">Saldo disponível</string>
     <string name="Swap_Allowance">Preço</string>
     <string name="Swap_Price">Preço</string>
+    <string name="Swap_AvailableBalance">Saldo Disponível</string>
     <string name="Swap_SellPrice">Preço de Venda</string>
     <string name="Swap_BuyPrice">Preço de Compra</string>
     <string name="Swap_PriceImpact">Impacto de preço</string>
@@ -523,25 +561,46 @@
     <string name="Swap_EstimatedFee">Taxa estimada</string>
     <string name="Swap_MaxFee">Taxa máxima</string>
     <string name="Swap_Fee">Taxa</string>
+    <string name="Swap_Slippage">Slippage</string>
+    <string name="Swap_Recipient">Destinatário</string>
+    <string name="Swap_ErrorNoProviders">Sem provedores</string>
+    <string name="Swap_ErrorNoQuote">Sem ofertas</string>
     <string name="Swap_ErrorInsufficientBalance">Saldo insuficiente</string>
     <string name="Swap_ErrorBalanceNotAvailable">Saldo N/A</string>
     <string name="Swap_ErrorNoLiquidity">Não é possível trocar esses tokens</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Este serviço não permite a embalagem/desagregação. Use 1inch em vez disso.</string>
     <string name="Swap_ErrorHighPriceImpact">Alto impacto no preço</string>
+    <string name="Swap_ErrorTokenNotEnabled">Token não ativado</string>
+    <string name="Swap_ErrorWalletSyncing">Carteira está Sincronizando</string>
+    <string name="Swap_ErrorWalletNotSynced">Carteira não sincronizada</string>
     <string name="Swap_Proceed">Próximo</string>
+    <string name="Swap_SelectTokenIn">Selecionar Token em</string>
+    <string name="Swap_SelectTokenOut">Selecionar Token de Saída</string>
+    <string name="Swap_EnterAmount">Inserir Quantidade</string>
+    <string name="Swap_Unlock">Desbloquear</string>
+    <string name="Swap_Unlocking">Desbloqueando...</string>
     <string name="Swap_Revoke">Revogar</string>
     <string name="Swap_Revoking">Revogando...</string>
     <string name="Swap_Approve">Aprovar</string>
     <string name="Swap_Approving">Aprovando</string>
     <string name="Swap_Swapping">Trocando</string>
+    <string name="Swap_Quoting">Cotação</string>
     <string name="Swap_MaximumPaid">Quantia Máxima</string>
     <string name="Swap_MinimumGot">Valor garantido</string>
     <string name="Swap_PoweredBy">Fornecido por</string>
+    <string name="Swap_Provider">Provedor</string>
+    <string name="Swap_Providers">Provedores</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
     <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moeda</string>
+    <string name="Swap_SwapRouteNotFound">Via não encontrada</string>
+    <string name="Swap_YouPay">Você Paga</string>
+    <string name="Swap_YouGet">Você recebe</string>
+    <string name="Swap_Confirm_Title">Confirmar</string>
+    <string name="SwapConfirm_QuoteExpired">A cotação expirou</string>
+    <string name="SwapConfirm_FetchingFinalQuote">Buscando cotação final</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Configurações de troca</string>
     <string name="SwapSettings_Service">Serviço</string>
@@ -598,26 +657,29 @@
     <string name="Transactions_EmptyList">Você ainda não tem nenhuma transação pendente ou anterior</string>
     <string name="Transactions_WaitForSync">Por favor, aguarde a sincronização concluir.</string>
     <string name="Transactions_Pending">Pendente</string>
-    <string name="Transactions_Receive">Receber</string>
+    <string name="Transactions_Receive">Recebido</string>
     <string name="Transactions_Completed">Concluído</string>
     <string name="Transactions_Processing">Processando</string>
-    <string name="Transactions_Send">Enviar</string>
+    <string name="Transactions_Send">Enviado</string>
     <string name="Transactions_Burn">Queimar</string>
     <string name="Transactions_Mint">Mint</string>
-    <string name="Transactions_Approve">Aprovar</string>
-    <string name="Transactions_Swap">Trocar</string>
+    <string name="Transactions_Approve">Aprovado</string>
+    <string name="Transactions_Swap">Trocado</string>
     <string name="Transactions_Failed">Falhou</string>
     <string name="Transactions_ContractCall">Chamada de Contrato</string>
     <string name="Transactions_ExternalContractCall">Ligação Externa</string>
     <string name="Transactions_ContractCreation">Criação de contrato</string>
     <string name="Transactions_To">para %s</string>
     <string name="Transactions_From">de %s</string>
-    <string name="Transaction_Unlimited">ilimitado %s</string>
+    <string name="Transaction_Unlimited_CoinCode">ilimitado %s</string>
+    <string name="Transaction_Unlimited">ilimitado</string>
     <string name="Transactions_All">Todas</string>
     <string name="Transactions_Filter_Blockchain">Blockchain</string>
     <string name="Transactions_Filter_Coin">Moeda</string>
+    <string name="Transactions_Filter_Contacts">Contatos</string>
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
     <string name="Transactions_Filter_AllCoins">Todas as moedas</string>
+    <string name="Transactions_Filter_AllContacts">Todos os Contatos</string>
     <string name="Transactions_Filter_ChooseCoin">Escolher Moedas</string>
     <string name="Transactions_Filter_ChooseBlockchain">Escolha Blockchain</string>
     <string name="Transactions_Incoming">Recebido</string>
@@ -630,6 +692,8 @@
     <string name="Transactions_Filter">Filtro</string>
     <string name="Transactions_Filter_HideSuspiciousTx">Ocultar Transações Suspeitas</string>
     <string name="Transactions_Filter_StablecoinDustAmount_Description">Ocultando transações de entrada com montantes ínfimos em stablecoins, isso resolve parcialmente os problemas de ataques de envenenamento de endereço.</string>
+    <string name="Transactions_Filter_ChooseContact_Hint">A filtragem de contato é suportada nas seguintes blockchains: Ethereum, BNB Smart Chain, Polygon, Avalanche, Gnosis, Fantom, Arbitrum, Opbitrum, Tron, Ton e ZCash. Abaixo estão os contatos adequados</string>
+    <string name="Transactions_Filter_ChooseContact_NoSuitableContact">Você não tem nenhum contato adequado </string>
     <!--Transaction Info-->
     <string name="TransactionInfo_Transaction">Transação</string>
     <string name="TransactionInfo_Title">Informações sobre a transação</string>
@@ -658,12 +722,17 @@
     <string name="TransactionInfo_YouPaid">Você Paga</string>
     <string name="TransactionInfo_YouGet">Você recebe</string>
     <string name="TransactionInfo_YouGot">Você Tem</string>
+    <string name="TransactionInfo_YouSent">Enviar</string>
+    <string name="TransactionInfo_Received">Recebido</string>
+    <string name="TransactionInfo_Sent">Enviado</string>
+    <string name="TransactionInfo_Approved">Aprovado</string>
     <string name="TransactionInfo_Resend">Enviar novamente</string>
     <string name="TransactionInfo_RevokeApproval">Revogar Aprovação</string>
     <string name="TransactionInfo_Options">Opções</string>
     <string name="TransactionInfo_SpeedUp">Acelerar</string>
     <string name="TransactionInfo_Cancel">Cancelar</string>
     <string name="TransactionInfo_SpamWarning">Esta transação é suspeita e pode ser um golpe. \nPor favor, não copie nenhum endereço desta transação.</string>
+    <string name="TransactionInfo_SpeedUpDescription">Esta ação tentará invalidar a transação anterior, reenviando-a com uma taxa maior.</string>
     <string name="StatusInfo_Pending">Pendente</string>
     <string name="StatusInfo_Processing">Processando</string>
     <string name="StatusInfo_Confirmed">Concluído</string>
@@ -674,15 +743,20 @@
     <string name="StatusInfo_FailedDescription">A transação não foi processada e nenhuma transferência de valor ocorreu. Dependendo do motivo, algumas transações com falha podem consumir taxas de transação. As transações que foram substituídas ou canceladas por outra transação não consomem taxas de transação e também aparecerão com falha. O aplicativo P.CASH não consegue mostrar o motivo das transações com falha, mas os usuários podem procurá-lo em um explorador de blocos público, como o etherscan.io.</string>
     <!-- Transaction Info Options -->
     <string name="TransactionInfoOptions_SpeedUp_Title">Acelerar</string>
-    <string name="TransactionInfoOptions_SpeedUp_Description">Esta ação tentará invalidar a transação anterior, reenviando-a com uma taxa maior. Se a transação original permanecer pendente quando uma nova foi enviada há uma alta chance (não garantida) de que ela seja invalidada e substituída. Apenas uma dessas duas transações será incluída no blockchain.</string>
     <string name="TransactionInfoOptions_SpeedUp_Button">Enviar novamente</string>
     <string name="TransactionInfoOptions_Cancel_Title">Cancelar</string>
-    <string name="TransactionInfoOptions_Cancel_Description">Esta ação tentará invalidar a transação anterior reenviando como uma nova transação 0 %s para si mesmo. Se a transação original permanecer pendente quando uma nova for enviada, há uma grande chance (não garantida) de que ela seja invalidada e substituída. Apenas uma dessas duas transações será incluída na blockchain.</string>
     <string name="TransactionInfoOptions_Cancel_Button">Cancelar transação</string>
     <string name="TransactionInfoOptions_Warning_TransactionInBlock">A transação já foi confirmada</string>
+    <string name="TransactionInfoOptions_Rbf_ReplacedTransactions">Transações Substituídas</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTitle">Taxa (Sat)</string>
+    <string name="TransactionInfoOptions_Rbf_FeeTooLow">Taxa Baixa Muito</string>
+    <string name="TransactionInfoOptions_Rbf_NotEnabled">RBF (Substituir por taxa) não ativado</string>
+    <string name="TransactionInfoOptions_Rbf_UnableToReplace">Incapaz de substituir</string>
     <!-- Info -->
     <string name="Info_LockTime_Description">O remetente enviou esses fundos com um bloqueio de gastos que expirará em %s.\n\nNão se preocupe, os Bitcoins recebidos já são seus, mas até que o período de bloqueio expire, você não poderá gastá-los na rede Bitcoin.</string>
     <string name="Info_LockTime_Description_Static">O remetente enviou esses fundos com um fechamento de gastos que expirará na data mostrada. \n\nNão se preocupe, o Bitcoin recebido já é seu, mas até que o período de bloqueio expire, você não pode gastá-los na rede Bitcoin.</string>
+    <string name="Info_NotRelayed_Title">Transmissão</string>
+    <string name="Info_NotRelayed_Description">A transação que detém esse valor foi transmitida, mas ainda não foi aceita pela rede.</string>
     <string name="Info_DoubleSpend_Title">Gasto Duplo</string>
     <string name="Info_DoubleSpend_Description">Risco de Gasto Duplo! Existe outra transação na Blockchain que está tentando gastar entradas usadas nesta transação. Apenas uma transação será aceita pela rede</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
@@ -712,8 +786,8 @@
     <string name="Settings_RateUs">Avalie-Nos</string>
     <string name="Settings_LaunchScreen">Tela Inicial</string>
     <string name="Settings_Appearance">Aparência</string>
-    <string name="Settings_Contact_ViaTelegram">via Telegram</string>
-    <string name="Settings_Contact_ViaEmail">via E-mail</string>
+    <string name="Settings_Contact_ViaTelegram">por Telegram</string>
+    <string name="Settings_Contact_ViaEmail">por e-mail</string>
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
     <string name="Settings_PersonalSupport">Suporte Pessoal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Digite seu nome de conta Telegram para começar um chat de suporte pessoal com a nossa equipe. Entraremos em contato com você e começaremos a trabalhar em seu problema assim que virmos.</string>
@@ -826,7 +900,7 @@
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, Sem Privado</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">Devagar, Sem Privado</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
-    <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado</string>
+    <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado.</string>
     <string name="SetDuressPin_Title">Senha do Modo Coação</string>
     <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
     <string name="EditDuressPin_Title">Editar Senha do Modo Coação</string>
@@ -845,10 +919,7 @@
     <string name="DuressPinSelectAccounts_SectionWallets_Title">CARTEIRAS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">ASSISTA CARTEIRAS</string>
     <!--Setting_Terms-->
-    <string name="SettingsTerms_Text">A carteira P.CASH foi criada para quem deseja investir e armazenar criptomoedas de maneira privada e independente.
-\n\nÉ uma carteira peer-to-peer sem custódia, onde apenas o usuário tem controle sobre os fundos. A carteira não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do mesmo em um aplicativo de carteira específico.
-\n\nA carteira P.CASH é totalmente de código aberto e qualquer pessoa pode confirmar se o aplicativo funciona exatamente como afirma.
-\n\nConstruímos a P.CASH para nós mesmos, pois as outras soluções disponíveis não estavam à altura. Tanto do ponto de vista da engenharia quanto da usabilidade, acreditamos que esta carteira está significativamente à frente dos produtos alternativos.</string>
+    <string name="SettingsTerms_Text">A carteira P.CASH foi construída para aqueles que buscam investir e armazenar criptomoedas de forma privada e independente.\n\nÉ uma carteira não-custódia, peer-to-peer onde apenas o usuário tem controle sobre os fundos. Não coleta nenhum dado e mantém o usuário independente ao não bloquear os fundos do usuário para um aplicativo específico de carteira.\n\nA carteira P.CASH é totalmente de código aberto e qualquer um pode confirmar que o aplicativo funciona exatamente como afirma.</string>
     <string name="SettingsTerms_Backup">Frases de recuperação de backup seguros para cada carteira. É a única maneira de recuperar o acesso a fundos se o aplicativo não funcionar.</string>
     <string name="SettingsTerms_PrivateKeys">As frases de recuperação de carteira são geradas aleatoriamente no dispositivo durante a configuração e não são armazenadas em outro lugar.</string>
     <string name="SettingsTerms_DisablingPin">Desabilitando o PIN (código) no smartphone exclui todas as carteiras do aplicativo. As frases de recuperação serão necessárias para restaurar o acesso aos fundos.</string>
@@ -1102,7 +1173,7 @@
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Endereço do contrato não encontrado em %s blockchain</string>
     <!-- Address Format Settings List -->
     <string name="AddressFormatSettings_Title">Formato do Endereço</string>
-    <string name="AddressFormatSettings_Description">Selecione o formato do endereço para a moeda. Prossiga com a opção recomendada se não tiver certeza. Um formato correto deve ser escolhido quando restaurar uma carteira existente.</string>
+    <string name="AddressFormatSettings_Description">Selecione o formato de endereço para receber pagamentos. Um formato correto deve ser escolhido quando restaurar uma carteira existente.</string>
     <!-- Coin Platforms -->
     <string name="CoinPlatforms_Native">Nativo</string>
     <string name="CoinPlatformsSelector_Title">Tipo de moeda</string>
@@ -1141,6 +1212,7 @@
     <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1A</string>
     <string name="CoinPage_TimeDuration_Year2">2A</string>
+    <string name="CoinPage_TimeDuration_Year5">5A</string>
     <string name="CoinPage_TimeDuration_All">Todas</string>
     <string name="CoinPage_Markets">Mercados</string>
     <string name="CoinPage_TradingVolume">Volume de Operações</string>
@@ -1333,18 +1405,44 @@
     <string name="Coin_Analytics_TechnicalIndicators">Indicadores Técnicos</string>
     <string name="Coin_Analytics_Details">Detalhes</string>
     <string name="Coin_Analytics_SelectPeriod">Selecionar Período</string>
-    <string name="Coin_Analytics_Period_30m">30 minutes</string>
+    <string name="Coin_Analytics_Period_30m">30 Minutos</string>
     <string name="Coin_Analytics_Period_1h">1 hora</string>
     <string name="Coin_Analytics_Period_4h">4 horas</string>
     <string name="Coin_Analytics_Period_8h">8 horas</string>
     <string name="Coin_Analytics_Period_1d">1 dia</string>
     <string name="Coin_Analytics_Period_1w">1 semana</string>
+    <string name="Coin_Analytics_Period_1m">1 mês</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">Compra forte</string>
     <string name="Coin_Analytics_Indicators_StrongSell">Venda forte</string>
     <string name="Coin_Analytics_Indicators_Sell">Irá vender</string>
     <string name="Coin_Analytics_Indicators_Buy">Comprar</string>
     <string name="Coin_Analytics_Indicators_Neutral">Neutra</string>
     <string name="Coin_Analytics_Indicators_NoData">Sem dados</string>
+    <string name="CoinAnalytics_SmartContractAnalysis">Análise de Contrato Inteligente</string>
+    <string name="CoinAnalytics_HighRiskItems">Itens de Alto Risco</string>
+    <string name="CoinAnalytics_MediumRiskItems">Itens de Risco Médio</string>
+    <string name="CoinAnalytics_AttentionRequired">Atenção Requerida</string>
+    <string name="CoinAnalytics_PoweredByDeFi">Desenvolvido por De.Fi</string>
+    <string name="CoinAnalytics_CountItems">%d Itens</string>
+    <string name="TechnicalAdvice_Title">Indicadores Técnicos</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">Always remember to apply risk management, and note that this is not financial advice.</string>
+    <string name="TechnicalAdvice_OverBought">sobrecomprado</string>
+    <string name="TechnicalAdvice_OverSold">sobrevendido</string>
+    <string name="TechnicalAdvice_Down">down</string>
+    <string name="TechnicalAdvice_Up">up</string>
+    <string name="TechnicalAdvice_OverMain">The actions with the asset are risky.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">Starting from the %s</string>
+    <string name="TechnicalAdvice_InfoTitle">Indicadores Técnicos</string>
+    <string name="TechnicalAdvice_ShowDetails">Mostrar detalhes</string>
+    <string name="TechnicalAdvice_HideDetails">Ocultar detalhes</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Compra forte</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Comprar</string>
+    <string name="TechnicalAdvice_Indicators_Neutral">Neutra</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Irá vender</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Venda forte</string>
+    <string name="Detectors_TokenDetectors">Detectores de Token</string>
+    <string name="Detectors_GeneralDetectors">Detectores Gerais</string>
+    <string name="Detectors_IssuesCount">Problemas %d</string>
     <string name="ActivateSubscription_Title">Ativar</string>
     <string name="ActivateSubscription_Wallet">Carteira</string>
     <string name="ActivateSubscription_Address">Endereço</string>

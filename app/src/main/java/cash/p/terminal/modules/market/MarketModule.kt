@@ -13,6 +13,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
+import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.Period
 import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
@@ -67,6 +68,21 @@ data class MarketItem(
     val rank: Int?
 ) {
     companion object {
+        fun createFromCoinMarket(
+            marketInfo: MarketInfo,
+            currency: Currency,
+            period: Period,
+        ): MarketItem {
+            return MarketItem(
+                fullCoin = marketInfo.fullCoin,
+                volume = CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
+                rate = CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
+                diff = marketInfo.priceChangeValue(period),
+                marketCap = CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO),
+                rank = marketInfo.marketCapRank
+            )
+        }
+
         fun createFromCoinMarket(
             marketInfo: MarketInfo,
             currency: Currency,
@@ -181,6 +197,12 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
     TimePeriod.TimePeriod_1M -> priceChange30d
     TimePeriod.TimePeriod_6M -> priceChange200d
     TimePeriod.TimePeriod_1Y -> priceChange1y
+}
+
+fun MarketInfo.priceChangeValue(period: Period) = when (period) {
+    Period.OneDay -> priceChange24h
+    Period.SevenDay -> priceChange7d
+    Period.ThirtyDay -> priceChange30d
 }
 
 @Parcelize

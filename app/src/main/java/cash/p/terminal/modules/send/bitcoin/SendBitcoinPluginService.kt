@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.send.bitcoin
 
-import cash.p.terminal.core.ILocalStorage
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.hodler.HodlerData
 import io.horizontalsystems.hodler.HodlerPlugin
@@ -10,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendBitcoinPluginService(localStorage: ILocalStorage, blockchainType: BlockchainType) {
-    val isLockTimeEnabled = localStorage.isLockTimeEnabled && blockchainType is BlockchainType.Bitcoin
+class SendBitcoinPluginService(blockchainType: BlockchainType) {
+    val isLockTimeEnabled = blockchainType is BlockchainType.Bitcoin
     val lockTimeIntervals = listOf(null) + LockTimeInterval.values().toList()
 
     private var lockTimeInterval: LockTimeInterval? = null

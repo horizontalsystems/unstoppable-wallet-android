@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.managers.FaqManager
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.manageaccount.ui.ActionButton
 import cash.p.terminal.modules.manageaccount.ui.ConfirmCopyBottomSheet
@@ -23,7 +24,6 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.launch
 
 class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
@@ -32,7 +32,7 @@ class RecoveryPhraseFragment : BaseComposeFragment(screenshotEnabled = false) {
     override fun GetContent(navController: NavController) {
         RecoveryPhraseScreen(
             navController = navController,
-            account = arguments?.parcelable(RecoveryPhraseModule.ACCOUNT)!!
+            account = navController.requireInput()
         )
     }
 

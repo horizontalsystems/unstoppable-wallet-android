@@ -1,8 +1,7 @@
 package cash.p.terminal.modules.market.favorites
 
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.modules.market.MarketField
-import cash.p.terminal.modules.market.SortingField
+import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.Period
 import cash.p.terminal.widgets.MarketWidgetManager
 
 class MarketFavoritesMenuService(
@@ -10,17 +9,17 @@ class MarketFavoritesMenuService(
     private val marketWidgetManager: MarketWidgetManager
 ) {
 
-    var sortingField: SortingField
-        get() = localStorage.marketFavoritesSortingField ?: SortingField.HighestCap
+    var sortDescending: Boolean
+        get() = localStorage.marketFavoritesSortDescending
         set(value) {
-            localStorage.marketFavoritesSortingField = value
+            localStorage.marketFavoritesSortDescending = value
             marketWidgetManager.updateWatchListWidgets()
         }
 
-    var marketField: MarketField
-        get() = localStorage.marketFavoritesMarketField ?: MarketField.PriceDiff
+    var period: Period
+        get() = localStorage.marketFavoritesPeriod ?: Period.OneDay
         set(value) {
-            localStorage.marketFavoritesMarketField = value
+            localStorage.marketFavoritesPeriod = value
             marketWidgetManager.updateWatchListWidgets()
         }
 }

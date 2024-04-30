@@ -118,7 +118,7 @@ fun SendEvmScreen(
                         viewModel.getSendData()?.let {
                             navController.slideFromRight(
                                 R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationModule.prepareParams(it, R.id.sendXFragment, sendEntryPointDestId)
+                                SendEvmConfirmationModule.Input(it, R.id.sendXFragment, sendEntryPointDestId)
                             )
                         }
                     } else {

@@ -1,10 +1,6 @@
 package cash.p.terminal.modules.main
 
 import android.net.Uri
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
@@ -13,19 +9,20 @@ import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.ActiveAccountState
 import cash.p.terminal.core.managers.ReleaseNotesManager
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.main.MainModule.MainNavigation
-import cash.p.terminal.modules.market.platform.MarketPlatformFragment
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.modules.nft.collection.NftCollectionFragment
+import cash.p.terminal.modules.walletconnect.WCManager
+import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.list.WCListFragment
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
-import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
@@ -39,13 +36,13 @@ class MainViewModel(
     private val accountManager: IAccountManager,
     private val releaseNotesManager: ReleaseNotesManager,
     private val localStorage: ILocalStorage,
-    wc2SessionManager: WC2SessionManager,
-    private val wc2Manager: WC2Manager,
+    wcSessionManager: WCSessionManager,
+    private val wcManager: WCManager,
     deepLink: Uri?
-) : ViewModel() {
+) : ViewModelUiState<MainModule.UiState>() {
 
     private val disposables = CompositeDisposable()
-    private var wc2PendingRequestsCount = 0
+    private var wcPendingRequestsCount = 0
     private var marketsTabEnabled = localStorage.marketsTabEnabledFlow.value
     private var transactionsEnabled = isTransactionsTabEnabled()
     private var settingsBadge: MainModule.BadgeType? = null
@@ -87,7 +84,7 @@ class MainViewModel(
     private var contentHidden = pinComponent.isLocked
     private var showWhatsNew = false
     private var activeWallet = accountManager.activeAccount
-    private var wcSupportState: WC2Manager.SupportState? = null
+    private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
 
     val wallets: List<Account>
@@ -95,21 +92,6 @@ class MainViewModel(
 
     val watchWallets: List<Account>
         get() = accountManager.accounts.filter { it.isWatchAccount }
-
-    var uiState by mutableStateOf(
-        MainModule.UiState(
-            selectedTabIndex = selectedTabIndex,
-            deeplinkPage = deeplinkPage,
-            mainNavItems = mainNavItems,
-            showRateAppDialog = showRateAppDialog,
-            contentHidden = contentHidden,
-            showWhatsNew = showWhatsNew,
-            activeWallet = activeWallet,
-            wcSupportState = wcSupportState,
-            torEnabled = torEnabled
-        )
-    )
-        private set
 
     init {
         localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) {
@@ -121,14 +103,14 @@ class MainViewModel(
             updateSettingsBadge()
         }
 
-        wc2SessionManager.pendingRequestCountFlow.collectWith(viewModelScope) {
-            wc2PendingRequestsCount = it
+        wcSessionManager.pendingRequestCountFlow.collectWith(viewModelScope) {
+            wcPendingRequestsCount = it
             updateSettingsBadge()
         }
 
         rateAppManager.showRateAppFlow.collectWith(viewModelScope) {
             showRateAppDialog = it
-            syncState()
+            emitState()
         }
 
         disposables.add(backupManager.allBackedUpFlowable.subscribe {
@@ -155,7 +137,7 @@ class MainViewModel(
         accountManager.activeAccountStateFlow.collectWith(viewModelScope) {
             (it as? ActiveAccountState.ActiveAccount)?.let { state ->
                 activeWallet = state.account
-                syncState()
+                emitState()
             }
         }
 
@@ -163,6 +145,18 @@ class MainViewModel(
         updateTransactionsTabEnabled()
         showWhatsNew()
     }
+
+    override fun createState() = MainModule.UiState(
+        selectedTabIndex = selectedTabIndex,
+        deeplinkPage = deeplinkPage,
+        mainNavItems = mainNavItems,
+        showRateAppDialog = showRateAppDialog,
+        contentHidden = contentHidden,
+        showWhatsNew = showWhatsNew,
+        activeWallet = activeWallet,
+        wcSupportState = wcSupportState,
+        torEnabled = torEnabled
+    )
 
     private fun isTransactionsTabEnabled(): Boolean =
         !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
@@ -174,23 +168,23 @@ class MainViewModel(
 
     fun whatsNewShown() {
         showWhatsNew = false
-        syncState()
+        emitState()
     }
 
     fun closeRateDialog() {
         showRateAppDialog = false
-        syncState()
+        emitState()
     }
 
     fun onSelect(account: Account) {
         accountManager.setActiveAccountId(account.id)
         activeWallet = account
-        syncState()
+        emitState()
     }
 
     fun onResume() {
         contentHidden = pinComponent.isLocked
-        syncState()
+        emitState()
     }
 
     fun onSelect(mainNavItem: MainNavigation) {
@@ -208,21 +202,7 @@ class MainViewModel(
 
     fun wcSupportStateHandled() {
         wcSupportState = null
-        syncState()
-    }
-
-    private fun syncState() {
-        uiState = MainModule.UiState(
-            selectedTabIndex = selectedTabIndex,
-            deeplinkPage = deeplinkPage,
-            mainNavItems = mainNavItems,
-            showRateAppDialog = showRateAppDialog,
-            contentHidden = contentHidden,
-            showWhatsNew = showWhatsNew,
-            activeWallet = activeWallet,
-            wcSupportState = wcSupportState,
-            torEnabled = torEnabled
-        )
+        emitState()
     }
 
     private fun navigationItems(): List<MainModule.NavigationViewItem> {
@@ -302,20 +282,21 @@ class MainViewModel(
         var tab = currentMainTab
         var deeplinkPage: DeeplinkPage? = null
         val deeplinkString = deepLink.toString()
+        val deeplinkScheme: String = Translator.getString(R.string.DeeplinkScheme)
         when {
-            deeplinkString.startsWith("unstoppable:") -> {
+            deeplinkString.startsWith("$deeplinkScheme:") -> {
                 val uid = deepLink.getQueryParameter("uid")
                 when {
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
-                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.prepareParams(it, "widget_click"))
+                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it))
                         }
                     }
 
                     deeplinkString.contains("nft-collection") -> {
                         val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
                         if (uid != null && blockchainTypeUid != null) {
-                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.prepareParams(uid, blockchainTypeUid))
+                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
                         }
                     }
 
@@ -323,7 +304,7 @@ class MainViewModel(
                         val title = deepLink.getQueryParameter("title")
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
-                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, MarketPlatformFragment.prepareParams(platform))
+                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
                         }
                     }
                 }
@@ -332,9 +313,9 @@ class MainViewModel(
             }
 
             deeplinkString.startsWith("wc:") -> {
-                wcSupportState = wc2Manager.getWalletConnectSupportState()
-                if (wcSupportState == WC2Manager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wallet_connect_graph, WCListFragment.prepareParams(deeplinkString))
+                wcSupportState = wcManager.getWalletConnectSupportState()
+                if (wcSupportState == WCManager.SupportState.Supported) {
+                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
                     tab = MainNavigation.Settings
                 }
             }
@@ -349,7 +330,7 @@ class MainViewModel(
         if (selectedTabIndex >= mainNavItems.size) {
             selectedTabIndex = mainNavItems.size - 1
         }
-        syncState()
+        emitState()
     }
 
     private fun showWhatsNew() {
@@ -357,7 +338,7 @@ class MainViewModel(
             if (releaseNotesManager.shouldShowChangeLog()) {
                 delay(2000)
                 showWhatsNew = true
-                syncState()
+                emitState()
             }
         }
     }
@@ -366,8 +347,8 @@ class MainViewModel(
         val showDotBadge =
             !(backupManager.allBackedUp && termsManager.allTermsAccepted && pinComponent.isPinSet) || accountManager.hasNonStandardAccount
 
-        settingsBadge = if (wc2PendingRequestsCount > 0) {
-            MainModule.BadgeType.BadgeNumber(wc2PendingRequestsCount)
+        settingsBadge = if (wcPendingRequestsCount > 0) {
+            MainModule.BadgeType.BadgeNumber(wcPendingRequestsCount)
         } else if (showDotBadge) {
             MainModule.BadgeType.BadgeDot
         } else {
@@ -378,7 +359,7 @@ class MainViewModel(
 
     fun deeplinkPageHandled() {
         deeplinkPage = null
-        syncState()
+        emitState()
     }
 
 }

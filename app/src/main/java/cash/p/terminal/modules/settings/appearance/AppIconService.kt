@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class AppIconService(private val localStorage: ILocalStorage) {
-    private val appIcons = AppIcon.values().asList()
+    private val appIcons by lazy { AppIcon.values().asList() }
 
     private val _optionsFlow = MutableStateFlow(
         Select(localStorage.appIcon ?: AppIcon.Main, appIcons)

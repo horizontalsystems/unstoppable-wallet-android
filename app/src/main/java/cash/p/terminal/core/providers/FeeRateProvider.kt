@@ -13,8 +13,8 @@ class FeeRateProvider(appConfig: AppConfigProvider) {
     private val feeRateKit: FeeRateKit by lazy {
         FeeRateKit(
             FeeProviderConfig(
-                ethEvmUrl = FeeProviderConfig.infuraUrl(appConfig.infuraProjectId),
-                ethEvmAuth = appConfig.infuraProjectSecret,
+                ethEvmUrl = appConfig.blocksDecodedEthereumRpc,
+                ethEvmAuth = null,
                 bscEvmUrl = FeeProviderConfig.defaultBscEvmUrl(),
                 mempoolSpaceUrl = appConfig.mempoolSpaceUrl
             )

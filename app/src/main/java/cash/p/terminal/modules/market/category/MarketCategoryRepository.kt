@@ -21,7 +21,7 @@ class MarketCategoryRepository(
     @Synchronized
     private fun getMarketItems(coinCategoryUid: String, forceRefresh: Boolean, baseCurrency: Currency): List<MarketItem> =
         if (forceRefresh && (cacheTimestamp + cacheValidPeriodInMillis < System.currentTimeMillis()) || cache.isEmpty()) {
-            val marketInfoList = marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code, "market_category").blockingGet()
+            val marketInfoList = marketKit.marketInfosSingle(coinCategoryUid, baseCurrency.code).blockingGet()
 
             val marketItems = marketInfoList.map { marketInfo ->
                 MarketItem.createFromCoinMarket(marketInfo, baseCurrency)

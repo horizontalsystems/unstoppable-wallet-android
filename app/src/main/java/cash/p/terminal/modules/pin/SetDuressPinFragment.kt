@@ -1,25 +1,25 @@
 package cash.p.terminal.modules.pin
 
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.pin.ui.PinSet
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import kotlinx.parcelize.Parcelize
 
-class SetDuressPinFragment : BaseComposeFragment() {
+class SetDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel = viewModel<SetDuressPinViewModel>(factory = SetDuressPinViewModel.Factory(arguments?.parcelable("input")))
+        val viewModel = viewModel<SetDuressPinViewModel>(
+            factory = SetDuressPinViewModel.Factory(navController.getInput())
+        )
         val view = LocalView.current
         PinSet(
             title = stringResource(id = R.string.SetDuressPin_Title),
@@ -32,12 +32,6 @@ class SetDuressPinFragment : BaseComposeFragment() {
             onBackPress = { navController.popBackStack() },
             forDuress = true
         )
-    }
-
-    companion object {
-        fun params(accountIds: List<String>): Bundle {
-            return bundleOf("input" to Input(accountIds))
-        }
     }
 
     @Parcelize

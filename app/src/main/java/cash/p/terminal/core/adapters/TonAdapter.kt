@@ -23,14 +23,15 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.tonkit.ConnectionManager
 import io.horizontalsystems.tonkit.DriverFactory
 import io.horizontalsystems.tonkit.SyncState
+import io.horizontalsystems.tonkit.TonAddress
 import io.horizontalsystems.tonkit.TonKit
 import io.horizontalsystems.tonkit.TonKitFactory
-import io.horizontalsystems.tonkit.TonTransaction
+import io.horizontalsystems.tonkit.TonTransactionWithTransfers
+import io.horizontalsystems.tonkit.TonTransfer
 import io.horizontalsystems.tonkit.TransactionType
-import io.horizontalsystems.tonkit.Transfer
-import io.horizontalsystems.tonkit.transfers
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -141,23 +142,27 @@ class TonAdapter(
         token: Token?,
         limit: Int,
         transactionType: FilterTransactionType,
-    ) = rxSingle {
-        val tonTransactionType = when (transactionType) {
-            FilterTransactionType.All -> null
-            FilterTransactionType.Incoming -> TransactionType.Incoming
-            FilterTransactionType.Outgoing -> TransactionType.Outgoing
-            FilterTransactionType.Swap -> return@rxSingle listOf()
-            FilterTransactionType.Approve -> return@rxSingle listOf()
-        }
+        address: String?,
+    ): Single<List<TransactionRecord>> {
 
-        tonKit
-            .transactions(from?.transactionHash, tonTransactionType, limit.toLong())
-            .map {
-                createTransactionRecord(it)
+        return rxSingle {
+            val tonTransactionType = when (transactionType) {
+                FilterTransactionType.All -> null
+                FilterTransactionType.Incoming -> TransactionType.Incoming
+                FilterTransactionType.Outgoing -> TransactionType.Outgoing
+                FilterTransactionType.Swap -> return@rxSingle listOf<TransactionRecord>()
+                FilterTransactionType.Approve -> return@rxSingle listOf<TransactionRecord>()
             }
+
+            tonKit
+                .transactions(from?.transactionHash, tonTransactionType, address, limit.toLong())
+                .map {
+                    createTransactionRecord(it)
+                }
+        }
     }
 
-    private fun createTransactionRecord(transaction: TonTransaction): TransactionRecord {
+    private fun createTransactionRecord(transaction: TonTransactionWithTransfers): TransactionRecord {
         val amount = transaction.amount?.toBigDecimal()?.movePointLeft(decimals)
 
         val value = if (transaction.type == TransactionType.Outgoing) {
@@ -184,16 +189,17 @@ class TonAdapter(
             source = wallet.transactionSource,
             mainValue = TransactionValue.CoinValue(wallet.token, value),
             fee = fee?.let { TransactionValue.CoinValue(wallet.token, it) },
+            memo = transaction.memo,
             type = type,
-            transfers = transaction.transfers.map { createTransferRecprd(it) }
+            transfers = transaction.transfers.map { createTransferRecord(it) }
         )
     }
 
-    private fun createTransferRecprd(transfer: Transfer): TonTransfer {
+    private fun createTransferRecord(transfer: TonTransfer): TonTransactionTransfer {
         val amount = transfer.amount.toBigDecimal().movePointLeft(decimals)
-        return TonTransfer(
-            src = transfer.src,
-            dest = transfer.dest,
+        return TonTransactionTransfer(
+            src = transfer.src.getNonBounceable(),
+            dest = transfer.dest.getNonBounceable(),
             amount = TransactionValue.CoinValue(wallet.token, amount),
         )
     }
@@ -201,6 +207,7 @@ class TonAdapter(
     override fun getTransactionRecordsFlowable(
         token: Token?,
         transactionType: FilterTransactionType,
+        address: String?,
     ): Flowable<List<TransactionRecord>> {
         val tonTransactionType = when (transactionType) {
             FilterTransactionType.All -> null
@@ -212,11 +219,22 @@ class TonAdapter(
 
         return tonKit.newTransactionsFlow
             .map {
+                var filtered = it
+
                 if (tonTransactionType != null) {
-                    it.filter { it.type == tonTransactionType }
-                } else {
-                    it
+                    filtered = filtered.filter { it.type == tonTransactionType }
                 }
+
+                if (address != null) {
+                    val rawAddress = TonAddress.parse(address).toRaw()
+                    filtered = filtered.filter {
+                        it.transfers.any {
+                            it.src.toRaw() == rawAddress || it.dest.toRaw() == rawAddress
+                        }
+                    }
+                }
+
+                filtered
             }
             .filter { it.isNotEmpty() }
             .map {
@@ -240,8 +258,8 @@ class TonAdapter(
     override val availableBalance: BigDecimal
         get() = balance
 
-    override suspend fun send(amount: BigDecimal, address: String) {
-        tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString())
+    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
+        tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString(), memo)
     }
 
     override suspend fun estimateFee(): BigDecimal {
@@ -261,8 +279,9 @@ class TonTransactionRecord(
     source: TransactionSource,
     override val mainValue: TransactionValue,
     val fee: TransactionValue?,
+    val memo: String?,
     val type: Type,
-    val transfers: List<TonTransfer>
+    val transfers: List<TonTransactionTransfer>
 ) : TransactionRecord(
     uid,
     transactionHash,
@@ -281,4 +300,4 @@ class TonTransactionRecord(
     override fun status(lastBlockHeight: Int?) = TransactionStatus.Completed
 }
 
-data class TonTransfer(val src: String, val dest: String, val amount: TransactionValue.CoinValue)
+data class TonTransactionTransfer(val src: String, val dest: String, val amount: TransactionValue.CoinValue)

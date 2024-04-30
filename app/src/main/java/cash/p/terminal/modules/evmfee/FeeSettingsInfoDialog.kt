@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.evmfee
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +14,16 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import cash.p.terminal.R
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.core.findNavController
+import kotlinx.parcelize.Parcelize
 
 class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
-    private val title by lazy { requireArguments().getString(TITLE) }
-    private val text by lazy { requireArguments().getString(TEXT) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,22 +35,18 @@ class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
+                val navController = findNavController()
+                val input = navController.requireInput<Input>()
+
                 ComposeAppTheme {
-                    FeeSettingsInfoScreen(title, text) { dismiss() }
+                    FeeSettingsInfoScreen(input.title, input.text) { dismiss() }
                 }
             }
         }
     }
 
-    companion object {
-        private const val TITLE = "title"
-        private const val TEXT = "text"
-
-        fun prepareParams(title: String, text: String) = bundleOf(
-            TITLE to title,
-            TEXT to text,
-        )
-    }
+    @Parcelize
+    data class Input(val title: String, val text: String) : Parcelable
 }
 
 @Composable

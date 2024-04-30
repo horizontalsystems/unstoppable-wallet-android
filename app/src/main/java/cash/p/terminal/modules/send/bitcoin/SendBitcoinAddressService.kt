@@ -13,8 +13,7 @@ import kotlinx.coroutines.flow.update
 
 class SendBitcoinAddressService(private val adapter: ISendBitcoinAdapter, filledAddress: String?) {
 
-    var address: Address? = filledAddress?.let { Address(it) }
-        private set
+    private var address: Address? = filledAddress?.let { Address(it) }
     private var validAddress: Address? = filledAddress?.let { Address(it) }
     private var addressError: Throwable? = null
 

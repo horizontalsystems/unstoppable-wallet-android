@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import cash.p.terminal.modules.receivemain.FullCoinsProvider
+import cash.p.terminal.modules.receive.FullCoinsProvider
 
 object ManageWalletsModule {
 

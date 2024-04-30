@@ -28,4 +28,14 @@ data class MarketInfoRaw(
     val athPercentage: BigDecimal?,
     @SerializedName("atl_percentage")
     val atlPercentage: BigDecimal?,
+    @SerializedName("listed_on_top_exchanges")
+    val listedOnTopExchanges: Boolean?,
+    @SerializedName("solid_cex")
+    val solidCex: Boolean?,
+    @SerializedName("solid_dex")
+    val solidDex: Boolean?,
+    @SerializedName("good_distribution")
+    val goodDistribution: Boolean?,
+    @SerializedName("indicators_result")
+    val advice: Analytics.TechnicalAdvice.Advice?,
 )

@@ -25,6 +25,7 @@ object CoinRankModule {
     }
 
     data class RankViewItem(
+        val coinUid: String,
         val rank: String,
         val title: String,
         val subTitle: String,

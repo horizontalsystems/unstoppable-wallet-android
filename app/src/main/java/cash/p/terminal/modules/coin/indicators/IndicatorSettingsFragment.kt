@@ -1,20 +1,22 @@
 package cash.p.terminal.modules.coin.indicators
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class IndicatorSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val indicatorSetting = arguments?.getString("indicatorId")?.let {
+        val indicatorSetting = navController.getInput<Input>()?.indicatorId?.let {
             App.chartIndicatorManager.getChartIndicatorSetting(it)
         }
 
@@ -47,7 +49,6 @@ class IndicatorSettingsFragment : BaseComposeFragment() {
         }
     }
 
-    companion object {
-        fun params(indicatorId: String) = bundleOf("indicatorId" to indicatorId)
-    }
+    @Parcelize
+    data class Input(val indicatorId: String) : Parcelable
 }

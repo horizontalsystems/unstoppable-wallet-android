@@ -1,10 +1,13 @@
 package cash.p.terminal.modules.market.metricspage
 
-import android.os.Bundle
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -15,33 +18,37 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.*
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.requireInput
+import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketField
-import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.MarketCoinClear
+import cash.p.terminal.ui.compose.components.MenuItem
 
 class MetricsPageFragment : BaseComposeFragment() {
 
-    private val metricsType by lazy {
-        requireArguments().parcelable<MetricsType>(METRICS_TYPE_KEY)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val factory = MetricsPageModule.Factory(metricsType!!)
+        val factory = MetricsPageModule.Factory(navController.requireInput())
         val chartViewModel by viewModels<ChartViewModel> { factory }
         val viewModel by viewModels<MetricsPageViewModel> { factory }
         MetricsPage(viewModel, chartViewModel, navController) {
@@ -50,7 +57,7 @@ class MetricsPageFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.prepareParams(coinUid, "market_metrics")
+        val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
     }
@@ -158,7 +165,7 @@ class MetricsPageFragment : BaseComposeFragment() {
             ButtonSecondaryCircle(
                 modifier = Modifier
                     .padding(start = 16.dp),
-                icon = if (menu.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20,
+                icon = if (menu.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
                 onClick = { onToggleSortType() }
             )
             Spacer(Modifier.weight(1f))
@@ -167,14 +174,6 @@ class MetricsPageFragment : BaseComposeFragment() {
                 select = menu.marketFieldSelect,
                 onSelect = onSelectMarketField
             )
-        }
-    }
-
-    companion object {
-        private const val METRICS_TYPE_KEY = "metric_type"
-
-        fun prepareParams(metricType: MetricsType): Bundle {
-            return bundleOf(METRICS_TYPE_KEY to metricType)
         }
     }
 }

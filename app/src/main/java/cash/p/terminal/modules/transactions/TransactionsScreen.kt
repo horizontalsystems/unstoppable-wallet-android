@@ -1,17 +1,33 @@
 package cash.p.terminal.modules.transactions
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +46,22 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.balance.BalanceAccountsViewModel
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceScreenState
-import cash.p.terminal.modules.settings.about.*
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui.compose.components.HeaderStick
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.ScrollableTabs
+import cash.p.terminal.ui.compose.components.SectionItemPosition
+import cash.p.terminal.ui.compose.components.SectionUniversalItem
+import cash.p.terminal.ui.compose.components.TabItem
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.sectionItemBorder
+import cash.p.terminal.ui.compose.components.subhead2_grey
 
 @Composable
 fun TransactionsScreen(
@@ -42,12 +70,12 @@ fun TransactionsScreen(
 ) {
     val accountsViewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
-    val filterCoins by viewModel.filterCoinsLiveData.observeAsState()
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
-    val filterBlockchains by viewModel.filterBlockchainsLiveData.observeAsState()
-    val transactions by viewModel.transactionList.observeAsState()
-    val viewState by viewModel.viewState.observeAsState()
-    val syncing by viewModel.syncingLiveData.observeAsState(false)
+    val showFilterAlertDot by viewModel.filterResetEnabled.observeAsState(false)
+
+    val uiState = viewModel.uiState
+    val syncing = uiState.syncing
+    val transactions = uiState.transactions
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -57,10 +85,11 @@ fun TransactionsScreen(
                 menuItems = listOf(
                     MenuItem(
                         title = TranslatableString.ResString(R.string.Transactions_Filter),
-                        icon = R.drawable.ic_sort_24,
+                        icon = R.drawable.ic_manage_2_24,
+                        showAlertDot = showFilterAlertDot,
                         onClick = {
                             navController.slideFromRight(R.id.transactionFilterFragment)
-                        }
+                        },
                     )
                 )
             )
@@ -71,50 +100,50 @@ fun TransactionsScreen(
                 )
             }
 
-            Crossfade(viewState, label = "") { viewState ->
-                when (viewState) {
-                    ViewState.Success -> {
-                        transactions?.let { transactionItems ->
-                            if (transactionItems.isEmpty()) {
-                                if (syncing) {
-                                    ListEmptyView(
-                                        text = stringResource(R.string.Transactions_WaitForSync),
-                                        icon = R.drawable.ic_clock
-                                    )
-                                } else {
-                                    ListEmptyView(
-                                        text = stringResource(R.string.Transactions_EmptyList),
-                                        icon = R.drawable.ic_outgoingraw
-                                    )
-                                }
+            Crossfade(uiState.viewState, label = "") { viewState ->
+                if (viewState == ViewState.Success) {
+                    transactions?.let { transactionItems ->
+                        if (transactionItems.isEmpty()) {
+                            if (syncing) {
+                                ListEmptyView(
+                                    text = stringResource(R.string.Transactions_WaitForSync),
+                                    icon = R.drawable.ic_clock
+                                )
                             } else {
-                                val filterCoin = filterCoins?.find { it.selected }?.item
-                                val filterType = filterTypes?.find { it.selected }?.item
-                                val filterBlockchain = filterBlockchains?.find { it.selected }?.item
+                                ListEmptyView(
+                                    text = stringResource(R.string.Transactions_EmptyList),
+                                    icon = R.drawable.ic_outgoingraw
+                                )
+                            }
+                        } else {
+                            val listState = rememberSaveable(
+                                uiState.transactionListId,
+                                (accountsViewModel.balanceScreenState as? BalanceScreenState.HasAccount)?.accountViewItem?.id,
+                                saver = LazyListState.Saver
+                            ) {
+                                LazyListState(0, 0)
+                            }
 
-                                val listState = rememberSaveable(
-                                    filterCoin,
-                                    filterType,
-                                    filterBlockchain,
-                                    (accountsViewModel.balanceScreenState as? BalanceScreenState.HasAccount)?.accountViewItem?.id,
-                                    saver = LazyListState.Saver
-                                ) {
-                                    LazyListState(0, 0)
-                                }
-                                LazyColumn(state = listState) {
-                                    transactionList(
-                                        transactionsMap = transactionItems,
-                                        willShow = { viewModel.willShow(it) },
-                                        onClick = { onTransactionClick(it, viewModel, navController) },
-                                        onBottomReached = { viewModel.onBottomReached() }
+                            val onClick: (TransactionViewItem) -> Unit = remember {
+                                {
+                                    onTransactionClick(
+                                        it,
+                                        viewModel,
+                                        navController
                                     )
                                 }
                             }
+
+                            LazyColumn(state = listState) {
+                                transactionList(
+                                    transactionsMap = transactionItems,
+                                    willShow = { viewModel.willShow(it) },
+                                    onClick = onClick,
+                                    onBottomReached = { viewModel.onBottomReached() }
+                                )
+                            }
                         }
                     }
-                    is ViewState.Error,
-                    ViewState.Loading,
-                    null -> {}
                 }
             }
         }
@@ -150,7 +179,12 @@ fun LazyListScope.transactionList(
         val itemsCount = transactions.size
         val singleElement = itemsCount == 1
 
-        itemsIndexed(transactions) { index, item ->
+        itemsIndexed(
+            items = transactions,
+            key = { _, item ->
+                item.uid
+            }
+        ) { index, item ->
             val position: SectionItemPosition = when {
                 singleElement -> SectionItemPosition.Single
                 index == 0 -> SectionItemPosition.First

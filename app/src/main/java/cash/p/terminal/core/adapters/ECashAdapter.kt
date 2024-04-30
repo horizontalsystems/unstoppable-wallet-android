@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.UsedAddress
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -10,6 +11,7 @@ import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.models.TransactionInfo
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ecash.ECashKit
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -78,8 +80,13 @@ class ECashAdapter(
         // ignored for now
     }
 
+    override val unspentOutputs: List<UnspentOutputInfo>
+        get() = kit.unspentOutputs
+
     override val blockchainType = BlockchainType.ECash
 
+    override fun usedAddresses(change: Boolean): List<UsedAddress> =
+        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/ecash/address/${it.address}") }
 
     companion object {
         private const val confirmationsThreshold = 1

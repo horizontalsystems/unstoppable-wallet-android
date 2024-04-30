@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.manageaccount.showextendedkey
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
 import cash.p.terminal.modules.manageaccount.ui.ActionButton
@@ -27,22 +29,17 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val hdExtendedKey = arguments?.getString(ShowExtendedKeyModule.EXTENDED_ROOT_KEY)?.let {
-            try {
-                HDExtendedKey(it)
-            } catch (error: Throwable) {
-                null
-            }
-        }
-        val displayKeyType = arguments?.parcelable<DisplayKeyType>(ShowExtendedKeyModule.DISPLAY_KEY_TYPE)
+        val input = navController.getInput<Input>()
+        val hdExtendedKey = input?.extendedRootKey
+        val displayKeyType = input?.displayKeyType
 
         if (hdExtendedKey == null || displayKeyType == null) {
             NoExtendKeyScreen()
@@ -55,6 +52,17 @@ class ShowExtendedKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
         }
     }
 
+    @Parcelize
+    data class Input(val extendedRootKeySerialized: String, val displayKeyType: DisplayKeyType) : Parcelable {
+        val extendedRootKey: HDExtendedKey?
+            get() = try {
+                HDExtendedKey(extendedRootKeySerialized)
+            } catch (error: Throwable) {
+                null
+            }
+
+        constructor(extendedRootKey: HDExtendedKey, displayKeyType: DisplayKeyType) : this(extendedRootKey.serialize(), displayKeyType)
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

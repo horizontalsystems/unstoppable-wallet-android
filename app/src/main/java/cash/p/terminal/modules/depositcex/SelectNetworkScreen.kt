@@ -14,7 +14,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexDepositNetwork
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.Badge
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -22,7 +21,6 @@ import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
@@ -31,28 +29,14 @@ import cash.p.terminal.ui.compose.components.body_leah
 fun SelectNetworkScreen(
     networks: List<CexDepositNetwork>,
     onSelectNetwork: (CexDepositNetwork) -> Unit,
-    onNavigateBack: (() -> Unit)?,
-    onClose: () -> Unit,
+    onNavigateBack: (() -> Unit),
 ) {
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
-            val navigationIcon: @Composable (() -> Unit)? = onNavigateBack?.let {
-                {
-                    HsBackButton(onClick = onNavigateBack)
-                }
-            }
-
             AppBar(
                 title = stringResource(R.string.Cex_ChooseNetwork),
-                navigationIcon = navigationIcon,
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Close),
-                        icon = R.drawable.ic_close,
-                        onClick = onClose
-                    )
-                )
+                navigationIcon = { HsBackButton(onClick = onNavigateBack) },
             )
         }
     ) {

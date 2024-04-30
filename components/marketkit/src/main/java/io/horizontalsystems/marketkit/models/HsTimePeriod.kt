@@ -8,7 +8,8 @@ enum class HsTimePeriod(val value: String) {
     Month3("3m"),
     Month6("6m"),
     Year1("1y"),
-    Year2("2y");
+    Year2("2y"),
+    Year5("5y");
 
     val range: Long
         get() = when (this) {
@@ -20,6 +21,7 @@ enum class HsTimePeriod(val value: String) {
             Month6 -> 180 * day
             Year1 -> 365 * day
             Year2 -> 730 * day
+            Year5 -> 1825 * day
         }
 
     private val day = (24 * 60 * 60).toLong()

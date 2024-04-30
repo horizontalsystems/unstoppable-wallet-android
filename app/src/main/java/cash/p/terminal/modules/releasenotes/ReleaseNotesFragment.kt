@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.releasenotes
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.markdown.MarkdownContent
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -30,21 +32,20 @@ import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.caption_grey
 import cash.p.terminal.ui.helpers.LinkHelper
+import kotlinx.parcelize.Parcelize
 
 class ReleaseNotesFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
         ReleaseNotesScreen(
-            closeablePopup = arguments?.getBoolean(showAsClosablePopupKey) ?: false,
+            closeablePopup = navController.getInput<Input>()?.showAsClosablePopup ?: false,
             onCloseClick = { navController.popBackStack() },
         )
     }
 
-    companion object {
-        const val showAsClosablePopupKey = "showAsClosablePopup"
-    }
-
+    @Parcelize
+    data class Input(val showAsClosablePopup: Boolean) : Parcelable
 }
 
 @Composable

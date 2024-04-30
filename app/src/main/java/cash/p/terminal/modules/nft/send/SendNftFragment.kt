@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.nft.send
 
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -13,6 +13,7 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.entities.nft.EvmNftRecord
 import cash.p.terminal.entities.nft.NftKey
 import cash.p.terminal.entities.nft.NftUid
@@ -27,21 +28,24 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.nftkit.models.NftType
+import kotlinx.parcelize.Parcelize
 
 class SendNftFragment : BaseComposeFragment() {
 
-    private val vmFactory by lazy { getFactory(requireArguments()) }
+    @Parcelize
+    data class Input(val nftUid: String) : Parcelable
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val factory = vmFactory
+        val factory = getFactory(navController.requireInput<Input>().nftUid)
 
         when (factory?.evmNftRecord?.nftType) {
             NftType.Eip721 -> {
                 val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                     R.id.nftSendFragment
                 ) { factory }
-                val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
+                val initiateLazyViewModel =
+                    evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
 
                 val eip721ViewModel by viewModels<SendEip721ViewModel> { factory }
                 val addressViewModel by viewModels<AddressViewModel> {
@@ -61,7 +65,8 @@ class SendNftFragment : BaseComposeFragment() {
                 val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                     R.id.nftSendFragment
                 ) { factory }
-                val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
+                val initiateLazyViewModel =
+                    evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
 
                 val eip1155ViewModel by viewModels<SendEip1155ViewModel> { factory }
                 val addressViewModel by viewModels<AddressViewModel> {
@@ -85,10 +90,8 @@ class SendNftFragment : BaseComposeFragment() {
 
 }
 
-private fun getFactory(requireArguments: Bundle): SendNftModule.Factory? {
-    val nftUid = requireArguments.getString(SendNftModule.nftUidKey)?.let {
-        NftUid.fromUid(it)
-    } ?: return null
+private fun getFactory(nftUidString: String): SendNftModule.Factory? {
+    val nftUid = NftUid.fromUid(nftUidString)
 
     val account = App.accountManager.activeAccount ?: return null
 

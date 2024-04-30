@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.entities.Account
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
@@ -34,7 +35,6 @@ import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import kotlinx.coroutines.delay
 
 class BackupConfirmKeyFragment : BaseComposeFragment() {
@@ -43,7 +43,7 @@ class BackupConfirmKeyFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         RecoveryPhraseVerifyScreen(
             navController,
-            arguments?.parcelable(BackupConfirmKeyModule.ACCOUNT)!!,
+            navController.requireInput(),
         )
     }
 

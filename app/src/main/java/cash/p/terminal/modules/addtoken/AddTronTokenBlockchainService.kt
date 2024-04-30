@@ -21,7 +21,7 @@ class AddTronTokenBlockchainService(
         return try {
             Address.fromBase58(reference)
             true
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             false
         }
     }

@@ -7,7 +7,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.modules.pin.ui.PinSet
 
-class EditDuressPinFragment : BaseComposeFragment() {
+class EditDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {

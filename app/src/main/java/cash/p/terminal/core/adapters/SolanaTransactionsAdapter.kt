@@ -44,10 +44,21 @@ class SolanaTransactionsAdapter(
         get() = kit.transactionsSyncStateFlow.map {}.asFlowable()
 
     override fun getTransactionsAsync(
-            from: TransactionRecord?,
-            token: Token?,
-            limit: Int,
-            transactionType: FilterTransactionType
+        from: TransactionRecord?,
+        token: Token?,
+        limit: Int,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ) = when (address) {
+        null -> getTransactionsAsync(from, token, limit, transactionType)
+        else -> Single.just(listOf())
+    }
+
+    private fun getTransactionsAsync(
+        from: TransactionRecord?,
+        token: Token?,
+        limit: Int,
+        transactionType: FilterTransactionType,
     ): Single<List<TransactionRecord>> {
         val incoming = when (transactionType) {
             FilterTransactionType.All -> null
@@ -70,7 +81,16 @@ class SolanaTransactionsAdapter(
         }
     }
 
-    override fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    override fun getTransactionRecordsFlowable(
+        token: Token?,
+        transactionType: FilterTransactionType,
+        address: String?,
+    ): Flowable<List<TransactionRecord>> = when (address) {
+        null -> getTransactionRecordsFlowable(token, transactionType)
+        else -> Flowable.empty()
+    }
+
+    private fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         val incoming: Boolean? = when (transactionType) {
             FilterTransactionType.All -> null
             FilterTransactionType.Incoming -> true

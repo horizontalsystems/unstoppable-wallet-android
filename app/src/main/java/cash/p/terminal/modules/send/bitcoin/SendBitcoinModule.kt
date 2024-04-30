@@ -24,7 +24,7 @@ object SendBitcoinModule {
             val feeRateService = SendBitcoinFeeRateService(provider)
             val amountService = SendBitcoinAmountService(adapter, wallet.coin.code, AmountValidator())
             val addressService = SendBitcoinAddressService(adapter, predefinedAddress)
-            val pluginService = SendBitcoinPluginService(App.localStorage, wallet.token.blockchainType)
+            val pluginService = SendBitcoinPluginService(wallet.token.blockchainType)
             return SendBitcoinViewModel(
                 adapter,
                 wallet,
@@ -37,8 +37,19 @@ object SendBitcoinModule {
                 App.btcBlockchainManager,
                 App.contactsRepository,
                 predefinedAddress == null,
+                App.localStorage
             ) as T
         }
+    }
+
+    data class UtxoData(
+        val type: UtxoType? = null,
+        val value: String = "0 / 0",
+    )
+
+    enum class UtxoType {
+        Auto,
+        Manual
     }
 
 }

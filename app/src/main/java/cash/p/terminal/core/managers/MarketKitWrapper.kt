@@ -4,7 +4,6 @@ import android.content.Context
 import cash.p.terminal.core.InvalidAuthTokenException
 import cash.p.terminal.core.NoAuthTokenException
 import cash.p.terminal.core.customCoinPrefix
-import cash.p.terminal.core.providers.AppConfigProvider
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.SyncInfo
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -25,20 +24,15 @@ class MarketKitWrapper(
     context: Context,
     hsApiBaseUrl: String,
     hsApiKey: String,
-    cryptoCompareApiKey: String? = null,
-    defiYieldApiKey: String? = null,
-    appConfigProvider: AppConfigProvider,
     private val subscriptionManager: SubscriptionManager
 ) {
-    private val marketKit: MarketKit = MarketKit.getInstance(
-        context = context,
-        hsApiBaseUrl = hsApiBaseUrl,
-        hsApiKey = hsApiKey,
-        cryptoCompareApiKey = cryptoCompareApiKey,
-        defiYieldApiKey = defiYieldApiKey,
-        appVersion = appConfigProvider.appVersion,
-        appId = appConfigProvider.appId
-    )
+    private val marketKit: MarketKit by lazy {
+        MarketKit.getInstance(
+            context = context,
+            hsApiBaseUrl = hsApiBaseUrl,
+            hsApiKey = hsApiKey,
+        )
+    }
 
     private fun <T> requestWithAuthToken(f: (String) -> Single<T>) =
         subscriptionManager.authToken?.let { authToken ->
@@ -80,22 +74,22 @@ class MarketKitWrapper(
 
     fun blockchain(uid: String) = marketKit.blockchain(uid)
 
-    fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean, apiTag: String) = marketKit.marketInfosSingle(top, currencyCode, defi, apiTag)
+    fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean) = marketKit.marketInfosSingle(top, currencyCode, defi)
 
-    fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String, apiTag: String) = marketKit.advancedMarketInfosSingle(top, currencyCode, apiTag)
+    fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
 
-    fun marketInfosSingle(coinUids: List<String>, currencyCode: String, apiTag: String): Single<List<MarketInfo>> =
-        marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode, apiTag)
+    fun marketInfosSingle(coinUids: List<String>, currencyCode: String): Single<List<MarketInfo>> =
+        marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode)
 
-    fun marketInfosSingle(categoryUid: String, currencyCode: String, apiTag: String) = marketKit.marketInfosSingle(categoryUid, currencyCode, apiTag)
+    fun marketInfosSingle(categoryUid: String, currencyCode: String) = marketKit.marketInfosSingle(categoryUid, currencyCode)
 
-    fun marketInfoOverviewSingle(coinUid: String, currencyCode: String, language: String, apiTag: String) =
-        marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language, apiTag)
+    fun marketInfoOverviewSingle(coinUid: String, currencyCode: String, language: String) =
+        marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language)
 
-    fun analyticsSingle(coinUid: String, currencyCode: String, apiTag: String) =
-        requestWithAuthToken { marketKit.analyticsSingle(it, coinUid, currencyCode, apiTag) }
+    fun analyticsSingle(coinUid: String, currencyCode: String) =
+        requestWithAuthToken { marketKit.analyticsSingle(it, coinUid, currencyCode) }
 
-    fun analyticsPreviewSingle(coinUid: String, addresses: List<String>, apiTag: String) = marketKit.analyticsPreviewSingle(coinUid, addresses, apiTag)
+    fun analyticsPreviewSingle(coinUid: String, addresses: List<String>) = marketKit.analyticsPreviewSingle(coinUid, addresses)
 
     fun marketInfoTvlSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
@@ -103,7 +97,7 @@ class MarketKitWrapper(
     fun marketInfoGlobalTvlSingle(chain: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, timePeriod)
 
-    fun defiMarketInfosSingle(currencyCode: String, apiTag: String) = marketKit.defiMarketInfosSingle(currencyCode, apiTag)
+    fun defiMarketInfosSingle(currencyCode: String) = marketKit.defiMarketInfosSingle(currencyCode)
 
     // Categories
 
@@ -172,8 +166,6 @@ class MarketKitWrapper(
 
     fun coinReportsSingle(coinUid: String) = marketKit.coinReportsSingle(coinUid)
 
-    fun auditReportsSingle(addresses: List<String>) = marketKit.auditReportsSingle(addresses)
-
     // Pro Details
 
     fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
@@ -219,6 +211,8 @@ class MarketKitWrapper(
 
     fun marketOverviewSingle(currencyCode: String) = marketKit.marketOverviewSingle(currencyCode)
 
+    fun topPairsSingle(currencyCode: String, page: Int, limit: Int) = marketKit.topPairsSingle(currencyCode, page, limit)
+
     fun topMoversSingle(currencyCode: String) = marketKit.topMoversSingle(currencyCode)
 
     // Chart Info
@@ -236,14 +230,20 @@ class MarketKitWrapper(
     fun globalMarketPointsSingle(currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.globalMarketPointsSingle(currencyCode, timePeriod)
 
-    fun topPlatformsSingle(currencyCode: String, apiTag: String) =
-        marketKit.topPlatformsSingle(currencyCode, apiTag)
+    fun topPlatformsSingle(currencyCode: String) =
+        marketKit.topPlatformsSingle(currencyCode)
 
-    fun topPlatformMarketCapPointsSingle(chain: String, timePeriod: HsTimePeriod, currencyCode: String) =
-        marketKit.topPlatformMarketCapPointsSingle(chain, timePeriod, currencyCode)
+    fun topPlatformMarketCapStartTimeSingle(platform: String) =
+        marketKit.topPlatformMarketCapStartTimeSingle(platform)
 
-    fun topPlatformCoinListSingle(chain: String, currencyCode: String, apiTag: String) =
-        marketKit.topPlatformMarketInfosSingle(chain, currencyCode, apiTag)
+    fun topPlatformMarketCapPointsSingle(
+        chain: String,
+        currencyCode: String,
+        periodType: HsPeriodType
+    ) = marketKit.topPlatformMarketCapPointsSingle(chain, currencyCode, periodType)
+
+    fun topPlatformCoinListSingle(chain: String, currencyCode: String) =
+        marketKit.topPlatformMarketInfosSingle(chain, currencyCode)
 
     // NFT
 

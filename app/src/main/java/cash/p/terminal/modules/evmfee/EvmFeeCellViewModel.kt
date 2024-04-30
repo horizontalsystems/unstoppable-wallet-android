@@ -2,11 +2,12 @@ package cash.p.terminal.modules.evmfee
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.fee.FeeItem
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class EvmFeeCellViewModel(
     val feeService: IEvmFeeService,
@@ -14,20 +15,15 @@ class EvmFeeCellViewModel(
     val coinService: EvmCoinService
 ) : ViewModel() {
 
-    private val disposable = CompositeDisposable()
-
     val feeLiveData = MutableLiveData<FeeItem?>()
     val viewStateLiveData = MutableLiveData<ViewState>()
 
     init {
-        syncTransactionStatus(feeService.transactionStatus)
-        feeService.transactionStatusObservable
-            .subscribe { syncTransactionStatus(it) }
-            .let { disposable.add(it) }
-    }
-
-    override fun onCleared() {
-        disposable.clear()
+        viewModelScope.launch {
+            feeService.transactionStatusFlow.collect {
+                syncTransactionStatus(it)
+            }
+        }
     }
 
     private fun syncTransactionStatus(transactionStatus: DataState<Transaction>) {

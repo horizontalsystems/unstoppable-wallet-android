@@ -19,9 +19,10 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.backupalert.BackupAlert
-import cash.p.terminal.modules.manageaccount.ManageAccountModule
+import cash.p.terminal.modules.manageaccount.ManageAccountFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.ActionViewItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -34,7 +35,6 @@ import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.subhead2_lucian
-import io.horizontalsystems.core.parcelable
 
 class ManageAccountsFragment : BaseComposeFragment() {
 
@@ -42,10 +42,9 @@ class ManageAccountsFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         ManageAccountsScreen(
             navController,
-            arguments?.parcelable(ManageAccountsModule.MODE)!!
+            navController.requireInput()
         )
     }
-
 }
 
 @Composable
@@ -84,8 +83,8 @@ fun ManageAccountsScreen(navController: NavController, mode: ManageAccountsModul
                 }
 
                 val args = when (mode) {
-                    ManageAccountsModule.Mode.Manage -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, false)
-                    ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.prepareParams(R.id.manageAccountsFragment, true)
+                    ManageAccountsModule.Mode.Manage -> ManageAccountsModule.Input(R.id.manageAccountsFragment, false)
+                    ManageAccountsModule.Mode.Switcher -> ManageAccountsModule.Input(R.id.manageAccountsFragment, true)
                 }
 
                 val actions = listOf(
@@ -181,7 +180,7 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
             ) {
                 navController.slideFromRight(
                     R.id.manageAccountFragment,
-                    ManageAccountModule.prepareParams(accountViewItem.accountId)
+                    ManageAccountFragment.Input(accountViewItem.accountId)
                 )
             }
         }

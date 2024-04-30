@@ -28,10 +28,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
@@ -42,7 +42,7 @@ import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
+import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.BadgeCount
@@ -113,7 +113,7 @@ private fun SettingSections(
                 onClick = {
                     navController.slideFromRight(
                         R.id.manageAccountsFragment,
-                        bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage)
+                        ManageAccountsModule.Mode.Manage
                     )
                 }
             )
@@ -125,7 +125,7 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.blockchainSettingsFragment)
                 }
             )
-        },{
+        }, {
             HsSettingCell(
                 R.string.BackupManager_Title,
                 R.drawable.ic_file_24,
@@ -134,7 +134,7 @@ private fun SettingSections(
                 }
             )
         }
-            )
+        )
     )
 
     VSpacer(32.dp)
@@ -148,23 +148,26 @@ private fun SettingSections(
                 counterBadge = (wcCounter as? CounterType.PendingRequestCounter)?.number?.toString(),
                 onClick = {
                     when (val state = viewModel.getWalletConnectSupportState()) {
-                        WC2Manager.SupportState.Supported -> {
-                            navController.slideFromRight(R.id.wallet_connect_graph)
+                        WCManager.SupportState.Supported -> {
+                            navController.slideFromRight(R.id.wcListFragment)
                         }
-                        WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
+
+                        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                         }
-                        is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+
+                        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                             navController.slideFromBottom(
                                 R.id.backupRequiredDialog,
-                                BackupRequiredDialog.prepareParams(state.account, text)
+                                BackupRequiredDialog.Input(state.account, text)
                             )
                         }
-                        is WC2Manager.SupportState.NotSupported -> {
+
+                        is WCManager.SupportState.NotSupported -> {
                             navController.slideFromBottom(
                                 R.id.wcAccountTypeNotSupportedDialog,
-                                WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
+                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
                             )
                         }
                     }
@@ -192,7 +195,10 @@ private fun SettingSections(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {
-                        navController.slideFromRight(R.id.contactsFragment, ContactsFragment.prepareParams(Mode.Full))
+                        navController.slideFromRight(
+                            R.id.contactsFragment,
+                            ContactsFragment.Input(Mode.Full)
+                        )
                     }
                 )
             },
@@ -255,21 +261,29 @@ private fun SettingSections(
     VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
-        listOf {
+        listOf({
             HsSettingCell(
-                R.string.Settings_ExperimentalFeatures,
-                R.drawable.ic_experimental,
+                R.string.Settings_Telegram,
+                R.drawable.ic_telegram_20,
                 onClick = {
-                    navController.slideFromRight(R.id.experimentalFeaturesFragment)
+                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
                 }
             )
-        }
+        }, {
+            HsSettingCell(
+                R.string.Settings_Twitter,
+                R.drawable.ic_twitter_20,
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
+                }
+            )
+        })
     )
 
     VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
-        listOf {
+        listOf({
             HsSettingCell(
                 R.string.SettingsAboutApp_Title,
                 R.drawable.ic_about_app_20,
@@ -278,13 +292,7 @@ private fun SettingSections(
                     navController.slideFromRight(R.id.aboutAppFragment)
                 }
             )
-        }
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf({
+        }, {
             HsSettingCell(
                 R.string.Settings_RateUs,
                 R.drawable.ic_star_20,
@@ -369,7 +377,12 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        caption_grey(text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion).uppercase())
+        caption_grey(
+            text = stringResource(
+                R.string.Settings_InfoTitleWithVersion,
+                appVersion
+            ).uppercase()
+        )
         Divider(
             modifier = Modifier
                 .width(100.dp)

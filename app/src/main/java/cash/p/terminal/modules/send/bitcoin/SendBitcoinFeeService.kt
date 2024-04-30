@@ -1,65 +1,82 @@
 package cash.p.terminal.modules.send.bitcoin
 
 import cash.p.terminal.core.ISendBitcoinAdapter
+import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.entities.Address
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.math.BigDecimal
 
 class SendBitcoinFeeService(private val adapter: ISendBitcoinAdapter) {
-    private val _feeFlow = MutableStateFlow<BigDecimal?>(null)
-    val feeFlow = _feeFlow.asStateFlow()
+    private val _bitcoinFeeInfoFlow = MutableStateFlow<BitcoinFeeInfo?>(null)
+    val bitcoinFeeInfoFlow = _bitcoinFeeInfoFlow.asStateFlow()
 
-    private var fee: BigDecimal? = null
+    private var bitcoinFeeInfo: BitcoinFeeInfo? = null
+    private var customUnspentOutputs: List<UnspentOutputInfo>? = null
 
     private var amount: BigDecimal? = null
     private var validAddress: Address? = null
+    private var memo: String? = null
     private var pluginData: Map<Byte, IPluginData>? = null
 
     private var feeRate: Int? = null
 
-    private fun refreshFee() {
+    private fun refreshFeeInfo() {
         val tmpAmount = amount
         val tmpFeeRate = feeRate
 
-        fee = when {
+        bitcoinFeeInfo = when {
             tmpAmount == null -> null
             tmpFeeRate == null -> null
-            else -> adapter.fee(tmpAmount, tmpFeeRate, validAddress?.hex, pluginData)
+            else -> adapter.bitcoinFeeInfo(tmpAmount, tmpFeeRate, validAddress?.hex, memo, customUnspentOutputs, pluginData)
         }
     }
 
     private fun emitState() {
-        _feeFlow.update { fee }
+        _bitcoinFeeInfoFlow.update { bitcoinFeeInfo }
     }
 
     fun setAmount(amount: BigDecimal?) {
         this.amount = amount
 
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 
     fun setValidAddress(validAddress: Address?) {
         this.validAddress = validAddress
 
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 
     fun setPluginData(pluginData: Map<Byte, IPluginData>?) {
         this.pluginData = pluginData
 
-        refreshFee()
+        refreshFeeInfo()
         emitState()
     }
 
     fun setFeeRate(feeRate: Int?) {
         this.feeRate = feeRate
 
-        refreshFee()
+        refreshFeeInfo()
+        emitState()
+    }
+
+    fun setCustomUnspentOutputs(customUnspentOutputs: List<UnspentOutputInfo>?) {
+        this.customUnspentOutputs = customUnspentOutputs
+        refreshFeeInfo()
+        emitState()
+    }
+
+    fun setMemo(memo: String?) {
+        this.memo = memo
+
+        refreshFeeInfo()
         emitState()
     }
 

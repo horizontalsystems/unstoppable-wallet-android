@@ -45,8 +45,8 @@ sealed class TokenType : Parcelable {
                 is Eip20 -> listOf("eip20", address)
                 is Bep2 -> listOf("bep2", symbol)
                 is Spl -> listOf("spl", address)
-                is AddressTyped -> listOf("address_type", type.name)
-                is Derived -> listOf("derived", derivation.name)
+                is AddressTyped -> listOf("address_type", type.name.lowercase())
+                is Derived -> listOf("derived", derivation.name.lowercase())
                 is Unsupported -> if (reference.isNotBlank()) {
                     listOf("unsupported", type, reference)
                 } else {

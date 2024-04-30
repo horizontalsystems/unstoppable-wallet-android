@@ -19,7 +19,7 @@ fun HSMemoInput(
         hint = stringResource(R.string.Send_DialogMemoHint),
         hintColor = ComposeAppTheme.colors.grey50,
         hintStyle = ComposeAppTheme.typography.bodyItalic,
-        textColor = ComposeAppTheme.colors.light,
+        textColor = ComposeAppTheme.colors.leah,
         textStyle = ComposeAppTheme.typography.bodyItalic,
         pasteEnabled = false,
         singleLine = true,

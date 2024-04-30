@@ -5,7 +5,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 
 class EvmSyncSourceStorage(appDatabase: AppDatabase) {
 
-    private val dao = appDatabase.evmSyncSourceDao()
+    private val dao by lazy { appDatabase.evmSyncSourceDao() }
 
     fun evmSyncSources(blockchainType: BlockchainType): List<EvmSyncSourceRecord> {
         return dao.getEvmSyncSources(blockchainType.uid)

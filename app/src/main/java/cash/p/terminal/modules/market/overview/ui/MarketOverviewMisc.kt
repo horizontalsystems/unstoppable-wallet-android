@@ -8,18 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.body_leah
-
-fun onItemClick(marketViewItem: MarketViewItem, navController: NavController) {
-    val arguments = CoinFragment.prepareParams(marketViewItem.coinUid, "market_overview")
-    navController.slideFromRight(R.id.coinFragment, arguments)
-}
 
 @Composable
 fun SeeAllButton(onClick: () -> Unit) {

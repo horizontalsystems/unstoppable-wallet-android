@@ -1,8 +1,6 @@
 package cash.p.terminal.modules.swap
 
-import android.os.Bundle
 import android.os.Parcelable
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
@@ -15,11 +13,9 @@ import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceService
 import cash.p.terminal.modules.swap.allowance.SwapAllowanceViewModel
 import cash.p.terminal.modules.swap.allowance.SwapPendingAllowanceService
-import cash.p.terminal.modules.swap.confirmation.BaseSwapConfirmationFragment
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -28,29 +24,23 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.util.*
 import kotlin.math.absoluteValue
 
 object SwapMainModule {
 
-    private const val tokenFromKey = "token_from_key"
-    const val resultKey = "swap_settings_result"
-    const val swapSettingsRecipientKey = "swap_settings_recipient"
-    const val swapSettingsSlippageKey = "swap_settings_slippage"
-    const val swapSettingsTtlKey = "swap_settings_ttl"
-
-    fun prepareParams(tokenFrom: Token, swapEntryPointDestId: Int = 0) = bundleOf(
-        tokenFromKey to tokenFrom,
-        BaseSwapConfirmationFragment.swapEntryPointDestIdKey to swapEntryPointDestId
-    )
+    @Parcelize
+    data class Result(
+        val recipient: Address?,
+        val slippageStr: String,
+        val ttl: Long? = null,
+    ) : Parcelable
 
     data class ProviderViewItem(
         val provider: ISwapProvider,
         val selected: Boolean,
     )
 
-    class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val tokenFrom: Token? = arguments.parcelable(tokenFromKey)
+    class Factory(private val tokenFrom: Token?) : ViewModelProvider.Factory {
         private val swapProviders: List<ISwapProvider> = listOf(
             UniswapProvider,
             UniswapV3Provider,
@@ -160,7 +150,6 @@ object SwapMainModule {
 
     data class SwapCoinCardViewState(
         val token: Token?,
-        val uuid: Long,
         val inputState: SwapAmountInputState,
     )
 
@@ -342,7 +331,7 @@ object SwapMainModule {
 
     @Parcelize
     data class ApproveData(
-        val dex: Dex,
+        val blockchainType: BlockchainType,
         val token: Token,
         val spenderAddress: String,
         val amount: BigDecimal,

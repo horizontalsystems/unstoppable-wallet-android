@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.coin
 
+import android.os.Parcelable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -10,33 +11,38 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
 import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.ListEmptyView
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.TabItem
+import cash.p.terminal.ui.compose.components.Tabs
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 class CoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val coinUid = requireArguments().getString(COIN_UID_KEY, "")
-        val apiTag = requireArguments().getString(API_TAG_KEY, "")
+        val input = navController.getInput<Input>()
+        val coinUid = input?.coinUid ?: ""
 
         CoinScreen(
             coinUid,
-            apiTag,
             coinViewModel(coinUid),
             navController,
             childFragmentManager
@@ -52,24 +58,19 @@ class CoinFragment : BaseComposeFragment() {
         null
     }
 
-    companion object {
-        private const val COIN_UID_KEY = "coin_uid_key"
-        private const val API_TAG_KEY = "api_tag_key"
-
-        fun prepareParams(coinUid: String, apiTag: String) = bundleOf(COIN_UID_KEY to coinUid, API_TAG_KEY to apiTag)
-    }
+    @Parcelize
+    data class Input(val coinUid: String) : Parcelable
 }
 
 @Composable
 fun CoinScreen(
     coinUid: String,
-    apiTag: String,
     coinViewModel: CoinViewModel?,
     navController: NavController,
     fragmentManager: FragmentManager
 ) {
     if (coinViewModel != null) {
-        CoinTabs(apiTag, coinViewModel, navController, fragmentManager)
+        CoinTabs(coinViewModel, navController, fragmentManager)
     } else {
         CoinNotFound(coinUid, navController)
     }
@@ -78,7 +79,6 @@ fun CoinScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CoinTabs(
-    apiTag: String,
     viewModel: CoinViewModel,
     navController: NavController,
     fragmentManager: FragmentManager
@@ -142,7 +142,6 @@ fun CoinTabs(
             when (tabs[page]) {
                 CoinModule.Tab.Overview -> {
                     CoinOverviewScreen(
-                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController
                     )
@@ -154,7 +153,6 @@ fun CoinTabs(
 
                 CoinModule.Tab.Details -> {
                     CoinAnalyticsScreen(
-                        apiTag = apiTag,
                         fullCoin = viewModel.fullCoin,
                         navController = navController,
                         fragmentManager = fragmentManager

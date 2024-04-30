@@ -20,7 +20,8 @@ class MarketOverviewManager(
                 HsTimePeriod.Day1 to nftManager.topCollections(response.nft.one_day),
                 HsTimePeriod.Week1 to nftManager.topCollections(response.nft.seven_day),
                 HsTimePeriod.Month1 to nftManager.topCollections(response.nft.thirty_day)
-            )
+            ),
+            topPairs = response.pairs
         )
 
     fun marketOverviewSingle(currencyCode: String): Single<MarketOverview> =

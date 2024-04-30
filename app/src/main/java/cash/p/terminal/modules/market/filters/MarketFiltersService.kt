@@ -4,16 +4,13 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.priceChangeValue
+import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Single
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 
 
@@ -21,7 +18,6 @@ class MarketFiltersService(
     private val marketKit: MarketKitWrapper,
     private val baseCurrency: Currency
 ) : IMarketListFetcher {
-
     private val blockchainTypes = listOf(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
@@ -42,41 +38,27 @@ class MarketFiltersService(
         BlockchainType.Unsupported("tomochain"),
         BlockchainType.Unsupported("xdai"),
     )
+    private var cache: List<MarketInfo>? = null
 
     val blockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
+    val currencyCode = baseCurrency.code
 
-    val currencyCode: String
-        get() = baseCurrency.code
-
-    private val allTimeDeltaPercent = BigDecimal.TEN
-
-    var coinCount: Int = CoinList.Top250.itemsCount
-
+    var coinCount = CoinList.Top250.itemsCount
     var filterMarketCap: Pair<Long?, Long?>? = null
-
     var filterVolume: Pair<Long?, Long?>? = null
-
-    var filterPeriod: TimePeriod = TimePeriod.TimePeriod_1D
-
+    var filterPeriod = TimePeriod.TimePeriod_1D
     var filterPriceChange: Pair<Long?, Long?>? = null
-
-    var filterBlockchains: List<Blockchain> = listOf()
-
-    var filterOutperformedBtcOn: Boolean = false
-
-    var filterOutperformedEthOn: Boolean = false
-
-    var filterOutperformedBnbOn: Boolean = false
-
-    var filterPriceCloseToAth: Boolean = false
-
-    var filterPriceCloseToAtl: Boolean = false
-
-    private val _numberOfItems =
-        MutableSharedFlow<Result<Int>?>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
-    val numberOfItems = _numberOfItems.asSharedFlow()
-
-    private var cache: List<MarketInfo>? = null
+    var filterBlockchains = listOf<Blockchain>()
+    var filterTradingSignal = listOf<Advice>()
+    var filterOutperformedBtcOn = false
+    var filterOutperformedEthOn = false
+    var filterOutperformedBnbOn = false
+    var filterPriceCloseToAth = false
+    var filterPriceCloseToAtl = false
+    var filterListedOnTopExchanges = false
+    var filterSolidCex = false
+    var filterSolidDex = false
+    var filterGoodDistribution = false
 
     override fun fetchAsync(): Single<List<MarketItem>> {
         return getTopMarketList()
@@ -93,20 +75,15 @@ class MarketFiltersService(
         cache = null
     }
 
-    suspend fun refresh() = withContext(Dispatchers.IO) {
-        try {
-            val items = getTopMarketList().blockingGet()
-            _numberOfItems.tryEmit(Result.success(items.size))
-        } catch (error: Exception) {
-            _numberOfItems.tryEmit(Result.failure(error))
-        }
+    suspend fun fetchNumberOfItems(): Int {
+        return getTopMarketList().await().size
     }
 
     private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code, "market_advanced_search_results")
+            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code)
                 .doOnSuccess {
                     cache = it
                 }
@@ -136,6 +113,11 @@ class MarketFiltersService(
                 && (!filterOutperformedBtcOn || outperformed(priceChangeValue, "bitcoin"))
                 && (!filterOutperformedEthOn || outperformed(priceChangeValue, "ethereum"))
                 && (!filterOutperformedBnbOn || outperformed(priceChangeValue, "binancecoin"))
+                && (!filterListedOnTopExchanges || marketInfo.listedOnTopExchanges == true)
+                && (!filterSolidCex || marketInfo.solidCex == true)
+                && (!filterSolidDex || marketInfo.solidDex == true)
+                && (!filterGoodDistribution || marketInfo.goodDistribution == true)
+                && inAdvice(marketInfo.advice)
     }
 
     private fun filterByRange(filter: Pair<Long?, Long?>?, value: Long?): Boolean {
@@ -163,13 +145,16 @@ class MarketFiltersService(
         if (value == null) return false
         val coinMarket = marketInfo(coinUid) ?: return false
 
-        return coinMarket.priceChangeValue(filterPeriod) ?: BigDecimal.ZERO < value
+        return (coinMarket.priceChangeValue(filterPeriod) ?: BigDecimal.ZERO) < value
     }
 
     private fun closeToAllTime(value: BigDecimal?): Boolean {
-        value ?: return false
+        return value != null && value.abs() < BigDecimal.TEN
+    }
 
-        return value.abs() < allTimeDeltaPercent
+    private fun inAdvice(tokenAdvice: Advice?): Boolean {
+        if (filterTradingSignal.isEmpty()) return true
+        return filterTradingSignal.contains(tokenAdvice)
     }
 
     private fun inBlockchain(tokens: List<Token>): Boolean {

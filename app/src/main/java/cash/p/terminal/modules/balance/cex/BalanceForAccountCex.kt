@@ -33,7 +33,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
-import cash.p.terminal.modules.balance.cex.asset.CexAssetFragment
 import cash.p.terminal.modules.balance.ui.BalanceSortingSelector
 import cash.p.terminal.modules.balance.ui.BalanceTitleRow
 import cash.p.terminal.modules.balance.ui.TotalBalanceRow
@@ -114,7 +113,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
                                     modifier = Modifier.weight(1f),
                                     title = stringResource(R.string.Balance_Deposit),
                                     onClick = {
-                                        navController.slideFromRight(R.id.depositCexChooseAssetFragment)
+                                        navController.slideFromRight(R.id.depositCexFragment)
                                     }
                                 )
                             }
@@ -170,7 +169,7 @@ fun BalanceCardCex(
                 onClick = {
                     navController.slideFromRight(
                         R.id.cexAssetFragment,
-                        CexAssetFragment.prepareParams(viewItem.cexAsset)
+                        viewItem.cexAsset
                     )
                 }
             )

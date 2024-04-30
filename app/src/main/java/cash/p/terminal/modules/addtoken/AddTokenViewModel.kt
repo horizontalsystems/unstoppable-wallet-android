@@ -3,9 +3,9 @@ package cash.p.terminal.modules.addtoken
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.swap.settings.Caution
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -15,7 +15,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewModel() {
+class AddTokenViewModel(private val addTokenService: AddTokenService) :
+    ViewModelUiState<AddTokenUiState>() {
 
     private var loading = false
     private var finished = false
@@ -24,16 +25,13 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
     private var caution: Caution? = null
     private var enteredText = ""
 
-    var uiState by mutableStateOf(
-        AddTokenUiState(
-            tokenInfo = tokenInfo,
-            addButtonEnabled = addButtonEnabled,
-            loading = loading,
-            finished = finished,
-            caution = caution
-        )
+    override fun createState() = AddTokenUiState(
+        tokenInfo = tokenInfo,
+        addButtonEnabled = addButtonEnabled,
+        loading = loading,
+        finished = finished,
+        caution = caution
     )
-        private set
 
     val blockchains by addTokenService::blockchains
 
@@ -98,16 +96,6 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
         }
     }
 
-    private fun emitState() {
-        uiState = AddTokenUiState(
-            tokenInfo = tokenInfo,
-            addButtonEnabled = addButtonEnabled,
-            loading = loading,
-            finished = finished,
-            caution = caution,
-        )
-    }
-
     private fun getErrorText(error: Throwable): String = when (error) {
         is AddTokenService.TokenError.NotFound -> {
             if (selectedBlockchain.type == BlockchainType.BinanceChain)
@@ -118,12 +106,14 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) : ViewMode
                     selectedBlockchain.name
                 )
         }
+
         is AddTokenService.TokenError.InvalidReference -> {
             if (selectedBlockchain.type == BlockchainType.BinanceChain)
                 Translator.getString(R.string.AddToken_InvalidBep2Symbol)
             else
                 Translator.getString(R.string.AddToken_InvalidContractAddress)
         }
+
         else -> Translator.getString(R.string.Error)
     }
 }

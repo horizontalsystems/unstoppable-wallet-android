@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class TransactionInfoService(
-    private val transactionRecord: TransactionRecord,
+    val transactionRecord: TransactionRecord,
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
@@ -151,7 +151,7 @@ class TransactionInfoService(
         _transactionInfoItemFlow.update { transactionInfoItem }
 
         launch {
-            adapter.getTransactionRecordsFlowable(null, FilterTransactionType.All).asFlow()
+            adapter.getTransactionRecordsFlowable(null, FilterTransactionType.All, null).asFlow()
                 .collect { transactionRecords ->
                     val record = transactionRecords.find { it == transactionRecord }
 

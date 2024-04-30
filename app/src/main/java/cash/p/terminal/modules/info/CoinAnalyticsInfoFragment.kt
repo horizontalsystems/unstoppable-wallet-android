@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.info
 
-import android.os.Bundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import cash.p.terminal.modules.info.ui.BulletedText
 import cash.p.terminal.modules.info.ui.InfoBody
@@ -27,27 +26,14 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
-import io.horizontalsystems.core.parcelable
 
 class CoinAnalyticsInfoFragment : BaseComposeFragment() {
-
-    private val analyticsInfo by lazy {
-        requireArguments().parcelable<AnalyticInfo>(analyticsInfoKey)
-    }
 
     @Composable
     override fun GetContent(navController: NavController) {
         CoinAnalyticsInfoScreen(
-            analyticsInfo
+            navController.getInput()
         ) { navController.popBackStack() }
-    }
-
-    companion object {
-        private const val analyticsInfoKey = "analyticsInfoKey"
-
-        fun prepareParams(analyticsInfo: AnalyticInfo): Bundle {
-            return bundleOf(analyticsInfoKey to analyticsInfo)
-        }
     }
 
 }
@@ -154,9 +140,7 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
         }
 
         AnalyticInfo.TechnicalIndicatorsInfo -> {
-            BulletedText(R.string.CoinAnalytics_TechIndicators_Info1)
-            BulletedText(R.string.CoinAnalytics_TechIndicators_Info2)
-            BulletedText(R.string.CoinAnalytics_TechIndicators_Info3)
+            InfoBody(R.string.TechnicalAdvice_InfoDescription)
         }
     }
 }

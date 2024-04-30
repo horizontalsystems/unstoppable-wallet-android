@@ -714,8 +714,8 @@ class SendEvmTransactionViewModel(
             info.chain?.let {
                 add(
                     ViewItem.Value(
-                        it.name,
-                        it.address,
+                        it.chain.name,
+                        it.address ?: "",
                         ValueType.Regular
                     )
                 )

@@ -46,18 +46,14 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
+import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.modules.swap.SwapMainModule.SwapAmountInputState
 import cash.p.terminal.modules.swap.SwapMainModule.SwapCoinCardViewState
-import cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.subhead1_jacob
 import cash.p.terminal.ui.compose.components.subhead1_leah
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
@@ -97,18 +93,12 @@ fun SwapCoinCardView(
                 .clickable(interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(bounded = false, radius = 40.dp),
                     onClick = {
-                        navController.getNavigationResult(SelectSwapCoinFragment.resultBundleKey) { bundle ->
-                            val requestId = bundle.getLong(SelectSwapCoinFragment.requestIdKey)
-                            val coinBalanceItem = bundle.parcelable<CoinBalanceItem>(
-                                SelectSwapCoinFragment.coinBalanceItemResultKey
-                            )
-                            if (requestId == cardState.uuid && coinBalanceItem != null) {
-                                onCoinSelect.invoke(coinBalanceItem.token)
-                            }
+                        navController.slideFromBottomForResult<SwapMainModule.CoinBalanceItem>(
+                            R.id.selectSwapCoinDialog,
+                            dex
+                        ) {
+                            onCoinSelect.invoke(it.token)
                         }
-
-                        val params = SelectSwapCoinFragment.prepareParams(cardState.uuid, dex)
-                        navController.slideFromBottom(R.id.selectSwapCoinDialog, params)
                     }),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -152,7 +142,7 @@ private fun SwapAmountInput(
 //    LaunchedEffect(amountData?.first) {
     if (!amountsEqual(state.amount.toBigDecimalOrNull(), textState.text.toBigDecimalOrNull())) {
         if (!state.dimAmount || state.amount.isNotEmpty())
-            textState = textState.copy(text = state.amount, selection = TextRange(state.amount.length))
+            textState = textState.copy(text = state.amount, selection = TextRange(0))
     }
 //    }
 
@@ -162,6 +152,10 @@ private fun SwapAmountInput(
                 .onFocusChanged { focusState ->
                     focused = focusState.isFocused
                     onFocusChanged?.invoke(focusState.isFocused)
+
+                    if (!focusState.isFocused) {
+                        textState = textState.copy(selection = TextRange(0))
+                    }
                 }
                 .focusRequester(focusRequester)
                 .fillMaxWidth(),

@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
@@ -30,7 +29,6 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.importwallet.getFileName
-import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -54,11 +52,11 @@ class BackupManagerFragment : BaseComposeFragment() {
                 navController.navigateWithTermsAccepted {
                     navController.slideFromBottom(
                         R.id.restoreLocalFragment,
-                        bundleOf(
-                            ManageAccountsModule.popOffOnSuccessKey to R.id.backupManagerFragment,
-                            ManageAccountsModule.popOffInclusiveKey to false,
-                            RestoreLocalFragment.jsonFileKey to jsonString,
-                            RestoreLocalFragment.fileNameKey to fileName
+                        RestoreLocalFragment.Input(
+                            R.id.backupManagerFragment,
+                            false,
+                            jsonString,
+                            fileName
                         )
                     )
                 }

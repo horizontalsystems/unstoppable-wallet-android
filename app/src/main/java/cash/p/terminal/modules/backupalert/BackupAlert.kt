@@ -23,7 +23,7 @@ fun BackupAlert(navController: NavController) {
         LaunchedEffect(account) {
             delay(300)
             viewModel.onHandled()
-            navController.slideFromBottom(R.id.backupRecoveryPhraseDialog, BackupRecoveryPhraseDialog.prepareParams(account))
+            navController.slideFromBottom(R.id.backupRecoveryPhraseDialog, account)
         }
     }
 }

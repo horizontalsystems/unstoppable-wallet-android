@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.swap.settings.oneinch
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,11 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swap.SwapMainModule
@@ -33,50 +35,21 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.core.setNavigationResult
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class OneInchSettingsFragment : BaseComposeFragment() {
 
-    companion object {
-        private const val dexKey = "dexKey"
-        private const val addressKey = "addressKey"
-        private const val slippageKey = "slippageKey"
-
-        fun prepareParams(
-            dex: SwapMainModule.Dex,
-            address: Address?,
-            slippage: BigDecimal
-        ) = bundleOf(
-            dexKey to dex,
-            addressKey to address,
-            slippageKey to slippage.toPlainString()
-        )
-    }
-
-    private val dex by lazy {
-        requireArguments().parcelable<SwapMainModule.Dex>(dexKey)
-    }
-
-    private val address by lazy {
-        requireArguments().parcelable<Address>(addressKey)
-    }
-
-    private val slippage by lazy {
-        requireArguments().getString(slippageKey)?.toBigDecimal()
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val dexValue = dex
-        if (dexValue != null) {
+        val input = navController.getInput<Input>()
+        if (input != null) {
             OneInchSettingsScreen(
                 onCloseClick = {
                     navController.popBackStack()
                 },
-                dex = dexValue,
-                factory = OneInchSwapSettingsModule.Factory(address, slippage),
+                dex = input.dex,
+                factory = OneInchSwapSettingsModule.Factory(input.address, input.slippage),
                 navController = navController
             )
         } else {
@@ -93,6 +66,26 @@ class OneInchSettingsFragment : BaseComposeFragment() {
                 )
             }
         }
+    }
+
+    @Parcelize
+    data class Input(
+        val dex: SwapMainModule.Dex,
+        val address: Address?,
+        val slippageString: String
+    ) : Parcelable {
+        val slippage: BigDecimal
+            get() = slippageString.toBigDecimal()
+
+        constructor(
+            dex: SwapMainModule.Dex,
+            address: Address?,
+            slippage: BigDecimal
+        ) : this(
+            dex,
+            address,
+            slippage.toPlainString()
+        )
     }
 
 }
@@ -155,11 +148,10 @@ private fun OneInchSettingsScreen(
                         val swapSettings = oneInchSettingsViewModel.swapSettings
 
                         if (swapSettings != null) {
-                            navController.setNavigationResult(
-                                SwapMainModule.resultKey,
-                                bundleOf(
-                                    SwapMainModule.swapSettingsRecipientKey to swapSettings.recipient,
-                                    SwapMainModule.swapSettingsSlippageKey to swapSettings.slippage.toString(),
+                            navController.setNavigationResultX(
+                                SwapMainModule.Result(
+                                    swapSettings.recipient,
+                                    swapSettings.slippage.toPlainString()
                                 )
                             )
                             onCloseClick()

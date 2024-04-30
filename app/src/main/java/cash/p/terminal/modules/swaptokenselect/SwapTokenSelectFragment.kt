@@ -8,7 +8,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.swap.SwapMainModule
+import cash.p.terminal.modules.swap.SwapMainFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.helpers.HudHelper
@@ -26,7 +26,7 @@ class SwapTokenSelectFragment : BaseComposeFragment() {
                     it.swapEnabled -> {
                         navController.slideFromRight(
                             R.id.swapFragment,
-                            SwapMainModule.prepareParams(it.wallet.token, R.id.swapTokenSelectFragment)
+                            SwapMainFragment.Input(it.wallet.token, R.id.swapTokenSelectFragment)
                         )
                     }
                     it.syncingProgress.progress != null -> {

@@ -14,8 +14,7 @@ import io.reactivex.Single
 import java.math.BigDecimal
 
 class GlobalMarketRepository(
-    private val marketKit: MarketKitWrapper,
-    private val apiTag: String
+    private val marketKit: MarketKitWrapper
 ) {
 
     private var cache: List<DefiMarketInfo> = listOf()
@@ -60,7 +59,7 @@ class GlobalMarketRepository(
         sortDescending: Boolean,
         metricsType: MetricsType
     ): Single<List<MarketItem>> {
-        return marketKit.marketInfosSingle(250, currency.code, defi = metricsType == MetricsType.DefiCap, apiTag)
+        return marketKit.marketInfosSingle(250, currency.code, defi = metricsType == MetricsType.DefiCap)
             .map { coinMarkets ->
                 val marketItems = coinMarkets.map { MarketItem.createFromCoinMarket(it, currency) }
                 val sortingField = when (metricsType) {
@@ -90,7 +89,7 @@ class GlobalMarketRepository(
 
     private fun defiMarketInfos(currencyCode: String, forceRefresh: Boolean): List<DefiMarketInfo> =
         if (forceRefresh || cache.isEmpty()) {
-            val defiMarketInfo = marketKit.defiMarketInfosSingle(currencyCode, apiTag).blockingGet()
+            val defiMarketInfo = marketKit.defiMarketInfosSingle(currencyCode).blockingGet()
 
             cache = defiMarketInfo
 

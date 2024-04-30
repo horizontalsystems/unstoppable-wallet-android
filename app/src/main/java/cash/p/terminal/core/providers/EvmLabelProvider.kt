@@ -7,7 +7,9 @@ import retrofit2.http.GET
 
 class EvmLabelProvider {
     private val apiURL = App.appConfigProvider.marketApiBaseUrl + "/v1/"
-    private val apiService: HsLabelApi = APIClient.retrofit(apiURL, 60).create(HsLabelApi::class.java)
+    private val apiService: HsLabelApi by lazy {
+        APIClient.retrofit(apiURL, 60).create(HsLabelApi::class.java)
+    }
 
     suspend fun updatesStatus(): UpdatesStatus = apiService.updatesStatus()
 

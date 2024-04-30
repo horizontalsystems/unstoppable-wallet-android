@@ -14,13 +14,17 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.DescriptionCell
 import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.PriceWithToggleCell
 import cash.p.terminal.ui.compose.components.SectionTitleCell
 import cash.p.terminal.ui.compose.components.TitleAndValueCell
 import cash.p.terminal.ui.compose.components.TransactionAmountCell
@@ -46,7 +50,7 @@ class TransactionInfoFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         val viewItem = viewModelTxs.tmpItemToShow
         if (viewItem == null) {
-            navController.popBackStack()
+            navController.popBackStack(R.id.transactionInfoFragment, true)
             return
         }
 
@@ -100,11 +104,21 @@ fun TransactionInfoSection(
     navController: NavController,
     getRawTransaction: () -> String?
 ) {
-    if (section.size == 1 && section[0] is TransactionInfoViewItem.WarningMessage) {
-        (section[0] as? TransactionInfoViewItem.WarningMessage)?.let {
-            WarningMessageCell(it.message)
+    //items without background
+    if (section.size == 1) {
+        when (val item = section[0]) {
+            is TransactionInfoViewItem.WarningMessage -> {
+                WarningMessageCell(item.message)
+                return
+            }
+            is TransactionInfoViewItem.Description -> {
+                DescriptionCell(text = item.text)
+                return
+            }
+            else -> {
+                //do nothing
+            }
         }
-        return
     }
 
     CellUniversalLawrenceSection(
@@ -120,12 +134,15 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.Amount -> {
                         add {
                             TransactionAmountCell(
+                                amountType = viewItem.amountType,
                                 fiatAmount = viewItem.fiatValue,
                                 coinAmount = viewItem.coinValue,
                                 coinIconUrl = viewItem.coinIconUrl,
+                                badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
-                                coinUid = viewItem.coinUid,
-                                navController = navController
+                                onClick = viewItem.coinUid?.let {
+                                    { navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it)) }
+                                }
                             )
                         }
                     }
@@ -133,19 +150,32 @@ fun TransactionInfoSection(
                     is TransactionInfoViewItem.NftAmount -> {
                         add {
                             TransactionNftAmountCell(
+                                viewItem.title,
                                 viewItem.nftValue,
+                                viewItem.nftName,
                                 viewItem.iconUrl,
                                 viewItem.iconPlaceholder,
-                                viewItem.nftUid,
-                                viewItem.providerCollectionUid,
-                                navController
+                                viewItem.badge,
                             )
                         }
                     }
 
                     is TransactionInfoViewItem.Value -> {
                         add {
-                            TitleAndValueCell(title = viewItem.title, value = viewItem.value)
+                            TitleAndValueCell(
+                                title = viewItem.title,
+                                value = viewItem.value,
+                            )
+                        }
+                    }
+
+                    is TransactionInfoViewItem.PriceWithToggle -> {
+                        add {
+                            PriceWithToggleCell(
+                                title = viewItem.title,
+                                valueOne = viewItem.valueTwo,
+                                valueTwo = viewItem.valueOne
+                            )
                         }
                     }
 
@@ -175,10 +205,18 @@ fun TransactionInfoSection(
 
                     is TransactionInfoViewItem.SpeedUpCancel -> {
                         add {
-                            TransactionInfoSpeedUpCell(transactionHash = viewItem.transactionHash, navController = navController)
+                            TransactionInfoSpeedUpCell(
+                                transactionHash = viewItem.transactionHash,
+                                blockchainType = viewItem.blockchainType,
+                                navController = navController
+                            )
                         }
                         add {
-                            TransactionInfoCancelCell(transactionHash = viewItem.transactionHash, navController = navController)
+                            TransactionInfoCancelCell(
+                                transactionHash = viewItem.transactionHash,
+                                blockchainType = viewItem.blockchainType,
+                                navController = navController
+                            )
                         }
                     }
 
@@ -224,8 +262,8 @@ fun TransactionInfoSection(
                         }
                     }
 
-                    is TransactionInfoViewItem.WarningMessage -> {
-                        //already handled
+                    else -> {
+                        //do nothing
                     }
                 }
             }

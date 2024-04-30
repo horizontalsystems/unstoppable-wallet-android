@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.manageaccount.dialogs
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +15,11 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.backuplocal.BackupLocalFragment
-import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaultWithIcon
 import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
@@ -30,17 +29,9 @@ import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.parcelable
+import kotlinx.parcelize.Parcelize
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
-
-    private val account by lazy {
-        requireArguments().parcelable<Account>(ACCOUNT)
-    }
-
-    private val text by lazy {
-        requireArguments().getString(TEXT) ?: ""
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,22 +43,16 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                account?.let {
-                    BackupRequiredScreen(findNavController(), it, text)
+                val navController = findNavController()
+                navController.getInput<Input>()?.let { input ->
+                    BackupRequiredScreen(navController, input.account, input.text ?: "")
                 }
             }
         }
     }
 
-    companion object {
-        private const val ACCOUNT = "account"
-        private const val TEXT = "text"
-
-        fun prepareParams(account: Account, text: String) = bundleOf(
-            ACCOUNT to account,
-            TEXT to text
-        )
-    }
+    @Parcelize
+    data class Input(val account: Account, val text: String) : Parcelable
 }
 
 @Composable
@@ -97,7 +82,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                 onClick = {
                     navController.slideFromBottom(
                         R.id.backupKeyFragment,
-                        BackupKeyModule.prepareParams(account)
+                        account
                     )
                 }
             )
@@ -110,10 +95,7 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                 icon = R.drawable.ic_file_24,
                 iconTint = ComposeAppTheme.colors.claude,
                 onClick = {
-                    navController.slideFromBottom(
-                        R.id.backupLocalFragment,
-                        BackupLocalFragment.prepareParams(account.id)
-                    )
+                    navController.slideFromBottom(R.id.backupLocalFragment, account)
                 }
             )
             VSpacer(12.dp)

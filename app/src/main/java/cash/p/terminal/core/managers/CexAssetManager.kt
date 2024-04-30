@@ -8,8 +8,8 @@ import java.math.BigDecimal
 
 class CexAssetManager(marketKit: MarketKitWrapper, private val cexAssetsDao: CexAssetsDao) {
 
-    private val coins = marketKit.allCoins().map { it.uid to it }.toMap()
-    private val allBlockchains = marketKit.allBlockchains().map { it.uid to it }.toMap()
+    private val coins by lazy { marketKit.allCoins().map { it.uid to it }.toMap() }
+    private val allBlockchains by lazy { marketKit.allBlockchains().map { it.uid to it }.toMap() }
 
     private fun buildCexAsset(cexAssetRaw: CexAssetRaw): CexAsset {
         return CexAsset(

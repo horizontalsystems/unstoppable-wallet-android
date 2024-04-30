@@ -204,6 +204,12 @@ sealed class AccountType : Parcelable {
         bip84("bip84"),
         bip86("bip86");
 
+        val recommended: String
+            get() = when (this) {
+                bip84 -> " " + Translator.getString(R.string.Restore_Bip_Recommended)
+                else -> ""
+            }
+
         val addressType: String
             get() = when (this) {
                 bip44 -> "Legacy"
@@ -226,6 +232,14 @@ sealed class AccountType : Parcelable {
                 bip49 -> HDWallet.Purpose.BIP49
                 bip84 -> HDWallet.Purpose.BIP84
                 bip86 -> HDWallet.Purpose.BIP86
+            }
+
+        val order: Int
+            get() = when (this) {
+                bip84 -> 0
+                bip86 -> 1
+                bip49 -> 2
+                bip44 -> 3
             }
 
         companion object {

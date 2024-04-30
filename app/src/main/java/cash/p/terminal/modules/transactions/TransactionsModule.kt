@@ -4,30 +4,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Account
+import io.horizontalsystems.hodler.LockTimeInterval
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
-import java.util.*
+import java.util.Date
 
 object TransactionsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val transactionsService = TransactionsService(
+                TransactionRecordRepository(App.transactionAdapterManager),
+                TransactionsRateRepository(App.currencyManager, App.marketKit),
+                TransactionSyncStateRepository(App.transactionAdapterManager),
+                App.contactsRepository,
+                NftMetadataService(App.nftMetadataManager),
+                App.spamManager
+            )
+            val transactionViewItemFactory = TransactionViewItemFactory(
+                App.evmLabelManager,
+                App.contactsRepository,
+                App.balanceHiddenManager
+            )
 
             return TransactionsViewModel(
-                TransactionsService(
-                    TransactionRecordRepository(App.transactionAdapterManager),
-                    TransactionsRateRepository(App.currencyManager, App.marketKit),
-                    TransactionSyncStateRepository(App.transactionAdapterManager),
-                    App.contactsRepository,
-                    App.transactionAdapterManager,
-                    App.walletManager,
-                    TransactionFilterService(App.spamManager),
-                    NftMetadataService(App.nftMetadataManager),
-                    App.spamManager
-                ),
-                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager),
-                App.balanceHiddenManager
+                transactionsService,
+                transactionViewItemFactory,
+                App.balanceHiddenManager,
+                App.transactionAdapterManager,
+                App.walletManager,
+                TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.spamManager),
             ) as T
         }
     }
@@ -36,7 +43,8 @@ object TransactionsModule {
 data class TransactionLockInfo(
     val lockedUntil: Date,
     val originalAddress: String,
-    val amount: BigDecimal?
+    val amount: BigDecimal?,
+    val lockTimeInterval: LockTimeInterval
 )
 
 sealed class TransactionStatus {
@@ -50,6 +58,11 @@ data class TransactionWallet(
     val token: Token?,
     val source: TransactionSource,
     val badge: String?
+)
+
+data class FilterToken(
+    val token: Token,
+    val source: TransactionSource,
 )
 
 data class TransactionSource(

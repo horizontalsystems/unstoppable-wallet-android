@@ -13,8 +13,7 @@ import kotlinx.coroutines.withContext
 
 class TopPlatformsRepository(
     private val marketKit: MarketKitWrapper,
-    private val currencyManager: CurrencyManager,
-    private val apiTag: String,
+    private val currencyManager: CurrencyManager
 ) {
     private var itemsCache: List<TopPlatform>? = null
 
@@ -27,7 +26,7 @@ class TopPlatformsRepository(
         val currentCache = itemsCache
 
         val items = if (forceRefresh || currentCache == null) {
-            marketKit.topPlatformsSingle(currencyManager.baseCurrency.code, apiTag).await()
+            marketKit.topPlatformsSingle(currencyManager.baseCurrency.code).await()
         } else {
             currentCache
         }

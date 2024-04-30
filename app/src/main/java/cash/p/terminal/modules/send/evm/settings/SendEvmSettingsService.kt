@@ -2,31 +2,37 @@ package cash.p.terminal.modules.send.evm.settings
 
 import cash.p.terminal.core.Warning
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.evmfee.*
+import cash.p.terminal.modules.evmfee.GasData
+import cash.p.terminal.modules.evmfee.IEvmFeeService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.withContext
+import cash.p.terminal.modules.evmfee.Transaction as TransactionFeeData
 
 class SendEvmSettingsService(
     private val feeService: IEvmFeeService,
     private val nonceService: SendEvmNonceService
 ) {
+    private var feeState: DataState<TransactionFeeData>? = null
+
     var state: DataState<Transaction> = DataState.Loading
         private set(value) {
             field = value
-            _stateFlow.update { value }
+            _stateFlow.tryEmit(value)
         }
-    private val _stateFlow = MutableStateFlow(state)
-    val stateFlow: Flow<DataState<Transaction>> = _stateFlow
+    private val _stateFlow: MutableSharedFlow<DataState<Transaction>> =
+        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val stateFlow: Flow<DataState<Transaction>> = _stateFlow.asSharedFlow()
 
     suspend fun start() = withContext(Dispatchers.IO) {
         launch {
-            feeService.transactionStatusObservable.asFlow().collect {
+            feeService.transactionStatusFlow.collect {
+                feeState = it
                 sync()
             }
         }
@@ -44,7 +50,7 @@ class SendEvmSettingsService(
     }
 
     private fun sync() {
-        val feeState = feeService.transactionStatus
+        val feeState = feeState
         val nonceState = nonceService.state
 
         state = when {

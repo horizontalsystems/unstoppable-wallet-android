@@ -24,13 +24,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartViewModel
@@ -40,7 +39,6 @@ import cash.p.terminal.modules.coin.overview.CoinOverviewViewModel
 import cash.p.terminal.modules.coin.overview.HudMessageType
 import cash.p.terminal.modules.coin.ui.CoinScreenTitle
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.managewallets.ManageWalletsModule
 import cash.p.terminal.modules.managewallets.ManageWalletsViewModel
 import cash.p.terminal.modules.markdown.MarkdownFragment
@@ -57,19 +55,16 @@ import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
-import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.LinkType
 
 @Composable
 fun CoinOverviewScreen(
-    apiTag: String,
     fullCoin: FullCoin,
     navController: NavController
 ) {
-    val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin, apiTag) }
+    val vmFactory by lazy { CoinOverviewModule.Factory(fullCoin) }
     val viewModel = viewModel<CoinOverviewViewModel>(factory = vmFactory)
     val chartViewModel = viewModel<ChartViewModel>(factory = vmFactory)
 
@@ -108,20 +103,13 @@ fun CoinOverviewScreen(
     if (restoreSettingsViewModel.openZcashConfigure != null) {
         restoreSettingsViewModel.zcashConfigureOpened()
 
-        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
-            val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
-
-            if (requestResult == ZcashConfigure.RESULT_OK) {
-                val zcashConfig = bundle.parcelable<ZCashConfig>(ZcashConfigure.zcashConfigKey)
-                zcashConfig?.let { config ->
-                    restoreSettingsViewModel.onEnter(config)
-                }
+        navController.slideFromBottomForResult<ZcashConfigure.Result>(R.id.zcashConfigure) {
+            if (it.config != null) {
+                restoreSettingsViewModel.onEnter(it.config)
             } else {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
         }
-
-        navController.slideFromBottom(R.id.zcashConfigure)
     }
 
 
@@ -251,13 +239,9 @@ private fun onClick(coinLink: CoinLink, context: Context, navController: NavCont
 
     when (coinLink.linkType) {
         LinkType.Guide -> {
-            val arguments = bundleOf(
-                MarkdownFragment.markdownUrlKey to absoluteUrl,
-                MarkdownFragment.handleRelativeUrlKey to true
-            )
             navController.slideFromRight(
                 R.id.markdownFragment,
-                arguments
+                MarkdownFragment.Input(absoluteUrl, true)
             )
         }
         else -> LinkHelper.openLinkInAppBrowser(context, absoluteUrl)

@@ -9,13 +9,16 @@ import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
-import cash.p.terminal.modules.walletconnect.version2.WC2SessionManager
+import cash.p.terminal.modules.walletconnect.WCManager
+import cash.p.terminal.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainSettingsService(
     private val backupManager: IBackupManager,
@@ -24,12 +27,13 @@ class MainSettingsService(
     private val currencyManager: CurrencyManager,
     private val termsManager: ITermsManager,
     private val pinComponent: IPinComponent,
-    private val wc2SessionManager: WC2SessionManager,
-    private val wc2Manager: WC2Manager,
+    private val wcSessionManager: WCSessionManager,
+    private val wcManager: WCManager,
     private val accountManager: IAccountManager,
     private val appConfigProvider: AppConfigProvider
 ) {
 
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     val appWebPageLink = appConfigProvider.appWebPageLink
     private val backedUpSubject = BehaviorSubject.create<Boolean>()
     val backedUpObservable: Observable<Boolean> get() = backedUpSubject
@@ -64,10 +68,10 @@ class MainSettingsService(
     val allBackedUp: Boolean
         get() = backupManager.allBackedUp
 
-    val pendingRequestCountFlow by wc2SessionManager::pendingRequestCountFlow
+    val pendingRequestCountFlow by wcSessionManager::pendingRequestCountFlow
 
     val walletConnectSessionCount: Int
-        get() = wc2SessionManager.sessions.count()
+        get() = wcSessionManager.sessions.count()
 
     val currentLanguageDisplayName: String
         get() = languageManager.currentLanguageName
@@ -83,9 +87,11 @@ class MainSettingsService(
             backedUpSubject.onNext(it)
         })
 
-        disposables.add(wc2SessionManager.sessionsObservable.subscribe {
-            walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
-        })
+        coroutineScope.launch {
+            wcSessionManager.sessionsFlow.collect{
+                walletConnectSessionCountSubject.onNext(walletConnectSessionCount)
+            }
+        }
 
         disposables.add(currencyManager.baseCurrencyUpdatedSignal.subscribe {
             baseCurrencySubject.onNext(currencyManager.baseCurrency)
@@ -100,7 +106,7 @@ class MainSettingsService(
         disposables.clear()
     }
 
-    fun getWalletConnectSupportState(): WC2Manager.SupportState {
-        return wc2Manager.getWalletConnectSupportState()
+    fun getWalletConnectSupportState(): WCManager.SupportState {
+        return wcManager.getWalletConnectSupportState()
     }
 }

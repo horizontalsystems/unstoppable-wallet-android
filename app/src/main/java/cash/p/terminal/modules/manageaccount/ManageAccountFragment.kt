@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.manageaccount
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,20 +23,15 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.FaqManager
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
-import cash.p.terminal.modules.backuplocal.BackupLocalFragment
 import cash.p.terminal.modules.balance.HeaderNote
 import cash.p.terminal.modules.balance.ui.NoteError
 import cash.p.terminal.modules.balance.ui.NoteWarning
-import cash.p.terminal.modules.manageaccount.ManageAccountModule.ACCOUNT_ID_KEY
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
-import cash.p.terminal.modules.manageaccount.backupkey.BackupKeyModule
-import cash.p.terminal.modules.manageaccount.publickeys.PublicKeysModule
-import cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
-import cash.p.terminal.modules.unlinkaccount.UnlinkAccountDialog
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -54,17 +50,21 @@ import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.body_lucian
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class ManageAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
         ManageAccountScreen(
             navController,
-            arguments?.getString(ACCOUNT_ID_KEY)!!
+            input.accountId
         )
     }
 
+    @Parcelize
+    data class Input(val accountId: String) : Parcelable
 }
 
 @Composable
@@ -154,7 +154,7 @@ fun ManageAccountScreen(navController: NavController, accountId: String) {
                     ) {
                         navController.slideFromBottom(
                             R.id.unlinkConfirmationDialog,
-                            UnlinkAccountDialog.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     }
                 })
@@ -185,7 +185,7 @@ private fun BackupActions(
                         navController.authorizedAction {
                             navController.slideFromBottom(
                                 R.id.backupKeyFragment,
-                                BackupKeyModule.prepareParams(account)
+                                account
                             )
                         }
                     }
@@ -200,7 +200,7 @@ private fun BackupActions(
                         attention = action.showAttention
                     ) {
                         navController.authorizedAction {
-                            navController.slideFromBottom(R.id.backupLocalFragment, BackupLocalFragment.prepareParams(account.id))
+                            navController.slideFromBottom(R.id.backupLocalFragment, account)
                         }
                     }
                 }
@@ -241,7 +241,7 @@ private fun KeyActions(
                         navController.authorizedAction {
                             navController.slideFromRight(
                                 R.id.recoveryPhraseFragment,
-                                RecoveryPhraseModule.prepareParams(viewModel.account)
+                                viewModel.account
                             )
                         }
                     }
@@ -256,7 +256,7 @@ private fun KeyActions(
                     ) {
                         navController.slideFromRight(
                             R.id.privateKeysFragment,
-                            PublicKeysModule.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     }
                 }
@@ -270,7 +270,7 @@ private fun KeyActions(
                     ) {
                         navController.slideFromRight(
                             R.id.publicKeysFragment,
-                            PublicKeysModule.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     }
                 }

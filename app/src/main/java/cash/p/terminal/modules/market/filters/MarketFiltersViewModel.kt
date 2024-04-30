@@ -1,58 +1,52 @@
 package cash.p.terminal.modules.market.filters
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.market.filters.MarketFiltersModule.BlockchainViewItem
 import cash.p.terminal.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
-class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
+class MarketFiltersViewModel(val service: MarketFiltersService)
+    : ViewModelUiState<MarketFiltersUiState>() {
 
-    var coinListSet by mutableStateOf(
-        FilterViewItemWrapper(
-            Translator.getString(CoinList.Top250.titleResId),
-            CoinList.Top250,
-        )
+    private var coinListSet = FilterViewItemWrapper(
+        Translator.getString(CoinList.Top250.titleResId),
+        CoinList.Top250,
     )
-        private set
-
-    var period by mutableStateOf(
-        FilterViewItemWrapper(
-            Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
-            TimePeriod.TimePeriod_1D,
-        )
+    private var period = FilterViewItemWrapper(
+        Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
+        TimePeriod.TimePeriod_1D,
     )
-        private set
+    private var filterTradingSignal = FilterViewItemWrapper.getAny<FilterTradingSignal>()
+    private var marketCap = rangeEmpty
+    private var volume = rangeEmpty
+    private var priceChange = FilterViewItemWrapper.getAny<PriceChange>()
+    private var outperformedBtcOn = false
+    private var outperformedEthOn = false
+    private var outperformedBnbOn = false
+    private var priceCloseToAth = false
+    private var priceCloseToAtl = false
+    private var listedOnTopExchangesOn = false
+    private var solidCexOn = false
+    private var solidDexOn = false
+    private var goodDistributionOn = false
+    private var selectedBlockchainsValue: String? = null
+    private var selectedBlockchains = listOf<Blockchain>()
+    private var blockchainOptions = listOf<BlockchainViewItem>()
+    private var showSpinner = false
+    private var buttonEnabled = false
+    private var buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults)
+    private var errorMessage: TranslatableString? = null
 
-    var marketCap by mutableStateOf(rangeEmpty)
-        private set
-    var volume by mutableStateOf(rangeEmpty)
-        private set
-    var priceChange by mutableStateOf<FilterViewItemWrapper<PriceChange?>>(FilterViewItemWrapper.getAny())
-        private set
-    var outperformedBtcOn by mutableStateOf(false)
-        private set
-    var outperformedEthOn by mutableStateOf(false)
-        private set
-    var outperformedBnbOn by mutableStateOf(false)
-        private set
-    var priceCloseToAth by mutableStateOf(false)
-        private set
-    var priceCloseToAtl by mutableStateOf(false)
-        private set
-    var selectedBlockchainsValue by mutableStateOf<String?>(null)
-        private set
-
-    var selectedBlockchains by mutableStateOf(listOf<Blockchain>())
-        private set
+    private var reloadDataJob: Job? = null
 
     val coinListsViewItemOptions = CoinList.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
@@ -62,51 +56,45 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
     val periodViewItemOptions = TimePeriod.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
     }
+
+    val tradingSignals = listOf(FilterViewItemWrapper.getAny<FilterTradingSignal>()) +
+                FilterTradingSignal.values().map { FilterViewItemWrapper<FilterTradingSignal?>(Translator.getString(it.titleResId), it) }
     val priceChangeViewItemOptions =
         listOf(FilterViewItemWrapper.getAny<PriceChange>()) + PriceChange.values().map {
             FilterViewItemWrapper<PriceChange?>(Translator.getString(it.titleResId), it)
         }
 
-    var blockchainOptions by mutableStateOf<List<BlockchainViewItem>>(emptyList())
-        private set
-
-    var showSpinner by mutableStateOf(false)
-        private set
-
-    var buttonEnabled by mutableStateOf(false)
-        private set
-
-    var buttonTitle by mutableStateOf(Translator.getString(R.string.Market_Filter_ShowResults))
-        private set
-
-    var errorMessage by mutableStateOf<TranslatableString?>(null)
-        private set
-
-    private var result: Result<Int>? = null
-
     init {
-        service.numberOfItems.collectWith(viewModelScope) {
-            result = it
-            sync()
-        }
-
+        showSpinner = true
         updateSelectedBlockchains()
-        refresh()
+        emitState()
+        reloadData()
     }
 
-    private fun sync() {
-        showSpinner = false
-
-        buttonTitle = result?.getOrNull()?.let {
-            Translator.getString(R.string.Market_Filter_ShowResults_Counter, it)
-        } ?: result?.exceptionOrNull()?.let {
-            Translator.getString(R.string.Market_Filter_ShowResults)
-        } ?: ""
-
-        buttonEnabled = result?.getOrNull()?.let { it > 0 } ?: false
-
-        errorMessage = result?.exceptionOrNull()?.let { convertErrorMessage(it) }
-    }
+    override fun createState() = MarketFiltersUiState(
+        coinListSet = coinListSet,
+        period = period,
+        marketCap = marketCap,
+        volume = volume,
+        priceChange = priceChange,
+        outperformedBtcOn = outperformedBtcOn,
+        outperformedEthOn = outperformedEthOn,
+        outperformedBnbOn = outperformedBnbOn,
+        priceCloseToAth = priceCloseToAth,
+        priceCloseToAtl = priceCloseToAtl,
+        selectedBlockchainsValue = selectedBlockchainsValue,
+        selectedBlockchains = selectedBlockchains,
+        blockchainOptions = blockchainOptions,
+        showSpinner = showSpinner,
+        buttonEnabled = buttonEnabled,
+        buttonTitle = buttonTitle,
+        errorMessage = errorMessage,
+        listedOnTopExchangesOn = listedOnTopExchangesOn,
+        solidCexOn = solidCexOn,
+        solidDexOn = solidDexOn,
+        goodDistributionOn = goodDistributionOn,
+        filterTradingSignal = filterTradingSignal,
+    )
 
     fun reset() {
         updateCoinList(
@@ -127,117 +115,169 @@ class MarketFiltersViewModel(val service: MarketFiltersService) : ViewModel() {
         outperformedBnbOn = false
         priceCloseToAth = false
         priceCloseToAtl = false
+        listedOnTopExchangesOn = false
+        solidCexOn = false
+        solidDexOn = false
+        goodDistributionOn = false
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
-        resetService()
-        refresh()
-    }
-
-    private fun resetService() {
-        service.filterMarketCap = marketCap.item?.values
-        service.filterVolume = volume.item?.values
-        service.filterPeriod = period.item
-        service.filterPriceChange = priceChange.item?.values
-        service.filterOutperformedBtcOn = outperformedBtcOn
-        service.filterOutperformedEthOn = outperformedEthOn
-        service.filterOutperformedBnbOn = outperformedBnbOn
-        service.filterPriceCloseToAth = priceCloseToAth
-        service.filterPriceCloseToAtl = priceCloseToAtl
-        service.filterBlockchains = selectedBlockchains
+        emitState()
+        reloadData()
     }
 
     fun updateCoinList(value: FilterViewItemWrapper<CoinList>) {
         coinListSet = value
         service.coinCount = value.item.itemsCount
         service.clearCache()
-        refresh()
+        showSpinner = true
+        emitState()
+        reloadData()
     }
 
     fun updateMarketCap(value: FilterViewItemWrapper<Range?>) {
         marketCap = value
-        service.filterMarketCap = value.item?.values
-        refresh()
+        emitState()
+        reloadData()
     }
 
     fun updateVolume(value: FilterViewItemWrapper<Range?>) {
         volume = value
-        service.filterVolume = value.item?.values
-        refresh()
+        emitState()
+        reloadData()
     }
 
     fun updatePeriod(value: FilterViewItemWrapper<TimePeriod>) {
         period = value
-        service.filterPeriod = value.item
-        refresh()
+        emitState()
+        reloadData()
+    }
+
+    fun updateTradingSignal(value: FilterViewItemWrapper<FilterTradingSignal?>) {
+        filterTradingSignal = value
+        emitState()
+        reloadData()
     }
 
     fun updatePriceChange(value: FilterViewItemWrapper<PriceChange?>) {
         priceChange = value
-        service.filterPriceChange = value.item?.values
-        refresh()
-    }
-
-    fun onBlockchainCheck(blockchain: Blockchain) {
-        selectedBlockchains = selectedBlockchains.toMutableList()
-            .also {
-                it.add(blockchain)
-            }
-        updateSelectedBlockchains()
-    }
-
-    fun onBlockchainUncheck(blockchain: Blockchain) {
-        selectedBlockchains = selectedBlockchains.toMutableList()
-            .also {
-                it.remove(blockchain)
-            }
-        updateSelectedBlockchains()
-    }
-
-    fun updateListBySelectedBlockchains() {
-        service.filterBlockchains = selectedBlockchains
-        refresh()
+        emitState()
+        reloadData()
     }
 
     fun updateOutperformedBtcOn(checked: Boolean) {
         outperformedBtcOn = checked
-        service.filterOutperformedBtcOn = checked
-        refresh()
+        emitState()
+        reloadData()
     }
 
     fun updateOutperformedEthOn(checked: Boolean) {
         outperformedEthOn = checked
-        service.filterOutperformedEthOn = checked
-        refresh()
+        emitState()
+        reloadData()
     }
 
     fun updateOutperformedBnbOn(checked: Boolean) {
         outperformedBnbOn = checked
-        service.filterOutperformedBnbOn = checked
-        refresh()
+        emitState()
+        reloadData()
     }
 
     fun updateOutperformedAthOn(checked: Boolean) {
         priceCloseToAth = checked
-        service.filterPriceCloseToAth = checked
-        refresh()
+        emitState()
+        reloadData()
     }
 
     fun updateOutperformedAtlOn(checked: Boolean) {
         priceCloseToAtl = checked
-        service.filterPriceCloseToAtl = checked
-        refresh()
+        emitState()
+        reloadData()
+    }
+
+    fun updateListedOnTopExchangesOn(checked: Boolean) {
+        listedOnTopExchangesOn = checked
+        emitState()
+        reloadData()
+    }
+
+    fun updateSolidCexOn(checked: Boolean) {
+        solidCexOn = checked
+        emitState()
+        reloadData()
+    }
+
+    fun updateSolidDexOn(checked: Boolean) {
+        solidDexOn = checked
+        emitState()
+        reloadData()
+    }
+
+    fun updateGoodDistributionOn(checked: Boolean) {
+        goodDistributionOn = checked
+        emitState()
+        reloadData()
     }
 
     fun anyBlockchains() {
         selectedBlockchains = emptyList()
         updateSelectedBlockchains()
-        refresh()
+        emitState()
     }
 
-    private fun refresh() {
-        showSpinner = true
-        viewModelScope.launch {
-            service.refresh()
+    fun onBlockchainCheck(blockchain: Blockchain) {
+        selectedBlockchains += blockchain
+        updateSelectedBlockchains()
+        emitState()
+    }
+
+    fun onBlockchainUncheck(blockchain: Blockchain) {
+        selectedBlockchains -= blockchain
+        updateSelectedBlockchains()
+        emitState()
+    }
+
+    fun updateListBySelectedBlockchains() {
+        emitState()
+        reloadData()
+    }
+
+    private fun reloadData() {
+        reloadDataJob?.cancel()
+        reloadDataJob = viewModelScope.launch(Dispatchers.Default) {
+            try {
+                service.filterMarketCap = marketCap.item?.values
+                service.filterVolume = volume.item?.values
+                service.filterPeriod = period.item
+                service.filterPriceChange = priceChange.item?.values
+                service.filterOutperformedBtcOn = outperformedBtcOn
+                service.filterOutperformedEthOn = outperformedEthOn
+                service.filterOutperformedBnbOn = outperformedBnbOn
+                service.filterListedOnTopExchanges = listedOnTopExchangesOn
+                service.filterSolidCex = solidCexOn
+                service.filterSolidDex = solidDexOn
+                service.filterGoodDistribution = goodDistributionOn
+                service.filterPriceCloseToAth = priceCloseToAth
+                service.filterPriceCloseToAtl = priceCloseToAtl
+                service.filterBlockchains = selectedBlockchains
+                service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
+
+                val numberOfItems = service.fetchNumberOfItems()
+
+                buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults_Counter, numberOfItems)
+                buttonEnabled = numberOfItems > 0
+                errorMessage = null
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Throwable) {
+                buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults)
+                buttonEnabled = false
+                errorMessage = convertErrorMessage(e)
+            }
+
+            showSpinner = false
+
+            ensureActive()
+            emitState()
         }
     }
 
@@ -262,3 +302,28 @@ fun getRanges(currencyCode: String): List<FilterViewItemWrapper<Range?>> {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
     }
 }
+
+data class MarketFiltersUiState(
+    val coinListSet: FilterViewItemWrapper<CoinList>,
+    val period: FilterViewItemWrapper<TimePeriod>,
+    val filterTradingSignal: FilterViewItemWrapper<FilterTradingSignal?>,
+    val marketCap: FilterViewItemWrapper<Range?>,
+    val volume: FilterViewItemWrapper<Range?>,
+    val priceChange: FilterViewItemWrapper<PriceChange?>,
+    val outperformedBtcOn: Boolean,
+    val outperformedEthOn: Boolean,
+    val outperformedBnbOn: Boolean,
+    val priceCloseToAth: Boolean,
+    val priceCloseToAtl: Boolean,
+    val selectedBlockchainsValue: String?,
+    val selectedBlockchains: List<Blockchain>,
+    val blockchainOptions: List<BlockchainViewItem>,
+    val showSpinner: Boolean,
+    val buttonEnabled: Boolean,
+    val buttonTitle: String,
+    val errorMessage: TranslatableString?,
+    val listedOnTopExchangesOn: Boolean,
+    val solidCexOn: Boolean,
+    val solidDexOn: Boolean,
+    val goodDistributionOn: Boolean
+)

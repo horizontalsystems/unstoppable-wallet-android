@@ -33,7 +33,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.backupalert.BackupAlert
@@ -46,8 +45,8 @@ import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
+import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
-import cash.p.terminal.modules.walletconnect.version2.WC2Manager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -123,15 +122,6 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                     BalanceTitleRow(navController, accountViewItem.name)
                 },
                 menuItems = buildList {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Nfts_Title),
-                            icon = R.drawable.ic_nft_24,
-                            onClick = {
-                                navController.slideFromRight(R.id.nftsFragment)
-                            }
-                        )
-                    )
                     if (accountViewItem.type.supportsWalletConnect) {
                         add(
                             MenuItem(
@@ -139,26 +129,26 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                 icon = R.drawable.ic_qr_scan_20,
                                 onClick = {
                                     when (val state = viewModel.getWalletConnectSupportState()) {
-                                        WC2Manager.SupportState.Supported -> {
+                                        WCManager.SupportState.Supported -> {
                                             qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true))
                                         }
 
-                                        WC2Manager.SupportState.NotSupportedDueToNoActiveAccount -> {
+                                        WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
                                             navController.slideFromBottom(R.id.wcErrorNoAccountFragment)
                                         }
 
-                                        is WC2Manager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
+                                        is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                                             navController.slideFromBottom(
                                                 R.id.backupRequiredDialog,
-                                                BackupRequiredDialog.prepareParams(state.account, text)
+                                                BackupRequiredDialog.Input(state.account, text)
                                             )
                                         }
 
-                                        is WC2Manager.SupportState.NotSupported -> {
+                                        is WCManager.SupportState.NotSupported -> {
                                             navController.slideFromBottom(
                                                 R.id.wcAccountTypeNotSupportedDialog,
-                                                WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
+                                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
                                             )
                                         }
                                     }
@@ -175,19 +165,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                 when (viewState) {
                     ViewState.Success -> {
                         val balanceViewItems = uiState.balanceViewItems
-
-                        if (balanceViewItems.isNotEmpty()) {
-                            BalanceItems(
-                                balanceViewItems,
-                                viewModel,
-                                accountViewItem,
-                                navController,
-                                uiState,
-                                viewModel.totalUiState
-                            )
-                        } else {
-                            BalanceItemsEmpty(navController)
-                        }
+                        BalanceItems(
+                            balanceViewItems,
+                            viewModel,
+                            accountViewItem,
+                            navController,
+                            uiState,
+                            viewModel.totalUiState
+                        )
                     }
 
                     ViewState.Loading,
@@ -213,7 +198,7 @@ fun BalanceTitleRow(
             ) {
                 navController.slideFromBottom(
                     R.id.manageAccountsFragment,
-                    ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
+                    ManageAccountsModule.Mode.Switcher
                 )
             },
         verticalAlignment = Alignment.CenterVertically

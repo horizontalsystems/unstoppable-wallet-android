@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.contacts.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,12 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.modules.addtoken.blockchainselector.BlockchainCell
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HSSectionRounded
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.cell.CellBlockchainChecked
+import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.marketkit.models.Blockchain
 
 @Composable
@@ -31,38 +30,35 @@ fun BlockchainSelectorScreen(
     onSelectBlockchain: (Blockchain) -> Unit,
     onNavigateToBack: () -> Unit
 ) {
-    val menuItems = emptyList<MenuItem>()
     var selectedItem by remember { mutableStateOf(selectedBlockchain) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = ComposeAppTheme.colors.tyler)
+    Scaffold(
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Market_Filter_Blockchains),
+                navigationIcon = {
+                    HsBackButton(onNavigateToBack)
+                },
+            )
+        },
+        backgroundColor = ComposeAppTheme.colors.tyler
     ) {
-        AppBar(
-            title = stringResource(R.string.Market_Filter_Blockchains),
-            navigationIcon = {
-                HsBackButton(onNavigateToBack)
-            },
-            menuItems = menuItems
-        )
-
         Column(
-            Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
         ) {
             Spacer(Modifier.height(12.dp))
-            HSSectionRounded {
+            SectionUniversalLawrence {
                 blockchains.forEachIndexed { index, item ->
-                    BlockchainCell(
-                        item = item,
-                        selected = selectedItem == item,
-                        onCheck = {
-                            selectedItem = item
-
-                            onSelectBlockchain(it)
-                        },
-                        borderTop = index != 0
-                    )
+                    CellBlockchainChecked(
+                        borderTop = index != 0,
+                        blockchain = item,
+                        checked = selectedItem == item
+                    ) {
+                        selectedItem = item
+                        onSelectBlockchain(item)
+                    }
                 }
             }
             Spacer(Modifier.height(32.dp))

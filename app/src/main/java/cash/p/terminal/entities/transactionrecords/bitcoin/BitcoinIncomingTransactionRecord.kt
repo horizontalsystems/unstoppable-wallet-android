@@ -21,7 +21,7 @@ class BitcoinIncomingTransactionRecord(
     showRawTransaction: Boolean,
     amount: BigDecimal,
     val from: String?,
-    memo: String? = null,
+    memo: String?,
     source: TransactionSource
 ) : BitcoinTransactionRecord(
     uid = uid,

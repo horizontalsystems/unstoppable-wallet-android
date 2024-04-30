@@ -21,11 +21,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -43,12 +44,11 @@ import cash.p.terminal.ui.compose.components.subhead2_grey
 
 class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 
-    private val viewModel by viewModels<BtcBlockchainSettingsViewModel> {
-        BtcBlockchainSettingsModule.Factory(requireArguments())
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
+            factory = BtcBlockchainSettingsModule.Factory(navController.requireInput())
+        )
         BtcBlockchainSettingsScreen(
             viewModel,
             navController

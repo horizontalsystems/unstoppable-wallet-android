@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.evmnetwork.addrpc
 
-import android.os.Bundle
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,13 +27,14 @@ import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui.compose.components.FormsInputStateWarning
 import cash.p.terminal.ui.compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.MenuItem
+import io.horizontalsystems.marketkit.models.Blockchain
 
 @Composable
 fun AddRpcScreen(
     navController: NavController,
-    arguments: Bundle,
-    viewModel: AddRpcViewModel = viewModel(factory = AddRpcModule.Factory(arguments))
+    blockchain: Blockchain,
 ) {
+    val viewModel = viewModel<AddRpcViewModel>(factory = AddRpcModule.Factory(blockchain))
     if (viewModel.viewState.closeScreen) {
         navController.popBackStack()
         viewModel.onScreenClose()

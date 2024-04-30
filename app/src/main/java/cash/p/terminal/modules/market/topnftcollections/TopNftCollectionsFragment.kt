@@ -1,26 +1,30 @@
 package cash.p.terminal.modules.market.topnftcollections
 
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -30,48 +34,47 @@ import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.nft.collection.NftCollectionFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
+import cash.p.terminal.ui.compose.components.AlertGroup
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
+import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
+import cash.p.terminal.ui.compose.components.NftIcon
+import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui.compose.components.SortMenu
+import cash.p.terminal.ui.compose.components.TopCloseButton
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
 
 class TopNftCollectionsFragment : BaseComposeFragment() {
 
-    private val sortingField by lazy {
-        arguments?.parcelable<SortingField>(sortingFieldKey)!!
-    }
-    private val timeDuration by lazy {
-        arguments?.parcelable<TimeDuration>(timeDurationKey)!!
-    }
-    val viewModel by viewModels<TopNftCollectionsViewModel> {
-        TopNftCollectionsModule.Factory(sortingField, timeDuration)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
+        val viewModel = viewModel<TopNftCollectionsViewModel>(
+            factory = TopNftCollectionsModule.Factory(
+                input.sortingField,
+                input.timeDuration
+            )
+        )
+
         TopNftCollectionsScreen(
             viewModel,
             { navController.popBackStack() },
             { blockchainType, collectionUid ->
-                val args = NftCollectionFragment.prepareParams(collectionUid, blockchainType.uid)
+                val args = NftCollectionFragment.Input(collectionUid, blockchainType.uid)
                 navController.slideFromBottom(R.id.nftCollectionFragment, args)
             }
         )
     }
 
-    companion object {
-        private const val sortingFieldKey = "sorting_field"
-        private const val timeDurationKey = "time_duration"
-
-        fun prepareParams(
-            sortingField: SortingField,
-            timeDuration: TimeDuration
-        ): Bundle {
-            return bundleOf(
-                sortingFieldKey to sortingField,
-                timeDurationKey to timeDuration
-            )
-        }
-    }
+    @Parcelize
+    data class Input(
+        val sortingField: SortingField,
+        val timeDuration: TimeDuration
+    ) : Parcelable
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -81,13 +84,12 @@ fun TopNftCollectionsScreen(
     onCloseButtonClick: () -> Unit,
     onClickCollection: (BlockchainType, String) -> Unit,
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
     val menu = viewModel.menu
     val header = viewModel.header
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
-            TopCloseButton(interactionSource, onCloseButtonClick)
+            TopCloseButton(onCloseButtonClick)
 
             HSSwipeRefresh(
                 refreshing = viewModel.isRefreshing,

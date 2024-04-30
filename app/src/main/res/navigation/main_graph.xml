@@ -4,23 +4,12 @@
     android:id="@+id/main_graph"
     app:startDestination="@id/mainFragment">
 
-    <include app:graph="@navigation/wallet_connect_graph" />
-
     <fragment
         android:id="@+id/mainFragment"
         android:name="cash.p.terminal.modules.main.MainFragment"/>
     <fragment
         android:id="@+id/depositCexFragment"
         android:name="cash.p.terminal.modules.depositcex.DepositCexFragment"/>
-    <fragment
-        android:id="@+id/depositCexChooseAssetFragment"
-        android:name="cash.p.terminal.modules.depositcex.DepositCexChooseAssetFragment"/>
-    <fragment
-        android:id="@+id/wc2SessionFragment"
-        android:name="cash.p.terminal.modules.walletconnect.session.v2.WC2SessionFragment"/>
-    <fragment
-        android:id="@+id/wc2RequestFragment"
-        android:name="cash.p.terminal.modules.walletconnect.request.WC2RequestFragment"/>
     <fragment
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
@@ -42,6 +31,9 @@
     <fragment
         android:id="@+id/transactionSpeedUpCancelFragment"
         android:name="cash.p.terminal.modules.transactionInfo.options.TransactionSpeedUpCancelFragment"/>
+    <fragment
+        android:id="@+id/resendBitcoinFragment"
+        android:name="cash.p.terminal.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment"/>
     <fragment
         android:id="@+id/manageWalletsFragment"
         android:name="cash.p.terminal.modules.managewallets.ManageWalletsFragment"/>
@@ -91,11 +83,11 @@
         android:id="@+id/blockchainSettingsFragment"
         android:name="cash.p.terminal.modules.blockchainsettings.BlockchainSettingsFragment"/>
     <fragment
-        android:id="@+id/backupManagerFragment"
-        android:name="cash.p.terminal.modules.backuplocal.fullbackup.BackupManagerFragment"/>
-    <fragment
         android:id="@+id/autoLockIntervalsFragment"
         android:name="cash.p.terminal.modules.settings.security.autolock.AutoLockIntervalsFragment" />
+    <fragment
+        android:id="@+id/backupManagerFragment"
+        android:name="cash.p.terminal.modules.backuplocal.fullbackup.BackupManagerFragment"/>
     <fragment
         android:id="@+id/faqListFragment"
         android:name="cash.p.terminal.modules.settings.faq.FaqListFragment"
@@ -123,12 +115,6 @@
         android:id="@+id/aboutAppFragment"
         android:name="cash.p.terminal.modules.settings.about.AboutFragment"/>
     <fragment
-        android:id="@+id/experimentalFeaturesFragment"
-        android:name="cash.p.terminal.modules.settings.experimental.ExperimentalFeaturesFragment"/>
-    <fragment
-        android:id="@+id/timeLockFragment"
-        android:name="cash.p.terminal.modules.settings.experimental.timelock.TimeLockFragment"/>
-    <fragment
         android:id="@+id/donateAddressesFragment"
         android:name="cash.p.terminal.modules.settings.donate.DonateAddressesFragment"/>
     <fragment
@@ -140,9 +126,6 @@
     <fragment
         android:id="@+id/coinFragment"
         android:name="cash.p.terminal.modules.coin.CoinFragment" />
-    <fragment
-        android:id="@+id/technicalIndicatorsDetailsFragment"
-        android:name="cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorsDetailsFragment" />
     <fragment
         android:id="@+id/indicatorsFragment"
         android:name="cash.p.terminal.modules.coin.indicators.IndicatorsFragment" />
@@ -179,6 +162,9 @@
     <fragment
         android:id="@+id/coinReportsFragment"
         android:name="cash.p.terminal.modules.coin.reports.CoinReportsFragment" />
+ <fragment
+     android:id="@+id/coinDetectorsFragment"
+     android:name="cash.p.terminal.modules.coin.detectors.DetectorsFragment" />
     <fragment
         android:id="@+id/setPinFragment"
         android:name="cash.p.terminal.modules.pin.SetPinFragment" />
@@ -240,6 +226,9 @@
         android:id="@+id/marketTopPlatformsFragment"
         android:name="cash.p.terminal.modules.market.topplatforms.TopPlatformsFragment"/>
     <fragment
+        android:id="@+id/topPairsFragment"
+        android:name="cash.p.terminal.modules.market.toppairs.TopPairsFragment"/>
+    <fragment
         android:id="@+id/marketPlatformFragment"
         android:name="cash.p.terminal.modules.market.platform.MarketPlatformFragment"/>
     <fragment
@@ -286,19 +275,7 @@
         android:name="cash.p.terminal.modules.zcashconfigure.ZcashConfigure"/>
     <fragment
         android:id="@+id/receiveFragment"
-        android:name="cash.p.terminal.modules.receive.address.ReceiveAddressFragment"/>
-    <fragment
-        android:id="@+id/receiveTokenSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.ReceiveTokenSelectFragment" />
-    <fragment
-        android:id="@+id/receiveNetworkSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.NetworkSelectFragment"/>
-    <fragment
-        android:id="@+id/receiveBchAddressTypeSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.BchAddressTypeSelectFragment"/>
-    <fragment
-        android:id="@+id/receiveDerivationSelectFragment"
-        android:name="cash.p.terminal.modules.receivemain.DerivationSelectFragment"/>
+        android:name="cash.p.terminal.modules.receive.ReceiveFragment" />
     <fragment
         android:id="@+id/evmNetworkFragment"
         android:name="cash.p.terminal.modules.evmnetwork.EvmNetworkFragment"
@@ -335,6 +312,21 @@
         android:id="@+id/swapTokenSelectFragment"
         android:name="cash.p.terminal.modules.swaptokenselect.SwapTokenSelectFragment" />
     <fragment
+        android:id="@+id/multiswap"
+        android:name="cash.p.terminal.modules.multiswap.SwapFragment" />
+    <fragment
+        android:id="@+id/swapSelectProvider"
+        android:name="cash.p.terminal.modules.multiswap.SwapSelectProviderFragment" />
+    <fragment
+        android:id="@+id/swapSettings"
+        android:name="cash.p.terminal.modules.multiswap.settings.SwapSettingsFragment" />
+    <fragment
+        android:id="@+id/swapTransactionSettings"
+        android:name="cash.p.terminal.modules.multiswap.settings.SwapTransactionSettingsFragment" />
+    <fragment
+        android:id="@+id/swapConfirm"
+        android:name="cash.p.terminal.modules.multiswap.SwapConfirmFragment" />
+    <fragment
         android:id="@+id/sendConfirmation"
         android:name="cash.p.terminal.modules.send.SendConfirmationFragment" />
     <fragment
@@ -347,23 +339,23 @@
         android:id="@+id/chooseContact"
         android:name="cash.p.terminal.modules.contacts.ChooseContactFragment"/>
     <fragment
+        android:id="@+id/selectContact"
+        android:name="cash.p.terminal.modules.transactions.SelectContactFragment"/>
+    <fragment
         android:id="@+id/statusInfoDialog"
         android:name="cash.p.terminal.modules.info.TransactionStatusInfoFragment" />
     <fragment
         android:id="@+id/selectSwapCoinDialog"
         android:name="cash.p.terminal.modules.swap.coinselect.SelectSwapCoinFragment" />
     <fragment
+        android:id="@+id/swapSelectCoinFragment"
+        android:name="cash.p.terminal.modules.multiswap.SwapSelectCoinFragment" />
+    <fragment
         android:id="@+id/tokenBalanceFragment"
         android:name="cash.p.terminal.modules.balance.token.TokenBalanceFragment" />
     <fragment
         android:id="@+id/cexAssetFragment"
         android:name="cash.p.terminal.modules.balance.cex.asset.CexAssetFragment" />
-    <dialog
-        android:id="@+id/wcErrorNoAccountFragment"
-        android:name="cash.p.terminal.modules.walletconnect.WCErrorNoAccountFragment" />
-    <dialog
-        android:id="@+id/wcAccountTypeNotSupportedDialog"
-        android:name="cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
     <dialog
         android:id="@+id/contactOptionsDialog"
         android:name="cash.p.terminal.modules.settings.about.ContactOptionsDialog" />
@@ -403,7 +395,24 @@
     <dialog
         android:id="@+id/periodSelectDialog"
         android:name="cash.p.terminal.ui.compose.components.PeriodSelectDialog" />
+
+    <!--Wallet Connect-->
+    <fragment
+        android:id="@+id/wcSessionFragment"
+        android:name="cash.p.terminal.modules.walletconnect.session.WCSessionFragment"/>
+    <fragment
+        android:id="@+id/wcRequestFragment"
+        android:name="cash.p.terminal.modules.walletconnect.request.WCRequestFragment"/>
+    <fragment
+        android:id="@+id/wcListFragment"
+        android:name="cash.p.terminal.modules.walletconnect.list.WCListFragment"/>
+    <fragment
+        android:id="@+id/wcPairingsFragment"
+        android:name="cash.p.terminal.modules.walletconnect.pairing.WCPairingsFragment"/>
     <dialog
-        android:id="@+id/notActiveAccountDialog"
-        android:name="cash.p.terminal.modules.receive.address.NotActiveWarningDialog" />
+        android:id="@+id/wcErrorNoAccountFragment"
+        android:name="cash.p.terminal.modules.walletconnect.WCErrorNoAccountFragment" />
+    <dialog
+        android:id="@+id/wcAccountTypeNotSupportedDialog"
+        android:name="cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
 </navigation>

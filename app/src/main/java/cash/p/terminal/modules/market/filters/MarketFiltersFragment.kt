@@ -4,11 +4,27 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Surface
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -26,7 +42,22 @@ import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.market.filters.MarketFiltersModule.FilterDropdown.*
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.body_grey
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.body_lucian
+import cash.p.terminal.ui.compose.components.body_remus
+import cash.p.terminal.ui.compose.components.cell.CellUniversal
+import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -54,7 +85,8 @@ private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
     navController: NavController,
 ) {
-    val errorMessage = viewModel.errorMessage
+    val uiState = viewModel.uiState
+    val errorMessage = uiState.errorMessage
     val coroutineScope = rememberCoroutineScope()
 
     var bottomSheetType by remember { mutableStateOf(CoinSet) }
@@ -114,14 +146,14 @@ private fun AdvancedSearchScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        title = viewModel.buttonTitle,
+                        title = uiState.buttonTitle,
                         onClick = {
                             navController.slideFromRight(
                                 R.id.marketAdvancedSearchResultsFragment
                             )
                         },
-                        showSpinner = viewModel.showSpinner,
-                        enabled = viewModel.buttonEnabled,
+                        showSpinner = uiState.showSpinner,
+                        enabled = uiState.buttonEnabled,
                     )
                 }
             }
@@ -139,13 +171,14 @@ private fun BottomSheetContent(
     viewModel: MarketFiltersViewModel,
     onClose: () -> Unit,
 ) {
+    val uiState = viewModel.uiState
     when (bottomSheetType) {
         CoinSet -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_ChooseSet,
                 headerIcon = R.drawable.ic_circle_coin_24,
                 items = viewModel.coinListsViewItemOptions,
-                selectedItem = viewModel.coinListSet,
+                selectedItem = uiState.coinListSet,
                 onSelect = {
                     viewModel.updateCoinList(it)
                 },
@@ -158,7 +191,7 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_MarketCap,
                 headerIcon = R.drawable.ic_usd_24,
                 items = viewModel.marketCapViewItemOptions,
-                selectedItem = viewModel.marketCap,
+                selectedItem = uiState.marketCap,
                 onSelect = {
                     viewModel.updateMarketCap(it)
                 },
@@ -171,7 +204,7 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_Volume24h,
                 headerIcon = R.drawable.ic_chart_24,
                 items = viewModel.volumeViewItemOptions,
-                selectedItem = viewModel.volume,
+                selectedItem = uiState.volume,
                 onSelect = {
                     viewModel.updateVolume(it)
                 },
@@ -184,7 +217,7 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_PriceChange,
                 headerIcon = R.drawable.icon_24_markets,
                 items = viewModel.priceChangeViewItemOptions,
-                selectedItem = viewModel.priceChange,
+                selectedItem = uiState.priceChange,
                 onSelect = {
                     viewModel.updatePriceChange(it)
                 },
@@ -197,9 +230,22 @@ private fun BottomSheetContent(
                 title = R.string.Market_Filter_PricePeriod,
                 headerIcon = R.drawable.ic_circle_clock_24,
                 items = viewModel.periodViewItemOptions,
-                selectedItem = viewModel.period,
+                selectedItem = uiState.period,
                 onSelect = {
                     viewModel.updatePeriod(it)
+                },
+                onClose = onClose
+            )
+        }
+
+        TradingSignals -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_TradingSignals,
+                headerIcon = R.drawable.ic_ring_24,
+                items = viewModel.tradingSignals,
+                selectedItem = uiState.filterTradingSignal,
+                onSelect = {
+                    viewModel.updateTradingSignal(it)
                 },
                 onClose = onClose
             )
@@ -213,102 +259,119 @@ fun AdvancedSearchContent(
     onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,
 ) {
+    val uiState = viewModel.uiState
 
-    Spacer(Modifier.height(12.dp))
+    VSpacer(height = 12.dp)
 
-    CellSingleLineLawrenceSection(
-        listOf {
-            AdvancedSearchDropdown(
-                title = R.string.Market_Filter_ChooseSet,
-                value = viewModel.coinListSet.title,
-                onDropdownClick = { showBottomSheet(CoinSet) }
-            )
-        }
-    )
+    SectionUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_ChooseSet,
+            value = uiState.coinListSet.title,
+            borderTop = false,
+            onDropdownClick = { showBottomSheet(CoinSet) }
+        )
+    }
+    VSpacer(height = 32.dp)
 
-    Spacer(Modifier.height(24.dp))
     HeaderText(stringResource(R.string.Market_FilterSection_MarketParameters))
+    SectionUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_MarketCap,
+            value = uiState.marketCap.title,
+            borderTop = false,
+            onDropdownClick = { showBottomSheet(MarketCap) }
+        )
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_Volume,
+            value = uiState.volume.title,
+            onDropdownClick = { showBottomSheet(TradingVolume) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_ListedOnTopExchanges,
+            enabled = uiState.listedOnTopExchangesOn,
+            onChecked = { viewModel.updateListedOnTopExchangesOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_SolidCex,
+            subtitle = R.string.Market_Filter_SolidCex_Description,
+            enabled = uiState.solidCexOn,
+            onChecked = { viewModel.updateSolidCexOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_SolidDex,
+            subtitle = R.string.Market_Filter_SolidDex_Description,
+            enabled = uiState.solidDexOn,
+            onChecked = { viewModel.updateSolidDexOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_GoodDistribution,
+            subtitle = R.string.Market_Filter_GoodDistribution_Description,
+            enabled = uiState.goodDistributionOn,
+            onChecked = { viewModel.updateGoodDistributionOn(it) }
+        )
+    }
+    VSpacer(height = 32.dp)
 
-    CellSingleLineLawrenceSection(
-        listOf({
-            AdvancedSearchDropdown(
-                title = R.string.Market_Filter_MarketCap,
-                value = viewModel.marketCap.title,
-                onDropdownClick = { showBottomSheet(MarketCap) }
-            )
-        }, {
-            AdvancedSearchDropdown(
-                title = R.string.Market_Filter_Volume,
-                value = viewModel.volume.title,
-                onDropdownClick = { showBottomSheet(TradingVolume) }
-            )
-        })
-    )
-
-    Spacer(Modifier.height(24.dp))
-    HeaderText(stringResource(R.string.Market_FilterSection_NetworkParameters))
-
-    CellSingleLineLawrenceSection(
-        listOf {
-            AdvancedSearchDropdown(
-                title = R.string.Market_Filter_Blockchains,
-                value = viewModel.selectedBlockchainsValue,
-                onDropdownClick = onFilterByBlockchainsClick
-            )
-        }
-    )
-
-    Spacer(Modifier.height(24.dp))
     HeaderText(stringResource(R.string.Market_FilterSection_PriceParameters))
+    SectionUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_PriceChange,
+            value = uiState.priceChange.title,
+            valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
+            onDropdownClick = { showBottomSheet(PriceChange) }
+        )
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_PricePeriod,
+            value = uiState.period.title,
+            onDropdownClick = { showBottomSheet(PricePeriod) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedBtc,
+            enabled = uiState.outperformedBtcOn,
+            onChecked = { viewModel.updateOutperformedBtcOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedEth,
+            enabled = uiState.outperformedEthOn,
+            onChecked = { viewModel.updateOutperformedEthOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedBnb,
+            enabled = uiState.outperformedBnbOn,
+            onChecked = { viewModel.updateOutperformedBnbOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_PriceCloseToAth,
+            enabled = uiState.priceCloseToAth,
+            onChecked = { viewModel.updateOutperformedAthOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_PriceCloseToAtl,
+            enabled = uiState.priceCloseToAtl,
+            onChecked = { viewModel.updateOutperformedAtlOn(it) }
+        )
+    }
+    VSpacer(height = 32.dp)
 
-    CellSingleLineLawrenceSection(
-        listOf({
-            AdvancedSearchDropdown(
-                title = R.string.Market_Filter_PriceChange,
-                value = viewModel.priceChange.title,
-                valueColor = viewModel.priceChange.item?.color ?: TextColor.Grey,
-                onDropdownClick = { showBottomSheet(PriceChange) }
-            )
-        }, {
-            AdvancedSearchDropdown(
-                title = R.string.Market_Filter_PricePeriod,
-                value = viewModel.period.title,
-                onDropdownClick = { showBottomSheet(PricePeriod) }
-            )
-        }, {
-            AdvancedSearchSwitch(
-                title = R.string.Market_Filter_OutperformedBtc,
-                enabled = viewModel.outperformedBtcOn,
-                onChecked = { viewModel.updateOutperformedBtcOn(it) }
-            )
-        }, {
-            AdvancedSearchSwitch(
-                title = R.string.Market_Filter_OutperformedEth,
-                enabled = viewModel.outperformedEthOn,
-                onChecked = { viewModel.updateOutperformedEthOn(it) }
-            )
-        }, {
-            AdvancedSearchSwitch(
-                title = R.string.Market_Filter_OutperformedBnb,
-                enabled = viewModel.outperformedBnbOn,
-                onChecked = { viewModel.updateOutperformedBnbOn(it) }
-            )
-        }, {
-            AdvancedSearchSwitch(
-                title = R.string.Market_Filter_PriceCloseToAth,
-                enabled = viewModel.priceCloseToAth,
-                onChecked = { viewModel.updateOutperformedAthOn(it) }
-            )
-        }, {
-            AdvancedSearchSwitch(
-                title = R.string.Market_Filter_PriceCloseToAtl,
-                enabled = viewModel.priceCloseToAtl,
-                onChecked = { viewModel.updateOutperformedAtlOn(it) }
-            )
-        })
-    )
+    HeaderText(stringResource(R.string.Market_FilterSection_NetworkParameters))
+    SectionUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_Blockchains,
+            value = uiState.selectedBlockchainsValue,
+            onDropdownClick = onFilterByBlockchainsClick
+        )
+    }
+    VSpacer(height = 32.dp)
 
-    Spacer(modifier = Modifier.height(32.dp))
+    HeaderText(stringResource(R.string.Market_FilterSection_Indicators))
+    SectionUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_TradingSignals,
+            value = uiState.filterTradingSignal.title,
+            onDropdownClick = { showBottomSheet(TradingSignals) }
+        )
+    }
+    VSpacer(32.dp)
 }
 
 @Composable
@@ -316,16 +379,12 @@ private fun AdvancedSearchDropdown(
     @StringRes title: Int,
     value: String?,
     valueColor: TextColor = TextColor.Leah,
+    borderTop: Boolean = true,
     onDropdownClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxHeight()
-            .clickable {
-                onDropdownClick()
-            }
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    CellUniversal(
+        borderTop = borderTop,
+        onClick = onDropdownClick
     ) {
         body_leah(
             text = stringResource(title),
@@ -342,21 +401,30 @@ private fun AdvancedSearchDropdown(
 @Composable
 private fun AdvancedSearchSwitch(
     title: Int,
+    subtitle: Int? = null,
     enabled: Boolean,
+    borderTop: Boolean = true,
     onChecked: (Boolean) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxHeight()
-            .clickable { onChecked(!enabled) }
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
+    CellUniversal(
+        borderTop = borderTop,
+        onClick = { onChecked(!enabled) }
     ) {
-        body_leah(
-            text = stringResource(title),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Column {
+            body_leah(
+                text = stringResource(title),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            subtitle?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(
+                    text = stringResource(subtitle),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
         Spacer(Modifier.weight(1f))
         HsSwitch(
             checked = enabled,

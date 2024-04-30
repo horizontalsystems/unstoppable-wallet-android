@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.coin.investments
 
+import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,11 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -43,17 +44,17 @@ import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead1_grey
 import cash.p.terminal.ui.compose.components.subhead2_remus
 import cash.p.terminal.ui.helpers.LinkHelper
+import kotlinx.parcelize.Parcelize
 
 class CoinInvestmentsFragment : BaseComposeFragment() {
 
-    private val viewModel by viewModels<CoinInvestmentsViewModel> {
-        CoinInvestmentsModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
         CoinInvestmentsScreen(
-            viewModel = viewModel,
+            viewModel = viewModel(
+                factory = CoinInvestmentsModule.Factory(input.coinUid)
+            ),
             onClickNavigation = {
                 navController.popBackStack()
             },
@@ -63,11 +64,8 @@ class CoinInvestmentsFragment : BaseComposeFragment() {
         )
     }
 
-    companion object {
-        private const val COIN_UID_KEY = "coin_uid_key"
-
-        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
-    }
+    @Parcelize
+    data class Input(val coinUid: String) : Parcelable
 }
 
 @Composable

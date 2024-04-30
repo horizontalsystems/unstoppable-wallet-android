@@ -21,6 +21,8 @@ import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
+import androidx.glance.appwidget.lazy.LazyColumn
+import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
@@ -61,7 +63,7 @@ class MarketWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            content(context)
+            Content(context)
         }
     }
 
@@ -72,8 +74,9 @@ class MarketWidget : GlanceAppWidget() {
     override val stateDefinition = MarketWidgetStateDefinition
 
     @Composable
-    private fun content(context: Context) {
+    private fun Content(context: Context) {
         val state = currentState<MarketWidgetState>()
+        val deeplinkScheme = context.getString(R.string.DeeplinkScheme)
 
         AppWidgetTheme {
             Column(
@@ -100,22 +103,6 @@ class MarketWidget : GlanceAppWidget() {
                             text = context.getString(state.type.title),
                             style = AppWidgetTheme.textStyles.d1()
                         )
-                        /*
-                        Image(
-                            modifier = GlanceModifier
-                                .size(20.dp)
-                                .clickable(
-                                    actionStartActivity<MarketWidgetConfigurationActivity>(
-                                        actionParametersOf(
-                                            ActionParameters.Key<Int>(AppWidgetManager.EXTRA_APPWIDGET_ID) to state.widgetId
-                                        )
-                                    )
-                                ),
-                            provider = ImageProvider(R.drawable.ic_edit_20),
-                            contentDescription = null
-                        )
-                        Spacer(modifier = GlanceModifier.width(16.dp))
-                        */
                         Box(
                             modifier = GlanceModifier
                                 .fillMaxHeight()
@@ -127,10 +114,7 @@ class MarketWidget : GlanceAppWidget() {
                                 CircularProgressIndicator(modifier = GlanceModifier.size(20.dp))
                             } else {
                                 Image(
-                                    modifier = GlanceModifier
-                                        .size(20.dp)
-                                        //todo remove after upgrade to glance-appwidget:1.0.0-alpha06
-                                        .clickable(actionRunCallback<UpdateMarketAction>()),
+                                    modifier = GlanceModifier.size(20.dp),
                                     provider = ImageProvider(R.drawable.ic_refresh),
                                     contentDescription = null
                                 )
@@ -149,24 +133,19 @@ class MarketWidget : GlanceAppWidget() {
                             text = state.error,
                         )
                     } else {
-                        state.items.forEach { item ->
-                            Box(
-                                modifier = GlanceModifier
-                                    .height(60.dp)
-                                    .background(ImageProvider(R.drawable.widget_list_item_background))
-                                    .clickable(
-                                        actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
-                                    )
-                            ) {
-                                Item(item = item)
-                                //todo remove after upgrade to glance-appwidget:1.0.0-alpha06
-                                Spacer(
-                                    GlanceModifier
-                                        .fillMaxSize()
+                        LazyColumn {
+                            items(state.items) { item ->
+                                val deeplinkUri = getDeeplinkUri(item, state.type, deeplinkScheme)
+                                Box(
+                                    modifier = GlanceModifier
+                                        .height(60.dp)
+                                        .background(ImageProvider(R.drawable.widget_list_item_background))
                                         .clickable(
-                                            actionStartActivity(Intent(Intent.ACTION_VIEW, getDeeplinkUri(item, state.type)))
+                                            actionStartActivity(Intent(Intent.ACTION_VIEW, deeplinkUri))
                                         )
-                                )
+                                ) {
+                                    Item(item = item)
+                                }
                             }
                         }
                     }
@@ -182,14 +161,17 @@ class MarketWidget : GlanceAppWidget() {
         }
     }
 
-    private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType): Uri = when (type) {
+    @Composable
+    private fun getDeeplinkUri(item: MarketWidgetItem, type: MarketWidgetType, deeplinkScheme: String): Uri = when (type) {
         MarketWidgetType.Watchlist,
         MarketWidgetType.TopGainers -> {
             "pcash://coin-page?uid=${item.uid}".toUri()
         }
+
         MarketWidgetType.TopNfts -> {
             "pcash://nft-collection?uid=${item.uid}&blockchainTypeUid=${item.blockchainTypeUid}".toUri()
         }
+
         MarketWidgetType.TopPlatforms -> {
             "pcash://top-platforms?uid=${item.uid}&title=${item.title}".toUri()
         }
@@ -217,8 +199,6 @@ class MarketWidget : GlanceAppWidget() {
                     subtitle = item.subtitle,
                     label = item.label,
                     diff = item.diff,
-                    marketCap = item.marketCap,
-                    volume = item.volume
                 )
             }
         }
@@ -256,8 +236,6 @@ class MarketWidget : GlanceAppWidget() {
         subtitle: String,
         label: String?,
         diff: BigDecimal?,
-        marketCap: String?,
-        volume: String?
     ) {
         Row(
             modifier = GlanceModifier.fillMaxWidth(),
@@ -273,7 +251,13 @@ class MarketWidget : GlanceAppWidget() {
                 style = AppWidgetTheme.textStyles.d1()
             )
             Spacer(modifier = GlanceModifier.defaultWeight())
-            MarketDataValueComponent(diff, marketCap, volume)
+            diff?.let {
+                Text(
+                    text = App.numberFormatter.formatValueAsDiff(Value.Percent(diff)),
+                    style = TextStyle(color = diffColor(diff), fontSize = 14.sp, fontWeight = FontWeight.Normal),
+                    maxLines = 1
+                )
+            }
         }
     }
 
@@ -284,54 +268,6 @@ class MarketWidget : GlanceAppWidget() {
         } else {
             AppWidgetTheme.colors.lucian
         }
-
-    @Composable
-    private fun MarketDataValueComponent(
-        diff: BigDecimal?,
-        marketCap: String?,
-        volume: String?
-    ) {
-
-        when {
-            diff != null -> {
-                Text(
-                    text = App.numberFormatter.formatValueAsDiff(Value.Percent(diff)),
-                    style = TextStyle(color = diffColor(diff), fontSize = 14.sp, fontWeight = FontWeight.Normal),
-                    maxLines = 1
-                )
-            }
-            marketCap != null -> {
-                Row {
-                    Text(
-                        text = "MCap",
-                        style = AppWidgetTheme.textStyles.c3(),
-                        maxLines = 1
-                    )
-                    Spacer(modifier = GlanceModifier.width(4.dp))
-                    Text(
-                        text = marketCap,
-                        style = AppWidgetTheme.textStyles.d1(),
-                        maxLines = 1
-                    )
-                }
-            }
-            volume != null -> {
-                Row {
-                    Text(
-                        text = "Vol",
-                        style = AppWidgetTheme.textStyles.d3(),
-                        maxLines = 1
-                    )
-                    Spacer(modifier = GlanceModifier.width(4.dp))
-                    Text(
-                        text = volume,
-                        style = AppWidgetTheme.textStyles.d1(),
-                        maxLines = 1
-                    )
-                }
-            }
-        }
-    }
 
     @Composable
     private fun Badge(text: String) {

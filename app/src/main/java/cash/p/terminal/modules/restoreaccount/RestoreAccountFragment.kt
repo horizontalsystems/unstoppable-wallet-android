@@ -10,6 +10,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
+import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
 import cash.p.terminal.modules.restoreaccount.restoremenu.RestoreMenuModule
@@ -18,15 +19,13 @@ import cash.p.terminal.modules.restoreaccount.restoremnemonic.RestorePhrase
 import cash.p.terminal.modules.restoreaccount.restoremnemonicnonstandard.RestorePhraseNonStandard
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 
-class RestoreAccountFragment : BaseComposeFragment() {
+class RestoreAccountFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val popUpToInclusiveId =
-            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
-
-        val inclusive =
-            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+        val input = navController.getInput<ManageAccountsModule.Input>()
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreAccountFragment
+        val inclusive = input?.popOffInclusive ?: false
 
         RestoreAccountNavHost(
             navController,

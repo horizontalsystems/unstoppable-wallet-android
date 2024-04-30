@@ -1,14 +1,14 @@
 package cash.p.terminal.modules.coin.analytics
 
 import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.coin.technicalindicators.CoinIndicatorViewItemFactory
-import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorData
-import cash.p.terminal.modules.coin.technicalindicators.TechnicalIndicatorService
+import cash.p.terminal.modules.coin.audits.CoinAuditsModule
+import cash.p.terminal.modules.coin.detectors.IssueParcelable
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.metricchart.ProChartModule
 import cash.p.terminal.ui.compose.TranslatableString
@@ -16,37 +16,29 @@ import cash.p.terminal.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import kotlinx.parcelize.Parcelize
 
 object CoinAnalyticsModule {
 
-    class Factory(private val fullCoin: FullCoin, private val apiTag: String) : ViewModelProvider.Factory {
+    class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val service = CoinAnalyticsService(
                 fullCoin,
-                apiTag,
                 App.marketKit,
                 App.currencyManager,
                 App.subscriptionManager,
                 App.accountManager,
             )
 
-            val indicatorsService = TechnicalIndicatorService(
-                fullCoin.coin.uid,
-                App.marketKit,
-                App.currencyManager
-            )
-
             return CoinAnalyticsViewModel(
                 service,
-                indicatorsService,
-                CoinIndicatorViewItemFactory(),
                 App.numberFormatter,
+                TechnicalAdviceViewItemFactory(App.numberFormatter),
                 fullCoin.coin.code
             ) as T
         }
@@ -58,17 +50,37 @@ object CoinAnalyticsModule {
         val value: String? = null,
         val valuePeriod: String? = null,
         val analyticChart: ChartViewItem?,
-        val footerItems: List<FooterItem>,
+        val footerItems: List<FooterType>,
         val sectionTitle: Int? = null,
         val sectionDescription: String? = null,
         val showFooterDivider: Boolean = true,
     )
 
-    data class FooterItem(
-        val title: BoxItem,
-        val value: BoxItem? = null,
-        val action: ActionType? = null
+
+    sealed class FooterType {
+        class FooterItem(
+            val title: BoxItem,
+            val value: BoxItem? = null,
+            val action: ActionType? = null
+        ) : FooterType()
+
+        class DetectorFooterItem(
+            val title: BoxItem,
+            val value: BoxItem? = null,
+            val action: ActionType? = null,
+            val issues: List<IssueSnippet>
+        ) : FooterType()
+    }
+
+    class IssueSnippet(
+        @StringRes val title: Int,
+        val count: String,
+        val type: IssueType
     )
+
+    enum class IssueType {
+        High, Medium, Attention
+    }
 
     data class ChartViewItem(
         val analyticChart: AnalyticChart,
@@ -80,8 +92,14 @@ object CoinAnalyticsModule {
         class Line(val data: ChartData) : AnalyticChart()
         class Bars(val data: ChartData) : AnalyticChart()
         class StackedBars(val data: List<StackBarSlice>) : AnalyticChart()
-        class TechIndicators(val data: List<TechnicalIndicatorData>, val selectedPeriod: HsPointTimePeriod) : AnalyticChart()
+        class TechAdvice(val data: TechAdviceData) : AnalyticChart()
     }
+
+    data class TechAdviceData(
+        val adviceTitle: String,
+        val detailText: String,
+        val sliderPosition: Int
+    )
 
     enum class OverallScore(val title: Int, val icon: Int) {
         Excellent(R.string.Coin_Analytics_OverallScore_Excellent, R.drawable.ic_score_excellent_24),
@@ -124,7 +142,7 @@ object CoinAnalyticsModule {
         val title: Int?,
         val info: AnalyticInfo?,
         val chartType: PreviewChartType?,
-        val footerItems: List<FooterItem>,
+        val footerItems: List<FooterType>,
         val sectionTitle: Int? = null,
         val showValueDots: Boolean = true,
         val showFooterDivider: Boolean = true,
@@ -143,7 +161,7 @@ object CoinAnalyticsModule {
         TransactionCountInfo(R.string.CoinAnalytics_TransactionCount),
         HoldersInfo(R.string.CoinAnalytics_Holders),
         TvlInfo(R.string.CoinAnalytics_ProjectTvl_FullTitle),
-        TechnicalIndicatorsInfo(R.string.Coin_Analytics_TechnicalIndicators),
+        TechnicalIndicatorsInfo(R.string.TechnicalAdvice_InfoTitle),
     }
 
     @Parcelize
@@ -163,8 +181,8 @@ object CoinAnalyticsModule {
 
     data class UiState(
         val viewState: ViewState,
-        val viewItem: AnalyticsViewItem? = null,
-        val isRefreshing: Boolean = false
+        val viewItem: AnalyticsViewItem?,
+        val isRefreshing: Boolean
     )
 
     sealed class AnalyticsViewItem {
@@ -177,13 +195,13 @@ object CoinAnalyticsModule {
         object Preview : ActionType()
         object OpenTvl : ActionType()
         class OpenOverallScoreInfo(val scoreCategory: ScoreCategory) : ActionType()
-        class OpenTechnicalIndicatorsDetails(val coinUid: String, val period: HsPointTimePeriod) : ActionType()
         class OpenRank(val type: RankType) : ActionType()
         class OpenReports(val coinUid: String) : ActionType()
         class OpenInvestors(val coinUid: String) : ActionType()
         class OpenTreasuries(val coin: Coin) : ActionType()
-        class OpenAudits(val auditAddresses: List<String>) : ActionType()
+        class OpenAudits(val audits: List<CoinAuditsModule.AuditParcelable>) : ActionType()
         class OpenTokenHolders(val coin: Coin, val blockchain: Blockchain) : ActionType()
+        class OpenDetectorsDetails(val issues: List<IssueParcelable>, val title: String) : ActionType()
     }
 
     fun zigzagPlaceholderAnalyticChart(isMovementChart: Boolean): AnalyticChart {
@@ -212,4 +230,6 @@ object CoinAnalyticsModule {
 
         return if (isMovementChart) AnalyticChart.Line(chartData) else AnalyticChart.Bars(chartData)
     }
+
+    data class BlockchainAndIssues(val blockchain: Blockchain, val issues: BlockchainIssues)
 }

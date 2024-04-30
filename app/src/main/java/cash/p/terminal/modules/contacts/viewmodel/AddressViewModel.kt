@@ -1,11 +1,8 @@
 package cash.p.terminal.modules.contacts.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.order
@@ -34,7 +31,7 @@ class AddressViewModel(
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
     definedAddresses: List<ContactAddress>?
-) : ViewModel() {
+) : ViewModelUiState<AddressViewModel.UiState>() {
 
     private val title = if (contactAddress == null)
         TranslatableString.ResString(R.string.Contacts_AddAddress)
@@ -42,7 +39,8 @@ class AddressViewModel(
         TranslatableString.PlainString(contactAddress.blockchain.name)
     private var address = contactAddress?.address ?: ""
     private val editingAddress = contactAddress
-    private var addressState: DataState<Address>? = contactAddress?.address?.let { DataState.Success(Address(it)) }
+    private var addressState: DataState<Address>? =
+        contactAddress?.address?.let { DataState.Success(Address(it)) }
     private val availableBlockchains: List<Blockchain>
 
     init {
@@ -60,7 +58,8 @@ class AddressViewModel(
                 BlockchainType.Ton,
             )
             val definedBlockchainTypes = definedAddresses?.map { it.blockchain.type } ?: listOf()
-            val availableBlockchainUids = allBlockchainTypes.filter { !definedBlockchainTypes.contains(it) }.map { it.uid }
+            val availableBlockchainUids =
+                allBlockchainTypes.filter { !definedBlockchainTypes.contains(it) }.map { it.uid }
 
             marketKit.blockchains(availableBlockchainUids).sortedBy { it.type.order }
         } else {
@@ -69,15 +68,13 @@ class AddressViewModel(
     }
 
     private var blockchain = contactAddress?.blockchain ?: availableBlockchains.first()
-    private var addressParser: AddressParserChain = addressHandlerFactory.parserChain(blockchain.type, true)
-
-    var uiState by mutableStateOf(uiState())
-        private set
+    private var addressParser: AddressParserChain =
+        addressHandlerFactory.parserChain(blockchain.type, true)
 
     fun onEnterAddress(address: String) {
         this.address = address
 
-        emitUiState()
+        emitState()
 
         validateAddress(address)
     }
@@ -86,7 +83,7 @@ class AddressViewModel(
         this.blockchain = blockchain
         this.addressParser = addressHandlerFactory.parserChain(blockchain.type, true)
 
-        emitUiState()
+        emitState()
 
         validateAddress(address)
     }
@@ -98,28 +95,31 @@ class AddressViewModel(
 
         if (address.isEmpty()) {
             addressState = null
-            emitUiState()
+            emitState()
             return
         }
 
         validationJob = viewModelScope.launch {
             addressState = DataState.Loading
-            emitUiState()
+            emitState()
 
             addressState = try {
                 val parsedAddress = parseAddress(addressParser, address.trim())
                 ensureActive()
-                contactsRepository.validateAddress(contactUid, ContactAddress(blockchain, parsedAddress.hex))
+                contactsRepository.validateAddress(
+                    contactUid,
+                    ContactAddress(blockchain, parsedAddress.hex)
+                )
                 DataState.Success(parsedAddress)
             } catch (error: Throwable) {
                 ensureActive()
                 DataState.Error(error)
             }
-            emitUiState()
+            emitState()
         }
     }
 
-    private fun uiState() = UiState(
+    override fun createState() = UiState(
         headerTitle = title,
         editingAddress = editingAddress,
         addressState = addressState,
@@ -131,18 +131,15 @@ class AddressViewModel(
         doneEnabled = addressState is DataState.Success
     )
 
-    private fun emitUiState() {
-        uiState = uiState()
-    }
-
-    private suspend fun parseAddress(addressParser: AddressParserChain, value: String): Address = withContext(Dispatchers.IO) {
-        try {
-            val resolvedAddress = addressParser.getAddressFromDomain(value)?.hex ?: value
-            parse(resolvedAddress, addressParser.supportedAddressHandlers(resolvedAddress))
-        } catch (error: Throwable) {
-            throw AddressValidationException.Invalid(error, blockchain.name)
+    private suspend fun parseAddress(addressParser: AddressParserChain, value: String): Address =
+        withContext(Dispatchers.IO) {
+            try {
+                val resolvedAddress = addressParser.getAddressFromDomain(value)?.hex ?: value
+                parse(resolvedAddress, addressParser.supportedAddressHandlers(resolvedAddress))
+            } catch (error: Throwable) {
+                throw AddressValidationException.Invalid(error, blockchain.name)
+            }
         }
-    }
 
     private fun parse(value: String, supportedHandlers: List<IAddressHandler>): Address {
         if (supportedHandlers.isEmpty()) {
