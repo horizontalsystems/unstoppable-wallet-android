@@ -1,12 +1,8 @@
 package io.horizontalsystems.bankwallet.modules.multiswap
 
 import android.os.Parcelable
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,14 +25,13 @@ import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
+import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataFieldFee
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -213,42 +207,10 @@ fun SwapConfirmScreen(navController: NavController) {
 
         VSpacer(height = 16.dp)
         SectionUniversalLawrence {
-            QuoteInfoRow(
-                title = {
-                    val title = stringResource(id = R.string.FeeSettings_NetworkFee)
-                    val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
-
-                    subhead2_grey(text = title)
-
-                    Image(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .clickable(
-                                onClick = {
-                                    navController.slideFromBottom(
-                                        R.id.feeSettingsInfoDialog,
-                                        FeeSettingsInfoDialog.Input(title, infoText)
-                                    )
-                                },
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            )
-                        ,
-                        painter = painterResource(id = R.drawable.ic_info_20),
-                        contentDescription = ""
-                    )
-
-                },
-                value = {
-                    val primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---"
-                    val secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
-
-                    Column(horizontalAlignment = Alignment.End) {
-                        subhead2_leah(text = primary)
-                        VSpacer(height = 1.dp)
-                        subhead2_grey(text = secondary)
-                    }
-                }
+            DataFieldFee(
+                navController,
+                uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
             )
         }
 
