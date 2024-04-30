@@ -41,10 +41,10 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                 val sendTitle = Translator.getString(R.string.Settings_DonateToken, it.wallet.token.fullCoin.coin.code)
                 navController.slideFromRight(
                     R.id.sendXFragment,
-                    SendFragment.prepareParams(
+                    SendFragment.Input(
                         it.wallet,
-                        R.id.sendTokenSelectFragment,
                         sendTitle,
+                        R.id.sendTokenSelectFragment,
                         donateAddress,
                     )
                 )

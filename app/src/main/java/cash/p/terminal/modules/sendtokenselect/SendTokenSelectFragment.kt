@@ -1,15 +1,14 @@
 package cash.p.terminal.modules.sendtokenselect
 
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.send.SendFragment
@@ -25,12 +24,12 @@ class SendTokenSelectFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val blockchainTypesUids = arguments?.getStringArrayList(blockchainTypesKey)
-        val tokenTypesIds = arguments?.getStringArrayList(tokenTypesKey)
-        val prefilledData = arguments?.getParcelable<PrefilledData>(addressDataKey)
+        val input = navController.getInput<Input>()
+
+        val blockchainTypes = input?.blockchainTypes
+        val tokenTypes = input?.tokenTypes
+        val prefilledData = input?.prefilledData
         val view = LocalView.current
-        val blockchainTypes = blockchainTypesUids?.mapNotNull { BlockchainType.fromUid(it) }
-        val tokenTypes = tokenTypesIds?.mapNotNull { TokenType.fromId(it) }
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Balance_Send),
@@ -41,7 +40,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                         val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                         navController.slideFromRight(
                             R.id.sendXFragment,
-                            SendFragment.prepareParams(
+                            SendFragment.Input(
                                 wallet = it.wallet,
                                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 title = sendTitle,
@@ -64,26 +63,15 @@ class SendTokenSelectFragment : BaseComposeFragment() {
         )
     }
 
-    companion object {
-        private const val blockchainTypesKey = "blockchainTypesKey"
-        private const val tokenTypesKey = "tokenTypesKey"
-        private const val addressDataKey = "addressDataKey"
-
-        fun prepareParams(
-            blockchainTypes: List<BlockchainType>? = null,
-            tokenTypes: List<TokenType>? = null,
-            address: String,
-            amount: BigDecimal?
-        ) : Bundle {
-            val blockchainTypesUids = blockchainTypes?.map { it.uid }
-            val tokenTypesIds = tokenTypes?.map { it.id }
-            return bundleOf(
-                blockchainTypesKey to blockchainTypesUids,
-                tokenTypesKey to tokenTypesIds,
-                addressDataKey to PrefilledData(address, amount)
-            )
-        }
-
+    @Parcelize
+    data class Input(
+        val blockchainTypes: List<BlockchainType>?,
+        val tokenTypes: List<TokenType>?,
+        val address: String,
+        val amount: BigDecimal?,
+    ) : Parcelable {
+        val prefilledData: PrefilledData
+            get() = PrefilledData(address, amount)
     }
 }
 

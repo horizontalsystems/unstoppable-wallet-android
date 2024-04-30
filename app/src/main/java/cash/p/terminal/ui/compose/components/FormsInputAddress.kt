@@ -36,7 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
@@ -44,7 +44,6 @@ import cash.p.terminal.modules.contacts.ChooseContactFragment
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
@@ -164,14 +163,13 @@ fun FormsInputAddress(
                         modifier = Modifier.padding(end = 8.dp),
                         icon = R.drawable.ic_user_20,
                         onClick = {
-                            navController.getNavigationResult(ChooseContactFragment.resultKey) {
-                                val chosenAddress = it.getString("contact") ?: ""
-                                val textProcessed = textPreprocessor.process(chosenAddress)
+                            navController.slideFromRightForResult<ChooseContactFragment.Result>(
+                                R.id.chooseContact,
+                                blockchainType
+                            ) {
+                                val textProcessed = textPreprocessor.process(it.address)
                                 onValueChange.invoke(textProcessed)
                             }
-                            navController.slideFromRight(
-                                R.id.chooseContact, ChooseContactFragment.prepareParams(blockchainType)
-                            )
                         }
                     )
                 }

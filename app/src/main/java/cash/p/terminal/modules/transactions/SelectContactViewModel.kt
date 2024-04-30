@@ -6,7 +6,6 @@ import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
->>>>>>>> b66a8f43d (Move filtering by contact stuff to transactions module):app/src/main/java/cash/p/terminal/modules/transactions/SelectContactViewModel.kt
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class SelectContactViewModel(

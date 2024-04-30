@@ -2,6 +2,7 @@ package cash.p.terminal.core
 
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -10,11 +11,10 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.SetPinFragment
 import cash.p.terminal.modules.settings.terms.TermsFragment
-import io.horizontalsystems.core.getNavigationResult
 import io.horizontalsystems.core.parcelable
 import java.util.UUID
 
-fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
+fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_right)
         .setExitAnim(android.R.anim.fade_out)
@@ -22,10 +22,13 @@ fun NavController.slideFromRight(@IdRes resId: Int, args: Bundle? = null) {
         .setPopExitAnim(R.anim.slide_to_right)
         .build()
 
+    val args = input?.let {
+        bundleOf("input" to it)
+    }
     navigate(resId, args, navOptions)
 }
 
-fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
+fun NavController.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_bottom)
         .setExitAnim(android.R.anim.fade_out)
@@ -33,6 +36,9 @@ fun NavController.slideFromBottom(@IdRes resId: Int, args: Bundle? = null) {
         .setPopExitAnim(R.anim.slide_to_bottom)
         .build()
 
+    val args = input?.let {
+        bundleOf("input" to it)
+    }
     navigate(resId, args, navOptions)
 }
 
@@ -50,14 +56,11 @@ fun NavController.authorizedAction(action: () -> Unit) {
 
 fun NavController.navigateWithTermsAccepted(action: () -> Unit) {
     if (!App.termsManager.allTermsAccepted) {
-        getNavigationResult(TermsFragment.resultBundleKey) { bundle ->
-            val agreedToTerms = bundle.getInt(TermsFragment.requestResultKey)
-
-            if (agreedToTerms == TermsFragment.RESULT_OK) {
+        slideFromBottomForResult<TermsFragment.Result>(R.id.termsFragment) { result ->
+            if (result.termsAccepted) {
                 action.invoke()
             }
         }
-        slideFromBottom(R.id.termsFragment)
     } else {
         action.invoke()
     }
@@ -129,18 +132,23 @@ private fun <T: Parcelable> NavController.getNavigationResultX(key: String, onRe
 }
 
 inline fun <reified T: Parcelable> NavController.getInput() : T? {
-    return currentBackStackEntry?.arguments?.parcelable("input")
+    return currentBackStackEntry?.arguments?.getInputX()
 }
 
-fun <T: Parcelable> NavController.setNavigationResultX(result: T, destinationId: Int? = null) {
+inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
+    return parcelable("input")
+}
+
+inline fun <reified T: Parcelable> NavController.requireInput() : T {
+    return getInput()!!
+}
+
+fun <T: Parcelable> NavController.setNavigationResultX(result: T) {
     val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
 
-    val backStackEntry = when (destinationId) {
-        null -> previousBackStackEntry
-        else -> currentBackStack.value.findLast { it.destination.id == destinationId }
-    }
-
-    resultKey?.let {
-        backStackEntry?.savedStateHandle?.set(resultKey, result)
+    if (resultKey == null) {
+        Log.w("AAA", "No key registered to set the result")
+    } else {
+        previousBackStackEntry?.savedStateHandle?.set(resultKey, result)
     }
 }

@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.info
 
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,10 +22,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.shorten
 import cash.p.terminal.modules.info.ui.InfoHeader
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -36,30 +37,25 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
         InfoScreen(
-            txHash = requireArguments().getString(TRANSACTION_HASH)!!,
-            conflictingTxHash = requireArguments().getString(
-                CONFLICTING_TRANSACTION_HASH
-            )!!,
+            txHash = input.transactionHash,
+            conflictingTxHash = input.conflictingTransactionHash,
             onBackClick = { navController.popBackStack() }
         )
     }
 
-    companion object {
-        private const val TRANSACTION_HASH = "transaction_hash"
-        private const val CONFLICTING_TRANSACTION_HASH = "conflicting_transaction_hash"
-
-        fun prepareParams(transactionHash: String, conflictingTransactionHash: String) = bundleOf(
-            TRANSACTION_HASH to transactionHash,
-            CONFLICTING_TRANSACTION_HASH to conflictingTransactionHash,
-        )
-    }
-
+    @Parcelize
+    data class Input(
+        val transactionHash: String,
+        val conflictingTransactionHash: String,
+    ) : Parcelable
 }
 
 @Composable

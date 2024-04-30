@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.coin.reports
 
+import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,11 +15,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -28,17 +29,16 @@ import cash.p.terminal.ui.compose.components.CellNews
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.helpers.LinkHelper
+import kotlinx.parcelize.Parcelize
 
 class CoinReportsFragment : BaseComposeFragment() {
 
-    private val viewModel by viewModels<CoinReportsViewModel> {
-        CoinReportsModule.Factory(requireArguments().getString(COIN_UID_KEY)!!)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
+
         CoinReportsScreen(
-            viewModel = viewModel,
+            viewModel = viewModel(factory = CoinReportsModule.Factory(input.coinUid)),
             onClickNavigation = {
                 navController.popBackStack()
             },
@@ -48,11 +48,8 @@ class CoinReportsFragment : BaseComposeFragment() {
         )
     }
 
-    companion object {
-        private const val COIN_UID_KEY = "coin_uid_key"
-
-        fun prepareParams(coinUid: String) = bundleOf(COIN_UID_KEY to coinUid)
-    }
+    @Parcelize
+    data class Input(val coinUid: String) : Parcelable
 }
 
 @Composable

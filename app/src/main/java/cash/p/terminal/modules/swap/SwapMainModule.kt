@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.swap
 
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -29,24 +28,19 @@ import kotlin.math.absoluteValue
 
 object SwapMainModule {
 
-    private const val tokenFromKey = "token_from_key"
-    const val resultKey = "swap_settings_result"
-    const val swapSettingsRecipientKey = "swap_settings_recipient"
-    const val swapSettingsSlippageKey = "swap_settings_slippage"
-    const val swapSettingsTtlKey = "swap_settings_ttl"
-
-    fun prepareParams(tokenFrom: Token, swapEntryPointDestId: Int = 0) = bundleOf(
-        tokenFromKey to tokenFrom,
-        BaseSwapConfirmationFragment.swapEntryPointDestIdKey to swapEntryPointDestId
-    )
+    @Parcelize
+    data class Result(
+        val recipient: Address?,
+        val slippageStr: String,
+        val ttl: Long? = null,
+    ) : Parcelable
 
     data class ProviderViewItem(
         val provider: ISwapProvider,
         val selected: Boolean,
     )
 
-    class Factory(arguments: Bundle) : ViewModelProvider.Factory {
-        private val tokenFrom: Token? = arguments.parcelable(tokenFromKey)
+    class Factory(private val tokenFrom: Token?) : ViewModelProvider.Factory {
         private val swapProviders: List<ISwapProvider> = listOf(
             UniswapProvider,
             UniswapV3Provider,
@@ -156,7 +150,6 @@ object SwapMainModule {
 
     data class SwapCoinCardViewState(
         val token: Token?,
-        val uuid: Long,
         val inputState: SwapAmountInputState,
     )
 

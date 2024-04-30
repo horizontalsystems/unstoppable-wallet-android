@@ -141,14 +141,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
                                             val text = Translator.getString(R.string.WalletConnect_Error_NeedBackup)
                                             navController.slideFromBottom(
                                                 R.id.backupRequiredDialog,
-                                                BackupRequiredDialog.prepareParams(state.account, text)
+                                                BackupRequiredDialog.Input(state.account, text)
                                             )
                                         }
 
                                         is WCManager.SupportState.NotSupported -> {
                                             navController.slideFromBottom(
                                                 R.id.wcAccountTypeNotSupportedDialog,
-                                                WCAccountTypeNotSupportedDialog.prepareParams(state.accountTypeDescription)
+                                                WCAccountTypeNotSupportedDialog.Input(state.accountTypeDescription)
                                             )
                                         }
                                     }
@@ -198,7 +198,7 @@ fun BalanceTitleRow(
             ) {
                 navController.slideFromBottom(
                     R.id.manageAccountsFragment,
-                    ManageAccountsModule.prepareParams(ManageAccountsModule.Mode.Switcher)
+                    ManageAccountsModule.Mode.Switcher
                 )
             },
         verticalAlignment = Alignment.CenterVertically

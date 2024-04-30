@@ -43,6 +43,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.shorten
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
@@ -56,13 +57,12 @@ import cash.p.terminal.modules.nft.collection.events.NftCollectionEventsModule
 import cash.p.terminal.modules.nft.collection.events.NftCollectionEventsViewModel
 import cash.p.terminal.modules.nft.collection.events.NftEventListType
 import cash.p.terminal.modules.nft.collection.events.NftEvents
-import cash.p.terminal.modules.nft.send.SendNftModule
+import cash.p.terminal.modules.nft.send.SendNftFragment
 import cash.p.terminal.modules.nft.ui.CellLink
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.helpers.LinkHelper
-import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,9 +74,12 @@ class NftAssetFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val collectionUid = requireArguments().getString(NftAssetModule.collectionUidKey)
-        val nftUid = requireArguments().getString(NftAssetModule.nftUidKey)?.let { NftUid.fromUid(it) }
-        NftAssetScreen(findNavController(), collectionUid, nftUid)
+        val input = navController.getInput<NftAssetModule.Input>()
+        NftAssetScreen(
+            navController,
+            input?.collectionUid,
+            input?.nftUid
+        )
     }
 
 }
@@ -244,7 +247,7 @@ private fun AssetContent(
                             .clickable {
                                 navController.slideFromRight(
                                     R.id.nftCollectionFragment,
-                                    NftCollectionFragment.prepareParams(asset.providerCollectionUid, asset.nftUid.blockchainType.uid)
+                                    NftCollectionFragment.Input(asset.providerCollectionUid, asset.nftUid.blockchainType.uid)
                                 )
                             },
                         verticalAlignment = Alignment.CenterVertically
@@ -273,7 +276,7 @@ private fun AssetContent(
                                     onClick = {
                                         navController.slideFromBottom(
                                             R.id.nftSendFragment,
-                                            SendNftModule.prepareParams(nftUid.uid)
+                                            SendNftFragment.Input(nftUid.uid)
                                         )
                                     }
                                 )

@@ -1,23 +1,30 @@
 package cash.p.terminal.modules.market.topcoins
 
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
@@ -27,27 +34,29 @@ import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
+import cash.p.terminal.ui.compose.components.AlertGroup
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.CoinList
+import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.SortMenu
+import cash.p.terminal.ui.compose.components.TopCloseButton
+import kotlinx.parcelize.Parcelize
 
 class MarketTopCoinsFragment : BaseComposeFragment() {
 
-    private val sortingField by lazy {
-        arguments?.parcelable<SortingField>(sortingFieldKey)
-    }
-    private val topMarket by lazy {
-        arguments?.parcelable<TopMarket>(topMarketKey)
-    }
-    private val marketField by lazy {
-        arguments?.parcelable<MarketField>(marketFieldKey)
-    }
-
-    val viewModel by viewModels<MarketTopCoinsViewModel> {
-        MarketTopCoinsModule.Factory(topMarket, sortingField, marketField)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.getInput<Input>()
+        val sortingField = input?.sortingField
+        val topMarket = input?.topMarket
+        val marketField = input?.marketField
+
+        val viewModel = viewModel<MarketTopCoinsViewModel>(
+            factory = MarketTopCoinsModule.Factory(topMarket, sortingField, marketField)
+        )
+
         TopCoinsScreen(
             viewModel,
             { navController.popBackStack() },
@@ -61,24 +70,12 @@ class MarketTopCoinsFragment : BaseComposeFragment() {
         navController.slideFromRight(R.id.coinFragment, arguments)
     }
 
-    companion object {
-        private const val sortingFieldKey = "sorting_field"
-        private const val topMarketKey = "top_market"
-        private const val marketFieldKey = "market_field"
-
-        fun prepareParams(
-            sortingField: SortingField,
-            topMarket: TopMarket,
-            marketField: MarketField
-        ): Bundle {
-            return bundleOf(
-                sortingFieldKey to sortingField,
-                topMarketKey to topMarket,
-                marketFieldKey to marketField
-            )
-        }
-    }
-
+    @Parcelize
+    data class Input(
+        val sortingField: SortingField,
+        val topMarket: TopMarket,
+        val marketField: MarketField
+    ) : Parcelable
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -96,11 +93,9 @@ fun TopCoinsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
-    val interactionSource = remember { MutableInteractionSource() }
-
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
-            TopCloseButton(interactionSource, onCloseButtonClick)
+            TopCloseButton(onCloseButtonClick)
 
             HSSwipeRefresh(
                 refreshing = isRefreshing,

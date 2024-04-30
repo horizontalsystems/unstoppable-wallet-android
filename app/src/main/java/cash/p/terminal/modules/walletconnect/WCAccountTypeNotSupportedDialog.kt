@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.walletconnect
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,8 +18,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import cash.p.terminal.R
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -27,6 +28,7 @@ import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
+import kotlinx.parcelize.Parcelize
 
 class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -39,15 +41,19 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
+                val navController = findNavController()
+
                 ComposeAppTheme {
                     WCAccountTypeNotSupportedScreen(
-                        requireArguments().getString(ACCOUNT_TYPE_DESC) ?: "",
-                        onCloseClick = { findNavController().popBackStack() },
+                        accountTypeDescription = navController.getInput<Input>()?.accountTypeDescription ?: "",
+                        onCloseClick = {
+                            navController.popBackStack()
+                        },
                         onSwitchClick = {
-                            findNavController().popBackStack()
-                            findNavController().slideFromRight(
+                            navController.popBackStack()
+                            navController.slideFromRight(
                                 R.id.manageAccountsFragment,
-                                bundleOf(ManageAccountsModule.MODE to ManageAccountsModule.Mode.Manage)
+                                ManageAccountsModule.Mode.Manage
                             )
                         }
                     )
@@ -56,13 +62,8 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
         }
     }
 
-    companion object {
-        private const val ACCOUNT_TYPE_DESC = "account_type_desc"
-
-        fun prepareParams(accountTypeDescription: String) = bundleOf(
-            ACCOUNT_TYPE_DESC to accountTypeDescription,
-        )
-    }
+    @Parcelize
+    data class Input(val accountTypeDescription: String) : Parcelable
 }
 
 @Composable

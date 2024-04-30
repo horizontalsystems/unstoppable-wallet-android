@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
-import cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsModule
+import cash.p.terminal.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -37,10 +37,9 @@ class WatchAddressFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val popUpToInclusiveId =
-            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.watchAddressFragment) ?: R.id.watchAddressFragment
-        val inclusive =
-            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: true
+        val input = navController.getInput<ManageAccountsModule.Input>()
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.watchAddressFragment
+        val inclusive = input?.popOffInclusive ?: true
         WatchAddressScreen(navController, popUpToInclusiveId, inclusive)
     }
 
@@ -75,11 +74,11 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
 
         navController.slideFromRight(
             R.id.selectBlockchainsFragment,
-            bundleOf(
-                SelectBlockchainsModule.accountTypeKey to accountType,
-                SelectBlockchainsModule.accountNameKey to accountName,
-                ManageAccountsModule.popOffOnSuccessKey to popUpToInclusiveId,
-                ManageAccountsModule.popOffInclusiveKey to inclusive,
+            SelectBlockchainsFragment.Input(
+                popUpToInclusiveId,
+                inclusive,
+                accountType,
+                accountName
             )
         )
     }

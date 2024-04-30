@@ -1,26 +1,24 @@
 package cash.p.terminal.modules.walletconnect.list
 
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.walletconnect.list.ui.WCSessionsScreen
+import kotlinx.parcelize.Parcelize
 
 class WCListFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val deepLinkUri = arguments?.getString(WC_CONNECTION_URI_KEY)
+        val input = navController.getInput<Input>()
         WCSessionsScreen(
             navController,
-            deepLinkUri
+            input?.deepLinkUri
         )
     }
 
-    companion object {
-        private const val WC_CONNECTION_URI_KEY = "wc_connection_uri_key"
-
-        fun prepareParams(deepLinkUri: String?) = bundleOf(WC_CONNECTION_URI_KEY to deepLinkUri)
-    }
-
+    @Parcelize
+    data class Input(val deepLinkUri: String) : Parcelable
 }

@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.coin.majorholders
 
+import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,11 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.shorten
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.MajorHolderItem
@@ -51,38 +52,24 @@ import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Blockchain
+import kotlinx.parcelize.Parcelize
 
 class CoinMajorHoldersFragment : BaseComposeFragment() {
 
-    private val coinUid by lazy {
-        requireArguments().getString(COIN_UID_KEY)!!
-    }
-
-    private val blockchain by lazy {
-        requireArguments().parcelable<Blockchain>(BLOCKCHAIN_KEY)!!
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val input = navController.requireInput<Input>()
+
         CoinMajorHoldersScreen(
-            coinUid,
-            blockchain,
+            input.coinUid,
+            input.blockchain,
             navController,
         )
     }
 
-    companion object {
-        private const val COIN_UID_KEY = "coin_uid_key"
-        private const val BLOCKCHAIN_KEY = "blockchain_key"
-
-        fun prepareParams(coinUid: String, blockchain: Blockchain) =
-            bundleOf(
-                COIN_UID_KEY to coinUid,
-                BLOCKCHAIN_KEY to blockchain,
-            )
-    }
+    @Parcelize
+    data class Input(val coinUid: String, val blockchain: Blockchain) : Parcelable
 }
 
 @Composable

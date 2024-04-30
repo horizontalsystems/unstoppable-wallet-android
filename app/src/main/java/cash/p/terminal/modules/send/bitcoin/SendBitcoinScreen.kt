@@ -259,7 +259,7 @@ fun SendBitcoinScreen(
                     onClick = {
                         fragmentNavController.slideFromRight(
                             R.id.sendConfirmation,
-                            SendConfirmationFragment.prepareParams(SendConfirmationFragment.Type.Bitcoin, sendEntryPointDestId)
+                            SendConfirmationFragment.Input(SendConfirmationFragment.Type.Bitcoin, sendEntryPointDestId)
                         )
                     },
                     enabled = proceedEnabled

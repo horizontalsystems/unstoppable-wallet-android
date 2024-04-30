@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
@@ -66,27 +65,6 @@ class SelectSwapCoinFragment : BaseComposeFragment() {
                 }, 100)
             }
         }
-    }
-
-    private fun closeWithResult(coinBalanceItem: CoinBalanceItem, requestId: Long, navController: NavController) {
-        setNavigationResult(
-            resultBundleKey, bundleOf(
-                requestIdKey to requestId,
-                coinBalanceItemResultKey to coinBalanceItem
-            )
-        )
-        Handler(Looper.getMainLooper()).postDelayed({
-            navController.popBackStack()
-        }, 100)
-    }
-
-    companion object {
-        const val resultBundleKey = "selectSwapCoinResultKey"
-        const val dexKey = "dexKey"
-        const val requestIdKey = "requestIdKey"
-        const val coinBalanceItemResultKey = "coinBalanceItemResultKey"
-
-        fun prepareParams(requestId: Long, dex: SwapMainModule.Dex) = bundleOf(requestIdKey to requestId, dexKey to dex)
     }
 }
 

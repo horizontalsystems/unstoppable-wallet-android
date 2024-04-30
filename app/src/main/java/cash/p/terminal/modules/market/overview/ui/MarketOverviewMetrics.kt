@@ -23,7 +23,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.market.metricspage.MetricsPageFragment
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -114,9 +113,6 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
     if (metricsType == MetricsType.TvlInDefi) {
         navController.slideFromBottom(R.id.tvlFragment)
     } else {
-        navController.slideFromBottom(
-            R.id.metricsPageFragment,
-            MetricsPageFragment.prepareParams(metricsType)
-        )
+        navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
     }
 }

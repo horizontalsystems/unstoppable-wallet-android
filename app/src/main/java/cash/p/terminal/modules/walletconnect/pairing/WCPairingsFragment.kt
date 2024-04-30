@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
@@ -90,10 +90,13 @@ fun WCPairingsScreen(navController: NavController) {
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
                         onClick = {
-                            ConfirmDeleteAllPairingsDialog.onConfirm(navController) {
-                                viewModel.deleteAll()
+                            navController.slideFromBottomForResult<ConfirmDeleteAllPairingsDialog.Result>(
+                                R.id.confirmDeleteAllPairingsDialog
+                            ) { result ->
+                                if (result.confirmed) {
+                                    viewModel.deleteAll()
+                                }
                             }
-                            navController.slideFromBottom(R.id.confirmDeleteAllPairingsDialog)
                         }
                     ) {
                         Icon(

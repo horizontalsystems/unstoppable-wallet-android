@@ -1,26 +1,37 @@
 package cash.p.terminal.modules.market.topplatforms
 
-import android.os.Bundle
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -28,36 +39,37 @@ import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
-import cash.p.terminal.modules.market.platform.MarketPlatformFragment
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.parcelable
+import cash.p.terminal.ui.compose.components.AlertGroup
+import cash.p.terminal.ui.compose.components.BadgeWithDiff
+import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
+import cash.p.terminal.ui.compose.components.MarketDataValueComponent
+import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui.compose.components.SortMenu
+import cash.p.terminal.ui.compose.components.TopCloseButton
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import java.math.BigDecimal
 
 class TopPlatformsFragment : BaseComposeFragment() {
 
-    private val timeDuration by lazy { arguments?.parcelable<TimeDuration>(timeDurationKey) }
-    val viewModel by viewModels<TopPlatformsViewModel> {
-        TopPlatformsModule.Factory(timeDuration)
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val viewModel = viewModel<TopPlatformsViewModel>(
+            factory = TopPlatformsModule.Factory(navController.getInput())
+        )
+
         TopPlatformsScreen(
             viewModel,
             navController,
         )
-    }
-
-    companion object {
-        private const val timeDurationKey = "time_duration"
-
-        fun prepareParams(timeDuration: TimeDuration): Bundle {
-            return bundleOf(timeDurationKey to timeDuration)
-        }
     }
 }
 
@@ -73,7 +85,7 @@ fun TopPlatformsScreen(
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
-            TopCloseButton(interactionSource) { navController.popBackStack() }
+            TopCloseButton { navController.popBackStack() }
 
             HSSwipeRefresh(
                 refreshing = viewModel.isRefreshing,
@@ -101,10 +113,9 @@ fun TopPlatformsScreen(
                                     sortingField = viewModel.sortingField,
                                     timeDuration = viewModel.timePeriod,
                                     onItemClick = {
-                                        val args = MarketPlatformFragment.prepareParams(it)
                                         navController.slideFromRight(
                                             R.id.marketPlatformFragment,
-                                            args
+                                            it
                                         )
                                     },
                                     preItems = {

@@ -282,8 +282,9 @@ class MainViewModel(
         var tab = currentMainTab
         var deeplinkPage: DeeplinkPage? = null
         val deeplinkString = deepLink.toString()
+        val deeplinkScheme: String = Translator.getString(R.string.DeeplinkScheme)
         when {
-            deeplinkString.startsWith("unstoppable:") -> {
+            deeplinkString.startsWith("$deeplinkScheme:") -> {
                 val uid = deepLink.getQueryParameter("uid")
                 when {
                     deeplinkString.contains("coin-page") -> {
@@ -295,7 +296,7 @@ class MainViewModel(
                     deeplinkString.contains("nft-collection") -> {
                         val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
                         if (uid != null && blockchainTypeUid != null) {
-                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.prepareParams(uid, blockchainTypeUid))
+                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
                         }
                     }
 
@@ -303,7 +304,7 @@ class MainViewModel(
                         val title = deepLink.getQueryParameter("title")
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
-                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, MarketPlatformFragment.prepareParams(platform))
+                            deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
                         }
                     }
                 }

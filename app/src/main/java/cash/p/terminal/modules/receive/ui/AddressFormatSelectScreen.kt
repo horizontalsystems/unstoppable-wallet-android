@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.receive.ui
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/AddressFormatSelectScreen.kt
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -25,7 +24,6 @@ import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/AddressFormatSelectScreen.kt
 
 @Composable
 fun AddressFormatSelectScreen(
@@ -62,7 +60,6 @@ fun AddressFormatSelectScreen(
                         subtitle = item.subtitle,
                         onClick = {
                             onSelect.invoke(item.wallet)
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/AddressFormatSelectScreen.kt
                         }
                     )
                 }

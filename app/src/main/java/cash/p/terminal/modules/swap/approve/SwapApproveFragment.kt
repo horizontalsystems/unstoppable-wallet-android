@@ -20,11 +20,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.requireInput
+import cash.p.terminal.core.setNavigationResultX
+import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.approve.SwapApproveModule.dataKey
+import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
 import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -34,13 +36,12 @@ import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.TextPreprocessor
-import io.horizontalsystems.core.parcelable
 
 class SwapApproveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val approveData = requireArguments().parcelable<SwapMainModule.ApproveData>(dataKey)!!
+        val approveData = navController.requireInput<SwapMainModule.ApproveData>()
         SwapApproveScreen(navController, approveData)
     }
 
@@ -111,7 +112,7 @@ fun SwapApproveScreen(
                 title = stringResource(R.string.Swap_Proceed),
                 onClick = {
                     swapApproveViewModel.getSendEvmData()?.let { sendEvmData ->
-                        navController.slideFromRight(
+                        navController.slideFromRightForResult<SwapApproveConfirmationFragment.Result>(
                             R.id.swapApproveConfirmationFragment,
                             SwapApproveConfirmationModule.Input(sendEvmData, swapApproveViewModel.blockchainType)
                         ) {

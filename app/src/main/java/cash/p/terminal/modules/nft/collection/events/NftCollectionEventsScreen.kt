@@ -231,7 +231,7 @@ fun NftEvents(
                                     {
                                         navController.slideFromBottom(
                                             R.id.nftAssetFragment,
-                                            NftAssetModule.prepareParams(event.providerCollectionUid, event.nftUid)
+                                            NftAssetModule.Input(event.providerCollectionUid, event.nftUid)
                                         )
                                     }
                                 }

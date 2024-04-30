@@ -137,7 +137,7 @@ fun SendZCashScreen(
                 onClick = {
                     navController.slideFromRight(
                         R.id.sendConfirmation,
-                        SendConfirmationFragment.prepareParams(
+                        SendConfirmationFragment.Input(
                             SendConfirmationFragment.Type.ZCash,
                             sendEntryPointDestId
                         )

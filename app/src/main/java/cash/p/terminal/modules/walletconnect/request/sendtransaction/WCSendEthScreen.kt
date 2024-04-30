@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.walletconnect.request.sendtransaction
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/request/sendtransaction/WCSendEthScreen.kt
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,6 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
 import cash.p.terminal.ui.compose.components.VSpacer
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/request/sendtransaction/WCSendEthScreen.kt
 
 @Composable
 fun WCSendEthRequestScreen(
@@ -76,8 +74,8 @@ fun WCSendEthRequestScreen(
                     tint = ComposeAppTheme.colors.jacob,
                     onClick = {
                         navController.slideFromBottom(
-                            resId = R.id.sendEvmSettingsFragment,
-                            args = SendEvmSettingsFragment.prepareParams(parentNavGraphId)
+                            R.id.sendEvmSettingsFragment,
+                            SendEvmSettingsFragment.Input(parentNavGraphId)
                         )
                     }
                 )

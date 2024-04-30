@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.nft.send
 
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.adapters.nft.INftAdapter
@@ -56,12 +55,6 @@ object SendNftModule {
             }
         }
     }
-
-    const val nftUidKey = "nftUidKey"
-
-    fun prepareParams(nftUid: String) = bundleOf(
-        nftUidKey to nftUid
-    )
 
     data class SendEip721UiState(
         val name: String,

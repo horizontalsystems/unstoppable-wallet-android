@@ -24,17 +24,14 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.modules.configuredtoken.ConfiguredTokenInfoDialog
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.core.getNavigationResult
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
@@ -66,20 +63,13 @@ private fun ManageWalletsScreen(
     if (restoreSettingsViewModel.openZcashConfigure != null) {
         restoreSettingsViewModel.zcashConfigureOpened()
 
-        navController.getNavigationResult(ZcashConfigure.resultBundleKey) { bundle ->
-            val requestResult = bundle.getInt(ZcashConfigure.requestResultKey)
-
-            if (requestResult == ZcashConfigure.RESULT_OK) {
-                val zcashConfig = bundle.parcelable<ZCashConfig>(ZcashConfigure.zcashConfigKey)
-                zcashConfig?.let { config ->
-                    restoreSettingsViewModel.onEnter(config)
-                }
+        navController.slideFromBottomForResult<ZcashConfigure.Result>(R.id.zcashConfigure) {
+            if (it.config != null) {
+                restoreSettingsViewModel.onEnter(it.config)
             } else {
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
         }
-
-        navController.slideFromBottom(R.id.zcashConfigure)
     }
 
     Column(
@@ -132,7 +122,7 @@ private fun ManageWalletsScreen(
                                 }
                             },
                             onInfoClick = {
-                                navController.slideFromBottom(R.id.configuredTokenInfo, ConfiguredTokenInfoDialog.prepareParams(viewItem.item))
+                                navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
                             }
                         )
                     }

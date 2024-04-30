@@ -6,7 +6,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.bitcoinCashCoinType
 import cash.p.terminal.modules.receive.ui.AddressFormatItem
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/viewmodels/BchAddressTypeSelectViewModel.kt
 import io.horizontalsystems.marketkit.models.TokenType
 
 class BchAddressTypeSelectViewModel(coinUid: String, walletManager: IWalletManager) : ViewModel() {

@@ -148,11 +148,14 @@ class MarketOverviewViewModel(
         val topLosersBoard = getBoard(ListType.TopLosers, topMovers)
 
         return MarketOverviewModule.ViewItem(
-            getMarketMetrics(marketOverview.globalMarketPoints, baseCurrency),
-            listOf(topGainersBoard, topLosersBoard),
-            topNftCollectionsBoard(nftCollectionItems),
-            topSectorsBoard(coinCategoryItems),
-            topPlatformsBoard(topPlatformItems)
+            marketMetrics = getMarketMetrics(marketOverview.globalMarketPoints, baseCurrency),
+            boards = listOf(topGainersBoard, topLosersBoard),
+            topNftCollectionsBoard = topNftCollectionsBoard(nftCollectionItems),
+            topSectorsBoard = topSectorsBoard(coinCategoryItems),
+            topPlatformsBoard = topPlatformsBoard(topPlatformItems),
+            topMarketPairs = marketOverview.topPairs.map {
+                TopPairViewItem.createFromTopPair(it, baseCurrency.symbol)
+            },
         )
     }
 

@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.transactions
->>>>>>>> b66a8f43d (Move filtering by contact stuff to transactions module):app/src/main/java/cash/p/terminal/modules/transactions/SelectContactFragment.kt
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column

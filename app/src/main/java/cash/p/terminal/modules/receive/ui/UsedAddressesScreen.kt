@@ -56,8 +56,8 @@ enum class UsedAddressTab(@StringRes val titleResId: Int) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UsedAddressScreen(
-    navController: NavController,
-    params: UsedAddressesParams
+    params: UsedAddressesParams,
+    onBackPress: () -> Unit
 ) {
     val tabs = UsedAddressTab.values()
     var selectedTab by remember { mutableStateOf(UsedAddressTab.ReceiveAddress) }

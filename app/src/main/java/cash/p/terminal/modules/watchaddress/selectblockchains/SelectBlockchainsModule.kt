@@ -7,10 +7,6 @@ import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.watchaddress.WatchAddressService
 
 object SelectBlockchainsModule {
-
-    const val accountTypeKey = "accountTypeKey"
-    const val accountNameKey = "accountNameKey"
-
     class Factory(val accountType: AccountType, val accountName: String?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

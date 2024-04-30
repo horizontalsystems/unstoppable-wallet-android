@@ -43,14 +43,6 @@ fun Fragment.findNavController(): NavController {
     return NavHostFragment.findNavController(this)
 }
 
-fun Fragment.getNavigationResult(key: String = "result", result: (Bundle) -> (Unit)) {
-    findNavController().getNavigationResult(key, result)
-}
-
-fun Fragment.setNavigationResult(key: String = "result", bundle: Bundle) {
-    findNavController().setNavigationResult(key, bundle)
-}
-
 //  String
 
 fun String.hexToByteArray(): ByteArray {

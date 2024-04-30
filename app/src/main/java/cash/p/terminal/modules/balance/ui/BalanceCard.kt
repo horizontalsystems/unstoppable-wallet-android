@@ -310,7 +310,7 @@ fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, 
 
             navController.slideFromBottom(
                 R.id.syncErrorDialog,
-                SyncErrorDialog.prepareParams(wallet, errorMessage)
+                SyncErrorDialog.Input(wallet, errorMessage)
             )
         }
         is BalanceViewModel.SyncError.NetworkNotAvailable -> {

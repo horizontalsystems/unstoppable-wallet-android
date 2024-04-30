@@ -1,14 +1,12 @@
 package cash.p.terminal.modules.walletconnect.session
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionModule.kt
 
-import androidx.core.os.bundleOf
+import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.walletconnect.web3.wallet.client.Wallet
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import kotlinx.parcelize.Parcelize
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionModule.kt
 
 object WCSessionModule {
 
@@ -26,11 +24,8 @@ object WCSessionModule {
         }
     }
 
-    fun prepareParams(sessionTopic: String?) = bundleOf(
-        SESSION_TOPIC_KEY to sessionTopic
-    )
-
-    const val SESSION_TOPIC_KEY = "session_topic_id"
+    @Parcelize
+    data class Input(val sessionTopic: String) : Parcelable
 }
 
 enum class WCButtonState(val visible: Boolean, val enabled: Boolean) {

@@ -12,28 +12,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment
-import cash.p.terminal.modules.manageaccount.publickeys.PublicKeysModule.ACCOUNT_KEY
-import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
+import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import cash.p.terminal.modules.manageaccount.ui.KeyActionItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
-import io.horizontalsystems.core.parcelable
 
 class PublicKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account: Account? = arguments?.parcelable(ACCOUNT_KEY)
+        val account = navController.getInput<Account>()
+
         if (account == null) {
             Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
             navController.popBackStack()
@@ -72,7 +71,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                 ) {
                     navController.slideFromRight(
                         R.id.evmAddressFragment,
-                        bundleOf(EvmAddressFragment.EVM_ADDRESS_KEY to evmAddress)
+                        EvmAddressFragment.Input(evmAddress)
                     )
                 }
             }
@@ -83,7 +82,7 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                 ) {
                     navController.slideFromRight(
                         R.id.showExtendedKeyFragment,
-                        ShowExtendedKeyModule.prepareParams(
+                        ShowExtendedKeyFragment.Input(
                             publicKey.hdKey,
                             publicKey.accountPublicKey
                         )

@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.send.evm.settings
 
+import android.os.Parcelable
 import androidx.annotation.IdRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,13 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.evmfee.Eip1559FeeSettings
 import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
@@ -35,15 +36,18 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class SendEvmSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-        val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
-        val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(requireArguments().getInt(NAV_GRAPH_ID))
+        val input = navController.requireInput<Input>()
+        val navGraphId = input.navGraphId
+        val feeViewModel by navGraphViewModels<EvmFeeCellViewModel>(navGraphId)
+        val nonceViewModel by navGraphViewModels<SendEvmNonceViewModel>(navGraphId)
+        val sendViewModel by navGraphViewModels<SendEvmTransactionViewModel>(navGraphId)
 
         val feeSettingsViewModel = viewModel<ViewModel>(
             factory = EvmFeeModule.Factory(
@@ -63,12 +67,8 @@ class SendEvmSettingsFragment : BaseComposeFragment() {
         )
     }
 
-    companion object {
-        private const val NAV_GRAPH_ID = "nav_graph_id"
-
-        fun prepareParams(@IdRes navGraphId: Int) =
-            bundleOf(NAV_GRAPH_ID to navGraphId)
-    }
+    @Parcelize
+    data class Input(@IdRes val navGraphId: Int) : Parcelable
 }
 
 

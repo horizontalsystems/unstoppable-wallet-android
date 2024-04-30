@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.swap.settings.uniswap
 
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,11 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.swap.SwapMainModule
@@ -36,76 +37,23 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.core.setNavigationResult
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
 class UniswapSettingsFragment : BaseComposeFragment() {
 
-    companion object {
-        private const val dexKey = "dexKey"
-        private const val addressKey = "addressKey"
-        private const val slippageKey = "slippageKey"
-        private const val ttlKey = "ttlKey"
-        private const val ttlEnabledKey = "ttlEnabledKey"
-
-        fun prepareParams(
-            dex: SwapMainModule.Dex,
-            address: Address?,
-            slippage: BigDecimal,
-            ttlEnabled: Boolean,
-            ttl: Long? = null
-        ): Bundle {
-            val bundle = bundleOf(
-                dexKey to dex,
-                addressKey to address,
-                slippageKey to slippage.toPlainString(),
-                ttlEnabledKey to ttlEnabled
-            )
-            if (ttl != null) {
-                bundle.putLong(ttlKey, ttl)
-            }
-            return bundle
-        }
-    }
-
-    private val dex by lazy {
-        requireArguments().parcelable<SwapMainModule.Dex>(dexKey)
-    }
-
-    private val address by lazy {
-        requireArguments().parcelable<Address>(addressKey)
-    }
-
-    private val slippage by lazy {
-        requireArguments().getString(slippageKey)?.toBigDecimal()
-    }
-
-    private val ttlEnabled by lazy {
-        requireArguments().getBoolean(ttlEnabledKey)
-    }
-
-    private val ttl by lazy {
-        val arguments = requireArguments()
-        if (arguments.containsKey(ttlKey)) {
-            arguments.getLong(ttlKey)
-        } else {
-            null
-        }
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val dexValue = dex
-        if (dexValue != null) {
+        val input = navController.getInput<Input>()
+        if (input != null) {
             UniswapSettingsScreen(
                 onCloseClick = {
                     navController.popBackStack()
                 },
-                dex = dexValue,
-                factory = UniswapSettingsModule.Factory(address, slippage, ttl),
+                dex = input.dex,
+                factory = UniswapSettingsModule.Factory(input.address, input.slippage, input.ttl),
                 navController = navController,
-                ttlEnabled = ttlEnabled
+                ttlEnabled = input.ttlEnabled
             )
         } else {
             ScreenMessageWithAction(
@@ -123,6 +71,14 @@ class UniswapSettingsFragment : BaseComposeFragment() {
         }
     }
 
+    @Parcelize
+    data class Input(
+        val dex: SwapMainModule.Dex,
+        val address: Address?,
+        val slippage: BigDecimal,
+        val ttlEnabled: Boolean,
+        val ttl: Long? = null
+    ) : Parcelable
 }
 
 @Composable
@@ -187,14 +143,12 @@ private fun UniswapSettingsScreen(
                     title = buttonTitle,
                     onClick = {
                         val tradeOptions = uniswapSettingsViewModel.tradeOptions
-
                         if (tradeOptions != null) {
-                            navController.setNavigationResult(
-                                SwapMainModule.resultKey,
-                                bundleOf(
-                                    SwapMainModule.swapSettingsRecipientKey to tradeOptions.recipient,
-                                    SwapMainModule.swapSettingsSlippageKey to tradeOptions.allowedSlippage.toPlainString(),
-                                    SwapMainModule.swapSettingsTtlKey to tradeOptions.ttl,
+                            navController.setNavigationResultX(
+                                SwapMainModule.Result(
+                                    tradeOptions.recipient,
+                                    tradeOptions.allowedSlippage.toPlainString(),
+                                    tradeOptions.ttl
                                 )
                             )
                             onCloseClick()

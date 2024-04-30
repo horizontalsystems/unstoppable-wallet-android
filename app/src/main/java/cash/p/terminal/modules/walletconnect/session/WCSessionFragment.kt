@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.walletconnect.session
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionFragment.kt
 
 import android.os.Bundle
 import android.view.View
@@ -47,7 +46,6 @@ import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.helpers.TextHelper
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionFragment.kt
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -56,7 +54,6 @@ class WCSessionFragment : BaseComposeFragment() {
     private val viewModel by viewModels<WCSessionViewModel> {
         val input = arguments?.getInputX<WCSessionModule.Input>()
         WCSessionModule.Factory(input?.sessionTopic)
->>>>>>>> b314ca824 (Rename prefix `wc2` to `wc` for WalletConnect classes):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WCSessionFragment.kt
     }
 
     @Composable
@@ -172,7 +169,6 @@ private fun ColumnScope.WCSessionListContent(
                 RequestCell(viewItem = item) {
                     viewModel.setRequestToOpen(item.request)
                     navController.slideFromBottom(R.id.wcRequestFragment)
->>>>>>>> 3a48e845b (Refactor WalletConnect, use Web3Wallet API):app/src/main/java/cash/p/terminal/modules/walletconnect/session/WC2SessionFragment.kt
                 }
             }
             Spacer(Modifier.height(32.dp))

@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.receive.ui
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/ReceiveTokenSelectScreen.kt
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.imagePlaceholder
@@ -34,7 +32,6 @@ import cash.p.terminal.ui.compose.components.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/ReceiveTokenSelectScreen.kt
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -97,7 +94,6 @@ fun ReceiveTokenSelectScreen(
 
                                     is CoinForReceiveType.Single -> {
                                         onCoinClick.invoke(coinActiveWalletsType.wallet)
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/ReceiveTokenSelectScreen.kt
                                     }
 
                                     null -> Unit

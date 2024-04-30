@@ -13,7 +13,6 @@ import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
 import cash.p.terminal.ui.compose.TranslatableString
->>>>>>>> 9752dd95a (ResendBitcoin module improvements):app/src/main/java/cash/p/terminal/modules/balance/BalanceViewItemFactory.kt
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.CoinPrice

@@ -22,8 +22,9 @@ object HsChartRequestHelper {
                 seconds <= HsTimePeriod.Day1.range -> HsPointTimePeriod.Minute30
                 seconds <= HsTimePeriod.Week1.range -> HsPointTimePeriod.Hour4
                 seconds <= HsTimePeriod.Week2.range -> HsPointTimePeriod.Hour8
-                seconds <= HsTimePeriod.Year2.range -> HsPointTimePeriod.Day1
-                else -> HsPointTimePeriod.Week1
+                seconds <= HsTimePeriod.Year1.range -> HsPointTimePeriod.Day1
+                seconds <= HsTimePeriod.Year5.range -> HsPointTimePeriod.Week1
+                else -> HsPointTimePeriod.Month1
             }
         }
     }
@@ -32,7 +33,12 @@ object HsChartRequestHelper {
         HsTimePeriod.Day1 -> HsPointTimePeriod.Minute30
         HsTimePeriod.Week1 -> HsPointTimePeriod.Hour4
         HsTimePeriod.Week2 -> HsPointTimePeriod.Hour8
-        else -> HsPointTimePeriod.Day1
+        HsTimePeriod.Month1,
+        HsTimePeriod.Month3,
+        HsTimePeriod.Month6 -> HsPointTimePeriod.Day1
+        HsTimePeriod.Year1,
+        HsTimePeriod.Year2 -> HsPointTimePeriod.Week1
+        HsTimePeriod.Year5 -> HsPointTimePeriod.Month1
     }
 
     fun fromTimestamp(timestamp: Long, periodType: HsPeriodType) = when (periodType) {

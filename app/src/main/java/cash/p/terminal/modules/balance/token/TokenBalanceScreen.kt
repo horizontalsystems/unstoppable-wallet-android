@@ -319,7 +319,7 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 
             navController.slideFromBottom(
                 R.id.syncErrorDialog,
-                SyncErrorDialog.prepareParams(wallet, errorMessage)
+                SyncErrorDialog.Input(wallet, errorMessage)
             )
         }
 
@@ -343,7 +343,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             )
             navController.slideFromBottom(
                 R.id.backupRequiredDialog,
-                BackupRequiredDialog.prepareParams(e.account, text)
+                BackupRequiredDialog.Input(e.account, text)
             )
         }
     }
@@ -365,7 +365,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
                     navController.slideFromRight(
                         R.id.sendXFragment,
-                        SendFragment.prepareParams(viewItem.wallet, sendTitle)
+                        SendFragment.Input(viewItem.wallet, sendTitle)
                     )
                 },
                 enabled = viewItem.sendEnabled
@@ -403,7 +403,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             enabled = !viewItem.wallet.token.isCustom,
             onClick = {
                 val coinUid = viewItem.wallet.coin.uid
-                val arguments = CoinFragment.prepareParams(coinUid, "wallet_token_balance")
+                val arguments = CoinFragment.Input(coinUid, "wallet_token_balance")
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
             },

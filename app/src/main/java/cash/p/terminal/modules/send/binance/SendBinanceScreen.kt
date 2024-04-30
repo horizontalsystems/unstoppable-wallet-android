@@ -142,7 +142,7 @@ fun SendBinanceScreen(
                 onClick = {
                     navController.slideFromRight(
                         R.id.sendConfirmation,
-                        SendConfirmationFragment.prepareParams(
+                        SendConfirmationFragment.Input(
                             SendConfirmationFragment.Type.Bep2,
                             sendEntryPointDestId
                         )

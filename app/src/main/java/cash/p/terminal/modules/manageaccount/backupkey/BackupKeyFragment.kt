@@ -19,10 +19,10 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.managers.FaqManager
+import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.manageaccount.backupconfirmkey.BackupConfirmKeyModule
 import cash.p.terminal.modules.manageaccount.ui.PassphraseCell
 import cash.p.terminal.modules.manageaccount.ui.SeedPhraseList
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -31,14 +31,12 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.MenuItem
-import io.horizontalsystems.core.parcelable
 
 class BackupKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account = requireArguments().parcelable<Account>(BackupKeyModule.ACCOUNT)!!
-        RecoveryPhraseScreen(navController, account)
+        RecoveryPhraseScreen(navController, navController.requireInput())
     }
 
 }
@@ -97,7 +95,7 @@ fun RecoveryPhraseScreen(
                     onClick = {
                         navController.slideFromRight(
                             R.id.backupConfirmationKeyFragment,
-                            BackupConfirmKeyModule.prepareParams(viewModel.account)
+                            viewModel.account
                         )
                     },
                 )

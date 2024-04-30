@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.receive.ui
 
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/NetworkSelectScreen.kt
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
@@ -37,7 +35,6 @@ import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.launch
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/NetworkSelectScreen.kt
 
 @Composable
 fun NetworkSelectScreen(
@@ -81,7 +78,6 @@ fun NetworkSelectScreen(
                             onClick = {
                                 coroutineScope.launch {
                                     onSelect.invoke(viewModel.getOrCreateWallet(token))
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ui/NetworkSelectScreen.kt
                                 }
                             }
                         )

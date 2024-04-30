@@ -7,7 +7,6 @@ import cash.p.terminal.core.UsedAddress
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.viewmodels.ReceiveAddressViewModel
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/ReceiveModule.kt
 import java.math.BigDecimal
 
 object ReceiveModule {

@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.send
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.os.bundleOf
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
@@ -38,8 +38,8 @@ import cash.p.terminal.modules.send.zcash.SendZCashScreen
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
 
 class SendFragment : BaseFragment() {
 
@@ -53,12 +53,13 @@ class SendFragment : BaseFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             try {
-                val arguments = requireArguments()
-                val wallet = arguments.parcelable<Wallet>(walletKey) ?: throw IllegalStateException("Wallet is Null!")
-                val title = arguments.getString(titleKey) ?: ""
-                val sendEntryPointDestId = arguments.getInt(sendEntryPointDestIdKey)
-                val predefinedAddress = arguments.getString(predefinedAddressKey)
-                val prefilledData = arguments.getParcelable<PrefilledData>(prefilledAddressDataKey)
+                val navController = findNavController()
+                val input = navController.requireInput<Input>()
+                val wallet = input.wallet
+                val title = input.title
+                val sendEntryPointDestId = input.sendEntryPointDestId
+                val predefinedAddress = input.predefinedAddress
+                val prefilledData = input.prefilledAddressData
 
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
@@ -132,6 +133,7 @@ class SendFragment : BaseFragment() {
                         val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
                             R.id.sendXFragment
                         ) { factory }
+                        @Suppress("UNUSED_VARIABLE")
                         val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
                         val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { factory }
                         setContent {
@@ -199,30 +201,12 @@ class SendFragment : BaseFragment() {
         }
     }
 
-    companion object {
-        private const val walletKey = "walletKey"
-        private const val sendEntryPointDestIdKey = "sendEntryPointDestIdKey"
-        private const val titleKey = "titleKey"
-        private const val predefinedAddressKey = "predefinedAddressKey"
-        private const val prefilledAddressDataKey = "predefilledAddressDataKey"
-
-        fun prepareParams(wallet: Wallet, title: String) = bundleOf(
-            walletKey to wallet,
-            titleKey to title
-        )
-
-        fun prepareParams(
-            wallet: Wallet,
-            sendEntryPointDestId: Int,
-            title: String,
-            predefinedAddress: String? = null,
-            prefilledAddressData: PrefilledData? = null,
-        ) = bundleOf(
-            walletKey to wallet,
-            sendEntryPointDestIdKey to sendEntryPointDestId,
-            titleKey to title,
-            predefinedAddressKey to predefinedAddress,
-            prefilledAddressDataKey to prefilledAddressData
-        )
-    }
+    @Parcelize
+    data class Input(
+        val wallet: Wallet,
+        val title: String,
+        val sendEntryPointDestId: Int = 0,
+        val predefinedAddress: String? = null,
+        val prefilledAddressData: PrefilledData? = null
+    ) : Parcelable
 }

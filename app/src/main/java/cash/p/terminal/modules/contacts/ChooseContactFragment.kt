@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.contacts
 
-import android.os.Bundle
+import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,11 +23,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.shorten
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -42,29 +43,21 @@ import cash.p.terminal.ui.compose.components.body_grey50
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.title3_leah
-import io.horizontalsystems.core.parcelable
-import io.horizontalsystems.core.setNavigationResult
 import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.parcelize.Parcelize
 
 class ChooseContactFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
         ChooseContactScreen(
-            arguments?.parcelable(blockchainTypeKey),
+            navController.getInput(),
             navController
         )
     }
 
-    companion object {
-        const val resultKey = "chooseContactResult"
-
-        private const val blockchainTypeKey = "blockchainTypeKey"
-        fun prepareParams(blockchainType: BlockchainType): Bundle {
-            return bundleOf(blockchainTypeKey to blockchainType)
-        }
-    }
-
+    @Parcelize
+    data class Result(val address: String) : Parcelable
 }
 
 @Composable
@@ -157,10 +150,7 @@ fun ChooseContactScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        navController.setNavigationResult(
-                                            ChooseContactFragment.resultKey,
-                                            bundleOf("contact" to contact.address)
-                                        )
+                                        navController.setNavigationResultX(ChooseContactFragment.Result(contact.address))
                                         navController.popBackStack()
                                     }
                                     .padding(horizontal = 16.dp, vertical = 12.dp)

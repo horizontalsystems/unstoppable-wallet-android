@@ -1,5 +1,4 @@
 package cash.p.terminal.modules.receive.viewmodels
->>>>>>>> 11b2c0855 (Refactor Receive Address module navigation):app/src/main/java/cash.p.terminal/modules/receive/viewmodels/ReceiveAddressViewModel.kt
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R

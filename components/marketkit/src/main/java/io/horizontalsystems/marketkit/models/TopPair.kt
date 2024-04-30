@@ -3,18 +3,16 @@ package io.horizontalsystems.marketkit.models
 import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
 
-data class MarketTicker(
+data class TopPair(
+    val rank: Long,
     val base: String,
     val target: String,
-    @SerializedName("market_name")
-    val marketName: String,
-    @SerializedName("market_logo")
-    val marketImageUrl: String?,
-    @SerializedName("price")
-    val rate: BigDecimal,
+    val price: BigDecimal?,
     val volume: BigDecimal,
+    @SerializedName("market_name")
+    val marketName: String?,
+    @SerializedName("market_logo")
+    val marketLogo: String?,
     @SerializedName("trade_url")
     val tradeUrl: String?,
-    @SerializedName("whitelisted")
-    val verified: Boolean
 )

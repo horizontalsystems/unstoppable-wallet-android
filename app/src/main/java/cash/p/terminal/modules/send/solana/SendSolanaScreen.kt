@@ -118,7 +118,7 @@ fun SendSolanaScreen(
                     if (viewModel.hasConnection()) {
                         navController.slideFromRight(
                             R.id.sendConfirmation,
-                            SendConfirmationFragment.prepareParams(
+                            SendConfirmationFragment.Input(
                                 SendConfirmationFragment.Type.Solana,
                                 sendEntryPointDestId
                             )

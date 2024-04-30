@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.info.ErrorDisplayDialogFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
@@ -18,11 +19,9 @@ class ImportCexAccountFragment : BaseComposeFragment(screenshotEnabled = false) 
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val popUpToInclusiveId =
-            arguments?.getInt(ManageAccountsModule.popOffOnSuccessKey, R.id.restoreAccountFragment) ?: R.id.restoreAccountFragment
-
-        val inclusive =
-            arguments?.getBoolean(ManageAccountsModule.popOffInclusiveKey) ?: false
+        val input = navController.getInput<ManageAccountsModule.Input>()
+        val popUpToInclusiveId = input?.popOffOnSuccess ?: R.id.restoreAccountFragment
+        val inclusive = input?.popOffInclusive ?: false
 
         ImportCexAccountNavHost(navController, popUpToInclusiveId, inclusive)
     }
@@ -65,8 +64,8 @@ fun ImportCexAccountNavHost(
                 },
                 onShowError = { title, text ->
                     fragmentNavController.slideFromBottom(
-                        resId = R.id.errorDisplayDialogFragment,
-                        args = ErrorDisplayDialogFragment.prepareParams(title.toString(), text.toString())
+                        R.id.errorDisplayDialogFragment,
+                        ErrorDisplayDialogFragment.Input(title.toString(), text.toString())
                     )
                 }
             )

@@ -166,8 +166,7 @@ private fun AnalyticsBlock(
                     title = stringResource(it),
                     onInfoClick = block.info?.let { info ->
                         {
-                            val params = CoinAnalyticsInfoFragment.prepareParams(info)
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, params)
+                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
                         }
                     }
                 )
@@ -299,8 +298,7 @@ private fun AnalyticsPreviewBlock(
                     title = stringResource(it),
                     onInfoClick = block.info?.let { info ->
                         {
-                            val params = CoinAnalyticsInfoFragment.prepareParams(info)
-                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, params)
+                            navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
                         }
                     }
                 )

@@ -285,11 +285,11 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, b
                 blockchainType?.let {
                     val args = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
-                            ContactsFragment.prepareParams(mode = Mode.AddAddressToNewContact(blockchainType, value))
+                            ContactsFragment.Input(Mode.AddAddressToNewContact(blockchainType, value))
 
                         }
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
-                            ContactsFragment.prepareParams(mode = Mode.AddAddressToExistingContact(blockchainType, value))
+                            ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
                         }
                     }
                     navController?.slideFromRight(R.id.contactsFragment, args)
@@ -550,11 +550,10 @@ fun TransactionInfoBtcLockCell(
                 modifier = Modifier.size(20.dp),
                 onClick = {
                     val lockTime = DateHelper.getFullDate(lockState.date)
-                    val params = TransactionLockTimeInfoFragment.prepareParams(lockTime)
 
                     navController.slideFromBottom(
                         R.id.transactionLockTimeInfoFragment,
-                        params
+                        TransactionLockTimeInfoFragment.Input(lockTime)
                     )
                 }
             ) {
@@ -591,13 +590,12 @@ fun TransactionInfoDoubleSpendCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                val params = TransactionDoubleSpendInfoFragment.prepareParams(
-                    transactionHash,
-                    conflictingHash
-                )
                 navController.slideFromBottom(
                     R.id.transactionDoubleSpendInfoFragment,
-                    params
+                    TransactionDoubleSpendInfoFragment.Input(
+                        transactionHash,
+                        conflictingHash
+                    )
                 )
             }
         ) {

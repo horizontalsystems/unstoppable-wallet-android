@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.manageaccount.evmaddress
 
+import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.modules.manageaccount.ui.ActionButton
 import cash.p.terminal.modules.manageaccount.ui.HidableContent
@@ -25,18 +27,18 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
+import kotlinx.parcelize.Parcelize
 
 class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 
-    companion object {
-        const val EVM_ADDRESS_KEY = "evm_address_key"
-    }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val evmAddress = arguments?.getString(EVM_ADDRESS_KEY) ?: ""
+        val evmAddress = navController.getInput<Input>()?.evmAddress ?: ""
         EvmAddressScreen(evmAddress, navController)
     }
+
+    @Parcelize
+    data class Input(val evmAddress: String) : Parcelable
 
 }
 

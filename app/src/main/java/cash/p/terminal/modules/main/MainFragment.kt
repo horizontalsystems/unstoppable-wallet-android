@@ -33,7 +33,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
@@ -225,7 +224,7 @@ private fun MainScreen(
         LaunchedEffect(Unit) {
             fragmentNavController.slideFromBottom(
                 R.id.releaseNotesFragment,
-                bundleOf(ReleaseNotesFragment.showAsClosablePopupKey to true)
+                ReleaseNotesFragment.Input(true)
             )
             viewModel.whatsNewShown()
         }
@@ -252,14 +251,14 @@ private fun MainScreen(
                 val text = stringResource(R.string.WalletConnect_Error_NeedBackup)
                 fragmentNavController.slideFromBottom(
                     R.id.backupRequiredDialog,
-                    BackupRequiredDialog.prepareParams(wcSupportState.account, text)
+                    BackupRequiredDialog.Input(wcSupportState.account, text)
                 )
             }
 
             is SupportState.NotSupported -> {
                 fragmentNavController.slideFromBottom(
                     R.id.wcAccountTypeNotSupportedDialog,
-                    WCAccountTypeNotSupportedDialog.prepareParams(wcSupportState.accountTypeDescription)
+                    WCAccountTypeNotSupportedDialog.Input(wcSupportState.accountTypeDescription)
                 )
             }
 
@@ -273,7 +272,7 @@ private fun MainScreen(
             delay(500)
             fragmentNavController.slideFromRight(
                 deepLinkPage.navigationId,
-                deepLinkPage.bundle
+                deepLinkPage.input
             )
             viewModel.deeplinkPageHandled()
         }

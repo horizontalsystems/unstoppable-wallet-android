@@ -283,7 +283,7 @@ fun BalanceItems(
                                         )
                                         navController.slideFromBottom(
                                             R.id.backupRequiredDialog,
-                                            BackupRequiredDialog.prepareParams(account, text)
+                                            BackupRequiredDialog.Input(account, text)
                                         )
                                     }
 
@@ -415,7 +415,7 @@ fun BalanceItems(
     uiState.openSend?.let { openSend ->
         navController.slideFromRight(
             R.id.sendTokenSelectFragment,
-            SendTokenSelectFragment.prepareParams(
+            SendTokenSelectFragment.Input(
                 openSend.blockchainTypes,
                 openSend.tokenTypes,
                 openSend.address,
