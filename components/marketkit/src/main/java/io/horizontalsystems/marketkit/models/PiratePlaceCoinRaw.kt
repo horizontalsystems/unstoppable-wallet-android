@@ -11,7 +11,7 @@ class PiratePlaceCoinRaw (
     @SerializedName("circulating_supply")
     val circulatingSupply: BigDecimal,
     @SerializedName("total_supply")
-    val totalSupply: Long,
+    val totalSupply: Double,
     @SerializedName("max_supply")
     val maxSupply: Long?,
     val changes: Changes,
