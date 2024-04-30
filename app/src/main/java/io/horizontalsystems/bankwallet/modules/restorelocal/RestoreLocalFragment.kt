@@ -42,7 +42,10 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
-import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.OtherBackupItems
 import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
@@ -75,13 +78,14 @@ class RestoreLocalFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
+        val input = navController.requireInput<Input>()
         RestoreLocalNavHost(
-            input?.jsonFile,
-            input?.fileName,
+            input.jsonFile,
+            input.fileName,
+            input.statPage,
             navController,
-            input?.popOffOnSuccess ?: R.id.restoreAccountFragment,
-            input?.popOffInclusive ?: false
+            input.popOffOnSuccess,
+            input.popOffInclusive
         ) { activity?.let { MainModule.startAsNewTask(it) } }
     }
 
@@ -91,6 +95,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
         val popOffInclusive: Boolean,
         val jsonFile: String,
         val fileName: String?,
+        val statPage: StatPage
     ) : Parcelable
 }
 
@@ -98,6 +103,7 @@ class RestoreLocalFragment : BaseComposeFragment() {
 private fun RestoreLocalNavHost(
     backupJsonString: String?,
     fileName: String?,
+    statPage: StatPage,
     fragmentNavController: NavController,
     popUpToInclusiveId: Int,
     popUpInclusive: Boolean,
@@ -105,7 +111,7 @@ private fun RestoreLocalNavHost(
 ) {
     val navController = rememberNavController()
     val mainViewModel: RestoreViewModel = viewModel()
-    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName))
+    val viewModel = viewModel<RestoreLocalViewModel>(factory = RestoreLocalModule.Factory(backupJsonString, fileName, statPage))
     NavHost(
         navController = navController,
         startDestination = "restore_local",
@@ -114,6 +120,7 @@ private fun RestoreLocalNavHost(
             RestoreLocalScreen(
                 viewModel = viewModel,
                 mainViewModel = mainViewModel,
+                statPage = statPage,
                 onBackClick = { fragmentNavController.popBackStack() },
                 close = { fragmentNavController.popBackStack(popUpToInclusiveId, popUpInclusive) },
                 openSelectCoins = { navController.navigate("restore_select_coins") },
@@ -155,6 +162,7 @@ private fun RestoreLocalNavHost(
 private fun RestoreLocalScreen(
     viewModel: RestoreLocalViewModel,
     mainViewModel: RestoreViewModel,
+    statPage: StatPage,
     onBackClick: () -> Unit,
     close: () -> Unit,
     openSelectCoins: () -> Unit,
@@ -187,11 +195,13 @@ private fun RestoreLocalScreen(
 
     LaunchedEffect(uiState.showSelectCoins) {
         uiState.showSelectCoins?.let { accountType ->
-            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true)
+            mainViewModel.setAccountData(accountType, viewModel.accountName, uiState.manualBackup, true, statPage)
             keyboardController?.hide()
             delay(300)
             openSelectCoins.invoke()
             viewModel.onSelectCoinsShown()
+
+            stat(page = statPage, event = StatEvent.Open(StatPage.RestoreSelect))
         }
     }
 

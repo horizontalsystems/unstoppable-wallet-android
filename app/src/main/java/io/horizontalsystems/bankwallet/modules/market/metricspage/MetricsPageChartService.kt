@@ -1,6 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.market.metricspage
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statPage
+import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
@@ -41,5 +45,11 @@ class MetricsPageChartService(
         ).map {
             ChartPointsWrapper(it)
         }
+    }
+
+    override fun updateChartInterval(chartInterval: HsTimePeriod?) {
+        super.updateChartInterval(chartInterval)
+
+        stat(page = metricsType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 }

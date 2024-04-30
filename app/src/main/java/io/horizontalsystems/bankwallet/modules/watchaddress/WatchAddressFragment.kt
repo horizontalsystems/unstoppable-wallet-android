@@ -20,6 +20,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.bankwallet.modules.watchaddress.selectblockchains.SelectBlockchainsFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -135,10 +139,20 @@ fun WatchAddressScreen(navController: NavController, popUpToInclusiveId: Int, in
                 modifier = Modifier.padding(horizontal = 16.dp),
                 hint = stringResource(id = R.string.Watch_Address_Hint),
                 qrScannerEnabled = true,
-                state = uiState.inputState
-            ) {
-                viewModel.onEnterInput(it)
-            }
+                state = uiState.inputState,
+                onValueChange = {
+                    viewModel.onEnterInput(it)
+                },
+                onClear = {
+                    stat(page = StatPage.WatchWallet, event = StatEvent.Clear(StatEntity.Key))
+                },
+                onScanQR = {
+                    stat(page = StatPage.WatchWallet, event = StatEvent.ScanQr(StatEntity.Key))
+                },
+                onPaste = {
+                    stat(page = StatPage.WatchWallet, event = StatEvent.Paste(StatEntity.Key))
+                }
+            )
             Spacer(Modifier.height(32.dp))
         }
     }

@@ -37,6 +37,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
@@ -118,6 +121,8 @@ private fun ShowExtendedKeyScreen(
                         TextHelper.copyText(viewModel.extendedKey)
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
+
+                        viewModel.logEvent(StatEvent.Copy(StatEntity.Key))
                     }
                 },
                 onCancel = {
@@ -140,6 +145,8 @@ private fun ShowExtendedKeyScreen(
                         icon = R.drawable.ic_info_24,
                         onClick = {
                             FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+
+                            viewModel.logEvent(StatEvent.Open(StatPage.Info))
                         }
                     )
                 )
@@ -204,7 +211,9 @@ private fun ShowExtendedKeyScreen(
 
                 Spacer(Modifier.height(32.dp))
                 if (viewModel.displayKeyType.isPrivate) {
-                    HidableContent(viewModel.extendedKey, stringResource(R.string.ExtendedKey_TapToShowPrivateKey))
+                    HidableContent(viewModel.extendedKey, stringResource(R.string.ExtendedKey_TapToShowPrivateKey)) {
+                        viewModel.logEvent(StatEvent.ToggleHidden)
+                    }
                 } else {
                     HidableContent(viewModel.extendedKey)
                 }
@@ -260,6 +269,8 @@ private fun ShowExtendedKeyScreen(
                 } else {
                     TextHelper.copyText(viewModel.extendedKey)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                    viewModel.logEvent(StatEvent.Copy(StatEntity.Key))
                 }
             }
         }

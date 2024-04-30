@@ -32,6 +32,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -181,7 +182,7 @@ fun SwapConfirmScreen(navController: NavController) {
         uiState.amountOut?.let { amountOut ->
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
-                PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut)
+                PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut, StatPage.SwapConfirmation)
                 PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                 uiState.amountOutMin?.let { amountOutMin ->
                     val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->

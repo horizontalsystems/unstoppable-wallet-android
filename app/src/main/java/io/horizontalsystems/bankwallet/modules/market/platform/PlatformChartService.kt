@@ -3,6 +3,10 @@ package io.horizontalsystems.bankwallet.modules.market.platform
 import android.util.Log
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
@@ -56,6 +60,12 @@ class PlatformChartService(
         currency: Currency,
     ): Single<ChartPointsWrapper> {
         return getChartPointsWrapper(currency, HsPeriodType.ByPeriod(chartInterval))
+    }
+
+    override fun updateChartInterval(chartInterval: HsTimePeriod?) {
+        super.updateChartInterval(chartInterval)
+
+        stat(page = StatPage.TopPlatform, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 
     private fun getChartPointsWrapper(

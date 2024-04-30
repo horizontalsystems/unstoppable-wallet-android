@@ -3,6 +3,11 @@ package io.horizontalsystems.bankwallet.modules.market.category
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statField
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
@@ -95,6 +100,8 @@ class MarketCategoryViewModel(
     fun onSelectSortingField(sortingField: SortingField) {
         service.setSortingField(sortingField)
         selectorDialogStateLiveData.postValue(SelectorDialogState.Closed)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchSortType(sortingField.statSortType))
     }
 
     fun onSelectMarketField(marketField: MarketField) {
@@ -102,6 +109,8 @@ class MarketCategoryViewModel(
 
         syncMarketViewItems()
         syncMenu()
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.SwitchField(marketField.statField))
     }
 
     fun onSelectorDialogDismiss() {
@@ -128,9 +137,13 @@ class MarketCategoryViewModel(
 
     fun onAddFavorite(uid: String) {
         service.addFavorite(uid)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.AddToWatchlist(uid))
     }
 
     fun onRemoveFavorite(uid: String) {
         service.removeFavorite(uid)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.RemoveFromWatchlist(uid))
     }
 }

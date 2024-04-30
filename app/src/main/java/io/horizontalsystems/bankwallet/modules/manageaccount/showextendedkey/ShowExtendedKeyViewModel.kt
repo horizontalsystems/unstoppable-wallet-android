@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyModule.DisplayKeyType
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
@@ -51,20 +55,36 @@ class ShowExtendedKeyViewModel(
             return if (displayKeyType.isPrivate) key.serializePrivate(version.value) else key.serializePublic(version.value)
         }
 
+    private val statPage = when (displayKeyType) {
+        is DisplayKeyType.AccountPrivateKey -> StatPage.AccountExtendedPrivateKey
+        is DisplayKeyType.AccountPublicKey -> StatPage.AccountExtendedPublicKey
+        DisplayKeyType.Bip32RootKey -> StatPage.Bip32RootKey
+    }
+
     fun set(purpose: HDWallet.Purpose) {
         this.purpose = purpose
 
         if (purpose != HDWallet.Purpose.BIP44 && (blockchain != Blockchain.Bitcoin && blockchain != Blockchain.Litecoin)) {
             blockchain = Blockchain.Bitcoin
         }
+
+        logEvent(StatEvent.Select(StatEntity.Derivation))
     }
 
     fun set(blockchain: Blockchain) {
         this.blockchain = blockchain
+
+        logEvent(StatEvent.Select(StatEntity.Blockchain))
     }
 
     fun set(account: Int) {
         this.account = account
+
+        logEvent(StatEvent.Select(StatEntity.Account))
+    }
+
+    fun logEvent(event: StatEvent) {
+        stat(page = statPage, event = event)
     }
 
     private val Blockchain.extendedKeyCoinType: ExtendedKeyCoinType
@@ -76,7 +96,7 @@ class ShowExtendedKeyViewModel(
         }
 
     private val ExtendedKeyCoinType.blockchain: Blockchain
-        get() =  when(this) {
+        get() = when (this) {
             ExtendedKeyCoinType.Bitcoin -> Blockchain.Bitcoin
             ExtendedKeyCoinType.Litecoin -> Blockchain.Litecoin
         }

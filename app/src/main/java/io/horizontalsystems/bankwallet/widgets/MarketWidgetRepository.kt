@@ -102,7 +102,7 @@ class MarketWidgetRepository(
     }
 
     private suspend fun getTopGainers(): List<MarketWidgetItem> {
-        val marketItems = marketKit.marketInfosSingle(topGainers, currency.code, false, "widget")
+        val marketItems = marketKit.marketInfosSingle(topGainers, currency.code, false)
             .await()
             .map { MarketItem.createFromCoinMarket(it, currency) }
 
@@ -121,7 +121,7 @@ class MarketWidgetRepository(
         if (favoriteCoins.isNotEmpty()) {
             val favoriteCoinUids = favoriteCoins.map { it.coinUid }
             val sortingField = if(sortDescending) SortingField.TopGainers else SortingField.TopLosers
-            marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code, "widget")
+            marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code)
                 .await()
                 .map { marketInfo ->
                     MarketItem.createFromCoinMarket(marketInfo, currency, period)

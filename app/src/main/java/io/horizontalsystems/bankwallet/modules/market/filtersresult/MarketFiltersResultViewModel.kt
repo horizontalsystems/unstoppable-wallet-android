@@ -5,6 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statField
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -74,6 +78,8 @@ class MarketFiltersResultViewModel(
 
         syncMarketViewItems()
         syncMenu()
+
+        stat(page = StatPage.AdvancedSearchResults, event = StatEvent.SwitchField(marketField.statField))
     }
 
     fun onAddFavorite(uid: String) {

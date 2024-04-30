@@ -12,6 +12,9 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.factories.uriScheme
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
@@ -157,6 +160,8 @@ class BalanceViewModel(
             return
         }
 
+        stat(page = StatPage.Balance, event = StatEvent.Refresh)
+
         viewModelScope.launch {
             isRefreshing = true
             emitState()
@@ -185,6 +190,8 @@ class BalanceViewModel(
 
     fun disable(viewItem: BalanceViewItem2) {
         service.disable(viewItem.wallet)
+
+        stat(page = StatPage.Balance, event = StatEvent.DisableToken(viewItem.wallet.token))
     }
 
     fun getSyncErrorDetails(viewItem: BalanceViewItem2): SyncError = when {

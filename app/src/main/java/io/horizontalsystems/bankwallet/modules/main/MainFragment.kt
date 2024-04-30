@@ -44,6 +44,11 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -147,6 +152,8 @@ private fun MainScreen(
                     coroutineScope.launch {
                         modalBottomSheetState.hide()
                         viewModel.onSelect(it)
+
+                        stat(page = StatPage.SwitchWallet, event = StatEvent.Select(StatEntity.Wallet))
                     }
                 },
                 onCancelClick = {
@@ -183,11 +190,17 @@ private fun MainScreen(
                                     enabled = item.enabled,
                                     selectedContentColor = ComposeAppTheme.colors.jacob,
                                     unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
-                                    onClick = { viewModel.onSelect(item.mainNavItem) },
+                                    onClick = {
+                                        viewModel.onSelect(item.mainNavItem)
+
+                                        stat(page = StatPage.Main, event = StatEvent.SwitchTab(item.mainNavItem.statTab))
+                                    },
                                     onLongClick = {
                                         if (item.mainNavItem == MainNavigation.Balance) {
                                             coroutineScope.launch {
                                                 modalBottomSheetState.show()
+
+                                                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.SwitchWallet))
                                             }
                                         }
                                     }
@@ -263,6 +276,8 @@ private fun MainScreen(
                     R.id.backupRequiredDialog,
                     BackupRequiredDialog.Input(wcSupportState.account, text)
                 )
+
+                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.BackupRequired))
             }
 
             is SupportState.NotSupported -> {

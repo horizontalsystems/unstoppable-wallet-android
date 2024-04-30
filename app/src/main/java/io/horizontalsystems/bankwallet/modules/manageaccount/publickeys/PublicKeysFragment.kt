@@ -19,6 +19,9 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.evmaddress.EvmAddressFragment
 import io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
@@ -73,6 +76,8 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                         R.id.evmAddressFragment,
                         EvmAddressFragment.Input(evmAddress)
                     )
+
+                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.EvmAddress))
                 }
             }
             viewModel.viewState.extendedPublicKey?.let { publicKey ->
@@ -87,6 +92,8 @@ fun ManageAccountScreen(navController: NavController, account: Account) {
                             publicKey.accountPublicKey
                         )
                     )
+
+                    stat(page = StatPage.PublicKeys, event = StatEvent.Open(StatPage.AccountExtendedPublicKey))
                 }
             }
         }

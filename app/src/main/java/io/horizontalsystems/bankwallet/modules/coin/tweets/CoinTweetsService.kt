@@ -50,8 +50,7 @@ class CoinTweetsService(
                     val marketInfoOverview = marketKit.marketInfoOverviewSingle(
                         coinUid,
                         "USD",
-                        "en",
-                        "market_tweets"
+                        "en"
                     ).await()
                     val username = marketInfoOverview.links[LinkType.Twitter]
                     if (username.isNullOrBlank()) {

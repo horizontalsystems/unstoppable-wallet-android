@@ -32,6 +32,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
@@ -95,7 +100,6 @@ fun SendTronConfirmationScreen(
     val activationFee = confirmationData.activationFee
     val resourcesConsumed = confirmationData.resourcesConsumed
     val memo = confirmationData.memo
-    val onClickSend = sendViewModel::onClickSend
 
     val view = LocalView.current
     when (sendResult) {
@@ -181,7 +185,16 @@ fun SendTronConfirmationScreen(
                             value = address.hex,
                             showAdd = contact == null,
                             blockchainType = blockchainType,
-                            navController = navController
+                            navController = navController,
+                            onCopy = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Copy(StatEntity.Address))
+                            },
+                            onAddToExisting = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactAddToExisting))
+                            },
+                            onAddToNew = {
+                                stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
+                            }
                         )
                     }
                     if (isInactiveAddress) {
@@ -262,7 +275,11 @@ fun SendTronConfirmationScreen(
                     .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
 
                 sendResult = sendResult,
-                onClickSend = onClickSend,
+                onClickSend = {
+                    sendViewModel.onClickSend()
+
+                    stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
+                },
                 enabled = sendEnabled
             )
         }

@@ -3,7 +3,14 @@ package io.horizontalsystems.bankwallet.modules.managewallets
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,12 +33,23 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchains.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.zcashconfigure.ZcashConfigure
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Token
 
 class ManageWalletsFragment : BaseComposeFragment() {
@@ -70,6 +88,8 @@ private fun ManageWalletsScreen(
                 restoreSettingsViewModel.onCancelEnterBirthdayHeight()
             }
         }
+
+        stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.BirthdayInput))
     }
 
     Column(
@@ -85,6 +105,8 @@ private fun ManageWalletsScreen(
                         icon = R.drawable.ic_add_yellow,
                         onClick = {
                             navController.slideFromRight(R.id.addTokenFragment)
+
+                            stat(page = StatPage.CoinManager, event = StatEvent.Open(StatPage.AddToken))
                         }
                     ))
             } else {
@@ -117,12 +139,18 @@ private fun ManageWalletsScreen(
                             onItemClick = {
                                 if (viewItem.enabled) {
                                     viewModel.disable(viewItem.item)
+
+                                    stat(page = StatPage.CoinManager, event = StatEvent.DisableToken(viewItem.item))
                                 } else {
                                     viewModel.enable(viewItem.item)
+
+                                    stat(page = StatPage.CoinManager, event = StatEvent.EnableToken(viewItem.item))
                                 }
                             },
                             onInfoClick = {
                                 navController.slideFromBottom(R.id.configuredTokenInfo, viewItem.item)
+
+                                stat(page = StatPage.CoinManager, event = StatEvent.OpenTokenInfo(viewItem.item))
                             }
                         )
                     }

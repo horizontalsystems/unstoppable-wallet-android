@@ -17,7 +17,6 @@ import java.net.URL
 
 class CoinOverviewService(
     val fullCoin: FullCoin,
-    private val apiTag: String,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val appConfigProvider: AppConfigProvider,
@@ -57,7 +56,7 @@ class CoinOverviewService(
     private fun fetchCoinOverview() {
         coroutineScope.launch {
             try {
-                val marketInfoOverview = marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLanguage, apiTag).await()
+                val marketInfoOverview = marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLanguage).await()
                 coinOverviewSubject.onNext(DataState.Success(CoinOverviewItem(fullCoin.coin.code, marketInfoOverview, guideUrl)))
             } catch (e: Throwable) {
                 coinOverviewSubject.onNext(DataState.Error(e))

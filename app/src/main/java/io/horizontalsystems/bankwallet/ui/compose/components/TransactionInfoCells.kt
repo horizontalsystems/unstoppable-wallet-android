@@ -34,6 +34,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statResendType
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
@@ -127,7 +133,7 @@ fun TransactionNftAmountCell(
         Column {
             subhead2_leah(text = title)
             VSpacer(height = 1.dp)
-            caption_grey(text = badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+            caption_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HSpacer(8.dp)
         Column(
@@ -177,7 +183,7 @@ fun TransactionAmountCell(
         Column {
             subhead2_leah(text = title)
             VSpacer(height = 1.dp)
-            caption_grey(text = badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+            caption_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 8.dp)
         Column(horizontalAlignment = Alignment.End) {
@@ -224,7 +230,11 @@ fun PriceWithToggleCell(
         )
         HSpacer(8.dp)
         HsIconButton(
-            onClick = { showValueOne = !showValueOne },
+            onClick = {
+                showValueOne = !showValueOne
+
+                stat(page = StatPage.TransactionInfo, event = StatEvent.TogglePrice)
+            },
             modifier = Modifier
                 .size(28.dp)
                 .clip(CircleShape),
@@ -239,7 +249,16 @@ fun PriceWithToggleCell(
 }
 
 @Composable
-fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, blockchainType: BlockchainType?, navController: NavController? = null) {
+fun TransactionInfoAddressCell(
+    title: String,
+    value: String,
+    showAdd: Boolean,
+    blockchainType: BlockchainType?,
+    navController: NavController? = null,
+    onCopy: (() -> Unit)? = null,
+    onAddToExisting: (() -> Unit)? = null,
+    onAddToNew: (() -> Unit)? = null,
+) {
     val view = LocalView.current
     var showSaveAddressDialog by remember { mutableStateOf(false) }
     RowUniversal(
@@ -268,6 +287,8 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, b
             onClick = {
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                onCopy?.invoke()
             }
         )
     }
@@ -285,10 +306,12 @@ fun TransactionInfoAddressCell(title: String, value: String, showAdd: Boolean, b
                 blockchainType?.let {
                     val args = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
+                            onAddToNew?.invoke()
                             ContactsFragment.Input(Mode.AddAddressToNewContact(blockchainType, value))
-
                         }
+
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
+                            onAddToExisting?.invoke()
                             ContactsFragment.Input(Mode.AddAddressToExistingContact(blockchainType, value))
                         }
                     }
@@ -327,14 +350,21 @@ fun TransactionInfoStatusCell(
         Spacer(modifier = Modifier.width(8.dp))
         HsIconButton(
             modifier = Modifier.size(20.dp),
-            onClick = { navController.slideFromBottom(R.id.statusInfoDialog) }
+            onClick = {
+                navController.slideFromBottom(R.id.statusInfoDialog)
+                stat(page = StatPage.TransactionInfo, section = StatSection.Status, event = StatEvent.Open(StatPage.Info))
+            }
         ) {
             Image(
                 painter = painterResource(R.drawable.ic_info_20),
                 contentDescription = null
             )
         }
-        Spacer(Modifier.weight(1f).defaultMinSize(minWidth = 8.dp))
+        Spacer(
+            Modifier
+                .weight(1f)
+                .defaultMinSize(minWidth = 8.dp)
+        )
         subhead1_leah(
             text = stringResource(statusTitle(status)),
             maxLines = 1,
@@ -350,6 +380,7 @@ fun TransactionInfoStatusCell(
                     tint = ComposeAppTheme.colors.remus
                 )
             }
+
             TransactionStatus.Failed -> {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_attention_20),
@@ -357,9 +388,11 @@ fun TransactionInfoStatusCell(
                     tint = ComposeAppTheme.colors.lucian
                 )
             }
+
             TransactionStatus.Pending -> {
                 HSCircularProgressIndicator(progress = 0.15f, size = 20.dp)
             }
+
             is TransactionStatus.Processing -> {
                 HSCircularProgressIndicator(progress = status.progress, size = 20.dp)
             }
@@ -461,6 +494,8 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
             onClick = {
                 TextHelper.copyText(transactionHash)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.TransactionId))
             }
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -472,6 +507,8 @@ fun TransactionInfoTransactionHashCell(transactionHash: String) {
                     putExtra(Intent.EXTRA_TEXT, transactionHash)
                     type = "text/plain"
                 })
+
+                stat(page = StatPage.TransactionInfo, event = StatEvent.Share(StatEntity.TransactionId))
             }
         )
     }
@@ -485,7 +522,11 @@ fun TransactionInfoExplorerCell(
     val context = LocalContext.current
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = { LinkHelper.openLinkInAppBrowser(context, url) }
+        onClick = {
+            LinkHelper.openLinkInAppBrowser(context, url)
+
+            stat(page = StatPage.TransactionInfo, event = StatEvent.Open(StatPage.ExternalBlockExplorer))
+        }
     ) {
         Image(
             modifier = Modifier.size(20.dp),
@@ -523,6 +564,8 @@ fun TransactionInfoRawTransaction(rawTransaction: () -> String?) {
                 rawTransaction()?.let {
                     TextHelper.copyText(it)
                     HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+
+                    stat(page = StatPage.TransactionInfo, event = StatEvent.Copy(StatEntity.RawTransaction))
                 }
             }
         )
@@ -555,6 +598,8 @@ fun TransactionInfoBtcLockCell(
                         R.id.transactionLockTimeInfoFragment,
                         TransactionLockTimeInfoFragment.Input(lockTime)
                     )
+
+                    stat(page = StatPage.TransactionInfo, section = StatSection.TimeLock, event = StatEvent.Open(StatPage.Info))
                 }
             ) {
                 Icon(
@@ -597,6 +642,8 @@ fun TransactionInfoDoubleSpendCell(
                         conflictingHash
                     )
                 )
+
+                stat(page = StatPage.TransactionInfo, event = StatEvent.Open(StatPage.DoubleSpend))
             }
         ) {
             Icon(
@@ -680,6 +727,8 @@ private fun openTransactionOptionsModule(
         BlockchainType.Ton,
         is BlockchainType.Unsupported -> Unit
     }
+
+    stat(page = StatPage.TransactionInfo, event = StatEvent.OpenResend(blockchainType.uid, type.statResendType))
 }
 
 private fun statusTitle(status: TransactionStatus) = when (status) {
@@ -695,12 +744,15 @@ private fun SubHead2ColoredValue(value: ColoredValue) {
         ColorName.Remus -> {
             subhead2_remus(text = value.value)
         }
+
         ColorName.Lucian -> {
             subhead2_lucian(text = value.value)
         }
+
         ColorName.Grey -> {
             subhead2_grey(text = value.value)
         }
+
         ColorName.Leah -> {
             subhead2_leah(text = value.value)
         }
@@ -714,12 +766,15 @@ private fun SubHead1ColoredValue(value: ColoredValue) {
         ColorName.Remus -> {
             subhead1_remus(text = value.value)
         }
+
         ColorName.Lucian -> {
             subhead1_lucian(text = value.value)
         }
+
         ColorName.Grey -> {
             subhead1_grey(text = value.value)
         }
+
         ColorName.Leah -> {
             subhead2_leah(text = value.value)
         }
