@@ -34,12 +34,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.shorten
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statResendType
 import cash.p.terminal.modules.contacts.ContactsFragment
 import cash.p.terminal.modules.contacts.ContactsModule
 import cash.p.terminal.modules.contacts.Mode
@@ -49,7 +43,7 @@ import cash.p.terminal.modules.transactionInfo.AmountType
 import cash.p.terminal.modules.transactionInfo.ColorName
 import cash.p.terminal.modules.transactionInfo.ColoredValue
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem
-import cash.p.terminal.modules.transactionInfo.options.TransactionInfoOptionsModule
+import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
 import cash.p.terminal.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment
 import cash.p.terminal.modules.transactions.TransactionStatus
@@ -410,7 +404,7 @@ fun TransactionInfoSpeedUpCell(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = {
             openTransactionOptionsModule(
-                TransactionInfoOptionsModule.Type.SpeedUp,
+                SpeedUpCancelType.SpeedUp,
                 transactionHash,
                 blockchainType,
                 navController
@@ -437,7 +431,7 @@ fun TransactionInfoCancelCell(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = {
             openTransactionOptionsModule(
-                TransactionInfoOptionsModule.Type.Cancel,
+                SpeedUpCancelType.Cancel,
                 transactionHash,
                 blockchainType,
                 navController
@@ -689,7 +683,7 @@ fun TransactionInfoCell(title: String, value: String) {
 }
 
 private fun openTransactionOptionsModule(
-    type: TransactionInfoOptionsModule.Type,
+    type: SpeedUpCancelType,
     transactionHash: String,
     blockchainType: BlockchainType,
     navController: NavController
@@ -715,7 +709,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.ArbitrumOne -> {
             navController.slideFromRight(
                 R.id.transactionSpeedUpCancelFragment,
-                TransactionSpeedUpCancelFragment.Input(type, transactionHash)
+                TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash)
             )
         }
 

@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,30 +23,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.shorten
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.Cautions
-import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
-import cash.p.terminal.modules.fee.FeeCell
+import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
+import cash.p.terminal.modules.multiswap.QuoteInfoRow
+import cash.p.terminal.modules.multiswap.ui.DataField
+import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HFillSpacer
+import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.NftIcon
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.caption_grey
+import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
 import cash.p.terminal.ui.compose.components.headline2_leah
 import cash.p.terminal.ui.compose.components.subhead1_grey
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.Blockchain
@@ -58,7 +61,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 
 @Composable
-fun SendEvmTransactionViewNew(
+fun SendEvmTransactionView(
     navController: NavController,
     items: List<SectionViewItem>,
     cautions: List<CautionViewItem>,
@@ -122,42 +125,6 @@ fun SendEvmTransactionViewNew(
 
         if (cautions.isNotEmpty()) {
             Cautions(cautions)
-        }
-    }
-}
-
-@Composable
-fun SendEvmTransactionView(
-    feeCellViewModel: EvmFeeCellViewModel,
-    nonceViewModel: SendEvmNonceViewModel,
-    navController: NavController,
-    statPage: StatPage
-) {
-    val fee by feeCellViewModel.feeLiveData.observeAsState(null)
-    val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
-
-    Column {
-        items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController, statPage)
-        }
-
-        NonceView(nonceViewModel)
-
-        Spacer(Modifier.height(16.dp))
-        CellUniversalLawrenceSection(
-            listOf {
-                FeeCell(
-                    title = stringResource(R.string.FeeSettings_NetworkFee),
-                    info = stringResource(R.string.FeeSettings_NetworkFee_Info),
-                    value = fee,
-                    viewState = viewState,
-                    navController = navController
-                )
-            }
-        )
-
-        cautions?.let {
-            Cautions(it)
         }
     }
 }

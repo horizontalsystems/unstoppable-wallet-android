@@ -6,14 +6,14 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.factories.FeeRateProviderFactory
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
-import cash.p.terminal.modules.transactionInfo.options.TransactionInfoOptionsModule
+import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.modules.transactions.TransactionSource
 import cash.p.terminal.modules.xrate.XRateService
 
 object ResendBitcoinModule {
 
     class Factory(
-        private val optionType: TransactionInfoOptionsModule.Type,
+        private val optionType: SpeedUpCancelType,
         private val transactionRecord: BitcoinOutgoingTransactionRecord,
         private val source: TransactionSource
     ) : ViewModelProvider.Factory {
@@ -25,8 +25,8 @@ object ResendBitcoinModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val replacementInfo = when (optionType) {
-                TransactionInfoOptionsModule.Type.SpeedUp -> adapter.speedUpTransactionInfo(transactionRecord.transactionHash)
-                TransactionInfoOptionsModule.Type.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash)
+                SpeedUpCancelType.SpeedUp -> adapter.speedUpTransactionInfo(transactionRecord.transactionHash)
+                SpeedUpCancelType.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash)
             }
 
             return ResendBitcoinViewModel(

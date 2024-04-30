@@ -24,11 +24,6 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.getInputX
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
@@ -38,9 +33,8 @@ import cash.p.terminal.modules.send.ConfirmAmountCell
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
 import cash.p.terminal.modules.transactionInfo.TransactionInfoViewModel
-import cash.p.terminal.modules.transactionInfo.options.TransactionInfoOptionsModule
+import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -58,7 +52,7 @@ import kotlinx.parcelize.Parcelize
 class ResendBitcoinFragment : BaseComposeFragment() {
 
     @Parcelize
-    data class Input(val optionType: TransactionInfoOptionsModule.Type) : Parcelable
+    data class Input(val optionType: SpeedUpCancelType) : Parcelable
 
     private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
 

@@ -15,36 +15,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.shorten
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.stats.StatEntity
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.modules.evmfee.Cautions
-import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
-import cash.p.terminal.modules.fee.FeeCell
-import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
-import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.modules.sendevmtransaction.ViewItem
-import cash.p.terminal.modules.walletconnect.request.ui.AmountCell
-import cash.p.terminal.modules.walletconnect.request.ui.AmountMultiCell
-import cash.p.terminal.modules.walletconnect.request.ui.SubheadCell
-import cash.p.terminal.modules.walletconnect.request.ui.TitleHexValueCell
-import cash.p.terminal.modules.walletconnect.request.ui.TitleTypedValueCell
-import cash.p.terminal.modules.walletconnect.request.ui.TokenCell
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
+import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
+import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
-import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
 import cash.p.terminal.ui.compose.components.VSpacer
+import io.horizontalsystems.core.SnackbarDuration
+import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun WCSendEthRequestScreen(
@@ -200,6 +183,13 @@ fun WCSendEthRequestScreen(
             )
             VSpacer(32.dp)
         }
-
+    ) {
+        SendEvmTransactionView(
+            navController,
+            uiState.sectionViewItems,
+            uiState.cautions,
+            uiState.transactionFields,
+            uiState.networkFee,
+        )
     }
 }

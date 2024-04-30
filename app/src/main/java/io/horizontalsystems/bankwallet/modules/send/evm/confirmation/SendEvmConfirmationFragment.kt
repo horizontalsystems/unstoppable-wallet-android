@@ -17,29 +17,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.getInputX
+import cash.p.terminal.core.requireInput
+import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.stats.StatEvent
-import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
-import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.modules.evmfee.EvmFeeCellViewModel
+import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
-import cash.p.terminal.modules.send.evm.settings.SendEvmSettingsFragment
+import cash.p.terminal.modules.send.evm.SendEvmModule
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
-import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import io.horizontalsystems.core.CustomSnackbar
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
@@ -163,30 +151,12 @@ private fun SendEvmConfirmationScreen(
             )
         }
     ) {
-        Column(modifier = Modifier.padding(it)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                SendEvmTransactionView(
-                    sendEvmTransactionViewModel,
-                    feeViewModel,
-                    nonceViewModel,
-                    navController,
-                    StatPage.SendConfirmation
-                )
-            }
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Send_Confirmation_Send_Button),
-                    onClick = onSendClick,
-                    enabled = enabled
-                )
-            }
-        }
+        SendEvmTransactionView(
+            navController,
+            uiState.sectionViewItems,
+            uiState.cautions,
+            uiState.transactionFields,
+            uiState.networkFee,
+        )
     }
 }
