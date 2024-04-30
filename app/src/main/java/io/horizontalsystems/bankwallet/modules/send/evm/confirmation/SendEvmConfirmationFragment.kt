@@ -24,7 +24,7 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewNew
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
@@ -136,7 +136,7 @@ private fun SendEvmConfirmationScreen(
             )
         }
     ) {
-        SendEvmTransactionViewNew(
+        SendEvmTransactionView(
             navController,
             uiState.sectionViewItems,
             uiState.cautions,

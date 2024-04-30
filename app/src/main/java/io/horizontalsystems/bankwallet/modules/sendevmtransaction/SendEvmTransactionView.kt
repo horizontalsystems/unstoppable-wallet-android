@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,9 +29,7 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.evmfee.Cautions
-import io.horizontalsystems.bankwallet.modules.evmfee.EvmFeeCellViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
-import io.horizontalsystems.bankwallet.modules.fee.FeeCell
 import io.horizontalsystems.bankwallet.modules.multiswap.QuoteInfoRow
 import io.horizontalsystems.bankwallet.modules.multiswap.ui.DataField
 import io.horizontalsystems.bankwallet.modules.send.SendModule
@@ -65,7 +61,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 
 @Composable
-fun SendEvmTransactionViewNew(
+fun SendEvmTransactionView(
     navController: NavController,
     items: List<SectionViewItem>,
     cautions: List<CautionViewItem>,
@@ -129,43 +125,6 @@ fun SendEvmTransactionViewNew(
 
         if (cautions.isNotEmpty()) {
             Cautions(cautions)
-        }
-    }
-}
-
-@Composable
-fun SendEvmTransactionView(
-    feeCellViewModel: EvmFeeCellViewModel,
-    nonceViewModel: SendEvmNonceViewModel,
-    navController: NavController,
-    items: List<SectionViewItem>,
-    cautions: List<CautionViewItem>?,
-) {
-    val fee by feeCellViewModel.feeLiveData.observeAsState(null)
-    val viewState by feeCellViewModel.viewStateLiveData.observeAsState()
-
-    Column {
-        items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController)
-        }
-
-        NonceView(nonceViewModel)
-
-        Spacer(Modifier.height(16.dp))
-        CellUniversalLawrenceSection(
-            listOf {
-                FeeCell(
-                    title = stringResource(R.string.FeeSettings_NetworkFee),
-                    info = stringResource(R.string.FeeSettings_NetworkFee_Info),
-                    value = fee,
-                    viewState = viewState,
-                    navController = navController
-                )
-            }
-        )
-
-        cautions?.let {
-            Cautions(it)
         }
     }
 }

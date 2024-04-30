@@ -43,7 +43,7 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.AmountType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColorName
 import io.horizontalsystems.bankwallet.modules.transactionInfo.ColoredValue
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
-import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionSpeedUpCancelFragment
 import io.horizontalsystems.bankwallet.modules.transactionInfo.resendbitcoin.ResendBitcoinFragment
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
@@ -377,7 +377,7 @@ fun TransactionInfoSpeedUpCell(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = {
             openTransactionOptionsModule(
-                TransactionInfoOptionsModule.Type.SpeedUp,
+                SpeedUpCancelType.SpeedUp,
                 transactionHash,
                 blockchainType,
                 navController
@@ -404,7 +404,7 @@ fun TransactionInfoCancelCell(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = {
             openTransactionOptionsModule(
-                TransactionInfoOptionsModule.Type.Cancel,
+                SpeedUpCancelType.Cancel,
                 transactionHash,
                 blockchainType,
                 navController
@@ -642,7 +642,7 @@ fun TransactionInfoCell(title: String, value: String) {
 }
 
 private fun openTransactionOptionsModule(
-    type: TransactionInfoOptionsModule.Type,
+    type: SpeedUpCancelType,
     transactionHash: String,
     blockchainType: BlockchainType,
     navController: NavController
@@ -668,7 +668,7 @@ private fun openTransactionOptionsModule(
         BlockchainType.ArbitrumOne -> {
             navController.slideFromRight(
                 R.id.transactionSpeedUpCancelFragment,
-                TransactionSpeedUpCancelFragment.Input(type, transactionHash)
+                TransactionSpeedUpCancelFragment.Input(blockchainType, type, transactionHash)
             )
         }
 

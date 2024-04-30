@@ -6,14 +6,14 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.factories.FeeRateProviderFactory
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
-import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 
 object ResendBitcoinModule {
 
     class Factory(
-        private val optionType: TransactionInfoOptionsModule.Type,
+        private val optionType: SpeedUpCancelType,
         private val transactionRecord: BitcoinOutgoingTransactionRecord,
         private val source: TransactionSource
     ) : ViewModelProvider.Factory {
@@ -25,8 +25,8 @@ object ResendBitcoinModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val replacementInfo = when (optionType) {
-                TransactionInfoOptionsModule.Type.SpeedUp -> adapter.speedUpTransactionInfo(transactionRecord.transactionHash)
-                TransactionInfoOptionsModule.Type.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash)
+                SpeedUpCancelType.SpeedUp -> adapter.speedUpTransactionInfo(transactionRecord.transactionHash)
+                SpeedUpCancelType.Cancel -> adapter.cancelTransactionInfo(transactionRecord.transactionHash)
             }
 
             return ResendBitcoinViewModel(

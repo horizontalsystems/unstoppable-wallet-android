@@ -19,7 +19,7 @@ import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewNew
+import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -102,7 +102,7 @@ fun WCSendEthRequestScreen(
             )
         }
     ) {
-        SendEvmTransactionViewNew(
+        SendEvmTransactionView(
             navController,
             uiState.sectionViewItems,
             uiState.cautions,

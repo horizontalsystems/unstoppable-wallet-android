@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 
 class SendEvmNonceService(
     private val evmKit: EthereumKit,
-    private val fixedNonce: Long? = null
+    private var fixedNonce: Long? = null
 ) {
     private var latestNonce: Long? = null
 
@@ -28,11 +28,18 @@ class SendEvmNonceService(
     val stateFlow: Flow<DataState<State>> = _stateFlow
 
     suspend fun start() {
+        val fixedNonce = fixedNonce
         if (fixedNonce != null) {
             sync(fixedNonce)
         } else {
             setRecommended()
         }
+    }
+
+    fun fixNonce(nonce: Long) {
+        fixedNonce = nonce
+
+        sync(nonce)
     }
 
     suspend fun reset() {
@@ -56,6 +63,7 @@ class SendEvmNonceService(
     }
 
     private fun sync(nonce: Long, default: Boolean = false) {
+        val fixedNonce = fixedNonce
         state = if (fixedNonce != null) {
             DataState.Success(State(nonce = fixedNonce, default = true, fixed = true))
         } else {

@@ -218,6 +218,10 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         return evmKitWrapper.evmKit.decorate(transactionData)
     }
 
+    fun fixNonce(nonce: Long) {
+        nonceService.fixNonce(nonce)
+    }
+
     @Composable
     override fun GetSettingsContent(navController: NavController) {
         val nonceViewModel = viewModel<SendEvmNonceViewModel>(initializer = {

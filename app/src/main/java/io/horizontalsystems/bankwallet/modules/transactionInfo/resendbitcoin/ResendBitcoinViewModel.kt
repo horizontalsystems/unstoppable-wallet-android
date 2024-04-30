@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.SendWarningRiskOfGettingStuck
-import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.rbf.ReplacementTransaction
@@ -32,7 +32,7 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class ResendBitcoinViewModel(
-    private val type: TransactionInfoOptionsModule.Type,
+    private val type: SpeedUpCancelType,
     private val transactionRecord: BitcoinOutgoingTransactionRecord,
 
     private val replacementInfo: ReplacementTransactionInfo?,
@@ -68,13 +68,13 @@ class ResendBitcoinViewModel(
 
     init {
         when (type) {
-            TransactionInfoOptionsModule.Type.SpeedUp -> {
+            SpeedUpCancelType.SpeedUp -> {
                 titleResId = R.string.TransactionInfoOptions_SpeedUp_Title
                 addressTitleResId = R.string.Send_Confirmation_To
                 sendButtonTitleResId = R.string.TransactionInfoOptions_SpeedUp_Button
             }
 
-            TransactionInfoOptionsModule.Type.Cancel -> {
+            SpeedUpCancelType.Cancel -> {
                 titleResId = R.string.TransactionInfoOptions_Cancel_Title
                 addressTitleResId = R.string.Send_Confirmation_Own
                 sendButtonTitleResId = R.string.TransactionInfoOptions_Cancel_Button
@@ -107,8 +107,8 @@ class ResendBitcoinViewModel(
             this.minFee = minFee
 
             val (replacementTransaction, bitcoinTransactionRecord) = when (type) {
-                TransactionInfoOptionsModule.Type.SpeedUp -> adapter.speedUpTransaction(transactionHash, minFee)
-                TransactionInfoOptionsModule.Type.Cancel -> adapter.cancelTransaction(transactionHash, minFee)
+                SpeedUpCancelType.SpeedUp -> adapter.speedUpTransaction(transactionHash, minFee)
+                SpeedUpCancelType.Cancel -> adapter.cancelTransaction(transactionHash, minFee)
             }
 
             this.replacementTransaction = replacementTransaction
@@ -217,7 +217,7 @@ data class ResendBitcoinUiState(
     @StringRes
     val titleResId: Int,
     val sendButtonTitleResId: Int,
-    val type: TransactionInfoOptionsModule.Type,
+    val type: SpeedUpCancelType,
 
     val coin: Coin,
     val feeCoin: Coin,

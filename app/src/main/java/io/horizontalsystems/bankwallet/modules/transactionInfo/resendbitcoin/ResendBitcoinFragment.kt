@@ -35,7 +35,7 @@ import io.horizontalsystems.bankwallet.modules.send.ConfirmAmountCell
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.advanced.FeeRateCaution
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
-import io.horizontalsystems.bankwallet.modules.transactionInfo.options.TransactionInfoOptionsModule
+import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -54,7 +54,7 @@ import kotlinx.parcelize.Parcelize
 class ResendBitcoinFragment : BaseComposeFragment() {
 
     @Parcelize
-    data class Input(val optionType: TransactionInfoOptionsModule.Type) : Parcelable
+    data class Input(val optionType: SpeedUpCancelType) : Parcelable
 
     private val transactionInfoViewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment)
 
