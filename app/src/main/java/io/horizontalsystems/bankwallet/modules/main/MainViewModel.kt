@@ -302,6 +302,8 @@ class MainViewModel(
                         val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
                         if (uid != null && blockchainTypeUid != null) {
                             deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
+
+                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopNftCollections))
                         }
                     }
 
@@ -310,6 +312,8 @@ class MainViewModel(
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
                             deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
+
+                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatforms))
                         }
                     }
                 }
