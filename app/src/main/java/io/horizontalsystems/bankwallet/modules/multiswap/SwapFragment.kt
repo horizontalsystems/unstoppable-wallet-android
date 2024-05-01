@@ -58,6 +58,9 @@ import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.CoinValue
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
@@ -134,9 +137,13 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         onEnterFiatAmount = viewModel::onEnterFiatAmount,
         onClickProvider = {
             navController.slideFromBottom(R.id.swapSelectProvider)
+
+            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapProvider))
         },
         onClickProviderSettings = {
             navController.slideFromRight(R.id.swapSettings)
+
+            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapSettings))
         },
         onTimeout = viewModel::reQuote,
         onClickNext = {
@@ -145,6 +152,8 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
                     navController.popBackStack()
                 }
             }
+
+            stat(page = StatPage.Swap, event = StatEvent.Open(StatPage.SwapConfirmation))
         },
         onActionStarted = {
             viewModel.onActionStarted()
@@ -327,7 +336,7 @@ private fun SwapScreenInner(
                 if (quote != null) {
                     CardsSwapInfo {
                         ProviderField(quote.provider, onClickProvider, onClickProviderSettings)
-                        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut)
+                        PriceField(quote.tokenIn, quote.tokenOut, quote.amountIn, quote.amountOut, StatPage.Swap)
                         PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                         quote.fields.forEach {
                             it.GetContent(navController, false)
@@ -484,7 +493,7 @@ private fun ProviderField(
 }
 
 @Composable
-fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal) {
+fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut: BigDecimal, statPage: StatPage) {
     var showRegularPrice by remember { mutableStateOf(true) }
     val swapPriceUIHelper = SwapPriceUIHelper(tokenIn, tokenOut, amountIn, amountOut)
 
@@ -500,6 +509,8 @@ fun PriceField(tokenIn: Token, tokenOut: Token, amountIn: BigDecimal, amountOut:
                         indication = null,
                         onClick = {
                             showRegularPrice = !showRegularPrice
+
+                            stat(page = statPage, event = StatEvent.TogglePrice)
                         }
                     ),
                 verticalAlignment = Alignment.CenterVertically,

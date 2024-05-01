@@ -13,6 +13,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.restoreaccount.RestoreViewModel
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreByMenu
 import io.horizontalsystems.bankwallet.modules.restoreaccount.restoremenu.RestoreMenuViewModel
@@ -47,8 +51,10 @@ fun RestorePrivateKey(
                         title = TranslatableString.ResString(R.string.Button_Next),
                         onClick = {
                             viewModel.resolveAccountType()?.let { accountType ->
-                                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false)
+                                mainViewModel.setAccountData(accountType, viewModel.accountName, true, false, StatPage.ImportWalletFromKeyAdvanced)
                                 openSelectCoinsScreen.invoke()
+
+                                stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Open(StatPage.RestoreSelect))
                             }
                         }
                     )
@@ -82,9 +88,18 @@ fun RestorePrivateKey(
                 hint = stringResource(id = R.string.Restore_PrivateKeyHint),
                 state = viewModel.inputState,
                 qrScannerEnabled = true,
-            ) {
-                viewModel.onEnterPrivateKey(it)
-            }
+                onValueChange = {
+                    viewModel.onEnterPrivateKey(it)
+                },
+                onClear = {
+                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Clear(StatEntity.Key))
+                },
+                onPaste = {
+                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.Paste(StatEntity.Key))
+                },
+                onScanQR = {
+                    stat(page = StatPage.ImportWalletFromKeyAdvanced, event = StatEvent.ScanQr(StatEntity.Key))
+                })
 
             Spacer(Modifier.height(32.dp))
         }

@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionView
@@ -108,6 +109,7 @@ fun WCSendEthRequestScreen(
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
+            StatPage.WalletConnect
         )
     }
 }

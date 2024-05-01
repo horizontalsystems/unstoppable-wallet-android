@@ -24,7 +24,7 @@ class MarketFavoritesRepository(
 
         val favoriteCoinUids = favoriteCoins.map { it.coinUid }
         return marketKit
-            .marketInfosSingle(favoriteCoinUids, currency.code, "watchlist").await()
+            .marketInfosSingle(favoriteCoinUids, currency.code).await()
             .map { marketInfo ->
                 MarketItem.createFromCoinMarket(
                     marketInfo = marketInfo,

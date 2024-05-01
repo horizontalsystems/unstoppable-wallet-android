@@ -42,6 +42,10 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.balance.BalanceAccountsViewModel
 import io.horizontalsystems.bankwallet.modules.balance.BalanceModule
@@ -89,6 +93,8 @@ fun TransactionsScreen(
                         showAlertDot = showFilterAlertDot,
                         onClick = {
                             navController.slideFromRight(R.id.transactionFilterFragment)
+
+                            stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionFilter))
                         },
                     )
                 )
@@ -96,7 +102,11 @@ fun TransactionsScreen(
             filterTypes?.let { filterTypes ->
                 FilterTypeTabs(
                     filterTypes = filterTypes,
-                    onTransactionTypeClick = viewModel::setFilterTransactionType
+                    onTransactionTypeClick = {
+                        viewModel.setFilterTransactionType(it)
+
+                        stat(page = StatPage.Transactions, event = StatEvent.SwitchTab(it.statTab))
+                    }
                 )
             }
 
@@ -160,6 +170,8 @@ private fun onTransactionClick(
     viewModel.tmpItemToShow = transactionItem
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
+
+    stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
 @OptIn(ExperimentalFoundationApi::class)

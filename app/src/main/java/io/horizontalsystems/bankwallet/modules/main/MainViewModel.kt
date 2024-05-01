@@ -17,6 +17,9 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.LaunchPage
@@ -302,7 +305,9 @@ class MainViewModel(
                 when {
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
-                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it, "widget"))
+                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it))
+
+                            stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
                         }
                     }
 
@@ -310,6 +315,8 @@ class MainViewModel(
                         val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
                         if (uid != null && blockchainTypeUid != null) {
                             deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
+
+                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopNftCollections))
                         }
                     }
 
@@ -318,6 +325,8 @@ class MainViewModel(
                         if (title != null && uid != null) {
                             val platform = Platform(uid, title)
                             deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
+
+                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatforms))
                         }
                     }
                 }

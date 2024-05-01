@@ -21,6 +21,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryRed
@@ -111,6 +115,8 @@ private fun UnlinkAccountScreen(navController: NavController, account: Account) 
                 viewModel.onUnlink()
                 HudHelper.showSuccessMessage(view, doneConfirmationMessage)
                 navController.popBackStack()
+
+                stat(page = StatPage.UnlinkWallet, event = StatEvent.Delete(StatEntity.Wallet))
             },
             enabled = unlinkEnabled
         )

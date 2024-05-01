@@ -39,6 +39,9 @@ import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
@@ -100,6 +103,8 @@ private fun SettingSections(
                 ComposeAppTheme.colors.jacob,
                 onClick = {
                     navController.slideFromRight(R.id.donateTokenSelectFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
                 }
             )
         }
@@ -118,6 +123,8 @@ private fun SettingSections(
                         R.id.manageAccountsFragment,
                         ManageAccountsModule.Mode.Manage
                     )
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ManageWallets))
                 }
             )
         }, {
@@ -126,6 +133,8 @@ private fun SettingSections(
                 R.drawable.ic_blocks_20,
                 onClick = {
                     navController.slideFromRight(R.id.blockchainSettingsFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BlockchainSettings))
                 }
             )
         }, {
@@ -138,6 +147,8 @@ private fun SettingSections(
                     when (val state = viewModel.getWalletConnectSupportState()) {
                         WCManager.SupportState.Supported -> {
                             navController.slideFromRight(R.id.wcListFragment)
+
+                            stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.WalletConnect))
                         }
 
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
@@ -150,6 +161,8 @@ private fun SettingSections(
                                 R.id.backupRequiredDialog,
                                 BackupRequiredDialog.Input(state.account, text)
                             )
+
+                            stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BackupRequired))
                         }
 
                         is WCManager.SupportState.NotSupported -> {
@@ -167,6 +180,8 @@ private fun SettingSections(
                 R.drawable.ic_file_24,
                 onClick = {
                     navController.slideFromRight(R.id.backupManagerFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BackupManager))
                 }
             )
         }
@@ -184,6 +199,8 @@ private fun SettingSections(
                     showAlert = showAlertSecurityCenter,
                     onClick = {
                         navController.slideFromRight(R.id.securitySettingsFragment)
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Security))
                     }
                 )
             },
@@ -196,6 +213,8 @@ private fun SettingSections(
                             R.id.contactsFragment,
                             ContactsFragment.Input(Mode.Full)
                         )
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Contacts))
                     }
                 )
             },
@@ -205,6 +224,8 @@ private fun SettingSections(
                     R.drawable.ic_brush_20,
                     onClick = {
                         navController.slideFromRight(R.id.appearanceFragment)
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Appearance))
                     }
                 )
             },
@@ -230,6 +251,8 @@ private fun SettingSections(
                 ComposeAppTheme.colors.jacob,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTelegram))
                 }
             )
         }, {
@@ -239,6 +262,8 @@ private fun SettingSections(
                 ComposeAppTheme.colors.jacob,
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTwitter))
                 }
             )
         })
@@ -256,6 +281,8 @@ private fun SettingSections(
                 R.drawable.ic_faq_20,
                 onClick = {
                     navController.slideFromRight(R.id.faqListFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Faq))
                 }
             )
         }, {
@@ -264,6 +291,8 @@ private fun SettingSections(
                 R.drawable.ic_academy_20,
                 onClick = {
                     navController.slideFromRight(R.id.academyFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Academy))
                 }
             )
         })
@@ -279,25 +308,39 @@ private fun SettingSections(
                 showAlert = showAlertAboutApp,
                 onClick = {
                     navController.slideFromRight(R.id.aboutAppFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.AboutApp))
                 }
             )
         }, {
             HsSettingCell(
                 R.string.Settings_RateUs,
                 R.drawable.ic_star_20,
-                onClick = { RateAppManager.openPlayMarket(context) }
+                onClick = {
+                    RateAppManager.openPlayMarket(context)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.RateUs))
+                }
             )
         }, {
             HsSettingCell(
                 R.string.Settings_ShareThisWallet,
                 R.drawable.ic_share_20,
-                onClick = { shareAppLink(viewModel.appWebPageLink, context) }
+                onClick = {
+                    shareAppLink(viewModel.appWebPageLink, context)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
+                }
             )
         }, {
             HsSettingCell(
                 R.string.SettingsContact_Title,
                 R.drawable.ic_mail_24,
-                onClick = { navController.slideFromBottom(R.id.contactOptionsDialog) },
+                onClick = {
+                    navController.slideFromBottom(R.id.contactOptionsDialog)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ContactUs))
+                },
             )
         })
     )

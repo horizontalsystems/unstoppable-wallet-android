@@ -29,6 +29,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statField
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -67,8 +72,10 @@ class MarketPlatformFragment : BaseComposeFragment() {
             factory = factory,
             onCloseButtonClick = { navController.popBackStack() },
             onCoinClick = { coinUid ->
-                val arguments = CoinFragment.Input(coinUid, "market_platform")
+                val arguments = CoinFragment.Input(coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
             }
         )
     }
@@ -94,6 +101,8 @@ private fun PlatformScreen(
                 refreshing = viewModel.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
+
+                    stat(page = StatPage.TopPlatform, event = StatEvent.Refresh)
                 }
             ) {
                 Crossfade(viewModel.viewState) { state ->
@@ -116,9 +125,13 @@ private fun PlatformScreen(
                                     scrollToTop = scrollToTopAfterUpdate,
                                     onAddFavorite = { uid ->
                                         viewModel.onAddFavorite(uid)
+
+                                        stat(page = StatPage.TopPlatform, event = StatEvent.AddToWatchlist(uid))
                                     },
                                     onRemoveFavorite = { uid ->
                                         viewModel.onRemoveFavorite(uid)
+
+                                        stat(page = StatPage.TopPlatform, event = StatEvent.RemoveFromWatchlist(uid))
                                     },
                                     onCoinClick = onCoinClick,
                                     preItems = {
@@ -146,7 +159,11 @@ private fun PlatformScreen(
                                                 ) {
                                                     ButtonSecondaryToggle(
                                                         select = viewModel.menu.marketFieldSelect,
-                                                        onSelect = viewModel::onSelectMarketField
+                                                        onSelect = {
+                                                            viewModel.onSelectMarketField(it)
+
+                                                            stat(page = StatPage.TopPlatform, event = StatEvent.SwitchField(it.statField))
+                                                        }
                                                     )
                                                 }
                                             }
@@ -171,6 +188,8 @@ private fun PlatformScreen(
                     { selected ->
                         viewModel.onSelectSortingField(selected)
                         scrollToTopAfterUpdate = true
+
+                        stat(page = StatPage.TopPlatform, event = StatEvent.SwitchSortType(selected.statSortType))
                     },
                     { viewModel.onSelectorDialogDismiss() }
                 )

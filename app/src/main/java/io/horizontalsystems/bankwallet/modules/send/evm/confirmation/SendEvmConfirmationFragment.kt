@@ -21,6 +21,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmModule
@@ -117,6 +120,7 @@ private fun SendEvmConfirmationScreen(
                             logger.info("sending tx")
                             viewModel.send()
                             logger.info("success")
+                            stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
@@ -142,6 +146,7 @@ private fun SendEvmConfirmationScreen(
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
+            StatPage.SendConfirmation
         )
     }
 }

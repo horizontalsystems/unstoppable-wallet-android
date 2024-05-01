@@ -4,7 +4,6 @@ import android.content.Context
 import io.horizontalsystems.bankwallet.core.InvalidAuthTokenException
 import io.horizontalsystems.bankwallet.core.NoAuthTokenException
 import io.horizontalsystems.bankwallet.core.customCoinPrefix
-import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.marketkit.MarketKit
 import io.horizontalsystems.marketkit.SyncInfo
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -25,7 +24,6 @@ class MarketKitWrapper(
     context: Context,
     hsApiBaseUrl: String,
     hsApiKey: String,
-    appConfigProvider: AppConfigProvider,
     private val subscriptionManager: SubscriptionManager
 ) {
     private val marketKit: MarketKit by lazy {
@@ -33,8 +31,6 @@ class MarketKitWrapper(
             context = context,
             hsApiBaseUrl = hsApiBaseUrl,
             hsApiKey = hsApiKey,
-            appVersion = appConfigProvider.appVersion,
-            appId = appConfigProvider.appId
         )
     }
 
@@ -78,22 +74,22 @@ class MarketKitWrapper(
 
     fun blockchain(uid: String) = marketKit.blockchain(uid)
 
-    fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean, apiTag: String) = marketKit.marketInfosSingle(top, currencyCode, defi, apiTag)
+    fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean) = marketKit.marketInfosSingle(top, currencyCode, defi)
 
     fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
 
-    fun marketInfosSingle(coinUids: List<String>, currencyCode: String, apiTag: String): Single<List<MarketInfo>> =
-        marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode, apiTag)
+    fun marketInfosSingle(coinUids: List<String>, currencyCode: String): Single<List<MarketInfo>> =
+        marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode)
 
-    fun marketInfosSingle(categoryUid: String, currencyCode: String, apiTag: String) = marketKit.marketInfosSingle(categoryUid, currencyCode, apiTag)
+    fun marketInfosSingle(categoryUid: String, currencyCode: String) = marketKit.marketInfosSingle(categoryUid, currencyCode)
 
-    fun marketInfoOverviewSingle(coinUid: String, currencyCode: String, language: String, apiTag: String) =
-        marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language, apiTag)
+    fun marketInfoOverviewSingle(coinUid: String, currencyCode: String, language: String) =
+        marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language)
 
-    fun analyticsSingle(coinUid: String, currencyCode: String, apiTag: String) =
-        requestWithAuthToken { marketKit.analyticsSingle(it, coinUid, currencyCode, apiTag) }
+    fun analyticsSingle(coinUid: String, currencyCode: String) =
+        requestWithAuthToken { marketKit.analyticsSingle(it, coinUid, currencyCode) }
 
-    fun analyticsPreviewSingle(coinUid: String, addresses: List<String>, apiTag: String) = marketKit.analyticsPreviewSingle(coinUid, addresses, apiTag)
+    fun analyticsPreviewSingle(coinUid: String, addresses: List<String>) = marketKit.analyticsPreviewSingle(coinUid, addresses)
 
     fun marketInfoTvlSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoTvlSingle(coinUid, currencyCode, timePeriod)
@@ -101,7 +97,7 @@ class MarketKitWrapper(
     fun marketInfoGlobalTvlSingle(chain: String, currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.marketInfoGlobalTvlSingle(chain, currencyCode, timePeriod)
 
-    fun defiMarketInfosSingle(currencyCode: String, apiTag: String) = marketKit.defiMarketInfosSingle(currencyCode, apiTag)
+    fun defiMarketInfosSingle(currencyCode: String) = marketKit.defiMarketInfosSingle(currencyCode)
 
     // Categories
 
@@ -234,8 +230,8 @@ class MarketKitWrapper(
     fun globalMarketPointsSingle(currencyCode: String, timePeriod: HsTimePeriod) =
         marketKit.globalMarketPointsSingle(currencyCode, timePeriod)
 
-    fun topPlatformsSingle(currencyCode: String, apiTag: String) =
-        marketKit.topPlatformsSingle(currencyCode, apiTag)
+    fun topPlatformsSingle(currencyCode: String) =
+        marketKit.topPlatformsSingle(currencyCode)
 
     fun topPlatformMarketCapStartTimeSingle(platform: String) =
         marketKit.topPlatformMarketCapStartTimeSingle(platform)
@@ -246,8 +242,8 @@ class MarketKitWrapper(
         periodType: HsPeriodType
     ) = marketKit.topPlatformMarketCapPointsSingle(chain, currencyCode, periodType)
 
-    fun topPlatformCoinListSingle(chain: String, currencyCode: String, apiTag: String) =
-        marketKit.topPlatformMarketInfosSingle(chain, currencyCode, apiTag)
+    fun topPlatformCoinListSingle(chain: String, currencyCode: String) =
+        marketKit.topPlatformMarketInfosSingle(chain, currencyCode)
 
     // NFT
 
@@ -271,5 +267,11 @@ class MarketKitWrapper(
 
     fun requestPersonalSupport(username: String): Single<Response<Void>> =
         requestWithAuthToken { marketKit.requestPersonalSupport(it, username) }
+
+    // Stats
+
+    fun sendStats(stats: String, appVersion: String, appId: String?): Single<Unit> {
+        return marketKit.sendStats(stats, appVersion, appId)
+    }
 
 }

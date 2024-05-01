@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
 
 class BaseCurrencySettingsViewModel(private val currencyManager: CurrencyManager) : ViewModel() {
@@ -62,6 +65,8 @@ class BaseCurrencySettingsViewModel(private val currencyManager: CurrencyManager
     private fun doSetBaseCurrency(v: Currency) {
         baseCurrency = v
         closeScreen = true
+
+        stat(page = StatPage.BaseCurrency, event = StatEvent.SwitchBaseCurrency(v.code))
     }
 
     fun closeDisclaimer() {

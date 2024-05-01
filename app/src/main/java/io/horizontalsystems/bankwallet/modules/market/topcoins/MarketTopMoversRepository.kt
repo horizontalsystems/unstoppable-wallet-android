@@ -26,8 +26,7 @@ class MarketTopMoversRepository(
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
             try {
-                val appTag = "market_top_${size}_${sortingField.name}_${marketField.name}"
-                val marketInfoList = marketKit.marketInfosSingle(size, baseCurrency.code, false, appTag).blockingGet()
+                val marketInfoList = marketKit.marketInfosSingle(size, baseCurrency.code, false).blockingGet()
                 val marketItemList = marketInfoList.map { marketInfo ->
                     MarketItem.createFromCoinMarket(
                         marketInfo,

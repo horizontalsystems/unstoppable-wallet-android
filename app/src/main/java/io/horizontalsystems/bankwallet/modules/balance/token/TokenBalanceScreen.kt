@@ -39,6 +39,9 @@ import io.horizontalsystems.bankwallet.core.isCustom
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.balance.BackupRequiredError
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItem
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewModel
@@ -138,6 +141,8 @@ private fun onTransactionClick(
     transactionsViewModel.tmpItemToShow = transactionItem
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
+
+    stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
 @Composable
@@ -169,6 +174,8 @@ private fun TokenBalanceHeader(
                     onClick = {
                         viewModel.toggleBalanceVisibility()
                         HudHelper.vibrate(context)
+
+                        stat(page = StatPage.TokenPage, event = StatEvent.ToggleBalanceHidden)
                     }
                 ),
             text = if (balanceViewItem.primaryValue.visible) balanceViewItem.primaryValue.value else "*****",
@@ -334,7 +341,10 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: TokenBalanceViewModel) {
     val onClickReceive = {
         try {
-            navController.slideFromRight(R.id.receiveFragment, viewModel.getWalletForReceive())
+            val wallet = viewModel.getWalletForReceive()
+            navController.slideFromRight(R.id.receiveFragment, wallet)
+
+            stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         } catch (e: BackupRequiredError) {
             val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
@@ -345,6 +355,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 R.id.backupRequiredDialog,
                 BackupRequiredDialog.Input(e.account, text)
             )
+
+            stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.BackupRequired))
         }
     }
 
@@ -367,6 +379,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                         R.id.sendXFragment,
                         SendFragment.Input(viewItem.wallet, sendTitle)
                     )
+
+                    stat(page = StatPage.TokenPage, event = StatEvent.OpenSend(viewItem.wallet.token))
                 },
                 enabled = viewItem.sendEnabled
             )
@@ -391,6 +405,8 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
                         navController.slideFromRight(R.id.multiswap, viewItem.wallet.token)
+
+                        stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                     },
                     enabled = viewItem.swapEnabled
                 )
@@ -403,9 +419,11 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             enabled = !viewItem.wallet.token.isCustom,
             onClick = {
                 val coinUid = viewItem.wallet.coin.uid
-                val arguments = CoinFragment.Input(coinUid, "wallet_token_balance")
+                val arguments = CoinFragment.Input(coinUid)
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
+
+                stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
             },
         )
     }

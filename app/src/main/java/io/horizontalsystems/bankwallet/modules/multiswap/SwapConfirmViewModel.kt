@@ -7,6 +7,9 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.modules.multiswap.sendtransaction.ISendTransactionService
@@ -182,6 +185,8 @@ class SwapConfirmViewModel(
         emitState()
 
         fetchFinalQuote()
+
+        stat(page = StatPage.SwapConfirmation, event = StatEvent.Refresh)
     }
 
     private fun fetchFinalQuote() {
@@ -206,6 +211,8 @@ class SwapConfirmViewModel(
     }
 
     suspend fun swap() = withContext(Dispatchers.Default) {
+        stat(page = StatPage.SwapConfirmation, event = StatEvent.Send)
+
         sendTransactionService.sendTransaction()
     }
 

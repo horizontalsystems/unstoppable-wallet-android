@@ -74,6 +74,7 @@ import io.horizontalsystems.bankwallet.core.providers.CexProviderManager
 import io.horizontalsystems.bankwallet.core.providers.EvmLabelProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeRateProvider
 import io.horizontalsystems.bankwallet.core.providers.FeeTokenProvider
+import io.horizontalsystems.bankwallet.core.stats.StatsManager
 import io.horizontalsystems.bankwallet.core.storage.AccountsStorage
 import io.horizontalsystems.bankwallet.core.storage.AppDatabase
 import io.horizontalsystems.bankwallet.core.storage.BlockchainSettingsStorage
@@ -189,6 +190,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var chartIndicatorManager: ChartIndicatorManager
         lateinit var backupProvider: BackupProvider
         lateinit var spamManager: SpamManager
+        lateinit var statsManager: StatsManager
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -226,7 +228,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             context = this,
             hsApiBaseUrl = appConfig.marketApiBaseUrl,
             hsApiKey = appConfig.marketApiKey,
-            appConfigProvider = appConfigProvider,
             subscriptionManager = subscriptionManager
         )
 
@@ -352,7 +353,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             pinDbStorage = PinDbStorage(appDatabase.pinDao())
         )
 
-        backgroundStateChangeListener = BackgroundStateChangeListener(pinComponent).apply {
+        statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider)
+        backgroundStateChangeListener = BackgroundStateChangeListener(pinComponent, statsManager).apply {
             backgroundManager.registerListener(this)
         }
 
@@ -371,7 +373,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             MarketFavoritesMenuService(localStorage, marketWidgetManager),
             TopNftCollectionsRepository(marketKit),
             TopNftCollectionsViewItemFactory(numberFormatter),
-            TopPlatformsRepository(marketKit, currencyManager, "widget"),
+            TopPlatformsRepository(marketKit, currencyManager),
             currencyManager
         )
 

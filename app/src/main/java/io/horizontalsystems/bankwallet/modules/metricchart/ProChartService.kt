@@ -2,6 +2,10 @@ package io.horizontalsystems.bankwallet.modules.metricchart
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statPage
+import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.chart.AbstractChartService
 import io.horizontalsystems.bankwallet.modules.chart.ChartPointsWrapper
@@ -51,6 +55,12 @@ class ProChartService(
         ProChartModule.ChartType.CexVolume,
         ProChartModule.ChartType.DexVolume,
         ProChartModule.ChartType.TxCount -> ChartViewType.Bar
+    }
+
+    override fun updateChartInterval(chartInterval: HsTimePeriod?) {
+        super.updateChartInterval(chartInterval)
+
+        stat(chartType.statPage, event = StatEvent.SwitchChartPeriod(chartInterval.statPeriod))
     }
 
     override fun getItems(

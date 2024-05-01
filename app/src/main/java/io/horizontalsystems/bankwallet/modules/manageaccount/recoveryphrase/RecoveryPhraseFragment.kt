@@ -1,9 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -14,6 +28,10 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ActionButton
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.ConfirmCopyBottomSheet
@@ -21,7 +39,10 @@ import io.horizontalsystems.bankwallet.modules.manageaccount.ui.PassphraseCell
 import io.horizontalsystems.bankwallet.modules.manageaccount.ui.SeedPhraseList
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -62,6 +83,8 @@ private fun RecoveryPhraseScreen(
                         TextHelper.copyText(viewModel.words.joinToString(" "))
                         HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
                         sheetState.hide()
+
+                        stat(page = StatPage.RecoveryPhrase, event = StatEvent.Copy(StatEntity.RecoveryPhrase))
                     }
                 },
                 onCancel = {
@@ -84,6 +107,8 @@ private fun RecoveryPhraseScreen(
                         icon = R.drawable.ic_info_24,
                         onClick = {
                             FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+
+                            stat(page = StatPage.RecoveryPhrase, event = StatEvent.Open(StatPage.Info))
                         }
                     )
                 )
@@ -104,6 +129,8 @@ private fun RecoveryPhraseScreen(
                 var hidden by remember { mutableStateOf(true) }
                 SeedPhraseList(viewModel.wordsNumbered, hidden) {
                     hidden = !hidden
+
+                    stat(page = StatPage.RecoveryPhrase, event = StatEvent.ToggleHidden)
                 }
                 Spacer(Modifier.height(24.dp))
                 PassphraseCell(viewModel.passphrase, hidden)

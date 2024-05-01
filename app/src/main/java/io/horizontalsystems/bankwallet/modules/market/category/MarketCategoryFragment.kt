@@ -21,6 +21,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
@@ -55,9 +58,11 @@ class MarketCategoryFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.Input(coinUid, "market_category")
+        val arguments = CoinFragment.Input(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
+
+        stat(page = StatPage.CoinCategory, event = StatEvent.OpenCoin(coinUid))
     }
 }
 
