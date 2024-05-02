@@ -116,6 +116,12 @@ class TonAdapter(
     override val debugInfo: String
         get() = ""
 
+    val statusInfo: Map<String, Any>
+        get() = buildMap {
+            put("Balance Sync State", balanceState)
+            put("Transaction Sync State", transactionsState)
+        }
+
 
     override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceStateUpdatedFlowable: Flowable<Unit>
