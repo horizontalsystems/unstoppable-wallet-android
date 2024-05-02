@@ -4,10 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.UserManager
+import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
@@ -24,6 +26,7 @@ class MainActivityViewModel(
 ) : ViewModel() {
 
     val navigateToMainLiveData = MutableLiveData(false)
+    val wcEvent = MutableLiveData<Wallet.Model?>()
 
     init {
         viewModelScope.launch {
@@ -31,6 +34,15 @@ class MainActivityViewModel(
                 navigateToMainLiveData.postValue(true)
             }
         }
+        viewModelScope.launch {
+            WCDelegate.walletEvents.collect {
+                wcEvent.postValue(it)
+            }
+        }
+    }
+
+    fun onWcEventHandled() {
+        wcEvent.postValue(null)
     }
 
     fun validate() {
