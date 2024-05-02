@@ -63,7 +63,6 @@ import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager.SupportState
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.HsBottomNavigation
 import cash.p.terminal.ui.compose.components.HsBottomNavigationItem
 import cash.p.terminal.ui.extensions.WalletSwitchBottomSheet
@@ -122,7 +121,6 @@ private fun MainScreen(
     fragmentNavController: NavController,
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory(deepLink))
 ) {
-
     val uiState = viewModel.uiState
     val selectedPage = uiState.selectedTabIndex
     val pagerState = rememberPagerState(initialPage = selectedPage) { uiState.mainNavItems.size }
