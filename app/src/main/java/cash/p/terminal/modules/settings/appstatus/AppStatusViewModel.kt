@@ -8,6 +8,7 @@ import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
+import cash.p.terminal.core.adapters.TonAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
@@ -213,6 +214,13 @@ class AppStatusViewModel(
                 }
             }
 
+        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
+            ?.let { wallet ->
+                (adapterManager.getAdapterForWallet(wallet) as? TonAdapter)?.let { adapter ->
+                    blockchainStatus["Ton"] = adapter.statusInfo
+                }
+            }
+
         return blockchainStatus
     }
 
@@ -283,6 +291,15 @@ class AppStatusViewModel(
                 (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
                     val title = if (blocks.isEmpty()) "Blockchain Status" else null
                     val block = getBlockchainInfoBlock(title, "Zcash", adapter.statusInfo)
+                    blocks.add(block)
+                }
+            }
+
+        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
+            ?.let { wallet ->
+                (adapterManager.getAdapterForWallet(wallet) as? TonAdapter)?.let { adapter ->
+                    val title = if (blocks.isEmpty()) "Blockchain Status" else null
+                    val block = getBlockchainInfoBlock(title, "Ton", adapter.statusInfo)
                     blocks.add(block)
                 }
             }
