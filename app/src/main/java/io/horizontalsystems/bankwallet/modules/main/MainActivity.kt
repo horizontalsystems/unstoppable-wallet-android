@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
+import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.modules.intro.IntroActivity
 import io.horizontalsystems.bankwallet.modules.keystore.KeyStoreActivity
 import io.horizontalsystems.bankwallet.modules.lockscreen.LockScreenActivity
@@ -41,6 +43,22 @@ class MainActivity : BaseActivity() {
             if (it) {
                 navController.popBackStack(navController.graph.startDestinationId, false)
                 viewModel.onNavigatedToMain()
+            }
+        }
+
+        viewModel.wcEvent.observe(this) { wcEvent ->
+            if (wcEvent != null) {
+                when (wcEvent) {
+                    is Wallet.Model.SessionRequest -> {
+                        navController.slideFromBottom(R.id.wcRequestFragment)
+                    }
+                    is Wallet.Model.SessionProposal -> {
+                        navController.slideFromBottom(R.id.wcSessionFragment)
+                    }
+                    else -> {}
+                }
+
+                viewModel.onWcEventHandled()
             }
         }
     }

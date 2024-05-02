@@ -38,7 +38,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
-import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
@@ -124,15 +123,6 @@ private fun MainScreen(
     fragmentNavController: NavController,
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory(deepLink))
 ) {
-    val wcEvent = viewModel.wcEvent
-    LaunchedEffect(wcEvent) {
-        if (wcEvent is Wallet.Model.SessionRequest) {
-            fragmentNavController.slideFromBottom(R.id.wcRequestFragment)
-        } else if (wcEvent is Wallet.Model.SessionProposal) {
-            fragmentNavController.slideFromBottom(R.id.wcSessionFragment)
-        }
-    }
-
     val uiState = viewModel.uiState
     val selectedPage = uiState.selectedTabIndex
     val pagerState = rememberPagerState(initialPage = selectedPage) { uiState.mainNavItems.size }
