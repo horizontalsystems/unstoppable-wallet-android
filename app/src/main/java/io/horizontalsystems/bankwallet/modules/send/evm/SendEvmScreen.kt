@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
@@ -34,11 +35,12 @@ import io.horizontalsystems.core.helpers.HudHelper
 fun SendEvmScreen(
     title: String,
     navController: NavController,
-    viewModel: SendEvmViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     prefilledData: PrefilledData?,
+    wallet: Wallet,
+    predefinedAddress: String?,
 ) {
-    val wallet = viewModel.wallet
+    val viewModel = viewModel<SendEvmViewModel>(factory = SendEvmModule.Factory(wallet, predefinedAddress))
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
