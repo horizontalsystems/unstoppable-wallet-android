@@ -20,9 +20,7 @@ import cash.p.terminal.modules.send.binance.SendBinanceViewModel
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinModule
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinNavHost
 import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
-import cash.p.terminal.modules.send.evm.SendEvmModule
 import cash.p.terminal.modules.send.evm.SendEvmScreen
-import cash.p.terminal.modules.send.evm.SendEvmViewModel
 import cash.p.terminal.modules.send.solana.SendSolanaModule
 import cash.p.terminal.modules.send.solana.SendSolanaScreen
 import cash.p.terminal.modules.send.solana.SendSolanaViewModel
@@ -128,15 +126,14 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Gnosis,
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
-                        val factory = SendEvmModule.Factory(wallet, predefinedAddress)
-                        val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendEvmScreen(
                                 title,
                                 findNavController(),
-                                sendEvmViewModel,
                                 amountInputModeViewModel,
                                 prefilledData,
+                                wallet,
+                                predefinedAddress
                             )
                         }
                     }
