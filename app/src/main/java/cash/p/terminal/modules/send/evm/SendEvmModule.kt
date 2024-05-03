@@ -9,7 +9,6 @@ import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
-import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 import cash.p.terminal.modules.xrate.XRateService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.parcelize.Parcelize
@@ -63,9 +62,6 @@ object SendEvmModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
-                EvmKitWrapperHoldingViewModel::class.java -> {
-                    EvmKitWrapperHoldingViewModel(adapter.evmKitWrapper) as T
-                }
                 SendEvmViewModel::class.java -> {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals

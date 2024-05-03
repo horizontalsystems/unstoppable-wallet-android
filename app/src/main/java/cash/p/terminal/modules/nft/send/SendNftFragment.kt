@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
@@ -21,7 +20,6 @@ import cash.p.terminal.modules.address.AddressInputModule
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.AddressViewModel
 import cash.p.terminal.modules.send.evm.SendEvmAddressService
-import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -41,12 +39,6 @@ class SendNftFragment : BaseComposeFragment() {
 
         when (factory?.evmNftRecord?.nftType) {
             NftType.Eip721 -> {
-                val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
-                    R.id.nftSendFragment
-                ) { factory }
-                val initiateLazyViewModel =
-                    evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
-
                 val eip721ViewModel by viewModels<SendEip721ViewModel> { factory }
                 val addressViewModel by viewModels<AddressViewModel> {
                     AddressInputModule.FactoryNft(factory.nftUid.blockchainType)
@@ -62,12 +54,6 @@ class SendNftFragment : BaseComposeFragment() {
             }
 
             NftType.Eip1155 -> {
-                val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
-                    R.id.nftSendFragment
-                ) { factory }
-                val initiateLazyViewModel =
-                    evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
-
                 val eip1155ViewModel by viewModels<SendEip1155ViewModel> { factory }
                 val addressViewModel by viewModels<AddressViewModel> {
                     AddressInputModule.FactoryNft(factory.nftUid.blockchainType)

@@ -23,7 +23,6 @@ import cash.p.terminal.modules.send.bitcoin.SendBitcoinViewModel
 import cash.p.terminal.modules.send.evm.SendEvmModule
 import cash.p.terminal.modules.send.evm.SendEvmScreen
 import cash.p.terminal.modules.send.evm.SendEvmViewModel
-import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 import cash.p.terminal.modules.send.solana.SendSolanaModule
 import cash.p.terminal.modules.send.solana.SendSolanaScreen
 import cash.p.terminal.modules.send.solana.SendSolanaViewModel
@@ -130,11 +129,6 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
                         val factory = SendEvmModule.Factory(wallet, predefinedAddress)
-                        val evmKitWrapperViewModel by navGraphViewModels<EvmKitWrapperHoldingViewModel>(
-                            R.id.sendXFragment
-                        ) { factory }
-                        @Suppress("UNUSED_VARIABLE")
-                        val initiateLazyViewModel = evmKitWrapperViewModel //needed in SendEvmConfirmationFragment
                         val sendEvmViewModel by navGraphViewModels<SendEvmViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendEvmScreen(

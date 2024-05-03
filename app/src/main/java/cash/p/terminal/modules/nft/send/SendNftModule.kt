@@ -11,7 +11,6 @@ import cash.p.terminal.entities.nft.EvmNftRecord
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.send.evm.SendEvmAddressService
-import cash.p.terminal.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 
 object SendNftModule {
 
@@ -44,9 +43,6 @@ object SendNftModule {
                         sendEvmAddressService,
                         nftMetadataManager
                     ) as T
-                }
-                EvmKitWrapperHoldingViewModel::class.java -> {
-                    EvmKitWrapperHoldingViewModel(evmKitWrapper) as T
                 }
                 AddressParserViewModel::class.java -> {
                     AddressParserViewModel(AddressUriParser(nftUid.blockchainType, null), null) as T
