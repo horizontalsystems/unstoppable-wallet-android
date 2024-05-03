@@ -15,10 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
-import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -168,8 +167,25 @@ fun WCSendEthRequestScreen(
                 title = stringResource(R.string.Button_Confirm),
                 enabled = approveEnabled,
                 onClick = {
-                    logger.info("click confirm button")
-                    sendEvmTransactionViewModel.send(logger)
+                    coroutineScope.launch {
+                        buttonEnabled = false
+                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+
+                        try {
+                            logger.info("click confirm button")
+                            viewModel.confirm()
+                            logger.info("success")
+
+                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                            delay(1200)
+                        } catch (t: Throwable) {
+                            logger.warning("failed", t)
+                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                        }
+
+                        buttonEnabled = true
+                        navController.popBackStack()
+                    }
                 }
             )
             VSpacer(16.dp)
