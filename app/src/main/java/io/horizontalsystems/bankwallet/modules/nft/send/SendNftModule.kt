@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.entities.nft.EvmNftRecord
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmAddressService
-import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.EvmKitWrapperHoldingViewModel
 
 object SendNftModule {
 
@@ -44,9 +43,6 @@ object SendNftModule {
                         sendEvmAddressService,
                         nftMetadataManager
                     ) as T
-                }
-                EvmKitWrapperHoldingViewModel::class.java -> {
-                    EvmKitWrapperHoldingViewModel(evmKitWrapper) as T
                 }
                 AddressParserViewModel::class.java -> {
                     AddressParserViewModel(AddressUriParser(nftUid.blockchainType, null), null) as T
