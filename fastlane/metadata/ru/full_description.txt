@@ -1,49 +1,49 @@
-Unstoppable wallet is purposely built as a decentralized management tool for cryptocurrencies.
+Unstoppable Wallet (Неостановимый кошелек) создан специально как децентрализованный инструмент управления криптовалютами.
 
-It is engineered to serve privacy-conscious individuals looking to manage and invest in cryptocurrencies in a sovereign and professional manner.
+Он предназначен для того, чтобы обслуживать сознательных в приватности лиц, которые хотят управлять криптовалютами и вкладывать их в их деятельность суверенным и профессиональным образом.
 
-Unstoppable is built with the following in mind:
+Unstoppable построен по следующим принципам:
 
-- Capital Should Be Free >> It’s built to provide users with genuinely independent control over their capital.
+- Капитал должен быть свободным >> Создан для обеспечения подлинного независимого контроля над своим капиталом.
 
-- Capital Should Be Borderless >> It works outside the traditional finance layer and acts as a Swiss knife to the world of decentralized finances (DeFi).
+- Капитал должен быть безграничным >> Он работает вне традиционного финансового слоя и выступает в качестве швейцарского ножа в мир децентрализованных финансов (DeFi).
 
-- Capital Should Be Private >> It doesn’t leak private data, it has no means to track users, and takes extra measures to ensure privacy on multiple layers.
+- Капитал который должен быть приватным >> Он не может допускать утечки личных данных, он не отслеживает пользователей, и принимает дополнительные меры для обеспечения конфиденциальности на нескольких уровнях.
 
-If the above rhymes well with you then Unstoppable is for you! And we are here to focus on your unique needs and serve you in the best possible manner.
+Если вышеперечисленные откликается вам тогда Unstoppable для вас! И мы здесь, чтобы сосредоточиться на ваших уникальных потребностях и наилучшим образом обслуживать вас.
 
-If you're merely looking for a plain way to store Bitcoin or Ethereum this app might not be for you.
+Если вы просто ищете простой способ хранить Bitcoin или Ethereum это приложение может не быть для вас.
 
-WALLET FEATURES:
+ВОЗМОЖНОСТИ КОШЕЛЬКА:
 
-- Non-Custodial Multi-wallet >> Manage any number of cryptocurrencies across multiple portfolio-style wallets in a non-custodial manner. This wallet is like your own bank where you are the only client and the only one in charge. It’s designed to keep assets secure and easy to restore even if the phone is stolen and tampered with.
+- Не хранящий на бирже (Non-Custodial) мульти-кошелек >> Управлять любым количеством криптовалют по нескольким кошелькам, локально а не на внешнем хранилище. Этот кошелек подобен вашему собственному банку, где только вы единственный клиент и единственный распорядитель. Он предназначен для обеспечения безопасности активов и их лёгкого восстановления, даже если телефон украден и подделан.
 
-- Investment Oriented Wallet >> Unstoppable brings unmatched cryptocurrency market analytics to your device: advanced sorting, curated categorization, extensive search filtering, and event-based alerting features.
+- Кошелек ориентированный на инвестиции >> Непрерывная аналитика рынка криптовалют на вашем устройстве: расширенная сортировка, категоризация курируемых, обширная фильтрация поиска и оповещение на основе событий.
 
-- Universal Wallet >> It supports all mainstream blockchains and is built in a standard compliant manner enabling users to use just one wallet app for everything crypto.
+- Универсальный кошелек >> Поддерживает все основные блокчейны и совместим со стандартом, позволяя пользователям использовать только одно приложение кошелька для всего криптовалютного.
 
-- A Bitcoin Wallet >> The wallet packs some of the most advanced Bitcoin features available: SPV enabled, BIP 44/49/84/69 compliant, Bitcoin timelocks, custom transaction fees, and more.
+- Кошелёк Bitcoin >> Кошелёк предоставляет некоторые из самых расширенных функций Bitcoin: SPV включен, совместим с BIP 44/49/84/69, таймлоки Bitcoin, выбор комисии за транзакцию и многое другое.
 
-- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Avalanche, Solana, and more. Also, the ability to interact with any smart contract-powered service on the blockchain via the WalletConnect protocol.
+- Кошелёк DeFi >> Полная поддержка обмена децентрализованных токенов на Ethereum, Binance Smart Chain, Avalanche, Solana и многих других. Кроме того, возможность взаимодействовать с любым умным контрактом в блокчейне через протокол WalletConnect.
 
-- Ethereum Wallet >> Full support for Ethereum blockchain, its growing ecosystem of tokens (ERC20, NFT tokens, etc.), and other decentralized services such as ENS (Ethereum Name Service).
+- Кошелёк Ethereum >> Полная поддержка блокчейна Ethereum, его растущей экосистемы токенов (ERC20, NFT токены и т. д.), и другие децентрализованные услуги, такие как ENS (Ethereum Name Service).
 
-- Ethereum L2 Wallet >> Artbitrum, Optimism, Polygon support.
+- Кошелёк Ethereum L2 >> поддержка Artbitrum, Optimism, Polygon.
 
-- Avalanche Wallet >> Full support for Avalanche C-Chain blockchain.
+- Кошелёк Avalanche >> Полная поддержка блокчейна Avalanche C-Chain.
 
-- Binance Wallet >> Full support for original Binance Chain (incl. BEP2) and Binance Smart Chain.
+- Кошелек Binance >> Полная поддержка оригинальной Binance Chain (включая BEP2) и Binance Smart Chain.
 
-- NFT Wallet >> Full support for Non Fungible tokens (NFTs).
+- Кошелёк NFT >> Полная поддержка токенов NFT.
 
-- Crypto Academy >> The app includes two courses meant to onboard newcomers into the world of cryptocurrencies and the DeFi ecosystem in an easy-to-digest manner covering essential aspects of cryptocurrency security, storage, privacy, transacting, and exchanging.
+- Академия криптовалют >> В приложении есть два курса, предназначенные для новичков в мире криптовалют и экосистемы DeFi, охватывающими основные аспекты безопасности криптовалют, хранение, конфиденциальность, транзакции обмен.
 
-- Wallet for Privacy Coins >> Fully supports major privacy coins (ZCash, DASH) in an SPV manner. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
+- Кошелек для приватных монет >> Полностью поддерживает основные приватные монеты (ZCash, DASH) в SPV манере. Один из очень немногих кошельков, способных поддерживать полностью защищенные транзакции Zcash и способность обезличить транзакции Bitcoin.
 
-- Decentralized Wallet >> Designed to work with most major blockchains in a decentralized manner where an app doesn't depend on some server of a wallet provider to send/receive transactions but interacts with blockchain networks directly.
+- Децентрализованный кошелек >> Разработан для децентрализованной работы с большинством основных блокчейнов в тех случаях, когда приложение не зависит от некоторых серверов провайдера кошелька для отправки/получения транзакций, но напрямую взаимодействует с сетями блокчейна.
 
-- Privacy Focused >> Designed to allow for privacy even in the most privacy-breaching scenarios. There are no user accounts keeping your records, no identity checks that risk exposing your financials to the world, and no interaction with traditional finance layers. The app is partially TOR enabled and VPN support is coming soon.
+- Конфиденциальный >> Дизайн позволяет сохранять конфиденциальность даже в самых сложных случаях. Нет учетных записей пользователей, которые сохраняют ваши карты, нет проверки личности, которые могут раскрывать ваши финансы, и отсутствие взаимодействия с традиционными финансовыми системами. Приложение частично поддерживает TOR и поддержка VPN скоро будет доступна.
 
-- Fully Open Source >> The most transparent wallet application built to date. The entire 4-year production process of the app is openly accessible online along with 100% of its code for anyone to evaluate or reuse in other projects. Verified and audited by third parties.
+- Полностью открытый исходный код >> Наиболее прозрачное приложение кошелька на сегодняшний день. Весь 4-летний процесс создания приложения доступен в сети Интернет вместе со 100% его кодом для проверки или повторного использования в других проектах. Проверено и проверено третьими лицами.
 
-Be Unstoppable!  😎
+Будьте Неостановимы!  😎
