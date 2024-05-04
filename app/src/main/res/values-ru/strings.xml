@@ -636,6 +636,10 @@
     <string name="Approve_YouApprove">Вы разрешаете</string>
     <string name="Approve_YouRevoke">Вы отменяете</string>
     <!--Swap Unlock Access-->
+    <string name="Swap_Unlock_PageTitle">Разблокировать доступ</string>
+    <string name="Swap_Unlock_Subtitle">Разрешить доступ к следующей сумме</string>
+    <string name="Swap_Unlock_Info">Предоставьте разрешение смарт-контракту на торговлю токенами от вашего имени, указав разрешенную сумму. Это не влияет на ваш баланс, но влечет за собой небольшую комиссию за разрешение.\n\nПредварительное разрешение более высокой суммы для будущих сделок экономически выгоднее по сравнению с разрешением по запросу.</string>
+    <string name="Swap_Unlock_Unlimited">Неограниченно</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Разрешение</string>
     <string name="SwapInfo_AllowanceDescription">Сумма, которую exchange может потратить от имени пользователя при выполнении обмена токенов. Действующая транзакция, устанавливающая достаточный уровень допустимости, необходима для того, чтобы транзакция обмена была осуществлена.</string>
@@ -786,6 +790,8 @@
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
+    <string name="Settings_JoinUnstoppables">Присоединиться к Unstoppables</string>
+    <string name="Settings_JoinUnstoppables_Description">Будьте в курсе событий Unstoppable. Будьте первыми, кто узнает о новых возможностях, о проблемах пользователей и о том над чем мы работаем!</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
@@ -1294,6 +1300,9 @@
     <string name="CoinPage_Type">Тип</string>
     <string name="CoinPage_Period">Период</string>
     <string name="CoinPage_RsiLength">Длина RSI</string>
+    <string name="CoinPage_FastLength">Быстрая длина</string>
+    <string name="CoinPage_SlowLength">Медленная длина</string>
+    <string name="CoinPage_SignalSmoothing">Сглаживание сигнала</string>
     <string name="CoinPage_IndicatorsAlertText">Индикаторы доступны только для премиум-пользователей Unstoppable кошелька.</string>
     <string name="CoinPage_AiGeneratedText">Это описание, сгенерированное искусственным интеллектом на основе предоставленного справочного материала для данной криптовалюты. Оно может содержать ошибки.</string>
     <string name="CoinPage_MarketsLabel_Verified">Подтверждено</string>
