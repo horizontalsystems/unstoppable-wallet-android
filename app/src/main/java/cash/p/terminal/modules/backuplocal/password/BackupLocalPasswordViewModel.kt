@@ -17,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 sealed class BackupType {
     class SingleWalletBackup(val accountId: String) : BackupType()
@@ -45,6 +47,9 @@ class BackupLocalPasswordViewModel(
         private set
 
     init {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm")
+        val currentDateTime = LocalDateTime.now().format(formatter)
+
         when (type) {
             is BackupType.SingleWalletBackup -> {
                 val account = accountManager.account(type.accountId)
@@ -53,12 +58,12 @@ class BackupLocalPasswordViewModel(
 
                 } else {
                     val walletName = account.name.replace(" ", "_")
-                    backupFileName = "UW_Backup_$walletName.json"
+                    backupFileName = "UW_Backup_${walletName}_${currentDateTime}.json"
                 }
             }
 
             is BackupType.FullBackup -> {
-                backupFileName = "UW_App_Backup.json"
+                backupFileName = "UW_App_Backup_${currentDateTime}.json"
             }
         }
 
