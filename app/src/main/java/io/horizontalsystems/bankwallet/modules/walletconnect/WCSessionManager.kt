@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.managers.ActiveAccountState
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionStorage
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +20,6 @@ class WCSessionManager(
 ) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val disposable = CompositeDisposable()
 
     private val _sessionsFlow = MutableStateFlow<List<Wallet.Model.Session>>(emptyList())
     val sessionsFlow: StateFlow<List<Wallet.Model.Session>>
@@ -130,6 +128,8 @@ class WCSessionManager(
         object NoSuitableEvmKit : RequestDataError()
         object NoSigner : RequestDataError()
         object RequestNotFoundError : RequestDataError()
+        object InvalidGasPrice: RequestDataError()
+        object InvalidNonce: RequestDataError()
     }
 
 }
