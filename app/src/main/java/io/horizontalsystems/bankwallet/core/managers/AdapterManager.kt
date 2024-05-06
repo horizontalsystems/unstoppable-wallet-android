@@ -121,7 +121,7 @@ class AdapterManager(
         wallets.forEach { wallet ->
             var adapter = currentAdapters.remove(wallet)
             if (adapter == null) {
-                adapterFactory.getAdapter(wallet)?.let {
+                adapterFactory.getAdapterOrNull(wallet)?.let {
                     it.start()
 
                     adapter = it
@@ -163,7 +163,7 @@ class AdapterManager(
 
             //add and start new adapters
             walletsToRefresh.forEach { wallet ->
-                adapterFactory.getAdapter(wallet)?.let { adapter ->
+                adapterFactory.getAdapterOrNull(wallet)?.let { adapter ->
                     adaptersMap[wallet] = adapter
                     adapter.start()
                 }

@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.core.factories
 
 import android.content.Context
+import android.util.Log
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
@@ -84,7 +85,14 @@ class AdapterFactory(
         return Trc20Adapter(tronKitWrapper, address, wallet)
     }
 
-    fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
+    fun getAdapterOrNull(wallet: Wallet) = try {
+        getAdapter(wallet)
+    } catch (e: Throwable) {
+        Log.e("AAA", "get adapter error", e)
+        null
+    }
+
+    private fun getAdapter(wallet: Wallet) = when (val tokenType = wallet.token.type) {
         is TokenType.Derived -> {
             when (wallet.token.blockchainType) {
                 BlockchainType.Bitcoin -> {
