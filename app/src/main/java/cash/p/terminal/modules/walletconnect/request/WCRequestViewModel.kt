@@ -76,7 +76,7 @@ class WCNewRequestViewModel(
                 extractMessageParamFromPersonalSign(sessionRequest.request.params)
             }
 
-            TYPED_DATA_METHOD, SEND_TRANSACTION_METHOD -> {
+            TYPED_DATA_METHOD, SEND_TRANSACTION_METHOD, SIGN_TRANSACTION_METHOD -> {
                 val params = JsonParser.parseString(sessionRequest.request.params).asJsonArray
                 params.firstOrNull { it.isJsonObject }?.asJsonObject?.toString()
                     ?: throw Exception("Invalid Data")

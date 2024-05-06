@@ -24,7 +24,7 @@ import cash.p.terminal.ui.compose.components.VSpacer
 fun ConfirmTransactionScreen(
     title: String = stringResource(R.string.Swap_Confirm_Title),
     onClickBack: () -> Unit,
-    onClickSettings: () -> Unit,
+    onClickSettings: (() -> Unit)?,
     onClickClose: (() -> Unit)?,
     buttonsSlot: @Composable() (ColumnScope.() -> Unit),
     content: @Composable() (ColumnScope.() -> Unit)
@@ -37,19 +37,21 @@ fun ConfirmTransactionScreen(
                     HsBackButton(onClick = onClickBack)
                 },
                 menuItems = buildList<MenuItem> {
-                    add(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Settings_Title),
-                            icon = R.drawable.ic_manage_2_24,
-                            onClick = onClickSettings
+                    onClickSettings?.let {
+                        add(
+                            MenuItem(
+                                title = TranslatableString.ResString(R.string.Settings_Title),
+                                icon = R.drawable.ic_manage_2_24,
+                                onClick = onClickSettings
+                            )
                         )
-                    )
-                    onClickClose?.let<() -> Unit, Unit> {
+                    }
+                    onClickClose?.let {
                         add(
                             MenuItem(
                                 title = TranslatableString.ResString(R.string.Button_Close),
                                 icon = R.drawable.ic_close,
-                                onClick = it
+                                onClick = onClickClose
                             )
                         )
                     }

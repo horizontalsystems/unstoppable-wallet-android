@@ -23,6 +23,7 @@ import cash.p.terminal.modules.sendevmtransaction.ValueType
 import cash.p.terminal.modules.sendevmtransaction.ViewItem
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCEthereumTransaction
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
+import cash.p.terminal.modules.walletconnect.request.signtransaction.WCSignEthereumTransactionRequestScreen
 import cash.p.terminal.modules.walletconnect.session.ui.BlockchainCell
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -42,8 +43,7 @@ class WCRequestFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val wcRequestViewModel =
-            viewModel<WCNewRequestViewModel>(factory = WCNewRequestViewModel.Factory())
+        val wcRequestViewModel = viewModel<WCNewRequestViewModel>(factory = WCNewRequestViewModel.Factory())
         val composableScope = rememberCoroutineScope()
         when (val sessionRequestUI = wcRequestViewModel.sessionRequest) {
             is SessionRequestUI.Content -> {
@@ -61,6 +61,26 @@ class WCRequestFragment : BaseComposeFragment() {
                         }
 
                     WCSendEthRequestScreen(
+                        navController,
+                        logger,
+                        blockchainType,
+                        transaction,
+                        sessionRequestUI.peerUI.peerName
+                    )
+                } else if (sessionRequestUI.method == "eth_signTransaction") {
+                    val blockchainType = wcRequestViewModel.blockchain?.type ?: return
+
+                    val transaction = try {
+                        val ethTransaction = Gson().fromJson(
+                            sessionRequestUI.param,
+                            WCEthereumTransaction::class.java
+                        )
+                        ethTransaction.getWCTransaction()
+                    } catch (e: Throwable) {
+                        return
+                    }
+
+                    WCSignEthereumTransactionRequestScreen(
                         navController,
                         logger,
                         blockchainType,

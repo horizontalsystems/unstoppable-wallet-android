@@ -205,6 +205,7 @@ class WCSessionViewModel(
         "eth_sign" -> "Standard Sign Request"
         "eth_signTypedData" -> "Typed Sign Request"
         "eth_sendTransaction" -> "Approve Transaction"
+        "eth_signTransaction" -> "Sign Transaction"
         else -> "Unsupported"
     }
 
@@ -467,7 +468,7 @@ class WCSessionViewModel(
 //                    "eth_getBalance",
 //                    "eth_sendRawTransaction",
                     "eth_sign",
-//                    "eth_signTransaction",
+                    "eth_signTransaction",
                     "eth_signTypedData"
                 ),
                 events = listOf("chainChanged", "accountsChanged"),

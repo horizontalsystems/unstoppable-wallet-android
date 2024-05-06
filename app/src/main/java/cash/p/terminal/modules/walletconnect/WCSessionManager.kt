@@ -4,10 +4,8 @@ import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.ActiveAccountState
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +19,6 @@ class WCSessionManager(
 ) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val disposable = CompositeDisposable()
 
     private val _sessionsFlow = MutableStateFlow<List<Wallet.Model.Session>>(emptyList())
     val sessionsFlow: StateFlow<List<Wallet.Model.Session>>
@@ -130,6 +127,8 @@ class WCSessionManager(
         object NoSuitableEvmKit : RequestDataError()
         object NoSigner : RequestDataError()
         object RequestNotFoundError : RequestDataError()
+        object InvalidGasPrice: RequestDataError()
+        object InvalidNonce: RequestDataError()
     }
 
 }
