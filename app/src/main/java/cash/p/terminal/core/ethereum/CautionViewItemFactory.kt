@@ -7,7 +7,6 @@ import cash.p.terminal.core.convertedError
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.evmfee.FeeSettingsError
 import cash.p.terminal.modules.evmfee.FeeSettingsWarning
-import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionService
 
 class CautionViewItemFactory(
     private val baseCoinService: EvmCoinService
@@ -77,15 +76,6 @@ class CautionViewItemFactory(
 
     private fun convertError(error: Throwable): Pair<String, String> =
         when (val convertedError = error.convertedError) {
-            is SendEvmTransactionService.TransactionError.InsufficientBalance -> {
-                Pair(
-                    Translator.getString(R.string.EthereumTransaction_Error_Title),
-                    Translator.getString(
-                        R.string.EthereumTransaction_Error_InsufficientBalance,
-                        baseCoinService.coinValue(convertedError.requiredBalance).getFormattedFull()
-                    )
-                )
-            }
             is EvmError.InsufficientBalanceWithFee -> {
                 Pair(
                     Translator.getString(R.string.EthereumTransaction_Error_Title),
