@@ -24,7 +24,7 @@ import kotlin.math.min
 
 class Eip1559GasPriceService(
     private val gasProvider: Eip1559GasPriceProvider,
-    refreshSignalFlowable: Flowable<Long>,
+    private val refreshSignalFlowable: Flowable<Long>,
     minGasPrice: GasPrice.Eip1559? = null,
     initialGasPrice: GasPrice.Eip1559? = null
 ) : IEvmGasPriceService() {
@@ -63,7 +63,7 @@ class Eip1559GasPriceService(
         initialGasPrice: GasPrice.Eip1559? = null
     ) : this(gasProvider, evmKit.lastBlockHeightFlowable, minGasPrice, initialGasPrice)
 
-    init {
+    override fun start() {
         if (initialBaseFee != null && initialPriorityFee != null) {
             setGasPrice(initialBaseFee, initialPriorityFee)
         } else {

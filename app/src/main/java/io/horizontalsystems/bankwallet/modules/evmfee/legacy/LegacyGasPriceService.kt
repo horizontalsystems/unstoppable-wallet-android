@@ -17,7 +17,7 @@ import java.math.BigDecimal
 class LegacyGasPriceService(
     private val gasPriceProvider: LegacyGasPriceProvider,
     private val minRecommendedGasPrice: Long? = null,
-    initialGasPrice: Long? = null,
+    private val initialGasPrice: Long? = null,
 ) : IEvmGasPriceService() {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var setGasPriceJob: Job? = null
@@ -30,7 +30,7 @@ class LegacyGasPriceService(
 
     override fun createState() = state
 
-    init {
+    override fun start() {
         if (initialGasPrice != null) {
             setGasPrice(initialGasPrice)
         } else {
