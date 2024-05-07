@@ -41,8 +41,6 @@ class SendEvmSettingsService(
                 sync()
             }
         }
-
-        nonceService.start()
     }
 
     fun clear() {

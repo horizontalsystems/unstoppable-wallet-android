@@ -38,7 +38,7 @@ class EvmFeeService(
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val transactionStatusFlow = _transactionStatusFlow.asSharedFlow()
 
-    init {
+    fun start() {
         coroutineScope.launch {
             gasPriceService.stateFlow.collect {
                 gasPriceInfoState = it

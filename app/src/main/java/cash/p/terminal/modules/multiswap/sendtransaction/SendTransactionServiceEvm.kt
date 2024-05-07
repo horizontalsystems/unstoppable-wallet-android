@@ -91,14 +91,6 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     }
     private val nonceService by lazy { SendEvmNonceService(evmKitWrapper.evmKit) }
     private val settingsService by lazy { SendEvmSettingsService(feeService, nonceService) }
-//    private val sendService by lazy {
-//        SendEvmTransactionService(
-//            sendEvmData,
-//            evmKitWrapper,
-//            settingsService,
-//            App.evmLabelManager
-//        )
-//    }
 
     private val baseCoinService = coinServiceFactory.baseCoinService
     private val cautionViewItemFactory by lazy { CautionViewItemFactory(baseCoinService) }
@@ -124,6 +116,9 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
     )
 
     override fun start(coroutineScope: CoroutineScope) {
+        gasPriceService.start()
+        feeService.start()
+
         coroutineScope.launch {
             gasPriceService.stateFlow.collect { gasPriceState ->
                 _sendTransactionSettingsFlow.update {
@@ -133,6 +128,9 @@ class SendTransactionServiceEvm(blockchainType: BlockchainType) : ISendTransacti
         }
         coroutineScope.launch {
             settingsService.start()
+        }
+        coroutineScope.launch {
+            nonceService.start()
         }
         coroutineScope.launch {
             settingsService.stateFlow.collect { transactionState ->

@@ -65,6 +65,7 @@ interface IEvmFeeService {
 
 abstract class IEvmGasPriceService : ServiceState<DataState<GasPriceInfo>>() {
     abstract fun setRecommended()
+    abstract fun start()
 }
 
 abstract class FeeSettingsError : Throwable() {
