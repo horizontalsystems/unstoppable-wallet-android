@@ -7,11 +7,11 @@ buildscript {
         lifecycle_version = '2.7.0'
 
         compose_version = '1.6.7'
-        kotlin_version = '1.8.0'
+        kotlin_version = '1.9.23'
         material_version = "1.12.0"
         appcompat_version = "1.6.1"
         constraint_version = "2.1.4"
-        core_ktx_version = "1.10.1"
+        core_ktx_version = "1.13.1"
         fragment_ktx_version = "1.7.0"
         navigation_ktx_version = "2.7.7"
         rxjava_version = "2.2.19"
@@ -25,12 +25,16 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.1'
+        classpath 'com.android.tools.build:gradle:8.4.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+plugins {
+    id 'com.google.devtools.ksp' version '1.9.23-1.0.20' apply false
 }
 
 allprojects {
