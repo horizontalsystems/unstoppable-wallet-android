@@ -255,6 +255,9 @@ dependencies {
 
     api 'com.journeyapps:zxing-android-embedded:4.3.0'
 
+    // QR code generator
+    implementation("io.github.alexzhirkevich:qrose:1.0.1")
+
     // WorkManager Kotlin
     def work_version = "2.9.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
