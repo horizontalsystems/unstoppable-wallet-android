@@ -37,7 +37,6 @@ android {
         resValue "string", "appGithubLink", "https://github.com/horizontalsystems/unstoppable-wallet-android"
         resValue "string", "appTwitterLink", "https://twitter.com/UnstoppableByHS"
         resValue "string", "appTelegramLink", "https://t.me/unstoppable_announcements"
-        resValue "string", "appRedditLink", "https://www.reddit.com/r/UNSTOPPABLEWallet/"
         resValue "string", "reportEmail", "support.unstoppable@protonmail.com"
         resValue "string", "releaseNotesUrl", "https://api.github.com/repos/horizontalsystems/unstoppable-wallet-android/releases/tags/"
         resValue "string", "walletConnectAppMetaDataName", "Unstoppable"

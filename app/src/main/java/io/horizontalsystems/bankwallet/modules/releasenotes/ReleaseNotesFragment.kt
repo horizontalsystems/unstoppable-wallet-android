@@ -108,11 +108,6 @@ fun ReleaseNotesScreen(
                     viewModel.telegramUrl,
                     stringResource(R.string.CoinPage_Telegram)
                 )
-                IconButton(
-                    R.drawable.ic_reddit_filled_24,
-                    viewModel.redditUrl,
-                    stringResource(R.string.CoinPage_Reddit)
-                )
 
                 Spacer(Modifier.weight(1f))
 
