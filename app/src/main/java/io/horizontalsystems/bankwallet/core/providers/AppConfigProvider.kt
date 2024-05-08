@@ -18,7 +18,6 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val appGithubLink by lazy { Translator.getString(R.string.appGithubLink) }
     val appTwitterLink by lazy { Translator.getString(R.string.appTwitterLink) }
     val appTelegramLink by lazy { Translator.getString(R.string.appTelegramLink) }
-    val appRedditLink by lazy { Translator.getString(R.string.appRedditLink) }
     val reportEmail by lazy { Translator.getString(R.string.reportEmail) }
     val releaseNotesUrl by lazy { Translator.getString(R.string.releaseNotesUrl) }
     val mempoolSpaceUrl: String = "https://mempool.space"

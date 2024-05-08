@@ -26,7 +26,6 @@ class ReleaseNotesViewModel(
 
     val twitterUrl = appConfigProvider.appTwitterLink
     val telegramUrl = appConfigProvider.appTelegramLink
-    val redditUrl = appConfigProvider.appRedditLink
 
     var markdownBlocks by mutableStateOf<List<MarkdownBlock>>(listOf())
         private set
