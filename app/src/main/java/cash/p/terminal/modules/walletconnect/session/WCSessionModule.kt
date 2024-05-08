@@ -71,7 +71,7 @@ data class WCSessionUiState(
     val closeEnabled: Boolean,
     val connecting: Boolean,
     val buttonStates: WCSessionButtonStates?,
-    val hint: Int?,
+    val hint: String?,
     val showError: String?,
     val status: Status?,
     val pendingRequests: List<WCRequestViewItem>

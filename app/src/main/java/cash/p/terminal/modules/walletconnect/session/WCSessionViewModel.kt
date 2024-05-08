@@ -7,6 +7,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.walletconnect.WCDelegate
@@ -43,10 +44,37 @@ class WCSessionViewModel(
     private var closeEnabled = false
     private var connecting = false
     private var buttonStates: WCSessionButtonStates? = null
-    private var hint: Int? = null
+    private var hint: String? = null
     private var showError: String? = null
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
+
+    private val supportedChains = listOf(
+        Chain.Ethereum,
+        Chain.BinanceSmartChain,
+        Chain.Polygon,
+        Chain.Optimism,
+        Chain.ArbitrumOne,
+        Chain.Avalanche,
+        Chain.Gnosis,
+    )
+
+    private val supportedMethods = listOf(
+        "eth_sendTransaction",
+        "personal_sign",
+//        "eth_accounts",
+//        "eth_requestAccounts",
+//        "eth_call",
+//        "eth_getBalance",
+//        "eth_sendRawTransaction",
+        "eth_sign",
+        "eth_signTransaction",
+        "eth_signTypedData",
+//        "wallet_addEthereumChain",
+//        "wallet_switchEthereumChain"
+    )
+
+    private val supportedEvents = listOf("chainChanged", "accountsChanged" /*"connect", "disconnect", "message"*/)
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
@@ -89,7 +117,7 @@ class WCSessionViewModel(
             WCDelegate.walletEvents.collect { event ->
                 when (event) {
                     is Wallet.Model.SessionDelete -> {
-                        when(event){
+                        when (event) {
                             is Wallet.Model.SessionDelete.Success -> {
                                 session?.topic?.let { topic ->
                                     if (topic == event.topic) {
@@ -97,6 +125,7 @@ class WCSessionViewModel(
                                     }
                                 }
                             }
+
                             is Wallet.Model.SessionDelete.Error -> {
                                 sessionServiceState = Invalid(event.error)
                             }
@@ -152,10 +181,34 @@ class WCSessionViewModel(
         loadSessionProposal(topic)
     }
 
+    private fun validate(proposal: Wallet.Model.SessionProposal): ValidationError? {
+        val chains = proposal.requiredNamespaces.mapNotNull { it.value.chains }.flatten()
+        val methods = proposal.requiredNamespaces.map { it.value.methods }.flatten()
+        val events = proposal.requiredNamespaces.map { it.value.events }.flatten()
+
+        val supportedChains = supportedChains.map { "eip155:${it.id}" }
+
+        val unsupportedChains = chains - supportedChains.toSet()
+        if (unsupportedChains.isNotEmpty()) {
+            return ValidationError.UnsupportedChains(unsupportedChains)
+        }
+
+        val unsupportedMethods = methods - supportedMethods.toSet()
+        if (unsupportedMethods.isNotEmpty()) {
+            return ValidationError.UnsupportedMethods(unsupportedMethods)
+        }
+
+        val unsupportedEvents = events - supportedEvents.toSet()
+        if (unsupportedEvents.isNotEmpty()) {
+            return ValidationError.UnsupportedEvents(unsupportedEvents)
+        }
+
+        return null
+    }
+
     private fun loadSessionProposal(topic: String?) {
         if (topic != null) {
-            val existingSession =
-                sessionManager.sessions.firstOrNull { it.topic == topic }
+            val existingSession = sessionManager.sessions.firstOrNull { it.topic == topic }
             if (existingSession != null) {
                 peerMeta = existingSession.metaData?.let {
                     PeerMetaItem(
@@ -172,8 +225,7 @@ class WCSessionViewModel(
                 sessionServiceState = Ready
             }
         } else {
-            WCDelegate.sessionProposalEvent?.let {
-                val (sessionProposal, _) = it
+            WCDelegate.sessionProposalEvent?.let { (sessionProposal, _) ->
                 peerMeta = PeerMetaItem(
                     sessionProposal.name,
                     sessionProposal.url,
@@ -182,7 +234,7 @@ class WCSessionViewModel(
                     account?.name,
                 )
                 proposal = sessionProposal
-                sessionServiceState = WaitingForApproveSession
+                sessionServiceState = validate(sessionProposal)?.let { Invalid(it) } ?: WaitingForApproveSession
             } ?: run {
                 sessionServiceState = Invalid(RequestNotFoundError)
             }
@@ -397,34 +449,46 @@ class WCSessionViewModel(
     private fun setError(
         state: WCSessionServiceState
     ) {
-        val error: String? = when (state) {
-            is Invalid -> state.error.message ?: state.error::class.java.simpleName
+        val error: String? = when {
+            state is Invalid && (state.error !is ValidationError) -> state.error.message ?: state.error::class.java.simpleName
             else -> null
         }
 
         showError = error
     }
 
-    private fun getHint(connection: Boolean?, state: WCSessionServiceState): Int? {
+    private fun getHint(connection: Boolean?, state: WCSessionServiceState): String? {
         when {
             connection == false
                     && (state == WaitingForApproveSession || state is Ready) -> {
-                return R.string.WalletConnect_Reconnect_Hint
+                return Translator.getString(R.string.WalletConnect_Reconnect_Hint)
             }
 
             connection == null -> return null
             state is Invalid -> return getErrorMessage(state.error)
-            state == WaitingForApproveSession -> R.string.WalletConnect_Approve_Hint
+            state == WaitingForApproveSession -> Translator.getString(R.string.WalletConnect_Approve_Hint)
         }
         return null
     }
 
-    private fun getErrorMessage(error: Throwable): Int? {
+    private fun getErrorMessage(error: Throwable): String? {
         return when (error) {
-            is UnsupportedChainId -> R.string.WalletConnect_Error_UnsupportedChainId
-            is NoSuitableAccount -> R.string.WalletConnect_Error_NoSuitableAccount
-            is NoSuitableEvmKit -> R.string.WalletConnect_Error_NoSuitableEvmKit
-            is RequestNotFoundError -> R.string.WalletConnect_Error_RequestNotFoundError
+            is UnsupportedChainId -> Translator.getString(R.string.WalletConnect_Error_UnsupportedChainId)
+            is NoSuitableAccount -> Translator.getString(R.string.WalletConnect_Error_NoSuitableAccount)
+            is NoSuitableEvmKit -> Translator.getString(R.string.WalletConnect_Error_NoSuitableEvmKit)
+            is RequestNotFoundError -> Translator.getString(R.string.WalletConnect_Error_RequestNotFoundError)
+            is ValidationError.UnsupportedChains -> Translator.getString(
+                R.string.WalletConnect_Error_UnsupportedChains,
+                error.chains.joinToString { it })
+
+            is ValidationError.UnsupportedMethods -> Translator.getString(
+                R.string.WalletConnect_Error_UnsupportedMethods,
+                error.methods.joinToString { it })
+
+            is ValidationError.UnsupportedEvents -> Translator.getString(
+                R.string.WalletConnect_Error_UnsupportedEvents,
+                error.events.joinToString { it })
+
             else -> null
         }
     }
@@ -447,50 +511,18 @@ class WCSessionViewModel(
             else -> throw UnsupportedAccountException()
         }
 
-    private fun getSupportedNamespaces(accounts: List<String>): Map<String, Wallet.Model.Namespace.Session> {
-        return mapOf(
-            "eip155" to Wallet.Model.Namespace.Session(
-                chains = listOf(
-                    "eip155:1",
-                    "eip155:56",
-                    "eip155:137",
-                    "eip155:10",
-                    "eip155:42161",
-                    "eip155:43114",
-                    "eip155:100",
-                ),
-                methods = listOf(
-                    "eth_sendTransaction",
-                    "personal_sign",
-//                    "eth_accounts",
-//                    "eth_requestAccounts",
-//                    "eth_call",
-//                    "eth_getBalance",
-//                    "eth_sendRawTransaction",
-                    "eth_sign",
-                    "eth_signTransaction",
-                    "eth_signTypedData"
-                ),
-                events = listOf("chainChanged", "accountsChanged"),
-                accounts = accounts
-            ),
+    private fun getSupportedNamespaces(accounts: List<String>) = mapOf(
+        "eip155" to Wallet.Model.Namespace.Session(
+            chains = supportedChains.map { "eip155:${it.id}" },
+            methods = supportedMethods,
+            events = supportedEvents,
+            accounts = accounts
         )
-    }
+    )
 
-    private fun getSupportedBlockchains(account: Account): List<WCBlockchain> {
-        val chains = listOf(
-            Chain.Ethereum,
-            Chain.BinanceSmartChain,
-            Chain.Polygon,
-            Chain.Optimism,
-            Chain.ArbitrumOne,
-            Chain.Avalanche,
-            Chain.Gnosis,
-        )
-        return chains.map {
-            val address = getEvmAddress(account, it).eip55
-            WCBlockchain(it.id, it.name, address)
-        }
+    private fun getSupportedBlockchains(account: Account) = supportedChains.map {
+        val address = getEvmAddress(account, it).eip55
+        WCBlockchain(it.id, it.name, address)
     }
 
     fun setRequestToOpen(request: Wallet.Model.SessionRequest) {
@@ -498,3 +530,10 @@ class WCSessionViewModel(
     }
 
 }
+
+sealed class ValidationError : Throwable() {
+    class UnsupportedChains(val chains: List<String>) : ValidationError()
+    class UnsupportedMethods(val methods: List<String>) : ValidationError()
+    class UnsupportedEvents(val events: List<String>) : ValidationError()
+}
+

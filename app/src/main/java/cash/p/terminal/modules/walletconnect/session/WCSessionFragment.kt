@@ -181,7 +181,7 @@ private fun ColumnScope.WCSessionListContent(
             Spacer(Modifier.height(12.dp))
             TextImportantWarning(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(it)
+                text = it
             )
         }
         Spacer(Modifier.height(24.dp))
