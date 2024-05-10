@@ -265,8 +265,6 @@
     <string name="Balance_Syncing">Synchronisieren…</string>
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
     <string name="Balance_Syncing_WithProgress">Synchronisiere... %s%%</string>
-    <string name="Balance_AddCoins">Coins hinzufügen</string>
-    <string name="Balance_AddCoin">Coin hinzufügen</string>
     <string name="Balance_CoinDisabled">Deaktivierte Münze %s</string>
     <string name="Balance_Sort_Balance">Guthaben</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
@@ -274,7 +272,6 @@
     <string name="Balance_Hidden">verborgen</string>
     <string name="Balance_DownloadingBlocks">Blöcke herunterladen</string>
     <string name="Balance_ScanningBlocks">Scanne Blöcke</string>
-    <string name="Balance_Backup_Alert">Sie müssen ein Backup des %s Wallet machen, bevor Sie %s erhalten können.</string>
     <string name="Balance_NoWalletAlert">Sie haben noch keine installierten Wallets.\nErstellen Sie eine neue Wallet oder stellen Sie eine vorhandene wieder her </string>
     <string name="Balance_NoCoinsAlert">Sie haben keine Coins zu diesem Wallet hinzugefügt.</string>
     <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
@@ -350,10 +347,6 @@
     <string name="Send_Error_SendToSelf">Sich selbst zu senden wird nicht unterstützt</string>
     <string name="Send_DialogAvailableBalance">Verfügbares Guthaben</string>
     <string name="Send_DialogSpeed">Transaktionsgeschwindigkeit</string>
-    <string name="Send_TxSpeed_Low">Niedrig</string>
-    <string name="Send_TxSpeed_High">Hoch</string>
-    <string name="Send_TxSpeed_Recommended">Empfohlen</string>
-    <string name="Send_TxSpeed_Custom">Benutzerdefiniert</string>
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogProceed">Weiter</string>
     <string name="Send_LockTime_Off">Aus</string>
@@ -558,7 +551,6 @@
     <string name="SwapSettings_Apply">Übernehmen</string>
     <string name="SwapSettings_DeadlineMinute">%s Min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse oder Domäne</string>
-    <string name="SwapSettings_FeeSettingsAlert">Eine Service-Gebühr für die Swap-Aktion auf der Plattform typischerweise entweder 0,3% oder 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Null Frist</string>
     <string name="SwapSettings_Error_SlippageZero">Null Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ihre Transaktion wird wahrscheinlich fehlschlagen.</string>
