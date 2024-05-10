@@ -271,8 +271,6 @@
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_SearchingTransactions">Buscando transacciones…</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando... %s%%</string>
-    <string name="Balance_AddCoins">Añadir Monedas</string>
-    <string name="Balance_AddCoin">Añadir Monedas</string>
     <string name="Balance_CoinDisabled">Moneda deshabilitada %s</string>
     <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Ordenar por</string>
@@ -281,7 +279,6 @@
     <string name="Balance_Hidden">oculto</string>
     <string name="Balance_DownloadingBlocks">Descargando bloques</string>
     <string name="Balance_ScanningBlocks">Bloques de escaneo</string>
-    <string name="Balance_Backup_Alert">Necesita respaldar el monedero %s antes de poder recibir %s.</string>
     <string name="Balance_NoWalletAlert">Aún no tiene ninguna cartera instalada.\nCrear una nueva cartera o restaurar una existente </string>
     <string name="Balance_NoCoinsAlert">No has añadido ninguna moneda a esta cartera.</string>
     <string name="Balance_WatchAccount_NoBalance">Esta dirección de billetera no tiene saldo</string>
@@ -359,10 +356,6 @@
     <string name="Send_Error_SendToSelf">Enviarte a vos mismo no está soportado</string>
     <string name="Send_DialogAvailableBalance">Saldo disponible</string>
     <string name="Send_DialogSpeed">Velocidad de transacción</string>
-    <string name="Send_TxSpeed_Low">Bajo</string>
-    <string name="Send_TxSpeed_High">Alto</string>
-    <string name="Send_TxSpeed_Recommended">Recomendado</string>
-    <string name="Send_TxSpeed_Custom">Personalizado</string>
     <string name="Send_DialogFee">Comisión:</string>
     <string name="Send_DialogProceed">Siguiente</string>
     <string name="Send_LockTime_Off">Desactivado</string>
@@ -571,7 +564,6 @@
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
-    <string name="SwapSettings_FeeSettingsAlert">Una tarifa de servicio para la acción de intercambio en la plataforma típicamente de 0,3% o 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
     <string name="SwapSettings_Error_SlippageZero">Cero deslizamiento</string>
     <string name="SwapSettings_Error_SlippageTooLow">Es probable que su transacción falle.</string>
