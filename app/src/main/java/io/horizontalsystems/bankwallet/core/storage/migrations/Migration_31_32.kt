@@ -5,15 +5,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 object Migration_31_32 : Migration(31, 32) {
 
-    override fun migrate(database: SupportSQLiteDatabase) {
-        createTableActiveAccount(database)
-        createTableRestoreSettings(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        createTableActiveAccount(db)
+        createTableRestoreSettings(db)
 
-        handleZcashAccount(database)
-        updateAccountRecordTable(database)
-        moveCoinSettingsFromBlockchainSettingsToWallet(database)
-        setActiveAccount(database)
-        setAccountUserFriendlyName(database)
+        handleZcashAccount(db)
+        updateAccountRecordTable(db)
+        moveCoinSettingsFromBlockchainSettingsToWallet(db)
+        setActiveAccount(db)
+        setAccountUserFriendlyName(db)
     }
 
     private fun handleZcashAccount(database: SupportSQLiteDatabase) {

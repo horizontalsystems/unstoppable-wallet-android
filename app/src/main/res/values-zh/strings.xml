@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">参数未设置</string>
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
     <string name="Alert_Close">关闭</string>
@@ -304,8 +304,6 @@
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
-    <string name="Balance_AddCoins">添加代币</string>
-    <string name="Balance_AddCoin">添加代币</string>
     <string name="Balance_CoinDisabled">已禁用代币%s</string>
     <string name="Balance_Sort_Balance">余额</string>
     <string name="Balance_Sort_PopupTitle">排序</string>
@@ -314,7 +312,6 @@
     <string name="Balance_Hidden">隐藏</string>
     <string name="Balance_DownloadingBlocks">正在下载块</string>
     <string name="Balance_ScanningBlocks">扫描块</string>
-    <string name="Balance_Backup_Alert">您必须在接收%s之前先备份%s钱包。</string>
     <string name="Balance_NoWalletAlert">尚无钱包</string>
     <string name="Balance_NoCoinsAlert">您还没有添加任何代币到此钱包中。</string>
     <string name="Balance_WatchAccount_NoBalance">此钱包地址没有任何余额</string>
@@ -392,10 +389,6 @@
     <string name="Send_Error_SendToSelf">不支持发送给自己</string>
     <string name="Send_DialogAvailableBalance">可用余额</string>
     <string name="Send_DialogSpeed">交易速度</string>
-    <string name="Send_TxSpeed_Low">低</string>
-    <string name="Send_TxSpeed_High">高</string>
-    <string name="Send_TxSpeed_Recommended">推荐</string>
-    <string name="Send_TxSpeed_Custom">自定义</string>
     <string name="Send_DialogFee">费用：</string>
     <string name="Send_DialogProceed">继续</string>
     <string name="Send_LockTime_Off">关</string>
@@ -609,7 +602,6 @@
     <string name="SwapSettings_Apply">应用</string>
     <string name="SwapSettings_DeadlineMinute">%s分钟。</string>
     <string name="SwapSettings_RecipientPlaceholder">地址或域名</string>
-    <string name="SwapSettings_FeeSettingsAlert">典型平台上交换动作的服务费：0.3% 或 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">没有截止日期</string>
     <string name="SwapSettings_Error_SlippageZero">没有滑点</string>
     <string name="SwapSettings_Error_SlippageTooLow">滑点太小，您的交易可能失败。</string>

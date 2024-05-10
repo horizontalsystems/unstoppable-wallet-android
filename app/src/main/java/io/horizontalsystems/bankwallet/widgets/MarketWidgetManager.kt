@@ -104,7 +104,7 @@ class MarketWidgetManager {
             }
         }
 
-        val localPath = context.imageLoader.diskCache?.get(url)?.use { snapshot ->
+        val localPath = context.imageLoader.diskCache?.openSnapshot(url)?.use { snapshot ->
             snapshot.data.toFile().path
         }
 

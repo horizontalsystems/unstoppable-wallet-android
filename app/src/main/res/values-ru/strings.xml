@@ -306,8 +306,6 @@
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
-    <string name="Balance_AddCoins">Добавить токен</string>
-    <string name="Balance_AddCoin">Добавить токен</string>
     <string name="Balance_CoinDisabled">Отключена монета %s</string>
     <string name="Balance_Sort_Balance">По балансу</string>
     <string name="Balance_Sort_PopupTitle">Сортировать</string>
@@ -316,7 +314,6 @@
     <string name="Balance_Hidden">скрытое</string>
     <string name="Balance_DownloadingBlocks">Загрузка блоков</string>
     <string name="Balance_ScanningBlocks">Сканирование блоков</string>
-    <string name="Balance_Backup_Alert">Вам нужно сделать резервную копию %s Кошелька, прежде чем вы сможете получать %s.</string>
     <string name="Balance_NoWalletAlert">У вас пока нет установленных кошельков.\nСоздайте новый кошелек или восстановите существующий кошелек </string>
     <string name="Balance_NoCoinsAlert">Вы еще не добавили токены в этот кошелек.</string>
     <string name="Balance_WatchAccount_NoBalance">У кошелька с этим адресом нет баланса</string>
@@ -394,10 +391,6 @@
     <string name="Send_Error_SendToSelf">Отправка самому себе невозможна</string>
     <string name="Send_DialogAvailableBalance">Доступный баланс</string>
     <string name="Send_DialogSpeed">Скорость транзакции</string>
-    <string name="Send_TxSpeed_Low">Низкая</string>
-    <string name="Send_TxSpeed_High">Высокая</string>
-    <string name="Send_TxSpeed_Recommended">Рекомендовано</string>
-    <string name="Send_TxSpeed_Custom">Индивидуальная</string>
     <string name="Send_DialogFee">Комиссия</string>
     <string name="Send_DialogProceed">Далее</string>
     <string name="Send_LockTime_Off">Выкл.</string>
@@ -407,7 +400,7 @@
     <string name="Send_LockTime_Year">1 год</string>
     <string name="Send_Sending">Отправка</string>
     <string name="Send_FeeRate">Комиссия</string>
-    <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %s (%s) взимаются в %s. Вам нужно %s.</string>
+    <string name="Send_Token_InsufficientFeeAlert">Комиссии за транзакцию %1$s (%2$s) взимаются в %3$s. Вам нужно %4$s.</string>
     <string name="Send_Warning_LowFee">Внимание! Транзакция может застрять в сети</string>
     <string name="Send_Error_LowFee">Ошибка комиссии</string>
     <string name="Send_Error_LowFee_Description">Ставка комиссии слишком низкая.</string>
@@ -611,7 +604,6 @@
     <string name="SwapSettings_Apply">Применить</string>
     <string name="SwapSettings_DeadlineMinute">%s мин</string>
     <string name="SwapSettings_RecipientPlaceholder">Адрес или домен</string>
-    <string name="SwapSettings_FeeSettingsAlert">Комиссия за услугу обмена на платформе обычно 0.3% или 0.6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Нулевой срок</string>
     <string name="SwapSettings_Error_SlippageZero">Нулевое отклонение</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ваша транзакция, скорее всего, не удастся.</string>

@@ -27,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.doOnLayout
-import androidx.navigation.compose.rememberNavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.BoxItem
@@ -368,7 +367,6 @@ private fun Preview_HoldersBlockLocked() {
 @Preview
 @Composable
 private fun Preview_AnalyticsBarChartDisabled() {
-    val navController = rememberNavController()
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
@@ -401,7 +399,6 @@ private fun Preview_AnalyticsBarChartDisabled() {
 @Preview
 @Composable
 private fun Preview_AnalyticsLineChartDisabled() {
-    val navController = rememberNavController()
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
@@ -479,7 +476,6 @@ private fun Preview_HoldersBlock() {
 @Preview
 @Composable
 private fun Preview_AnalyticsRatingScale() {
-    val navController = rememberNavController()
     ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {

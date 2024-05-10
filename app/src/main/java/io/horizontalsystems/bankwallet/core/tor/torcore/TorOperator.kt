@@ -162,7 +162,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
         var exitCode: Int
 
         exitCode = try {
-            exec("$torCmdString --verify-config", true)
+            exec("$torCmdString --verify-config")
         } catch (e: Exception) {
             eventMonitor(msg = "Tor configuration did not verify: " + e.message + e)
             return false
@@ -174,7 +174,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
         }
 
         exitCode = try {
-            exec(torCmdString, true)
+            exec(torCmdString)
         } catch (e: Exception) {
             eventMonitor(msg = "Tor was unable to start: " + e.message + e)
             return false
@@ -189,7 +189,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
     }
 
     @Throws(Exception::class)
-    private fun exec(cmd: String, wait: Boolean = false): Int {
+    private fun exec(cmd: String): Int {
         val shellResult = Shell.run(cmd)
         //  debug("CMD: " + cmd + "; SUCCESS=" + shellResult.isSuccessful());
 

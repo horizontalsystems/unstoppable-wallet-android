@@ -111,7 +111,7 @@ class TorResourceManager(private val torSettings: Tor.Settings) {
 
     private fun checkPortOrAuto(portString: String): String {
 
-        if (!portString.toLowerCase().contentEquals("auto")) {
+        if (!portString.lowercase().contentEquals("auto")) {
             var isPortUsed = true
             var port = portString.toInt()
 

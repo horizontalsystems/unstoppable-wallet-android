@@ -124,8 +124,8 @@ class SendBitcoinViewModel(
         addressService.setAddress(address)
     }
 
-    fun onEnterMemo(memo: String) {
-        val memo = memo.ifBlank { null }
+    fun onEnterMemo(memoValue: String) {
+        val memo = memoValue.ifBlank { null }
 
         this.memo = memo
 

@@ -9,13 +9,13 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.parcelize.Parcelize
 
 object Migration_45_46 : Migration(45, 46) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        renameColumnEnabledWallet(database)
-        renameColumnEnabledWalletCache(database)
-        renameColumnRestoreSettingRecord(database)
-        renameColumnNftCollectionRecord(database)
-        renameColumnNftAssetRecord(database)
-        deleteRecordsAppLogMemory(database)
+    override fun migrate(db: SupportSQLiteDatabase) {
+        renameColumnEnabledWallet(db)
+        renameColumnEnabledWalletCache(db)
+        renameColumnRestoreSettingRecord(db)
+        renameColumnNftCollectionRecord(db)
+        renameColumnNftAssetRecord(db)
+        deleteRecordsAppLogMemory(db)
     }
 
     private fun renameColumnEnabledWallet(database: SupportSQLiteDatabase) {

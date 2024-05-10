@@ -64,7 +64,6 @@ fun SendConfirmationScreen(
     navController: NavController,
     coinMaxAllowedDecimals: Int,
     feeCoinMaxAllowedDecimals: Int,
-    fiatMaxAllowedDecimals: Int,
     amountInputType: AmountInputType,
     rate: CurrencyValue?,
     feeCoinRate: CurrencyValue?,
