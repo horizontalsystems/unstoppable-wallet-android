@@ -35,7 +35,6 @@ fun SendTonConfirmationScreen(
         navController = navController,
         coinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
         feeCoinMaxAllowedDecimals = sendViewModel.feeTokenMaxAllowedDecimals,
-        fiatMaxAllowedDecimals = sendViewModel.fiatMaxAllowedDecimals,
         amountInputType = amountInputModeViewModel.inputType,
         rate = sendViewModel.coinRate,
         feeCoinRate = sendViewModel.feeCoinRate,

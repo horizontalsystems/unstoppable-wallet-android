@@ -27,7 +27,6 @@ class AddressViewModel(
     private val contactUid: String?,
     private val contactsRepository: ContactsRepository,
     private val addressHandlerFactory: AddressHandlerFactory,
-    evmBlockchainManager: EvmBlockchainManager,
     marketKit: MarketKitWrapper,
     contactAddress: ContactAddress?,
     definedAddresses: List<ContactAddress>?

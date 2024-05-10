@@ -46,7 +46,15 @@ class MarketTopCoinsService(
     }
 
     private fun sync() {
-        disposables.clear()
+        syncJob?.cancel()
+        syncJob = coroutineScope.launch {
+            try {
+                marketItems = marketTopMoversRepository.get(
+                    topMarket.value,
+                    sortingField,
+                    topMarket.value,
+                    currencyManager.baseCurrency
+                ).await()
 
         marketTopMoversRepository
             .get(

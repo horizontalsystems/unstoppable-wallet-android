@@ -35,7 +35,6 @@ fun SendBitcoinConfirmationScreen(
         navController = navController,
         coinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
         feeCoinMaxAllowedDecimals = sendViewModel.coinMaxAllowedDecimals,
-        fiatMaxAllowedDecimals = sendViewModel.fiatMaxAllowedDecimals,
         amountInputType = amountInputModeViewModel.inputType,
         rate = sendViewModel.coinRate,
         feeCoinRate = sendViewModel.coinRate,

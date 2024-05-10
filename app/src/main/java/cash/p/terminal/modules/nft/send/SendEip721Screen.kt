@@ -38,7 +38,6 @@ fun SendEip721Screen(
     viewModel: SendEip721ViewModel,
     addressViewModel: AddressViewModel,
     addressParserViewModel: AddressParserViewModel,
-    parentNavId: Int,
 ) {
 
     Scaffold(

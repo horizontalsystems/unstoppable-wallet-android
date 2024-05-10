@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">매개 변수가 설정되지 않았습니다</string>
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">취소</string>
     <string name="Alert_Copy">복사</string>
     <string name="Alert_Close">가까운, 닫힌</string>
@@ -303,8 +303,6 @@
     <string name="Balance_SearchingTransactions">거래 검색 중...</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">동기화 중입니다...%s%%</string>
-    <string name="Balance_AddCoins">코인 추가</string>
-    <string name="Balance_AddCoin">코인 추가</string>
     <string name="Balance_CoinDisabled">비활성화된 코인 %s</string>
     <string name="Balance_Sort_Balance">잔액</string>
     <string name="Balance_Sort_PopupTitle">정렬 기준</string>
@@ -313,7 +311,6 @@
     <string name="Balance_Hidden">숨겨짐</string>
     <string name="Balance_DownloadingBlocks">블록 다운로드</string>
     <string name="Balance_ScanningBlocks">스캐닝 블록</string>
-    <string name="Balance_Backup_Alert">귀하께서 %s를 받기전에 %s 지갑의 백업이 필요합니다.</string>
     <string name="Balance_NoWalletAlert">아직 지갑이 없습니다</string>
     <string name="Balance_NoCoinsAlert">이 지갑에 코인을 넣지 않았습니다.</string>
     <string name="Balance_WatchAccount_NoBalance">이 지갑 주소에는 잔액이 없습니다</string>
@@ -391,10 +388,6 @@
     <string name="Send_Error_SendToSelf">자체로 전송이 지원되지 않음</string>
     <string name="Send_DialogAvailableBalance">사용 가능한 잔액</string>
     <string name="Send_DialogSpeed">거래 속도</string>
-    <string name="Send_TxSpeed_Low">낮음</string>
-    <string name="Send_TxSpeed_High">높음</string>
-    <string name="Send_TxSpeed_Recommended">권장</string>
-    <string name="Send_TxSpeed_Custom">사용자 지정</string>
     <string name="Send_DialogFee">수수료:</string>
     <string name="Send_DialogProceed">다음</string>
     <string name="Send_LockTime_Off">끄기</string>
@@ -404,7 +397,7 @@
     <string name="Send_LockTime_Year">1 년</string>
     <string name="Send_Sending">전송중</string>
     <string name="Send_FeeRate">수수료율</string>
-    <string name="Send_Token_InsufficientFeeAlert">%s (%s) 에 대한 거래 수수료는 %s로 지불되었습니다. 귀하는 %s가 필요합니다.</string>
+    <string name="Send_Token_InsufficientFeeAlert">%1$s (%2$s) 에 대한 거래 수수료는 %3$s로 지불되었습니다. 귀하는 %4$s가 필요합니다.</string>
     <string name="Send_Warning_LowFee">경고! 갇힐 위험</string>
     <string name="Send_Error_LowFee">수수료 오류</string>
     <string name="Send_Error_LowFee_Description">요금이 너무 낮습니다.</string>
@@ -612,7 +605,6 @@
     <string name="SwapSettings_Apply">적용</string>
     <string name="SwapSettings_DeadlineMinute">최소 %s</string>
     <string name="SwapSettings_RecipientPlaceholder">Memo</string>
-    <string name="SwapSettings_FeeSettingsAlert">플랫폼에서 스왑 작업에 대한 서비스 수수료는 일반적으로 0.3% 또는 0.6%입니다.</string>
     <string name="SwapSettings_Error_DeadlineZero">올바르지 않은 마감 시간</string>
     <string name="SwapSettings_Error_SlippageZero">올바르지 않은 슬립</string>
     <string name="SwapSettings_Error_SlippageTooLow">귀하의 거래가 실패할 것 같습니다.</string>

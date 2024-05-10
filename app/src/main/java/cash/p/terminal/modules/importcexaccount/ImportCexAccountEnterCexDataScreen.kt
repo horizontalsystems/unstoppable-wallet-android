@@ -41,7 +41,6 @@ fun ImportCexAccountEnterCexDataScreen(
     onNavigateBack: () -> Unit,
     onClose: () -> Unit,
     onAccountCreate: () -> Unit,
-    onShowError: (title: TranslatableString, description: TranslatableString) -> Unit,
 ) {
     val viewModel = viewModel<ImportCexAccountEnterCexDataViewModel>(factory = ImportCexAccountEnterCexDataViewModel.Factory(cexId))
 

@@ -2,7 +2,6 @@ package cash.p.terminal.modules.market.topplatforms
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -85,8 +84,6 @@ fun TopPlatformsScreen(
     viewModel: TopPlatformsViewModel,
     navController: NavController,
 ) {
-
-    val interactionSource = remember { MutableInteractionSource() }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {

@@ -10,8 +10,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.getInput
-import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.modules.info.ErrorDisplayDialogFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -61,12 +59,6 @@ fun ImportCexAccountNavHost(
                         iconTint = R.color.white
                     )
                     fragmentNavController.popBackStack(popUpToInclusiveId, inclusive)
-                },
-                onShowError = { title, text ->
-                    fragmentNavController.slideFromBottom(
-                        R.id.errorDisplayDialogFragment,
-                        ErrorDisplayDialogFragment.Input(title.toString(), text.toString())
-                    )
                 }
             )
         }

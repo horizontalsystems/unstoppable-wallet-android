@@ -117,11 +117,11 @@ abstract class BitcoinBaseAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ): Flowable<List<TransactionRecord>> = when (address) {
-        null -> getTransactionRecordsFlowable(token, transactionType)
+        null -> getTransactionRecordsFlowable(transactionType)
         else -> Flowable.empty()
     }
 
-    private fun getTransactionRecordsFlowable(token: Token?, transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
+    private fun getTransactionRecordsFlowable(transactionType: FilterTransactionType): Flowable<List<TransactionRecord>> {
         val observable: Observable<List<TransactionRecord>> = when (transactionType) {
             FilterTransactionType.All -> {
                 transactionRecordsSubject
@@ -190,13 +190,12 @@ abstract class BitcoinBaseAdapter(
         transactionType: FilterTransactionType,
         address: String?,
     ) = when (address) {
-        null -> getTransactionsAsync(from, token, limit, transactionType)
+        null -> getTransactionsAsync(from, limit, transactionType)
         else -> Single.just(listOf())
     }
 
     private fun getTransactionsAsync(
         from: TransactionRecord?,
-        token: Token?,
         limit: Int,
         transactionType: FilterTransactionType
     ): Single<List<TransactionRecord>> {

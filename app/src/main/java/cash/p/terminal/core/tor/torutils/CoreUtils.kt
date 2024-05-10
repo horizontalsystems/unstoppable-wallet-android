@@ -53,7 +53,7 @@ object ProcessUtils {
 
     @Throws(Exception::class)
     fun killProcess(fileProcBin: File, signal: String) {
-        var procId = -1
+        var procId: Int
         var killAttempts = 0
         while (findProcessId(fileProcBin.name).also { procId = it } != -1) {
 

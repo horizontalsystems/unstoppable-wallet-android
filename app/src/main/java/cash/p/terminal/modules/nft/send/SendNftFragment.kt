@@ -49,7 +49,6 @@ class SendNftFragment : BaseComposeFragment() {
                     eip721ViewModel,
                     addressViewModel,
                     addressParserViewModel,
-                    R.id.nftSendFragment,
                 )
             }
 
@@ -64,7 +63,6 @@ class SendNftFragment : BaseComposeFragment() {
                     eip1155ViewModel,
                     addressViewModel,
                     addressParserViewModel,
-                    R.id.nftSendFragment,
                 )
             }
 

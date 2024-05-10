@@ -2,7 +2,6 @@ package cash.p.terminal.modules.market.topcoins
 
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.sort
@@ -21,8 +20,7 @@ class MarketTopMoversRepository(
         size: Int,
         sortingField: SortingField,
         limit: Int,
-        baseCurrency: Currency,
-        marketField: MarketField
+        baseCurrency: Currency
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
             try {

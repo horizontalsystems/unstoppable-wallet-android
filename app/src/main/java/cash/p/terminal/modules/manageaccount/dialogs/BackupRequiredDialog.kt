@@ -48,7 +48,7 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
                 navController.getInput<Input>()?.let { input ->
-                    BackupRequiredScreen(navController, input.account, input.text ?: "")
+                    BackupRequiredScreen(navController, input.account, input.text)
                 }
             }
         }

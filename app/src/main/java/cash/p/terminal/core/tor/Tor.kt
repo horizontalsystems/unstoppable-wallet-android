@@ -34,7 +34,7 @@ enum class ConnectionStatus {
 
         fun getByName(typName: String): ConnectionStatus {
             return values()
-                .find { it.name.contentEquals(typName.toUpperCase()) } ?: CLOSED
+                .find { it.name.contentEquals(typName.uppercase()) } ?: CLOSED
         }
     }
 
