@@ -430,8 +430,6 @@ class TransactionViewItemFactory(
 
             is TonTransactionRecord -> {
                 createViewItemFromTonTransactionRecord(
-                    uid = record.uid,
-                    timestamp = record.timestamp,
                     icon = icon,
                     record = record,
                     currencyValue = transactionItem.currencyValue
@@ -443,8 +441,6 @@ class TransactionViewItemFactory(
     }
 
     private fun createViewItemFromTonTransactionRecord(
-        uid: String,
-        timestamp: Long,
         icon: TransactionViewItem.Icon?,
         record: TonTransactionRecord,
         currencyValue: CurrencyValue?,

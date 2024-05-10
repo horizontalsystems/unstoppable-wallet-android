@@ -304,8 +304,6 @@
     <string name="Balance_SearchingTransactions">Procurando transações...</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando… %s%%</string>
-    <string name="Balance_AddCoins">Adicionar Moedas</string>
-    <string name="Balance_AddCoin">Adicionar Moeda</string>
     <string name="Balance_CoinDisabled">Desativar moeda %s</string>
     <string name="Balance_Sort_Balance">Saldo</string>
     <string name="Balance_Sort_PopupTitle">Organizar por</string>
@@ -314,7 +312,6 @@
     <string name="Balance_Hidden">oculto</string>
     <string name="Balance_DownloadingBlocks">Baixando Blocos</string>
     <string name="Balance_ScanningBlocks">Verificando Blocos</string>
-    <string name="Balance_Backup_Alert">Você precisa fazer um backup da carteira %1$s antes de poder receber %2$s.</string>
     <string name="Balance_NoWalletAlert">Você ainda não tem nenhuma carteira instalada.\nCrie uma nova carteira ou restaure uma já existente </string>
     <string name="Balance_NoCoinsAlert">Você não adicionou nenhuma moeda nesta carteira.</string>
     <string name="Balance_WatchAccount_NoBalance">Este endereço da carteira não tem nenhum saldo</string>
@@ -392,10 +389,6 @@
     <string name="Send_Error_SendToSelf">Não é possível enviar para você mesmo</string>
     <string name="Send_DialogAvailableBalance">Saldo Disponível</string>
     <string name="Send_DialogSpeed">Velocidade da Transação</string>
-    <string name="Send_TxSpeed_Low">Baixo</string>
-    <string name="Send_TxSpeed_High">Alto</string>
-    <string name="Send_TxSpeed_Recommended">Recomendado</string>
-    <string name="Send_TxSpeed_Custom">Personalizado</string>
     <string name="Send_DialogFee">Taxa</string>
     <string name="Send_DialogProceed">Próximo</string>
     <string name="Send_LockTime_Off">Desligado</string>
@@ -613,7 +606,6 @@
     <string name="SwapSettings_Apply">Aplicar</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Endereço ou Domínio</string>
-    <string name="SwapSettings_FeeSettingsAlert">Uma taxa de serviço para a ação de troca na plataforma normalmente 0,3% ou 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Sem prazo</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>

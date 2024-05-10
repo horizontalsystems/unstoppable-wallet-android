@@ -43,7 +43,6 @@ object ContactsModule {
                 contactUid,
                 App.contactsRepository,
                 AddressHandlerFactory(App.appConfigProvider.udnApiKey),
-                App.evmBlockchainManager,
                 App.marketKit,
                 contactAddress,
                 definedAddresses

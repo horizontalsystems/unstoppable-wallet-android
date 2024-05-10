@@ -364,8 +364,6 @@
     <string name="Balance_SearchingTransactions">Searching transactions…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
-    <string name="Balance_AddCoins">Add Coins</string>
-    <string name="Balance_AddCoin">Add Coin</string>
     <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
@@ -374,7 +372,6 @@
     <string name="Balance_Hidden">hidden</string>
     <string name="Balance_DownloadingBlocks">Downloading Blocks</string>
     <string name="Balance_ScanningBlocks">Scanning Blocks</string>
-    <string name="Balance_Backup_Alert">You need to backup the %1$s Wallet before you may receive %2$s.</string>
     <string name="Balance_NoWalletAlert">You don\'t have any installed wallets yet.\nCreate a new wallet or restore an existing one </string>
     <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet.</string>
     <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
@@ -466,10 +463,6 @@
 
     <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
-    <string name="Send_TxSpeed_Low">Low</string>
-    <string name="Send_TxSpeed_High">High</string>
-    <string name="Send_TxSpeed_Recommended">Recommended</string>
-    <string name="Send_TxSpeed_Custom">Custom</string>
     <string name="Send_TxSpeed_CustomFeeHint" translatable="false">sat/byte</string>
     <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
@@ -715,7 +708,6 @@
     <string name="SwapSettings_Apply">Apply</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
-    <string name="SwapSettings_FeeSettingsAlert">A service fee for the swap action on the platform typically either 0.3% or 0.6%</string>
 
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>

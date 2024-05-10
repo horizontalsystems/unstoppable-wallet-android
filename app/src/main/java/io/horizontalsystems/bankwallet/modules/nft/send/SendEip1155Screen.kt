@@ -58,7 +58,6 @@ fun SendEip1155Screen(
     viewModel: SendEip1155ViewModel,
     addressViewModel: AddressViewModel,
     addressParserViewModel: AddressParserViewModel,
-    nftSendFragment: Int,
 ) {
 
     Scaffold(

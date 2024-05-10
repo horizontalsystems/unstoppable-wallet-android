@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
     <string name="Alert_Close">بستن</string>
@@ -132,15 +132,12 @@
     <string name="Balance_Syncing">همزمانی…</string>
     <string name="Balance_SearchingTransactions">در جستجوی تراکنش ها…</string>
     <string name="Balance_Syncing_WithProgress">همزمانی... %%%s</string>
-    <string name="Balance_AddCoins">اضافه کردن سکه ها</string>
-    <string name="Balance_AddCoin">اضافه کردن سکه ها</string>
     <string name="Balance_CoinDisabled">سکه %s غیرفعال شد</string>
     <string name="Balance_Sort_Balance">مانده حساب</string>
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <string name="Balance_Hidden">پنهان</string>
-    <string name="Balance_Backup_Alert">قبل از اینکه %s را دریافت کنید به نسخه پشتیبان از کیف پول %s نیاز دارید.</string>
     <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
     <string name="Balance_SendHint_CoinName">نام سکه</string>
     <!--Send NFT-->
@@ -175,10 +172,6 @@
     <string name="Send_Error_SendToSelf">ارسال به خود پشتیبانی نشده است</string>
     <string name="Send_DialogAvailableBalance">موجودی در دسترس</string>
     <string name="Send_DialogSpeed">سرعت تراکنش</string>
-    <string name="Send_TxSpeed_Low">پایین</string>
-    <string name="Send_TxSpeed_High">بالا</string>
-    <string name="Send_TxSpeed_Recommended">توصیه شده</string>
-    <string name="Send_TxSpeed_Custom">شخصی سازی</string>
     <string name="Send_DialogFee">قیمت:</string>
     <string name="Send_DialogProceed">بعدي</string>
     <string name="Send_LockTime_Off">خاموش</string>

@@ -208,7 +208,7 @@ private fun FilterDropdownCell(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = value ?: stringResource(R.string.Any),
+                text = value,
                 maxLines = 1,
                 style = ComposeAppTheme.typography.body,
                 color = valueColor

@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.market.topcoins
 
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
@@ -21,8 +20,7 @@ class MarketTopMoversRepository(
         size: Int,
         sortingField: SortingField,
         limit: Int,
-        baseCurrency: Currency,
-        marketField: MarketField
+        baseCurrency: Currency
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
             try {

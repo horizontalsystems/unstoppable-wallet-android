@@ -90,7 +90,7 @@ object NativeLoader {
                         return fileNativeBin
                 }
             }
-            var folder = Build.CPU_ABI
+            var folder = Build.SUPPORTED_ABIS[0]
             val javaArch = System.getProperty("os.arch")
 
             if (javaArch != null && javaArch.contains("686")) {

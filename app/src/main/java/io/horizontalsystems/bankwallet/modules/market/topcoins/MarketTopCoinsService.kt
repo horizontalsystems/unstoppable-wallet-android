@@ -59,8 +59,7 @@ class MarketTopCoinsService(
                     topMarket.value,
                     sortingField,
                     topMarket.value,
-                    currencyManager.baseCurrency,
-                    marketField
+                    currencyManager.baseCurrency
                 ).await()
 
                 syncItems()

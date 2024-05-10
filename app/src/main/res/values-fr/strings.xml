@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Le paramètre n\'est pas défini</string>
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Annuler</string>
     <string name="Alert_Copy">Copier</string>
     <string name="Alert_Close">Fermer</string>
@@ -304,8 +304,6 @@
     <string name="Balance_SearchingTransactions">Recherche des transactions…</string>
     <string name="Balance_FoundTx">%s TX</string>
     <string name="Balance_Syncing_WithProgress">Synchronisation... %s%%</string>
-    <string name="Balance_AddCoins">Ajouter des coins</string>
-    <string name="Balance_AddCoin">Ajouter la pièce</string>
     <string name="Balance_CoinDisabled">Pièce %s désactivée</string>
     <string name="Balance_Sort_Balance">Solde</string>
     <string name="Balance_Sort_PopupTitle">Trier par</string>
@@ -314,7 +312,6 @@
     <string name="Balance_Hidden">masqué</string>
     <string name="Balance_DownloadingBlocks">Téléchargement des blocs</string>
     <string name="Balance_ScanningBlocks">Blocs de numérisation</string>
-    <string name="Balance_Backup_Alert">Vous devez sauvegarder le portefeuille %1$s avant de recevoir %2$s.</string>
     <string name="Balance_NoWalletAlert">Vous n\'avez pas encore de portefeuilles installés.\nCréez un nouveau portefeuille ou restaurez un portefeuille existant </string>
     <string name="Balance_NoCoinsAlert">Vous n\'avez ajouté aucune pièce à ce portefeuille.</string>
     <string name="Balance_WatchAccount_NoBalance">Cette adresse de portefeuille n\'a pas de solde</string>
@@ -392,10 +389,6 @@
     <string name="Send_Error_SendToSelf">L\'envoi à soi-même n\'est pas pris en charge</string>
     <string name="Send_DialogAvailableBalance">Solde disponible</string>
     <string name="Send_DialogSpeed">Vitesse de transaction </string>
-    <string name="Send_TxSpeed_Low">Faible</string>
-    <string name="Send_TxSpeed_High">Élevée</string>
-    <string name="Send_TxSpeed_Recommended">Recommandé</string>
-    <string name="Send_TxSpeed_Custom">Personnalisé</string>
     <string name="Send_DialogFee">Frais</string>
     <string name="Send_DialogProceed">Suivant</string>
     <string name="Send_LockTime_Off">Désactivé</string>
@@ -609,7 +602,6 @@
     <string name="SwapSettings_Apply">Appliquer</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse ou domaine</string>
-    <string name="SwapSettings_FeeSettingsAlert">Des frais de service pour l\'action de swap sur la plateforme sont typiques de 0,3% ou 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
     <string name="SwapSettings_Error_SlippageZero">Zéro Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Votre transaction est susceptible de ne pas aboutir.</string>

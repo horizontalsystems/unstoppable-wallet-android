@@ -2,7 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
-    <string name="LargeNumberFormat">%s%s</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
     <string name="Alert_Close">Kapat</string>
@@ -302,8 +302,6 @@
     <string name="Balance_SearchingTransactions">İşlemler aranıyor ...</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Eşitleniyor...%s%%</string>
-    <string name="Balance_AddCoins">Kredi Ekle</string>
-    <string name="Balance_AddCoin">Para Ekle</string>
     <string name="Balance_CoinDisabled">engelli madeni para %s</string>
     <string name="Balance_Sort_Balance">Bakiye</string>
     <string name="Balance_Sort_PopupTitle">Sıralama şekli</string>
@@ -312,7 +310,6 @@
     <string name="Balance_Hidden">gizli</string>
     <string name="Balance_DownloadingBlocks">Blokları İndirme</string>
     <string name="Balance_ScanningBlocks">Tarama Blokları</string>
-    <string name="Balance_Backup_Alert">Öncelikle %s cüzdanınızı yedeklemeniz gerekiyor daha sonra %s kripto parasını alabilirsiniz.</string>
     <string name="Balance_NoWalletAlert">Henüz cüzdan yok</string>
     <string name="Balance_NoCoinsAlert">Bu cüzdana hiç jeton eklemediniz.</string>
     <string name="Balance_WatchAccount_NoBalance">Bu cüzdan adresinde bakiye bulunmuyor</string>
@@ -390,10 +387,6 @@
     <string name="Send_Error_SendToSelf">Kendine gönderme desteklenmiyor</string>
     <string name="Send_DialogAvailableBalance">Mevcut Bakiye</string>
     <string name="Send_DialogSpeed">İşlem hızı</string>
-    <string name="Send_TxSpeed_Low">Yavaş</string>
-    <string name="Send_TxSpeed_High">Hızlı</string>
-    <string name="Send_TxSpeed_Recommended">Tavsiye Edilen</string>
-    <string name="Send_TxSpeed_Custom">Özel</string>
     <string name="Send_DialogFee">Masraf:</string>
     <string name="Send_DialogProceed">İleri</string>
     <string name="Send_LockTime_Off">Kapat</string>
@@ -403,7 +396,7 @@
     <string name="Send_LockTime_Year">1 yıl</string>
     <string name="Send_Sending">Gönderiliyor</string>
     <string name="Send_FeeRate">Ücret oranı</string>
-    <string name="Send_Token_InsufficientFeeAlert">%s (%s) için ișlem ücreti %s hesabından ödenir. Asgari %s gerekiyor.</string>
+    <string name="Send_Token_InsufficientFeeAlert">%1$s (%2$s) için ișlem ücreti %3$s hesabından ödenir. Asgari %4$s gerekiyor.</string>
     <string name="Send_Warning_LowFee">Uyarı! Takılma riski</string>
     <string name="Send_Error_LowFee">Ücret Hatası</string>
     <string name="Send_Error_LowFee_Description">Ücret Oranı çok düşük.</string>
@@ -611,7 +604,6 @@
     <string name="SwapSettings_Apply">Uygula</string>
     <string name="SwapSettings_DeadlineMinute">%s dk</string>
     <string name="SwapSettings_RecipientPlaceholder">Adres veya Domain</string>
-    <string name="SwapSettings_FeeSettingsAlert">Platformdaki takas işlemi için bir hizmet ücreti genellikle %0,3 veya %0,6\'dır</string>
     <string name="SwapSettings_Error_DeadlineZero">Geçersiz Son Tarih</string>
     <string name="SwapSettings_Error_SlippageZero">Geçersiz Kayma</string>
     <string name="SwapSettings_Error_SlippageTooLow">İşleminizin başarısız olması muhtemeldir.</string>
