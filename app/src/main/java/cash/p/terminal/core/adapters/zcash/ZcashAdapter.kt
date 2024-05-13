@@ -17,7 +17,6 @@ import cash.z.ecc.android.sdk.model.PercentDecimal
 import cash.z.ecc.android.sdk.model.WalletBalance
 import cash.z.ecc.android.sdk.model.Zatoshi
 import cash.z.ecc.android.sdk.model.ZcashNetwork
-import cash.z.ecc.android.sdk.model.defaultForNetwork
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
@@ -66,7 +65,7 @@ class ZcashAdapter(
     private val decimalCount = 8
     private val network: ZcashNetwork = ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = 1_077_550
-    private val lightWalletEndpoint = LightWalletEndpoint.defaultForNetwork(network)
+    private val lightWalletEndpoint = LightWalletEndpoint(host = "zec.rocks", port = 443, isSecure = true)
 
     private val synchronizer: CloseableSynchronizer
     private val transactionsProvider: ZcashTransactionsProvider
