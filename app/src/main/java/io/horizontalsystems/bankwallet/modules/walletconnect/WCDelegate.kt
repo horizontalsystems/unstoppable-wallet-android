@@ -100,6 +100,8 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
             App.wcSessionManager.getCurrentSessionRequests().reversed().firstOrNull()
                 ?: return
 
+        if (App.wcWalletRequestHandler.handle(sessionRequestForAccount)) return
+
         sessionRequestEvent = sessionRequestForAccount
 
         scope.launch {
