@@ -450,7 +450,6 @@
     <string name="FeeInfo_TronFee_Title">Комиссия</string>
     <string name="FeeInfo_TronFee_Description">Ориентировочные затраты на отправку данной транзакции по сети (без учёта energy, Bandwidth и комиссии за активацию) предполагаются</string>
     <string name="FeeInfo_TronActivationFee_Title">Комиссия за активацию</string>
-    <string name="FeeInfo_TronActivationFee_Description">Передача токенов TRX или TRC-10 на адрес неактивного аккаунта активирует его.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Расходуемые ресурсы</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth - это единица, которая измеряет размер байт транзакции, хранящихся в базе данных блокчейна. Чем больше транзакция, тем больше bandwidth будет потребляться.\n\nEnergy — это единица, измеряющая количество вычислений, требуемых виртуальной машиной TRON для выполнения конкретных операций в сети TRON.\n\nПоскольку транзакции смарт-контракта требуют выполнения вычислительных ресурсов, каждая сделка по контракту требует оплаты energy комиссии.</string>
     <!--Tron-->
