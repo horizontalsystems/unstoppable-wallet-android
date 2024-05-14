@@ -7,6 +7,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
@@ -35,6 +36,7 @@ class WCSessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
     private val topic: String?,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : ViewModelUiState<WCSessionUiState>() {
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
@@ -49,15 +51,7 @@ class WCSessionViewModel(
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
 
-    private val supportedChains = listOf(
-        Chain.Ethereum,
-        Chain.BinanceSmartChain,
-        Chain.Polygon,
-        Chain.Optimism,
-        Chain.ArbitrumOne,
-        Chain.Avalanche,
-        Chain.Gnosis,
-    )
+    private val supportedChains = EvmBlockchainManager.blockchainTypes.map { evmBlockchainManager.getChain(it) }
 
     private val supportedMethods = listOf(
         "eth_sendTransaction",
@@ -70,8 +64,8 @@ class WCSessionViewModel(
         "eth_sign",
         "eth_signTransaction",
         "eth_signTypedData",
-//        "wallet_addEthereumChain",
-//        "wallet_switchEthereumChain"
+        "wallet_addEthereumChain",
+        "wallet_switchEthereumChain"
     )
 
     private val supportedEvents = listOf("chainChanged", "accountsChanged" /*"connect", "disconnect", "message"*/)
