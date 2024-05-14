@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
@@ -35,6 +36,7 @@ class WCSessionViewModel(
     private val connectivityManager: ConnectivityManager,
     private val account: Account?,
     private val topic: String?,
+    private val evmBlockchainManager: EvmBlockchainManager
 ) : ViewModelUiState<WCSessionUiState>() {
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
@@ -49,15 +51,7 @@ class WCSessionViewModel(
     private var status: Status? = null
     private var pendingRequests = listOf<WCRequestViewItem>()
 
-    private val supportedChains = listOf(
-        Chain.Ethereum,
-        Chain.BinanceSmartChain,
-        Chain.Polygon,
-        Chain.Optimism,
-        Chain.ArbitrumOne,
-        Chain.Avalanche,
-        Chain.Gnosis,
-    )
+    private val supportedChains = EvmBlockchainManager.blockchainTypes.map { evmBlockchainManager.getChain(it) }
 
     private val supportedMethods = listOf(
         "eth_sendTransaction",
@@ -70,8 +64,8 @@ class WCSessionViewModel(
         "eth_sign",
         "eth_signTransaction",
         "eth_signTypedData",
-//        "wallet_addEthereumChain",
-//        "wallet_switchEthereumChain"
+        "wallet_addEthereumChain",
+        "wallet_switchEthereumChain"
     )
 
     private val supportedEvents = listOf("chainChanged", "accountsChanged" /*"connect", "disconnect", "message"*/)
