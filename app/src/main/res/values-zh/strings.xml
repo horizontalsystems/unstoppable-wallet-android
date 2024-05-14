@@ -446,7 +446,6 @@
     <string name="FeeInfo_TronFee_Title">费用</string>
     <string name="FeeInfo_TronFee_Description">估算在网络上发送特定交易所需的成本，包括能源、带宽和激活费</string>
     <string name="FeeInfo_TronActivationFee_Title">激活费</string>
-    <string name="FeeInfo_TronActivationFee_Description">正在将TRX或 TRC-10令牌传输到一个非活动帐户地址将激活帐户。</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">消耗的资源</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 是衡量存储在区块链数据库中的交易字节大小的单位。 交易越大，消耗的带宽资源就越多。\n\nEnergy 是衡量波场虚拟机在波场网络上执行特定操作所需计算量的单位。\n\n自智能合约 交易需要计算资源来执行，每笔智能合约交易都需要支付 energy费用。</string>
     <!--Tron-->
