@@ -408,7 +408,6 @@
     <string name="FeeInfo_TronFee_Title">Gebühr</string>
     <string name="FeeInfo_TronFee_Description">Die geschätzten Kosten für den Versand einer Transaktion im Netzwerk (ohne Energie-, Bandbreiten- und Aktivierungsgebühren)</string>
     <string name="FeeInfo_TronActivationFee_Title">Aktivierungsgebühr</string>
-    <string name="FeeInfo_TronActivationFee_Description">Die Übertragung von TRX- oder TRC-10-Token an eine inaktive Konto-Adresse wird das Konto aktivieren.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Verbrauchte Ressourcen</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandbreite ist die Einheit, die die Größe der in der Blockchain-Datenbank gespeicherten Transaktionsbytes misst. Je größer die Transaktion, desto mehr Ressourcen werden verbraucht.\n\nEnergie ist die Einheit, die die Anzahl der Berechnungen misst, die von der virtuellen TRON-Maschine benötigt werden, um bestimmte Operationen im TRON-Netzwerk durchzuführen.\n\nDa intelligente Vertragsabschlüsse die Verwendung von Rechnerressourcen erfordern, muss für jeden Smart Contract eine Energiegebühr bezahlt werden.</string>
     <!--Tron-->
