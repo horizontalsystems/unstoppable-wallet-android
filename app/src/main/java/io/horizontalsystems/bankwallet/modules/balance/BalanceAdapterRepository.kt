@@ -4,7 +4,10 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.Clearable
 import io.horizontalsystems.bankwallet.core.IAdapterManager
+import io.horizontalsystems.bankwallet.core.adapters.BaseTronAdapter
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.BalanceWarning
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -101,6 +104,16 @@ class BalanceAdapterRepository(
 
     fun sendAllowed(wallet: Wallet): Boolean {
         return adapterManager.getBalanceAdapterForWallet(wallet)?.sendAllowed() ?: false
+    }
+
+    suspend fun warning(wallet: Wallet): BalanceWarning? {
+        if (wallet.token.blockchainType is BlockchainType.Tron) {
+            (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.let { adapter ->
+                if (!adapter.isAddressActive(adapter.receiveAddress))
+                    return BalanceWarning.TronInactiveAccountWarning
+            }
+        }
+        return null
     }
 
     fun refresh() {
