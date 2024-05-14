@@ -2,14 +2,17 @@ package io.horizontalsystems.bankwallet.modules.balance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BalanceData
+import io.horizontalsystems.bankwallet.core.Warning
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerFactory
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexRepositoryWrapper
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexSorter
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewModel
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.CoinPrice
 
 object BalanceModule {
@@ -70,9 +73,22 @@ object BalanceModule {
         val balanceData: BalanceData,
         val state: AdapterState,
         val sendAllowed: Boolean,
-        val coinPrice: CoinPrice? = null
+        val coinPrice: CoinPrice?,
+        val warning: BalanceWarning? = null
     ) {
         val fiatValue get() = coinPrice?.value?.let { balanceData.available.times(it) }
         val balanceFiatTotal get() = coinPrice?.value?.let { balanceData.total.times(it) }
     }
+
+    sealed class BalanceWarning : Warning() {
+        data object TronInactiveAccountWarning : BalanceWarning()
+    }
+
+    val BalanceWarning.warningText: WarningText
+        get() = when (this) {
+            BalanceWarning.TronInactiveAccountWarning -> WarningText(
+                title = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Title),
+                text = TranslatableString.ResString(R.string.Tron_TokenPage_AddressNotActive_Info),
+            )
+        }
 }

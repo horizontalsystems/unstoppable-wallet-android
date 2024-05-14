@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.swappable
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.balance.BalanceModule.warningText
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewItem
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
@@ -40,7 +41,13 @@ data class BalanceViewItem(
     val swapVisible: Boolean,
     val swapEnabled: Boolean = false,
     val errorMessage: String?,
-    val isWatchAccount: Boolean
+    val isWatchAccount: Boolean,
+    val warning: WarningText?
+)
+
+data class WarningText(
+    val title: TranslatableString,
+    val text: TranslatableString
 )
 
 data class LockedValue(
@@ -254,7 +261,8 @@ class BalanceViewItemFactory {
             swapVisible = wallet.token.swappable,
             swapEnabled = state is AdapterState.Synced,
             errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
-            isWatchAccount = watchAccount
+            isWatchAccount = watchAccount,
+            warning = item.warning?.warningText
         )
     }
 
