@@ -440,7 +440,6 @@
     <string name="FeeInfo_TronFee_Title">Frais</string>
     <string name="FeeInfo_TronFee_Description">Le coût estimé pour envoyer une transaction donnée sur le réseau (sans exclure les coûts d\'énergie, de bande passante et d\'activation)</string>
     <string name="FeeInfo_TronActivationFee_Title">Frais d\'activation</string>
-    <string name="FeeInfo_TronActivationFee_Description">Le transfert de jetons TRX ou TRC-10 vers une adresse de compte inactive activera ledit compte.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Ressources consommées</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">La bande passante est l\'unité qui mesure la taille des octets de transaction stockés dans la base de données blockchain. Plus la transaction est grande, plus la bande passante sera consommée.\n\nL\'énergie est l\'unité qui mesure le montant de calcul requis par la machine virtuelle TRON pour effectuer des opérations spécifiques sur le réseau TRON.\n\nÉtant donné que les transactions de contrats intelligents nécessitent des ressources informatiques pour être exécutées, chaque transaction de contrat intelligent nécessite le paiement de frais d\'énergie.</string>
     <!--Tron-->
