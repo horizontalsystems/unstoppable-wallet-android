@@ -93,7 +93,6 @@ fun SendTronConfirmationScreen(
     val feeCoin = confirmationData.feeCoin
     val amount = confirmationData.amount
     val address = confirmationData.address
-    val isInactiveAddress = confirmationData.isInactiveAddress
     val contact = confirmationData.contact
     val fee = confirmationData.fee
     val activationFee = confirmationData.activationFee
@@ -197,11 +196,6 @@ fun SendTronConfirmationScreen(
                                 stat(page = StatPage.SendConfirmation, section = StatSection.AddressTo, event = StatEvent.Open(StatPage.ContactNew))
                             }
                         )
-                    }
-                    if (isInactiveAddress) {
-                        add {
-                            InactiveAddressWarningItem(navController)
-                        }
                     }
                     contact?.let {
                         add {
