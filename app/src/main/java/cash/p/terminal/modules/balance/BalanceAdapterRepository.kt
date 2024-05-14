@@ -4,8 +4,10 @@ import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.BalanceData
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.IAdapterManager
-import cash.p.terminal.core.subscribeIO
+import cash.p.terminal.core.adapters.BaseTronAdapter
 import cash.p.terminal.entities.Wallet
+import cash.p.terminal.modules.balance.BalanceModule.BalanceWarning
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -106,6 +108,16 @@ class BalanceAdapterRepository(
 
     fun sendAllowed(wallet: Wallet): Boolean {
         return adapterManager.getBalanceAdapterForWallet(wallet)?.sendAllowed() ?: false
+    }
+
+    suspend fun warning(wallet: Wallet): BalanceWarning? {
+        if (wallet.token.blockchainType is BlockchainType.Tron) {
+            (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.let { adapter ->
+                if (!adapter.isAddressActive(adapter.receiveAddress))
+                    return BalanceWarning.TronInactiveAccountWarning
+            }
+        }
+        return null
     }
 
     fun refresh() {

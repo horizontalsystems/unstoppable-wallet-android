@@ -1,11 +1,11 @@
-package io.horizontalsystems.bankwallet.modules.walletconnect
+package cash.p.terminal.modules.walletconnect
 
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
-import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
+import cash.p.terminal.core.managers.EvmBlockchainManager
 import io.horizontalsystems.ethereumkit.core.hexStringToIntOrNull
 
 class WCWalletRequestHandler(

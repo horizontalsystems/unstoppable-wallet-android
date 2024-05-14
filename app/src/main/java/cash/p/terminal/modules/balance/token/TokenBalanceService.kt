@@ -32,7 +32,7 @@ class TokenBalanceService(
 
     val baseCurrency by xRateRepository::baseCurrency
 
-    fun start() {
+    suspend fun start() {
         balanceAdapterRepository.setWallet(listOf(wallet))
         xRateRepository.setCoinUids(listOf(wallet.coin.uid))
 
@@ -43,7 +43,8 @@ class TokenBalanceService(
             balanceData = balanceAdapterRepository.balanceData(wallet),
             state = balanceAdapterRepository.state(wallet),
             sendAllowed = balanceAdapterRepository.sendAllowed(wallet),
-            coinPrice = latestRates[wallet.coin.uid]
+            coinPrice = latestRates[wallet.coin.uid],
+            warning = balanceAdapterRepository.warning(wallet)
         )
 
         xRateRepository.itemObservable

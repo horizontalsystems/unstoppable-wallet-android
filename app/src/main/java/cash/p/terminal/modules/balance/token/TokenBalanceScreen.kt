@@ -65,6 +65,7 @@ import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_grey
 import cash.p.terminal.ui.compose.components.subhead2_grey
@@ -200,6 +201,15 @@ private fun TokenBalanceHeader(
         VSpacer(height = 24.dp)
         ButtonsRow(viewItem = balanceViewItem, navController = navController, viewModel = viewModel)
         LockedBalanceSection(balanceViewItem, navController)
+        balanceViewItem.warning?.let {
+            VSpacer(height = 8.dp)
+            TextImportantWarning(
+                icon = R.drawable.ic_attention_20,
+                title = it.title.getString(),
+                text = it.text.getString()
+            )
+        }
+        VSpacer(height = 16.dp)
     }
 }
 
@@ -221,7 +231,6 @@ private fun LockedBalanceSection(balanceViewItem: BalanceViewItem, navController
                 )
             }
         }
-        VSpacer(height = 18.dp)
     }
 }
 
