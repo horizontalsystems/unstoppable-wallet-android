@@ -49,13 +49,7 @@ class SendTronAddressService(
 
         try {
             val validAddress = TronAddress.fromBase58(address.hex)
-
-            if (!adapter.isAddressActive(validAddress)) {
-                isInactiveAddress = true
-                addressError = FormsInputStateWarning(Translator.getString(R.string.Tron_AddressNotActive_Warning))
-            } else {
-                isInactiveAddress = false
-            }
+            isInactiveAddress = !adapter.isAddressActive(validAddress)
 
             if (token.type == TokenType.Native && adapter.isOwnAddress(validAddress)) {
                 addressError = Throwable(Translator.getString(R.string.Tron_SelfSendTrxNotAllowed))
