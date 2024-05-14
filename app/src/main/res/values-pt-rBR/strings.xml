@@ -430,7 +430,6 @@
     <string name="FeeInfo_TronFee_Title">Taxa</string>
     <string name="FeeInfo_TronFee_Description">O custo estimado de envio de determinada transação na rede. (Sem excluir Eneregy, Bandwidth e Taxa de Ativação)</string>
     <string name="FeeInfo_TronActivationFee_Title">Taxa de ativação</string>
-    <string name="FeeInfo_TronActivationFee_Description">Transferir tokens TRX ou TRC-10 para um endereço de conta inativo ativará a conta.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Recursos consumidos</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">A bandwidth é a unidade que mede o tamanho dos bytes de transação armazenados no banco de dados blockchain. Quanto maior a transação, mais recursos de largura de banda serão consumidos.\n\nEnergy é a unidade que mede a quantidade de computação necessária pela máquina virtual TRON para realizar operações específicas na rede TRON.\n\nComo as transações de contrato inteligente exigem recursos de computação para executar, cada transação de contrato inteligente requer o pagamento da taxa de energy.</string>
     <!--Tron-->
