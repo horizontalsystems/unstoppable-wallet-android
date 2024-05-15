@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,9 +16,6 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statTab
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
-import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewScreen
-import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -73,15 +69,15 @@ fun MarketScreen(navController: NavController) {
             stat(page = StatPage.Markets, event = StatEvent.SwitchTab(it.statTab))
         })
 
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false
-        ) { page ->
-            when (tabs[page]) {
-                MarketModule.Tab.Overview -> MarketOverviewScreen(navController)
-                MarketModule.Tab.Posts -> MarketPostsScreen()
-                MarketModule.Tab.Watchlist -> MarketFavoritesScreen(navController)
-            }
-        }
+//        HorizontalPager(
+//            state = pagerState,
+//            userScrollEnabled = false
+//        ) { page ->
+//            when (tabs[page]) {
+//                MarketModule.Tab.Overview -> MarketOverviewScreen(navController)
+//                MarketModule.Tab.Posts -> MarketPostsScreen()
+//                MarketModule.Tab.Watchlist -> MarketFavoritesScreen(navController)
+//            }
+//        }
     }
 }

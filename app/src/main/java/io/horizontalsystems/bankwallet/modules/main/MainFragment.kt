@@ -51,7 +51,7 @@ import io.horizontalsystems.bankwallet.core.stats.statTab
 import io.horizontalsystems.bankwallet.modules.balance.ui.BalanceScreen
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
-import io.horizontalsystems.bankwallet.modules.market.MarketScreen
+import io.horizontalsystems.bankwallet.modules.market.overviewxxx.MarketScreenXxx
 import io.horizontalsystems.bankwallet.modules.rateapp.RateApp
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesFragment
 import io.horizontalsystems.bankwallet.modules.rooteddevice.RootedDeviceModule
@@ -217,7 +217,7 @@ private fun MainScreen(
                         verticalAlignment = Alignment.Top
                     ) { page ->
                         when (uiState.mainNavItems[page].mainNavItem) {
-                            MainNavigation.Market -> MarketScreen(fragmentNavController)
+                            MainNavigation.Market -> MarketScreenXxx(fragmentNavController)
                             MainNavigation.Balance -> BalanceScreen(fragmentNavController)
                             MainNavigation.Transactions -> TransactionsScreen(
                                 fragmentNavController,

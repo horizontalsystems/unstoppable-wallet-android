@@ -217,9 +217,6 @@
         android:id="@+id/marketSearchFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.search.MarketSearchFragment"/>
     <fragment
-        android:id="@+id/marketTopPlatformsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformsFragment"/>
-    <fragment
         android:id="@+id/topPairsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsFragment"/>
     <fragment
@@ -231,9 +228,6 @@
     <fragment
         android:id="@+id/blockchainsSelectorFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.BlockchainsSelectorFragment"/>
-    <fragment
-        android:id="@+id/marketTopCoinsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment"/>
     <fragment
         android:id="@+id/marketTopNftCollectionsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsFragment"/>
@@ -383,9 +377,6 @@
     <dialog
         android:id="@+id/configuredTokenInfo"
         android:name="io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenInfoDialog" />
-    <dialog
-        android:id="@+id/periodSelectDialog"
-        android:name="io.horizontalsystems.bankwallet.ui.compose.components.PeriodSelectDialog" />
 
     <!--Wallet Connect-->
     <fragment
