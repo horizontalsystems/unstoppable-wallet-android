@@ -3,11 +3,11 @@ package io.horizontalsystems.bankwallet.modules.market.topcoins
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
+import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,6 @@ class MarketTopCoinsService(
     private val favoritesManager: MarketFavoritesManager,
     topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
-    private val marketField: MarketField,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var syncJob: Job? = null
@@ -33,11 +32,20 @@ class MarketTopCoinsService(
     val stateObservable: BehaviorSubject<DataState<List<MarketItemWrapper>>> =
         BehaviorSubject.create()
 
-    val topMarkets = TopMarket.values().toList()
+    val periods = listOf(
+        TimePeriod.TimePeriod_1D,
+        TimePeriod.TimePeriod_1W,
+        TimePeriod.TimePeriod_1M,
+        TimePeriod.TimePeriod_3M,
+    )
+    var period: TimePeriod = periods[0]
+        private set
+
+    val topMarkets = TopMarket.entries
     var topMarket: TopMarket = topMarket
         private set
 
-    val sortingFields = SortingField.values().toList()
+    val sortingFields = SortingField.entries
     var sortingField: SortingField = sortingField
         private set
 
@@ -51,6 +59,11 @@ class MarketTopCoinsService(
         sync()
     }
 
+    fun setPeriod(period: TimePeriod) {
+        this.period = period
+        sync()
+    }
+
     private fun sync() {
         syncJob?.cancel()
         syncJob = coroutineScope.launch {
@@ -59,7 +72,8 @@ class MarketTopCoinsService(
                     topMarket.value,
                     sortingField,
                     topMarket.value,
-                    currencyManager.baseCurrency
+                    currencyManager.baseCurrency,
+                    period,
                 ).await()
 
                 syncItems()

@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.reactivex.Single
@@ -150,18 +152,22 @@ enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>)
     }
 }
 
-enum class TimePeriod(@StringRes val titleResId: Int) {
+enum class TimePeriod(@StringRes val titleResId: Int): WithTranslatableTitle {
     TimePeriod_1D(R.string.Market_Filter_TimePeriod_1D),
     TimePeriod_1W(R.string.Market_Filter_TimePeriod_1W),
     TimePeriod_2W(R.string.Market_Filter_TimePeriod_2W),
     TimePeriod_1M(R.string.Market_Filter_TimePeriod_1M),
+    TimePeriod_3M(R.string.Market_Filter_TimePeriod_3M),
     TimePeriod_6M(R.string.Market_Filter_TimePeriod_6M),
-    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y),
+    TimePeriod_1Y(R.string.Market_Filter_TimePeriod_1Y);
+
+    override val title: TranslatableString
+        get() = TranslatableString.ResString(titleResId)
 }
 
 enum class PriceChange(
     @StringRes val titleResId: Int,
-    @ColorRes val color: TextColor,
+    val color: TextColor,
     val values: Pair<Long?, Long?>
 ) {
     Positive_10_plus(

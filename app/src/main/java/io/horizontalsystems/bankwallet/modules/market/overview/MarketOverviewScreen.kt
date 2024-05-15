@@ -31,7 +31,6 @@ import io.horizontalsystems.bankwallet.modules.market.overview.ui.MetricChartsVi
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopPairsBoardView
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopPlatformsBoardView
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopSectorsBoardView
-import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopCoinsFragment
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -81,14 +80,14 @@ fun MarketOverviewScreen(
                                         listType
                                     )
 
-                                    navController.slideFromBottom(
-                                        R.id.marketTopCoinsFragment,
-                                        MarketTopCoinsFragment.Input(
-                                            sortingField,
-                                            topMarket,
-                                            marketField
-                                        )
-                                    )
+//                                    navController.slideFromBottom(
+//                                        R.id.marketTopCoinsFragment,
+//                                        MarketTopCoinsFragment.Input(
+//                                            sortingField,
+//                                            topMarket,
+//                                            marketField
+//                                        )
+//                                    )
 
                                     stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.Open(StatPage.TopCoins))
                                 },
@@ -129,10 +128,10 @@ fun MarketOverviewScreen(
                                 onClickSeeAll = {
                                     val timeDuration = viewModel.topPlatformsTimeDuration
 
-                                    navController.slideFromBottom(
-                                        R.id.marketTopPlatformsFragment,
-                                        timeDuration
-                                    )
+//                                    navController.slideFromBottom(
+//                                        R.id.marketTopPlatformsFragment,
+//                                        timeDuration
+//                                    )
 
                                     stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopPlatforms))
                                 }
