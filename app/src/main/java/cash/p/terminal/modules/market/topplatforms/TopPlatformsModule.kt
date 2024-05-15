@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.iconUrl
+import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
@@ -30,13 +31,21 @@ object TopPlatformsModule {
         val marketFieldSelect: Select<MarketField>
     )
 
+    data class UiState(
+        val sortingField: SortingField,
+        val timePeriod: TimeDuration,
+        val viewItems: List<TopPlatformViewItem>,
+        val viewState: ViewState,
+        val isRefreshing: Boolean
+    )
+
 }
 
 @Parcelize
 data class Platform(
     val uid: String,
     val name: String,
-): Parcelable
+) : Parcelable
 
 data class TopPlatformItem(
     val platform: Platform,

@@ -3,7 +3,6 @@ package cash.p.terminal.modules.market
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,9 +16,6 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statTab
-import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
-import cash.p.terminal.modules.market.overview.MarketOverviewScreen
-import cash.p.terminal.modules.market.posts.MarketPostsScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
@@ -73,15 +69,15 @@ fun MarketScreen(navController: NavController) {
             stat(page = StatPage.Markets, event = StatEvent.SwitchTab(it.statTab))
         })
 
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false
-        ) { page ->
-            when (tabs[page]) {
-                MarketModule.Tab.Overview -> MarketOverviewScreen(navController)
-                MarketModule.Tab.Posts -> MarketPostsScreen()
-                MarketModule.Tab.Watchlist -> MarketFavoritesScreen(navController)
-            }
-        }
+//        HorizontalPager(
+//            state = pagerState,
+//            userScrollEnabled = false
+//        ) { page ->
+//            when (tabs[page]) {
+//                MarketModule.Tab.Overview -> MarketOverviewScreen(navController)
+//                MarketModule.Tab.Posts -> MarketPostsScreen()
+//                MarketModule.Tab.Watchlist -> MarketFavoritesScreen(navController)
+//            }
+//        }
     }
 }

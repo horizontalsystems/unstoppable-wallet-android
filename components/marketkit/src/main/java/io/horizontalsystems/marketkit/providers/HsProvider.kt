@@ -453,6 +453,10 @@ class HsProvider(baseUrl: String, apiKey: String) {
         )
     }
 
+    fun coinsSignalsSingle(uids: List<String>): Single<List<SignalResponse>> {
+        return service.getCoinsSignals(uids.joinToString(separator = ","))
+    }
+
     private interface MarketService {
         @GET("coins/{coin}")
         fun getPlaceCoinInfo(@Path("coin") coin: String): Single<PiratePlaceCoinRaw>
@@ -733,7 +737,7 @@ class HsProvider(baseUrl: String, apiKey: String) {
         @GET("exchanges/whitelist")
         fun verifiedExchangeUids(): Single<List<String>>
 
-        @GET("exchanges/top-pairs")
+        @GET("exchanges/top-market-pairs")
         fun getTopPairs(
             @Query("currency") currencyCode: String,
             @Query("page") page: Int,
@@ -748,6 +752,11 @@ class HsProvider(baseUrl: String, apiKey: String) {
             @Header("app_id") appId: String?,
             @Body stats: String,
         ): Single<Unit>
+
+        @GET("coins/signals")
+        fun getCoinsSignals(
+            @Query("uids") uids: String,
+        ): Single<List<SignalResponse>>
 
         companion object {
             private const val marketInfoFields =
@@ -764,6 +773,11 @@ class HsProvider(baseUrl: String, apiKey: String) {
 data class HistoricalCoinPriceResponse(
     val timestamp: Long,
     val price: BigDecimal,
+)
+
+data class SignalResponse(
+    val uid: String,
+    val signal: Analytics.TechnicalAdvice.Advice?
 )
 
 data class ChartStart(val timestamp: Long)

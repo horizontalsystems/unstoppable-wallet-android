@@ -84,7 +84,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
 
     val uiState = viewModel.uiState
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+    Column {
         SearchBar(
             title = stringResource(R.string.Market_Search),
             searchHintText = stringResource(R.string.Market_Search),
@@ -225,11 +225,6 @@ fun MarketSearchResults(
                                     )
                                 }
                             }
-                        )
-                        Divider(
-                            thickness = 1.dp,
-                            color = ComposeAppTheme.colors.steel10,
-                            modifier = Modifier.align(Alignment.BottomCenter)
                         )
                     }
                 }

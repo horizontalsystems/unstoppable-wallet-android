@@ -3,9 +3,12 @@ package cash.p.terminal.modules.market.topcoins
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
+import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
+import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.ui.compose.Select
 
 object MarketTopCoinsModule {
@@ -24,7 +27,6 @@ object MarketTopCoinsModule {
                 App.marketFavoritesManager,
                 topMarket ?: defaultTopMarket,
                 sortingField ?: defaultSortingField,
-                marketField ?: defaultMarketField
             )
             return MarketTopCoinsViewModel(
                 service,
@@ -38,6 +40,15 @@ object MarketTopCoinsModule {
             val defaultMarketField = MarketField.PriceDiff
         }
     }
+
+    data class UiState(
+        val viewItems: List<MarketViewItem>,
+        val viewState: ViewState,
+        val isRefreshing: Boolean,
+        val sortingField: SortingField,
+        val topMarket: TopMarket,
+        val period: TimePeriod,
+    )
 
     data class Menu(
         val sortingFieldSelect: Select<SortingField>,

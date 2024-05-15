@@ -215,6 +215,8 @@ class MarketKitWrapper(
 
     fun topMoversSingle(currencyCode: String) = marketKit.topMoversSingle(currencyCode)
 
+    fun topCoinsMarketInfosSingle(top: Int, currencyCode: String) = marketKit.topCoinsMarketInfosSingle(top, currencyCode)
+
     // Chart Info
 
     fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)

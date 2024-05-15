@@ -251,9 +251,12 @@ val TimeDuration.statPeriod: StatPeriod
 
 val MarketModule.Tab.statTab: StatTab
     get() = when (this) {
-        MarketModule.Tab.Overview -> StatTab.Overview
         MarketModule.Tab.Posts -> StatTab.News
         MarketModule.Tab.Watchlist -> StatTab.Watchlist
+        MarketModule.Tab.Coins -> TODO()
+        MarketModule.Tab.Platform -> TODO()
+        MarketModule.Tab.Pairs -> TODO()
+        MarketModule.Tab.Sectors -> TODO()
     }
 
 val MarketSearchSection.statSection: StatSection

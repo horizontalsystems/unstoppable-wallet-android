@@ -1,63 +1,60 @@
 package cash.p.terminal.modules.market.topplatforms
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
-import cash.p.terminal.modules.market.topcoins.SelectorDialogState
-import cash.p.terminal.ui.compose.Select
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TopPlatformsViewModel(
     private val service: TopPlatformsService,
     timeDuration: TimeDuration?,
-) : ViewModel() {
+) : ViewModelUiState<TopPlatformsModule.UiState>() {
 
-    private val sortingFields = listOf(
+    val sortingOptions = listOf(
         SortingField.HighestCap,
         SortingField.LowestCap,
         SortingField.TopGainers,
         SortingField.TopLosers
     )
 
-    var sortingField: SortingField = SortingField.HighestCap
-        private set
+    val periods = listOf(
+        TimeDuration.OneDay,
+        TimeDuration.SevenDay,
+        TimeDuration.ThirtyDay,
+        TimeDuration.ThreeMonths,
+    )
 
-    val periodOptions = TimeDuration.values().toList()
+    private var sortingField = SortingField.HighestCap
 
-    var timePeriod = timeDuration ?: TimeDuration.OneDay
-        private set
+    private var timePeriod = timeDuration ?: TimeDuration.OneDay
 
-    val timePeriodSelect = Select(timePeriod, periodOptions)
+    private var viewItems = emptyList<TopPlatformViewItem>()
 
-    var sortingSelect by mutableStateOf(Select(sortingField, sortingFields))
-        private set
+    private var viewState: ViewState = ViewState.Loading
 
-    var viewItems by mutableStateOf<List<TopPlatformViewItem>>(listOf())
-        private set
-
-    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
-        private set
-
-    var isRefreshing by mutableStateOf(false)
-        private set
-
-    var selectorDialogState by mutableStateOf<SelectorDialogState>(SelectorDialogState.Closed)
-        private set
+    private var isRefreshing = false
 
 
     init {
         viewModelScope.launch {
             sync(false)
         }
+    }
+
+    override fun createState(): TopPlatformsModule.UiState {
+        return TopPlatformsModule.UiState(
+            sortingField = sortingField,
+            timePeriod = timePeriod,
+            viewItems = viewItems,
+            viewState = viewState,
+            isRefreshing = isRefreshing
+        )
     }
 
     private fun sync(forceRefresh: Boolean = false) {
@@ -70,6 +67,7 @@ class TopPlatformsViewModel(
             } catch (e: Throwable) {
                 viewState = ViewState.Error(e)
             }
+            emitState()
         }
     }
 
@@ -104,19 +102,7 @@ class TopPlatformsViewModel(
 
     fun onSelectSortingField(sortingField: SortingField) {
         this.sortingField = sortingField
-        sortingSelect = Select(sortingField, sortingFields)
-        selectorDialogState = SelectorDialogState.Closed
         sync()
-    }
-
-    fun onSelectorDialogDismiss() {
-        selectorDialogState = SelectorDialogState.Closed
-    }
-
-    fun showSelectorMenu() {
-        selectorDialogState = SelectorDialogState.Opened(
-            Select(sortingSelect.selected, sortingSelect.options)
-        )
     }
 
     fun refresh() {

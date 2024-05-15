@@ -193,6 +193,18 @@ class MarketKit(
         }
     }
 
+    //Signals
+
+    fun coinsSignalsSingle(coinsUids: List<String>): Single<Map<String, Analytics.TechnicalAdvice.Advice>> {
+        return hsProvider.coinsSignalsSingle(coinsUids).map { list ->
+            list.mapNotNull { coinSignal ->
+                if (coinSignal.signal == null) null
+                else coinSignal.uid to coinSignal.signal
+            }.toMap()
+        }
+    }
+
+
     // Categories
 
     fun coinCategoriesSingle(currencyCode: String): Single<List<CoinCategory>> =
@@ -455,7 +467,12 @@ class MarketKit(
         periodType: HsPeriodType
     ): Single<Pair<Long, List<ChartPoint>>> {
         val data = intervalData(periodType)
-        return hsProvider.coinPriceChartSingle(coinUid, currencyCode, data.interval, data.fromTimestamp)
+        return hsProvider.coinPriceChartSingle(
+            coinUid,
+            currencyCode,
+            data.interval,
+            data.fromTimestamp
+        )
             .map {
                 Pair(data.visibleTimestamp, it.map { it.chartPoint })
             }
@@ -516,7 +533,12 @@ class MarketKit(
         periodType: HsPeriodType
     ): Single<List<TopPlatformMarketCapPoint>> {
         val data = intervalData(periodType)
-        return hsProvider.topPlatformMarketCapPointsSingle(chain, currencyCode, data.interval, data.fromTimestamp)
+        return hsProvider.topPlatformMarketCapPointsSingle(
+            chain,
+            currencyCode,
+            data.interval,
+            data.fromTimestamp
+        )
     }
 
     fun topPlatformMarketInfosSingle(
@@ -597,7 +619,8 @@ class MarketKit(
             val cryptoCompareProvider = CryptoCompareProvider()
             val postManager = PostManager(cryptoCompareProvider)
             val globalMarketInfoStorage = GlobalMarketInfoStorage(marketDatabase)
-            val globalMarketInfoManager = GlobalMarketInfoManager(hsProvider, globalMarketInfoStorage)
+            val globalMarketInfoManager =
+                GlobalMarketInfoManager(hsProvider, globalMarketInfoStorage)
             val hsDataSyncer = HsDataSyncer(coinSyncer, hsProvider)
 
             return MarketKit(

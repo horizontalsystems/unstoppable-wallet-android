@@ -2,7 +2,6 @@ package cash.p.terminal.modules.market.favorites
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -26,7 +25,6 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.Period
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
@@ -57,7 +55,6 @@ fun MarketFavoritesScreen(
     ) {
         Crossfade(
             targetState = viewState,
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler),
             label = ""
         ) { viewState ->
             when (viewState) {

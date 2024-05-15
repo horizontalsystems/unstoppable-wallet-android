@@ -3,11 +3,11 @@ package cash.p.terminal.modules.market.topcoins
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.market.category.MarketItemWrapper
+import cash.p.terminal.modules.market.filters.TimePeriod
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +23,6 @@ class MarketTopCoinsService(
     private val favoritesManager: MarketFavoritesManager,
     topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
-    private val marketField: MarketField,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var syncJob: Job? = null
@@ -33,11 +32,20 @@ class MarketTopCoinsService(
     val stateObservable: BehaviorSubject<DataState<List<MarketItemWrapper>>> =
         BehaviorSubject.create()
 
-    val topMarkets = TopMarket.values().toList()
+    val periods = listOf(
+        TimePeriod.TimePeriod_1D,
+        TimePeriod.TimePeriod_1W,
+        TimePeriod.TimePeriod_1M,
+        TimePeriod.TimePeriod_3M,
+    )
+    var period: TimePeriod = periods[0]
+        private set
+
+    val topMarkets = TopMarket.entries
     var topMarket: TopMarket = topMarket
         private set
 
-    val sortingFields = SortingField.values().toList()
+    val sortingFields = SortingField.entries
     var sortingField: SortingField = sortingField
         private set
 
@@ -51,6 +59,11 @@ class MarketTopCoinsService(
         sync()
     }
 
+    fun setPeriod(period: TimePeriod) {
+        this.period = period
+        sync()
+    }
+
     private fun sync() {
         syncJob?.cancel()
         syncJob = coroutineScope.launch {
@@ -59,7 +72,8 @@ class MarketTopCoinsService(
                     topMarket.value,
                     sortingField,
                     topMarket.value,
-                    currencyManager.baseCurrency
+                    currencyManager.baseCurrency,
+                    period,
                 ).await()
 
                 syncItems()

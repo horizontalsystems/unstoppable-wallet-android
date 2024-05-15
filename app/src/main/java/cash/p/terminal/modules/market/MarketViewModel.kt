@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import cash.p.terminal.entities.LaunchPage
 
 class MarketViewModel(private val service: MarketService) : ViewModel() {
 
@@ -17,9 +16,10 @@ class MarketViewModel(private val service: MarketService) : ViewModel() {
         selectedTab = tab
     }
 
-    private fun getInitialTab() = when (service.launchPage) {
-        LaunchPage.Market -> MarketModule.Tab.Overview
-        LaunchPage.Watchlist -> MarketModule.Tab.Watchlist
-        else -> service.currentTab ?: MarketModule.Tab.Overview
-    }
+    private fun getInitialTab() = MarketModule.Tab.Watchlist
+//        when (service.launchPage) {
+//        LaunchPage.Market -> MarketModule.Tab.Overview
+//        LaunchPage.Watchlist -> MarketModule.Tab.Watchlist
+//        else -> service.currentTab ?: MarketModule.Tab.Overview
+//    }
 }
