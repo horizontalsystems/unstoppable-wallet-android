@@ -33,6 +33,8 @@ object OneInchProvider : EvmSwapProvider() {
     override val url = "https://app.1inch.io/"
     override val icon = R.drawable.oneinch
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
+    private const val PARTNER_FEE: Float = 0.3F
+    private const val PARTNER_ADDRESS: String = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"
 
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
@@ -67,7 +69,8 @@ object OneInchProvider : EvmSwapProvider() {
             chain = evmBlockchainHelper.chain,
             fromToken = getTokenAddress(tokenIn),
             toToken = getTokenAddress(tokenOut),
-            amount = amountIn.scaleUp(tokenIn.decimals)
+            amount = amountIn.scaleUp(tokenIn.decimals),
+            fee = PARTNER_FEE
         ).onErrorResumeNext {
             Single.error(it.convertedError)
         }.await()
@@ -132,7 +135,9 @@ object OneInchProvider : EvmSwapProvider() {
             amount = amountIn.scaleUp(tokenIn.decimals),
             slippagePercentage = slippage.toFloat(),
             recipient = settingRecipient.value?.hex?.let { Address(it) },
-            gasPrice = gasPrice
+            gasPrice = gasPrice,
+            referrer = PARTNER_ADDRESS,
+            fee = PARTNER_FEE
         ).await()
 
         val swapTx = swap.transaction
