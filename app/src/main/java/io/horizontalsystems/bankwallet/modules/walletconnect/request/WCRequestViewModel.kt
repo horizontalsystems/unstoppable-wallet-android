@@ -1,11 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonParser
-import com.unstoppabledomains.resolution.artifacts.Numeric
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
@@ -15,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.toHexString
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCUtils
+import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.marketkit.models.Blockchain
 import kotlinx.parcelize.Parcelize
@@ -25,7 +24,7 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val PERSONAL_SIGN_METHOD = "personal_sign"
 private const val TYPED_DATA_METHOD = "eth_signTypedData"
-private const val MESSAGE_METHOD = "eth_sign"
+private const val ETH_SIGN_METHOD = "eth_sign"
 private const val SEND_TRANSACTION_METHOD = "eth_sendTransaction"
 private const val SIGN_TRANSACTION_METHOD = "eth_signTransaction"
 
@@ -76,6 +75,15 @@ class WCNewRequestViewModel(
                 extractMessageParamFromPersonalSign(sessionRequest.request.params)
             }
 
+            ETH_SIGN_METHOD -> {
+                val params = JsonParser.parseString(sessionRequest.request.params).asJsonArray
+                if (params.size() >= 2) {
+                    params.get(1).asString
+                } else {
+                    throw Exception("Invalid Data")
+                }
+            }
+
             TYPED_DATA_METHOD, SEND_TRANSACTION_METHOD, SIGN_TRANSACTION_METHOD -> {
                 val params = JsonParser.parseString(sessionRequest.request.params).asJsonArray
                 params.firstOrNull { it.isJsonObject }?.asJsonObject?.toString()
@@ -94,7 +102,12 @@ class WCNewRequestViewModel(
     private fun extractMessageParamFromPersonalSign(input: String): String {
         val jsonArray = JSONArray(input)
         return if (jsonArray.length() > 0) {
-            String(Numeric.hexStringToByteArray(jsonArray.getString(0)))
+            val message = jsonArray.getString(0)
+            try {
+                String(message.hexStringToByteArray())
+            } catch (_: Throwable) {
+                message
+            }
         } else {
             throw IllegalArgumentException()
         }
@@ -123,16 +136,22 @@ class WCNewRequestViewModel(
         return suspendCoroutine { continuation ->
             val sessionRequest = sessionRequest as? SessionRequestUI.Content
             if (sessionRequest != null) {
-                Log.e("TAG", "sessionRequest.method: ${sessionRequest.method}")
-                val result: String = when {
-                    sessionRequest.method == PERSONAL_SIGN_METHOD ||
-                            sessionRequest.method == MESSAGE_METHOD -> {
-                        signer.signByteArray(message = sessionRequest.param.toByteArray())
-                            .toHexString()
+                val result = when (sessionRequest.method) {
+                    ETH_SIGN_METHOD -> {
+                        val message = sessionRequest.param.hexStringToByteArray()
+                        if (message.size == 32) {
+                            signer.signByteArrayLegacy(message = message)
+                        } else {
+                            signer.signByteArray(message = message)
+                        }
                     }
 
-                    sessionRequest.method == TYPED_DATA_METHOD -> {
-                        signer.signTypedData(rawJsonMessage = sessionRequest.param).toHexString()
+                    PERSONAL_SIGN_METHOD -> {
+                        signer.signByteArray(message = sessionRequest.param.toByteArray())
+                    }
+
+                    TYPED_DATA_METHOD -> {
+                        signer.signTypedData(rawJsonMessage = sessionRequest.param)
                     }
 
                     else -> throw Exception("Unsupported Chain")
@@ -141,7 +160,7 @@ class WCNewRequestViewModel(
                 WCDelegate.respondPendingRequest(
                     sessionRequest.requestId,
                     sessionRequest.topic,
-                    result,
+                    result.toHexString(),
                     onSuccessResult = {
                         continuation.resume(Unit)
                         clearSessionRequest()
