@@ -24,6 +24,7 @@ import kotlin.coroutines.suspendCoroutine
 
 private const val PERSONAL_SIGN_METHOD = "personal_sign"
 private const val TYPED_DATA_METHOD = "eth_signTypedData"
+private const val TYPED_DATA_METHOD_V4 = "eth_signTypedData_v4"
 private const val ETH_SIGN_METHOD = "eth_sign"
 private const val SEND_TRANSACTION_METHOD = "eth_sendTransaction"
 private const val SIGN_TRANSACTION_METHOD = "eth_signTransaction"
@@ -84,7 +85,7 @@ class WCNewRequestViewModel(
                 }
             }
 
-            TYPED_DATA_METHOD, SEND_TRANSACTION_METHOD, SIGN_TRANSACTION_METHOD -> {
+            TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4, SEND_TRANSACTION_METHOD, SIGN_TRANSACTION_METHOD -> {
                 val params = JsonParser.parseString(sessionRequest.request.params).asJsonArray
                 params.firstOrNull { it.isJsonObject }?.asJsonObject?.toString()
                     ?: throw Exception("Invalid Data")
@@ -150,7 +151,7 @@ class WCNewRequestViewModel(
                         signer.signByteArray(message = sessionRequest.param.toByteArray())
                     }
 
-                    TYPED_DATA_METHOD -> {
+                    TYPED_DATA_METHOD, TYPED_DATA_METHOD_V4 -> {
                         signer.signTypedData(rawJsonMessage = sessionRequest.param)
                     }
 

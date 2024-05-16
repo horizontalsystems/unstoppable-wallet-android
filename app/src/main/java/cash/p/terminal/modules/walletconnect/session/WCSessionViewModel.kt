@@ -64,6 +64,7 @@ class WCSessionViewModel(
         "eth_sign",
         "eth_signTransaction",
         "eth_signTypedData",
+        "eth_signTypedData_v4",
         "wallet_addEthereumChain",
         "wallet_switchEthereumChain"
     )
