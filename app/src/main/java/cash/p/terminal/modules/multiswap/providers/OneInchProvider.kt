@@ -34,7 +34,7 @@ object OneInchProvider : EvmSwapProvider() {
     override val icon = R.drawable.oneinch
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
     private const val PARTNER_FEE: Float = 0.3F
-    private const val PARTNER_ADDRESS: String = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"
+    private const val PARTNER_ADDRESS: String = "0x6A5aD0192ad3F6e04cd654CA53daD7aA72CFcfc4"
 
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
