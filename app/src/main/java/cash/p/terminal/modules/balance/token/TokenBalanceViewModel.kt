@@ -6,7 +6,6 @@ import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceModule
@@ -18,10 +17,10 @@ import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiSt
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class TokenBalanceViewModel(
     private val wallet: Wallet,
@@ -35,7 +34,6 @@ class TokenBalanceViewModel(
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
-    private val disposables = CompositeDisposable()
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
@@ -59,13 +57,11 @@ class TokenBalanceViewModel(
             }
         }
 
-        transactionsService.itemsObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            transactionsService.itemsObservable.asFlow().collect {
                 updateTransactions(it)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             balanceService.start()
@@ -135,7 +131,6 @@ class TokenBalanceViewModel(
     override fun onCleared() {
         super.onCleared()
 
-        disposables.clear()
         balanceService.clear()
     }
 

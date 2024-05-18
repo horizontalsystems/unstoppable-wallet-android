@@ -113,6 +113,9 @@ import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.plugins.RxJavaPlugins
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.logging.Level
 import java.util.logging.Logger
 import androidx.work.Configuration as WorkConfiguration
@@ -191,6 +194,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
     }
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
@@ -346,17 +351,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         pinComponent = PinComponent(
             pinSettingsStorage = pinSettingsStorage,
-            excludedActivityNames = listOf(
-                KeyStoreActivity::class.java.name,
-                LockScreenActivity::class.java.name,
-                LauncherActivity::class.java.name,
-            ),
             userManager = userManager,
             pinDbStorage = PinDbStorage(appDatabase.pinDao())
         )
 
         statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider)
-        backgroundStateChangeListener = BackgroundStateChangeListener(systemInfoManager, keyStoreManager, pinComponent, statsManager).apply {
+        backgroundStateChangeListener = BackgroundStateChangeListener(pinComponent, statsManager).apply {
             backgroundManager.registerListener(this)
         }
 
@@ -512,7 +512,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     }
 
     private fun startTasks() {
-        Thread {
+        coroutineScope.launch {
             EthereumKit.init()
             adapterManager.startAdapterManager()
             marketKit.sync()
@@ -532,7 +532,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             evmLabelManager.sync()
             contactsRepository.initialize()
-
-        }.start()
+        }
     }
 }

@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
@@ -24,6 +26,11 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.getInputX
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.StatSection
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.modules.evmfee.EvmSettingsInput
@@ -118,14 +125,12 @@ class ResendBitcoinFragment : BaseComposeFragment() {
             }
         }
 
-        DisposableLifecycleCallbacks(
+        LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
             //additional close for cases when user closes app immediately after sending
-            onResume = {
-                if (uiState.sendResult == SendResult.Sent) {
-                    navController.popBackStack(closeUntilDestId, true)
-                }
+            if (uiState.sendResult == SendResult.Sent) {
+                navController.popBackStack(closeUntilDestId, true)
             }
-        )
+        }
 
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(

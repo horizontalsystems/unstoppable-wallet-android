@@ -19,7 +19,6 @@ class LockScreenActivity : BaseActivity() {
             ComposeAppTheme {
                 PinUnlock(
                     onSuccess = {
-                        setResult(RESULT_OK)
                         finish()
                     }
                 )

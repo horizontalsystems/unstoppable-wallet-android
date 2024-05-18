@@ -73,6 +73,16 @@ class HsProvider(baseUrl: String, apiKey: String) {
         )
     }
 
+    fun topCoinsMarketInfosSingle(
+        top: Int,
+        currencyCode: String,
+    ): Single<List<MarketInfoRaw>> {
+        return service.getTopCoinsMarketInfos(
+            top = top,
+            currencyCode = currencyCode,
+        )
+    }
+
     fun marketInfosSingle(
         categoryUid: String,
         currencyCode: String,
@@ -456,6 +466,14 @@ class HsProvider(baseUrl: String, apiKey: String) {
             @Query("fields") fields: String = marketInfoFields,
         ): Single<List<MarketInfoRaw>>
 
+        @GET("coins")
+        fun getTopCoinsMarketInfos(
+            @Query("limit") top: Int,
+            @Query("currency") currencyCode: String,
+            @Query("order_by_rank") orderByRank: Boolean = true,
+            @Query("fields") fields: String = topCoinsMarketInfoFields,
+        ): Single<List<MarketInfoRaw>>
+
         @GET("coins/filter")
         fun getAdvancedMarketInfos(
             @Query("limit") top: Int,
@@ -733,7 +751,9 @@ class HsProvider(baseUrl: String, apiKey: String) {
 
         companion object {
             private const val marketInfoFields =
-                "name,code,price,price_change_24h,price_change_7d,price_change_30d,market_cap_rank,coingecko_id,market_cap,market_cap_rank,total_volume"
+                "name,code,price,price_change_24h,price_change_7d,price_change_30d,price_change_90d,market_cap_rank,coingecko_id,market_cap,market_cap_rank,total_volume"
+            private const val topCoinsMarketInfoFields =
+                "price,price_change_24h,price_change_7d,price_change_30d,price_change_90d,market_cap_rank,market_cap,total_volume"
             private const val coinPriceFields = "price,price_change_24h,last_updated"
             private const val advancedMarketFields =
                 "all_platforms,price,market_cap,total_volume,price_change_24h,price_change_7d,price_change_14d,price_change_30d,price_change_200d,price_change_1y,ath_percentage,atl_percentage"

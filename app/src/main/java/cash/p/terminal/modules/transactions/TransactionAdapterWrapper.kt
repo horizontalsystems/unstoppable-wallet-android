@@ -2,13 +2,17 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.ITransactionsAdapter
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionAdapterWrapper(
@@ -22,7 +26,8 @@ class TransactionAdapterWrapper(
 
     private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
     private var allLoaded = false
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var updatesJob: Job? = null
 
     val address: String?
         get() = contact
@@ -35,15 +40,12 @@ class TransactionAdapterWrapper(
     }
 
     fun reload() {
-        unsubscribeFromUpdates()
         transactionRecords.clear()
         allLoaded = false
         subscribeForUpdates()
     }
 
     fun setTransactionType(transactionType: FilterTransactionType) {
-        unsubscribeFromUpdates()
-
         this.transactionType = transactionType
         transactionRecords.clear()
         allLoaded = false
@@ -51,7 +53,6 @@ class TransactionAdapterWrapper(
     }
 
     fun setContact(contact: Contact?) {
-        unsubscribeFromUpdates()
         this.contact = contact
         transactionRecords.clear()
         allLoaded = false
@@ -59,21 +60,20 @@ class TransactionAdapterWrapper(
     }
 
     private fun subscribeForUpdates() {
+        updatesJob?.cancel()
+
         if (contact != null && address == null) return
 
-        transactionsAdapter.getTransactionRecordsFlowable(transactionWallet.token, transactionType, address)
-            .subscribeIO {
-                transactionRecords.clear()
-                allLoaded = false
-                updatedSubject.onNext(Unit)
-            }
-            .let {
-                disposables.add(it)
-            }
-    }
-
-    private fun unsubscribeFromUpdates() {
-        disposables.clear()
+        updatesJob = coroutineScope.launch {
+            transactionsAdapter
+                .getTransactionRecordsFlowable(transactionWallet.token, transactionType, address)
+                .asFlow()
+                .collect {
+                    transactionRecords.clear()
+                    allLoaded = false
+                    updatedSubject.onNext(Unit)
+                }
+        }
     }
 
     fun get(limit: Int): Single<List<TransactionRecord>> = when {
@@ -99,6 +99,6 @@ class TransactionAdapterWrapper(
     }
 
     override fun clear() {
-        unsubscribeFromUpdates()
+        coroutineScope.cancel()
     }
 }

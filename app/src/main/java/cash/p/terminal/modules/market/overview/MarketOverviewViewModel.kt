@@ -7,7 +7,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.ViewState
@@ -43,10 +42,10 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketOverview
 import io.horizontalsystems.marketkit.models.NftPrice
 import io.horizontalsystems.marketkit.models.TopMovers
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 
 class MarketOverviewViewModel(
@@ -54,8 +53,6 @@ class MarketOverviewViewModel(
     private val topNftCollectionsViewItemFactory: TopNftCollectionsViewItemFactory,
     private val currencyManager: CurrencyManager
 ) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
 
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val viewItem = MutableLiveData<MarketOverviewModule.ViewItem>()
@@ -94,14 +91,13 @@ class MarketOverviewViewModel(
 
 
     init {
-        Observable
-            .combineLatest(
-                service.topMoversObservable,
-                service.marketOverviewObservable
-            ) { t1, t2 ->
-                Pair(t1, t2)
-            }
-            .subscribeIO { overviewItems ->
+        viewModelScope.launch {
+            val overviewItemsFlow = service.topMoversObservable.asFlow()
+                .combine(service.marketOverviewObservable.asFlow()) { t1, t2 ->
+                    Pair(t1, t2)
+                }
+
+            overviewItemsFlow.collect { overviewItems ->
                 val error = listOfNotNull(
                     overviewItems.first.exceptionOrNull(),
                     overviewItems.second.exceptionOrNull(),
@@ -120,9 +116,8 @@ class MarketOverviewViewModel(
                         syncViewItems()
                     }
                 }
-            }.let {
-                disposables.add(it)
             }
+        }
 
         service.start()
     }
@@ -378,7 +373,6 @@ class MarketOverviewViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 }
 

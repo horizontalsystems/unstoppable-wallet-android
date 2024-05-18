@@ -1,12 +1,35 @@
 package cash.p.terminal.modules.settings.appearance
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Surface
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,10 +42,28 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.B2
+import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.D1
+import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.MultitextM1
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead1_jacob
+import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 
@@ -75,6 +116,28 @@ fun AppearanceScreen(navController: NavController) {
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState()),
                 ) {
+                    CellUniversalLawrenceSection(
+                        listOf({
+                            HsSettingCell(
+                                R.string.Settings_BaseCurrency,
+                                R.drawable.ic_currency,
+                                value = uiState.baseCurrencyCode,
+                                onClick = {
+                                    navController.slideFromRight(R.id.baseCurrencySettingsFragment)
+                                }
+                            )
+                        }, {
+                            HsSettingCell(
+                                R.string.Settings_Language,
+                                R.drawable.ic_language,
+                                value = uiState.currentLanguage,
+                                onClick = {
+                                    navController.slideFromRight(R.id.languageSettingsFragment)
+                                }
+                            )
+                        })
+                    )
+                    VSpacer(height = 12.dp)
                     HeaderText(text = stringResource(id = R.string.Appearance_Theme))
                     CellUniversalLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
                         RowSelect(

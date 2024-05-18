@@ -15,11 +15,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
-import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewNew
+import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.VSpacer
@@ -71,22 +70,19 @@ fun WCSendEthRequestScreen(
                         buttonEnabled = false
                         HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
 
-                        val result = try {
+                        try {
                             logger.info("click confirm button")
                             viewModel.confirm()
                             logger.info("success")
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
-                            SendEvmConfirmationFragment.Result(true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
                             HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                            SendEvmConfirmationFragment.Result(false)
                         }
 
                         buttonEnabled = true
-                        navController.setNavigationResultX(result)
                         navController.popBackStack()
                     }
                 }
@@ -102,12 +98,13 @@ fun WCSendEthRequestScreen(
             )
         }
     ) {
-        SendEvmTransactionViewNew(
+        SendEvmTransactionView(
             navController,
             uiState.sectionViewItems,
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
+            StatPage.WalletConnect
         )
     }
 }

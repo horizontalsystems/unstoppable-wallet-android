@@ -4,19 +4,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.BtcRestoreMode
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class BtcBlockchainSettingsViewModel(
     private val service: BtcBlockchainSettingsService
 ) : ViewModel() {
-
-    private val disposables = CompositeDisposable()
 
     var closeScreen by mutableStateOf(false)
         private set
@@ -31,19 +31,14 @@ class BtcBlockchainSettingsViewModel(
     val blockchainIconUrl = service.blockchain.type.imageUrl
 
     init {
-        service.hasChangesObservable
-            .subscribe {
+        viewModelScope.launch {
+            service.hasChangesObservable.asFlow().collect {
                 saveButtonEnabled = it
                 syncRestoreModeState()
-            }.let {
-                disposables.add(it)
             }
+        }
 
         syncRestoreModeState()
-    }
-
-    override fun onCleared() {
-        disposables.clear()
     }
 
     fun onSelectRestoreMode(viewItem: ViewItem) {

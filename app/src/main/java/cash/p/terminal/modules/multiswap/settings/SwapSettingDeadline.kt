@@ -5,10 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import cash.p.terminal.modules.swap.settings.ISwapDeadlineService
-import cash.p.terminal.modules.swap.settings.SwapDeadlineViewModel
-import cash.p.terminal.modules.swap.settings.SwapSettingsModule
-import cash.p.terminal.modules.swap.settings.ui.TransactionDeadlineInput
+import cash.p.terminal.modules.multiswap.settings.ui.TransactionDeadlineInput
 import io.reactivex.subjects.PublishSubject
 import java.util.Optional
 

@@ -6,7 +6,10 @@ import cash.p.terminal.core.tor.EntityStatus
 import cash.p.terminal.core.tor.Tor
 import cash.p.terminal.core.tor.torutils.ProcessUtils
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.logging.Level
@@ -23,6 +26,7 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
 
     private var torControl: TorControl? = null
     private lateinit var resManager: TorResourceManager
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     fun start() {
 
@@ -59,16 +63,16 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
                     torInfo.status = EntityStatus.RUNNING
                     eventMonitor(torInfo = torInfo, msg = "Tor started successfully")
 
-                    torControl?.let {
-                        it.initConnection(4)
-                            .subscribe(
-                                { torConnection ->
+                    torControl?.let { it ->
+                        coroutineScope.launch {
+                            try {
+                                it.initConnection(4).asFlow().collect { torConnection ->
                                     torInfo.connection = torConnection
-                                },
-                                {
-                                    torInfo.processId = -1
-                                })
-
+                                }
+                            } catch (e: Throwable) {
+                                torInfo.processId = -1
+                            }
+                        }
                     }
                 }
             } else {
@@ -92,7 +96,6 @@ class TorOperator(private val torSettings: Tor.Settings, private val listener: L
 
     fun stop(): Single<Boolean> {
         return killAllDaemons()
-            .subscribeOn(Schedulers.io())
     }
 
     fun newIdentity(): Boolean {

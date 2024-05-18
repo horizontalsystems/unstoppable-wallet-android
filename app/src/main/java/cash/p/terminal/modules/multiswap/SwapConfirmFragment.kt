@@ -1,16 +1,9 @@
 package cash.p.terminal.modules.multiswap
 
 import android.os.Parcelable
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,8 +13,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,27 +25,20 @@ import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.setNavigationResultX
-import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions
-import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
+import cash.p.terminal.modules.multiswap.ui.DataFieldFee
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.caption_grey
 import cash.p.terminal.ui.compose.components.cell.CellUniversal
@@ -99,191 +85,138 @@ fun SwapConfirmScreen(navController: NavController) {
 
     val uiState = viewModel.uiState
 
-    Scaffold(
-        topBar = {
-            AppBar(
-                title = stringResource(R.string.Swap_Confirm_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = navController::popBackStack)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Settings_Title),
-                        icon = R.drawable.ic_manage_2_24,
-                        onClick = {
-                            navController.slideFromRight(R.id.swapTransactionSettings)
+    ConfirmTransactionScreen(
+        onClickBack = navController::popBackStack,
+        onClickSettings = {
+            navController.slideFromRight(R.id.swapTransactionSettings)
+        },
+        onClickClose = null,
+        buttonsSlot = {
+            if (uiState.loading) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Alert_Loading),
+                    enabled = false,
+                    onClick = { },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
+            } else if (!uiState.validQuote) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Refresh),
+                    onClick = {
+                        viewModel.refresh()
+                    },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = "Quote is invalid")
+            } else if (uiState.expired) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Refresh),
+                    onClick = {
+                        viewModel.refresh()
+                    },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
+            } else {
+                var buttonEnabled by remember { mutableStateOf(true) }
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Swap),
+                    enabled = buttonEnabled,
+                    onClick = {
+                        coroutineScope.launch {
+                            buttonEnabled = false
+                            HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
 
-                            stat(page = StatPage.SwapConfirmation, event = StatEvent.Open(StatPage.SwapSettings))
+                            val result = try {
+                                viewModel.swap()
+
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                delay(1200)
+                                SwapConfirmFragment.Result(true)
+                            } catch (t: Throwable) {
+                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                SwapConfirmFragment.Result(false)
+                            }
+
+                            buttonEnabled = true
+                            navController.setNavigationResultX(result)
+                            navController.popBackStack()
                         }
-                    )
-                ),
-            )
-        },
-        bottomBar = {
-            ButtonsGroupWithShade {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    if (uiState.loading) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Alert_Loading),
-                            enabled = false,
-                            onClick = { },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
-                    } else if (!uiState.validQuote) {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Button_Refresh),
-                            onClick = {
-                                viewModel.refresh()
-                            },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Quote is invalid")
-                    } else if (uiState.expired) {
-                        ButtonPrimaryDefault(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Button_Refresh),
-                            onClick = {
-                                viewModel.refresh()
-                            },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = stringResource(id = R.string.SwapConfirm_QuoteExpired))
-                    } else {
-                        var buttonEnabled by remember { mutableStateOf(true) }
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, end = 16.dp),
-                            title = stringResource(R.string.Swap),
-                            enabled = buttonEnabled,
-                            onClick = {
-                                coroutineScope.launch {
-                                    buttonEnabled = false
-                                    HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
-
-                                    val result = try {
-                                        viewModel.swap()
-
-                                        HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                                        delay(1200)
-                                        SwapConfirmFragment.Result(true)
-                                    } catch (t: Throwable) {
-                                        HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                                        SwapConfirmFragment.Result(false)
-                                    }
-
-                                    buttonEnabled = true
-                                    navController.setNavigationResultX(result)
-                                    navController.popBackStack()
-                                }
-                            },
-                        )
-                        VSpacer(height = 12.dp)
-                        subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
-                    }
-                }
+                    },
+                )
+                VSpacer(height = 12.dp)
+                subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
             }
-        },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
-        ) {
-            VSpacer(height = 12.dp)
-            SectionUniversalLawrence {
-                TokenRow(uiState.tokenIn, uiState.amountIn, uiState.fiatAmountIn, uiState.currency, TokenRowType.In, false,)
-                TokenRow(uiState.tokenOut, uiState.amountOut, uiState.fiatAmountOut, uiState.currency, TokenRowType.Out)
-            }
-            uiState.amountOut?.let { amountOut ->
-                VSpacer(height = 16.dp)
-                SectionUniversalLawrence {
-                    PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut, StatPage.SwapConfirmation)
-                    PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
-                    uiState.amountOutMin?.let { amountOutMin ->
-                        val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
-                            CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
-                        } ?: "---"
-
-                        SwapInfoRow(
-                            borderTop = true,
-                            title = stringResource(id = R.string.Swap_MinimumReceived),
-                            value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
-                            subvalue = subvalue
-                        )
-                    }
-                    uiState.quoteFields.forEach {
-                        it.GetContent(navController, true)
-                    }
-                }
-            }
-
-            val transactionFields = uiState.transactionFields
-            if (transactionFields.isNotEmpty()) {
-                VSpacer(height = 16.dp)
-                SectionUniversalLawrence {
-                    transactionFields.forEachIndexed { index, field ->
-                        field.GetContent(navController, index != 0)
-                    }
-                }
-            }
-
+        SectionUniversalLawrence {
+            TokenRow(
+                token = uiState.tokenIn,
+                amount = uiState.amountIn,
+                fiatAmount = uiState.fiatAmountIn,
+                currency = uiState.currency,
+                borderTop = false,
+                title = stringResource(R.string.Send_Confirmation_YouSend),
+                amountColor = ComposeAppTheme.colors.leah,
+            )
+            TokenRow(
+                token = uiState.tokenOut,
+                amount = uiState.amountOut,
+                fiatAmount = uiState.fiatAmountOut,
+                currency = uiState.currency,
+                title = stringResource(R.string.Swap_ToAmountTitle),
+                amountColor = ComposeAppTheme.colors.remus,
+            )
+        }
+        uiState.amountOut?.let { amountOut ->
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
-                QuoteInfoRow(
-                    title = {
-                        val title = stringResource(id = R.string.FeeSettings_NetworkFee)
-                        val infoText = stringResource(id = R.string.FeeSettings_NetworkFee_Info)
+                PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut, StatPage.SwapConfirmation)
+                PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
+                uiState.amountOutMin?.let { amountOutMin ->
+                    val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
+                        CurrencyValue(uiState.currency, fiatAmountOutMin).getFormattedFull()
+                    } ?: "---"
 
-                        subhead2_grey(text = title)
-
-                        Image(
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .clickable(
-                                    onClick = {
-                                        navController.slideFromBottom(
-                                            R.id.feeSettingsInfoDialog,
-                                            FeeSettingsInfoDialog.Input(title, infoText)
-                                        )
-                                    },
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                )
-                            ,
-                            painter = painterResource(id = R.drawable.ic_info_20),
-                            contentDescription = ""
-                        )
-
-                    },
-                    value = {
-                        val primary = uiState.networkFee?.primary?.getFormattedPlain() ?: "---"
-                        val secondary = uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
-
-                        Column(horizontalAlignment = Alignment.End) {
-                            subhead2_leah(text = primary)
-                            VSpacer(height = 1.dp)
-                            subhead2_grey(text = secondary)
-                        }
-                    }
-                )
+                    SwapInfoRow(
+                        borderTop = true,
+                        title = stringResource(id = R.string.Swap_MinimumReceived),
+                        value = CoinValue(uiState.tokenOut, amountOutMin).getFormattedFull(),
+                        subvalue = subvalue
+                    )
+                }
+                uiState.quoteFields.forEach {
+                    it.GetContent(navController, true)
+                }
             }
+        }
 
-            if (uiState.cautions.isNotEmpty()) {
-                Cautions(cautions = uiState.cautions)
+        val transactionFields = uiState.transactionFields
+        if (transactionFields.isNotEmpty()) {
+            VSpacer(height = 16.dp)
+            SectionUniversalLawrence {
+                transactionFields.forEachIndexed { index, field ->
+                    field.GetContent(navController, index != 0)
+                }
             }
+        }
 
-            VSpacer(height = 32.dp)
+        VSpacer(height = 16.dp)
+        SectionUniversalLawrence {
+            DataFieldFee(
+                navController,
+                uiState.networkFee?.primary?.getFormattedPlain() ?: "---",
+                uiState.networkFee?.secondary?.getFormattedPlain() ?: "---"
+            )
+        }
+
+        if (uiState.cautions.isNotEmpty()) {
+            Cautions(cautions = uiState.cautions)
         }
     }
 }
@@ -303,18 +236,15 @@ private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subval
     }
 }
 
-enum class TokenRowType {
-    In, Out;
-}
-
 @Composable
-private fun TokenRow(
+fun TokenRow(
     token: Token,
     amount: BigDecimal?,
     fiatAmount: BigDecimal?,
     currency: Currency,
-    type: TokenRowType,
     borderTop: Boolean = true,
+    title: String,
+    amountColor: Color,
 ) {
     CellUniversal(borderTop = borderTop) {
         CoinImage(
@@ -324,30 +254,53 @@ private fun TokenRow(
         )
         HSpacer(width = 16.dp)
         Column {
-            val title = when (type) {
-                TokenRowType.In -> stringResource(R.string.Send_Confirmation_YouSend)
-                TokenRowType.Out -> stringResource(R.string.Swap_ToAmountTitle)
-            }
-
             subhead2_leah(text = title)
             VSpacer(height = 1.dp)
             caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 16.dp)
         Column(horizontalAlignment = Alignment.End) {
-            val color = when (type) {
-                TokenRowType.In -> ComposeAppTheme.colors.leah
-                TokenRowType.Out -> ComposeAppTheme.colors.remus
-            }
             Text(
                 text = amount?.let { CoinValue(token, it).getFormattedFull() } ?: "---",
                 style = ComposeAppTheme.typography.subhead1,
-                color = color,
+                color = amountColor,
             )
             fiatAmount?.let {
                 VSpacer(height = 1.dp)
                 caption_grey(text = CurrencyValue(currency, fiatAmount).getFormattedFull())
             }
+        }
+    }
+}
+
+@Composable
+fun TokenRowUnlimited(
+    token: Token,
+    borderTop: Boolean = true,
+    title: String,
+    amountColor: Color,
+) {
+    CellUniversal(borderTop = borderTop) {
+        CoinImage(
+            iconUrl = token.coin.imageUrl,
+            placeholder = token.iconPlaceholder,
+            modifier = Modifier.size(32.dp)
+        )
+        HSpacer(width = 16.dp)
+        Column {
+            subhead2_leah(text = title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+        }
+        HFillSpacer(minWidth = 16.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = "∞ ${token.coin.code}",
+                style = ComposeAppTheme.typography.subhead1,
+                color = amountColor,
+            )
+            VSpacer(height = 1.dp)
+            caption_grey(text = stringResource(id = R.string.Transaction_Unlimited))
         }
     }
 }

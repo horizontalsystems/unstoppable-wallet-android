@@ -7,7 +7,6 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.tvl.TvlModule.SelectorDialogState
@@ -15,16 +14,15 @@ import cash.p.terminal.modules.market.tvl.TvlModule.TvlDiffType
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.Select
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class TvlViewModel(
     private val service: TvlService,
     private val tvlViewItemFactory: TvlViewItemFactory,
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
     private var tvlDiffType: TvlDiffType = TvlDiffType.Percent
         set(value) {
             field = value
@@ -46,8 +44,8 @@ class TvlViewModel(
     )
 
     init {
-        service.marketTvlItemsObservable
-            .subscribeIO { tvlItemsDataState ->
+        viewModelScope.launch {
+            service.marketTvlItemsObservable.asFlow().collect { tvlItemsDataState ->
                 tvlItemsDataState.viewState?.let {
                     viewStateLiveData.postValue(it)
                 }
@@ -57,7 +55,7 @@ class TvlViewModel(
                     syncTvlItems(it)
                 }
             }
-            .let { disposables.add(it) }
+        }
 
         service.start()
     }
@@ -116,7 +114,6 @@ class TvlViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {

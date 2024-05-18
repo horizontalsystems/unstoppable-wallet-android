@@ -2,7 +2,6 @@ package cash.p.terminal.modules.balance.token
 
 import cash.p.terminal.core.Clearable
 import cash.p.terminal.core.managers.SpamManager
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.Wallet
@@ -21,13 +20,13 @@ import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.modules.transactions.TransactionWallet
 import cash.p.terminal.modules.transactions.TransactionsRateRepository
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
@@ -40,7 +39,6 @@ class TokenTransactionsService(
     private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
 ) : Clearable {
-    private val disposables = CompositeDisposable()
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
@@ -48,44 +46,32 @@ class TokenTransactionsService(
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
     fun start() {
-        transactionRecordRepository.itemsObservable
-            .subscribeIO {
+        coroutineScope.launch {
+            transactionRecordRepository.itemsObservable.asFlow().collect {
                 handleUpdatedRecords(it)
             }
-            .let {
-                disposables.add(it)
-            }
-
-        rateRepository.dataExpiredObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            rateRepository.dataExpiredObservable.asFlow().collect {
                 handleUpdatedHistoricalRates()
             }
-            .let {
-                disposables.add(it)
-            }
-
-        rateRepository.historicalRateObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            rateRepository.historicalRateObservable.asFlow().collect {
                 handleUpdatedHistoricalRate(it.first, it.second)
             }
-            .let {
-                disposables.add(it)
-            }
-
-        transactionSyncStateRepository.lastBlockInfoObservable
-            .subscribeIO { (source, lastBlockInfo) ->
-                handleLastBlockInfo(source, lastBlockInfo)
-            }
-            .let {
-                disposables.add(it)
-            }
-
+        }
+        coroutineScope.launch {
+            transactionSyncStateRepository.lastBlockInfoObservable.asFlow()
+                .collect { (source, lastBlockInfo) ->
+                    handleLastBlockInfo(source, lastBlockInfo)
+                }
+        }
         coroutineScope.launch {
             nftMetadataService.assetsBriefMetadataFlow.collect {
                 handle(it)
             }
         }
-
         coroutineScope.launch {
             contactsRepository.contactsFlow.drop(1).collect {
                 handleContactsUpdate()
@@ -268,7 +254,6 @@ class TokenTransactionsService(
 
 
     override fun clear() {
-        disposables.clear()
         transactionRecordRepository.clear()
         rateRepository.clear()
         transactionSyncStateRepository.clear()

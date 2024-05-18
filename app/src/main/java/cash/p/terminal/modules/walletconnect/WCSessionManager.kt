@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class WCSessionManager(
     private val accountManager: IAccountManager,
@@ -51,11 +52,11 @@ class WCSessionManager(
             }
         }
 
-        accountManager.accountsDeletedFlowable
-            .subscribeIO {
+        coroutineScope.launch {
+            accountManager.accountsDeletedFlowable.asFlow().collect {
                 handleDeletedAccount()
             }
-            .let { disposable.add(it) }
+        }
 
         coroutineScope.launch {
             WCDelegate.walletEvents.collect {

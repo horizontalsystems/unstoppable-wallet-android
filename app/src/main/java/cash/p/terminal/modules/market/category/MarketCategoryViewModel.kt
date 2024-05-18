@@ -8,7 +8,6 @@ import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statField
 import cash.p.terminal.core.stats.statSortType
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.ImageSource
@@ -18,15 +17,14 @@ import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.ui.compose.Select
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketCategoryViewModel(
     private val service: MarketCategoryService,
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
     private var marketItems: List<MarketItemWrapper> = listOf()
     private var marketField = MarketField.PriceDiff
@@ -42,12 +40,11 @@ class MarketCategoryViewModel(
         syncHeader()
         syncMenu()
 
-        service.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
                 syncState(it)
-            }.let {
-                disposables.add(it)
             }
+        }
 
         service.start()
     }
@@ -136,7 +133,6 @@ class MarketCategoryViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun onAddFavorite(uid: String) {

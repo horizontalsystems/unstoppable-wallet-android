@@ -6,15 +6,13 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.modules.send.evm.SendEvmData
-import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationFragment
-import cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationModule
+import cash.p.terminal.modules.eip20revoke.Eip20RevokeConfirmFragment
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 class ActionRevoke(
     private val token: Token,
-    private val sendEvmData: SendEvmData,
+    private val spenderAddress: String,
     override val inProgress: Boolean,
     private val allowance: BigDecimal
 ) : ISwapProviderAction {
@@ -30,9 +28,9 @@ class ActionRevoke(
         stringResource(R.string.Approve_RevokeAndApproveInfo, CoinValue(token, allowance).getFormattedFull())
 
     override fun execute(navController: NavController, onActionCompleted: () -> Unit) {
-        navController.slideFromBottomForResult<SwapApproveConfirmationFragment.Result>(
-            R.id.swapApproveConfirmationFragment,
-            SwapApproveConfirmationModule.Input(sendEvmData, token.blockchainType, false)
+        navController.slideFromBottomForResult<Eip20RevokeConfirmFragment.Result>(
+            R.id.eip20RevokeConfirmFragment,
+            Eip20RevokeConfirmFragment.Input(token, spenderAddress, allowance)
         ) {
             onActionCompleted.invoke()
         }

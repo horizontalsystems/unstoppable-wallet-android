@@ -2,30 +2,27 @@ package cash.p.terminal.modules.coin.coinmarkets
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.MarketTickerViewItem
 import cash.p.terminal.ui.compose.TranslatableString
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel() {
     val verifiedMenu by service::verifiedMenu
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val viewItemsLiveData = MutableLiveData<List<MarketTickerViewItem>>()
 
-    private val disposables = CompositeDisposable()
-
     init {
-        service.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
                 syncState(it)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         service.start()
     }
@@ -51,7 +48,6 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
     }
 
     override fun onCleared() {
-        disposables.clear()
         service.stop()
     }
 

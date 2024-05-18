@@ -199,11 +199,20 @@
         android:id="@+id/addTokenFragment"
         android:name="cash.p.terminal.modules.addtoken.AddTokenFragment"/>
     <fragment
-        android:id="@+id/swapApproveFragment"
-        android:name="cash.p.terminal.modules.swap.approve.SwapApproveFragment" />
+        android:id="@+id/eip20ApproveFragment"
+        android:name="cash.p.terminal.modules.eip20approve.Eip20ApproveFragment" />
     <fragment
-        android:id="@+id/swapApproveConfirmationFragment"
-        android:name="cash.p.terminal.modules.swap.approve.confirmation.SwapApproveConfirmationFragment"/>
+        android:id="@+id/eip20RevokeTransactionSettingsFragment"
+        android:name="cash.p.terminal.modules.eip20revoke.Eip20RevokeTransactionSettingsFragment" />
+    <fragment
+        android:id="@+id/eip20RevokeConfirmFragment"
+        android:name="cash.p.terminal.modules.eip20revoke.Eip20RevokeConfirmFragment" />
+    <fragment
+        android:id="@+id/eip20ApproveConfirmFragment"
+        android:name="cash.p.terminal.modules.eip20approve.Eip20ApproveConfirmFragment" />
+    <fragment
+        android:id="@+id/eip20ApproveTransactionSettingsFragment"
+        android:name="cash.p.terminal.modules.eip20approve.Eip20ApproveTransactionSettingsFragment" />
     <fragment
         android:id="@+id/marketSearchFragment"
         android:name="cash.p.terminal.modules.market.search.MarketSearchFragment"/>
@@ -335,6 +344,9 @@
     <fragment
         android:id="@+id/cexAssetFragment"
         android:name="cash.p.terminal.modules.balance.cex.asset.CexAssetFragment" />
+    <fragment
+        android:id="@+id/кeyAccountInfoFragment"
+        android:name="cash.p.terminal.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />
     <dialog
         android:id="@+id/contactOptionsDialog"
         android:name="cash.p.terminal.modules.settings.about.ContactOptionsDialog" />

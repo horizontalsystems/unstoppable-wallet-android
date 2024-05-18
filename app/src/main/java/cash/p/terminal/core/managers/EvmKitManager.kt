@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supportedNftTypes
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
@@ -27,9 +26,12 @@ import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.UniswapV3Kit
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.net.URI
 
 class EvmKitManager(
@@ -37,19 +39,16 @@ class EvmKitManager(
     backgroundManager: BackgroundManager,
     private val syncSourceManager: EvmSyncSourceManager
 ) : BackgroundManager.Listener {
-
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     init {
         backgroundManager.registerListener(this)
 
-        syncSourceManager.syncSourceObservable
-            .subscribeIO { blockchain ->
+        coroutineScope.launch {
+            syncSourceManager.syncSourceObservable.asFlow().collect { blockchain ->
                 handleUpdateNetwork(blockchain)
             }
-            .let {
-                disposables.add(it)
-            }
+        }
     }
 
     private fun handleUpdateNetwork(blockchainType: BlockchainType) {

@@ -39,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.Caution
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.requireInput
@@ -51,7 +52,6 @@ import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.ManageWalletsScreen
-import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigureScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString

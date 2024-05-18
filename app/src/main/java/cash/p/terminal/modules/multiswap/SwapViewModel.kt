@@ -13,7 +13,6 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
-import cash.p.terminal.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -245,14 +244,14 @@ data class SwapUiState(
     val error: Throwable?,
     val availableBalance: BigDecimal?,
     val priceImpact: BigDecimal?,
-    val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    val priceImpactLevel: PriceImpactLevel?,
     val priceImpactCaution: HSCaution?,
     val fiatAmountIn: BigDecimal?,
     val fiatAmountOut: BigDecimal?,
     val fiatPriceImpact: BigDecimal?,
     val currency: Currency,
     val fiatAmountInputEnabled: Boolean,
-    val fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    val fiatPriceImpactLevel: PriceImpactLevel?,
     val timeRemaining: Long?,
     val timeout: Boolean,
     val timeRemainingProgress: Float?

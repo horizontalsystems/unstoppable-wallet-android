@@ -5,10 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import cash.p.terminal.modules.swap.settings.ISwapSlippageService
-import cash.p.terminal.modules.swap.settings.SwapSettingsModule
-import cash.p.terminal.modules.swap.settings.SwapSlippageViewModel
-import cash.p.terminal.modules.swap.settings.ui.SlippageAmount
+import cash.p.terminal.modules.multiswap.settings.ui.SlippageAmount
 import cash.p.terminal.ui.compose.components.FormsInputStateWarning
 import io.reactivex.subjects.PublishSubject
 import java.math.BigDecimal

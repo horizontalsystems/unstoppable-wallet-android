@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlow
 
 class XRateService(
@@ -20,11 +20,9 @@ class XRateService(
     }
 
     fun getRateFlow(coinUid: String): Flow<CurrencyValue> {
-        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code)
-            .subscribeOn(Schedulers.io())
+        return marketKit.coinPriceObservable("xrate-service", coinUid, currency.code).asFlow()
             .map {
                 CurrencyValue(currency, it.value)
             }
-            .asFlow()
     }
 }

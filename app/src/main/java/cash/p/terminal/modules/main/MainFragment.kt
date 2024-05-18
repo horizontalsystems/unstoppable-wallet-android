@@ -33,6 +33,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
@@ -291,9 +293,9 @@ private fun MainScreen(
         }
     }
 
-    DisposableLifecycleCallbacks(
-        onResume = viewModel::onResume,
-    )
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        viewModel.onResume()
+    }
 }
 
 @Composable

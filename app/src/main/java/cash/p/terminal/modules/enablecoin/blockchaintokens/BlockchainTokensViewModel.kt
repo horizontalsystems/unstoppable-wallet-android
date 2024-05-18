@@ -4,16 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.title
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import cash.p.terminal.ui.extensions.BottomSheetSelectorViewItem
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class BlockchainTokensViewModel(
     private val service: BlockchainTokensService
@@ -25,13 +26,13 @@ class BlockchainTokensViewModel(
     var config: BottomSheetSelectorMultipleDialog.Config? = null
         private set
     private var currentRequest: BlockchainTokensService.Request? = null
-    private val disposable: Disposable
 
     init {
-        disposable = service.requestObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.requestObservable.asFlow().collect {
                 handle(it)
             }
+        }
     }
 
     private fun handle(request: BlockchainTokensService.Request) {

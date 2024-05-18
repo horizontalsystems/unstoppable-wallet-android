@@ -27,9 +27,9 @@ import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.list.WCListFragment
 import io.horizontalsystems.core.IPinComponent
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 
 class MainViewModel(
     private val pinComponent: IPinComponent,
@@ -44,7 +44,6 @@ class MainViewModel(
     deepLink: Uri?
 ) : ViewModelUiState<MainModule.UiState>() {
 
-    private val disposables = CompositeDisposable()
     private var wcPendingRequestsCount = 0
     private var marketsTabEnabled = localStorage.marketsTabEnabledFlow.value
     private var transactionsEnabled = isTransactionsTabEnabled()
@@ -116,18 +115,22 @@ class MainViewModel(
             emitState()
         }
 
-        disposables.add(backupManager.allBackedUpFlowable.subscribe {
-            updateSettingsBadge()
-        })
-
-        disposables.add(pinComponent.pinSetFlowable.subscribe {
-            updateSettingsBadge()
-        })
-
-        disposables.add(accountManager.accountsFlowable.subscribe {
-            updateTransactionsTabEnabled()
-            updateSettingsBadge()
-        })
+        viewModelScope.launch {
+            backupManager.allBackedUpFlowable.asFlow().collect {
+                updateSettingsBadge()
+            }
+        }
+        viewModelScope.launch {
+            pinComponent.pinSetFlowable.asFlow().collect {
+                updateSettingsBadge()
+            }
+        }
+        viewModelScope.launch {
+            accountManager.accountsFlowable.asFlow().collect {
+                updateTransactionsTabEnabled()
+                updateSettingsBadge()
+            }
+        }
 
         viewModelScope.launch {
             accountManager.activeAccountStateFlow.collect {
@@ -164,10 +167,6 @@ class MainViewModel(
     private fun isTransactionsTabEnabled(): Boolean =
         !accountManager.isAccountsEmpty && accountManager.activeAccount?.type !is AccountType.Cex
 
-
-    override fun onCleared() {
-        disposables.clear()
-    }
 
     fun whatsNewShown() {
         showWhatsNew = false

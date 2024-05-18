@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -35,6 +36,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.managers.FaqManager
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -46,7 +48,9 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
@@ -192,6 +196,9 @@ private fun ShowExtendedKeyScreen(
                             MenuItem(
                                 title = stringResource(R.string.ExtendedKey_Account),
                                 value = viewModel.account.toString(),
+                                infoButtonClick = {
+                                    navController.slideFromBottom(R.id.кeyAccountInfoFragment)
+                                },
                                 onClick = { showAccountSelectorDialog = true }
                             )
                         }
@@ -274,6 +281,7 @@ private fun ShowExtendedKeyScreen(
 private fun MenuItem(
     title: String,
     value: String,
+    infoButtonClick: (() -> Unit)? = null,
     onClick: (() -> Unit)?
 ) {
     RowUniversal(
@@ -285,6 +293,20 @@ private fun MenuItem(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
+        infoButtonClick?.let { click ->
+            HSpacer(width = 8.dp)
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = click
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_info_20),
+                    contentDescription = "info button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
+        }
+
         Spacer(Modifier.weight(1f))
 
         Row(

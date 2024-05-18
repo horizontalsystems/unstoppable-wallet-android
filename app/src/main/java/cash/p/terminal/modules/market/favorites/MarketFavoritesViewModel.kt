@@ -3,7 +3,6 @@ package cash.p.terminal.modules.market.favorites
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem
@@ -11,15 +10,14 @@ import cash.p.terminal.modules.market.category.MarketItemWrapper
 import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.Period
 import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.ViewItem
 import cash.p.terminal.ui.compose.Select
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketFavoritesViewModel(
     private val service: MarketFavoritesService,
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
     private var marketItemsWrapper: List<MarketItemWrapper> = listOf()
     private val timeDurationOptions: List<Period> = listOf(
         Period.OneDay,
@@ -32,8 +30,8 @@ class MarketFavoritesViewModel(
     val viewItemLiveData = MutableLiveData<ViewItem>()
 
     init {
-        service.marketItemsObservable
-            .subscribeIO { state ->
+        viewModelScope.launch {
+            service.marketItemsObservable.asFlow().collect { state ->
                 when (state) {
                     is DataState.Success -> {
                         viewStateLiveData.postValue(ViewState.Success)
@@ -47,7 +45,8 @@ class MarketFavoritesViewModel(
 
                     DataState.Loading -> {}
                 }
-            }.let { disposables.add(it) }
+            }
+        }
 
         service.start()
     }
@@ -90,7 +89,6 @@ class MarketFavoritesViewModel(
     }
 
     override fun onCleared() {
-        disposables.clear()
         service.stop()
     }
 

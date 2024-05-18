@@ -64,25 +64,24 @@ class KeyStoreManager(
         keyStoreCleaner.cleanApp()
     }
 
-    override fun validateKeyStore(): KeyStoreValidationResult {
-        return try {
+    override fun validateKeyStore() {
+        try {
             validateKey()
-            KeyStoreValidationResult.KeyIsValid
         } catch (ex: UserNotAuthenticatedException) {
             logger.warning("invalid key", ex)
-            KeyStoreValidationResult.UserNotAuthenticated
+            throw KeyStoreValidationError.UserNotAuthenticated()
         } catch (ex: KeyPermanentlyInvalidatedException) {
             logger.warning("invalid key", ex)
-            KeyStoreValidationResult.KeyIsInvalid
+            throw KeyStoreValidationError.KeyIsInvalid()
         } catch (ex: UnrecoverableKeyException) {
             logger.warning("invalid key", ex)
-            KeyStoreValidationResult.KeyIsInvalid
+            throw KeyStoreValidationError.KeyIsInvalid()
         } catch (ex: InvalidKeyException) {
             logger.warning("invalid key", ex)
-            KeyStoreValidationResult.KeyIsInvalid
+            throw KeyStoreValidationError.KeyIsInvalid()
         } catch (ex: BadPaddingException) {
             logger.warning("invalid key", ex)
-            KeyStoreValidationResult.KeyIsInvalid
+            throw KeyStoreValidationError.KeyIsInvalid()
         }
     }
 
@@ -128,6 +127,7 @@ class KeyStoreManager(
 
 }
 
-enum class KeyStoreValidationResult {
-    UserNotAuthenticated, KeyIsInvalid, KeyIsValid
+sealed class KeyStoreValidationError : Error() {
+    class UserNotAuthenticated : KeyStoreValidationError()
+    class KeyIsInvalid : KeyStoreValidationError()
 }

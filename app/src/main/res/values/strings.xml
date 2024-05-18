@@ -739,6 +739,14 @@
     <string name="Approve_YouApprove">You Approve</string>
     <string name="Approve_YouRevoke">You Revoke</string>
 
+
+    <!--Swap Unlock Access-->
+
+    <string name="Swap_Unlock_PageTitle">Unlock Access</string>
+    <string name="Swap_Unlock_Subtitle">Allow access to the following amount</string>
+    <string name="Swap_Unlock_Info">Grant permission to a smart contract for token trading on your behalf, specifying the allowed amount. No impact on your balance, but incurs a small fee for approval.\n\nPre-approving a higher amount for future trades is cost-effective compared to on-demand approvals.</string>
+    <string name="Swap_Unlock_Unlimited">Unlimited</string>
+
     <!--Uniswap Info -->
 
     <string name="SwapInfo_AllowanceTitle">Allowance</string>
@@ -921,6 +929,8 @@
     <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
+    <string name="Settings_JoinUnstoppables">Join P.CASH</string>
+    <string name="Settings_JoinUnstoppables_Description">Stay on top of P.CASH happenings. Be the first to know about new features, user reported issues and things we work on!</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
@@ -1328,6 +1338,7 @@
     <string name="ExtendedKey_Purpose" translatable="false">Purpose</string>
     <string name="ExtendedKey_Account" translatable="false">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
+    <string name="ExtendedKey_AccountInfo">To do</string>
 
     <string name="AccountExtendedPrivateKey" translatable="false">Account Extended Private Key</string>
     <string name="AccountExtendedPublicKey" translatable="false">Account Extended Public Key</string>

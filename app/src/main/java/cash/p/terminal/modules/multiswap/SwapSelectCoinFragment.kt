@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.setNavigationResultX
-import cash.p.terminal.modules.swap.coinselect.SelectSwapCoinDialogScreen
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.parcelize.Parcelize
 

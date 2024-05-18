@@ -19,6 +19,7 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -131,6 +132,7 @@ private fun TransactionSpeedUpCancelScreen(
             sendTransactionState.cautions,
             sendTransactionState.fields,
             sendTransactionState.networkFee,
+            StatPage.Resend
         )
     }
 }

@@ -5,23 +5,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.*
+import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.modules.market.MarketField
+import cash.p.terminal.modules.market.MarketModule
+import cash.p.terminal.modules.market.MarketViewItem
+import cash.p.terminal.modules.market.SortingField
+import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.market.category.MarketItemWrapper
 import cash.p.terminal.modules.market.topcoins.MarketTopCoinsModule.Menu
 import cash.p.terminal.ui.compose.Select
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketTopCoinsViewModel(
     private val service: MarketTopCoinsService,
     private var marketField: MarketField
 ) : ViewModel() {
 
-    private val disposables = CompositeDisposable()
     private val marketFields = MarketField.values().toList()
     private var marketItems: List<MarketItemWrapper> = listOf()
 
@@ -36,12 +39,11 @@ class MarketTopCoinsViewModel(
         syncHeader()
         syncMenu()
 
-        service.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
                 syncState(it)
-            }.let {
-                disposables.add(it)
             }
+        }
 
         service.start()
     }
@@ -123,7 +125,6 @@ class MarketTopCoinsViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun onSelectorDialogDismiss() {

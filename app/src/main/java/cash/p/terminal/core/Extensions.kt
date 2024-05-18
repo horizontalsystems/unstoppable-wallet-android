@@ -3,7 +3,6 @@ package cash.p.terminal.core
 import android.content.Intent
 import android.os.Parcelable
 import android.widget.ImageView
-import androidx.annotation.CheckResult
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
@@ -19,16 +18,11 @@ import cash.p.terminal.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.Auditor
 import io.horizontalsystems.marketkit.models.CoinCategory
 import io.horizontalsystems.marketkit.models.CoinInvestment
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.delay
 import java.util.Locale
 import java.util.Optional
 
@@ -141,52 +135,6 @@ fun LockTimeInterval?.stringResId(): Int {
     }
 }
 
-@CheckResult
-fun <T> Observable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onNext)
-}
-
-@CheckResult
-fun <T> Observable<T>.subscribeIO(
-    onSuccess: (t: T) -> Unit,
-    onError: (e: Throwable) -> Unit
-): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onSuccess, onError)
-}
-
-@CheckResult
-fun <T> Flowable<T>.subscribeIO(onNext: (t: T) -> Unit): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onNext)
-}
-
-@CheckResult
-fun <T> Single<T>.subscribeIO(
-    onSuccess: (t: T) -> Unit,
-    onError: (e: Throwable) -> Unit
-): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onSuccess, onError)
-}
-
-@CheckResult
-fun <T> Single<T>.subscribeIO(onSuccess: (t: T) -> Unit): Disposable {
-    return this
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe(onSuccess)
-}
-
 fun String.shorten(): String {
     val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:", "ecash:")
 
@@ -254,4 +202,22 @@ fun NavGraphBuilder.composablePopup(
         },
         content = content
     )
+}
+
+suspend fun <T> retryWhen(
+    times: Int,
+    predicate: suspend (cause: Throwable) -> Boolean,
+    block: suspend () -> T
+): T {
+    repeat(times - 1) {
+        try {
+            return block()
+        } catch (e: Throwable) {
+            if (!predicate(e)) {
+                throw e
+            }
+        }
+        delay(1000)
+    }
+    return block()
 }

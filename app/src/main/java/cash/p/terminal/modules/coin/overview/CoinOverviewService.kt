@@ -4,12 +4,15 @@ import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 import java.net.URL
 
 class CoinOverviewService(
@@ -44,25 +47,25 @@ class CoinOverviewService(
     private val guideUrl: String?
         get() = guideUrls[fullCoin.coin.uid]?.let { URL(URL(appConfigProvider.guidesUrl), it).toString() }
 
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     fun start() {
         fetchCoinOverview()
     }
 
     private fun fetchCoinOverview() {
-        marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLanguage)
-            .subscribeIO({ marketInfoOverview ->
+        coroutineScope.launch {
+            try {
+                val marketInfoOverview = marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLanguage).await()
                 coinOverviewSubject.onNext(DataState.Success(CoinOverviewItem(fullCoin.coin.code, marketInfoOverview, guideUrl)))
-            }, {
-                coinOverviewSubject.onNext(DataState.Error(it))
-            }).let {
-                disposables.add(it)
+            } catch (e: Throwable) {
+                coinOverviewSubject.onNext(DataState.Error(e))
             }
+        }
     }
 
     fun stop() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 
     fun refresh() {

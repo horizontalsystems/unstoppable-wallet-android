@@ -15,7 +15,6 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statAccountType
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountOrigin
@@ -26,9 +25,13 @@ import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class RestoreBlockchainsService(
     private val accountName: String,
@@ -44,8 +47,7 @@ class RestoreBlockchainsService(
     private val restoreSettingsService: RestoreSettingsService,
     private val statPage: StatPage
 ) : Clearable {
-
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var tokens = listOf<Token>()
     private val enabledTokens = mutableListOf<Token>()
@@ -63,29 +65,26 @@ class RestoreBlockchainsService(
         }
 
     init {
-        blockchainTokensService.approveTokensObservable
-            .subscribeIO {
+        coroutineScope.launch {
+            blockchainTokensService.approveTokensObservable.asFlow().collect {
                 handleApproveTokens(it.blockchain, it.tokens)
             }
-            .let { disposables.add(it) }
-
-        blockchainTokensService.rejectApproveTokensObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            blockchainTokensService.rejectApproveTokensObservable.asFlow().collect {
                 handleCancelEnable(it)
             }
-            .let { disposables.add(it) }
-
-        restoreSettingsService.approveSettingsObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            restoreSettingsService.approveSettingsObservable.asFlow().collect {
                 handleApproveRestoreSettings(it.token, it.settings)
             }
-            .let { disposables.add(it) }
-
-        restoreSettingsService.rejectApproveSettingsObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            restoreSettingsService.rejectApproveSettingsObservable.asFlow().collect {
                 handleCancelEnable(it.blockchain)
             }
-            .let { disposables.add(it) }
+        }
 
         syncInternalItems()
         syncState()
@@ -214,7 +213,9 @@ class RestoreBlockchainsService(
         stat(page = statPage, event = StatEvent.ImportWallet(accountType.statAccountType))
     }
 
-    override fun clear() = disposables.clear()
+    override fun clear() {
+        coroutineScope.cancel()
+    }
 
     data class Item(
         val blockchain: Blockchain,

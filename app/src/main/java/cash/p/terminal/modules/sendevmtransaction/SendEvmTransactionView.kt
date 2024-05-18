@@ -23,6 +23,10 @@ import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.shorten
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
@@ -61,10 +65,11 @@ fun SendEvmTransactionView(
     cautions: List<CautionViewItem>,
     transactionFields: List<DataField>,
     networkFee: SendModule.AmountData?,
+    statPage: StatPage
 ) {
     Column {
         items.forEach { sectionViewItem ->
-            SectionView(sectionViewItem.viewItems, navController)
+            SectionView(sectionViewItem.viewItems, navController, statPage)
         }
 
         if (transactionFields.isNotEmpty()) {
@@ -128,6 +133,7 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
             is ViewItem.ValueMulti -> TitleValueMulti(item)
             is ViewItem.AmountMulti -> AmountMulti(item)
             is ViewItem.Amount -> Amount(item)
+            is ViewItem.AmountWithTitle -> AmountWithTitle(item)
             is ViewItem.NftAmount -> NftAmount(item)
             is ViewItem.Address -> {
                 TransactionInfoAddressCell(
@@ -290,6 +296,38 @@ private fun Amount(item: ViewItem.Amount) {
         subhead2_grey(
             text = item.fiatAmount ?: ""
         )
+    }
+}
+
+@Composable
+private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
+    RowUniversal(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        CoinImage(
+            modifier = Modifier.size(32.dp),
+            iconUrl = item.token.coin.imageUrl,
+            placeholder = item.token.iconPlaceholder
+        )
+        HSpacer(16.dp)
+        Column {
+            subhead2_leah(text = item.title)
+            VSpacer(height = 1.dp)
+            caption_grey(text = item.badge ?: stringResource(id =R.string.CoinPlatforms_Native))
+        }
+        HFillSpacer(minWidth = 8.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            Text(
+                text = item.coinAmount,
+                maxLines = 1,
+                style = ComposeAppTheme.typography.subhead1,
+                color = setColorByType(item.type)
+            )
+            item.fiatAmount?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(text = it)
+            }
+        }
     }
 }
 

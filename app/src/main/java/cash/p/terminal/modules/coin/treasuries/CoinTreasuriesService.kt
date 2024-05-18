@@ -1,22 +1,25 @@
 package cash.p.terminal.modules.coin.treasuries
 
 import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesModule.TreasuryTypeFilter
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 
 class CoinTreasuriesService(
     val coin: Coin,
     private val repository: CoinTreasuriesRepository,
     private val currencyManager: CurrencyManager
 ) {
-    private var disposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val stateSubject = BehaviorSubject.create<DataState<List<CoinTreasury>>>()
     val stateObservable: Observable<DataState<List<CoinTreasury>>>
@@ -47,14 +50,14 @@ class CoinTreasuriesService(
     }
 
     private fun fetch(forceRefresh: Boolean) {
-        disposable?.dispose()
-
-        repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh)
-            .subscribeIO({
-                stateSubject.onNext(DataState.Success(it))
-            }, {
-                stateSubject.onNext(DataState.Error(it))
-            }).let { disposable = it }
+        coroutineScope.launch {
+            try {
+                val coinTreasuries = repository.coinTreasuriesSingle(coin.uid, currency.code, treasuryType, sortDescending, forceRefresh).await()
+                stateSubject.onNext(DataState.Success(coinTreasuries))
+            } catch (e: Throwable) {
+                stateSubject.onNext(DataState.Error(e))
+            }
+        }
     }
 
     fun start() {
@@ -66,6 +69,6 @@ class CoinTreasuriesService(
     }
 
     fun stop() {
-        disposable?.dispose()
+        coroutineScope.cancel()
     }
 }

@@ -7,7 +7,6 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartIndicatorManager
@@ -17,11 +16,9 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
-import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 import retrofit2.HttpException
 import java.io.IOException
@@ -40,12 +37,10 @@ class CoinOverviewChartService(
     override val chartViewType = ChartViewType.Line
 
     private var updatesSubscriptionKey: String? = null
-    private val disposables = CompositeDisposable()
+    private var updatesJob: Job? = null
 
     private var chartStartTime: Long = 0
     private val cache = mutableMapOf<String, Pair<Long, List<MarketKitChartPoint>>>()
-
-    private val scope = CoroutineScope(Dispatchers.IO)
 
     private var indicatorsEnabled = chartIndicatorManager.isEnabledFlow.value
 
@@ -65,13 +60,13 @@ class CoinOverviewChartService(
             it.range <= mostPeriodSeconds
         } + listOf<HsTimePeriod?>(null)
 
-        scope.launch {
+        coroutineScope.launch {
             chartIndicatorManager.isEnabledFlow.collect {
                 indicatorsEnabled = it
                 dataInvalidated()
             }
         }
-        scope.launch {
+        coroutineScope.launch {
             chartIndicatorManager.allIndicatorsFlow.collect {
                 if (indicatorsEnabled) {
                     dataInvalidated()
@@ -80,12 +75,6 @@ class CoinOverviewChartService(
         }
 
         super.start()
-    }
-
-    override fun stop() {
-        super.stop()
-        unsubscribeFromUpdates()
-        scope.cancel()
     }
 
     override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
@@ -126,7 +115,6 @@ class CoinOverviewChartService(
     ): Single<ChartPointsWrapper> {
         val newKey = currency.code
         if (newKey != updatesSubscriptionKey) {
-            unsubscribeFromUpdates()
             subscribeForUpdates(currency)
             updatesSubscriptionKey = newKey
         }
@@ -153,18 +141,13 @@ class CoinOverviewChartService(
         }
     }
 
-    private fun unsubscribeFromUpdates() {
-        disposables.clear()
-    }
-
     private fun subscribeForUpdates(currency: Currency) {
-        marketKit.coinPriceObservable("coin-overview-chart-service", coinUid, currency.code)
-            .subscribeIO {
+        updatesJob?.cancel()
+        updatesJob = coroutineScope.launch {
+            marketKit.coinPriceObservable("coin-overview-chart-service", coinUid, currency.code).asFlow().collect {
                 dataInvalidated()
             }
-            .let {
-                disposables.add(it)
-            }
+        }
     }
 
     private fun doGetItems(

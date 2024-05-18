@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
@@ -35,7 +37,6 @@ import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.fee.HSFeeRaw
 import cash.p.terminal.modules.hodler.HSHodler
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
@@ -117,14 +118,11 @@ fun SendConfirmationScreen(
         }
     }
 
-    DisposableLifecycleCallbacks(
-        //additional close for cases when user closes app immediately after sending
-        onResume = {
-            if (sendResult == SendResult.Sent) {
-                navController.popBackStack(closeUntilDestId, true)
-            }
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        if (sendResult == SendResult.Sent) {
+            navController.popBackStack(closeUntilDestId, true)
         }
-    )
+    }
 
     Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(

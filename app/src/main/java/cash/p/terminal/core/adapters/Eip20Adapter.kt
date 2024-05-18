@@ -19,6 +19,7 @@ import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
+import java.math.BigInteger
 
 class Eip20Adapter(
     context: Context,
@@ -84,6 +85,20 @@ class Eip20Adapter(
                 .map {
                     scaleDown(it.toBigDecimal())
                 }
+    }
+
+    fun buildRevokeTransactionData(spenderAddress: Address): TransactionData {
+        return eip20Kit.buildApproveTransactionData(spenderAddress, BigInteger.ZERO)
+    }
+
+    fun buildApproveTransactionData(spenderAddress: Address, amount: BigDecimal): TransactionData {
+        val amountBigInt = amount.movePointRight(decimal).toBigInteger()
+        return eip20Kit.buildApproveTransactionData(spenderAddress, amountBigInt)
+    }
+
+    fun buildApproveUnlimitedTransactionData(spenderAddress: Address): TransactionData {
+        val max = BigInteger.ONE.shiftLeft(256).subtract(BigInteger.ONE)
+        return eip20Kit.buildApproveTransactionData(spenderAddress, max)
     }
 
     companion object {

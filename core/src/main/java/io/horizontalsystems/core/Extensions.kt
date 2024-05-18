@@ -11,6 +11,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import java.math.BigDecimal
+import java.math.BigInteger
+import kotlin.math.absoluteValue
 
 
 fun View.hideKeyboard(context: Context) {
@@ -73,4 +76,14 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
 inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
     SDK_INT >= 33 -> getParcelableExtra(key, T::class.java)
     else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+}
+
+fun BigDecimal.scaleUp(scale: Int): BigInteger {
+    val exponent = scale - scale()
+
+    return if (exponent >= 0) {
+        unscaledValue() * BigInteger.TEN.pow(exponent)
+    } else {
+        unscaledValue() / BigInteger.TEN.pow(exponent.absoluteValue)
+    }
 }

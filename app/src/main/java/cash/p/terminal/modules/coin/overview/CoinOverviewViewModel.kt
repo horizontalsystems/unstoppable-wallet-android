@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IWalletManager
@@ -18,7 +19,6 @@ import cash.p.terminal.core.isSupported
 import cash.p.terminal.core.order
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.shorten
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.core.supports
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.ViewState
@@ -28,7 +28,8 @@ import cash.p.terminal.modules.coin.CoinViewFactory
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class CoinOverviewViewModel(
     private val service: CoinOverviewService,
@@ -54,8 +55,6 @@ class CoinOverviewViewModel(
         )
     )
 
-    private val disposables = CompositeDisposable()
-
     private var hudMessage: HudMessage? = null
         set(value) {
             field = value
@@ -66,8 +65,8 @@ class CoinOverviewViewModel(
     private var activeWallets = walletManager.activeWallets
 
     init {
-        service.coinOverviewObservable
-            .subscribeIO { coinOverview ->
+        viewModelScope.launch {
+            service.coinOverviewObservable.asFlow().collect { coinOverview ->
                 isRefreshingLiveData.postValue(false)
 
                 coinOverview.dataOrNull?.let {
@@ -78,14 +77,12 @@ class CoinOverviewViewModel(
                     viewStateLiveData.postValue(it)
                 }
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         service.start()
 
-        walletManager.activeWalletsUpdatedObservable
-            .subscribeIO { wallets ->
+        viewModelScope.launch {
+            walletManager.activeWalletsUpdatedObservable.asFlow().collect { wallets ->
                 if (wallets.size > activeWallets.size) {
                     hudMessage = HudMessage(R.string.Hud_Added_To_Wallet, HudMessageType.Success, R.drawable.ic_add_to_wallet_2_24)
                 } else if (wallets.size < activeWallets.size) {
@@ -95,9 +92,7 @@ class CoinOverviewViewModel(
                 activeWallets = wallets
                 refreshTokensVariants()
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         refreshTokensVariants()
     }
@@ -122,7 +117,6 @@ class CoinOverviewViewModel(
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun refresh() {

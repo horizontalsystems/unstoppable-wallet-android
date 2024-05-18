@@ -500,10 +500,6 @@ class LocalStorageManager(
             preferences.edit().putBoolean(RBF_ENABLED, value).apply()
         }
 
-    private fun getSwapProviderKey(blockchainType: BlockchainType): String {
-        return SWAP_PROVIDER + blockchainType.uid
-    }
-
     override var statsLastSyncTime: Long
         get() = preferences.getLong(STATS_SYNC_TIME, 0)
         set(value) {

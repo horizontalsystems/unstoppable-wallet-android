@@ -17,7 +17,6 @@ import cash.p.terminal.core.supports
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.receive.FullCoinsProvider
-import cash.p.terminal.modules.swap.SwapMainModule.CoinBalanceItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery

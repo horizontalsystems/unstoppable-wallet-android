@@ -272,7 +272,7 @@ dependencies {
     // Wallet kits
     implementation 'com.github.horizontalsystems:ton-kit-kmm:f1fd301'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:80fd413'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:f4957a9'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:3d83900'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     // implementation 'com.github.horizontalsystems:market-kit-android:ba2f1e6'
@@ -317,7 +317,9 @@ dependencies {
     // Tooling support (Previews, etc.)
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+    // Lifecycle utilities for Compose
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version"
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 

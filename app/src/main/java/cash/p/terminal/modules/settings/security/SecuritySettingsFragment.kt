@@ -18,6 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
@@ -29,7 +31,6 @@ import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewMode
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
@@ -115,12 +116,9 @@ private fun SecurityCenterScreen(
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
 ) {
-
-    DisposableLifecycleCallbacks(
-        onResume = {
-            securitySettingsViewModel.update()
-        },
-    )
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        securitySettingsViewModel.update()
+    }
 
     if (torViewModel.restartApp) {
         restartApp()

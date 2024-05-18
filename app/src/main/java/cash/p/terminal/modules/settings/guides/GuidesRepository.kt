@@ -3,16 +3,18 @@ package cash.p.terminal.modules.settings.guides
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.GuidesManager
 import cash.p.terminal.core.managers.LanguageManager
+import cash.p.terminal.core.retryWhen
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.GuideCategory
 import cash.p.terminal.entities.GuideCategoryMultiLang
-import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 
 class GuidesRepository(
         private val guidesManager: GuidesManager,
@@ -23,58 +25,44 @@ class GuidesRepository(
     val guideCategories: Observable<DataState<List<GuideCategory>>>
         get() = guideCategoriesSubject
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val guideCategoriesSubject = BehaviorSubject.create<DataState<List<GuideCategory>>>()
-    private val disposables = CompositeDisposable()
     private val retryLimit = 3
 
     init {
         fetch()
 
-        connectivityManager.networkAvailabilitySignal
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    if (connectivityManager.isConnected && guideCategoriesSubject.value is DataState.Error) {
-                        fetch()
-                    }
+        coroutineScope.launch {
+            connectivityManager.networkAvailabilitySignal.asFlow().collect {
+                if (connectivityManager.isConnected && guideCategoriesSubject.value is DataState.Error) {
+                    fetch()
                 }
-                .let {
-                    disposables.add(it)
-                }
+            }
+        }
     }
 
     fun clear() {
-        disposables.clear()
+        coroutineScope.cancel()
     }
 
     private fun fetch() {
         guideCategoriesSubject.onNext(DataState.Loading)
 
-        guidesManager.getGuideCategories()
-                //retry on error java.lang.AssertionError: No System TLS
-                .retryWhen { errors ->
-                    errors.zipWith(
-                            Flowable.range(1, retryLimit + 1),
-                            BiFunction<Throwable, Int, Int> { error: Throwable, retryCount: Int ->
-                                if (retryCount < retryLimit && (error is AssertionError)) {
-                                    retryCount
-                                } else {
-                                    throw error
-                                }
-                            }
-                    ).flatMap {
-                        Flowable.timer(1, TimeUnit.SECONDS)
-                    }
+        coroutineScope.launch {
+            try {
+                val guideCategories = retryWhen(
+                    times = retryLimit,
+                    predicate = { it is AssertionError }
+                ) {
+                    guidesManager.getGuideCategories().await()
                 }
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    val categories = getCategoriesByLocalLanguage(it, languageManager.currentLocale.language, languageManager.fallbackLocale.language)
-                    guideCategoriesSubject.onNext(DataState.Success(categories))
-                }, {
-                    guideCategoriesSubject.onNext(DataState.Error(it))
-                })
-                .let {
-                    disposables.add(it)
-                }
+
+                val categories = getCategoriesByLocalLanguage(guideCategories, languageManager.currentLocale.language, languageManager.fallbackLocale.language)
+                guideCategoriesSubject.onNext(DataState.Success(categories))
+            } catch (e: Throwable) {
+                guideCategoriesSubject.onNext(DataState.Error(e))
+            }
+        }
     }
 
     private fun getCategoriesByLocalLanguage(categoriesMultiLanguage: Array<GuideCategoryMultiLang>, language: String, fallbackLanguage: String) =

@@ -5,10 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.send.SendConfirmationScreen
-import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 
 @Composable
 fun SendBinanceConfirmationScreen(
@@ -20,16 +20,15 @@ fun SendBinanceConfirmationScreen(
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }
 
-    DisposableLifecycleCallbacks(
-        onResume = {
-            if (refresh) {
-                confirmationData = sendViewModel.getConfirmationData()
-            }
-        },
-        onPause = {
+    LifecycleResumeEffect {
+        if (refresh) {
+            confirmationData = sendViewModel.getConfirmationData()
+        }
+
+        onPauseOrDispose {
             refresh = true
         }
-    )
+    }
 
     SendConfirmationScreen(
         navController = navController,

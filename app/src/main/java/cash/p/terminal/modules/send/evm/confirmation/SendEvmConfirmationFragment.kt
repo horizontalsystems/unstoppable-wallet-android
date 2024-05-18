@@ -21,10 +21,13 @@ import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmModule
-import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewNew
+import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionView
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
@@ -117,6 +120,7 @@ private fun SendEvmConfirmationScreen(
                             logger.info("sending tx")
                             viewModel.send()
                             logger.info("success")
+                            stat(page = StatPage.SendConfirmation, event = StatEvent.Send)
 
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
@@ -136,12 +140,13 @@ private fun SendEvmConfirmationScreen(
             )
         }
     ) {
-        SendEvmTransactionViewNew(
+        SendEvmTransactionView(
             navController,
             uiState.sectionViewItems,
             uiState.cautions,
             uiState.transactionFields,
             uiState.networkFee,
+            StatPage.SendConfirmation
         )
     }
 }

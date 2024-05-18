@@ -10,16 +10,19 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statSortType
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.marketkit.models.CoinPrice
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -66,41 +69,29 @@ class BalanceService(
     private val _balanceItemsFlow = MutableStateFlow<List<BalanceModule.BalanceItem>?>(null)
     val balanceItemsFlow = _balanceItemsFlow.asStateFlow()
 
-    private val disposables = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     fun start() {
-        activeWalletRepository.itemsObservable
-            .subscribeIO { wallets ->
+        coroutineScope.launch {
+            activeWalletRepository.itemsObservable.asFlow().collect { wallets ->
                 handleWalletsUpdate(wallets)
             }
-            .let {
-                disposables.add(it)
-            }
-
-        xRateRepository.itemObservable
-            .subscribeIO { latestRates ->
+        }
+        coroutineScope.launch {
+            xRateRepository.itemObservable.asFlow().collect { latestRates ->
                 handleXRateUpdate(latestRates)
             }
-            .let {
-                disposables.add(it)
-            }
-
-        adapterRepository.readyObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            adapterRepository.readyObservable.asFlow().collect {
                 handleAdaptersReady()
             }
-            .let {
-                disposables.add(it)
-            }
-
-        adapterRepository.updatesObservable
-            .subscribeIO {
+        }
+        coroutineScope.launch {
+            adapterRepository.updatesObservable.asFlow().collect {
                 handleAdapterUpdate(it)
             }
-            .let {
-                disposables.add(it)
-            }
-
+        }
     }
 
     @Synchronized
@@ -193,7 +184,7 @@ class BalanceService(
     }
 
     override fun clear() {
-        disposables.clear()
+        coroutineScope.cancel()
         adapterRepository.clear()
     }
 

@@ -22,21 +22,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.Caution
 import cash.p.terminal.core.managers.FaqManager
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
-import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListUiState
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.DisposableLifecycleCallbacks
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
@@ -87,11 +88,9 @@ fun WCSessionsScreen(
         }
     }
 
-    DisposableLifecycleCallbacks(
-        onResume = {
-            viewModel.refreshList()
-        }
-    )
+    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
+        viewModel.refreshList()
+    }
 
     ModalBottomSheetLayout(
         sheetState = invalidUrlBottomSheetState,

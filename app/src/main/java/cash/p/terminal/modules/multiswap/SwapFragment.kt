@@ -24,7 +24,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,10 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -46,7 +45,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
@@ -66,9 +65,6 @@ import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
-import cash.p.terminal.modules.swap.SwapMainModule
-import cash.p.terminal.modules.swap.getPriceImpactColor
-import cash.p.terminal.modules.swap.ui.SuggestionsBar
 import cash.p.terminal.ui.compose.ColoredTextStyle
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard
@@ -187,13 +183,12 @@ private fun SwapScreenInner(
     onActionCompleted: () -> Unit,
     navController: NavController,
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
-
-    LaunchedEffect(uiState.timeout, lifecycleState) {
-        if (uiState.timeout && lifecycleState == Lifecycle.State.RESUMED) {
+    LifecycleResumeEffect(uiState.timeout) {
+        if (uiState.timeout) {
             onTimeout.invoke()
         }
+
+        onPauseOrDispose { }
     }
 
     val quote = uiState.quote
@@ -284,7 +279,7 @@ private fun SwapScreenInner(
 
                     is SwapStep.Error -> {
                         val errorText = when (val error = currentStep.error) {
-                            SwapMainModule.SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
+                            SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
                             is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
@@ -417,7 +412,7 @@ private fun AvailableBalanceField(tokenIn: Token?, availableBalance: BigDecimal?
 @Composable
 fun PriceImpactField(
     priceImpact: BigDecimal?,
-    priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    priceImpactLevel: PriceImpactLevel?,
     navController: NavController
 ) {
     if (priceImpact == null || priceImpactLevel == null) return
@@ -547,7 +542,7 @@ private fun SwapInput(
     amountOut: BigDecimal?,
     fiatAmountOut: BigDecimal?,
     fiatPriceImpact: BigDecimal?,
-    fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    fiatPriceImpactLevel: PriceImpactLevel?,
     onValueChange: (BigDecimal?) -> Unit,
     onFiatValueChange: (BigDecimal?) -> Unit,
     onClickCoinFrom: () -> Unit,
@@ -641,7 +636,7 @@ private fun SwapCoinInputTo(
     coinAmount: BigDecimal?,
     fiatAmount: BigDecimal?,
     fiatPriceImpact: BigDecimal?,
-    fiatPriceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    fiatPriceImpactLevel: PriceImpactLevel?,
     currency: Currency,
     token: Token?,
     onClickCoin: () -> Unit,
@@ -858,4 +853,15 @@ private fun AmountInput(
             innerTextField()
         },
     )
+}
+
+@Composable
+fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
+    return when (priceImpactLevel) {
+        PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Warning,
+        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+
+        else -> ComposeAppTheme.colors.grey
+    }
 }

@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.market.filtersresult
 
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
@@ -11,8 +10,14 @@ import cash.p.terminal.modules.market.category.MarketItemWrapper
 import cash.p.terminal.modules.market.filters.IMarketListFetcher
 import cash.p.terminal.modules.market.sort
 import cash.p.terminal.ui.compose.Select
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 
 class MarketFiltersResultService(
     private val fetcher: IMarketListFetcher,
@@ -34,23 +39,21 @@ class MarketFiltersResultService(
             Select(marketField, marketFields)
         )
 
-    private var fetchDisposable: Disposable? = null
-    private var favoriteDisposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var fetchJob: Job? = null
 
     fun start() {
-        fetch()
-
-        favoritesManager.dataUpdatedAsync
-            .subscribeIO {
+        coroutineScope.launch {
+            favoritesManager.dataUpdatedAsync.asFlow().collect {
                 syncItems()
-            }.let {
-                favoriteDisposable = it
             }
+        }
+
+        fetch()
     }
 
     fun stop() {
-        favoriteDisposable?.dispose()
-        fetchDisposable?.dispose()
+        coroutineScope.cancel()
     }
 
     fun refresh() {
@@ -71,17 +74,16 @@ class MarketFiltersResultService(
     }
 
     private fun fetch() {
-        fetchDisposable?.dispose()
+        fetchJob?.cancel()
 
-        fetcher.fetchAsync()
-            .subscribeIO({
-                marketItems = it
+        fetchJob = coroutineScope.launch {
+            try {
+                marketItems = fetcher.fetchAsync().await()
                 syncItems()
-            }, {
-                stateObservable.onNext(DataState.Error(it))
-            }).let {
-                fetchDisposable = it
+            } catch (e: Throwable) {
+                stateObservable.onNext(DataState.Error(e))
             }
+        }
     }
 
     private fun syncItems() {

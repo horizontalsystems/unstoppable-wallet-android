@@ -5,7 +5,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.entities.viewState
@@ -16,10 +15,10 @@ import cash.p.terminal.ui.compose.components.TabItem
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import java.util.Date
 
 open class ChartViewModel(
@@ -33,28 +32,24 @@ open class ChartViewModel(
     private var loading = false
     private var viewState: ViewState = ViewState.Success
 
-    private val disposables = CompositeDisposable()
-
     init {
         loading = true
         emitState()
 
-        service.chartTypeObservable
-            .subscribeIO { chartType ->
+        viewModelScope.launch {
+            service.chartTypeObservable.asFlow().collect { chartType ->
                 val tabItems = service.chartIntervals.map {
                     val titleResId = it?.stringResId ?: R.string.CoinPage_TimeDuration_All
                     TabItem(Translator.getString(titleResId), it == chartType.orElse(null), it)
                 }
-                this.tabItems = tabItems
+                this@ChartViewModel.tabItems = tabItems
 
                 emitState()
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
-        service.chartPointsWrapperObservable
-            .subscribeIO { chartItemsDataState ->
+        viewModelScope.launch {
+            service.chartPointsWrapperObservable.asFlow().collect { chartItemsDataState ->
                 chartItemsDataState.viewState?.let {
                     viewState = it
                 }
@@ -65,9 +60,7 @@ open class ChartViewModel(
 
                 emitState()
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         viewModelScope.launch(Dispatchers.IO) {
             service.start()
@@ -188,7 +181,6 @@ open class ChartViewModel(
     }
 
     override fun onCleared() {
-        disposables.clear()
         service.stop()
     }
 

@@ -5,6 +5,7 @@ import cash.p.terminal.core.badge
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendModule
@@ -150,7 +151,8 @@ class SendEvmTransactionViewItemFactory(
                     Translator.getString(R.string.Send_Confirmation_To),
                     addressValue,
                     contact == null,
-                    blockchainType
+                    blockchainType,
+                    StatSection.AddressTo
                 )
             )
 
@@ -190,7 +192,8 @@ class SendEvmTransactionViewItemFactory(
                     Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
                     addressValue,
                     contact == null,
-                    blockchainType
+                    blockchainType,
+                    StatSection.AddressRecipient
                 )
             )
             contact?.let {
@@ -320,7 +323,8 @@ class SendEvmTransactionViewItemFactory(
                 Translator.getString(R.string.Send_Confirmation_To),
                 addressValue,
                 contact == null,
-                blockchainType
+                blockchainType,
+                StatSection.AddressTo
             )
         )
         contact?.let {
@@ -371,7 +375,8 @@ class SendEvmTransactionViewItemFactory(
                     Translator.getString(R.string.Approve_Spender),
                     addressValue,
                     contact == null,
-                    blockchainType
+                    blockchainType,
+                    StatSection.AddressSpender
                 )
             )
             contact?.let {
@@ -403,7 +408,8 @@ class SendEvmTransactionViewItemFactory(
                     Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
                     contact == null,
-                    blockchainType
+                    blockchainType,
+                    StatSection.AddressTo
                 )
             )
             contact?.let {
@@ -442,7 +448,8 @@ class SendEvmTransactionViewItemFactory(
                     Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
                     contact == null,
-                    blockchainType
+                    blockchainType,
+                    StatSection.AddressTo
                 )
             )
             contact?.let {
@@ -560,7 +567,7 @@ sealed class ViewItem {
         val type: ValueType,
     ) : ViewItem()
 
-    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType) : ViewItem()
+    class Address(val title: String, val value: String, val showAdd: Boolean, val blockchainType: BlockchainType, val statSection: StatSection) : ViewItem()
     class Input(val value: String) : ViewItem()
     class TokenItem(val token: Token) : ViewItem()
     class ContactItem(val contact: Contact) : ViewItem()

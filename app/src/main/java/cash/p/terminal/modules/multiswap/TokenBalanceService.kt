@@ -4,7 +4,6 @@ import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.IAdapterManager
 import cash.p.terminal.core.IBalanceAdapter
 import cash.p.terminal.core.ServiceState
-import cash.p.terminal.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
@@ -51,7 +50,7 @@ class TokenBalanceService(
             is AdapterState.NotSynced -> WalletNotSynced()
             AdapterState.Synced -> {
                 if (amount > balance) {
-                    SwapMainModule.SwapError.InsufficientBalanceFrom
+                    SwapError.InsufficientBalanceFrom
                 } else {
                     null
                 }

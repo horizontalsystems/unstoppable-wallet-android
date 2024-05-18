@@ -14,6 +14,8 @@ data class MarketInfoRaw(
     val priceChange14d: BigDecimal?,
     @SerializedName("price_change_30d")
     val priceChange30d: BigDecimal?,
+    @SerializedName("price_change_90d")
+    val priceChange90d: BigDecimal?,
     @SerializedName("price_change_200d")
     val priceChange200d: BigDecimal?,
     @SerializedName("price_change_1y")

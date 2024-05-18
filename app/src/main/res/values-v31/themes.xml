@@ -5,6 +5,7 @@
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/tyler</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
-        <item name="postSplashScreenTheme">@style/Theme.AppTheme</item>
+        <item name="postSplashScreenTheme">@style/Theme.AppTheme.DayNight</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

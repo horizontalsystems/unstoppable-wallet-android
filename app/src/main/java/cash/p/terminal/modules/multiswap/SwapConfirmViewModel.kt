@@ -17,7 +17,6 @@ import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceF
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
-import cash.p.terminal.modules.swap.SwapMainModule
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -255,7 +254,7 @@ data class SwapConfirmUiState(
     val cautions: List<CautionViewItem>,
     val validQuote: Boolean,
     val priceImpact: BigDecimal?,
-    val priceImpactLevel: SwapMainModule.PriceImpactLevel?,
+    val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,
     val transactionFields: List<DataField>,
 )

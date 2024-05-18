@@ -1,22 +1,26 @@
 package cash.p.terminal.modules.market.metricspage
 
 import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.tvl.GlobalMarketRepository
 import cash.p.terminal.modules.metricchart.MetricsType
-import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.await
 
 class MetricsPageService(
     val metricsType: MetricsType,
     private val currencyManager: CurrencyManager,
     private val globalMarketRepository: GlobalMarketRepository
 ) {
-    private var currencyManagerDisposable: Disposable? = null
-    private var globalMarketPointsDisposable: Disposable? = null
-    private var marketDataDisposable: Disposable? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var marketDataJob: Job? = null
 
     val currency by currencyManager::baseCurrency
 
@@ -29,36 +33,35 @@ class MetricsPageService(
             syncMarketItems()
         }
 
-    private fun sync() {
-        syncMarketItems()
-    }
-
     private fun syncMarketItems() {
-        marketDataDisposable?.dispose()
-        globalMarketRepository.getMarketItems(currency, sortDescending, metricsType)
-            .subscribeIO({
-                marketItemsObservable.onNext(DataState.Success(it))
-            }, {
-                marketItemsObservable.onNext(DataState.Error(it))
-            })
-            .let { marketDataDisposable = it }
+        marketDataJob?.cancel()
+        marketDataJob = coroutineScope.launch {
+            try {
+                val marketItems = globalMarketRepository
+                    .getMarketItems(currency, sortDescending, metricsType)
+                    .await()
+                marketItemsObservable.onNext(DataState.Success(marketItems))
+            } catch (e: Throwable) {
+                marketItemsObservable.onNext(DataState.Error(e))
+            }
+        }
     }
 
     fun start() {
-        currencyManager.baseCurrencyUpdatedSignal
-            .subscribeIO { sync() }
-            .let { currencyManagerDisposable = it }
+        coroutineScope.launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+                syncMarketItems()
+            }
+        }
 
-        sync()
+        syncMarketItems()
     }
 
     fun refresh() {
-        sync()
+        syncMarketItems()
     }
 
     fun stop() {
-        currencyManagerDisposable?.dispose()
-        globalMarketPointsDisposable?.dispose()
-        marketDataDisposable?.dispose()
+        coroutineScope.cancel()
     }
 }

@@ -2,20 +2,19 @@ package cash.p.terminal.modules.market.posts
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketPostsViewModel(private val service: MarketPostService) : ViewModel() {
 
     val itemsLiveData = MutableLiveData<List<MarketPostsModule.PostViewItem>>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
     val isRefreshingLiveData = MutableLiveData<Boolean>()
-
-    private val disposables = CompositeDisposable()
 
     private fun getTimeAgo(timestamp: Long): String {
         val secondsAgo = DateHelper.getSecondsAgo(timestamp * 1000)
@@ -34,8 +33,8 @@ class MarketPostsViewModel(private val service: MarketPostService) : ViewModel()
     }
 
     init {
-        service.stateObservable
-            .subscribeIO { state ->
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect { state ->
                 isRefreshingLiveData.postValue(false)
 
                 state.dataOrNull?.let { posts ->
@@ -55,16 +54,13 @@ class MarketPostsViewModel(private val service: MarketPostService) : ViewModel()
                     viewStateLiveData.postValue(it)
                 }
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         service.start()
     }
 
     override fun onCleared() {
         service.stop()
-        disposables.clear()
     }
 
     fun onErrorClick() {

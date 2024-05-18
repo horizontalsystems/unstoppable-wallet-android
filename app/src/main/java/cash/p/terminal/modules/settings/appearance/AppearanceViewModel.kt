@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.BaseTokenManager
+import cash.p.terminal.core.managers.CurrencyManager
+import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.modules.balance.BalanceViewType
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
@@ -13,6 +15,7 @@ import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.SelectOptional
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 
 class AppearanceViewModel(
@@ -21,7 +24,9 @@ class AppearanceViewModel(
     private val themeService: ThemeService,
     private val baseTokenManager: BaseTokenManager,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
+    private val languageManager: LanguageManager,
+    private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<AppearanceUIState>() {
     private var launchScreenOptions = launchScreenService.optionsFlow.value
     private var appIconOptions = appIconService.optionsFlow.value
@@ -30,6 +35,11 @@ class AppearanceViewModel(
     private var marketsTabEnabled = localStorage.marketsTabEnabled
     private var balanceViewTypeOptions =
         buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
+    private val currentLanguageDisplayName: String
+        get() = languageManager.currentLanguageName
+
+    private val baseCurrencyCode: String
+        get() = currencyManager.baseCurrency.code
 
     init {
         viewModelScope.launch {
@@ -62,6 +72,11 @@ class AppearanceViewModel(
                     handleUpdatedBalanceViewType(buildBalanceViewTypeSelect(it))
                 }
         }
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
+                emitState()
+            }
+        }
     }
 
     override fun createState() = AppearanceUIState(
@@ -70,7 +85,9 @@ class AppearanceViewModel(
         themeOptions = themeOptions,
         baseTokenOptions = baseTokenOptions,
         balanceViewTypeOptions = balanceViewTypeOptions,
-        marketsTabEnabled = marketsTabEnabled
+        marketsTabEnabled = marketsTabEnabled,
+        currentLanguage = currentLanguageDisplayName,
+        baseCurrencyCode = baseCurrencyCode
     )
 
     private fun buildBaseTokenSelect(token: Token?): SelectOptional<Token> {
@@ -145,4 +162,6 @@ data class AppearanceUIState(
     val baseTokenOptions: SelectOptional<Token>,
     val balanceViewTypeOptions: Select<BalanceViewType>,
     val marketsTabEnabled: Boolean,
+    val currentLanguage: String,
+    val baseCurrencyCode: String,
 )

@@ -3,7 +3,7 @@ package cash.p.terminal.modules.multiswap.settings
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import cash.p.terminal.entities.Address
-import cash.p.terminal.modules.swap.settings.ui.RecipientAddress
+import cash.p.terminal.modules.multiswap.settings.ui.RecipientAddress
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 data class SwapSettingRecipient(

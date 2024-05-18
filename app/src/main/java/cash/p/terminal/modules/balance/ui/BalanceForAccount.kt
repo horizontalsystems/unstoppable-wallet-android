@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.Caution
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
@@ -46,7 +47,6 @@ import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
-import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel

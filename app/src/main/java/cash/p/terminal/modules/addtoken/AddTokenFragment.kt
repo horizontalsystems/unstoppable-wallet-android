@@ -26,11 +26,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.Caution
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.addtoken.blockchainselector.AddTokenBlockchainSelectorScreen
 import cash.p.terminal.modules.addtoken.blockchainselector.BlockchainSelectorResult
-import cash.p.terminal.modules.swap.settings.Caution
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString

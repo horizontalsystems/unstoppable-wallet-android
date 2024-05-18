@@ -9,7 +9,6 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statField
-import cash.p.terminal.core.subscribeIO
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
@@ -18,8 +17,8 @@ import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.category.MarketItemWrapper
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.ui.compose.Select
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class MarketFiltersResultViewModel(
     private val service: MarketFiltersResultService,
@@ -39,25 +38,20 @@ class MarketFiltersResultViewModel(
     var menuState by mutableStateOf(service.menu)
         private set
 
-    private val disposable = CompositeDisposable()
-
     init {
         syncMenu()
 
-        service.stateObservable
-            .subscribeIO {
+        viewModelScope.launch {
+            service.stateObservable.asFlow().collect {
                 syncState(it)
             }
-            .let {
-                disposable.add(it)
-            }
+        }
 
         service.start()
     }
 
     override fun onCleared() {
         service.stop()
-        disposable.clear()
     }
 
     fun onErrorClick() {

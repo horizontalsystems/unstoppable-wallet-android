@@ -7,7 +7,7 @@ import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.favorites.MarketFavoritesModule.Period
 import cash.p.terminal.modules.market.sort
-import io.reactivex.Single
+import kotlinx.coroutines.rx2.await
 
 class MarketFavoritesRepository(
     private val marketKit: MarketKitWrapper,
@@ -15,42 +15,34 @@ class MarketFavoritesRepository(
 ) {
     val dataUpdatedObservable by manager::dataUpdatedAsync
 
-    private fun getFavorites(
+    private suspend fun getFavorites(
         currency: Currency,
         period: Period
     ): List<MarketItem> {
         val favoriteCoins = manager.getAll()
-        var marketItems = listOf<MarketItem>()
-        if (favoriteCoins.isNotEmpty()) {
-            val favoriteCoinUids = favoriteCoins.map { it.coinUid }
-            marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code).blockingGet()
-                .map { marketInfo ->
-                    MarketItem.createFromCoinMarket(
-                        marketInfo = marketInfo,
-                        currency = currency,
-                        period = period
-                    )
-                }
-        }
-        return marketItems
+        if (favoriteCoins.isEmpty()) return listOf()
+
+        val favoriteCoinUids = favoriteCoins.map { it.coinUid }
+        return marketKit
+            .marketInfosSingle(favoriteCoinUids, currency.code).await()
+            .map { marketInfo ->
+                MarketItem.createFromCoinMarket(
+                    marketInfo = marketInfo,
+                    currency = currency,
+                    period = period
+                )
+            }
     }
 
-    fun get(
+    suspend fun get(
         sortDescending: Boolean,
         period: Period,
         currency: Currency,
-    ): Single<List<MarketItem>> =
-        Single.create { emitter ->
-            val sortingField = if (sortDescending) SortingField.TopGainers else SortingField.TopLosers
-            try {
-                val marketItems = getFavorites(currency, period)
-                emitter.onSuccess(
-                    marketItems.sort(sortingField)
-                )
-            } catch (error: Throwable) {
-                emitter.onError(error)
-            }
-        }
+    ): List<MarketItem> {
+        val sortingField = if (sortDescending) SortingField.TopGainers else SortingField.TopLosers
+        val marketItems = getFavorites(currency, period)
+        return marketItems.sort(sortingField)
+    }
 
     fun removeFavorite(uid: String) {
         manager.remove(uid)

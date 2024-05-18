@@ -9,8 +9,8 @@ import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.Faq
 import cash.p.terminal.entities.FaqSection
 import cash.p.terminal.entities.ViewState
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 
 class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
 
@@ -23,11 +23,9 @@ class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
         private set
 
-    private var disposables = CompositeDisposable()
-
     init {
-        repository.faqList
-            .subscribe { dataState ->
+        viewModelScope.launch {
+            repository.faqList.asFlow().collect { dataState ->
                 viewModelScope.launch {
                     dataState.viewState?.let {
                         viewState = it
@@ -38,9 +36,7 @@ class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
                     }
                 }
             }
-            .let {
-                disposables.add(it)
-            }
+        }
 
         repository.start()
     }
@@ -51,7 +47,6 @@ class FaqViewModel(private val repository: FaqRepository) : ViewModel() {
     }
 
     override fun onCleared() {
-        disposables.dispose()
         repository.clear()
     }
 
