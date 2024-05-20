@@ -11,6 +11,7 @@ import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceState
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.sendevmtransaction.SectionViewItem
@@ -20,6 +21,7 @@ import cash.p.terminal.modules.sendevmtransaction.ViewItem
 import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.core.toHexString
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
@@ -28,19 +30,32 @@ import kotlinx.coroutines.withContext
 
 class WCSendEthereumTransactionRequestViewModel(
     private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
-    val sendTransactionService: SendTransactionServiceEvm,
     private val dAppName: String,
-    transaction: WalletConnectTransaction
+    transaction: WalletConnectTransaction,
+    blockchainType: BlockchainType
 ) : ViewModelUiState<WCSendEthereumTransactionRequestUiState>() {
+    val sendTransactionService: SendTransactionServiceEvm
+
     private val transactionData = TransactionData(
         transaction.to,
         transaction.value,
         transaction.data
     )
 
-    private var sendTransactionState = sendTransactionService.stateFlow.value
+    private var sendTransactionState: SendTransactionServiceState
 
     init {
+        val gasPrice = if (transaction.maxFeePerGas != null && transaction.maxPriorityFeePerGas != null) {
+            GasPrice.Eip1559(transaction.maxFeePerGas, transaction.maxPriorityFeePerGas)
+        } else if (transaction.gasPrice != null) {
+            GasPrice.Legacy(transaction.gasPrice)
+        } else {
+            null
+        }
+
+        sendTransactionService = SendTransactionServiceEvm(blockchainType, gasPrice, transaction.nonce)
+        sendTransactionState = sendTransactionService.stateFlow.value
+
         viewModelScope.launch {
             sendTransactionService.stateFlow.collect { transactionState ->
                 sendTransactionState = transactionState
@@ -114,7 +129,6 @@ class WCSendEthereumTransactionRequestViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(blockchainType)
             val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)!!
             val coinServiceFactory = EvmCoinServiceFactory(
                 feeToken,
@@ -132,9 +146,9 @@ class WCSendEthereumTransactionRequestViewModel(
 
             return WCSendEthereumTransactionRequestViewModel(
                 sendEvmTransactionViewItemFactory,
-                sendTransactionService,
                 peerName,
-                transaction
+                transaction,
+                blockchainType
             ) as T
         }
     }
