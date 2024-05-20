@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction
 
 import io.horizontalsystems.ethereumkit.models.Address
+import io.horizontalsystems.ethereumkit.models.GasPrice
 import java.math.BigInteger
 
 data class WalletConnectTransaction(
@@ -13,4 +14,14 @@ data class WalletConnectTransaction(
     val maxFeePerGas: Long?,
     val value: BigInteger,
     val data: ByteArray
-)
+) {
+    fun getGasPriceObj() = when {
+        maxFeePerGas != null && maxPriorityFeePerGas != null -> {
+            GasPrice.Eip1559(maxFeePerGas, maxPriorityFeePerGas)
+        }
+        this.gasPrice != null -> {
+            GasPrice.Legacy(this.gasPrice)
+        }
+        else -> null
+    }
+}
