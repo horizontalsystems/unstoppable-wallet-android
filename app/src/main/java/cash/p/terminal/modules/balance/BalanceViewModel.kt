@@ -52,6 +52,7 @@ class BalanceViewModel(
     private var isRefreshing = false
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var errorMessage: String? = null
+    private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
 
     val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
@@ -90,18 +91,26 @@ class BalanceViewModel(
             }
         }
 
+        viewModelScope.launch {
+            localStorage.balanceTabButtonsEnabledFlow.collect {
+                balanceTabButtonsEnabled = it
+                emitState()
+            }
+        }
+
         service.start()
 
         totalBalance.start(viewModelScope)
     }
 
-    override fun createState()= BalanceUiState(
+    override fun createState() = BalanceUiState(
         balanceViewItems = balanceViewItems,
         viewState = viewState,
         isRefreshing = isRefreshing,
         headerNote = headerNote(),
         errorMessage = errorMessage,
-        openSend = openSendTokenSelect
+        openSend = openSendTokenSelect,
+        balanceTabButtonsEnabled = balanceTabButtonsEnabled
     )
 
     private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
@@ -329,6 +338,7 @@ data class BalanceUiState(
     val headerNote: HeaderNote,
     val errorMessage: String?,
     val openSend: OpenSendTokenSelect? = null,
+    val balanceTabButtonsEnabled: Boolean,
 )
 
 data class OpenSendTokenSelect(
