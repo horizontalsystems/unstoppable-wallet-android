@@ -22,7 +22,6 @@ import io.horizontalsystems.bankwallet.modules.sendevmtransaction.ViewItem
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.request.sendtransaction.WalletConnectTransaction
-import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
@@ -48,13 +47,7 @@ class WCSignEthereumTransactionRequestViewModel(
     private var fields: List<DataField>
 
     init {
-        val gasPrice = if (transaction.maxFeePerGas != null && transaction.maxPriorityFeePerGas != null) {
-            GasPrice.Eip1559(transaction.maxFeePerGas, transaction.maxPriorityFeePerGas)
-        } else if (transaction.gasPrice != null) {
-            GasPrice.Legacy(transaction.gasPrice)
-        } else {
-            null
-        }
+        val gasPrice = transaction.getGasPriceObj()
 
         feeAmountData = if (gasPrice != null && transaction.gasLimit != null) {
             GasData(gasLimit = transaction.gasLimit, gasPrice = gasPrice).let {
