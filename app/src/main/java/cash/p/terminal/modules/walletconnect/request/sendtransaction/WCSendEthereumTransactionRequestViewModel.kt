@@ -21,7 +21,6 @@ import cash.p.terminal.modules.sendevmtransaction.ViewItem
 import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.core.toHexString
-import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
@@ -45,15 +44,11 @@ class WCSendEthereumTransactionRequestViewModel(
     private var sendTransactionState: SendTransactionServiceState
 
     init {
-        val gasPrice = if (transaction.maxFeePerGas != null && transaction.maxPriorityFeePerGas != null) {
-            GasPrice.Eip1559(transaction.maxFeePerGas, transaction.maxPriorityFeePerGas)
-        } else if (transaction.gasPrice != null) {
-            GasPrice.Legacy(transaction.gasPrice)
-        } else {
-            null
-        }
-
-        sendTransactionService = SendTransactionServiceEvm(blockchainType, gasPrice, transaction.nonce)
+        sendTransactionService = SendTransactionServiceEvm(
+            blockchainType = blockchainType,
+            initialGasPrice = transaction.getGasPriceObj(),
+            initialNonce = transaction.nonce
+        )
         sendTransactionState = sendTransactionService.stateFlow.value
 
         viewModelScope.launch {
