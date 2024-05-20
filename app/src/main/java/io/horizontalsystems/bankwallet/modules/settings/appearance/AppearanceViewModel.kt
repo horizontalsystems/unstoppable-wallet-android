@@ -33,6 +33,7 @@ class AppearanceViewModel(
     private var themeOptions = themeService.optionsFlow.value
     private var baseTokenOptions = buildBaseTokenSelect(baseTokenManager.baseTokenFlow.value)
     private var marketsTabEnabled = localStorage.marketsTabEnabled
+    private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
     private var balanceViewTypeOptions =
         buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
     private val currentLanguageDisplayName: String
@@ -87,7 +88,8 @@ class AppearanceViewModel(
         balanceViewTypeOptions = balanceViewTypeOptions,
         marketsTabEnabled = marketsTabEnabled,
         currentLanguage = currentLanguageDisplayName,
-        baseCurrencyCode = baseCurrencyCode
+        baseCurrencyCode = baseCurrencyCode,
+        balanceTabButtonsEnabled = balanceTabButtonsEnabled
     )
 
     private fun buildBaseTokenSelect(token: Token?): SelectOptional<Token> {
@@ -153,6 +155,13 @@ class AppearanceViewModel(
         emitState()
     }
 
+    fun onSetBalanceTabButtons(enabled: Boolean) {
+        localStorage.balanceTabButtonsEnabled = enabled
+
+        balanceTabButtonsEnabled = enabled
+        emitState()
+    }
+
 }
 
 data class AppearanceUIState(
@@ -164,4 +173,5 @@ data class AppearanceUIState(
     val marketsTabEnabled: Boolean,
     val currentLanguage: String,
     val baseCurrencyCode: String,
+    val balanceTabButtonsEnabled: Boolean,
 )

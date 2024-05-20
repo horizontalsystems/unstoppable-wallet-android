@@ -159,7 +159,7 @@ fun AppearanceScreen(navController: NavController) {
 
                     HeaderText(text = stringResource(id = R.string.Appearance_Tab))
                     CellUniversalLawrenceSection(
-                        listOf {
+                        listOf({
                             RowUniversal(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                             ) {
@@ -185,8 +185,33 @@ fun AppearanceScreen(navController: NavController) {
                                 )
 
                             }
+                        }, {
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+                                Image(
+                                    modifier = Modifier.size(24.dp),
+                                    painter = painterResource(id = R.drawable.ic_more_24),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(ComposeAppTheme.colors.grey)
+                                )
 
-                        }
+                                body_leah(
+                                    text = stringResource(id = R.string.Appearance_BalanceTabButtons),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(horizontal = 16.dp)
+                                )
+
+                                HsSwitch(
+                                    checked = uiState.balanceTabButtonsEnabled,
+                                    onCheckedChange = {
+                                        viewModel.onSetBalanceTabButtons(it)
+                                    }
+                                )
+
+                            }
+                        })
                     )
                     Spacer(modifier = Modifier.height(24.dp))
 

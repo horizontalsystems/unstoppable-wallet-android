@@ -261,7 +261,7 @@ fun BalanceItems(
                 )
             }
 
-            if (!accountViewItem.isWatchAccount) {
+            if (uiState.balanceTabButtonsEnabled && !accountViewItem.isWatchAccount) {
                 item {
                     Row(
                         modifier = Modifier.padding(horizontal = 24.dp),

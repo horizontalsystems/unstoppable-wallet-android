@@ -450,6 +450,15 @@ class LocalStorageManager(
             }
         }
 
+    override var balanceTabButtonsEnabled: Boolean
+        get() = preferences.getBoolean("balanceTabButtonsEnabled", true)
+        set(value) {
+            preferences.edit().putBoolean("balanceTabButtonsEnabled", value).apply()
+            balanceTabButtonsEnabledFlow.update { value }
+        }
+
+    override val balanceTabButtonsEnabledFlow = MutableStateFlow(balanceTabButtonsEnabled)
+
     override var personalSupportEnabled: Boolean
         get() = preferences.getBoolean(PERSONAL_SUPPORT_ENABLED, false)
         set(enabled) {
