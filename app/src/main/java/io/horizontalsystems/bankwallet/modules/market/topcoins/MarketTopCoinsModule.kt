@@ -7,8 +7,8 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.ui.compose.Select
 
 object MarketTopCoinsModule {
@@ -47,7 +47,7 @@ object MarketTopCoinsModule {
         val isRefreshing: Boolean,
         val sortingField: SortingField,
         val topMarket: TopMarket,
-        val period: TimePeriod,
+        val timeDuration: TimeDuration,
     )
 
     data class Menu(

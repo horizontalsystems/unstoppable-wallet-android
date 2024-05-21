@@ -247,6 +247,8 @@ class MarketKitWrapper(
     fun topPlatformCoinListSingle(chain: String, currencyCode: String) =
         marketKit.topPlatformMarketInfosSingle(chain, currencyCode)
 
+    fun getCoinSignalsSingle(coinUids: List<String>) = marketKit.coinsSignalsSingle(coinUids)
+
     // NFT
 
     suspend fun nftCollections(): List<NftTopCollection> =

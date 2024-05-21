@@ -21,7 +21,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,11 +37,11 @@ import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
+import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeWithDiff
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
@@ -112,7 +111,7 @@ fun TopPlatforms(
                                                     openSortingSelector = true
                                                 }
                                             )
-                                            HSpacer(width = 8.dp)
+                                            HSpacer(width = 12.dp)
                                             OptionController(
                                                 uiState.timePeriod.titleResId,
                                                 onOptionClick = {
@@ -161,19 +160,6 @@ fun TopPlatforms(
             { openSortingSelector = false }
         )
     }
-}
-
-@Composable
-private fun OptionController(
-    label: Int,
-    onOptionClick: () -> Unit
-) {
-    ButtonSecondaryWithIcon(
-        modifier = Modifier.height(28.dp),
-        onClick = onOptionClick,
-        title = stringResource(label),
-        iconRight = painterResource(R.drawable.ic_down_arrow_20),
-    )
 }
 
 @Composable

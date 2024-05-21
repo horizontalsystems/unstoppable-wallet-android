@@ -226,6 +226,7 @@
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
+    <string name="Market_Signals">Signals</string>
 
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
@@ -352,6 +353,12 @@
     <string name="Market_Filter_PriceChange_Negative_50_minus" translatable="false">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_75_minus" translatable="false">&lt; -75%</string>
     <string name="TimePeriod_24h">24h</string>
+
+    <string name="Market_Sorting_Manual">Manual</string>
+    <string name="Market_Sorting_Gainers">Gainers</string>
+    <string name="Market_Sorting_Losers">Losers</string>
+    <string name="Market_Sorting_HighestCap">Highest Cap</string>
+    <string name="Market_Sorting_LowestCap">Lowest Cap</string>
 
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
@@ -1736,6 +1743,7 @@
     <string name="CoinAnalytics_SmartContractAnalysis">Smart Contract Analysis</string>
     <string name="CoinAnalytics_HighRiskItems">High Risk Items</string>
     <string name="CoinAnalytics_MediumRiskItems">Medium Risk Items</string>
+    <string name="Coin_Analytics_Indicators_Risky">Risky</string>
     <string name="CoinAnalytics_AttentionRequired">Attention Required</string>
     <string name="CoinAnalytics_PoweredByDeFi">Powered by De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Items</string>
@@ -1872,8 +1880,8 @@
     <string name="NftCollection_EventType_Unknown">Unknown</string>
 
     <!--Rate list-->
-    <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Top Losers</string>
+    <string name="RateList_TopGainers">Gainers</string>
+    <string name="RateList_TopLosers">Losers</string>
     <string name="RateList_Posts">News</string>
 
     <string name="Market_DaysAgo">%dd. ago</string>

@@ -27,8 +27,9 @@ import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.Period
+import io.horizontalsystems.bankwallet.modules.market.favorites.WatchlistSorting
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
@@ -107,8 +108,10 @@ interface ILocalStorage {
     var launchPage: LaunchPage?
     var appIcon: AppIcon?
     var mainTab: MainModule.MainNavigation?
-    var marketFavoritesSortDescending: Boolean
-    var marketFavoritesPeriod: Period?
+    var marketFavoritesSorting: WatchlistSorting?
+    var marketFavoritesShowSignals: Boolean
+    var marketFavoritesManualSortingOrder: List<String>
+    var marketFavoritesPeriod: TimeDuration?
     var relaunchBySettingChange: Boolean
     var marketsTabEnabled: Boolean
     val marketsTabEnabledFlow: StateFlow<Boolean>

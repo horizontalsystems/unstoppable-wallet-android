@@ -17,7 +17,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule
+import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchSection
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
@@ -261,11 +261,15 @@ val MarketSearchSection.statSection: StatSection
         MarketSearchSection.SearchResults -> StatSection.SearchResults
     }
 
-val MarketFavoritesModule.Period.statPeriod: StatPeriod
+val TimePeriod.statPeriod: StatPeriod
     get() = when (this) {
-        MarketFavoritesModule.Period.OneDay -> StatPeriod.Day1
-        MarketFavoritesModule.Period.SevenDay -> StatPeriod.Week1
-        MarketFavoritesModule.Period.ThirtyDay -> StatPeriod.Month1
+        TimePeriod.TimePeriod_1D -> StatPeriod.Day1
+        TimePeriod.TimePeriod_1W -> StatPeriod.Week1
+        TimePeriod.TimePeriod_1M -> StatPeriod.Month1
+        TimePeriod.TimePeriod_2W -> TODO()
+        TimePeriod.TimePeriod_3M -> TODO()
+        TimePeriod.TimePeriod_6M -> TODO()
+        TimePeriod.TimePeriod_1Y -> TODO()
     }
 
 val FilterTransactionType.statTab: StatTab

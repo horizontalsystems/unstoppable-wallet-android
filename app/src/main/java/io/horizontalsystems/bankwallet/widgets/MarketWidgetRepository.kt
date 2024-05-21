@@ -12,7 +12,8 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesMenuService
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.Period
+import io.horizontalsystems.bankwallet.modules.market.favorites.WatchlistSorting
+import io.horizontalsystems.bankwallet.modules.market.favorites.period
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsRepository
 import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
@@ -39,14 +40,21 @@ class MarketWidgetRepository(
     suspend fun getMarketItems(marketWidgetType: MarketWidgetType): List<MarketWidgetItem> =
         when (marketWidgetType) {
             MarketWidgetType.Watchlist -> {
-                getWatchlist(favoritesMenuService.sortDescending, favoritesMenuService.period)
+                getWatchlist(
+                    favoritesMenuService.listSorting,
+                    favoritesMenuService.manualSortOrder,
+                    favoritesMenuService.timeDuration
+                )
             }
+
             MarketWidgetType.TopGainers -> {
                 getTopGainers()
             }
+
             MarketWidgetType.TopNfts -> {
                 getTopNtfs()
             }
+
             MarketWidgetType.TopPlatforms -> {
                 getTopPlatforms()
             }
@@ -63,7 +71,10 @@ class MarketWidgetRepository(
             MarketWidgetItem(
                 uid = item.platform.uid,
                 title = item.platform.name,
-                subtitle = Translator.getString(R.string.MarketTopPlatforms_Protocols, item.protocols),
+                subtitle = Translator.getString(
+                    R.string.MarketTopPlatforms_Protocols,
+                    item.protocols
+                ),
                 label = item.rank.toString(),
                 value = App.numberFormatter.formatFiatShort(
                     item.marketCap,
@@ -114,19 +125,36 @@ class MarketWidgetRepository(
         return sortedMarketItems.map { marketWidgetItem(it) }
     }
 
-    private suspend fun getWatchlist(sortDescending: Boolean, period: Period): List<MarketWidgetItem> {
+    private suspend fun getWatchlist(
+        listSorting: WatchlistSorting,
+        manualSortOrder: List<String>,
+        timeDuration: TimeDuration
+    ): List<MarketWidgetItem> {
         val favoriteCoins = favoritesManager.getAll()
         var marketItems = listOf<MarketItem>()
 
         if (favoriteCoins.isNotEmpty()) {
             val favoriteCoinUids = favoriteCoins.map { it.coinUid }
-            val sortingField = if(sortDescending) SortingField.TopGainers else SortingField.TopLosers
             marketItems = marketKit.marketInfosSingle(favoriteCoinUids, currency.code)
                 .await()
                 .map { marketInfo ->
-                    MarketItem.createFromCoinMarket(marketInfo, currency, period)
+                    MarketItem.createFromCoinMarket(marketInfo, currency, timeDuration.period)
                 }
-                .sort(sortingField)
+
+            if (listSorting == WatchlistSorting.Manual) {
+                marketItems = marketItems.sortedBy {
+                    manualSortOrder.indexOf(it.fullCoin.coin.uid)
+                }
+            } else {
+                val sortField = when (listSorting) {
+                    WatchlistSorting.HighestCap -> SortingField.HighestCap
+                    WatchlistSorting.LowestCap -> SortingField.LowestCap
+                    WatchlistSorting.Gainers -> SortingField.TopGainers
+                    WatchlistSorting.Losers -> SortingField.TopLosers
+                    else -> throw IllegalStateException("Manual sorting should be handled separately")
+                }
+                marketItems = marketItems.sort(sortField)
+            }
         }
 
         return marketItems.map { marketWidgetItem(it) }
