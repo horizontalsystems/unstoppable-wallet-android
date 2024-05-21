@@ -7,9 +7,9 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
-import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -79,16 +79,19 @@ class MarketTopCoinsViewModel(
         }
     }
 
-    fun onSelectPeriod(period: TimePeriod) {
-        service.setPeriod(period)
+    fun onSelectPeriod(timeDuration: TimeDuration) {
+        service.setTimeDuration(timeDuration)
+        emitState()
     }
 
     fun onSelectSortingField(sortingField: SortingField) {
         service.setSortingField(sortingField)
+        emitState()
     }
 
     fun onSelectTopMarket(topMarket: TopMarket) {
         service.setTopMarket(topMarket)
+        emitState()
     }
 
     fun refresh() {

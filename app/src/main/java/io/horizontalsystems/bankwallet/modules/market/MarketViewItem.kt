@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 import io.horizontalsystems.marketkit.models.FullCoin
 
 @Immutable
@@ -13,6 +14,7 @@ data class MarketViewItem(
     val marketDataValue: MarketDataValue,
     val rank: String?,
     val favorited: Boolean,
+    val signal: Advice? = null
 ) {
 
     val coinUid: String
@@ -41,7 +43,8 @@ data class MarketViewItem(
     companion object {
         fun create(
             marketItem: MarketItem,
-            favorited: Boolean = false
+            favorited: Boolean = false,
+            advice: Advice? = null
         ): MarketViewItem {
             return MarketViewItem(
                 marketItem.fullCoin,
@@ -51,14 +54,15 @@ data class MarketViewItem(
                 ),
                 MarketDataValue.Diff(marketItem.diff),
                 marketItem.rank?.toString(),
-                favorited
+                favorited,
+                advice
             )
         }
 
         fun create(
             marketItem: MarketItem,
             marketField: MarketField,
-            favorited: Boolean = false
+            favorited: Boolean = false,
         ): MarketViewItem {
             val marketDataValue = when (marketField) {
                 MarketField.MarketCap -> {

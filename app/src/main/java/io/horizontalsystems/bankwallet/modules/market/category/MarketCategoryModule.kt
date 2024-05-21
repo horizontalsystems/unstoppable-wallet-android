@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.CoinCategory
 
 object MarketCategoryModule {
@@ -64,4 +65,5 @@ object MarketCategoryModule {
 data class MarketItemWrapper(
     val marketItem: MarketItem,
     val favorited: Boolean,
+    val signal: Analytics.TechnicalAdvice.Advice? =  null
 )

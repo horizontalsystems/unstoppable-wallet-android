@@ -4,9 +4,7 @@ import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesModule.Period
-import io.horizontalsystems.bankwallet.modules.market.sort
+import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import kotlinx.coroutines.rx2.await
 
 class MarketFavoritesRepository(
@@ -17,7 +15,7 @@ class MarketFavoritesRepository(
 
     private suspend fun getFavorites(
         currency: Currency,
-        period: Period
+        period: TimePeriod
     ): List<MarketItem> {
         val favoriteCoins = manager.getAll()
         if (favoriteCoins.isEmpty()) return listOf()
@@ -34,14 +32,10 @@ class MarketFavoritesRepository(
             }
     }
 
-    suspend fun get(
-        sortDescending: Boolean,
-        period: Period,
-        currency: Currency,
-    ): List<MarketItem> {
-        val sortingField = if (sortDescending) SortingField.TopGainers else SortingField.TopLosers
-        val marketItems = getFavorites(currency, period)
-        return marketItems.sort(sortingField)
+    fun getSignals(uids: List<String>) = marketKit.getCoinSignalsSingle(uids)
+
+    suspend fun get(period: TimePeriod, currency: Currency): List<MarketItem> {
+        return getFavorites(currency, period)
     }
 
     fun removeFavorite(uid: String) {

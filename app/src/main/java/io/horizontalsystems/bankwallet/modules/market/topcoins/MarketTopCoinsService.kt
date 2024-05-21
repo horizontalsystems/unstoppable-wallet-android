@@ -5,9 +5,9 @@ import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
-import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,19 +33,24 @@ class MarketTopCoinsService(
         BehaviorSubject.create()
 
     val periods = listOf(
-        TimePeriod.TimePeriod_1D,
-        TimePeriod.TimePeriod_1W,
-        TimePeriod.TimePeriod_1M,
-        TimePeriod.TimePeriod_3M,
+        TimeDuration.OneDay,
+        TimeDuration.SevenDay,
+        TimeDuration.ThirtyDay,
+        TimeDuration.ThreeMonths,
     )
-    var period: TimePeriod = periods[0]
+    var period: TimeDuration = periods[0]
         private set
 
     val topMarkets = TopMarket.entries
     var topMarket: TopMarket = topMarket
         private set
 
-    val sortingFields = SortingField.entries
+    val sortingFields = listOf(
+        SortingField.HighestCap,
+        SortingField.LowestCap,
+        SortingField.TopGainers,
+        SortingField.TopLosers,
+        )
     var sortingField: SortingField = sortingField
         private set
 
@@ -59,7 +64,7 @@ class MarketTopCoinsService(
         sync()
     }
 
-    fun setPeriod(period: TimePeriod) {
+    fun setTimeDuration(period: TimeDuration) {
         this.period = period
         sync()
     }

@@ -4,7 +4,8 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
+import io.horizontalsystems.bankwallet.modules.market.TimeDuration
+import io.horizontalsystems.bankwallet.modules.market.favorites.period
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.Single
@@ -22,7 +23,7 @@ class MarketTopMoversRepository(
         sortingField: SortingField,
         limit: Int,
         baseCurrency: Currency,
-        period: TimePeriod
+        timeDuration: TimeDuration
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
             try {
@@ -31,7 +32,7 @@ class MarketTopMoversRepository(
                     MarketItem.createFromCoinMarket(
                         marketInfo,
                         baseCurrency,
-                        period,
+                        timeDuration.period,
                     )
                 }
 
