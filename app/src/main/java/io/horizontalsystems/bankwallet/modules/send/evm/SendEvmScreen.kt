@@ -1,13 +1,17 @@
 package io.horizontalsystems.bankwallet.modules.send.evm
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -15,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -22,8 +27,8 @@ import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
-import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
+import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance2
+import io.horizontalsystems.bankwallet.modules.multiswap.XxxAmountInput
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
@@ -47,56 +52,56 @@ fun SendEvmScreen(
     val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
-    val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
         factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
-    val amountUnique = paymentAddressViewModel.amountUnique
     val view = LocalView.current
 
     ComposeAppTheme {
-        val focusRequester = remember { FocusRequester() }
-
-        LaunchedEffect(Unit) {
-            focusRequester.requestFocus()
-        }
-
         SendScreen(
             title = title,
             onCloseClick = { navController.popBackStack() }
         ) {
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
-            )
+            val focusRequester = remember { FocusRequester() }
+
+            LaunchedEffect(Unit) {
+                focusRequester.requestFocus()
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
-            HSAmountInput(
-                modifier = Modifier.padding(horizontal = 16.dp),
+
+            val borderColor = when (amountCaution?.type) {
+                HSCaution.Type.Error -> ComposeAppTheme.colors.red50
+                HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
+                else -> ComposeAppTheme.colors.steel20
+            }
+
+            XxxAmountInput(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .border(1.dp, borderColor, RoundedCornerShape(18.dp))
+                    .background(ComposeAppTheme.colors.lawrence)
+                    .padding(horizontal = 16.dp, vertical = 20.dp),
+                coinAmount = uiState.amount,
+                onValueChange = viewModel::onEnterAmount,
+                fiatAmount = uiState.fiatAmount,
+                currency = uiState.currency,
+                onFiatValueChange = viewModel::onEnterFiatAmount,
+                fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
                 focusRequester = focusRequester,
-                availableBalance = availableBalance,
-                caution = amountCaution,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            AvailableBalance2(
                 coinCode = wallet.coin.code,
                 coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                onClickHint = {
-                    amountInputModeViewModel.onToggleInputType()
-                },
-                onValueChange = {
-                    viewModel.onEnterAmount(it)
-                },
-                inputType = amountInputType,
-                rate = viewModel.coinRate,
-                amountUnique = amountUnique
+                availableBalance = availableBalance
             )
 
             if (uiState.showAddressInput) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     initial = prefilledData?.address?.let { Address(it) },

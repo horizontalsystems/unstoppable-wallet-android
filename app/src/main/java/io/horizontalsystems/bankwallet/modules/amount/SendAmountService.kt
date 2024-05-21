@@ -53,6 +53,8 @@ class SendAmountService(
     }
 
     fun setAmount(amount: BigDecimal?) {
+        if (this.amount == amount) return
+
         this.amount = amount
 
         validateAmount()

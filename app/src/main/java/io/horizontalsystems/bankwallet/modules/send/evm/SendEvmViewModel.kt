@@ -1,50 +1,54 @@
 package io.horizontalsystems.bankwallet.modules.send.evm
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
+import io.horizontalsystems.bankwallet.modules.multiswap.FiatService
 import io.horizontalsystems.bankwallet.modules.send.SendUiState
-import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.marketkit.models.Token
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class SendEvmViewModel(
     val wallet: Wallet,
     val sendToken: Token,
     val adapter: ISendEthereumAdapter,
-    private val xRateService: XRateService,
     private val amountService: SendAmountService,
     private val addressService: SendEvmAddressService,
     val coinMaxAllowedDecimals: Int,
     private val showAddressInput: Boolean,
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
+    private val currencyManager: CurrencyManager,
+    private val fiatService: FiatService
 ) : ViewModelUiState<SendUiState>() {
-    val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
-
     private var amountState = amountService.stateFlow.value
+    private var fiatAmountState = fiatService.stateFlow.value
     private var addressState = addressService.stateFlow.value
-
-    var coinRate by mutableStateOf(xRateService.getRate(sendToken.coin.uid))
-        private set
+    private val currency = currencyManager.baseCurrency
 
     init {
-        amountService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAmountState(it)
+        fiatService.setCurrency(currency)
+        fiatService.setToken(sendToken)
+
+        viewModelScope.launch {
+            fiatService.stateFlow.collect {
+                handleUpdatedFiatAmountState(it)
+            }
         }
-        addressService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAddressState(it)
+        viewModelScope.launch {
+            amountService.stateFlow.collect {
+                handleUpdatedAmountState(it)
+            }
         }
-        xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
+        viewModelScope.launch {
+            addressService.stateFlow.collect {
+                handleUpdatedAddressState(it)
+            }
         }
     }
 
@@ -54,18 +58,26 @@ class SendEvmViewModel(
         addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
+        currency = currency,
+        amount = amountState.amount,
+        fiatAmountInputEnabled = fiatAmountState.coinPrice != null,
+        fiatAmount = fiatAmountState.fiatAmount
     )
 
-    fun onEnterAmount(amount: BigDecimal?) {
-        amountService.setAmount(amount)
-    }
-
-    fun onEnterAddress(address: Address?) {
-        addressService.setAddress(address)
-    }
+    fun onEnterAmount(amount: BigDecimal?) = amountService.setAmount(amount)
+    fun onEnterFiatAmount(v: BigDecimal?) = fiatService.setFiatAmount(v)
+    fun onEnterAddress(address: Address?) = addressService.setAddress(address)
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
         this.amountState = amountState
+        fiatService.setAmount(amountState.amount)
+
+        emitState()
+    }
+
+    private fun handleUpdatedFiatAmountState(fiatAmountState: FiatService.State) {
+        this.fiatAmountState = fiatAmountState
+        amountService.setAmount(fiatAmountState.amount)
 
         emitState()
     }

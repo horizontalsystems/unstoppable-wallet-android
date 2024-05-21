@@ -32,7 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -611,21 +613,44 @@ private fun SwapCoinInputIn(
             .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier = Modifier.weight(1f)) {
-            AmountInput(
-                value = coinAmount,
-                onValueChange = onValueChange
-            )
-            VSpacer(height = 3.dp)
-            FiatAmountInput(
-                value = fiatAmount,
-                currency = currency,
-                onValueChange = onFiatValueChange,
-                enabled = fiatAmountInputEnabled
-            )
-        }
+        XxxAmountInput(
+            modifier = Modifier.weight(1f),
+            coinAmount = coinAmount,
+            onValueChange = onValueChange,
+            fiatAmount = fiatAmount,
+            currency = currency,
+            onFiatValueChange = onFiatValueChange,
+            fiatAmountInputEnabled = fiatAmountInputEnabled
+        )
         HSpacer(width = 8.dp)
         CoinSelector(token, onClickCoin)
+    }
+}
+
+@Composable
+fun XxxAmountInput(
+    modifier: Modifier = Modifier,
+    coinAmount: BigDecimal?,
+    onValueChange: (BigDecimal?) -> Unit,
+    fiatAmount: BigDecimal?,
+    currency: Currency,
+    onFiatValueChange: (BigDecimal?) -> Unit,
+    fiatAmountInputEnabled: Boolean,
+    focusRequester: FocusRequester = remember { FocusRequester() }
+) {
+    Column(modifier = modifier) {
+        AmountInput(
+            value = coinAmount,
+            onValueChange = onValueChange,
+            focusRequester = focusRequester
+        )
+        VSpacer(height = 8.dp)
+        FiatAmountInput(
+            value = fiatAmount,
+            currency = currency,
+            onValueChange = onFiatValueChange,
+            enabled = fiatAmountInputEnabled
+        )
     }
 }
 
@@ -782,6 +807,7 @@ private fun Selector(
 private fun AmountInput(
     value: BigDecimal?,
     onValueChange: (BigDecimal?) -> Unit,
+    focusRequester: FocusRequester,
 ) {
     var amount by rememberSaveable {
         mutableStateOf(value)
@@ -806,6 +832,7 @@ private fun AmountInput(
     BasicTextField(
         modifier = Modifier
             .fillMaxWidth()
+            .focusRequester(focusRequester)
             .onFocusChanged {
                 setCursorToEndOnFocused = it.isFocused
 

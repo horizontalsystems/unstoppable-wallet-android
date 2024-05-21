@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
-import io.horizontalsystems.bankwallet.modules.xrate.XRateService
+import io.horizontalsystems.bankwallet.modules.multiswap.FiatService
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import kotlinx.parcelize.Parcelize
 import java.math.BigInteger
@@ -73,18 +73,18 @@ object SendEvmModule {
                         wallet.token.type.isNative
                     )
                     val addressService = SendEvmAddressService(predefinedAddress)
-                    val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendEvmViewModel(
                         wallet,
                         wallet.token,
                         adapter,
-                        xRateService,
                         amountService,
                         addressService,
                         coinMaxAllowedDecimals,
                         predefinedAddress == null,
                         App.connectivityManager,
+                        App.currencyManager,
+                        FiatService(App.marketKit)
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
