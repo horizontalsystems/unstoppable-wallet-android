@@ -1,5 +1,6 @@
 package cash.p.terminal.core.managers
 
+import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.core.storage.FavoriteCoin
 import cash.p.terminal.core.storage.MarketFavoritesDao
@@ -9,6 +10,7 @@ import io.reactivex.subjects.PublishSubject
 
 class MarketFavoritesManager(
     appDatabase: AppDatabase,
+    private val localStorage: ILocalStorage,
     private val marketWidgetManager: MarketWidgetManager
 ) {
     val dataUpdatedAsync: Observable<Unit>
@@ -21,6 +23,10 @@ class MarketFavoritesManager(
     }
 
     fun add(coinUid: String) {
+        localStorage.marketFavoritesManualSortingOrder =
+            localStorage.marketFavoritesManualSortingOrder.toMutableList().apply {
+                add(coinUid)
+            }
         dao.insert(FavoriteCoin(coinUid))
         dataUpdatedSubject.onNext(Unit)
         marketWidgetManager.updateWatchListWidgets()
@@ -33,6 +39,10 @@ class MarketFavoritesManager(
     }
 
     fun remove(coinUid: String) {
+        localStorage.marketFavoritesManualSortingOrder =
+            localStorage.marketFavoritesManualSortingOrder.toMutableList().apply {
+                remove(coinUid)
+            }
         dao.delete(coinUid)
         dataUpdatedSubject.onNext(Unit)
         marketWidgetManager.updateWatchListWidgets()

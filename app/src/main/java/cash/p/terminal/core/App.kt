@@ -368,7 +368,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         termsManager = TermsManager(localStorage)
 
         marketWidgetManager = MarketWidgetManager()
-        marketFavoritesManager = MarketFavoritesManager(appDatabase, marketWidgetManager)
+        marketFavoritesManager = MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)
 
         marketWidgetRepository = MarketWidgetRepository(
             marketKit,

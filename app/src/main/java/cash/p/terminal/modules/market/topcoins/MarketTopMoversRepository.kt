@@ -4,7 +4,8 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
-import cash.p.terminal.modules.market.filters.TimePeriod
+import cash.p.terminal.modules.market.TimeDuration
+import cash.p.terminal.modules.market.favorites.period
 import cash.p.terminal.modules.market.sort
 import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.Single
@@ -22,7 +23,7 @@ class MarketTopMoversRepository(
         sortingField: SortingField,
         limit: Int,
         baseCurrency: Currency,
-        period: TimePeriod
+        timeDuration: TimeDuration
     ): Single<List<MarketItem>> =
         Single.create { emitter ->
             try {
@@ -31,7 +32,7 @@ class MarketTopMoversRepository(
                     MarketItem.createFromCoinMarket(
                         marketInfo,
                         baseCurrency,
-                        period,
+                        timeDuration.period,
                     )
                 }
 

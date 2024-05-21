@@ -11,6 +11,7 @@ import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.ui.compose.Select
+import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.CoinCategory
 
 object MarketCategoryModule {
@@ -64,4 +65,5 @@ object MarketCategoryModule {
 data class MarketItemWrapper(
     val marketItem: MarketItem,
     val favorited: Boolean,
+    val signal: Analytics.TechnicalAdvice.Advice? =  null
 )

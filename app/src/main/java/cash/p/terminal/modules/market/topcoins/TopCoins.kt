@@ -83,16 +83,16 @@ fun TopCoins(
                                             openSortingSelector = true
                                         }
                                     )
-                                    HSpacer(width = 8.dp)
+                                    HSpacer(width = 12.dp)
                                     OptionController(
                                         uiState.topMarket.titleResId,
                                         onOptionClick = {
                                             openTopSelector = true
                                         }
                                     )
-                                    HSpacer(width = 8.dp)
+                                    HSpacer(width = 12.dp)
                                     OptionController(
-                                        uiState.period.titleResId,
+                                        uiState.timeDuration.titleResId,
                                         onOptionClick = {
                                             openPeriodSelector = true
                                         }
@@ -139,7 +139,7 @@ fun TopCoins(
     if (openPeriodSelector) {
         AlertGroup(
             title = R.string.Market_Tab_Coins,
-            select = Select(uiState.period, viewModel.periods),
+            select = Select(uiState.timeDuration, viewModel.periods),
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
@@ -152,7 +152,7 @@ fun TopCoins(
 }
 
 @Composable
-private fun OptionController(
+fun OptionController(
     label: Int,
     onOptionClick: () -> Unit
 ) {

@@ -46,6 +46,7 @@ fun ButtonSecondaryCircle(
     @DrawableRes icon: Int = R.drawable.ic_arrow_down_20,
     contentDescription: String? = null,
     tint: Color = ComposeAppTheme.colors.leah,
+    background: Color = ComposeAppTheme.colors.steel20,
     onClick: () -> Unit,
 ) {
     HsIconButton(
@@ -53,7 +54,7 @@ fun ButtonSecondaryCircle(
         modifier = modifier
             .size(28.dp)
             .clip(CircleShape)
-            .background(ComposeAppTheme.colors.steel20),
+            .background(background),
         enabled = enabled,
         rippleColor = tint
     ) {

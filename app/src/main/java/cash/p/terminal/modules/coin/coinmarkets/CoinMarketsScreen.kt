@@ -180,7 +180,7 @@ fun CoinMarketCell(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(name, volumeToken, badge?.getString())
+            MarketCoinFirstRow(name, volumeToken, badge = badge?.getString())
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(subtitle, marketDataValue, null)
         }

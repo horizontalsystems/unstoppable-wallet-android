@@ -133,7 +133,8 @@ fun CoinList(
                             item.fullCoin.iconPlaceholder,
                             item.coinRate,
                             item.marketDataValue,
-                            item.rank
+                            item.rank,
+                            item.signal,
                         ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
                     }
                 )

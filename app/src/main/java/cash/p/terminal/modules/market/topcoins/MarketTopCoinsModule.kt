@@ -7,8 +7,8 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
+import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
-import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.ui.compose.Select
 
 object MarketTopCoinsModule {
@@ -47,7 +47,7 @@ object MarketTopCoinsModule {
         val isRefreshing: Boolean,
         val sortingField: SortingField,
         val topMarket: TopMarket,
-        val period: TimePeriod,
+        val timeDuration: TimeDuration,
     )
 
     data class Menu(

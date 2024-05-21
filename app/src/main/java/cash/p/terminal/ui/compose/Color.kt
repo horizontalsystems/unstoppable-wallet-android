@@ -13,6 +13,7 @@ val Grey = Color(0xFF808085)
 val Grey50 = Color(0x80808085)
 val Yellow50 = Color(0x80FFA800)
 val Yellow20 = Color(0x33FFA800)
+val Green20 = Color(0x3305C46B)
 val Black50 = Color(0x80000000)
 val White50 = Color(0x80FFFFFF)
 

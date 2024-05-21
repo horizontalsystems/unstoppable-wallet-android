@@ -5,9 +5,9 @@ import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
+import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.market.category.MarketItemWrapper
-import cash.p.terminal.modules.market.filters.TimePeriod
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,19 +33,24 @@ class MarketTopCoinsService(
         BehaviorSubject.create()
 
     val periods = listOf(
-        TimePeriod.TimePeriod_1D,
-        TimePeriod.TimePeriod_1W,
-        TimePeriod.TimePeriod_1M,
-        TimePeriod.TimePeriod_3M,
+        TimeDuration.OneDay,
+        TimeDuration.SevenDay,
+        TimeDuration.ThirtyDay,
+        TimeDuration.ThreeMonths,
     )
-    var period: TimePeriod = periods[0]
+    var period: TimeDuration = periods[0]
         private set
 
     val topMarkets = TopMarket.entries
     var topMarket: TopMarket = topMarket
         private set
 
-    val sortingFields = SortingField.entries
+    val sortingFields = listOf(
+        SortingField.HighestCap,
+        SortingField.LowestCap,
+        SortingField.TopGainers,
+        SortingField.TopLosers,
+        )
     var sortingField: SortingField = sortingField
         private set
 
@@ -59,7 +64,7 @@ class MarketTopCoinsService(
         sync()
     }
 
-    fun setPeriod(period: TimePeriod) {
+    fun setTimeDuration(period: TimeDuration) {
         this.period = period
         sync()
     }

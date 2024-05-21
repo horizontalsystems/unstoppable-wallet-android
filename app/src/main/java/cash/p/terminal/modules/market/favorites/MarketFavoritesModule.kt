@@ -1,17 +1,15 @@
 package cash.p.terminal.modules.market.favorites
 
-import android.os.Parcelable
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem
-import cash.p.terminal.ui.compose.Select
+import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
-import kotlinx.parcelize.IgnoredOnParcel
-import kotlinx.parcelize.Parcelize
-import javax.annotation.concurrent.Immutable
 
 object MarketFavoritesModule {
 
@@ -20,25 +18,33 @@ object MarketFavoritesModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val repository = MarketFavoritesRepository(App.marketKit, App.marketFavoritesManager)
             val menuService = MarketFavoritesMenuService(App.localStorage, App.marketWidgetManager)
-            val service = MarketFavoritesService(repository, menuService, App.currencyManager, App.backgroundManager)
+            val service = MarketFavoritesService(
+                repository,
+                menuService,
+                App.currencyManager,
+                App.backgroundManager
+            )
             return MarketFavoritesViewModel(service) as T
         }
     }
 
-    @Immutable
-    data class ViewItem(
-        val sortingDescending: Boolean,
-        val periodSelect: Select<Period>,
-        val marketItems: List<MarketViewItem>
+    data class UiState(
+        val viewItems: List<MarketViewItem>,
+        val viewState: ViewState,
+        val isRefreshing: Boolean,
+        val sortingField: WatchlistSorting,
+        val period: TimeDuration,
+        val showSignal: Boolean,
     )
 
-    @Parcelize
-    enum class Period(val titleResId: Int) : WithTranslatableTitle, Parcelable {
-        OneDay(R.string.CoinPage_TimeDuration_Day),
-        SevenDay(R.string.CoinPage_TimeDuration_Week),
-        ThirtyDay(R.string.CoinPage_TimeDuration_Month);
+}
 
-        @IgnoredOnParcel
-        override val title = TranslatableString.ResString(titleResId)
-    }
+enum class WatchlistSorting(@StringRes val titleResId: Int): WithTranslatableTitle {
+    Manual(R.string.Market_Sorting_Manual),
+    HighestCap(R.string.Market_Sorting_HighestCap),
+    LowestCap(R.string.Market_Sorting_LowestCap),
+    Gainers(R.string.Market_Sorting_Gainers),
+    Losers(R.string.Market_Sorting_Losers);
+
+    override val title = TranslatableString.ResString(titleResId)
 }

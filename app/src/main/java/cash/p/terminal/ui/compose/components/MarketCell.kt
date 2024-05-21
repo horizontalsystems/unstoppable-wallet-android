@@ -1,10 +1,13 @@
 package cash.p.terminal.ui.compose.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,12 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 
 @Composable
 fun MarketCoinClear(
@@ -55,6 +60,7 @@ fun MarketCoinClear(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketCoin(
     coinName: String,
@@ -64,13 +70,23 @@ fun MarketCoin(
     coinRate: String? = null,
     marketDataValue: MarketDataValue? = null,
     label: String? = null,
-    onClick: (() -> Unit)? = null
+    advice: Advice? = null,
+    onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null
 ) {
-    RowUniversal(
+    Row(
         modifier = Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 24.dp)
+            .combinedClickable(
+                enabled = onClick != null || onLongClick != null,
+                onClick = onClick ?: { },
+                onLongClick = onLongClick
+            )
             .background(ComposeAppTheme.colors.tyler)
-            .padding(horizontal = 16.dp),
-        onClick = onClick
+            .padding(horizontal = 16.dp)
+            .padding(vertical = 12.dp),
+        verticalAlignment =  Alignment.CenterVertically,
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
@@ -82,7 +98,7 @@ fun MarketCoin(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(coinCode, coinRate)
+            MarketCoinFirstRow(coinCode, coinRate, advice)
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(coinName, marketDataValue, label)
         }
@@ -90,7 +106,12 @@ fun MarketCoin(
 }
 
 @Composable
-fun MarketCoinFirstRow(title: String, rate: String?, badge: String? = null) {
+fun MarketCoinFirstRow(
+    title: String,
+    rate: String?,
+    advice: Advice? = null,
+    badge: String? = null
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -123,6 +144,10 @@ fun MarketCoinFirstRow(title: String, rate: String?, badge: String? = null) {
                     )
                 }
             }
+            if (advice != null) {
+                HSpacer(8.dp)
+                SignalBadge(advice)
+            }
         }
         rate?.let {
             body_leah(
@@ -131,6 +156,46 @@ fun MarketCoinFirstRow(title: String, rate: String?, badge: String? = null) {
             )
         }
     }
+}
+
+@Composable
+fun SignalBadge(advice: Advice) {
+    val textColor = when (advice) {
+        Advice.Buy -> ComposeAppTheme.colors.remus
+        Advice.Sell -> ComposeAppTheme.colors.lucian
+        Advice.StrongBuy -> ComposeAppTheme.colors.tyler
+        Advice.StrongSell -> ComposeAppTheme.colors.tyler
+        Advice.Neutral -> ComposeAppTheme.colors.bran
+        else -> ComposeAppTheme.colors.jacob
+    }
+
+    val backgroundColor = when (advice) {
+        Advice.Buy -> ComposeAppTheme.colors.green20
+        Advice.Sell -> ComposeAppTheme.colors.red20
+        Advice.StrongBuy -> ComposeAppTheme.colors.remus
+        Advice.StrongSell -> ComposeAppTheme.colors.lucian
+        Advice.Neutral -> ComposeAppTheme.colors.jeremy
+        else -> ComposeAppTheme.colors.yellow20
+    }
+
+    val text = when (advice) {
+        Advice.Buy -> stringResource(R.string.Coin_Analytics_Indicators_Buy)
+        Advice.Sell -> stringResource(R.string.Coin_Analytics_Indicators_Sell)
+        Advice.StrongBuy -> stringResource(R.string.Coin_Analytics_Indicators_StrongBuy)
+        Advice.StrongSell -> stringResource(R.string.Coin_Analytics_Indicators_StrongSell)
+        Advice.Neutral -> stringResource(R.string.Coin_Analytics_Indicators_Neutral)
+        else -> stringResource(R.string.Coin_Analytics_Indicators_Risky)
+    }
+
+    Text(
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(backgroundColor)
+            .padding(horizontal = 4.dp, vertical = 2.dp),
+        text = text,
+        color = textColor,
+        style = ComposeAppTheme.typography.microSB,
+    )
 }
 
 @Composable

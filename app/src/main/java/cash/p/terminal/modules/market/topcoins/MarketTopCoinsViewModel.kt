@@ -7,9 +7,9 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
+import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.market.category.MarketItemWrapper
-import cash.p.terminal.modules.market.filters.TimePeriod
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -79,16 +79,19 @@ class MarketTopCoinsViewModel(
         }
     }
 
-    fun onSelectPeriod(period: TimePeriod) {
-        service.setPeriod(period)
+    fun onSelectPeriod(timeDuration: TimeDuration) {
+        service.setTimeDuration(timeDuration)
+        emitState()
     }
 
     fun onSelectSortingField(sortingField: SortingField) {
         service.setSortingField(sortingField)
+        emitState()
     }
 
     fun onSelectTopMarket(topMarket: TopMarket) {
         service.setTopMarket(topMarket)
+        emitState()
     }
 
     fun refresh() {

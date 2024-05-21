@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.market.filters
 
-import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
