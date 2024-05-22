@@ -179,10 +179,12 @@
     <string name="Market_PoweredByDefiLlamaApi">DefiLlama API에 의해 구동됩니다.</string>
     <string name="Market_Tab_Overview">개요</string>
     <string name="Market_Tab_Posts">뉴스</string>
+    <string name="Market_Tab_Sectors">분야</string>
     <string name="Market_Tab_Watchlist">관심 목록</string>
     <string name="Market_Tab_Watchlist_EmptyList">관심 목록이 비어 있습니다.</string>
     <string name="Market_Category_TopCoins">주요 코인</string>
     <string name="Market_Category_TopCoins_Description">시가총액 순위별 주요 코인</string>
+    <string name="Market_Top_100">상위 100</string>
     <string name="TopPairs_Title">상위 시장 페어</string>
     <string name="TopPairs_Description">각 거래소에서 거래량 상위 페어</string>
     <!--Market Overview-->
@@ -281,6 +283,8 @@
     <string name="Market_Filter_TimePeriod_6M">6 개월</string>
     <string name="Market_Filter_TimePeriod_1Y">일년</string>
     <string name="TimePeriod_24h">24 시간</string>
+    <string name="Market_Sorting_HighestCap">가장 높은 시가총액</string>
+    <string name="Market_Sorting_LowestCap">가장 낮은 시가총액</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 시장</string>
     <!--TVL Rank-->
@@ -1393,6 +1397,7 @@
     <string name="CoinAnalytics_SmartContractAnalysis">스마트 계약 분석</string>
     <string name="CoinAnalytics_HighRiskItems">고위험 품목</string>
     <string name="CoinAnalytics_MediumRiskItems">중위험 품목</string>
+    <string name="Coin_Analytics_Indicators_Risky">위험</string>
     <string name="CoinAnalytics_AttentionRequired">주의 필요</string>
     <string name="CoinAnalytics_PoweredByDeFi">De.Fi에 의해 구동됨</string>
     <string name="CoinAnalytics_CountItems">%d 아이템</string>
@@ -1475,8 +1480,6 @@
     <string name="NftCollection_EventType_Mint">민트</string>
     <string name="NftCollection_EventType_Unknown">알 수 없음</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">최고 상승자</string>
-    <string name="RateList_TopLosers">최고 하락자</string>
     <string name="RateList_Posts">뉴스</string>
     <string name="Market_DaysAgo">%d일 전에</string>
     <string name="Market_HoursAgo">%d시간 전에</string>
