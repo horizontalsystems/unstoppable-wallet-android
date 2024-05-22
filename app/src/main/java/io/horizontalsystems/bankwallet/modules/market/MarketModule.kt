@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
+import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -28,11 +29,28 @@ object MarketModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MarketService(App.marketStorage, App.localStorage)
-            return MarketViewModel(service) as T
+            return MarketViewModel(
+                App.marketStorage,
+                App.marketKit,
+                App.currencyManager,
+                App.localStorage
+            ) as T
         }
 
     }
+
+    data class UiState(
+        val selectedTab: Tab,
+        val marketOverviewItems: List<MarketOverviewViewItem>
+    )
+
+    data class MarketOverviewViewItem(
+        val title: String,
+        val value: String,
+        val change: String,
+        val changePositive: Boolean,
+        val metricsType: MetricsType,
+    )
 
     enum class Tab(@StringRes val titleResId: Int) {
         Coins(R.string.Market_Tab_Coins),
