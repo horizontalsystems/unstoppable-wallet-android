@@ -51,7 +51,7 @@ import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
-import cash.p.terminal.modules.market.overviewxxx.MarketScreenXxx
+import cash.p.terminal.modules.market.MarketScreen
 import cash.p.terminal.modules.rateapp.RateApp
 import cash.p.terminal.modules.releasenotes.ReleaseNotesFragment
 import cash.p.terminal.modules.rooteddevice.RootedDeviceModule
@@ -217,7 +217,7 @@ private fun MainScreen(
                         verticalAlignment = Alignment.Top
                     ) { page ->
                         when (uiState.mainNavItems[page].mainNavItem) {
-                            MainNavigation.Market -> MarketScreenXxx(fragmentNavController)
+                            MainNavigation.Market -> MarketScreen(fragmentNavController)
                             MainNavigation.Balance -> BalanceScreen(fragmentNavController)
                             MainNavigation.Transactions -> TransactionsScreen(
                                 fragmentNavController,

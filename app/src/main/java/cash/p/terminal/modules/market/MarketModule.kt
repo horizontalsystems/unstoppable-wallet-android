@@ -14,6 +14,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.market.filters.TimePeriod
+import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -28,11 +29,28 @@ object MarketModule {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MarketService(App.marketStorage, App.localStorage)
-            return MarketViewModel(service) as T
+            return MarketViewModel(
+                App.marketStorage,
+                App.marketKit,
+                App.currencyManager,
+                App.localStorage
+            ) as T
         }
 
     }
+
+    data class UiState(
+        val selectedTab: Tab,
+        val marketOverviewItems: List<MarketOverviewViewItem>
+    )
+
+    data class MarketOverviewViewItem(
+        val title: String,
+        val value: String,
+        val change: String,
+        val changePositive: Boolean,
+        val metricsType: MetricsType,
+    )
 
     enum class Tab(@StringRes val titleResId: Int) {
         Coins(R.string.Market_Tab_Coins),
