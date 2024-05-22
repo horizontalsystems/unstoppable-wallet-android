@@ -251,7 +251,7 @@ val MarketModule.Tab.statTab: StatTab
         MarketModule.Tab.Coins -> TODO()
         MarketModule.Tab.Platform -> TODO()
         MarketModule.Tab.Pairs -> TODO()
-        MarketModule.Tab.Sectors -> TODO()
+//        MarketModule.Tab.Sectors -> TODO()
     }
 
 val MarketSearchSection.statSection: StatSection

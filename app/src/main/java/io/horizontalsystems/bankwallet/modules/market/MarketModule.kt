@@ -57,8 +57,8 @@ object MarketModule {
         Watchlist(R.string.Market_Tab_Watchlist),
         Posts(R.string.Market_Tab_Posts),
         Platform(R.string.Market_Tab_Platform),
-        Pairs(R.string.Market_Tab_Pairs),
-        Sectors(R.string.Market_Tab_Sectors);
+        Pairs(R.string.Market_Tab_Pairs);
+//        Sectors(R.string.Market_Tab_Sectors);
 
         companion object {
             private val map = entries.associateBy(Tab::name)
