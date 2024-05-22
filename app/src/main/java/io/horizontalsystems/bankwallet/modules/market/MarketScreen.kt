@@ -146,8 +146,8 @@ fun TabsSection(
             }
             Tab.Pairs -> TopPairsScreen()
 
-            Tab.Sectors -> {
-            }
+//            Tab.Sectors -> {
+//            }
         }
     }
 }
