@@ -174,6 +174,7 @@
     <string name="Market_PoweredByDefiLlamaApi">DefiLlama API İle Güçlendirildi</string>
     <string name="Market_Tab_Overview">İzleme</string>
     <string name="Market_Tab_Posts">Haberler</string>
+    <string name="Market_Tab_Sectors">Sektörler</string>
     <string name="Market_Tab_Watchlist">İzleme Listesi</string>
     <string name="Market_Tab_Watchlist_EmptyList">İzleme listeniz boş.</string>
     <string name="Market_Category_TopCoins">En iyi Coinler</string>
@@ -240,6 +241,8 @@
     <string name="Market_Filter_TimePeriod_6M">6 Ay</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Yıl</string>
     <string name="TimePeriod_24h">24sa</string>
+    <string name="Market_Sorting_HighestCap">En Yüksek</string>
+    <string name="Market_Sorting_LowestCap">En Düşük</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <!--Balance-->
@@ -1316,6 +1319,7 @@
     <string name="Coin_Analytics_Indicators_Buy">Al</string>
     <string name="Coin_Analytics_Indicators_Neutral">Tarafsız</string>
     <string name="Coin_Analytics_Indicators_NoData">Veri Yok</string>
+    <string name="Coin_Analytics_Indicators_Risky">Riskli</string>
     <string name="CoinAnalytics_PoweredByDeFi">De.Fi tarafından desteklenmektedir</string>
     <string name="CoinAnalytics_CountItems">%d adet</string>
     <string name="TechnicalAdvice_Title">Teknik Göstergeleri</string>
@@ -1386,8 +1390,6 @@
     <string name="NftCollection_EventType_BulkCancel">Toplu İptal</string>
     <string name="NftCollection_EventType_Unknown">Bilinmeyen</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">En Kazançlılar</string>
-    <string name="RateList_TopLosers">Çok Kaybedenler</string>
     <string name="RateList_Posts">Haberler</string>
     <string name="Market_DaysAgo">%dg önce</string>
     <string name="Market_HoursAgo">%dsa önce</string>
