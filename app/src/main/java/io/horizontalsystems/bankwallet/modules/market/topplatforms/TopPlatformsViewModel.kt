@@ -30,7 +30,7 @@ class TopPlatformsViewModel(
         TimeDuration.ThreeMonths,
     )
 
-    private var sortingField = SortingField.HighestCap
+    private var sortingField = SortingField.TopGainers
 
     private var timePeriod = timeDuration ?: TimeDuration.OneDay
 

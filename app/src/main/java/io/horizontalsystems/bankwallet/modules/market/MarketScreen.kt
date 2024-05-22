@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
 import io.horizontalsystems.bankwallet.modules.market.posts.MarketPostsScreen
 import io.horizontalsystems.bankwallet.modules.market.topcoins.TopCoins
+import io.horizontalsystems.bankwallet.modules.market.toppairs.TopPairsScreen
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatforms
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -143,8 +144,7 @@ fun TabsSection(
                 TopPlatforms(navController)
                 stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopPlatforms))
             }
-            Tab.Pairs -> {
-            }
+            Tab.Pairs -> TopPairsScreen()
 
             Tab.Sectors -> {
             }

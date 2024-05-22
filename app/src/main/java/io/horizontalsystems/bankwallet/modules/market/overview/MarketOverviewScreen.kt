@@ -108,7 +108,7 @@ fun MarketOverviewScreen(
                                     }
                                 }
                             ) {
-                                navController.slideFromBottom(R.id.topPairsFragment)
+                                //navController.slideFromBottom(R.id.topPairsFragment)
 
                                 stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopMarketPairs))
                             }
