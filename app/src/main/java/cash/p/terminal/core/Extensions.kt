@@ -35,6 +35,9 @@ val <T> Optional<T>.orNull: T?
 val Platform.iconUrl: String
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/$uid@3x.png"
 
+val String.coinIconUrl: String
+    get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$this@3x.png"
+
 val CoinCategory.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/category-icons/$uid@3x.png"
 

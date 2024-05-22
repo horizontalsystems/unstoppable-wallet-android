@@ -103,9 +103,12 @@ data class TopPairViewItem(
     val title: String,
     val rank: String,
     val name: String,
+    val baseCoinUid: String?,
+    val targetCoinUid: String?,
     val iconUrl: String?,
     val tradeUrl: String?,
-    val volume: String,
+    val volume: BigDecimal,
+    val volumeInFiat: String,
     val price: String?
 ) {
     companion object {
@@ -123,10 +126,13 @@ data class TopPairViewItem(
             return TopPairViewItem(
                 title = "${topPair.base}/${topPair.target}",
                 name = topPair.marketName ?: "",
+                baseCoinUid = topPair.baseCoinUid,
+                targetCoinUid = topPair.targetCoinUid,
                 iconUrl = topPair.marketLogo,
                 rank = topPair.rank.toString(),
                 tradeUrl = topPair.tradeUrl,
-                volume = volumeStr,
+                volume = topPair.volume,
+                volumeInFiat = volumeStr,
                 price = priceStr,
             )
         }

@@ -34,6 +34,7 @@ import cash.p.terminal.modules.market.MarketModule.Tab
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
 import cash.p.terminal.modules.market.posts.MarketPostsScreen
 import cash.p.terminal.modules.market.topcoins.TopCoins
+import cash.p.terminal.modules.market.toppairs.TopPairsScreen
 import cash.p.terminal.modules.market.topplatforms.TopPlatforms
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -143,8 +144,7 @@ fun TabsSection(
                 TopPlatforms(navController)
                 stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopPlatforms))
             }
-            Tab.Pairs -> {
-            }
+            Tab.Pairs -> TopPairsScreen()
 
             Tab.Sectors -> {
             }
