@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.EvmError
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendSolanaAdapter
 import cash.p.terminal.core.LocalizedException
@@ -17,11 +18,13 @@ import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
+import cash.p.terminal.modules.send.SendErrorInsufficientBalance
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +36,7 @@ class SendSolanaViewModel(
     val wallet: Wallet,
     val sendToken: Token,
     val feeToken: Token,
+    val solBalance: BigDecimal,
     val adapter: ISendSolanaAdapter,
     private val xRateService: XRateService,
     private val amountService: SendAmountService,
@@ -117,13 +121,18 @@ class SendSolanaViewModel(
     }
 
     private suspend fun send() = withContext(Dispatchers.IO) {
-        if (!hasConnection()){
+        if (!hasConnection()) {
             sendResult = SendResult.Failed(createCaution(UnknownHostException()))
             return@withContext
         }
 
         try {
             sendResult = SendResult.Sending
+
+            val totalSolAmount = (if (sendToken.type == TokenType.Native) decimalAmount else BigDecimal.ZERO) + SolanaKit.fee
+
+            if (totalSolAmount > solBalance)
+                throw EvmError.InsufficientBalanceWithFee
 
             adapter.send(decimalAmount, addressState.evmAddress!!)
 
@@ -136,7 +145,8 @@ class SendSolanaViewModel(
     private fun createCaution(error: Throwable) = when (error) {
         is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
         is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+        is EvmError.InsufficientBalanceWithFee -> SendErrorInsufficientBalance(feeToken.coin.code)
+        else -> HSCaution(TranslatableString.PlainString(error.cause?.message ?: error.message ?: ""))
     }
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {

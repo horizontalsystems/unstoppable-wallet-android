@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-medium"
             android:textSize="14sp"
-            android:maxLines="2"
+            android:maxLines="4"
             tools:text="Snackbar Text" />
 
         <ImageView
