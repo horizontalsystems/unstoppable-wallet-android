@@ -181,6 +181,7 @@
     <string name="Market_PoweredByDefiLlamaApi">Desarrollado por DefiLama API</string>
     <string name="Market_Tab_Overview">Resumen</string>
     <string name="Market_Tab_Posts">Noticias</string>
+    <string name="Market_Tab_Sectors">Sectores</string>
     <string name="Market_Tab_Watchlist">Lista de Seguimiento</string>
     <string name="Market_Tab_Watchlist_EmptyList">Tu Watchlist está vacía.</string>
     <string name="Market_Category_TopCoins">Monedas Top</string>
@@ -254,6 +255,8 @@
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Año</string>
     <string name="TimePeriod_24h">24 horas</string>
+    <string name="Market_Sorting_HighestCap">Capitalización Mayor</string>
+    <string name="Market_Sorting_LowestCap">Capitalización Menor</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
@@ -1334,6 +1337,7 @@
     <string name="Coin_Analytics_Indicators_NoData">No hay datos</string>
     <string name="CoinAnalytics_SmartContractAnalysis">Análisis de contratos inteligente</string>
     <string name="CoinAnalytics_HighRiskItems">Elementos de Alto Riesgo</string>
+    <string name="Coin_Analytics_Indicators_Risky">Arriesgado</string>
     <string name="CoinAnalytics_PoweredByDeFi">Desarrollado por De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Artículos</string>
     <string name="TechnicalAdvice_Title">Indicadores técnicos</string>
@@ -1415,8 +1419,6 @@
     <string name="NftCollection_EventType_BulkCancel">Cancelar en masa</string>
     <string name="NftCollection_EventType_Unknown">Desconocido</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Máximos Ganadores</string>
-    <string name="RateList_TopLosers">Peores perdedores</string>
     <string name="RateList_Posts">Noticias</string>
     <string name="Market_DaysAgo">Hace %d dias</string>
     <string name="Market_HoursAgo">Hace %d hora</string>
