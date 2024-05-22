@@ -185,10 +185,12 @@
     <string name="Market_PoweredByDefiLlamaApi">Работает на DefiLlama API</string>
     <string name="Market_Tab_Overview">Обзор</string>
     <string name="Market_Tab_Posts">Новости</string>
+    <string name="Market_Tab_Sectors">Секторы</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
+    <string name="Market_Top_100">Топ 100</string>
     <string name="TopPairs_Title">Лучшие рыночные пары</string>
     <string name="TopPairs_Description">Лучшие торговые пары по объему на каждой бирже</string>
     <!--Market Overview-->
@@ -288,6 +290,8 @@
     <string name="Market_Filter_TimePeriod_6M">6 Месяцев</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Год</string>
     <string name="TimePeriod_24h">24ч</string>
+    <string name="Market_Sorting_HighestCap">Наивысшей кап.</string>
+    <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Рынки</string>
     <!--TVL Rank-->
@@ -1406,6 +1410,7 @@
     <string name="CoinAnalytics_SmartContractAnalysis">Анализ смарт-контрактов</string>
     <string name="CoinAnalytics_HighRiskItems">Предметы высокого риска</string>
     <string name="CoinAnalytics_MediumRiskItems">Элементы среднего риска</string>
+    <string name="Coin_Analytics_Indicators_Risky">Риски</string>
     <string name="CoinAnalytics_AttentionRequired">Требуется внимание</string>
     <string name="CoinAnalytics_PoweredByDeFi">При поддержке De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Элементов</string>
@@ -1526,8 +1531,6 @@
     <string name="NftCollection_EventType_Mint">Минт</string>
     <string name="NftCollection_EventType_Unknown">Неизвестная</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Взлеты</string>
-    <string name="RateList_TopLosers">Падения</string>
     <string name="RateList_Posts">Новости</string>
     <string name="Market_DaysAgo">%dд назад</string>
     <string name="Market_HoursAgo">%dч назад</string>
