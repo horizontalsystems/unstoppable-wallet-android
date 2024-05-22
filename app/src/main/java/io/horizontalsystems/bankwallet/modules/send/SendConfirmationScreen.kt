@@ -105,7 +105,7 @@ fun SendConfirmationScreen(
         }
 
         is SendResult.Failed -> {
-            HudHelper.showErrorMessage(view, sendResult.caution.getString())
+            HudHelper.showErrorMessage(view, sendResult.caution.getDescription() ?: sendResult.caution.getString())
         }
 
         null -> Unit
