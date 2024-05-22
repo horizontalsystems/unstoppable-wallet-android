@@ -179,6 +179,7 @@
     <string name="Market_PoweredByDefiLlamaApi">Desenvolvido por DefiLlama API</string>
     <string name="Market_Tab_Overview">Visão Geral</string>
     <string name="Market_Tab_Posts">Notícias</string>
+    <string name="Market_Tab_Sectors">Setores</string>
     <string name="Market_Tab_Watchlist">Catálogo</string>
     <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
     <string name="Market_Category_TopCoins">Top Moedas</string>
@@ -264,6 +265,8 @@
     <string name="Market_Filter_TimePeriod_1M">1 Meses</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Ano</string>
+    <string name="Market_Sorting_HighestCap">Maior capitalização</string>
+    <string name="Market_Sorting_LowestCap">Menor capitalização</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
@@ -1356,6 +1359,7 @@
     <string name="CoinAnalytics_SmartContractAnalysis">Análise de Contrato Inteligente</string>
     <string name="CoinAnalytics_HighRiskItems">Itens de Alto Risco</string>
     <string name="CoinAnalytics_MediumRiskItems">Itens de Risco Médio</string>
+    <string name="Coin_Analytics_Indicators_Risky">Arriscado</string>
     <string name="CoinAnalytics_AttentionRequired">Atenção Requerida</string>
     <string name="CoinAnalytics_PoweredByDeFi">Desenvolvido por De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Itens</string>
@@ -1446,8 +1450,6 @@
     <string name="NftCollection_EventType_BulkCancel">Cancelar vários</string>
     <string name="NftCollection_EventType_Unknown">Desconhecido</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Maiores Altas</string>
-    <string name="RateList_TopLosers">Maiores Quedas</string>
     <string name="RateList_Posts">Notícias</string>
     <string name="Market_DaysAgo">%dd atrás</string>
     <string name="Market_HoursAgo">%dh atrás</string>
