@@ -181,10 +181,12 @@
     <string name="Market_PoweredByDefiLlamaApi">由 DefiLlama API 提供</string>
     <string name="Market_Tab_Overview">行情</string>
     <string name="Market_Tab_Posts">发现</string>
+    <string name="Market_Tab_Sectors">行业</string>
     <string name="Market_Tab_Watchlist">关注</string>
     <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
     <string name="Market_Category_TopCoins">前列代币</string>
     <string name="Market_Category_TopCoins_Description">币种排名描述</string>
+    <string name="Market_Top_100">前100名</string>
     <string name="TopPairs_Title">热门市场交易对</string>
     <string name="TopPairs_Description">每个交易所的交易量最高的交易对</string>
     <!--Market Overview-->
@@ -284,6 +286,8 @@
     <string name="Market_Filter_TimePeriod_6M">6月</string>
     <string name="Market_Filter_TimePeriod_1Y">1年</string>
     <string name="TimePeriod_24h">24小时</string>
+    <string name="Market_Sorting_HighestCap">市值由高到低</string>
+    <string name="Market_Sorting_LowestCap">市值由低到高</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 市场</string>
     <!--TVL Rank-->
@@ -1390,6 +1394,7 @@
     <string name="CoinAnalytics_SmartContractAnalysis">智能合约分析</string>
     <string name="CoinAnalytics_HighRiskItems">高风险项目</string>
     <string name="CoinAnalytics_MediumRiskItems">中等风险项目</string>
+    <string name="Coin_Analytics_Indicators_Risky">有风险</string>
     <string name="CoinAnalytics_AttentionRequired">需要注意</string>
     <string name="CoinAnalytics_PoweredByDeFi">由 De.Fi 支持</string>
     <string name="CoinAnalytics_CountItems">%d条新闻</string>
@@ -1478,8 +1483,6 @@
     <string name="NftCollection_EventType_Mint">薄荷绿</string>
     <string name="NftCollection_EventType_Unknown">未知</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">涨幅榜</string>
-    <string name="RateList_TopLosers">跌幅榜</string>
     <string name="RateList_Posts">发现</string>
     <string name="Market_DaysAgo">%d天前</string>
     <string name="Market_HoursAgo">%d小时前</string>
