@@ -147,7 +147,6 @@ fun ButtonSecondaryTransparent(
                         title,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f, fill = false)
                     )
                     Icon(
                         modifier = Modifier.padding(start = 4.dp),
