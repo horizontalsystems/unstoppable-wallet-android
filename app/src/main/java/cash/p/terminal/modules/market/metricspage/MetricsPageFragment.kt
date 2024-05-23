@@ -5,17 +5,15 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -34,15 +32,14 @@ import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinClear
@@ -77,10 +74,7 @@ class MetricsPageFragment : BaseComposeFragment() {
         navController: NavController,
         onCoinClick: (String) -> Unit,
     ) {
-        val itemsViewState by viewModel.viewStateLiveData.observeAsState()
-        val viewState = itemsViewState?.merge(chartViewModel.uiState.viewState)
-        val marketData by viewModel.marketLiveData.observeAsState()
-        val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
+        val uiState = viewModel.uiState
 
         Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
             AppBar(
@@ -96,24 +90,27 @@ class MetricsPageFragment : BaseComposeFragment() {
             )
 
             HSSwipeRefresh(
-                refreshing = isRefreshing,
+                refreshing = uiState.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
                 }
             ) {
-                Crossfade(viewState) { viewState ->
+                Crossfade(uiState.viewState, label = "") { viewState ->
                     when (viewState) {
                         ViewState.Loading -> {
                             Loading()
                         }
 
                         is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                            ListErrorView(
+                                stringResource(R.string.SyncError),
+                                viewModel::onErrorClick
+                            )
                         }
 
                         ViewState.Success -> {
                             val listState = rememberSaveable(
-                                marketData?.menu?.sortDescending,
+                                uiState.sortDescending,
                                 saver = LazyListState.Saver
                             ) {
                                 LazyListState()
@@ -125,62 +122,50 @@ class MetricsPageFragment : BaseComposeFragment() {
                                 contentPadding = PaddingValues(bottom = 32.dp),
                             ) {
                                 item {
-                                    viewModel.header.let { header ->
-                                        DescriptionCard(header.title, header.description, header.icon)
+                                    uiState.header.let { header ->
+                                        DescriptionCard(
+                                            header.title,
+                                            header.description,
+                                            header.icon
+                                        )
                                     }
                                 }
                                 item {
                                     Chart(chartViewModel = chartViewModel)
                                 }
-                                marketData?.let { marketData ->
-                                    stickyHeader {
-                                        Menu(
-                                            marketData.menu,
-                                            viewModel::onToggleSortType,
-                                            viewModel::onSelectMarketField
+                                stickyHeader {
+                                    HeaderSorting(borderBottom = true, borderTop = true) {
+                                        HSpacer(width = 16.dp)
+                                        ButtonSecondaryWithIcon(
+                                            modifier = Modifier.height(28.dp),
+                                            onClick = {
+                                                viewModel.toggleSorting()
+                                            },
+                                            title =uiState.toggleButtonTitle,
+                                            iconRight = painterResource(
+                                                if (uiState.sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
+                                            ),
                                         )
+                                        HSpacer(width = 16.dp)
                                     }
-                                    items(marketData.marketViewItems) { marketViewItem ->
-                                        MarketCoinClear(
-                                            marketViewItem.fullCoin.coin.name,
-                                            marketViewItem.fullCoin.coin.code,
-                                            marketViewItem.fullCoin.coin.imageUrl,
-                                            marketViewItem.fullCoin.iconPlaceholder,
-                                            marketViewItem.coinRate,
-                                            marketViewItem.marketDataValue,
-                                            marketViewItem.rank,
-                                        ) { onCoinClick(marketViewItem.fullCoin.coin.uid) }
-                                    }
+                                }
+                                items(uiState.viewItems) { viewItem ->
+                                    MarketCoinClear(
+                                        subtitle = viewItem.subtitle,
+                                        coinCode = viewItem.fullCoin.coin.code,
+                                        coinIconUrl = viewItem.fullCoin.coin.imageUrl,
+                                        coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
+                                        coinRate = viewItem.coinRate,
+                                        marketDataValue = viewItem.marketDataValue,
+                                        label = viewItem.rank,
+                                    ) { onCoinClick(viewItem.fullCoin.coin.uid) }
                                 }
                             }
                         }
-
-                        null -> {}
                     }
                 }
             }
         }
     }
 
-    @Composable
-    private fun Menu(
-        menu: MetricsPageModule.Menu,
-        onToggleSortType: () -> Unit,
-        onSelectMarketField: (MarketField) -> Unit
-    ) {
-        HeaderSorting(borderTop = true, borderBottom = true) {
-            ButtonSecondaryCircle(
-                modifier = Modifier
-                    .padding(start = 16.dp),
-                icon = if (menu.sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
-                onClick = { onToggleSortType() }
-            )
-            Spacer(Modifier.weight(1f))
-            ButtonSecondaryToggle(
-                modifier = Modifier.padding(end = 16.dp),
-                select = menu.marketFieldSelect,
-                onSelect = onSelectMarketField
-            )
-        }
-    }
 }

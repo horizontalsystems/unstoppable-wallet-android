@@ -4,14 +4,16 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
 import cash.p.terminal.modules.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartViewModel
-import cash.p.terminal.modules.market.MarketField
-import cash.p.terminal.modules.market.MarketViewItem
+import cash.p.terminal.modules.market.MarketDataValue
+import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.tvl.GlobalMarketRepository
 import cash.p.terminal.modules.metricchart.MetricsType
-import cash.p.terminal.ui.compose.Select
+import io.horizontalsystems.marketkit.models.FullCoin
+import java.math.BigDecimal
 
 object MetricsPageModule {
 
@@ -24,8 +26,7 @@ object MetricsPageModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return when (modelClass) {
                 MetricsPageViewModel::class.java -> {
-                    val service = MetricsPageService(metricsType, App.currencyManager, globalMarketRepository)
-                    MetricsPageViewModel(service) as T
+                    MetricsPageViewModel(metricsType, App.currencyManager, App.marketKit) as T
                 }
                 ChartViewModel::class.java -> {
                     val chartService = MetricsPageChartService(App.currencyManager, metricsType, globalMarketRepository)
@@ -38,15 +39,23 @@ object MetricsPageModule {
     }
 
     @Immutable
-    data class MarketData(
-        val menu: Menu,
-        val marketViewItems: List<MarketViewItem>
+    data class CoinViewItem(
+        val fullCoin: FullCoin,
+        val subtitle: String,
+        val coinRate: String,
+        val marketDataValue: MarketDataValue?,
+        val rank: String?,
+        val sortField: BigDecimal?,
     )
 
     @Immutable
-    data class Menu(
+    data class UiState(
+        val header: MarketModule.Header,
+        val viewItems: List<CoinViewItem>,
+        val viewState: ViewState,
+        val isRefreshing: Boolean,
+        val toggleButtonTitle: String,
         val sortDescending: Boolean,
-        val marketFieldSelect: Select<MarketField>
     )
 }
 

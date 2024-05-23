@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -51,14 +50,15 @@ import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.DescriptionCard
+import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
-import cash.p.terminal.ui.compose.components.SortMenu
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseComposeFragment() {
@@ -117,7 +117,7 @@ class TvlFragment : BaseComposeFragment() {
                     tvlViewModel.refresh()
                 }
             ) {
-                Crossfade(viewState) { viewState ->
+                Crossfade(viewState, label = "") { viewState ->
                     when (viewState) {
                         ViewState.Loading -> {
                             Loading()
@@ -221,24 +221,31 @@ class TvlFragment : BaseComposeFragment() {
         onToggleSortType: () -> Unit,
         onToggleTvlDiffType: () -> Unit
     ) {
-        HeaderSorting(borderBottom = true) {
-            Box(modifier = Modifier.weight(1f)) {
-                SortMenu(chainSelect.selected.title) {
-                    onClickChainSelector()
-                }
-            }
-            ButtonSecondaryCircle(
-                modifier = Modifier.padding(end = 16.dp),
-                icon = if (sortDescending) R.drawable.ic_sort_l2h_20 else R.drawable.ic_sort_h2l_20,
-                onClick = { onToggleSortType() }
+        HeaderSorting(borderBottom = true, borderTop = true) {
+            HSpacer(16.dp)
+            ButtonSecondaryWithIcon(
+                modifier = Modifier.height(28.dp),
+                onClick = onClickChainSelector,
+                title =chainSelect.selected.title.getString(),
+                iconRight = painterResource(R.drawable.ic_down_arrow_20),
+            )
+            HSpacer(8.dp)
+            ButtonSecondaryWithIcon(
+                title = stringResource(R.string.Market_TVL),
+                iconRight = painterResource(
+                    if (sortDescending) R.drawable.ic_arrow_down_20 else R.drawable.ic_arrow_up_20
+                ),
+                onClick = onToggleSortType
             )
             tvlDiffType?.let {
+                HSpacer(8.dp)
                 ButtonSecondaryCircle(
                     modifier = Modifier.padding(end = 16.dp),
                     icon = if (tvlDiffType == TvlDiffType.Percent) R.drawable.ic_percent_20 else R.drawable.ic_usd_20,
                     onClick = { onToggleTvlDiffType() }
                 )
             }
+            HSpacer(width = 16.dp)
         }
     }
 

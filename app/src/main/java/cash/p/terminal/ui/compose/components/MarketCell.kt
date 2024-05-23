@@ -30,7 +30,7 @@ import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 
 @Composable
 fun MarketCoinClear(
-    coinName: String,
+    subtitle: String,
     coinCode: String,
     coinIconUrl: String,
     coinIconPlaceholder: Int,
@@ -55,7 +55,7 @@ fun MarketCoinClear(
         ) {
             MarketCoinFirstRow(coinCode, coinRate)
             Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinName, marketDataValue, label)
+            MarketCoinSecondRow(subtitle, marketDataValue, label)
         }
     }
 }
