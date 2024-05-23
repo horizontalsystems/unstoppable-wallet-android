@@ -228,6 +228,8 @@
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <string name="Market_Signals">Signals</string>
     <string name="Market_Volume">Volume</string>
+    <string name="Market_MarketCap">Market Cap</string>
+    <string name="Market_TVL">TVL</string>
 
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
