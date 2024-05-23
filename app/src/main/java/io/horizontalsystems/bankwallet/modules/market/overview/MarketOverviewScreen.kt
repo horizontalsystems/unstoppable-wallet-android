@@ -21,12 +21,9 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statMarketTop
 import io.horizontalsystems.bankwallet.core.stats.statPeriod
-import io.horizontalsystems.bankwallet.core.stats.statSection
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.market.overview.ui.BoardsView
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.MetricChartsView
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopPairsBoardView
 import io.horizontalsystems.bankwallet.modules.market.overview.ui.TopPlatformsBoardView
@@ -72,31 +69,31 @@ fun MarketOverviewScreen(
                                 .verticalScroll(scrollState)
                         ) {
                             MetricChartsView(viewItem.marketMetrics, navController)
-                            BoardsView(
-                                boards = viewItem.boards,
-                                navController = navController,
-                                onClickSeeAll = { listType ->
-                                    val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
-                                        listType
-                                    )
-
-//                                    navController.slideFromBottom(
-//                                        R.id.marketTopCoinsFragment,
-//                                        MarketTopCoinsFragment.Input(
-//                                            sortingField,
-//                                            topMarket,
-//                                            marketField
-//                                        )
+//                            BoardsView(
+//                                boards = viewItem.boards,
+//                                navController = navController,
+//                                onClickSeeAll = { listType ->
+//                                    val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
+//                                        listType
 //                                    )
-
-                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.Open(StatPage.TopCoins))
-                                },
-                                onSelectTopMarket = { topMarket, listType ->
-                                    viewModel.onSelectTopMarket(topMarket, listType)
-
-                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.SwitchMarketTop(topMarket.statMarketTop))
-                                }
-                            )
+//
+////                                    navController.slideFromBottom(
+////                                        R.id.marketTopCoinsFragment,
+////                                        MarketTopCoinsFragment.Input(
+////                                            sortingField,
+////                                            topMarket,
+////                                            marketField
+////                                        )
+////                                    )
+//
+//                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.Open(StatPage.TopCoins))
+//                                },
+//                                onSelectTopMarket = { topMarket, listType ->
+//                                    viewModel.onSelectTopMarket(topMarket, listType)
+//
+//                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.SwitchMarketTop(topMarket.statMarketTop))
+//                                }
+//                            )
 
                             TopPairsBoardView(
                                 topMarketPairs = viewItem.topMarketPairs,
