@@ -30,7 +30,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
-import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_jacob
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 import kotlinx.parcelize.Parcelize
 
@@ -111,9 +111,9 @@ fun ReleaseNotesScreen(
 
                 Spacer(Modifier.weight(1f))
 
-                caption_grey(
+                caption_jacob(
                     modifier = Modifier.padding(end = 24.dp),
-                    text = stringResource(R.string.ReleaseNotes_FollowUs)
+                    text = stringResource(R.string.ReleaseNotes_JoinUnstoppables)
                 )
             }
         }
@@ -127,7 +127,7 @@ private fun IconButton(icon: Int, url: String, description: String) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = description,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.jacob
         )
     }
 }

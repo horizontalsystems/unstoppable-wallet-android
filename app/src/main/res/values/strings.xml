@@ -1899,6 +1899,7 @@
 
     <!--Release notes-->
 
+    <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
