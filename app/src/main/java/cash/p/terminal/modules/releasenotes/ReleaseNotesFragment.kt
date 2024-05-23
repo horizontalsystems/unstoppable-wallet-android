@@ -30,7 +30,7 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.caption_grey
+import cash.p.terminal.ui.compose.components.caption_jacob
 import cash.p.terminal.ui.helpers.LinkHelper
 import kotlinx.parcelize.Parcelize
 
@@ -116,9 +116,9 @@ fun ReleaseNotesScreen(
 
                 Spacer(Modifier.weight(1f))
 
-                caption_grey(
+                caption_jacob(
                     modifier = Modifier.padding(end = 24.dp),
-                    text = stringResource(R.string.ReleaseNotes_FollowUs)
+                    text = stringResource(R.string.ReleaseNotes_JoinUnstoppables)
                 )
             }
         }
@@ -132,7 +132,7 @@ private fun IconButton(icon: Int, url: String, description: String) {
         Icon(
             painter = painterResource(id = icon),
             contentDescription = description,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.jacob
         )
     }
 }
