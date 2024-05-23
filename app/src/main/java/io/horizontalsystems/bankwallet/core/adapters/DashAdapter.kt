@@ -43,10 +43,10 @@ class DashAdapter(
     //
 
     override val explorerTitle: String
-        get() = "dash.org"
+        get() = "blockchair.com"
 
     override fun getTransactionUrl(transactionHash: String): String =
-        "https://insight.dash.org/insight/tx/$transactionHash"
+        "https://blockchair.com/dash/transaction/$transactionHash"
 
     override fun onBalanceUpdate(balance: BalanceInfo) {
         balanceUpdatedSubject.onNext(Unit)
@@ -84,7 +84,7 @@ class DashAdapter(
     override val blockchainType = BlockchainType.Dash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
-        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://insight.dash.org/insight/address/${it.address}") }
+        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/dash/address/${it.address}") }
 
     companion object {
         private const val confirmationsThreshold = 3
