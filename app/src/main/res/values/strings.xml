@@ -233,6 +233,7 @@
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_500">Top 500</string>
 
     <string name="TopPairs_Title">Top Market Pairs</string>
     <string name="TopPairs_Description">Top trading pairs by volume in every exchanges</string>
@@ -338,6 +339,7 @@
     <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
     <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
 
+    <string name="Market_Filter_TimePeriod_24H">24 Hours</string>
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
     <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>

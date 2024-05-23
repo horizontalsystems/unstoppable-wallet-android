@@ -11,14 +11,10 @@ import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
-import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.MarketModule.ListType
-import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
-import cash.p.terminal.modules.market.overview.MarketOverviewModule.Board
-import cash.p.terminal.modules.market.overview.MarketOverviewModule.BoardHeader
 import cash.p.terminal.modules.market.overview.MarketOverviewModule.MarketMetrics
 import cash.p.terminal.modules.market.overview.MarketOverviewModule.MarketMetricsPoint
 import cash.p.terminal.modules.market.overview.MarketOverviewModule.TopNftCollectionsBoard
@@ -139,12 +135,12 @@ class MarketOverviewViewModel(
         }
         val nftCollectionItems = marketOverview.nftCollections.getOrElse(timePeriod) { listOf() }.map { it.nftCollectionItem }
 
-        val topGainersBoard = getBoard(ListType.TopGainers, topMovers)
-        val topLosersBoard = getBoard(ListType.TopLosers, topMovers)
+//        val topGainersBoard = getBoard(ListType.TopGainers, topMovers)
+//        val topLosersBoard = getBoard(ListType.TopLosers, topMovers)
 
         return MarketOverviewModule.ViewItem(
             marketMetrics = getMarketMetrics(marketOverview.globalMarketPoints, baseCurrency),
-            boards = listOf(topGainersBoard, topLosersBoard),
+//            boards = listOf(topGainersBoard, topLosersBoard),
             topNftCollectionsBoard = topNftCollectionsBoard(nftCollectionItems),
             topSectorsBoard = topSectorsBoard(coinCategoryItems),
             topPlatformsBoard = topPlatformsBoard(topPlatformItems),
@@ -194,41 +190,41 @@ class MarketOverviewViewModel(
             }
         )
 
-    private fun getBoard(type: ListType, topMovers: TopMovers): Board {
-        val topMarket: TopMarket
-
-        val marketInfoList = when (type) {
-            ListType.TopGainers -> {
-                topMarket = gainersTopMarket
-
-                when (gainersTopMarket) {
-                    TopMarket.Top100 -> topMovers.gainers100
-                    TopMarket.Top200 -> topMovers.gainers200
-                    TopMarket.Top300 -> topMovers.gainers300
-                }
-            }
-
-            ListType.TopLosers -> {
-                topMarket = losersTopMarket
-
-                when (losersTopMarket) {
-                    TopMarket.Top100 -> topMovers.losers100
-                    TopMarket.Top200 -> topMovers.losers200
-                    TopMarket.Top300 -> topMovers.losers300
-                }
-            }
-        }
-
-        val marketItems = marketInfoList.map { MarketItem.createFromCoinMarket(it, baseCurrency) }
-        val topList = marketItems.map { MarketViewItem.create(it, type.marketField) }
-
-        val boardHeader = BoardHeader(
-            getSectionTitle(type),
-            getSectionIcon(type),
-            Select(topMarket, service.topMarketOptions)
-        )
-        return Board(boardHeader, topList, type)
-    }
+//    private fun getBoard(type: ListType, topMovers: TopMovers): Board {
+//        val topMarket: TopMarket
+//
+//        val marketInfoList = when (type) {
+//            ListType.TopGainers -> {
+//                topMarket = gainersTopMarket
+//
+//                when (gainersTopMarket) {
+//                    TopMarket.Top100 -> topMovers.gainers100
+//                    TopMarket.Top200 -> topMovers.gainers200
+//                    TopMarket.Top300 -> topMovers.gainers300
+//                }
+//            }
+//
+//            ListType.TopLosers -> {
+//                topMarket = losersTopMarket
+//
+//                when (losersTopMarket) {
+//                    TopMarket.Top100 -> topMovers.losers100
+//                    TopMarket.Top200 -> topMovers.losers200
+//                    TopMarket.Top300 -> topMovers.losers300
+//                }
+//            }
+//        }
+//
+//        val marketItems = marketInfoList.map { MarketItem.createFromCoinMarket(it, baseCurrency) }
+//        val topList = marketItems.map { MarketViewItem.create(it, type.marketField) }
+//
+//        val boardHeader = BoardHeader(
+//            getSectionTitle(type),
+//            getSectionIcon(type),
+//            Select(topMarket, service.topMarketOptions)
+//        )
+//        return Board(boardHeader, topList, type)
+//    }
 
     private fun getMarketMetrics(globalMarketPoints: List<GlobalMarketPoint>, baseCurrency: Currency): MarketMetrics {
         var marketCap: BigDecimal? = null

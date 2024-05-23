@@ -233,6 +233,7 @@ val TopMarket.statMarketTop: StatMarketTop
         TopMarket.Top100 -> StatMarketTop.Top100
         TopMarket.Top200 -> StatMarketTop.Top200
         TopMarket.Top300 -> StatMarketTop.Top300
+        TopMarket.Top500 -> StatMarketTop.Top500
     }
 
 val MarketModule.ListType.statSection: StatSection

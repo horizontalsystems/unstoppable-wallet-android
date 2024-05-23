@@ -150,12 +150,13 @@ enum class MarketField(@StringRes val titleResId: Int) : WithTranslatableTitle, 
 enum class TopMarket(val value: Int, val titleResId: Int) : WithTranslatableTitle, Parcelable {
     Top100(100, R.string.Market_Top_100),
     Top200(200, R.string.Market_Top_200),
-    Top300(300, R.string.Market_Top_300);
+    Top300(300, R.string.Market_Top_300),
+    Top500(500, R.string.Market_Top_500);
 
-    fun next() = values()[if (ordinal == values().size - 1) 0 else ordinal + 1]
+    fun next() = entries[if (ordinal == entries.size - 1) 0 else ordinal + 1]
 
     override val title: TranslatableString
-        get() = TranslatableString.PlainString(value.toString())
+        get() = TranslatableString.ResString(titleResId)
 }
 
 sealed class ImageSource {
@@ -209,10 +210,10 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
 
 @Parcelize
 enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle, Parcelable {
-    OneDay(R.string.CoinPage_TimeDuration_Day),
-    SevenDay(R.string.CoinPage_TimeDuration_Week),
-    ThirtyDay(R.string.CoinPage_TimeDuration_Month),
-    ThreeMonths(R.string.CoinPage_TimeDuration_Month3);
+    OneDay(R.string.Market_Filter_TimePeriod_24H),
+    SevenDay(R.string.Market_Filter_TimePeriod_1W),
+    ThirtyDay(R.string.Market_Filter_TimePeriod_1M),
+    ThreeMonths(R.string.Market_Filter_TimePeriod_3M);
 
     @IgnoredOnParcel
     override val title = TranslatableString.ResString(titleResId)

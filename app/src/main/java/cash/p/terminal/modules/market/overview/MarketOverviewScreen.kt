@@ -21,12 +21,9 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.stats.statMarketTop
 import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.core.stats.statSection
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.modules.market.overview.ui.BoardsView
 import cash.p.terminal.modules.market.overview.ui.MetricChartsView
 import cash.p.terminal.modules.market.overview.ui.TopPairsBoardView
 import cash.p.terminal.modules.market.overview.ui.TopPlatformsBoardView
@@ -72,31 +69,31 @@ fun MarketOverviewScreen(
                                 .verticalScroll(scrollState)
                         ) {
                             MetricChartsView(viewItem.marketMetrics, navController)
-                            BoardsView(
-                                boards = viewItem.boards,
-                                navController = navController,
-                                onClickSeeAll = { listType ->
-                                    val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
-                                        listType
-                                    )
-
-//                                    navController.slideFromBottom(
-//                                        R.id.marketTopCoinsFragment,
-//                                        MarketTopCoinsFragment.Input(
-//                                            sortingField,
-//                                            topMarket,
-//                                            marketField
-//                                        )
+//                            BoardsView(
+//                                boards = viewItem.boards,
+//                                navController = navController,
+//                                onClickSeeAll = { listType ->
+//                                    val (sortingField, topMarket, marketField) = viewModel.getTopCoinsParams(
+//                                        listType
 //                                    )
-
-                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.Open(StatPage.TopCoins))
-                                },
-                                onSelectTopMarket = { topMarket, listType ->
-                                    viewModel.onSelectTopMarket(topMarket, listType)
-
-                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.SwitchMarketTop(topMarket.statMarketTop))
-                                }
-                            )
+//
+////                                    navController.slideFromBottom(
+////                                        R.id.marketTopCoinsFragment,
+////                                        MarketTopCoinsFragment.Input(
+////                                            sortingField,
+////                                            topMarket,
+////                                            marketField
+////                                        )
+////                                    )
+//
+//                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.Open(StatPage.TopCoins))
+//                                },
+//                                onSelectTopMarket = { topMarket, listType ->
+//                                    viewModel.onSelectTopMarket(topMarket, listType)
+//
+//                                    stat(page = StatPage.MarketOverview, section = listType.statSection, event = StatEvent.SwitchMarketTop(topMarket.statMarketTop))
+//                                }
+//                            )
 
                             TopPairsBoardView(
                                 topMarketPairs = viewItem.topMarketPairs,
