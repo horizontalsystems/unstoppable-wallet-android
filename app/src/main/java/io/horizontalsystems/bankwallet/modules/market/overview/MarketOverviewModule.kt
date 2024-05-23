@@ -38,7 +38,7 @@ object MarketOverviewModule {
     @Immutable
     data class ViewItem(
         val marketMetrics: MarketMetrics,
-        val boards: List<Board>,
+//        val boards: List<Board>,
         val topNftCollectionsBoard: TopNftCollectionsBoard,
         val topSectorsBoard: TopSectorsBoard,
         val topPlatformsBoard: TopPlatformsBoard,

@@ -524,6 +524,7 @@ enum class StatMarketTop(val key: String) {
     Top100("top100"),
     Top200("top200"),
     Top300("top300"),
+    Top500("top500"),
 }
 
 enum class StatEntity(val key: String) {
