@@ -186,6 +186,7 @@
     <string name="Market_Tab_Watchlist_EmptyList">Tu Watchlist está vacía.</string>
     <string name="Market_Category_TopCoins">Monedas Top</string>
     <string name="Market_Category_TopCoins_Description">Mejores monedas por rango de límite de mercado</string>
+    <string name="Market_MarketCap">Cap. de Mercado</string>
     <string name="TopPairs_Title">Mejores pares de mercado</string>
     <string name="TopPairs_Description">Mejores pares de trading por volumen en cada bolsa</string>
     <!--Market Overview-->
