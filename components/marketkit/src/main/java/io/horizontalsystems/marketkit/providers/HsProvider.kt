@@ -357,8 +357,8 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.getMarketOverview(currencyCode)
     }
 
-    fun marketTickers(coinUid: String): Single<List<MarketTicker>> {
-        return service.getMarketTickers(coinUid)
+    fun marketTickers(coinUid: String, currencyCode: String): Single<List<MarketTicker>> {
+        return service.getMarketTickers(coinUid, currencyCode)
     }
 
     fun topMoversRawSingle(currencyCode: String): Single<TopMoversRaw> {
@@ -695,7 +695,8 @@ class HsProvider(baseUrl: String, apiKey: String) {
 
         @GET("exchanges/tickers/{coinUid}")
         fun getMarketTickers(
-            @Path("coinUid") coinUid: String
+            @Path("coinUid") coinUid: String,
+            @Query("currency") currencyCode: String,
         ): Single<List<MarketTicker>>
 
         @GET("coins/top-movers")

@@ -9,23 +9,22 @@ import io.horizontalsystems.marketkit.models.MarketTicker
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
-import java.math.BigDecimal
 
 class CoinMarketsService(
     val fullCoin: FullCoin,
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private var marketTickers = listOf<MarketTicker>()
-    private val price = marketKit.coinPrice(fullCoin.coin.uid, currencyManager.baseCurrency.code)?.value ?: BigDecimal.ZERO
 
     private var verifiedType: VerifiedType = VerifiedType.All
 
-    val verifiedMenu = Select(verifiedType, VerifiedType.values().toList())
+    val verifiedMenu = Select(verifiedType, VerifiedType.entries)
     val stateObservable: BehaviorSubject<DataState<List<MarketTickerItem>>> = BehaviorSubject.create()
 
     val currency get() = currencyManager.baseCurrency
@@ -33,13 +32,18 @@ class CoinMarketsService(
 
     fun start() {
         coroutineScope.launch {
-            try {
-                val marketTickers = marketKit.marketTickersSingle(fullCoin.coin.uid).await()
-                this@CoinMarketsService.marketTickers = marketTickers.sortedByDescending { it.volume }
-                emitItems()
-            } catch (e: Throwable) {
-                stateObservable.onNext(DataState.Error(e))
-            }
+            syncMarketTickers()
+        }
+    }
+
+    private suspend fun syncMarketTickers() {
+        try {
+            val tickers =
+                marketKit.marketTickersSingle(fullCoin.coin.uid, currency.code).await()
+            marketTickers = tickers.sortedByDescending { it.volume }
+            emitItems()
+        } catch (e: Throwable) {
+            stateObservable.onNext(DataState.Error(e))
         }
     }
 
@@ -68,7 +72,7 @@ class CoinMarketsService(
         marketImageUrl = marketTicker.marketImageUrl,
         baseCoinCode = marketTicker.base,
         targetCoinCode = marketTicker.target,
-        volumeFiat = marketTicker.volume.multiply(price),
+        volumeFiat = marketTicker.fiatVolume,
         volumeToken = marketTicker.volume,
         tradeUrl = marketTicker.tradeUrl,
         verified = marketTicker.verified

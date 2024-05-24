@@ -153,7 +153,7 @@ class MarketKitWrapper(
 
     // Market Tickers
 
-    fun marketTickersSingle(coinUid: String) = marketKit.marketTickersSingle(coinUid)
+    fun marketTickersSingle(coinUid: String, currencyCode: String) = marketKit.marketTickersSingle(coinUid, currencyCode)
 
     // Details
 
