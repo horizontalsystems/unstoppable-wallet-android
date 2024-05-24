@@ -755,7 +755,6 @@
     <string name="Appearance_BalanceConversion">BAKIYE ÇEVRIMI</string>
     <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
-    <string name="Appearance_MarketsTab">Piyasalar Sekmesi</string>
     <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
     <string name="Appearance_BalanceAutoHide_Description">Uygulama her açıldığında, önceki tercihlere bakılmaksızın bakiyeyi otomatik olarak gizler.</string>
     <string name="BalanceViewType_CoinValue">Para değeri</string>
