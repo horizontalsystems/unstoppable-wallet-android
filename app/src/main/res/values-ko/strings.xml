@@ -184,7 +184,9 @@
     <string name="Market_Tab_Watchlist_EmptyList">관심 목록이 비어 있습니다.</string>
     <string name="Market_Category_TopCoins">주요 코인</string>
     <string name="Market_Category_TopCoins_Description">시가총액 순위별 주요 코인</string>
+    <string name="Market_MarketCap">시가총액</string>
     <string name="Market_Top_100">상위 100</string>
+    <string name="Market_Top_500">상위 500</string>
     <string name="TopPairs_Title">상위 시장 페어</string>
     <string name="TopPairs_Description">각 거래소에서 거래량 상위 페어</string>
     <!--Market Overview-->
