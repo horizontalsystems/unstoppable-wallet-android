@@ -117,6 +117,7 @@ fun TopCoins(
             onSelect = { selected ->
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
+                scrollToTopAfterUpdate = true
             },
             onDismiss = {
                 openSortingSelector = false
@@ -130,6 +131,7 @@ fun TopCoins(
             onSelect = {
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
+                scrollToTopAfterUpdate = true
             },
             onDismiss = {
                 openTopSelector = false
