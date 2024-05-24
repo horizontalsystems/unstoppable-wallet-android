@@ -57,6 +57,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
+import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MultitextM1
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
@@ -159,7 +160,7 @@ fun AppearanceScreen(navController: NavController) {
 
                     HeaderText(text = stringResource(id = R.string.Appearance_Tab))
                     CellUniversalLawrenceSection(
-                        listOf({
+                        listOf {
                             RowUniversal(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                             ) {
@@ -171,21 +172,26 @@ fun AppearanceScreen(navController: NavController) {
                                 )
 
                                 body_leah(
-                                    text = stringResource(id = R.string.Appearance_MarketsTab),
+                                    text = stringResource(id = R.string.Appearance_HideMarketsTab),
                                     modifier = Modifier
                                         .weight(1f)
                                         .padding(horizontal = 16.dp)
                                 )
 
                                 HsSwitch(
-                                    checked = uiState.marketsTabEnabled,
+                                    checked = uiState.marketsTabHidden,
                                     onCheckedChange = {
-                                        viewModel.onSetMarketTabsEnabled(it)
+                                        viewModel.onSetMarketTabsHidden(it)
                                     }
                                 )
-
                             }
-                        }, {
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    HeaderText(text = stringResource(id = R.string.Appearance_BalanceTab))
+                    CellUniversalLawrenceSection(
+                        listOf {
                             RowUniversal(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                             ) {
@@ -197,25 +203,27 @@ fun AppearanceScreen(navController: NavController) {
                                 )
 
                                 body_leah(
-                                    text = stringResource(id = R.string.Appearance_BalanceTabButtons),
+                                    text = stringResource(id = R.string.Appearance_HideBalanceTabButtons),
                                     modifier = Modifier
                                         .weight(1f)
                                         .padding(horizontal = 16.dp)
                                 )
 
                                 HsSwitch(
-                                    checked = uiState.balanceTabButtonsEnabled,
+                                    checked = uiState.balanceTabButtonsHidden,
                                     onCheckedChange = {
-                                        viewModel.onSetBalanceTabButtons(it)
+                                        viewModel.onSetBalanceTabButtonsHidden(it)
                                     }
                                 )
-
                             }
-                        })
+                        }
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
+                    InfoText(
+                        text = stringResource(R.string.Appearance_HideBalanceTabButtonsDescription),
+                        paddingBottom = 24.dp
+                    )
 
-                    AnimatedVisibility(visible = uiState.marketsTabEnabled) {
+                    AnimatedVisibility(visible = !uiState.marketsTabHidden) {
                         Column {
                             HeaderText(text = stringResource(id = R.string.Appearance_LaunchScreen))
                             CellUniversalLawrenceSection(uiState.launchScreenOptions.options) { option ->
