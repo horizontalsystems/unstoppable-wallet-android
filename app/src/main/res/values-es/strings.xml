@@ -768,7 +768,6 @@
     <string name="Appearance_BalanceConversion">CONVERSIÓN DE BALANCE</string>
     <string name="Appearance_BalanceValue">VALLA DE BALANZA</string>
     <string name="Appearance_Warning_CloseApplication">Cambiar icono cerrará la aplicación</string>
-    <string name="Appearance_MarketsTab">Pestaña de Mercados</string>
     <string name="Appearance_BalanceAutoHide">Saldo Auto Ocultar</string>
     <string name="Appearance_BalanceAutoHide_Description">Oculta automáticamente el balance cada vez que se abre la aplicación, independientemente de las preferencias anteriores.</string>
     <string name="BalanceViewType_CoinValue">Valor de la moneda</string>
