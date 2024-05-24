@@ -788,7 +788,6 @@
     <string name="Appearance_BalanceConversion">CONVERSION DE BALANCE</string>
     <string name="Appearance_BalanceValue">VALEUR DE BALANCE</string>
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
-    <string name="Appearance_MarketsTab">Onglet Marchés</string>
     <string name="Appearance_BalanceAutoHide">Masquer le Solde Automatiquement</string>
     <string name="Appearance_BalanceAutoHide_Description">Masque automatiquement le solde à chaque ouverture de l\'application, indépendamment des préférences précédentes.</string>
     <string name="BalanceViewType_CoinValue">Valeur de la pièce</string>
