@@ -32,8 +32,8 @@ class AppearanceViewModel(
     private var appIconOptions = appIconService.optionsFlow.value
     private var themeOptions = themeService.optionsFlow.value
     private var baseTokenOptions = buildBaseTokenSelect(baseTokenManager.baseTokenFlow.value)
-    private var marketsTabEnabled = localStorage.marketsTabEnabled
-    private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
+    private var marketsTabHidden = !localStorage.marketsTabEnabled
+    private var balanceTabButtonsHidden = !localStorage.balanceTabButtonsEnabled
     private var balanceViewTypeOptions =
         buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
     private val currentLanguageDisplayName: String
@@ -86,10 +86,10 @@ class AppearanceViewModel(
         themeOptions = themeOptions,
         baseTokenOptions = baseTokenOptions,
         balanceViewTypeOptions = balanceViewTypeOptions,
-        marketsTabEnabled = marketsTabEnabled,
+        marketsTabHidden = marketsTabHidden,
         currentLanguage = currentLanguageDisplayName,
         baseCurrencyCode = baseCurrencyCode,
-        balanceTabButtonsEnabled = balanceTabButtonsEnabled
+        balanceTabButtonsHidden = balanceTabButtonsHidden
     )
 
     private fun buildBaseTokenSelect(token: Token?): SelectOptional<Token> {
@@ -145,20 +145,20 @@ class AppearanceViewModel(
         balanceViewTypeManager.setViewType(viewType)
     }
 
-    fun onSetMarketTabsEnabled(enabled: Boolean) {
-        if (enabled.not() && (launchScreenOptions.selected == LaunchPage.Market || launchScreenOptions.selected == LaunchPage.Watchlist)) {
+    fun onSetMarketTabsHidden(hidden: Boolean) {
+        if (hidden && (launchScreenOptions.selected == LaunchPage.Market || launchScreenOptions.selected == LaunchPage.Watchlist)) {
             launchScreenService.setLaunchScreen(LaunchPage.Auto)
         }
-        localStorage.marketsTabEnabled = enabled
+        localStorage.marketsTabEnabled = !hidden
 
-        marketsTabEnabled = enabled
+        marketsTabHidden = hidden
         emitState()
     }
 
-    fun onSetBalanceTabButtons(enabled: Boolean) {
-        localStorage.balanceTabButtonsEnabled = enabled
+    fun onSetBalanceTabButtonsHidden(hidden: Boolean) {
+        localStorage.balanceTabButtonsEnabled = !hidden
 
-        balanceTabButtonsEnabled = enabled
+        balanceTabButtonsHidden = hidden
         emitState()
     }
 
@@ -170,8 +170,8 @@ data class AppearanceUIState(
     val themeOptions: Select<ThemeType>,
     val baseTokenOptions: SelectOptional<Token>,
     val balanceViewTypeOptions: Select<BalanceViewType>,
-    val marketsTabEnabled: Boolean,
+    val marketsTabHidden: Boolean,
     val currentLanguage: String,
     val baseCurrencyCode: String,
-    val balanceTabButtonsEnabled: Boolean,
+    val balanceTabButtonsHidden: Boolean,
 )

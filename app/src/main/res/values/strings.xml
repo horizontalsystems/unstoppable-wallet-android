@@ -985,13 +985,15 @@
 
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_Tab">TAB SETTINGS</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
     <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
     <string name="Appearance_BalanceValue">BALANCE VALUE</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
-    <string name="Appearance_MarketsTab">Markets Tab</string>
-    <string name="Appearance_BalanceTabButtons">Balance Tab Buttons</string>
+    <string name="Appearance_HideMarketsTab">Hide Markets</string>
+    <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">This configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
 
