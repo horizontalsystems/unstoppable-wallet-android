@@ -807,7 +807,6 @@
     <string name="Appearance_BalanceConversion">잔액 변환</string>
     <string name="Appearance_BalanceValue">균형 가치</string>
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
-    <string name="Appearance_MarketsTab">시장 탭</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="Appearance_BalanceAutoHide_Description">앱이 열릴 때마다 잔고를 자동으로 숨깁니다. 이전 설정에 관계없이 적용됩니다.</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
