@@ -47,6 +47,7 @@ import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -103,7 +104,9 @@ class CoinAnalyticsViewModel(
 
     fun refresh() {
         viewModelScope.launch {
-            service.refresh()
+            withContext(Dispatchers.IO) {
+                service.refresh()
+            }
             isRefreshing = true
             emitState()
             delay(1000)
