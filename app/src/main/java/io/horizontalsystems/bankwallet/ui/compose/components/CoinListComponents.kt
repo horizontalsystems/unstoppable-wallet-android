@@ -127,15 +127,16 @@ fun CoinList(
                     },
                     content = {
                         MarketCoin(
-                            item.fullCoin.coin.name,
-                            item.fullCoin.coin.code,
-                            item.fullCoin.coin.imageUrl,
-                            item.fullCoin.iconPlaceholder,
-                            item.coinRate,
-                            item.marketDataValue,
-                            item.rank,
-                            item.signal,
-                        ) { onCoinClick.invoke(item.fullCoin.coin.uid) }
+                            coinName = item.fullCoin.coin.name,
+                            coinCode = item.fullCoin.coin.code,
+                            coinIconUrl = item.fullCoin.coin.imageUrl,
+                            coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                            coinRate = item.coinRate,
+                            marketDataValue = item.marketDataValue,
+                            label = item.rank,
+                            advice = item.signal,
+                            onClick = { onCoinClick.invoke(item.fullCoin.coin.uid) }
+                        )
                     }
                 )
                 Divider(
