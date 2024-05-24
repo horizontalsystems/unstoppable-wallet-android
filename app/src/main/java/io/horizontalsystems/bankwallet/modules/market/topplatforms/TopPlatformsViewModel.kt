@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -12,7 +13,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TopPlatformsViewModel(
-    private val service: TopPlatformsService,
+    private val repository: TopPlatformsRepository,
+    private val currencyManager: CurrencyManager,
     timeDuration: TimeDuration?,
 ) : ViewModelUiState<TopPlatformsModule.UiState>() {
 
@@ -44,6 +46,12 @@ class TopPlatformsViewModel(
         viewModelScope.launch {
             sync(false)
         }
+
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                sync(true)
+            }
+        }
     }
 
     override fun createState(): TopPlatformsModule.UiState {
@@ -59,8 +67,12 @@ class TopPlatformsViewModel(
     private fun sync(forceRefresh: Boolean = false) {
         viewModelScope.launch {
             try {
-                val topPlatformItems =
-                    service.getTopPlatforms(sortingField, timePeriod, forceRefresh)
+                val topPlatformItems = repository.get(
+                    sortingField,
+                    timePeriod,
+                    currencyManager.baseCurrency.code,
+                    forceRefresh
+                )
                 viewItems = getViewItems(topPlatformItems)
                 viewState = ViewState.Success
             } catch (e: Throwable) {
@@ -80,7 +92,7 @@ class TopPlatformsViewModel(
                 ),
                 marketCap = App.numberFormatter.formatFiatShort(
                     item.marketCap,
-                    service.baseCurrency.symbol,
+                    currencyManager.baseCurrency.symbol,
                     2
                 ),
                 marketCapDiff = item.changeDiff,
