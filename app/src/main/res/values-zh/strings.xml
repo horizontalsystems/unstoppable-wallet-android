@@ -808,7 +808,6 @@
     <string name="Appearance_BalanceConversion">余额配对</string>
     <string name="Appearance_BalanceValue">平衡值</string>
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
-    <string name="Appearance_MarketsTab">市场选项卡</string>
     <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡，不管先前的偏好设置。</string>
     <string name="BalanceViewType_CoinValue">币值</string>
