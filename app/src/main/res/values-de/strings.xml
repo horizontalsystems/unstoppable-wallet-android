@@ -751,7 +751,6 @@
     <string name="Appearance_BalanceConversion">SALDOKONVERTIERUNG</string>
     <string name="Appearance_BalanceValue">SALDO WERT</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
-    <string name="Appearance_MarketsTab">Markt-Tab</string>
     <string name="Appearance_BalanceAutoHide">Auto-Ausblenden ausgleichen</string>
     <string name="Appearance_BalanceAutoHide_Description">Bei jedem Öffnen der App wird der Saldo automatisch ausgeblendet, unabhängig von den vorherigen Einstellungen.</string>
     <string name="BalanceViewType_FiatValue">Fiat-Wert</string>
