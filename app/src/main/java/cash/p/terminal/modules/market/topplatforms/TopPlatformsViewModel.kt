@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
+import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.SortingField
@@ -12,7 +13,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TopPlatformsViewModel(
-    private val service: TopPlatformsService,
+    private val repository: TopPlatformsRepository,
+    private val currencyManager: CurrencyManager,
     timeDuration: TimeDuration?,
 ) : ViewModelUiState<TopPlatformsModule.UiState>() {
 
@@ -44,6 +46,12 @@ class TopPlatformsViewModel(
         viewModelScope.launch {
             sync(false)
         }
+
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                sync(true)
+            }
+        }
     }
 
     override fun createState(): TopPlatformsModule.UiState {
@@ -59,8 +67,12 @@ class TopPlatformsViewModel(
     private fun sync(forceRefresh: Boolean = false) {
         viewModelScope.launch {
             try {
-                val topPlatformItems =
-                    service.getTopPlatforms(sortingField, timePeriod, forceRefresh)
+                val topPlatformItems = repository.get(
+                    sortingField,
+                    timePeriod,
+                    currencyManager.baseCurrency.code,
+                    forceRefresh
+                )
                 viewItems = getViewItems(topPlatformItems)
                 viewState = ViewState.Success
             } catch (e: Throwable) {
@@ -80,7 +92,7 @@ class TopPlatformsViewModel(
                 ),
                 marketCap = App.numberFormatter.formatFiatShort(
                     item.marketCap,
-                    service.baseCurrency.symbol,
+                    currencyManager.baseCurrency.symbol,
                     2
                 ),
                 marketCapDiff = item.changeDiff,

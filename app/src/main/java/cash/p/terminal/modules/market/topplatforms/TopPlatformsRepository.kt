@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.market.topplatforms
 
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
@@ -11,22 +10,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
 
-class TopPlatformsRepository(
-    private val marketKit: MarketKitWrapper,
-    private val currencyManager: CurrencyManager
-) {
+class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
     private var itemsCache: List<TopPlatform>? = null
 
     suspend fun get(
         sortingField: SortingField,
         timeDuration: TimeDuration,
+        currencyCode: String,
         forceRefresh: Boolean,
         limit: Int? = null,
     ) = withContext(Dispatchers.IO) {
         val currentCache = itemsCache
 
         val items = if (forceRefresh || currentCache == null) {
-            marketKit.topPlatformsSingle(currencyManager.baseCurrency.code).await()
+            marketKit.topPlatformsSingle(currencyCode).await()
         } else {
             currentCache
         }

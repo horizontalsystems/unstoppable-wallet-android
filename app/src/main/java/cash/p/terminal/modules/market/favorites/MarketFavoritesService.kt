@@ -146,6 +146,12 @@ class MarketFavoritesService(
             }
         }
 
+        coroutineScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                fetch()
+            }
+        }
+
         fetch()
     }
 

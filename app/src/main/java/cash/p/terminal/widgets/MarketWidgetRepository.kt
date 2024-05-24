@@ -64,6 +64,7 @@ class MarketWidgetRepository(
         val platformItems = topPlatformsRepository.get(
             sortingField = SortingField.HighestCap,
             timeDuration = TimeDuration.OneDay,
+            currencyCode = currency.code,
             forceRefresh = true,
             limit = itemsLimit
         )

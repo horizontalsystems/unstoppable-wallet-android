@@ -102,6 +102,12 @@ class MarketTopCoinsService(
             }
         }
 
+        coroutineScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                sync()
+            }
+        }
+
         sync()
     }
 

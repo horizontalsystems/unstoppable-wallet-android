@@ -10,7 +10,11 @@ import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.*
+import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.modules.market.MarketField
+import cash.p.terminal.modules.market.MarketModule
+import cash.p.terminal.modules.market.MarketViewItem
+import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.ui.compose.Select
@@ -23,9 +27,9 @@ class MarketPlatformViewModel(
     private val favoritesManager: MarketFavoritesManager,
 ) : ViewModel() {
 
-    private val sortingFields = SortingField.values().toList()
+    private val sortingFields = SortingField.entries
 
-    private val marketFields = MarketField.values().toList()
+    private val marketFields = MarketField.entries
 
     var sortingField: SortingField = SortingField.HighestCap
         private set
