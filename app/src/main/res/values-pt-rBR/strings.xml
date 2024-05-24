@@ -184,6 +184,7 @@
     <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
     <string name="Market_Category_TopCoins">Top Moedas</string>
     <string name="Market_Category_TopCoins_Description">Top moedas por classificação de capitalização de mercado</string>
+    <string name="Market_MarketCap">Capitalização de mercado</string>
     <string name="TopPairs_Title">Principais Pares de Mercado</string>
     <string name="TopPairs_Description">Principais pares de negociação por volume em todas as bolsas</string>
     <!--Market Overview-->
