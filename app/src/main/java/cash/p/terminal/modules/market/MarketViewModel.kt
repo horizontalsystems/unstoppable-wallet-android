@@ -34,6 +34,12 @@ class MarketViewModel(
 
     init {
         updateMarketOverview()
+
+        viewModelScope.launch {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                updateMarketOverview()
+            }
+        }
     }
 
     override fun createState(): MarketModule.UiState {
