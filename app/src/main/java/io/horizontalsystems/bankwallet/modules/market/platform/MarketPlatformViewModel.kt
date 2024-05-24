@@ -10,7 +10,11 @@ import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.*
+import io.horizontalsystems.bankwallet.modules.market.ImageSource
+import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketModule
+import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
+import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.ui.compose.Select
@@ -23,9 +27,9 @@ class MarketPlatformViewModel(
     private val favoritesManager: MarketFavoritesManager,
 ) : ViewModel() {
 
-    private val sortingFields = SortingField.values().toList()
+    private val sortingFields = SortingField.entries
 
-    private val marketFields = MarketField.values().toList()
+    private val marketFields = MarketField.entries
 
     var sortingField: SortingField = SortingField.HighestCap
         private set
