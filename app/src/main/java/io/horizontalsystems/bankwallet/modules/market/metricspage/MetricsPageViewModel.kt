@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
+import io.horizontalsystems.bankwallet.modules.market.metricspage.MetricsPageModule.CoinViewItem
 import io.horizontalsystems.bankwallet.modules.market.priceChangeValue
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
@@ -38,14 +39,14 @@ class MetricsPageViewModel(
     private var viewState: ViewState = ViewState.Loading
     private var isRefreshing: Boolean = false
     private val statPage: StatPage = metricsType.statPage
-    private var viewItems: List<MetricsPageModule.CoinViewItem> = listOf()
-    private var toggleButtonTitle = when (metricsType) {
+    private var viewItems: List<CoinViewItem> = listOf()
+    private var sortDescending: Boolean = true
+    private var marketDataJob: Job? = null
+
+    private val toggleButtonTitle = when (metricsType) {
         MetricsType.Volume24h -> Translator.getString(R.string.Market_Volume)
         else -> Translator.getString(R.string.Market_MarketCap)
     }
-
-    private var marketDataJob: Job? = null
-    private var sortDescending: Boolean = true
 
     private val header = MarketModule.Header(
         title = Translator.getString(metricsType.title),
@@ -78,13 +79,12 @@ class MetricsPageViewModel(
         marketDataJob?.cancel()
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val coinViewItems = getMarketItemsSingle(
+                viewItems = getMarketItemsSingle(
                     currencyManager.baseCurrency,
                     sortDescending,
                     metricsType
                 ).await()
                 viewState = ViewState.Success
-                viewItems = coinViewItems
             } catch (e: Throwable) {
                 viewState = ViewState.Error(e)
             }
@@ -97,7 +97,7 @@ class MetricsPageViewModel(
         sortDescending: Boolean,
         metricsType: MetricsType,
         period: TimePeriod = TimePeriod.TimePeriod_1D
-    ): Single<List<MetricsPageModule.CoinViewItem>> {
+    ): Single<List<CoinViewItem>> {
         return marketKit.marketInfosSingle(
             250,
             currency.code,
@@ -118,10 +118,13 @@ class MetricsPageViewModel(
 
                         else -> marketInfo.fullCoin.coin.name
                     }
-                    MetricsPageModule.CoinViewItem(
+                    CoinViewItem(
                         fullCoin = marketInfo.fullCoin,
                         subtitle = subtitle,
-                        coinRate = CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO).getFormattedFull(),
+                        coinRate = CurrencyValue(
+                            currency,
+                            marketInfo.price ?: BigDecimal.ZERO
+                        ).getFormattedFull(),
                         marketDataValue = MarketDataValue.Diff(marketInfo.priceChangeValue(period)),
                         rank = marketInfo.marketCapRank?.toString(),
                         sortField = when (metricsType) {
@@ -131,10 +134,7 @@ class MetricsPageViewModel(
                         }
                     )
                 }
-                if (sortDescending)
-                    marketItems.sortedByDescendingNullLast { it.sortField }
-                else
-                    marketItems.sortedByNullLast { it.sortField }
+                sortItems(marketItems, sortDescending)
             }
     }
 
@@ -147,6 +147,13 @@ class MetricsPageViewModel(
             isRefreshing = false
             emitState()
         }
+    }
+
+    private fun sortItems(items: List<CoinViewItem>, sortDescending: Boolean): List<CoinViewItem> {
+        return if (sortDescending)
+            items.sortedByDescendingNullLast { it.sortField }
+        else
+            items.sortedByNullLast { it.sortField }
     }
 
     fun refresh() {
@@ -162,7 +169,12 @@ class MetricsPageViewModel(
     fun toggleSorting() {
         sortDescending = !sortDescending
         emitState()
-        syncMarketItems()
+        if (viewItems.isNotEmpty()) {
+            viewItems = sortItems(viewItems, sortDescending)
+            emitState()
+        } else {
+            syncMarketItems()
+        }
         stat(page = statPage, event = StatEvent.ToggleSortDirection)
     }
 
