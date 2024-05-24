@@ -182,6 +182,7 @@
     <string name="Market_Tab_Watchlist_EmptyList">Ihre Beobachtungsliste ist leer.</string>
     <string name="Market_Category_TopCoins">Top Münzen</string>
     <string name="Market_Category_TopCoins_Description">Top Münzen nach Marktkappenrang</string>
+    <string name="Market_MarketCap">Marktkappe</string>
     <string name="TopPairs_Title">Top Marktpaare</string>
     <string name="TopPairs_Description">Top-Handelspaare nach Volumen in jedem Exchange</string>
     <!--Market Overview-->
