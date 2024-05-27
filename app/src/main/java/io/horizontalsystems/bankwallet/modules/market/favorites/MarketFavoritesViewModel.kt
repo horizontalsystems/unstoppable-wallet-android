@@ -33,6 +33,7 @@ class MarketFavoritesViewModel(
 
     private var isRefreshing = false
     private var viewState: ViewState = ViewState.Loading
+    private var showSignalsInfo = false
 
     init {
         viewModelScope.launch {
@@ -65,7 +66,8 @@ class MarketFavoritesViewModel(
             isRefreshing = isRefreshing,
             sortingField = service.watchlistSorting,
             period = service.timeDuration,
-            showSignal = service.showSignals
+            showSignal = service.showSignals,
+            showSignalsInfo = showSignalsInfo
         )
     }
 
@@ -106,7 +108,21 @@ class MarketFavoritesViewModel(
     }
 
     fun onToggleSignal() {
-        service.toggleSignal()
+        if (service.showSignals) {
+            service.hideSignals()
+        } else {
+            showSignalsInfo = true
+            emitState()
+        }
+    }
+
+    fun onSignalsInfoShown() {
+        showSignalsInfo = false
+        emitState()
+    }
+
+    fun showSignals() {
+        service.showSignals()
     }
 
     fun reorder(from: Int, to: Int) {

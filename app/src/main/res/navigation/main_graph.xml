@@ -235,6 +235,9 @@
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filtersresult.MarketFiltersResultsFragment"/>
     <fragment
+        android:id="@+id/marketSignalsFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.favorites.MarketSignalsFragment" />
+    <fragment
         android:id="@+id/createAccountFragment"
         android:name="io.horizontalsystems.bankwallet.modules.createaccount.CreateAccountFragment" />
     <fragment
