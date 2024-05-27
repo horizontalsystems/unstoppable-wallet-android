@@ -191,7 +191,7 @@ fun SignalBadge(advice: Advice) {
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
             .background(backgroundColor)
-            .padding(horizontal = 4.dp, vertical = 2.dp),
+            .padding(horizontal = 6.dp, vertical = 2.dp),
         text = text,
         color = textColor,
         style = ComposeAppTheme.typography.microSB,

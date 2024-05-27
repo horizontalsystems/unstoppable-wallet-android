@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -36,9 +38,13 @@ import cash.p.terminal.ui.compose.components.ListErrorView
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketFavoritesScreen(
-    navController: NavController,
-    viewModel: MarketFavoritesViewModel = viewModel(factory = MarketFavoritesModule.Factory())
+    navController: NavController
 ) {
+    val currentBackStackEntry = remember { navController.currentBackStackEntry }
+    val viewModel = viewModel<MarketFavoritesViewModel>(
+        viewModelStoreOwner = currentBackStackEntry!!,
+        factory = MarketFavoritesModule.Factory()
+    )
     val uiState = viewModel.uiState
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
@@ -73,6 +79,12 @@ fun MarketFavoritesScreen(
                             icon = R.drawable.ic_rate_24
                         )
                     } else {
+                        if (uiState.showSignalsInfo) {
+                            viewModel.onSignalsInfoShown()
+
+                            navController.slideFromBottom(R.id.marketSignalsFragment)
+                        }
+
                         CoinListOrderable(
                             items = uiState.viewItems,
                             scrollToTop = scrollToTopAfterUpdate,

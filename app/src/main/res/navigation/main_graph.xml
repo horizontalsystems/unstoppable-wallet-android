@@ -235,6 +235,9 @@
         android:id="@+id/marketAdvancedSearchResultsFragment"
         android:name="cash.p.terminal.modules.market.filtersresult.MarketFiltersResultsFragment"/>
     <fragment
+        android:id="@+id/marketSignalsFragment"
+        android:name="cash.p.terminal.modules.market.favorites.MarketSignalsFragment" />
+    <fragment
         android:id="@+id/createAccountFragment"
         android:name="cash.p.terminal.modules.createaccount.CreateAccountFragment" />
     <fragment
