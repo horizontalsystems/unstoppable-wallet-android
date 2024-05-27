@@ -160,14 +160,16 @@ class MarketFavoritesService(
         coroutineScope.cancel()
     }
 
-    fun toggleSignal() {
-        menuService.showSignals = !menuService.showSignals
-        if (menuService.showSignals) {
-            syncSignals()
-        } else {
-            coroutineScope.launch {
-                updateItems()
-            }
+    fun showSignals() {
+        menuService.showSignals = true
+        syncSignals()
+    }
+
+    fun hideSignals() {
+        menuService.showSignals = false
+
+        coroutineScope.launch {
+            updateItems()
         }
     }
 
