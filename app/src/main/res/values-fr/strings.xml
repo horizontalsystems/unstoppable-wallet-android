@@ -185,6 +185,7 @@
     <string name="Market_Category_TopCoins">Top des coins</string>
     <string name="Market_Category_TopCoins_Description">Top des coins par cap de marché</string>
     <string name="Market_MarketCap">Cap. marché</string>
+    <string name="Market_Signal_Warning">N\'oubliez pas d\'appliquer une gestion des risques, et notez que ceci n\'est pas un conseil financier.</string>
     <string name="TopPairs_Title">Principaux paires de marché</string>
     <string name="TopPairs_Description">Principales paires de trading par volume sur chaque bourse</string>
     <!--Market Overview-->
