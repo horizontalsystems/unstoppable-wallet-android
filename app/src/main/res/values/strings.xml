@@ -1058,11 +1058,11 @@
 
     <!-- Privacy  -->
 
-    <string name="Privacy_Information">P.CASH doesn\'t collect any data or use analytics tools that may expose any data about its users. The wallet is designed to ensure a high level of privacy for its users.</string>
-    <string name="Privacy_BulletedText1">User data always remains on the user\'s device.</string>
-    <string name="Privacy_BulletedText2">The wallet doesn\'t collect any data about users.</string>
-    <string name="Privacy_BulletedText3">The wallet doesn\'t share any data about users.</string>
-    <string name="Privacy_BulletedText4">There are no user accounts or databases keeping user data elsewhere.</string>
+    <string name="Privacy_Information">P.CASH doesn\'t collect personal data that expose your private information i.e. coin balances or addresses. While we gather some UI usage statistics, it\'s solely for understanding our user base and app usage trends. That can be disabled if you wish.</string>
+    <string name="Privacy_BulletedText1">The wallet does not gather any personal data.</string>
+    <string name="Privacy_BulletedText2">There are no user accounts or databases storing user data.</string>
+    <string name="Privacy_BulletedText3">If allowed the wallet will share app usage habits with P.CASH team. This is to understand which features are being used (or not) by our users. Being a privacy focused app we need some way to evaluate our efforts and without this we have no idea whether the features we built are being used or not.</string>
+    <string name="ShareUiData">Share UI data</string>
 
     <!-- Security Center -->
 
@@ -1931,7 +1931,7 @@
 
     <!--Release notes-->
 
-    <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
+    <string name="ReleaseNotes_JoinUnstoppables">JOIN P.CASHS</string>
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
