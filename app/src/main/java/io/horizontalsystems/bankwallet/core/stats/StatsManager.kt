@@ -23,8 +23,12 @@ import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
+import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -36,13 +40,36 @@ class StatsManager(
     private val statsDao: StatsDao,
     private val localStorage: ILocalStorage,
     private val marketKit: MarketKitWrapper,
-    private val appConfigProvider: AppConfigProvider
+    private val appConfigProvider: AppConfigProvider,
 ) {
+    var uiStatsEnabled = getInitialUiStatsEnabled()
+        private set
+
+    private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
+    val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
+
     private val gson by lazy { Gson() }
     private val executor = Executors.newCachedThreadPool()
-    private val syncInterval = 0 //60 * 60 // 1H in seconds
+    private val syncInterval = 60 * 60 // 1H in seconds
+
+    private fun getInitialUiStatsEnabled(): Boolean {
+        val uiStatsEnabled = localStorage.uiStatsEnabled
+        if (uiStatsEnabled != null) return uiStatsEnabled
+
+        val signatures = listOf(
+            "b797339fb356afce5160fe49274ee17a1c1816db", // appcenter
+            "5afb2517b06caac7f108ba9d96ad826f1c4ba30c", // hs
+        )
+
+        val applicationSignatures = App.instance.getApplicationSignatures()
+        return applicationSignatures.any {
+            signatures.contains(it.toHexString())
+        }
+    }
 
     fun logStat(eventPage: StatPage, eventSection: StatSection? = null, event: StatEvent) {
+        if (!uiStatsEnabled) return
+
         executor.submit {
             try {
                 val eventMap = buildMap {
@@ -65,6 +92,8 @@ class StatsManager(
     }
 
     fun sendStats() {
+        if (!uiStatsEnabled) return
+
         executor.submit {
             try {
                 val statLastSyncTime = localStorage.statsLastSyncTime
@@ -86,6 +115,12 @@ class StatsManager(
 //                Log.e("e", "sendStats error", error)
             }
         }
+    }
+
+    fun toggleUiStats(enabled: Boolean) {
+        localStorage.uiStatsEnabled = enabled
+        uiStatsEnabled = enabled
+        _uiStatsEnabledFlow.update { enabled }
     }
 
 }

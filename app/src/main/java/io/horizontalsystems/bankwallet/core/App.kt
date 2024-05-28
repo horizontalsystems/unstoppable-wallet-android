@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
@@ -117,6 +118,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
 import java.util.logging.Level
 import java.util.logging.Logger
 import androidx.work.Configuration as WorkConfiguration
@@ -513,6 +515,31 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         localeAwareContext(this)
+    }
+
+    override fun getApplicationSignatures() = try {
+        val signatureList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val signingInfo = packageManager.getPackageInfo(
+                packageName,
+                PackageManager.GET_SIGNING_CERTIFICATES
+            ).signingInfo
+
+            when {
+                signingInfo.hasMultipleSigners() -> signingInfo.apkContentsSigners // Send all with apkContentsSigners
+                else -> signingInfo.signingCertificateHistory // Send one with signingCertificateHistory
+            }
+        } else {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
+        }
+
+        signatureList.map {
+            val digest = MessageDigest.getInstance("SHA")
+            digest.update(it.toByteArray())
+            digest.digest()
+        }
+    } catch (e: Exception) {
+        // Handle error
+        emptyList()
     }
 
     private fun startTasks() {

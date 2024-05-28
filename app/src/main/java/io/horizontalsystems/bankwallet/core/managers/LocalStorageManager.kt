@@ -85,6 +85,7 @@ class LocalStorageManager(
     private val RBF_ENABLED = "rbf_enabled"
     private val STATS_SYNC_TIME = "stats_sync_time"
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
+    private val UI_STATS_ENABLED = "ui_stats_enabled"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -545,4 +546,20 @@ class LocalStorageManager(
         }
 
     override val priceChangeIntervalFlow = MutableStateFlow(priceChangeInterval)
+
+    override var uiStatsEnabled: Boolean?
+        get() = when {
+            preferences.contains(UI_STATS_ENABLED) -> {
+                preferences.getBoolean(UI_STATS_ENABLED, false)
+            }
+            else -> null
+        }
+        set(value) {
+            val editor = preferences.edit()
+            if (value == null) {
+                editor.remove(UI_STATS_ENABLED).apply()
+            } else {
+                editor.putBoolean(UI_STATS_ENABLED, value).apply()
+            }
+        }
 }
