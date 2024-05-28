@@ -212,6 +212,8 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">Alle</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Diese Münze wird noch nicht unterstützt</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Period_All">Alle</string>
     <!--Market Search-->
     <string name="EmptyResults">Keine Ergebnisse gefunden</string>
     <string name="Market_Filters">Filter</string>
