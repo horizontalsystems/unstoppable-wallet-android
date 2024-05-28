@@ -224,6 +224,8 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">Все</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Этот токен еще не поддерживается</string>
     <string name="MarketGlobalMetrics_NoCoin">У этого проекта нет токена</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Period_All">Все</string>
     <!--Market Search-->
     <string name="EmptyResults">Ничего не найдено</string>
     <string name="Market_Filters">Фильтры</string>
