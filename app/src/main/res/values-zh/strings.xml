@@ -219,6 +219,8 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">所有</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">此货币还未支持</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Period_All">所有</string>
     <!--Market Search-->
     <string name="EmptyResults">未发现结果</string>
     <string name="Market_Filters">高级搜索</string>
