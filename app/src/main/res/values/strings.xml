@@ -229,13 +229,13 @@
     <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">Market Cap</string>
     <string name="Market_TVL">TVL</string>
-    <string name="Market_Signal_Description">Signals are based on the Bollinger Bands + RSI strategy to determine trading signals. All calculations are candlesticks and provide based on daily advice for a moderately long term.</string>
-    <string name="Market_Signal_StrongBuy_Description">High confidence in asset price growth.</string>
-    <string name="Market_Signal_Buy_Description">Indicates likely price increase in near future.</string>
+    <string name="Market_Signal_Description">Below signals are based on the Bollinger Bands and RSI technical price indicators over approx. the last 30 days. These signals are algorithmic and can change frequently.</string>
+    <string name="Market_Signal_StrongBuy_Description">High confidence in price increase.</string>
+    <string name="Market_Signal_Buy_Description">Likely price increase in near future.</string>
     <string name="Market_Signal_Neutral_Descripion">No clear trend, market is in equilibrium.</string>
-    <string name="Market_Signal_Sell_Description">Likely price decrease, considers current market conditions.</string>
+    <string name="Market_Signal_Sell_Description">Likely price decrease in near future.</string>
     <string name="Market_Signal_StrongSell_Description">High probability of price decrease.</string>
-    <string name="Market_Signal_Risky_Description">Elevated risk level, requires cautious approach.</string>
+    <string name="Market_Signal_Risky_Description">Elevated risk level, requires caution.</string>
     <string name="Market_Signal_Warning">Always remember to apply risk management, and note that this is not financial advice.</string>
     <string name="Market_Signal_TurnOn">Turn on</string>
 
