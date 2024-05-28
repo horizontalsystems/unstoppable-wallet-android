@@ -183,6 +183,7 @@
     <string name="Market_Category_TopCoins">Top Münzen</string>
     <string name="Market_Category_TopCoins_Description">Top Münzen nach Marktkappenrang</string>
     <string name="Market_MarketCap">Marktkappe</string>
+    <string name="Market_Signal_Warning">Denken Sie immer daran, das Risikomanagement anzuwenden und beachten Sie, dass dies keine finanzielle Beratung ist.</string>
     <string name="TopPairs_Title">Top Marktpaare</string>
     <string name="TopPairs_Description">Top-Handelspaare nach Volumen in jedem Exchange</string>
     <!--Market Overview-->
