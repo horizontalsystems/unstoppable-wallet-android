@@ -31,10 +31,10 @@ import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 @Composable
 fun MarketCoinClear(
     subtitle: String,
-    coinCode: String,
+    title: String,
     coinIconUrl: String,
     coinIconPlaceholder: Int,
-    coinRate: String? = null,
+    value: String? = null,
     marketDataValue: MarketDataValue? = null,
     label: String? = null,
     onClick: (() -> Unit)? = null
@@ -53,7 +53,7 @@ fun MarketCoinClear(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(coinCode, coinRate)
+            MarketCoinFirstRow(title, value)
             Spacer(modifier = Modifier.height(3.dp))
             MarketCoinSecondRow(subtitle, marketDataValue, label)
         }
@@ -108,7 +108,7 @@ fun MarketCoin(
 @Composable
 fun MarketCoinFirstRow(
     title: String,
-    rate: String?,
+    value: String?,
     advice: Advice? = null,
     badge: String? = null
 ) {
@@ -116,7 +116,9 @@ fun MarketCoinFirstRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
-            modifier = Modifier.weight(1f).padding(end = 16.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             body_leah(
@@ -149,12 +151,10 @@ fun MarketCoinFirstRow(
                 SignalBadge(advice)
             }
         }
-        rate?.let {
-            body_leah(
-                text = rate,
-                maxLines = 1,
-            )
-        }
+        body_leah(
+            text = value ?: "n/a",
+            maxLines = 1,
+        )
     }
 }
 
@@ -219,15 +219,13 @@ fun MarketCoinSecondRow(
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
         )
-        marketDataValue?.let {
-            Spacer(Modifier.width(8.dp))
-            MarketDataValueComponent(marketDataValue)
-        }
+        Spacer(Modifier.width(8.dp))
+        MarketDataValueComponent(marketDataValue)
     }
 }
 
 @Composable
-fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
+fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
     when (marketDataValue) {
         is MarketDataValue.MarketCap -> {
             Row {
@@ -260,6 +258,9 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue) {
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
             )
+        }
+        null -> {
+            subhead2_grey(text = "---")
         }
     }
 }

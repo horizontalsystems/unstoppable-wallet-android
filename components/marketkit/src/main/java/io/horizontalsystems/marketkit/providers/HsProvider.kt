@@ -457,6 +457,14 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.getCoinsSignals(uids.joinToString(separator = ","))
     }
 
+    fun etfsSingle(currencyCode: String): Single<List<EtfResponse>> {
+        return service.getEtfs(currencyCode)
+    }
+
+    fun etfPointsSingle(currencyCode: String): Single<List<EtfPointResponse>> {
+        return service.getEtfPoints(currencyCode)
+    }
+
     private interface MarketService {
         @GET("coins/{coin}")
         fun getPlaceCoinInfo(@Path("coin") coin: String): Single<PiratePlaceCoinRaw>
@@ -758,6 +766,16 @@ class HsProvider(baseUrl: String, apiKey: String) {
         fun getCoinsSignals(
             @Query("uids") uids: String,
         ): Single<List<SignalResponse>>
+
+        @GET("etfs")
+        fun getEtfs(
+            @Query("currency") currencyCode: String
+        ): Single<List<EtfResponse>>
+
+        @GET("etfs/total")
+        fun getEtfPoints(
+            @Query("currency") currencyCode: String
+        ): Single<List<EtfPointResponse>>
 
         companion object {
             private const val marketInfoFields =

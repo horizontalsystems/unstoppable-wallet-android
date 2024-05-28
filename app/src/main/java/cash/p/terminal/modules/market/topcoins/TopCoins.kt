@@ -140,7 +140,7 @@ fun TopCoins(
     }
     if (openPeriodSelector) {
         AlertGroup(
-            title = R.string.Market_Tab_Coins,
+            title = R.string.CoinPage_Period,
             select = Select(uiState.timeDuration, viewModel.periods),
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)

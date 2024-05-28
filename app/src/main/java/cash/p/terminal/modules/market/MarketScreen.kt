@@ -194,6 +194,8 @@ fun MetricsBoard(
 private fun openMetricsPage(metricsType: MetricsType, navController: NavController) {
     if (metricsType == MetricsType.TvlInDefi) {
         navController.slideFromBottom(R.id.tvlFragment)
+    } else if (metricsType == MetricsType.Etf) {
+        navController.slideFromBottom(R.id.etfFragment)
     } else {
         navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
     }

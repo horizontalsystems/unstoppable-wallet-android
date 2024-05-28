@@ -214,9 +214,8 @@ val AccountType.statAccountType: String
 val MetricsType.statPage: StatPage
     get() = when (this) {
         MetricsType.TotalMarketCap -> StatPage.GlobalMetricsMarketCap
-        MetricsType.BtcDominance -> StatPage.GlobalMetricsMarketCap
         MetricsType.Volume24h -> StatPage.GlobalMetricsVolume
-        MetricsType.DefiCap -> StatPage.GlobalMetricsDefiCap
+        MetricsType.Etf -> StatPage.GlobalMetricsEtf
         MetricsType.TvlInDefi -> StatPage.GlobalMetricsTvlInDefi
     }
 

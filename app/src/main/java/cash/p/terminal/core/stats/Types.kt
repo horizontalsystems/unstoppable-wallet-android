@@ -74,7 +74,7 @@ enum class StatPage(val key: String) {
     Faq("faq"),
     GlobalMetricsMarketCap("global_metrics_market_cap"),
     GlobalMetricsVolume("global_metrics_volume"),
-    GlobalMetricsDefiCap("global_metrics_defi_cap"),
+    GlobalMetricsEtf("global_metrics_etf"),
     GlobalMetricsTvlInDefi("global_metrics_tvl_in_defi"),
     Guide("guide"),
     ImportFull("import_full"),

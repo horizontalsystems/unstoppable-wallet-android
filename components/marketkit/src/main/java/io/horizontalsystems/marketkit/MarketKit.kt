@@ -24,6 +24,10 @@ import io.horizontalsystems.marketkit.models.CoinPrice
 import io.horizontalsystems.marketkit.models.CoinReport
 import io.horizontalsystems.marketkit.models.CoinTreasury
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
+import io.horizontalsystems.marketkit.models.Etf
+import io.horizontalsystems.marketkit.models.EtfPoint
+import io.horizontalsystems.marketkit.models.EtfPointResponse
+import io.horizontalsystems.marketkit.models.EtfResponse
 import io.horizontalsystems.marketkit.models.FullCoin
 import io.horizontalsystems.marketkit.models.GlobalMarketPoint
 import io.horizontalsystems.marketkit.models.HsPeriodType
@@ -575,6 +579,22 @@ class MarketKit(
 
     fun getInitialDump(): String {
         return dumpManager.getInitialDump()
+    }
+
+    //ETF
+
+    fun etfSingle(currencyCode: String): Single<List<Etf>> {
+        return hsProvider.etfsSingle(currencyCode)
+            .map { items ->
+                items.map { EtfResponse.toEtf(it) }
+            }
+    }
+
+    fun etfPointSingle(currencyCode: String): Single<List<EtfPoint>> {
+        return hsProvider.etfPointsSingle(currencyCode)
+            .map { points ->
+                points.mapNotNull { EtfPointResponse.toEtfPoint(it) }
+            }
     }
 
     //Stats

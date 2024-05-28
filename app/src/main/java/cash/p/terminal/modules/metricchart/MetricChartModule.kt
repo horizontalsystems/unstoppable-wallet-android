@@ -7,23 +7,21 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class MetricsType : Parcelable {
-    TotalMarketCap, BtcDominance, Volume24h, DefiCap, TvlInDefi;
+    TotalMarketCap, Volume24h, Etf, TvlInDefi;
 
     val title: Int
         get() = when (this) {
             TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCap
-            BtcDominance -> R.string.MarketGlobalMetrics_BtcDominance
             Volume24h -> R.string.MarketGlobalMetrics_Volume
-            DefiCap -> R.string.MarketGlobalMetrics_DefiCap
+            Etf -> R.string.MarketGlobalMetrics_Etf
             TvlInDefi -> R.string.MarketGlobalMetrics_TvlInDefi
         }
 
     val description: Int
         get() = when (this) {
             TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCapDescription
-            BtcDominance -> R.string.MarketGlobalMetrics_BtcDominanceDescription
             Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
-            DefiCap -> R.string.MarketGlobalMetrics_DefiCapDescription
+            Etf -> R.string.MarketEtf_Description
             TvlInDefi -> R.string.MarketGlobalMetrics_TvlInDefiDescription
         }
 
@@ -31,9 +29,8 @@ enum class MetricsType : Parcelable {
         get() {
             val imageName = when (this) {
                 TotalMarketCap,
-                BtcDominance -> "total_mcap"
                 Volume24h -> "total_volume"
-                DefiCap -> "defi_cap"
+                Etf -> "defi_cap"
                 TvlInDefi -> "tvl"
             }
 

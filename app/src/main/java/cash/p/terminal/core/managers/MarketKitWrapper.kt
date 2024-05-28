@@ -278,4 +278,10 @@ class MarketKitWrapper(
         return marketKit.sendStats(stats, appVersion, appId)
     }
 
+    // Etf
+
+    fun etfs(currencyCode: String) = marketKit.etfSingle(currencyCode)
+
+    fun etfPoints(currencyCode: String) = marketKit.etfPointSingle(currencyCode)
+
 }

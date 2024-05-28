@@ -279,6 +279,9 @@
         android:id="@+id/tvlFragment"
         android:name="cash.p.terminal.modules.market.tvl.TvlFragment" />
     <fragment
+        android:id="@+id/etfFragment"
+        android:name="cash.p.terminal.modules.market.etf.EtfFragment" />
+    <fragment
         android:id="@+id/nftsFragment"
         android:name="cash.p.terminal.modules.nft.holdings.NftHoldingsFragment" />
     <fragment

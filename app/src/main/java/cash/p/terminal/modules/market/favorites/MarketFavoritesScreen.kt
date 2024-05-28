@@ -178,7 +178,7 @@ fun MarketFavoritesScreen(
     }
     if (openPeriodSelector) {
         AlertGroup(
-            title = R.string.Market_Tab_Coins,
+            title = R.string.CoinPage_Period,
             select = Select(uiState.period, viewModel.periods),
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)

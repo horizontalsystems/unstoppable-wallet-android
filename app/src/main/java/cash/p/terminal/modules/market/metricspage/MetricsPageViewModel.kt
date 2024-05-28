@@ -101,7 +101,7 @@ class MetricsPageViewModel(
         return marketKit.marketInfosSingle(
             250,
             currency.code,
-            defi = metricsType == MetricsType.DefiCap
+            defi = false
         )
             .map { coinMarkets ->
                 val marketItems = coinMarkets.map { marketInfo ->
