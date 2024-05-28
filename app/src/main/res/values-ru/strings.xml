@@ -191,6 +191,7 @@
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
     <string name="Market_MarketCap">Рын. капитализация</string>
+    <string name="Market_Signal_Warning">Всегда помните о применении управления рисками, и обратите внимание, что это не финансовый совет.</string>
     <string name="Market_Top_100">Топ 100</string>
     <string name="Market_Top_500">Топ 500</string>
     <string name="TopPairs_Title">Лучшие рыночные пары</string>
