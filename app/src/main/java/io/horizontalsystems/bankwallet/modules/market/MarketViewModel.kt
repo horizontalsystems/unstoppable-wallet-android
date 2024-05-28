@@ -83,6 +83,8 @@ class MarketViewModel(
         var volume24hDiff: BigDecimal? = null
         var tvl: BigDecimal? = null
         var tvlDiff: BigDecimal? = null
+        var btcDominance: BigDecimal? = null
+        var btcDominanceDiff: BigDecimal? = null
 
         if (globalMarketPoints.isNotEmpty()) {
             val startingPoint = globalMarketPoints.first()
@@ -96,6 +98,9 @@ class MarketViewModel(
 
             volume24h = endingPoint.volume24h
             volume24hDiff = diff(startingPoint.volume24h, volume24h)
+
+            btcDominance = endingPoint.btcDominance
+            btcDominanceDiff = diff(startingPoint.btcDominance, btcDominance)
 
             tvl = endingPoint.tvl
             tvlDiff = diff(startingPoint.tvl, tvl)
@@ -117,11 +122,20 @@ class MarketViewModel(
                 MetricsType.Volume24h
             ),
             MarketOverviewViewItem(
+                "BTC Dominance",
+                btcDominance?.let {
+                    App.numberFormatter.format(it, 0, 2, suffix = "%")
+                } ?: "-",
+                btcDominanceDiff?.let { getDiff(it) } ?: "----",
+                btcDominanceDiff?.let { it > BigDecimal.ZERO } ?: false,
+                MetricsType.TotalMarketCap
+            ),
+            MarketOverviewViewItem(
                 "ETF",
                 defiMarketCap?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
                 defiMarketCapDiff?.let { getDiff(it) } ?: "----",
                 defiMarketCapDiff?.let { it > BigDecimal.ZERO } ?: false,
-                MetricsType.DefiCap
+                MetricsType.Etf
             ),
             MarketOverviewViewItem(
                 "TVL",
@@ -137,7 +151,7 @@ class MarketViewModel(
 
     private fun getDiff(it: BigDecimal): String {
         val sign = if (it >= BigDecimal.ZERO) "+" else "-"
-        return "${App.numberFormatter.format(it.abs(), 0, 2, sign, "%")}%"
+        return App.numberFormatter.format(it.abs(), 0, 2, sign, "%")
     }
 
     private fun formatFiatShortened(value: BigDecimal, symbol: String): String {

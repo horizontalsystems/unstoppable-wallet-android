@@ -279,6 +279,9 @@
         android:id="@+id/tvlFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.tvl.TvlFragment" />
     <fragment
+        android:id="@+id/etfFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.etf.EtfFragment" />
+    <fragment
         android:id="@+id/nftsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.nft.holdings.NftHoldingsFragment" />
     <fragment

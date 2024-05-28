@@ -3,9 +3,6 @@ package io.horizontalsystems.bankwallet.modules.market.tvl
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.marketkit.models.DefiMarketInfo
@@ -29,9 +26,8 @@ class GlobalMarketRepository(
                 list.map { point ->
                     val value = when (metricsType) {
                         MetricsType.TotalMarketCap -> point.marketCap
-                        MetricsType.BtcDominance -> point.btcDominance
                         MetricsType.Volume24h -> point.volume24h
-                        MetricsType.DefiCap -> point.defiMarketCap
+                        MetricsType.Etf -> point.defiMarketCap
                         MetricsType.TvlInDefi -> point.tvl
                     }
 
@@ -51,22 +47,6 @@ class GlobalMarketRepository(
                 list.map { point ->
                       ChartPoint(point.value.toFloat(), point.timestamp)
                 }
-            }
-    }
-
-    fun getMarketItems(
-        currency: Currency,
-        sortDescending: Boolean,
-        metricsType: MetricsType
-    ): Single<List<MarketItem>> {
-        return marketKit.marketInfosSingle(250, currency.code, defi = metricsType == MetricsType.DefiCap)
-            .map { coinMarkets ->
-                val marketItems = coinMarkets.map { MarketItem.createFromCoinMarket(it, currency) }
-                val sortingField = when (metricsType) {
-                    MetricsType.Volume24h -> if (sortDescending) SortingField.HighestVolume else SortingField.LowestVolume
-                    else -> if (sortDescending) SortingField.HighestCap else SortingField.LowestCap
-                }
-                marketItems.sort(sortingField)
             }
     }
 

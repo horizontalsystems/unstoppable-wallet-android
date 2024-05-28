@@ -152,10 +152,10 @@ class MetricsPageFragment : BaseComposeFragment() {
                                 items(uiState.viewItems) { viewItem ->
                                     MarketCoinClear(
                                         subtitle = viewItem.subtitle,
-                                        coinCode = viewItem.fullCoin.coin.code,
+                                        title = viewItem.fullCoin.coin.code,
                                         coinIconUrl = viewItem.fullCoin.coin.imageUrl,
                                         coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
-                                        coinRate = viewItem.coinRate,
+                                        value = viewItem.coinRate,
                                         marketDataValue = viewItem.marketDataValue,
                                         label = viewItem.rank,
                                     ) { onCoinClick(viewItem.fullCoin.coin.uid) }
