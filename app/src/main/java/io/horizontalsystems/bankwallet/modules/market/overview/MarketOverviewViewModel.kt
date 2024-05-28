@@ -275,7 +275,7 @@ class MarketOverviewViewModel(
                 defiMarketCap?.let { formatFiatShortened(it, baseCurrency.symbol) },
                 defiMarketCapDiff,
                 getChartData(defiMarketCapPoints),
-                MetricsType.DefiCap
+                MetricsType.Etf
             ),
             defiTvl = MetricData(
                 tvl?.let { formatFiatShortened(it, baseCurrency.symbol) },
