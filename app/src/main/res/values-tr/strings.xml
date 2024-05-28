@@ -202,6 +202,8 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Bu kripto para henüz desteklenmiyor</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Period_All">Hepsi</string>
     <!--Market Search-->
     <string name="EmptyResults">Sonuç bulunamadı</string>
     <string name="Market_Filters">Filtreler</string>
