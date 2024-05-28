@@ -217,6 +217,8 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">이 코인은 아직 지원되지 않습니다.</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Period_All">모든</string>
     <!--Market Search-->
     <string name="EmptyResults">검색 결과가 없습니다</string>
     <string name="Market_Filters">필터</string>
