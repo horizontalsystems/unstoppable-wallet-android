@@ -202,9 +202,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s 체인상의 모든 프로토콜의 시가총액</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">차트</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">총 시가총액</string>
-    <string name="MarketGlobalMetrics_BtcDominance">비트코인 지배도</string>
-    <string name="MarketGlobalMetrics_Volume">24시간 거래량</string>
+    <string name="MarketGlobalMetrics_BtcDominance">BTC 지배력</string>
     <string name="MarketGlobalMetrics_DefiCap">디파이(DeFi) 시가총액</string>
     <string name="MarketGlobalMetrics_TvlInDefi">디파이(DeFi)에서의 총 예치 가치</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">모든 암호화폐의 총 시장 가치\" or \"모든 가상 화폐의 총 시장 가치.</string>
