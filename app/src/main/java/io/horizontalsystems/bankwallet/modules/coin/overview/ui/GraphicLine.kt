@@ -19,10 +19,10 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 fun GraphicLine(
     modifier: Modifier,
     data: LinkedHashMap<Long, Float>,
-    minKey: Long,
-    maxKey: Long,
-    minValue: Float,
-    maxValue: Float,
+    minKey: Long = data.minOf { it.key },
+    maxKey: Long = data.maxOf { it.key },
+    minValue: Float = data.minOf { it.value },
+    maxValue: Float = data.maxOf { it.value },
     color: Color
 ) {
     Canvas(
