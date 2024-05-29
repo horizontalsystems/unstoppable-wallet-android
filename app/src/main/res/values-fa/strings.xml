@@ -109,7 +109,6 @@
     <string name="MarketPlatformCoins_PlatformEcosystem"> Ecosystem %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">نمودار</string>
-    <string name="MarketGlobalMetrics_Volume">۲۴ ساعته</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
     <!-- ETF-->
     <!--Market Search-->
