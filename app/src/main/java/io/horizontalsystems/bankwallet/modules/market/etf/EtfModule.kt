@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.marketkit.models.EtfPoint
 
 object EtfModule {
 
@@ -38,6 +40,9 @@ object EtfModule {
         val isRefreshing: Boolean,
         val timeDuration: TimeDuration,
         val sortBy: SortBy,
+        val chartDataLoading: Boolean,
+        val etfPoints: List<EtfPoint>,
+        val currency: Currency,
     )
 
     enum class SortBy(@StringRes val titleResId: Int): WithTranslatableTitle {

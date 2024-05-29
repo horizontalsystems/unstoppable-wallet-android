@@ -3,27 +3,41 @@ package io.horizontalsystems.bankwallet.modules.market.etf
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.GraphicLine
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -34,11 +48,22 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
 import io.horizontalsystems.bankwallet.ui.compose.components.DescriptionCard
+import io.horizontalsystems.bankwallet.ui.compose.components.GraphicBarsWithNegative
+import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversalFixedHeight
+import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_lucian
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_remus
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
+import io.horizontalsystems.marketkit.models.EtfPoint
+import java.math.BigDecimal
 
 class EtfFragment : BaseComposeFragment() {
 
@@ -114,10 +139,9 @@ fun EtfPage(
                                     ImageSource.Remote("https://cdn.blocksdecoded.com/category-icons/lending@3x.png")
                                 )
                             }
-                            //todo Add chart
-//                                item {
-//                                    Chart(chartViewModel = chartViewModel)
-//                                }
+                            item {
+                                ChartEtf(uiState.chartDataLoading, uiState.etfPoints, uiState.currency)
+                            }
                             stickyHeader {
                                 HeaderSorting(borderBottom = true, borderTop = true) {
                                     HSpacer(width = 16.dp)
@@ -183,5 +207,198 @@ fun EtfPage(
                 openSortingSelector = false
             }
         )
+    }
+}
+
+@Composable
+fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
+    val dataDailyInflow = LinkedHashMap(
+        etfPoints.map { point ->
+            point.date.time / 1000 to point.dailyInflow.toFloat()
+        }.toMap()
+    )
+
+    val dataTotalInflow = LinkedHashMap(
+        etfPoints.map { point ->
+            point.date.time / 1000 to point.totalInflow.toFloat()
+        }.toMap()
+    )
+
+    val lastPoint = etfPoints.lastOrNull()
+    val totalInflow = lastPoint?.totalInflow
+    val dailyInflow = lastPoint?.dailyInflow
+    val totalAssets = lastPoint?.totalAssets
+
+    val totalInflowStr = totalInflow?.let {
+        App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
+    }
+
+    val dailyInflowStr = dailyInflow?.let {
+        App.numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
+    }
+    val dailyInflowPositive = dailyInflow != null && dailyInflow > BigDecimal.ZERO
+
+    val totalAssetsStr = totalAssets?.let {
+        App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
+    }
+
+    val totalAssetsTitle = stringResource(id = R.string.MarketEtf_TotalNetAssets)
+
+    val labelTop = etfPoints.maxOfOrNull { it.dailyInflow }?.let {
+        App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
+    } ?: ""
+
+    val labelBottom = etfPoints.minOfOrNull { it.dailyInflow }?.let {
+        val sign = if (it < BigDecimal.ZERO) {
+            "-"
+        } else {
+            ""
+        }
+        sign + App.numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
+    } ?: ""
+
+    Column {
+        ChartHeader(totalInflowStr, dailyInflowStr, dailyInflowPositive, totalAssetsTitle, totalAssetsStr)
+
+        val loadingModifier = if (loading) Modifier.alpha(0.5f) else Modifier
+        Box(
+            modifier = loadingModifier.fillMaxWidth().height(160.dp)
+        ) {
+            Column(modifier = Modifier.matchParentSize()) {
+                if (dataDailyInflow.isNotEmpty()) {
+                    ChartLabelTop(labelTop)
+
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                    ) {
+                        GraphicBarsWithNegative(
+                            modifier = Modifier.matchParentSize(),
+                            data = dataDailyInflow,
+                            minKey = dataDailyInflow.minOf { it.key },
+                            maxKey = dataDailyInflow.maxOf { it.key },
+                            minValue = dataDailyInflow.minOf { it.value },
+                            maxValue = dataDailyInflow.maxOf { it.value },
+                            color = ComposeAppTheme.colors.remus,
+                            colorNegative = ComposeAppTheme.colors.lucian,
+                        )
+                        GraphicLine(
+                            modifier = Modifier.matchParentSize(),
+                            data = dataTotalInflow,
+                            minKey = dataTotalInflow.minOf { it.key },
+                            maxKey = dataTotalInflow.maxOf { it.key },
+                            minValue = dataTotalInflow.minOf { it.value },
+                            maxValue = dataTotalInflow.maxOf { it.value },
+                            color = ComposeAppTheme.colors.grey50
+                        )
+                    }
+
+                    ChartLabelBottom(labelBottom)
+                }
+            }
+
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.Center),
+                    color = ComposeAppTheme.colors.grey,
+                    strokeWidth = 2.dp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ChartLabelBottom(labelBottom: String) {
+    val colors = ComposeAppTheme.colors
+    Row(
+        modifier = Modifier
+            .height(20.dp)
+            .fillMaxWidth()
+            .drawBehind {
+                val pathEffect =
+                    PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                drawLine(
+                    color = colors.steel10,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    pathEffect = pathEffect
+                )
+            }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        micro_grey(text = labelBottom)
+    }
+}
+
+@Composable
+private fun ChartLabelTop(
+    labelTop: String,
+) {
+    val colors = ComposeAppTheme.colors
+
+    Row(
+        modifier = Modifier
+            .height(20.dp)
+            .fillMaxWidth()
+            .drawBehind {
+                val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+                drawLine(
+                    color = colors.steel10,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    pathEffect = pathEffect
+                )
+            }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        micro_grey(text = labelTop)
+    }
+}
+
+@Composable
+private fun ChartHeader(
+    mainValue: String?,
+    secondaryValue: String?,
+    secondaryValuePositive: Boolean,
+    tertiaryTitle: String,
+    tertiaryValue: String?,
+) {
+    CellUniversalFixedHeight(height = 64.dp) {
+        Row {
+            mainValue?.let {
+                title3_leah(
+                    modifier = Modifier.alignByBaseline(),
+                    text = it
+                )
+                HSpacer(width = 4.dp)
+            }
+            secondaryValue?.let {
+                if (secondaryValuePositive) {
+                    subhead1_remus(
+                        modifier = Modifier.alignByBaseline(),
+                        text = it
+                    )
+                } else {
+                    subhead1_lucian(
+                        modifier = Modifier.alignByBaseline(),
+                        text = it
+                    )
+                }
+            }
+        }
+        HFillSpacer(minWidth = 8.dp)
+        Column(horizontalAlignment = Alignment.End) {
+            subhead2_grey(text = tertiaryTitle)
+            tertiaryValue?.let {
+                subhead1_leah(text = it)
+            }
+        }
     }
 }
