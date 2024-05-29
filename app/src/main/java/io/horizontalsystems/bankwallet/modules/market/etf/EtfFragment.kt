@@ -277,20 +277,12 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                         GraphicBarsWithNegative(
                             modifier = Modifier.matchParentSize(),
                             data = dataDailyInflow,
-                            minKey = dataDailyInflow.minOf { it.key },
-                            maxKey = dataDailyInflow.maxOf { it.key },
-                            minValue = dataDailyInflow.minOf { it.value },
-                            maxValue = dataDailyInflow.maxOf { it.value },
                             color = ComposeAppTheme.colors.remus,
                             colorNegative = ComposeAppTheme.colors.lucian,
                         )
                         GraphicLine(
                             modifier = Modifier.matchParentSize(),
                             data = dataTotalInflow,
-                            minKey = dataTotalInflow.minOf { it.key },
-                            maxKey = dataTotalInflow.maxOf { it.key },
-                            minValue = dataTotalInflow.minOf { it.value },
-                            maxValue = dataTotalInflow.maxOf { it.value },
                             color = ComposeAppTheme.colors.grey50
                         )
                     }
