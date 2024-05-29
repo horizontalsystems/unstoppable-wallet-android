@@ -33,6 +33,7 @@ import io.horizontalsystems.marketkit.models.GlobalMarketPoint
 import io.horizontalsystems.marketkit.models.HsPeriodType
 import io.horizontalsystems.marketkit.models.HsPointTimePeriod
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.marketkit.models.MarketGlobal
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.MarketInfoOverview
 import io.horizontalsystems.marketkit.models.MarketOverview
@@ -429,6 +430,9 @@ class MarketKit(
     // Overview
     fun marketOverviewSingle(currencyCode: String): Single<MarketOverview> =
         marketOverviewManager.marketOverviewSingle(currencyCode)
+
+    fun marketGlobalSingle(currencyCode: String): Single<MarketGlobal> =
+        hsProvider.marketGlobalSingle(currencyCode)
 
     fun topPairsSingle(currencyCode: String, page: Int, limit: Int): Single<List<TopPair>> =
         hsProvider.topPairsSingle(currencyCode, page, limit)

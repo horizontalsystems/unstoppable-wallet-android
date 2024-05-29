@@ -30,7 +30,6 @@ import cash.p.terminal.core.stats.statPage
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.caption_grey
 import cash.p.terminal.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartMinimal
 import java.math.BigDecimal
@@ -59,7 +58,7 @@ private fun ChartView(metricsData: MetricData, navController: NavController) {
         Column(
             modifier = Modifier.padding(12.dp)
         ) {
-            caption_grey(text = stringResource(metricsData.type.title))
+//            caption_grey(text = stringResource(metricsData.type.title))
             Spacer(modifier = Modifier.height(10.dp))
             if (metricsData.value != null) {
                 Text(

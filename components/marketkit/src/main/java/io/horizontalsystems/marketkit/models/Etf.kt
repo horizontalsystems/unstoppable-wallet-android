@@ -12,7 +12,7 @@ data class Etf(
     val date: Date?,
     val totalAssets: BigDecimal?,
     val totalInflow: BigDecimal?,
-    val inflows: Map<HsTimePeriod, BigDecimal>
+    val inflows: Map<HsTimePeriod, BigDecimal?>
 )
 
 data class EtfResponse(
@@ -47,10 +47,10 @@ data class EtfResponse(
                 response.totalAssets,
                 response.totalInflow,
                 mapOf(
-                    HsTimePeriod.Day1 to (response.inflow1d ?: BigDecimal.ZERO),
-                    HsTimePeriod.Week1 to (response.inflow1w ?: BigDecimal.ZERO),
-                    HsTimePeriod.Month1 to (response.inflow1m ?: BigDecimal.ZERO),
-                    HsTimePeriod.Month3 to (response.inflow3m ?: BigDecimal.ZERO)
+                    HsTimePeriod.Day1 to response.inflow1d,
+                    HsTimePeriod.Week1 to response.inflow1w,
+                    HsTimePeriod.Month1 to response.inflow1m,
+                    HsTimePeriod.Month3 to response.inflow3m
                 )
             )
         }

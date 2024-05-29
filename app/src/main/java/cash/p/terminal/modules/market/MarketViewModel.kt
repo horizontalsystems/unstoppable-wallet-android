@@ -2,18 +2,20 @@ package cash.p.terminal.modules.market
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.modules.market.MarketModule.MarketOverviewViewItem
 import cash.p.terminal.modules.market.MarketModule.Tab
 import cash.p.terminal.modules.metricchart.MetricsType
-import io.horizontalsystems.marketkit.models.GlobalMarketPoint
+import io.horizontalsystems.marketkit.models.MarketGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -53,12 +55,10 @@ class MarketViewModel(
         marketOverviewJob?.cancel()
         marketOverviewJob = viewModelScope.launch(Dispatchers.IO) {
             try {
-                val marketOverview =
-                    marketKit.marketOverviewSingle(currencyManager.baseCurrency.code).await()
-                marketOverview?.globalMarketPoints?.let {
-                    marketOverviewItems = getMarketMetrics(it, currencyManager.baseCurrency)
-                    emitState()
-                }
+                val marketGlobal =
+                    marketKit.marketGlobalSingle(currencyManager.baseCurrency.code).await()
+                marketOverviewItems = getMarketMetrics(marketGlobal, currencyManager.baseCurrency)
+                emitState()
             } catch (e: Throwable) {
                 Log.e("TAG", "updateMarketOverview: ", e)
             }
@@ -72,76 +72,49 @@ class MarketViewModel(
     }
 
     private fun getMarketMetrics(
-        globalMarketPoints: List<GlobalMarketPoint>,
+        globalMarket: MarketGlobal,
         baseCurrency: Currency
     ): List<MarketOverviewViewItem> {
-        var marketCap: BigDecimal? = null
-        var marketCapDiff: BigDecimal? = null
-        var defiMarketCap: BigDecimal? = null
-        var defiMarketCapDiff: BigDecimal? = null
-        var volume24h: BigDecimal? = null
-        var volume24hDiff: BigDecimal? = null
-        var tvl: BigDecimal? = null
-        var tvlDiff: BigDecimal? = null
-        var btcDominance: BigDecimal? = null
-        var btcDominanceDiff: BigDecimal? = null
-
-        if (globalMarketPoints.isNotEmpty()) {
-            val startingPoint = globalMarketPoints.first()
-            val endingPoint = globalMarketPoints.last()
-
-            marketCap = endingPoint.marketCap
-            marketCapDiff = diff(startingPoint.marketCap, marketCap)
-
-            defiMarketCap = endingPoint.defiMarketCap
-            defiMarketCapDiff = diff(startingPoint.defiMarketCap, defiMarketCap)
-
-            volume24h = endingPoint.volume24h
-            volume24hDiff = diff(startingPoint.volume24h, volume24h)
-
-            btcDominance = endingPoint.btcDominance
-            btcDominanceDiff = diff(startingPoint.btcDominance, btcDominance)
-
-            tvl = endingPoint.tvl
-            tvlDiff = diff(startingPoint.tvl, tvl)
-        }
-
         val metrics: List<MarketOverviewViewItem> = listOf(
             MarketOverviewViewItem(
-                "Total.Cap",
-                marketCap?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                marketCapDiff?.let { getDiff(it) } ?: "----",
-                marketCapDiff?.let { it > BigDecimal.ZERO } ?: false,
+                Translator.getString(R.string.MarketGlobalMetrics_TotalMarketCap),
+                globalMarket.marketCap?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
+                globalMarket.marketCapChange?.let { getDiff(it) } ?: "----",
+                globalMarket.marketCapChange?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.TotalMarketCap
             ),
             MarketOverviewViewItem(
-                "24h Vol.",
-                volume24h?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                volume24hDiff?.let { getDiff(it) } ?: "----",
-                volume24hDiff?.let { it > BigDecimal.ZERO } ?: false,
+                Translator.getString(R.string.MarketGlobalMetrics_Volume),
+                globalMarket.volume?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
+                globalMarket.volumeChange?.let { getDiff(it) } ?: "----",
+                globalMarket.volumeChange?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.Volume24h
             ),
             MarketOverviewViewItem(
-                "BTC Dominance",
-                btcDominance?.let {
+                Translator.getString(R.string.MarketGlobalMetrics_BtcDominance),
+                globalMarket.btcDominance?.let {
                     App.numberFormatter.format(it, 0, 2, suffix = "%")
                 } ?: "-",
-                btcDominanceDiff?.let { getDiff(it) } ?: "----",
-                btcDominanceDiff?.let { it > BigDecimal.ZERO } ?: false,
+                globalMarket.btcDominance?.let { getDiff(it) } ?: "----",
+                globalMarket.btcDominance?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.TotalMarketCap
             ),
             MarketOverviewViewItem(
-                "ETF",
-                defiMarketCap?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                defiMarketCapDiff?.let { getDiff(it) } ?: "----",
-                defiMarketCapDiff?.let { it > BigDecimal.ZERO } ?: false,
+                Translator.getString(R.string.MarketGlobalMetrics_EtfInflow),
+                globalMarket.etfTotalInflow?.let { formatFiatShortened(it, baseCurrency.symbol) }
+                    ?: "-",
+                globalMarket.etfDailyInflow?.let {
+                    val sign = if (it >= BigDecimal.ZERO) "+" else "-"
+                    "$sign${formatFiatShortened(it, baseCurrency.symbol)}"
+                } ?: "----",
+                globalMarket.etfDailyInflow?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.Etf
             ),
             MarketOverviewViewItem(
-                "TVL",
-                tvl?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                tvlDiff?.let { getDiff(it) } ?: "----",
-                tvlDiff?.let { it > BigDecimal.ZERO } ?: false,
+                Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
+                globalMarket.tvl?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
+                globalMarket.tvlChange?.let { getDiff(it) } ?: "----",
+                globalMarket.tvlChange?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.TvlInDefi
             )
         )

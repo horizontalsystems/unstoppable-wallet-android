@@ -13,6 +13,7 @@ import cash.p.terminal.core.stats.statPage
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.ViewState
+import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.filters.TimePeriod
@@ -45,13 +46,26 @@ class MetricsPageViewModel(
 
     private val toggleButtonTitle = when (metricsType) {
         MetricsType.Volume24h -> Translator.getString(R.string.Market_Volume)
-        else -> Translator.getString(R.string.Market_MarketCap)
+        MetricsType.TotalMarketCap -> Translator.getString(R.string.Market_MarketCap)
+        else -> throw Exception("MetricsType not supported")
+    }
+
+    private val title = when(metricsType) {
+        MetricsType.Volume24h -> R.string.MarketGlobalMetrics_Volume
+        MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCap
+        else -> throw Exception("MetricsType not supported")
+    }
+
+    private val description = when(metricsType) {
+        MetricsType.Volume24h -> R.string.MarketGlobalMetrics_VolumeDescription
+        MetricsType.TotalMarketCap -> R.string.MarketGlobalMetrics_TotalMarketCapDescription
+        else -> throw Exception("MetricsType not supported")
     }
 
     private val header = MarketModule.Header(
-        title = Translator.getString(metricsType.title),
-        description = Translator.getString(metricsType.description),
-        icon = metricsType.headerIcon
+        title = Translator.getString(title),
+        description = Translator.getString(description),
+        icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/total_volume@3x.png")
     )
 
     override fun createState(): MetricsPageModule.UiState {
