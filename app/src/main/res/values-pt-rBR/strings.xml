@@ -200,9 +200,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Valor de mercado de todos procolos na cadeia %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Gráfico</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Valor Total de M.</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Dominação Bitcoin</string>
-    <string name="MarketGlobalMetrics_Volume">Volume em 24h</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Dominação BTC</string>
     <string name="MarketGlobalMetrics_DefiCap">Mercado de DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL no DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas.</string>
