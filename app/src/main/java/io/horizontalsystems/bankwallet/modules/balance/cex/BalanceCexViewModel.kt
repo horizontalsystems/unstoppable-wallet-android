@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.balance.ITotalBalance
 import io.horizontalsystems.bankwallet.modules.balance.SyncingProgress
 import io.horizontalsystems.bankwallet.modules.balance.TotalBalance
 import io.horizontalsystems.bankwallet.modules.balance.TotalService
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -98,7 +99,7 @@ class BalanceCexViewModel(
     private fun handleXRateUpdate(latestRates: Map<String, CoinPrice?>) {
         for (i in 0 until viewItems.size) {
             val viewItem = viewItems[i]
-            viewItem.coinUid?.let { coinUid ->
+            viewItem.coin?.uid?.let { coinUid ->
                 if (latestRates.containsKey(coinUid)) {
                     viewItems[i] = createBalanceCexViewItem(
                         cexAsset = viewItem.cexAsset,
@@ -129,7 +130,7 @@ class BalanceCexViewModel(
         val latestRates = xRateRepository.getLatestRates()
 
         viewItems.replaceAll { viewItem ->
-            createBalanceCexViewItem(viewItem.cexAsset, viewItem.coinUid?.let { latestRates[it] }, viewItem.adapterState)
+            createBalanceCexViewItem(viewItem.cexAsset, viewItem.coin?.uid?.let { latestRates[it] }, viewItem.adapterState)
         }
     }
 
@@ -234,8 +235,7 @@ data class UiState(
 )
 
 data class BalanceCexViewItem(
-    val coinIconUrl: String?,
-    val coinIconPlaceholder: Int,
+    val coin: Coin?,
     val coinCode: String,
     val badge: String?,
     val primaryValue: DeemedValue<String>,
@@ -244,7 +244,6 @@ data class BalanceCexViewItem(
     val secondaryValue: DeemedValue<String>,
     val coinValueLocked: DeemedValue<String?>,
     val fiatValueLocked: DeemedValue<String>,
-    val coinUid: String?,
     val assetId: String,
     val coinPrice: CoinPrice?,
     val cexAsset: CexAsset,

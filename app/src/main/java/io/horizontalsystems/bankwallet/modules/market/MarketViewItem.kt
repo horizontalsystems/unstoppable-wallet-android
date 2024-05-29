@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market
 
 import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
@@ -28,6 +29,9 @@ data class MarketViewItem(
 
     val iconUrl: String
         get() = fullCoin.coin.imageUrl
+
+    val alternativeIconUrl: String?
+        get() = fullCoin.coin.alternativeImageUrl
 
     val iconPlaceHolder: Int
         get() = fullCoin.iconPlaceholder

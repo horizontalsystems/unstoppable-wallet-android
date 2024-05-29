@@ -22,8 +22,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -248,8 +246,7 @@ fun TokenRow(
 ) {
     CellUniversal(borderTop = borderTop) {
         CoinImage(
-            iconUrl = token.coin.imageUrl,
-            placeholder = token.iconPlaceholder,
+            token = token,
             modifier = Modifier.size(32.dp)
         )
         HSpacer(width = 16.dp)
@@ -282,8 +279,7 @@ fun TokenRowUnlimited(
 ) {
     CellUniversal(borderTop = borderTop) {
         CoinImage(
-            iconUrl = token.coin.imageUrl,
-            placeholder = token.iconPlaceholder,
+            token = token,
             modifier = Modifier.size(32.dp)
         )
         HSpacer(width = 16.dp)

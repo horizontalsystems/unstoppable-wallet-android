@@ -33,6 +33,7 @@ fun MarketCoinClear(
     subtitle: String,
     title: String,
     coinIconUrl: String,
+    alternativeCoinIconUrl: String? = null,
     coinIconPlaceholder: Int,
     value: String? = null,
     marketDataValue: MarketDataValue? = null,
@@ -45,6 +46,7 @@ fun MarketCoinClear(
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
+            alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -66,6 +68,7 @@ fun MarketCoin(
     coinName: String,
     coinCode: String,
     coinIconUrl: String,
+    alternativeCoinIconUrl: String? = null,
     coinIconPlaceholder: Int,
     coinRate: String? = null,
     marketDataValue: MarketDataValue? = null,
@@ -90,6 +93,7 @@ fun MarketCoin(
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
+            alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)

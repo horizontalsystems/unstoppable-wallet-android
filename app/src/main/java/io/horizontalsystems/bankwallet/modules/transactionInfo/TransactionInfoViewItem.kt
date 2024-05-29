@@ -15,6 +15,7 @@ sealed class TransactionInfoViewItem {
         val coinValue: ColoredValue,
         val fiatValue: ColoredValue,
         val coinIconUrl: String?,
+        val alternativeCoinIconUrl: String?,
         val coinIconPlaceholder: Int?,
         val coinUid: String?,
         val badge: String?,

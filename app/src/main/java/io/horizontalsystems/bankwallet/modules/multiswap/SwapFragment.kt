@@ -52,8 +52,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -688,8 +686,7 @@ private fun CoinSelector(
     Selector(
         icon = {
             CoinImage(
-                iconUrl = token?.coin?.imageUrl,
-                placeholder = token?.iconPlaceholder,
+                token = token,
                 modifier = Modifier.size(32.dp)
             )
         },

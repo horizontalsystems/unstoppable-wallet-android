@@ -7,6 +7,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.CexAssetManager
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,7 @@ class SelectCexAssetViewModel(
                         title = cexAsset.id,
                         subtitle = cexAsset.name,
                         coinIconUrl = cexAsset.coin?.imageUrl,
+                        alternativeCoinUrl = cexAsset.coin?.alternativeImageUrl,
                         coinIconPlaceholder = R.drawable.coin_placeholder,
                         cexAsset = cexAsset,
                         depositEnabled = cexAsset.depositEnabled,

@@ -371,6 +371,9 @@ val TokenType.bitcoinCashCoinType: TokenType.AddressType?
 val Coin.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
 
+val Coin.alternativeImageUrl: String?
+    get() = image
+
 val Coin.imagePlaceholder: Int
     get() = R.drawable.coin_placeholder
 

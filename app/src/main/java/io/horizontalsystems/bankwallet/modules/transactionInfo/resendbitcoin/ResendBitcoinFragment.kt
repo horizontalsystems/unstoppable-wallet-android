@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.getInputX
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -167,7 +166,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                                 .getFormattedFull()
                         }
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin.imageUrl)
+                        ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
                     }
                     add {
                         TransactionInfoAddressCell(
