@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -220,6 +221,7 @@ fun MarketSearchResults(
                                         coinCode = coin.code,
                                         coinName = coin.name,
                                         coinIconUrl = coin.imageUrl,
+                                        alternativeCoinIconUrl = coin.alternativeImageUrl,
                                         coinIconPlaceholder = item.fullCoin.iconPlaceholder,
                                         onClick = { onCoinClick(coin, section) }
                                     )
@@ -248,6 +250,7 @@ private fun MarketCoin(
     coinCode: String,
     coinName: String,
     coinIconUrl: String,
+    alternativeCoinIconUrl: String?,
     coinIconPlaceholder: Int,
     onClick: () -> Unit,
     coinRate: String? = null,
@@ -260,6 +263,7 @@ private fun MarketCoin(
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
+            alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -284,6 +288,7 @@ fun MarketCoinPreview() {
             coin.code,
             coin.name,
             coin.imageUrl,
+            null,
             R.drawable.coin_placeholder,
             {},
         )

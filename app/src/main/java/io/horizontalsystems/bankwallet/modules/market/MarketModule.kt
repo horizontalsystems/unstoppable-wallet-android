@@ -161,14 +161,24 @@ enum class TopMarket(val value: Int, val titleResId: Int) : WithTranslatableTitl
 
 sealed class ImageSource {
     class Local(@DrawableRes val resId: Int) : ImageSource()
-    class Remote(val url: String, @DrawableRes val placeholder: Int = R.drawable.ic_placeholder) : ImageSource()
+    class Remote(
+        val url: String,
+        @DrawableRes
+        val placeholder: Int = R.drawable.ic_placeholder,
+        val alternativeUrl: String? = null
+    ) : ImageSource()
 
     @Composable
     fun painter(): Painter = when (this) {
         is Local -> painterResource(resId)
         is Remote -> rememberAsyncImagePainter(
             model = url,
-            error = painterResource(placeholder)
+            error = alternativeUrl?.let {
+                rememberAsyncImagePainter(
+                    model = alternativeUrl,
+                    error = painterResource(placeholder)
+                )
+            } ?: painterResource(placeholder)
         )
     }
 }

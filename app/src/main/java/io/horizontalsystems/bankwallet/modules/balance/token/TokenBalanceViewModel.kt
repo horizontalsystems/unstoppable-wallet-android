@@ -94,7 +94,7 @@ class TokenBalanceViewModel(
         )
 
         this.balanceViewItem = balanceViewItem.copy(
-            primaryValue = balanceViewItem.primaryValue.copy(value = balanceViewItem.primaryValue.value + " " + balanceViewItem.coinCode)
+            primaryValue = balanceViewItem.primaryValue.copy(value = balanceViewItem.primaryValue.value + " " + balanceViewItem.wallet.coin.code)
         )
 
         emitState()

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.Clearable
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -36,7 +37,7 @@ class ManageWalletsViewModel(
         item: ManageWalletsService.Item,
     ) = CoinViewItem(
         item = item.token,
-        imageSource = ImageSource.Remote(item.token.coin.imageUrl, item.token.iconPlaceholder),
+        imageSource = ImageSource.Remote(item.token.coin.imageUrl, item.token.iconPlaceholder, item.token.coin.alternativeImageUrl),
         title = item.token.coin.code,
         subtitle = item.token.coin.name,
         enabled = item.enabled,

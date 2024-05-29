@@ -20,8 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ethereum.CautionViewItem
-import io.horizontalsystems.bankwallet.core.iconPlaceholder
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -233,9 +231,8 @@ private fun AmountMulti(item: ViewItem.AmountMulti) {
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
-            modifier = Modifier.size(32.dp),
-            iconUrl = item.token.coin.imageUrl,
-            placeholder = item.token.iconPlaceholder
+            token = item.token,
+            modifier = Modifier.size(32.dp)
         )
         Column(
             modifier = Modifier
@@ -280,11 +277,8 @@ private fun Amount(item: ViewItem.Amount) {
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp),
-            iconUrl = item.token.coin.imageUrl,
-            placeholder = item.token.iconPlaceholder
+            token = item.token,
+            modifier = Modifier.padding(end = 16.dp).size(32.dp)
         )
         Text(
             text = item.coinAmount,
@@ -305,9 +299,8 @@ private fun AmountWithTitle(item: ViewItem.AmountWithTitle) {
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
-            modifier = Modifier.size(32.dp),
-            iconUrl = item.token.coin.imageUrl,
-            placeholder = item.token.iconPlaceholder
+            token = item.token,
+            modifier = Modifier.size(32.dp)
         )
         HSpacer(16.dp)
         Column {
@@ -355,11 +348,8 @@ private fun Token(item: ViewItem.TokenItem) {
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
         CoinImage(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp),
-            iconUrl = item.token.coin.imageUrl,
-            placeholder = item.token.iconPlaceholder
+            token = item.token,
+            modifier = Modifier.padding(end = 16.dp).size(32.dp)
         )
         subhead1_leah(item.token.coin.code)
     }

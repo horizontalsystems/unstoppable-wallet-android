@@ -113,6 +113,7 @@ private fun MarketCoinWithBackground(
         marketViewItem.coinName,
         marketViewItem.coinCode,
         marketViewItem.iconUrl,
+        marketViewItem.alternativeIconUrl,
         marketViewItem.iconPlaceHolder,
         marketViewItem.coinRate,
         marketViewItem.marketDataValue,

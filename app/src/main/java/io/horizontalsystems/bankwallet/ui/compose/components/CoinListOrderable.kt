@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -87,6 +87,7 @@ fun CoinListOrderable(
                         item.fullCoin.coin.name,
                         item.fullCoin.coin.code,
                         item.fullCoin.coin.imageUrl,
+                        item.fullCoin.coin.alternativeImageUrl,
                         item.fullCoin.iconPlaceholder,
                         item.coinRate,
                         item.marketDataValue,
@@ -142,6 +143,7 @@ fun CoinListOrderable(
                                 coinName = item.fullCoin.coin.name,
                                 coinCode = item.fullCoin.coin.code,
                                 coinIconUrl = item.fullCoin.coin.imageUrl,
+                                alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
                                 coinIconPlaceholder = item.fullCoin.iconPlaceholder,
                                 coinRate = item.coinRate,
                                 marketDataValue = item.marketDataValue,

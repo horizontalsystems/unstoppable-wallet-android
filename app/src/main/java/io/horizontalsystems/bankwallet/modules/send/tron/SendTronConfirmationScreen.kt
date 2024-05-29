@@ -30,7 +30,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.HSCaution
-import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -176,7 +175,7 @@ fun SendTronConfirmationScreen(
                                 .getFormattedFull()
                         }
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
+                        ConfirmAmountCell(currencyAmount, coinAmount, coin)
                     }
                     add {
                         TransactionInfoAddressCell(

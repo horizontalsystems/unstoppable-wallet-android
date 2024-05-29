@@ -2,9 +2,14 @@ package io.horizontalsystems.bankwallet.modules.configuredtoken
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import io.horizontalsystems.bankwallet.core.*
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
+import io.horizontalsystems.bankwallet.core.bep2TokenUrl
+import io.horizontalsystems.bankwallet.core.eip20TokenUrl
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
-import io.horizontalsystems.bankwallet.modules.address.*
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -45,7 +50,7 @@ class ConfiguredTokenInfoViewModel(
         }
 
         uiState = ConfiguredTokenInfoUiState(
-            iconSource = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder),
+            iconSource = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder, token.coin.alternativeImageUrl),
             title = token.coin.code,
             subtitle = token.coin.name,
             tokenInfoType = type

@@ -9,6 +9,7 @@ object DepositCexModule {
         val title: String,
         val subtitle: String,
         val coinIconUrl: String?,
+        val alternativeCoinUrl: String?,
         val coinIconPlaceholder: Int,
         val cexAsset: CexAsset,
         val depositEnabled: Boolean,

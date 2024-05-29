@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.requireInput
@@ -154,6 +155,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                                         subtitle = viewItem.subtitle,
                                         title = viewItem.fullCoin.coin.code,
                                         coinIconUrl = viewItem.fullCoin.coin.imageUrl,
+                                        alternativeCoinIconUrl = viewItem.fullCoin.coin.alternativeImageUrl,
                                         coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
                                         value = viewItem.coinRate,
                                         marketDataValue = viewItem.marketDataValue,

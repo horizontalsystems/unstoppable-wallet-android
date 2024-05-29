@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -61,6 +62,7 @@ fun SelectSwapCoinDialogScreen(
                     ) {
                         CoinImage(
                             iconUrl = coinItem.token.coin.imageUrl,
+                            alternativeUrl = coinItem.token.coin.alternativeImageUrl,
                             placeholder = coinItem.token.iconPlaceholder,
                             modifier = Modifier.size(32.dp)
                         )

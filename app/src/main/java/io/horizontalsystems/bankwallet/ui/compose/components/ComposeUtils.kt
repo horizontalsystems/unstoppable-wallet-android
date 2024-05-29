@@ -13,8 +13,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imagePlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 @Composable
@@ -42,7 +48,34 @@ fun RateText(diff: BigDecimal?): String {
 
 @Composable
 fun CoinImage(
+    coin: Coin?,
+    modifier: Modifier,
+    colorFilter: ColorFilter? = null
+) = CoinImage(
+    iconUrl = coin?.imageUrl,
+    alternativeUrl = coin?.alternativeImageUrl,
+    placeholder = coin?.imagePlaceholder,
+    modifier = modifier,
+    colorFilter = colorFilter
+)
+
+@Composable
+fun CoinImage(
+    token: Token?,
+    modifier: Modifier,
+    colorFilter: ColorFilter? = null
+) = CoinImage(
+    iconUrl = token?.coin?.imageUrl,
+    alternativeUrl = token?.coin?.alternativeImageUrl,
+    placeholder = token?.iconPlaceholder,
+    modifier = modifier,
+    colorFilter = colorFilter
+)
+
+@Composable
+fun CoinImage(
     iconUrl: String?,
+    alternativeUrl: String? = null,
     placeholder: Int? = null,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
@@ -52,13 +85,19 @@ fun CoinImage(
         iconUrl != null -> Image(
             painter = rememberAsyncImagePainter(
                 model = iconUrl,
-                error = painterResource(fallback)
+                error = alternativeUrl?.let {
+                    rememberAsyncImagePainter(
+                        model = alternativeUrl,
+                        error = painterResource(fallback)
+                    )
+                } ?: painterResource(fallback)
             ),
             contentDescription = null,
             modifier = modifier,
             colorFilter = colorFilter,
             contentScale = ContentScale.FillBounds
         )
+
         else -> Image(
             painter = painterResource(fallback),
             contentDescription = null,
@@ -89,6 +128,7 @@ fun NftIcon(
             colorFilter = colorFilter,
             contentScale = ContentScale.Crop
         )
+
         else -> Image(
             painter = painterResource(fallback),
             contentDescription = null,
