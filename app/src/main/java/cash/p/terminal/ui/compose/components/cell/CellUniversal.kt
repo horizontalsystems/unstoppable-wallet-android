@@ -60,6 +60,7 @@ fun CellUniversal(
 fun CellUniversalFixedHeight(
     borderTop: Boolean = true,
     height: Dp,
+    paddingHorizontal: Dp = 16.dp,
     content: @Composable() (RowScope.() -> Unit),
 ) {
     Box {
@@ -72,7 +73,9 @@ fun CellUniversalFixedHeight(
         }
 
         Row(
-            modifier = Modifier.height(height),
+            modifier = Modifier
+                .height(height)
+                .padding(horizontal = paddingHorizontal),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
             content = content

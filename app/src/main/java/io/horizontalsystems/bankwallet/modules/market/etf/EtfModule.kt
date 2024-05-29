@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.marketkit.models.EtfPoint
 
 object EtfModule {
 
@@ -38,6 +40,9 @@ object EtfModule {
         val isRefreshing: Boolean,
         val timeDuration: TimeDuration,
         val sortBy: SortBy,
+        val chartDataLoading: Boolean,
+        val etfPoints: List<EtfPoint>,
+        val currency: Currency,
     )
 
     enum class SortBy(@StringRes val titleResId: Int): WithTranslatableTitle {

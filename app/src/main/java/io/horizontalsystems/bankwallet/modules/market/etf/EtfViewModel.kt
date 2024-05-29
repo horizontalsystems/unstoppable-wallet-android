@@ -12,6 +12,7 @@ import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.Value
 import cash.p.terminal.modules.market.etf.EtfModule.EtfViewItem
 import io.horizontalsystems.marketkit.models.Etf
+import io.horizontalsystems.marketkit.models.EtfPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -44,19 +45,32 @@ class EtfViewModel(
     private var sortBy: EtfModule.SortBy = sortByOptions.first()
     private var timeDuration: TimeDuration = timeDurations.first()
     private var cachedEtfs: List<Etf> = listOf()
+    private var chartDataLoading = true
+    private var etfPoints = listOf<EtfPoint>()
 
-    override fun createState(): EtfModule.UiState {
-        return EtfModule.UiState(
-            viewItems = viewItems,
-            viewState = viewState,
-            isRefreshing = isRefreshing,
-            timeDuration = timeDuration,
-            sortBy = sortBy,
-        )
-    }
+    override fun createState() = EtfModule.UiState(
+        viewItems = viewItems,
+        viewState = viewState,
+        isRefreshing = isRefreshing,
+        timeDuration = timeDuration,
+        sortBy = sortBy,
+        chartDataLoading = chartDataLoading,
+        etfPoints = etfPoints,
+        currency = currencyManager.baseCurrency
+    )
 
     init {
         syncItems()
+        fetchChartData()
+    }
+
+    private fun fetchChartData() {
+        viewModelScope.launch(Dispatchers.Default) {
+            etfPoints = marketKit.etfPoints(currencyManager.baseCurrency.code).await().sortedBy { it.date }
+            chartDataLoading = false
+
+            emitState()
+        }
     }
 
     private fun syncItems() {
