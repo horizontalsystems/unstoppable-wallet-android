@@ -204,9 +204,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s 链上所有协议的市场上限</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">总市值</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin市场占比</string>
-    <string name="MarketGlobalMetrics_Volume">24h成交量</string>
+    <string name="MarketGlobalMetrics_BtcDominance">BTC市场占比</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi市值</string>
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">所有加密货币的总市场价值.</string>
