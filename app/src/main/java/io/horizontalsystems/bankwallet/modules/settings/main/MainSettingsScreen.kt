@@ -21,8 +21,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -88,11 +86,7 @@ private fun SettingSections(
     viewModel: MainSettingsViewModel,
     navController: NavController
 ) {
-
-    val showAlertManageWallet by viewModel.manageWalletShowAlertLiveData.observeAsState(false)
-    val showAlertSecurityCenter by viewModel.securityCenterShowAlertLiveData.observeAsState(false)
-    val showAlertAboutApp by viewModel.aboutAppShowAlertLiveData.observeAsState(false)
-    val wcCounter by viewModel.wcCounterLiveData.observeAsState()
+    val uiState = viewModel.uiState
     val context = LocalContext.current
 
     CellUniversalLawrenceSection(
@@ -117,7 +111,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
                 R.drawable.ic_wallet_20,
-                showAlert = showAlertManageWallet,
+                showAlert = uiState.manageWalletShowAlert,
                 onClick = {
                     navController.slideFromRight(
                         R.id.manageAccountsFragment,
@@ -134,21 +128,27 @@ private fun SettingSections(
                 onClick = {
                     navController.slideFromRight(R.id.blockchainSettingsFragment)
 
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BlockchainSettings))
+                    stat(
+                        page = StatPage.Settings,
+                        event = StatEvent.Open(StatPage.BlockchainSettings)
+                    )
                 }
             )
         }, {
             HsSettingCell(
                 R.string.Settings_WalletConnect,
                 R.drawable.ic_wallet_connect_20,
-                value = (wcCounter as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
-                counterBadge = (wcCounter as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
+                value = (uiState.wcCounterType as? MainSettingsModule.CounterType.SessionCounter)?.number?.toString(),
+                counterBadge = (uiState.wcCounterType as? MainSettingsModule.CounterType.PendingRequestCounter)?.number?.toString(),
                 onClick = {
-                    when (val state = viewModel.getWalletConnectSupportState()) {
+                    when (val state = viewModel.walletConnectSupportState) {
                         WCManager.SupportState.Supported -> {
                             navController.slideFromRight(R.id.wcListFragment)
 
-                            stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.WalletConnect))
+                            stat(
+                                page = StatPage.Settings,
+                                event = StatEvent.Open(StatPage.WalletConnect)
+                            )
                         }
 
                         WCManager.SupportState.NotSupportedDueToNoActiveAccount -> {
@@ -162,7 +162,10 @@ private fun SettingSections(
                                 BackupRequiredDialog.Input(state.account, text)
                             )
 
-                            stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BackupRequired))
+                            stat(
+                                page = StatPage.Settings,
+                                event = StatEvent.Open(StatPage.BackupRequired)
+                            )
                         }
 
                         is WCManager.SupportState.NotSupported -> {
@@ -196,7 +199,7 @@ private fun SettingSections(
                 HsSettingCell(
                     R.string.Settings_SecurityCenter,
                     R.drawable.ic_security,
-                    showAlert = showAlertSecurityCenter,
+                    showAlert = uiState.securityCenterShowAlert,
                     onClick = {
                         navController.slideFromRight(R.id.securitySettingsFragment)
 
@@ -229,6 +232,26 @@ private fun SettingSections(
                     }
                 )
             },
+            {
+                HsSettingCell(
+                    R.string.Settings_BaseCurrency,
+                    R.drawable.ic_currency,
+                    value = uiState.baseCurrencyCode,
+                    onClick = {
+                        navController.slideFromRight(R.id.baseCurrencySettingsFragment)
+                    }
+                )
+            },
+            {
+                HsSettingCell(
+                    R.string.Settings_Language,
+                    R.drawable.ic_language,
+                    value = uiState.currentLanguage,
+                    onClick = {
+                        navController.slideFromRight(R.id.languageSettingsFragment)
+                    }
+                )
+            }
         )
     )
 
@@ -252,7 +275,10 @@ private fun SettingSections(
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
 
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTelegram))
+                    stat(
+                        page = StatPage.Settings,
+                        event = StatEvent.Open(StatPage.ExternalTelegram)
+                    )
                 }
             )
         }, {
@@ -305,7 +331,7 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.SettingsAboutApp_Title,
                 R.drawable.ic_about_app_20,
-                showAlert = showAlertAboutApp,
+                showAlert = uiState.aboutAppShowAlert,
                 onClick = {
                     navController.slideFromRight(R.id.aboutAppFragment)
 
@@ -327,7 +353,7 @@ private fun SettingSections(
                 R.string.Settings_ShareThisWallet,
                 R.drawable.ic_share_20,
                 onClick = {
-                    shareAppLink(viewModel.appWebPageLink, context)
+                    shareAppLink(uiState.appWebPageLink, context)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
                 }

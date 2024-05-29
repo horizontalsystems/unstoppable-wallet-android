@@ -116,27 +116,6 @@ fun AppearanceScreen(navController: NavController) {
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState()),
                 ) {
-                    CellUniversalLawrenceSection(
-                        listOf({
-                            HsSettingCell(
-                                R.string.Settings_BaseCurrency,
-                                R.drawable.ic_currency,
-                                value = uiState.baseCurrencyCode,
-                                onClick = {
-                                    navController.slideFromRight(R.id.baseCurrencySettingsFragment)
-                                }
-                            )
-                        }, {
-                            HsSettingCell(
-                                R.string.Settings_Language,
-                                R.drawable.ic_language,
-                                value = uiState.currentLanguage,
-                                onClick = {
-                                    navController.slideFromRight(R.id.languageSettingsFragment)
-                                }
-                            )
-                        })
-                    )
                     VSpacer(height = 12.dp)
                     HeaderText(text = stringResource(id = R.string.Appearance_Theme))
                     CellUniversalLawrenceSection(uiState.themeOptions.options) { option: ThemeType ->
