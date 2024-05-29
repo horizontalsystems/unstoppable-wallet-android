@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.core.stats.statPage
 import io.horizontalsystems.bankwallet.modules.market.overview.MarketOverviewModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
 import io.horizontalsystems.chartview.ChartMinimal
 import java.math.BigDecimal
@@ -59,7 +58,7 @@ private fun ChartView(metricsData: MetricData, navController: NavController) {
         Column(
             modifier = Modifier.padding(12.dp)
         ) {
-            caption_grey(text = stringResource(metricsData.type.title))
+//            caption_grey(text = stringResource(metricsData.type.title))
             Spacer(modifier = Modifier.height(10.dp))
             if (metricsData.value != null) {
                 Text(
