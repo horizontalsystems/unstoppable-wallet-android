@@ -20,6 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.requireInput
@@ -154,6 +155,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                                         subtitle = viewItem.subtitle,
                                         title = viewItem.fullCoin.coin.code,
                                         coinIconUrl = viewItem.fullCoin.coin.imageUrl,
+                                        alternativeCoinIconUrl = viewItem.fullCoin.coin.alternativeImageUrl,
                                         coinIconPlaceholder = viewItem.fullCoin.iconPlaceholder,
                                         value = viewItem.coinRate,
                                         marketDataValue = viewItem.marketDataValue,

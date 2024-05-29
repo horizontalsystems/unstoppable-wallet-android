@@ -18,6 +18,7 @@ fun CoinScreenTitle(
     coinName: String,
     marketCapRank: Int?,
     coinIconUrl: String,
+    alternativeCoinIconUrl: String?,
     iconPlaceholder: Int?
 ) {
     RowUniversal(
@@ -25,6 +26,7 @@ fun CoinScreenTitle(
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
+            alternativeUrl = alternativeCoinIconUrl,
             placeholder = iconPlaceholder,
             modifier = Modifier.size(32.dp)
         )
@@ -55,6 +57,7 @@ fun CoinScreenTitlePreviewNoRank() {
             coinName = "Synthetix Network TokenSynthetix Network Token",
             marketCapRank = null,
             coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
+            alternativeCoinIconUrl = null,
             iconPlaceholder = null
         )
     }
@@ -68,6 +71,7 @@ fun CoinScreenTitlePreviewLongTitle() {
             coinName = "Synthetix Network Token Synthetix Network Token Synthetix Network Token Synthetix Network Token",
             marketCapRank = 123,
             coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
+            alternativeCoinIconUrl = null,
             iconPlaceholder = null
         )
     }
@@ -81,6 +85,7 @@ fun CoinScreenTitlePreviewShortTitle() {
             coinName = "Bitcoin",
             marketCapRank = 1,
             coinIconUrl = "https://cdn.blocksdecoded.com/coin-icons/32px/bitcoin@3x.png",
+            alternativeCoinIconUrl = null,
             iconPlaceholder = null
         )
     }

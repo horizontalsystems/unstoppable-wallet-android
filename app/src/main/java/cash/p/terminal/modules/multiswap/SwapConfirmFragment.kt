@@ -22,8 +22,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.badge
-import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatPage
@@ -248,8 +246,7 @@ fun TokenRow(
 ) {
     CellUniversal(borderTop = borderTop) {
         CoinImage(
-            iconUrl = token.coin.imageUrl,
-            placeholder = token.iconPlaceholder,
+            token = token,
             modifier = Modifier.size(32.dp)
         )
         HSpacer(width = 16.dp)
@@ -282,8 +279,7 @@ fun TokenRowUnlimited(
 ) {
     CellUniversal(borderTop = borderTop) {
         CoinImage(
-            iconUrl = token.coin.imageUrl,
-            placeholder = token.iconPlaceholder,
+            token = token,
             modifier = Modifier.size(32.dp)
         )
         HSpacer(width = 16.dp)

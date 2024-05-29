@@ -159,6 +159,7 @@ fun TransactionAmountCell(
     fiatAmount: ColoredValue?,
     coinAmount: ColoredValue,
     coinIconUrl: String?,
+    alternativeCoinIconUrl: String?,
     badge: String?,
     coinIconPlaceholder: Int?,
     onClick: (() -> Unit)? = null
@@ -176,6 +177,7 @@ fun TransactionAmountCell(
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
+            alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier.size(32.dp)
         )

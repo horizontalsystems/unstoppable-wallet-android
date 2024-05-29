@@ -2,6 +2,7 @@ package cash.p.terminal.modules.market
 
 import androidx.compose.runtime.Immutable
 import cash.p.terminal.core.App
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
@@ -28,6 +29,9 @@ data class MarketViewItem(
 
     val iconUrl: String
         get() = fullCoin.coin.imageUrl
+
+    val alternativeIconUrl: String?
+        get() = fullCoin.coin.alternativeImageUrl
 
     val iconPlaceHolder: Int
         get() = fullCoin.iconPlaceholder

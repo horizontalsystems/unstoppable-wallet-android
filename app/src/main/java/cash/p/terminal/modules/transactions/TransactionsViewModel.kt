@@ -235,7 +235,7 @@ data class TransactionViewItem(
 
     sealed class Icon {
         class ImageResource(val resourceId: Int) : Icon()
-        class Regular(val url: String?, val placeholder: Int?, val rectangle: Boolean = false) : Icon()
+        class Regular(val url: String?, val alternativeUrl: String?, val placeholder: Int?, val rectangle: Boolean = false) : Icon()
         class Double(val back: Regular, val front: Regular) : Icon()
         object Failed : Icon()
         class Platform(blockchainType: BlockchainType) : Icon() {

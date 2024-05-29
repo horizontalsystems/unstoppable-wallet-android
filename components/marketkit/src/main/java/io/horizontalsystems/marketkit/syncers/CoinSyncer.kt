@@ -58,6 +58,7 @@ class CoinSyncer(
             response.code.uppercase(),
             response.market_cap_rank,
             response.coingecko_id,
+            response.image,
             response.priority
         )
 

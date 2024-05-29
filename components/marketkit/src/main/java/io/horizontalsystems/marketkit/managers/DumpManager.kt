@@ -7,7 +7,7 @@ class DumpManager(private val marketDatabase: MarketDatabase) {
 
     private val tablesCreation =
         "CREATE TABLE IF NOT EXISTS `BlockchainEntity` (`uid` TEXT NOT NULL, `name` TEXT NOT NULL, `eip3091url` TEXT, PRIMARY KEY(`uid`));\n" +
-                "CREATE TABLE IF NOT EXISTS `Coin` (`uid` TEXT NOT NULL, `name` TEXT NOT NULL, `code` TEXT NOT NULL, `marketCapRank` INTEGER, `coinGeckoId` TEXT, PRIMARY KEY(`uid`));\n" +
+                "CREATE TABLE IF NOT EXISTS `Coin` (`uid` TEXT NOT NULL, `name` TEXT NOT NULL, `code` TEXT NOT NULL, `marketCapRank` INTEGER, `coinGeckoId` TEXT, `image` TEXT, `priority` INTEGER NULL, PRIMARY KEY(`uid`));\n" +
                 "CREATE TABLE IF NOT EXISTS `TokenEntity` (`coinUid` TEXT NOT NULL, `blockchainUid` TEXT NOT NULL, `type` TEXT NOT NULL, `decimals` INTEGER, `reference` TEXT NOT NULL, PRIMARY KEY(`coinUid`, `blockchainUid`, `type`, `reference`), FOREIGN KEY(`coinUid`) REFERENCES `Coin`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`blockchainUid`) REFERENCES `BlockchainEntity`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )\n"
 
     fun getInitialDump(): String {
@@ -31,7 +31,7 @@ class DumpManager(private val marketDatabase: MarketDatabase) {
         coins.forEach { coin ->
             val coinGeckoId = coin.coinGeckoId?.let { "'$it'" } ?: "null"
             val insertQuery =
-                "INSERT INTO Coin VALUES('${coin.uid}',${DatabaseUtils.sqlEscapeString(coin.name)},'${coin.code}',${coin.marketCapRank},$coinGeckoId);"
+                "INSERT INTO Coin VALUES('${coin.uid}',${DatabaseUtils.sqlEscapeString(coin.name)},'${coin.code}',${coin.marketCapRank},$coinGeckoId,'${coin.image}',${coin.priority});"
             insertQueries.append(insertQuery).append("\n")
         }
         return insertQueries.toString()

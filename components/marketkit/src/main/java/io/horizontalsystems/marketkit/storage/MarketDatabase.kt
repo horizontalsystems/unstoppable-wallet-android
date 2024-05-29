@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.horizontalsystems.marketkit.models.*
-import io.horizontalsystems.marketkit.storage.migrations.*
 import java.io.BufferedReader
 import java.io.InputStreamReader
 //import java.util.concurrent.Executors
@@ -24,7 +23,7 @@ import java.util.logging.Logger
         GlobalMarketInfo::class,
         SyncerState::class,
     ],
-    version = 11,
+    version = 12,
     exportSchema = false
 )
 @TypeConverters(DatabaseTypeConverters::class)
@@ -69,10 +68,6 @@ abstract class MarketDatabase : RoomDatabase() {
 //                }, Executors.newSingleThreadExecutor())
                 .fallbackToDestructiveMigration()
                 .allowMainThreadQueries()
-                .addMigrations(
-                        Migration_6_7,
-                        Migration_8_9
-                )
                 .build()
 
             // force db creation

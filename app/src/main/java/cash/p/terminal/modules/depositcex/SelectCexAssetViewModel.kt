@@ -7,6 +7,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.ViewModelUiState
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.CexAssetManager
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,7 @@ class SelectCexAssetViewModel(
                         title = cexAsset.id,
                         subtitle = cexAsset.name,
                         coinIconUrl = cexAsset.coin?.imageUrl,
+                        alternativeCoinUrl = cexAsset.coin?.alternativeImageUrl,
                         coinIconPlaceholder = R.drawable.coin_placeholder,
                         cexAsset = cexAsset,
                         depositEnabled = cexAsset.depositEnabled,

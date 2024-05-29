@@ -386,6 +386,9 @@ val Coin.imageUrl: String
         return coinURL
     }
 
+val Coin.alternativeImageUrl: String?
+    get() = image
+
 val Coin.imagePlaceholder: Int
     get() = R.drawable.coin_placeholder
 

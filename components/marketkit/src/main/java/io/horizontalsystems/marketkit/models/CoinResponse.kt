@@ -6,5 +6,6 @@ data class CoinResponse(
     val code: String,
     val market_cap_rank: Int?,
     val coingecko_id: String?,
+    val image: String?,
     val priority: Int?
 )

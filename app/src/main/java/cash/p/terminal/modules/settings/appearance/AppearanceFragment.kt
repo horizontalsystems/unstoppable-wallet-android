@@ -41,7 +41,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.theme.ThemeType
@@ -251,7 +250,7 @@ fun AppearanceScreen(navController: NavController) {
                         RowSelect(
                             imageContent = {
                                 CoinImage(
-                                    iconUrl = option.coin.imageUrl,
+                                    coin = option.coin,
                                     modifier = Modifier.size(32.dp)
                                 )
                             },

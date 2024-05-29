@@ -318,10 +318,8 @@ private fun WalletIcon(
             )
         } else {
             CoinImage(
-                iconUrl = viewItem.coinIconUrl,
-                placeholder = viewItem.coinIconPlaceholder,
-                modifier = Modifier
-                    .size(32.dp)
+                token = viewItem.wallet.token,
+                modifier = Modifier.size(32.dp)
             )
         }
     }

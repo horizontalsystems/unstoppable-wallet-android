@@ -25,7 +25,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.getInputX
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -167,7 +166,7 @@ class ResendBitcoinFragment : BaseComposeFragment() {
                                 .getFormattedFull()
                         }
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin.imageUrl)
+                        ConfirmAmountCell(currencyAmount, coinAmount, uiState.coin)
                     }
                     add {
                         TransactionInfoAddressCell(

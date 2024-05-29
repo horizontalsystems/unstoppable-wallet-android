@@ -52,8 +52,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.getInput
-import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
@@ -688,8 +686,7 @@ private fun CoinSelector(
     Selector(
         icon = {
             CoinImage(
-                iconUrl = token?.coin?.imageUrl,
-                placeholder = token?.iconPlaceholder,
+                token = token,
                 modifier = Modifier.size(32.dp)
             )
         },

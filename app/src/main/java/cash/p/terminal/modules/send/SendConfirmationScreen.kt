@@ -24,7 +24,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -161,7 +160,7 @@ fun SendConfirmationScreen(
                                 .getFormattedFull()
                         }
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
+                        ConfirmAmountCell(currencyAmount, coinAmount, coin)
                     }
                     add {
                         TransactionInfoAddressCell(
@@ -273,13 +272,12 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
 }
 
 @Composable
-fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, iconUrl: String?) {
+fun ConfirmAmountCell(fiatAmount: String?, coinAmount: String, coin: Coin) {
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         CoinImage(
-            iconUrl = iconUrl,
-            placeholder = R.drawable.coin_placeholder,
+            coin = coin,
             modifier = Modifier.size(32.dp)
         )
         subhead2_leah(

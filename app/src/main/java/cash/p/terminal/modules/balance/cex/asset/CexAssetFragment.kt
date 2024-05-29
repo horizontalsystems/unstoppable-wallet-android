@@ -213,12 +213,12 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
         ButtonPrimaryCircle(
             icon = R.drawable.ic_chart_24,
             contentDescription = stringResource(R.string.Coin_Info),
-            enabled = viewItem.coinUid != null,
+            enabled = viewItem.coin != null,
             onClick = {
-                viewItem.coinUid?.let { coinUid ->
+                viewItem.coin?.let { coin ->
                     navController.slideFromRight(
                         R.id.coinFragment,
-                        CoinFragment.Input(coinUid)
+                        CoinFragment.Input(coin.uid)
                     )
                 }
             },

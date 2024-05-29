@@ -55,6 +55,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.market.ImageSource
@@ -130,6 +131,7 @@ fun CoinList(
                             coinName = item.fullCoin.coin.name,
                             coinCode = item.fullCoin.coin.code,
                             coinIconUrl = item.fullCoin.coin.imageUrl,
+                            alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
                             coinIconPlaceholder = item.fullCoin.iconPlaceholder,
                             coinRate = item.coinRate,
                             marketDataValue = item.marketDataValue,

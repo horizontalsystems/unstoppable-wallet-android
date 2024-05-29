@@ -108,6 +108,7 @@ private fun CoinCell(
         ) {
             CoinImage(
                 iconUrl = viewItem.coinIconUrl,
+                alternativeUrl = viewItem.alternativeCoinUrl,
                 placeholder = viewItem.coinIconPlaceholder,
                 modifier = Modifier
                     .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)

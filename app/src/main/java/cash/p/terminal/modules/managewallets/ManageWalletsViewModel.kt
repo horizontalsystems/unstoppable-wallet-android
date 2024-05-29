@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.Clearable
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
@@ -36,7 +37,7 @@ class ManageWalletsViewModel(
         item: ManageWalletsService.Item,
     ) = CoinViewItem(
         item = item.token,
-        imageSource = ImageSource.Remote(item.token.coin.imageUrl, item.token.iconPlaceholder),
+        imageSource = ImageSource.Remote(item.token.coin.imageUrl, item.token.iconPlaceholder, item.token.coin.alternativeImageUrl),
         title = item.token.coin.code,
         subtitle = item.token.coin.name,
         enabled = item.enabled,

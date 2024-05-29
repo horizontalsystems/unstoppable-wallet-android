@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottomForResult
@@ -136,6 +137,7 @@ fun CoinOverviewScreen(
                                     fullCoin.coin.name,
                                     overview.marketCapRank,
                                     fullCoin.coin.imageUrl,
+                                    fullCoin.coin.alternativeImageUrl,
                                     fullCoin.iconPlaceholder
                                 )
 

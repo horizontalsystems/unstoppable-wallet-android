@@ -30,7 +30,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
@@ -176,7 +175,7 @@ fun SendTronConfirmationScreen(
                                 .getFormattedFull()
                         }
 
-                        ConfirmAmountCell(currencyAmount, coinAmount, coin.imageUrl)
+                        ConfirmAmountCell(currencyAmount, coinAmount, coin)
                     }
                     add {
                         TransactionInfoAddressCell(

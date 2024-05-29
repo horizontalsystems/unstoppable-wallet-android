@@ -295,10 +295,10 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                     is TransactionViewItem.Icon.Regular -> {
                         val shape = if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         CoinImage(
-                            modifier = Modifier
-                                .size(32.dp)
+                            modifier = Modifier.size(32.dp)
                                 .clip(shape),
                             iconUrl = icon.url,
+                            alternativeUrl = icon.alternativeUrl,
                             placeholder = icon.placeholder
                         )
                     }
@@ -312,6 +312,7 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                                 .size(24.dp)
                                 .clip(backShape),
                             iconUrl = icon.back.url,
+                            alternativeUrl = icon.back.alternativeUrl,
                             placeholder = icon.back.placeholder,
                         )
 
@@ -331,6 +332,7 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                                 .size(24.dp)
                                 .clip(frontShape),
                             iconUrl = icon.front.url,
+                            alternativeUrl = icon.front.alternativeUrl,
                             placeholder = icon.front.placeholder,
                         )
                     }

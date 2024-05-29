@@ -2,9 +2,14 @@ package cash.p.terminal.modules.configuredtoken
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import cash.p.terminal.core.*
+import cash.p.terminal.core.App
+import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.core.bep2TokenUrl
+import cash.p.terminal.core.eip20TokenUrl
+import cash.p.terminal.core.iconPlaceholder
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.RestoreSettingsManager
-import cash.p.terminal.modules.address.*
 import cash.p.terminal.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
@@ -45,7 +50,7 @@ class ConfiguredTokenInfoViewModel(
         }
 
         uiState = ConfiguredTokenInfoUiState(
-            iconSource = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder),
+            iconSource = ImageSource.Remote(token.coin.imageUrl, token.iconPlaceholder, token.coin.alternativeImageUrl),
             title = token.coin.code,
             subtitle = token.coin.name,
             tokenInfoType = type

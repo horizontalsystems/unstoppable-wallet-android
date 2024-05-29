@@ -19,6 +19,7 @@ data class Coin(
     val code: String,
     val marketCapRank: Int? = null,
     val coinGeckoId: String? = null,
+    val image: String? = null,
     val priority: Int? = null
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {

@@ -142,6 +142,7 @@ fun TransactionInfoSection(
                                 fiatAmount = viewItem.fiatValue,
                                 coinAmount = viewItem.coinValue,
                                 coinIconUrl = viewItem.coinIconUrl,
+                                alternativeCoinIconUrl = viewItem.alternativeCoinIconUrl,
                                 badge = viewItem.badge,
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
                                 onClick = viewItem.coinUid?.let {

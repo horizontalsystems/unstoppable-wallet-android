@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
@@ -61,6 +62,7 @@ fun SelectSwapCoinDialogScreen(
                     ) {
                         CoinImage(
                             iconUrl = coinItem.token.coin.imageUrl,
+                            alternativeUrl = coinItem.token.coin.alternativeImageUrl,
                             placeholder = coinItem.token.iconPlaceholder,
                             modifier = Modifier.size(32.dp)
                         )

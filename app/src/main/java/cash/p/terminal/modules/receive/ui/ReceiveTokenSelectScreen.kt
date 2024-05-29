@@ -18,7 +18,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.imagePlaceholder
+import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.Wallet
@@ -76,7 +77,8 @@ fun ReceiveTokenSelectScreen(
                         coinName = coin.name,
                         coinCode = coin.code,
                         coinIconUrl = coin.imageUrl,
-                        coinIconPlaceholder = coin.imagePlaceholder,
+                        alternativeCoinIconUrl = coin.alternativeImageUrl,
+                        coinIconPlaceholder = fullCoin.iconPlaceholder,
                         onClick = {
                             coroutineScope.launch {
                                 when (val coinActiveWalletsType = viewModel.getCoinForReceiveType(fullCoin)) {
@@ -115,6 +117,7 @@ fun ReceiveCoin(
     coinName: String,
     coinCode: String,
     coinIconUrl: String,
+    alternativeCoinIconUrl: String?,
     coinIconPlaceholder: Int,
     onClick: (() -> Unit)? = null
 ) {
@@ -124,6 +127,7 @@ fun ReceiveCoin(
     ) {
         CoinImage(
             iconUrl = coinIconUrl,
+            alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier
                 .padding(end = 16.dp)

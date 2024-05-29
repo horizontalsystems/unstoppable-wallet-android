@@ -2,6 +2,7 @@ package cash.p.terminal.modules.watchaddress.selectblockchains
 
 import cash.p.terminal.R
 import cash.p.terminal.core.ViewModelUiState
+import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
@@ -76,7 +77,7 @@ class SelectBlockchainsViewModel(
     private fun coinViewItemForToken(token: Token, label: String?): CoinViewItem<Token> {
         return CoinViewItem(
             item = token,
-            imageSource = ImageSource.Remote(token.fullCoin.coin.imageUrl, R.drawable.coin_placeholder),
+            imageSource = ImageSource.Remote(token.fullCoin.coin.imageUrl, R.drawable.coin_placeholder, token.fullCoin.coin.alternativeImageUrl),
             title = token.fullCoin.coin.code,
             subtitle = token.fullCoin.coin.name,
             enabled = false,

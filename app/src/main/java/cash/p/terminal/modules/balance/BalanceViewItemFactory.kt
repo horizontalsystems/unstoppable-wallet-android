@@ -4,8 +4,6 @@ import androidx.compose.runtime.Immutable
 import cash.p.terminal.R
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
-import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.swappable
@@ -23,10 +21,6 @@ import java.math.BigDecimal
 @Immutable
 data class BalanceViewItem(
     val wallet: Wallet,
-    val coinCode: String,
-    val coinTitle: String,
-    val coinIconUrl: String,
-    val coinIconPlaceholder: Int,
     val primaryValue: DeemedValue<String>,
     val exchangeValue: DeemedValue<String>,
     val secondaryValue: DeemedValue<String>,
@@ -60,10 +54,6 @@ data class LockedValue(
 @Immutable
 data class BalanceViewItem2(
     val wallet: Wallet,
-    val coinCode: String,
-    val coinTitle: String,
-    val coinIconUrl: String,
-    val coinIconPlaceholder: Int,
     val primaryValue: DeemedValue<String>,
     val exchangeValue: DeemedValue<String>,
     val diff: BigDecimal?,
@@ -243,10 +233,6 @@ class BalanceViewItemFactory {
 
         return BalanceViewItem(
             wallet = item.wallet,
-            coinCode = coin.code,
-            coinTitle = coin.name,
-            coinIconUrl = coin.imageUrl,
-            coinIconPlaceholder = wallet.token.iconPlaceholder,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             lockedValues = lockedValues,
@@ -300,10 +286,6 @@ class BalanceViewItemFactory {
 
         return BalanceViewItem2(
             wallet = item.wallet,
-            coinCode = coin.code,
-            coinTitle = coin.name,
-            coinIconUrl = coin.imageUrl,
-            coinIconPlaceholder = wallet.token.iconPlaceholder,
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             exchangeValue = BalanceViewHelper.rateValue(latestRate, currency, true),
@@ -343,8 +325,7 @@ class BalanceViewItemFactory {
         val errorMessage = (adapterState as? AdapterState.NotSynced)?.error?.message
 
         return BalanceCexViewItem(
-            coinIconUrl = cexAsset.coin?.imageUrl,
-            coinIconPlaceholder = R.drawable.coin_placeholder,
+            coin = cexAsset.coin,
             coinCode = cexAsset.id,
             badge = null,
             primaryValue = primaryValue,
@@ -365,7 +346,6 @@ class BalanceViewItemFactory {
                 currency = currency,
                 dimmed = false
             ),
-            coinUid = cexAsset.coin?.uid,
             assetId = cexAsset.id,
             cexAsset = cexAsset,
             coinPrice = latestRate,
