@@ -209,9 +209,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Капитализация рынка всех протоколов на блокчейне %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Общая капитализация</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Доминирование Bitcoin</string>
-    <string name="MarketGlobalMetrics_Volume">Объем торгов (24ч)</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Доминирование BTC</string>
     <string name="MarketGlobalMetrics_DefiCap">Капитализация DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют.</string>
