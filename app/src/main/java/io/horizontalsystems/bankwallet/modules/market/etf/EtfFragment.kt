@@ -1,8 +1,11 @@
 package cash.p.terminal.modules.market.etf
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,8 +20,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -27,6 +32,9 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,15 +63,20 @@ import cash.p.terminal.ui.compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinClear
 import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.cell.CellUniversalFixedHeight
+import cash.p.terminal.ui.compose.components.headline2_leah
 import cash.p.terminal.ui.compose.components.micro_grey
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead1_lucian
 import cash.p.terminal.ui.compose.components.subhead1_remus
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.title3_leah
+import io.horizontalsystems.core.helpers.DateHelper
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.EtfPoint
 import java.math.BigDecimal
+import kotlin.math.abs
 
 class EtfFragment : BaseComposeFragment() {
 
@@ -213,21 +226,48 @@ fun EtfPage(
 @Composable
 fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
     val dataDailyInflow = LinkedHashMap(
-        etfPoints.map { point ->
+        etfPoints.associate { point ->
             point.date.time / 1000 to point.dailyInflow.toFloat()
-        }.toMap()
+        }
     )
 
     val dataTotalInflow = LinkedHashMap(
-        etfPoints.map { point ->
+        etfPoints.associate { point ->
             point.date.time / 1000 to point.totalInflow.toFloat()
-        }.toMap()
+        }
     )
 
-    val lastPoint = etfPoints.lastOrNull()
-    val totalInflow = lastPoint?.totalInflow
-    val dailyInflow = lastPoint?.dailyInflow
-    val totalAssets = lastPoint?.totalAssets
+    val keys = etfPoints.map { point ->
+        point.date.time / 1000
+    }
+
+    var selectedKey by remember {
+        mutableStateOf<Long?>(null)
+    }
+
+    val itemSelected = selectedKey != null
+
+    val context = LocalContext.current
+    LaunchedEffect(selectedKey) {
+        if (itemSelected) {
+            HudHelper.vibrate(context)
+        }
+    }
+
+    val etfPoint = if (itemSelected) {
+        etfPoints.firstOrNull { it.date.time / 1000 == selectedKey }
+    } else {
+        etfPoints.lastOrNull()
+    }
+
+    val totalInflow = etfPoint?.totalInflow
+    val dailyInflow = etfPoint?.dailyInflow
+    val totalAssets = etfPoint?.totalAssets
+    val dateStr = if (itemSelected) {
+        etfPoint?.date?.let { DateHelper.getFullDate(it) }
+    } else {
+        null
+    }
 
     val totalInflowStr = totalInflow?.let {
         App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
@@ -242,27 +282,35 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
         App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
     }
 
-    val totalAssetsTitle = stringResource(id = R.string.MarketEtf_TotalNetAssets)
-
     val labelTop = etfPoints.maxOfOrNull { it.dailyInflow }?.let {
         App.numberFormatter.formatFiatShort(it, currency.symbol, currency.decimal)
     } ?: ""
 
     val labelBottom = etfPoints.minOfOrNull { it.dailyInflow }?.let {
-        val sign = if (it < BigDecimal.ZERO) {
-            "-"
-        } else {
-            ""
+        val sign = when {
+            it < BigDecimal.ZERO -> "-"
+            else -> ""
         }
+
         sign + App.numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
     } ?: ""
 
     Column {
-        ChartHeader(totalInflowStr, dailyInflowStr, dailyInflowPositive, totalAssetsTitle, totalAssetsStr)
+        ChartHeader(
+            mainValue = totalInflowStr,
+            mainValueStyleLarge = !itemSelected,
+            mainSubvalue = dateStr,
+            secondaryValue = dailyInflowStr,
+            secondaryValuePositive = dailyInflowPositive,
+            tertiaryTitle = stringResource(id = R.string.MarketEtf_TotalNetAssets),
+            tertiaryValue = totalAssetsStr
+        )
 
         val loadingModifier = if (loading) Modifier.alpha(0.5f) else Modifier
         Box(
-            modifier = loadingModifier.fillMaxWidth().height(160.dp)
+            modifier = loadingModifier
+                .fillMaxWidth()
+                .height(160.dp)
         ) {
             Column(modifier = Modifier.matchParentSize()) {
                 if (dataDailyInflow.isNotEmpty()) {
@@ -274,16 +322,35 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp)
                     ) {
+                        val color = if (itemSelected) {
+                            ComposeAppTheme.colors.grey50
+                        } else {
+                            ComposeAppTheme.colors.remus
+                        }
+                        val colorNegative = if (itemSelected) {
+                            ComposeAppTheme.colors.grey50
+                        } else {
+                            ComposeAppTheme.colors.lucian
+                        }
+
                         GraphicBarsWithNegative(
                             modifier = Modifier.matchParentSize(),
                             data = dataDailyInflow,
-                            color = ComposeAppTheme.colors.remus,
-                            colorNegative = ComposeAppTheme.colors.lucian,
+                            color = color,
+                            colorNegative = colorNegative,
                         )
                         GraphicLine(
                             modifier = Modifier.matchParentSize(),
                             data = dataTotalInflow,
-                            color = ComposeAppTheme.colors.grey50
+                            color = ComposeAppTheme.colors.grey50,
+                            selectedItemKey = selectedKey
+                        )
+                        GraphicPointer(
+                            modifier = Modifier.matchParentSize(),
+                            keys = keys,
+                            onSelect = {
+                                selectedKey = it
+                            }
                         )
                     }
 
@@ -302,6 +369,67 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
             }
         }
     }
+}
+
+@Composable
+private fun GraphicPointer(
+    modifier: Modifier = Modifier,
+    keys: List<Long>,
+    onSelect: (Long?) -> Unit
+) {
+    var selectedX by remember {
+        mutableStateOf<Float?>(null)
+    }
+    val lineColor = ComposeAppTheme.colors.leah
+    Canvas(
+        modifier = modifier
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = { offset ->
+                        selectedX = offset.x
+                    },
+                    onTap = {
+                        selectedX = null
+                    }
+                )
+            }
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDrag = { change: PointerInputChange, _: Offset ->
+                        selectedX = change.position.x
+                    },
+                    onDragEnd = {
+                        selectedX = null
+                    }
+                )
+            },
+        onDraw = {
+            val canvasWidth = size.width
+            val pointedXPercentage = selectedX?.div(canvasWidth)
+
+            val minKey = keys.min()
+            val maxKey = keys.max()
+
+            val interval = maxKey - minKey
+
+            val nearestKey = pointedXPercentage?.let {
+                val pointedKeyCalculatedValue = interval * it + minKey
+                keys.minBy {
+                    abs(it - pointedKeyCalculatedValue)
+                }
+            }
+
+            nearestKey?.let {
+                val percentage = (nearestKey - minKey) / interval.toFloat()
+
+                val x = percentage * canvasWidth
+
+                drawLine(lineColor, Offset(x, 0f), Offset(x, size.height))
+            }
+
+            onSelect.invoke(nearestKey)
+        }
+    )
 }
 
 @Composable
@@ -357,32 +485,47 @@ private fun ChartLabelTop(
 @Composable
 private fun ChartHeader(
     mainValue: String?,
+    mainValueStyleLarge: Boolean,
+    mainSubvalue: String?,
     secondaryValue: String?,
     secondaryValuePositive: Boolean,
     tertiaryTitle: String,
     tertiaryValue: String?,
 ) {
     CellUniversalFixedHeight(height = 64.dp) {
-        Row {
-            mainValue?.let {
-                title3_leah(
-                    modifier = Modifier.alignByBaseline(),
-                    text = it
-                )
-                HSpacer(width = 4.dp)
-            }
-            secondaryValue?.let {
-                if (secondaryValuePositive) {
-                    subhead1_remus(
-                        modifier = Modifier.alignByBaseline(),
-                        text = it
-                    )
-                } else {
-                    subhead1_lucian(
-                        modifier = Modifier.alignByBaseline(),
-                        text = it
-                    )
+        Column {
+            Row {
+                mainValue?.let {
+                    if (mainValueStyleLarge) {
+                        title3_leah(
+                            modifier = Modifier.alignByBaseline(),
+                            text = it
+                        )
+                    } else {
+                        headline2_leah(
+                            modifier = Modifier.alignByBaseline(),
+                            text = it
+                        )
+                    }
+                    HSpacer(width = 4.dp)
                 }
+                secondaryValue?.let {
+                    if (secondaryValuePositive) {
+                        subhead1_remus(
+                            modifier = Modifier.alignByBaseline(),
+                            text = it
+                        )
+                    } else {
+                        subhead1_lucian(
+                            modifier = Modifier.alignByBaseline(),
+                            text = it
+                        )
+                    }
+                }
+            }
+            mainSubvalue?.let {
+                VSpacer(height = 1.dp)
+                subhead2_grey(text = it)
             }
         }
         HFillSpacer(minWidth = 8.dp)

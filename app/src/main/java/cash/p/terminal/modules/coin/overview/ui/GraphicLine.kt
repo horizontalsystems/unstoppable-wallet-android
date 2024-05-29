@@ -23,11 +23,15 @@ fun GraphicLine(
     maxKey: Long = data.maxOf { it.key },
     minValue: Float = data.minOf { it.value },
     maxValue: Float = data.maxOf { it.value },
-    color: Color
+    color: Color,
+    selectedItemKey: Long? = null
 ) {
+    val dotColor = ComposeAppTheme.colors.leah
     Canvas(
         modifier = modifier,
         onDraw = {
+            var dotPosition: Offset? = null
+
             val canvasWidth = size.width
             val canvasHeight = size.height
 
@@ -46,6 +50,10 @@ fun GraphicLine(
                 } else {
                     linePath.lineTo(x, y)
                 }
+
+                if (selectedItemKey == key) {
+                    dotPosition = Offset(x, y)
+                }
             }
 
             scale(scaleX = 1f, scaleY = -1f) {
@@ -54,6 +62,9 @@ fun GraphicLine(
                     color,
                     style = Stroke(1.dp.toPx())
                 )
+                dotPosition?.let {
+                    drawCircle(dotColor, 5.dp.toPx(), center = it)
+                }
             }
         }
     )
