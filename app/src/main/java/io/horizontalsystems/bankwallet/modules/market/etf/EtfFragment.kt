@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -225,36 +226,36 @@ fun EtfPage(
 
 @Composable
 fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
-    val dataDailyInflow = LinkedHashMap(
-        etfPoints.associate { point ->
-            point.date.time / 1000 to point.dailyInflow.toFloat()
-        }
-    )
+    val keys = mutableListOf<Long>()
+    val dataDailyInflow = linkedMapOf<Long, Float>()
+    val dataTotalInflow = linkedMapOf<Long, Float>()
 
-    val dataTotalInflow = LinkedHashMap(
-        etfPoints.associate { point ->
-            point.date.time / 1000 to point.totalInflow.toFloat()
-        }
-    )
+    etfPoints.forEach { point ->
+        val timestamp = point.date.time / 1000
 
-    val keys = etfPoints.map { point ->
-        point.date.time / 1000
+        keys.add(timestamp)
+        dataDailyInflow[timestamp] = point.dailyInflow.toFloat()
+        dataTotalInflow[timestamp] = point.totalInflow.toFloat()
     }
 
     var selectedKey by remember {
         mutableStateOf<Long?>(null)
     }
 
-    val itemSelected = selectedKey != null
+    val isSelected by remember {
+        derivedStateOf {
+            selectedKey != null
+        }
+    }
 
     val context = LocalContext.current
     LaunchedEffect(selectedKey) {
-        if (itemSelected) {
+        if (isSelected) {
             HudHelper.vibrate(context)
         }
     }
 
-    val etfPoint = if (itemSelected) {
+    val etfPoint = if (isSelected) {
         etfPoints.firstOrNull { it.date.time / 1000 == selectedKey }
     } else {
         etfPoints.lastOrNull()
@@ -263,7 +264,7 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
     val totalInflow = etfPoint?.totalInflow
     val dailyInflow = etfPoint?.dailyInflow
     val totalAssets = etfPoint?.totalAssets
-    val dateStr = if (itemSelected) {
+    val dateStr = if (isSelected) {
         etfPoint?.date?.let { DateHelper.getFullDate(it) }
     } else {
         null
@@ -298,7 +299,7 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
     Column {
         ChartHeader(
             mainValue = totalInflowStr,
-            mainValueStyleLarge = !itemSelected,
+            mainValueStyleLarge = !isSelected,
             mainSubvalue = dateStr,
             secondaryValue = dailyInflowStr,
             secondaryValuePositive = dailyInflowPositive,
@@ -322,12 +323,12 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp)
                     ) {
-                        val color = if (itemSelected) {
+                        val color = if (isSelected) {
                             ComposeAppTheme.colors.grey50
                         } else {
                             ComposeAppTheme.colors.remus
                         }
-                        val colorNegative = if (itemSelected) {
+                        val colorNegative = if (isSelected) {
                             ComposeAppTheme.colors.grey50
                         } else {
                             ComposeAppTheme.colors.lucian
