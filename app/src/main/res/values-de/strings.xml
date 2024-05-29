@@ -198,9 +198,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Marktkapitalisierung aller Protokolle auf der %s Kette</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Diagramm</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Gesamt-MK</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin-Dominanz</string>
-    <string name="MarketGlobalMetrics_Volume">24h Lautstärke</string>
+    <string name="MarketGlobalMetrics_BtcDominance">BTC-Dominanz in Prozent</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi MK</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Gesamtmarktwert aller Kryptowährungen.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
