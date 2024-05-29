@@ -201,9 +201,7 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Capitalisation boursière de tous les protocoles de la chaîne %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Cap Totale</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Dominance Bitcoin</string>
-    <string name="MarketGlobalMetrics_Volume">Volume des dernières 24h</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Pourcentage de Dominance du BTC</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valeur de marché totale de toutes les cryptomonnaies.</string>
