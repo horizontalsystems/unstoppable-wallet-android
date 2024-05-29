@@ -290,6 +290,7 @@
     <string name="MarketEtf_Inflow">Inflow</string>
     <string name="MarketEtf_Outflow">Outflow</string>
     <string name="MarketEtf_Period_All">All</string>
+    <string name="MarketEtf_TotalNetAssets">Total Net Assets</string>
 
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
