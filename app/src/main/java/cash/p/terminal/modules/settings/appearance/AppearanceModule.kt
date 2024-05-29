@@ -23,8 +23,6 @@ object AppearanceModule {
                 App.baseTokenManager,
                 App.balanceViewTypeManager,
                 App.localStorage,
-                App.languageManager,
-                App.currencyManager,
             ) as T
         }
     }

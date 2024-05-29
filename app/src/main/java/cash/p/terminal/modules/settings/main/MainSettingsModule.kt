@@ -9,7 +9,7 @@ object MainSettingsModule {
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val service = MainSettingsService(
+            val viewModel = MainSettingsViewModel(
                 App.backupManager,
                 App.systemInfoManager,
                 App.termsManager,
@@ -18,10 +18,8 @@ object MainSettingsModule {
                 App.wcManager,
                 App.accountManager,
                 App.appConfigProvider,
-            )
-            val viewModel = MainSettingsViewModel(
-                service,
-                App.appConfigProvider.companyWebPageLink,
+                App.languageManager,
+                App.currencyManager,
             )
 
             return viewModel as T
