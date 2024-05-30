@@ -37,9 +37,9 @@ import io.horizontalsystems.bankwallet.modules.market.overview.TopPairViewItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryWithIcon
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
@@ -136,8 +136,8 @@ fun TopPairItem(
                 .padding(end = 16.dp)
                 .width(54.dp)
         ) {
-            CoinImage(
-                iconUrl = item.targetCoinUid?.coinIconUrl,
+            HsImage(
+                url = item.targetCoinUid?.coinIconUrl,
                 placeholder = R.drawable.ic_platform_placeholder_32,
                 modifier = Modifier
                     .size(32.dp)
@@ -145,8 +145,8 @@ fun TopPairItem(
                     .clip(CircleShape)
                     .align(Alignment.TopEnd)
             )
-            CoinImage(
-                iconUrl = item.baseCoinUid?.coinIconUrl,
+            HsImage(
+                url = item.baseCoinUid?.coinIconUrl,
                 placeholder = R.drawable.ic_platform_placeholder_32,
                 modifier = Modifier
                     .size(32.dp)

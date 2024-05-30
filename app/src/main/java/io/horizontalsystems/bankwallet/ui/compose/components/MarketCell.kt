@@ -44,8 +44,8 @@ fun MarketCoinClear(
         onClick = onClick,
         borderBottom = true
     ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
+        HsImage(
+            url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier
@@ -91,8 +91,8 @@ fun MarketCoin(
             .padding(vertical = 12.dp),
         verticalAlignment =  Alignment.CenterVertically,
     ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
+        HsImage(
+            url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier

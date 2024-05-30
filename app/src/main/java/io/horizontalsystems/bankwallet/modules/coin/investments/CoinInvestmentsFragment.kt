@@ -36,8 +36,8 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -146,8 +146,8 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
             .clickable(onClick = onClick, enabled = hasWebsiteUrl),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CoinImage(
-            iconUrl = fundViewItem.logoUrl,
+        HsImage(
+            url = fundViewItem.logoUrl,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .size(24.dp)

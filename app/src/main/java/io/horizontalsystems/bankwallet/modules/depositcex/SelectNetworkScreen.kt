@@ -17,9 +17,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -66,8 +66,8 @@ private fun NetworkCell(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalPadding = 0.dp
     ) {
-        CoinImage(
-            iconUrl = item.blockchain?.type?.imageUrl,
+        HsImage(
+            url = item.blockchain?.type?.imageUrl,
             placeholder = R.drawable.ic_platform_placeholder_24,
             modifier = Modifier
                 .padding(vertical = 12.dp)
