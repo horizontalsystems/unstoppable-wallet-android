@@ -6,11 +6,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class BalanceViewTypeManager(private val localStorage: ILocalStorage) {
-    val viewTypes = BalanceViewType.values().asList()
+    val viewTypes = BalanceViewType.entries
 
-    private val _balanceViewTypeFlow = MutableStateFlow(
-        localStorage.balanceViewType ?: BalanceViewType.CoinThenFiat
-    )
+    val balanceViewType: BalanceViewType
+        get() = localStorage.balanceViewType ?: BalanceViewType.CoinThenFiat
+
+    private val _balanceViewTypeFlow = MutableStateFlow(balanceViewType)
+
     val balanceViewTypeFlow = _balanceViewTypeFlow.asStateFlow()
 
     fun setViewType(viewType: BalanceViewType) {
