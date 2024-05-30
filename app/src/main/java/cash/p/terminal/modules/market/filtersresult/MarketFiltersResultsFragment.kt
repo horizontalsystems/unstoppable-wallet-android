@@ -2,20 +2,13 @@ package cash.p.terminal.modules.market.filtersresult
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
@@ -31,16 +24,15 @@ import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.filters.MarketFiltersViewModel
-import cash.p.terminal.modules.market.topcoins.SelectorDialogState
+import cash.p.terminal.modules.market.topcoins.OptionController
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
 import cash.p.terminal.ui.compose.components.CoinList
+import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListErrorView
-import cash.p.terminal.ui.compose.components.SortMenu
 
 class MarketFiltersResultsFragment : BaseComposeFragment() {
 
@@ -77,7 +69,9 @@ private fun SearchResultsScreen(
     navController: NavController
 ) {
 
+    val uiState = viewModel.uiState
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
+    var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
@@ -88,7 +82,7 @@ private fun SearchResultsScreen(
                 },
             )
 
-            Crossfade(viewModel.viewState) { state ->
+            Crossfade(uiState.viewState, label = "") { state ->
                 when (state) {
                     ViewState.Loading -> {
                         Loading()
@@ -100,27 +94,45 @@ private fun SearchResultsScreen(
 
                     ViewState.Success -> {
                         CoinList(
-                            items = viewModel.viewItemsState,
+                            items = uiState.viewItems,
                             scrollToTop = scrollToTopAfterUpdate,
                             onAddFavorite = { uid ->
                                 viewModel.onAddFavorite(uid)
 
-                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.AddToWatchlist(uid))
+                                stat(
+                                    page = StatPage.AdvancedSearchResults,
+                                    event = StatEvent.AddToWatchlist(uid)
+                                )
                             },
                             onRemoveFavorite = { uid ->
                                 viewModel.onRemoveFavorite(uid)
 
-                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.RemoveFromWatchlist(uid))
+                                stat(
+                                    page = StatPage.AdvancedSearchResults,
+                                    event = StatEvent.RemoveFromWatchlist(uid)
+                                )
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragment.Input(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
 
-                                stat(page = StatPage.AdvancedSearchResults, event = StatEvent.OpenCoin(coinUid))
+                                stat(
+                                    page = StatPage.AdvancedSearchResults,
+                                    event = StatEvent.OpenCoin(coinUid)
+                                )
                             },
                             preItems = {
                                 stickyHeader {
-                                    ListHeaderMenu(viewModel)
+                                    HeaderSorting(borderBottom = true, borderTop = true) {
+                                        HSpacer(width = 16.dp)
+                                        OptionController(
+                                            uiState.sortingField.titleResId,
+                                            onOptionClick = {
+                                                openSortingSelector = true
+                                            }
+                                        )
+                                        HSpacer(width = 16.dp)
+                                    }
                                 }
                             }
                         )
@@ -131,49 +143,21 @@ private fun SearchResultsScreen(
                 }
             }
 
-        }
-
-        //Dialog
-        (viewModel.selectorDialogState as? SelectorDialogState.Opened)?.let { state ->
-            AlertGroup(
-                title = R.string.Market_Sort_PopupTitle,
-                select = state.select,
-                onSelect = { selected ->
-                    scrollToTopAfterUpdate = true
-                    viewModel.onSelectSortingField(selected)
-                },
-                onDismiss = { viewModel.onSelectorDialogDismiss() }
-            )
-        }
-    }
-
-}
-
-@Composable
-private fun ListHeaderMenu(
-    viewModel: MarketFiltersResultViewModel,
-) {
-    HeaderSorting(borderTop = true, borderBottom = true) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp)
-                .height(44.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(modifier = Modifier.weight(1f)) {
-                SortMenu(
-                    titleRes = viewModel.menuState.sortingFieldSelect.selected.titleResId,
-                    onClick = viewModel::showSelectorMenu
+            if (openSortingSelector) {
+                AlertGroup(
+                    title = R.string.Market_Sort_PopupTitle,
+                    select = uiState.selectSortingField,
+                    onSelect = { selected ->
+                        viewModel.onSelectSortingField(selected)
+                        openSortingSelector = false
+                        scrollToTopAfterUpdate = true
+                    },
+                    onDismiss = {
+                        openSortingSelector = false
+                    }
                 )
             }
 
-            Box(modifier = Modifier.padding(start = 8.dp)) {
-                ButtonSecondaryToggle(
-                    select = viewModel.menuState.marketFieldSelect,
-                    onSelect = viewModel::marketFieldSelected
-                )
-            }
         }
     }
 }

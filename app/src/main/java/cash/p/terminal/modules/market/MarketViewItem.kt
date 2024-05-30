@@ -11,7 +11,8 @@ import io.horizontalsystems.marketkit.models.FullCoin
 @Immutable
 data class MarketViewItem(
     val fullCoin: FullCoin,
-    val coinRate: String,
+    val subtitle: String,
+    val value: String,
     val marketDataValue: MarketDataValue,
     val rank: String?,
     val favorited: Boolean,
@@ -52,6 +53,7 @@ data class MarketViewItem(
         ): MarketViewItem {
             return MarketViewItem(
                 marketItem.fullCoin,
+                marketItem.fullCoin.coin.name,
                 App.numberFormatter.formatFiatFull(
                     marketItem.rate.value,
                     marketItem.rate.currency.symbol
@@ -93,6 +95,7 @@ data class MarketViewItem(
             }
             return MarketViewItem(
                 marketItem.fullCoin,
+                marketItem.fullCoin.coin.name,
                 App.numberFormatter.formatFiatFull(
                     marketItem.rate.value,
                     marketItem.rate.currency.symbol

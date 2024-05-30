@@ -2,14 +2,11 @@ package cash.p.terminal.modules.market.filtersresult
 
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
-import cash.p.terminal.modules.market.category.MarketCategoryModule
 import cash.p.terminal.modules.market.category.MarketItemWrapper
 import cash.p.terminal.modules.market.filters.IMarketListFetcher
 import cash.p.terminal.modules.market.sort
-import cash.p.terminal.ui.compose.Select
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,16 +25,14 @@ class MarketFiltersResultService(
 
     var marketItems: List<MarketItem> = listOf()
 
-    val sortingFields = SortingField.values().toList()
-    private val marketFields = MarketField.values().toList()
-    var sortingField = SortingField.HighestCap
-    var marketField = MarketField.PriceDiff
+    val sortingFields = listOf(
+        SortingField.HighestCap,
+        SortingField.LowestCap,
+        SortingField.TopGainers,
+        SortingField.TopLosers,
+    )
 
-    val menu: MarketCategoryModule.Menu
-        get() = MarketCategoryModule.Menu(
-            Select(sortingField, sortingFields),
-            Select(marketField, marketFields)
-        )
+    var sortingField = SortingField.HighestCap
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var fetchJob: Job? = null

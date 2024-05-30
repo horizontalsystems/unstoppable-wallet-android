@@ -128,12 +128,12 @@ fun CoinList(
                     },
                     content = {
                         MarketCoin(
-                            coinName = item.fullCoin.coin.name,
-                            coinCode = item.fullCoin.coin.code,
+                            title = item.fullCoin.coin.code,
+                            subtitle = item.subtitle,
                             coinIconUrl = item.fullCoin.coin.imageUrl,
                             alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
                             coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                            coinRate = item.coinRate,
+                            value = item.value,
                             marketDataValue = item.marketDataValue,
                             label = item.rank,
                             advice = item.signal,
