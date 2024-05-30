@@ -84,15 +84,15 @@ fun CoinListOrderable(
                     }
 
                     MarketCoin(
-                        item.fullCoin.coin.name,
-                        item.fullCoin.coin.code,
-                        item.fullCoin.coin.imageUrl,
-                        item.fullCoin.coin.alternativeImageUrl,
-                        item.fullCoin.iconPlaceholder,
-                        item.coinRate,
-                        item.marketDataValue,
-                        item.rank,
-                        item.signal,
+                        title = item.fullCoin.coin.code,
+                        subtitle = item.fullCoin.coin.name,
+                        coinIconUrl = item.fullCoin.coin.imageUrl,
+                        alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
+                        coinIconPlaceholder = item.fullCoin.iconPlaceholder,
+                        value = item.value,
+                        marketDataValue = item.marketDataValue,
+                        label = item.rank,
+                        advice = item.signal,
                     )
                 }
             } else {
@@ -140,12 +140,12 @@ fun CoinListOrderable(
                         },
                         content = {
                             MarketCoin(
-                                coinName = item.fullCoin.coin.name,
-                                coinCode = item.fullCoin.coin.code,
+                                title = item.fullCoin.coin.code,
+                                subtitle = item.fullCoin.coin.name,
                                 coinIconUrl = item.fullCoin.coin.imageUrl,
                                 alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
                                 coinIconPlaceholder = item.fullCoin.iconPlaceholder,
-                                coinRate = item.coinRate,
+                                value = item.value,
                                 marketDataValue = item.marketDataValue,
                                 label = item.rank,
                                 advice = item.signal,

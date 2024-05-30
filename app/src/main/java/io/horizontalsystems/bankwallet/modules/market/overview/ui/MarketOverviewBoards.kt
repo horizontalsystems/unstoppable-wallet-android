@@ -110,12 +110,12 @@ private fun MarketCoinWithBackground(
     onClick: () -> Unit
 ) {
     MarketCoinClear(
-        marketViewItem.coinName,
         marketViewItem.coinCode,
+        marketViewItem.coinName,
         marketViewItem.iconUrl,
         marketViewItem.alternativeIconUrl,
         marketViewItem.iconPlaceHolder,
-        marketViewItem.coinRate,
+        marketViewItem.value,
         marketViewItem.marketDataValue,
         marketViewItem.rank,
         onClick

@@ -30,8 +30,8 @@ import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
 
 @Composable
 fun MarketCoinClear(
-    subtitle: String,
     title: String,
+    subtitle: String,
     coinIconUrl: String,
     alternativeCoinIconUrl: String? = null,
     coinIconPlaceholder: Int,
@@ -65,12 +65,12 @@ fun MarketCoinClear(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MarketCoin(
-    coinName: String,
-    coinCode: String,
+    title: String,
+    subtitle: String,
     coinIconUrl: String,
     alternativeCoinIconUrl: String? = null,
     coinIconPlaceholder: Int,
-    coinRate: String? = null,
+    value: String? = null,
     marketDataValue: MarketDataValue? = null,
     label: String? = null,
     advice: Advice? = null,
@@ -102,9 +102,9 @@ fun MarketCoin(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            MarketCoinFirstRow(coinCode, coinRate, advice)
+            MarketCoinFirstRow(title, value, advice)
             Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinName, marketDataValue, label)
+            MarketCoinSecondRow(subtitle, marketDataValue, label)
         }
     }
 }
@@ -274,11 +274,11 @@ fun MarketDataValueComponent(marketDataValue: MarketDataValue?) {
 fun PreviewMarketCoin(){
     ComposeAppTheme {
         MarketCoin(
-            coinName = "Ethereum With very long name for token",
-            coinCode = "ETH",
+            title = "ETH",
+            subtitle = "Ethereum With very long name for token",
             coinIconUrl = "eth.png",
             coinIconPlaceholder = R.drawable.logo_ethereum_24,
-            coinRate = "$2600",
+            value = "$2600",
         )
     }
 }
