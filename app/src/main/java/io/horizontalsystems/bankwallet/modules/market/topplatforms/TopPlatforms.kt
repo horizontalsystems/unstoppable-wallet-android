@@ -42,9 +42,9 @@ import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeWithDiff
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketDataValueComponent
@@ -217,8 +217,8 @@ fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) 
         borderBottom = true,
         onClick = { onItemClick(item.platform) }
     ) {
-        CoinImage(
-            iconUrl = item.iconUrl,
+        HsImage(
+            url = item.iconUrl,
             placeholder = item.iconPlaceHolder,
             modifier = Modifier
                 .padding(end = 16.dp)

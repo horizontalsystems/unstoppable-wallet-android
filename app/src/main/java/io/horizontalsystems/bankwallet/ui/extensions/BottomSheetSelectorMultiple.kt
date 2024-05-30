@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
@@ -75,8 +75,8 @@ fun BottomSheetSelectorMultiple(
                             verticalPadding = 0.dp
                         ) {
                             item.icon?.let { url ->
-                                CoinImage(
-                                    iconUrl = url,
+                                HsImage(
+                                    url = url,
                                     modifier = Modifier
                                         .padding(end = 16.dp)
                                         .size(32.dp)

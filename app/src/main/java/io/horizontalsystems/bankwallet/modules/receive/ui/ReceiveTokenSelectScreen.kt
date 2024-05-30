@@ -26,7 +26,7 @@ import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.CoinForReceiveType
 import io.horizontalsystems.bankwallet.modules.receive.viewmodels.ReceiveTokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionUniversalItem
@@ -125,8 +125,8 @@ fun ReceiveCoin(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = onClick
     ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
+        HsImage(
+            url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier

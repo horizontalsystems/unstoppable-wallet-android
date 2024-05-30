@@ -41,11 +41,11 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
@@ -328,11 +328,11 @@ private fun AccountActionItem(
         }
 
         if (coinIconUrl != null) {
-            CoinImage(
+            HsImage(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .size(20.dp),
-                iconUrl = coinIconUrl,
+                url = coinIconUrl,
                 placeholder = coinIconPlaceholder
             )
         }

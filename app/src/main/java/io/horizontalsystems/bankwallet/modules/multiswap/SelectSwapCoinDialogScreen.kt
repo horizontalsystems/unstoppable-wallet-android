@@ -24,8 +24,8 @@ import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.Badge
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.D1
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.MultitextM1
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
@@ -60,8 +60,8 @@ fun SelectSwapCoinDialogScreen(
                             onClickItem.invoke(coinItem)
                         }
                     ) {
-                        CoinImage(
-                            iconUrl = coinItem.token.coin.imageUrl,
+                        HsImage(
+                            url = coinItem.token.coin.imageUrl,
                             alternativeUrl = coinItem.token.coin.alternativeImageUrl,
                             placeholder = coinItem.token.iconPlaceholder,
                             modifier = Modifier.size(32.dp)

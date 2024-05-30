@@ -27,8 +27,8 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
@@ -118,8 +118,8 @@ fun CoinAuditHeader(name: String, logoUrl: String) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        CoinImage(
-            iconUrl = logoUrl,
+        HsImage(
+            url = logoUrl,
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp)

@@ -36,9 +36,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
@@ -105,8 +105,8 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                                         SectionItemBorderedRowUniversalClear(
                                             borderBottom = true
                                         ) {
-                                            CoinImage(
-                                                iconUrl = item.fundLogoUrl,
+                                            HsImage(
+                                                url = item.fundLogoUrl,
                                                 modifier = Modifier
                                                     .padding(end = 16.dp)
                                                     .size(32.dp)
