@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCo
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.TopPlatformViewItem
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.extensions.MetricData
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.TopPair
 import java.math.BigDecimal
 
@@ -103,8 +104,12 @@ data class TopPairViewItem(
     val title: String,
     val rank: String,
     val name: String,
+    val base: String,
     val baseCoinUid: String?,
+    val baseCoin: Coin?,
+    val target: String,
     val targetCoinUid: String?,
+    val targetCoin: Coin?,
     val iconUrl: String?,
     val tradeUrl: String?,
     val volume: BigDecimal,
@@ -126,8 +131,12 @@ data class TopPairViewItem(
             return TopPairViewItem(
                 title = "${topPair.base}/${topPair.target}",
                 name = topPair.marketName ?: "",
+                base = topPair.base,
                 baseCoinUid = topPair.baseCoinUid,
+                baseCoin = topPair.baseCoin,
+                target = topPair.target,
                 targetCoinUid = topPair.targetCoinUid,
+                targetCoin = topPair.targetCoin,
                 iconUrl = topPair.marketLogo,
                 rank = topPair.rank.toString(),
                 tradeUrl = topPair.tradeUrl,
