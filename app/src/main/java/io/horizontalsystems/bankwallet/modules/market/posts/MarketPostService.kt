@@ -18,7 +18,7 @@ class MarketPostService(
     private val backgroundManager: BackgroundManager,
 ) : BackgroundManager.Listener {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private var xxxJob: Job? = null
+    private var job: Job? = null
 
     private val stateSubject = BehaviorSubject.create<DataState<List<Post>>>()
     val stateObservable: Observable<DataState<List<Post>>>
@@ -26,12 +26,11 @@ class MarketPostService(
 
     init {
         backgroundManager.registerListener(this)
-        fetchPosts()
     }
 
     private fun fetchPosts() {
-        xxxJob?.cancel()
-        xxxJob = coroutineScope.launch {
+        job?.cancel()
+        job = coroutineScope.launch {
             try {
                 val posts = marketKit.postsSingle().await()
                 stateSubject.onNext(DataState.Success(posts))

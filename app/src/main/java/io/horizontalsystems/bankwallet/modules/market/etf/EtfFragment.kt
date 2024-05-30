@@ -150,7 +150,7 @@ fun EtfPage(
                                 DescriptionCard(
                                     title,
                                     description,
-                                    ImageSource.Remote("https://cdn.blocksdecoded.com/category-icons/lending@3x.png")
+                                    ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/ETF_bitcoin@3x.png")
                                 )
                             }
                             item {
