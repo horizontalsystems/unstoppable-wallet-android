@@ -81,6 +81,8 @@ class MarketKit(
     private val hsDataSyncer: HsDataSyncer,
     private val dumpManager: DumpManager,
 ) {
+    private val coinsMap by lazy { coinManager.allCoins().associateBy { it.uid } }
+
     // Coins
 
     val fullCoinsUpdatedObservable: Observable<Unit>
@@ -429,13 +431,25 @@ class MarketKit(
 
     // Overview
     fun marketOverviewSingle(currencyCode: String): Single<MarketOverview> =
-        marketOverviewManager.marketOverviewSingle(currencyCode)
+        marketOverviewManager.marketOverviewSingle(currencyCode).map { marketOverview ->
+            marketOverview.copy(
+                topPairs = marketOverview.topPairs.map { topPairWithCoin(it) }
+            )
+        }
+
+    private fun topPairWithCoin(topPair: TopPair) =
+        topPair.copy(
+            baseCoin = coinsMap[topPair.baseCoinUid],
+            targetCoin = coinsMap[topPair.targetCoinUid]
+        )
 
     fun marketGlobalSingle(currencyCode: String): Single<MarketGlobal> =
         hsProvider.marketGlobalSingle(currencyCode)
 
     fun topPairsSingle(currencyCode: String, page: Int, limit: Int): Single<List<TopPair>> =
-        hsProvider.topPairsSingle(currencyCode, page, limit)
+        hsProvider.topPairsSingle(currencyCode, page, limit).map { topPairs ->
+            topPairs.map { topPairWithCoin(it) }
+        }
 
 
     fun topMoversSingle(currencyCode: String): Single<TopMovers> =

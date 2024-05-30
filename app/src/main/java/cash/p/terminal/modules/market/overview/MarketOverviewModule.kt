@@ -15,6 +15,7 @@ import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsViewIte
 import cash.p.terminal.modules.market.topplatforms.TopPlatformViewItem
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.extensions.MetricData
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.TopPair
 import java.math.BigDecimal
 
@@ -103,8 +104,12 @@ data class TopPairViewItem(
     val title: String,
     val rank: String,
     val name: String,
+    val base: String,
     val baseCoinUid: String?,
+    val baseCoin: Coin?,
+    val target: String,
     val targetCoinUid: String?,
+    val targetCoin: Coin?,
     val iconUrl: String?,
     val tradeUrl: String?,
     val volume: BigDecimal,
@@ -126,8 +131,12 @@ data class TopPairViewItem(
             return TopPairViewItem(
                 title = "${topPair.base}/${topPair.target}",
                 name = topPair.marketName ?: "",
+                base = topPair.base,
                 baseCoinUid = topPair.baseCoinUid,
+                baseCoin = topPair.baseCoin,
+                target = topPair.target,
                 targetCoinUid = topPair.targetCoinUid,
+                targetCoin = topPair.targetCoin,
                 iconUrl = topPair.marketLogo,
                 rank = topPair.rank.toString(),
                 tradeUrl = topPair.tradeUrl,

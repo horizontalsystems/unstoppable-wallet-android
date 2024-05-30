@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.coinIconUrl
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
@@ -37,6 +36,7 @@ import cash.p.terminal.modules.market.overview.TopPairViewItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
+import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.HsImage
@@ -136,24 +136,37 @@ fun TopPairItem(
                 .padding(end = 16.dp)
                 .width(54.dp)
         ) {
-            HsImage(
-                url = item.targetCoinUid?.coinIconUrl,
-                placeholder = R.drawable.ic_platform_placeholder_32,
-                modifier = Modifier
-                    .size(32.dp)
-                    .background(ComposeAppTheme.colors.tyler)
-                    .clip(CircleShape)
-                    .align(Alignment.TopEnd)
-            )
-            HsImage(
-                url = item.baseCoinUid?.coinIconUrl,
-                placeholder = R.drawable.ic_platform_placeholder_32,
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape)
-                    .background(ComposeAppTheme.colors.tyler)
-                    .align(Alignment.TopStart)
-            )
+
+            val modifier = Modifier
+                .size(32.dp)
+                .background(ComposeAppTheme.colors.tyler)
+                .clip(CircleShape)
+
+            if (item.targetCoin!= null) {
+                CoinImage(
+                    coin = item.targetCoin,
+                    modifier = modifier.align(Alignment.TopEnd)
+                )
+            } else {
+                HsImage(
+                    url = "https://cdn.blocksdecoded.com/fiat-icons/${item.target}@3x.png",
+                    placeholder = R.drawable.ic_platform_placeholder_32,
+                    modifier = modifier.align(Alignment.TopEnd)
+                )
+            }
+
+            if (item.baseCoin != null) {
+                CoinImage(
+                    coin = item.baseCoin,
+                    modifier = modifier.align(Alignment.TopStart)
+                )
+            } else {
+                HsImage(
+                    url = "https://cdn.blocksdecoded.com/fiat-icons/${item.base}@3x.png",
+                    placeholder = R.drawable.ic_platform_placeholder_32,
+                    modifier = modifier.align(Alignment.TopStart)
+                )
+            }
         }
 
         Column(modifier = Modifier.fillMaxWidth()) {

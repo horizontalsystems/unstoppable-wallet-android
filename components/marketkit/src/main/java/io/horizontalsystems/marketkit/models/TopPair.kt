@@ -8,9 +8,13 @@ data class TopPair(
     val base: String,
     @SerializedName("base_uid")
     val baseCoinUid: String?,
+    @Transient
+    val baseCoin: Coin?,
     val target: String,
     @SerializedName("target_uid")
     val targetCoinUid: String?,
+    @Transient
+    val targetCoin: Coin?,
     val price: BigDecimal?,
     val volume: BigDecimal,
     @SerializedName("market_name")
