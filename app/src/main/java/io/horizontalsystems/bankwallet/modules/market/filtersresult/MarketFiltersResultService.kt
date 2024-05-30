@@ -2,14 +2,11 @@ package io.horizontalsystems.bankwallet.modules.market.filtersresult
 
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryModule
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.filters.IMarketListFetcher
 import io.horizontalsystems.bankwallet.modules.market.sort
-import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,16 +25,14 @@ class MarketFiltersResultService(
 
     var marketItems: List<MarketItem> = listOf()
 
-    val sortingFields = SortingField.values().toList()
-    private val marketFields = MarketField.values().toList()
-    var sortingField = SortingField.HighestCap
-    var marketField = MarketField.PriceDiff
+    val sortingFields = listOf(
+        SortingField.HighestCap,
+        SortingField.LowestCap,
+        SortingField.TopGainers,
+        SortingField.TopLosers,
+    )
 
-    val menu: MarketCategoryModule.Menu
-        get() = MarketCategoryModule.Menu(
-            Select(sortingField, sortingFields),
-            Select(marketField, marketFields)
-        )
+    var sortingField = SortingField.HighestCap
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var fetchJob: Job? = null

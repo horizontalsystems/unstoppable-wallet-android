@@ -1,54 +1,50 @@
 package io.horizontalsystems.bankwallet.modules.market.filtersresult
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statField
-import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
-import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class MarketFiltersResultViewModel(
     private val service: MarketFiltersResultService,
-) : ViewModel() {
+) : ViewModelUiState<MarketFiltersUiState>() {
 
     private var marketItems: List<MarketItemWrapper> = listOf()
-
-    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
-        private set
-
-    var viewItemsState by mutableStateOf<List<MarketViewItem>>(listOf())
-        private set
-
-    var selectorDialogState by mutableStateOf<SelectorDialogState>(SelectorDialogState.Closed)
-        private set
-
-    var menuState by mutableStateOf(service.menu)
-        private set
+    private var viewState: ViewState = ViewState.Loading
+    private var viewItemsState: List<MarketViewItem> = listOf()
 
     init {
-        syncMenu()
-
         viewModelScope.launch {
-            service.stateObservable.asFlow().collect {
-                syncState(it)
+            service.stateObservable.asFlow().collect { state ->
+                state.viewState?.let {
+                    viewState = it
+                    emitState()
+                }
+
+                state.dataOrNull?.let {
+                    marketItems = it
+                    syncMarketViewItems()
+                    emitState()
+                }
             }
         }
 
         service.start()
     }
+
+    override fun createState() = MarketFiltersUiState(
+        viewItems = viewItemsState,
+        viewState = viewState,
+        sortingField = service.sortingField,
+        selectSortingField = Select(service.sortingField, service.sortingFields)
+    )
 
     override fun onCleared() {
         service.stop()
@@ -58,28 +54,9 @@ class MarketFiltersResultViewModel(
         service.refresh()
     }
 
-    fun showSelectorMenu() {
-        selectorDialogState =
-            SelectorDialogState.Opened(Select(service.sortingField, service.sortingFields))
-    }
-
-    fun onSelectorDialogDismiss() {
-        selectorDialogState = SelectorDialogState.Closed
-    }
-
     fun onSelectSortingField(sortingField: SortingField) {
         service.updateSortingField(sortingField)
-        selectorDialogState = SelectorDialogState.Closed
-        syncMenu()
-    }
-
-    fun marketFieldSelected(marketField: MarketField) {
-        service.marketField = marketField
-
-        syncMarketViewItems()
-        syncMenu()
-
-        stat(page = StatPage.AdvancedSearchResults, event = StatEvent.SwitchField(marketField.statField))
+        emitState()
     }
 
     fun onAddFavorite(uid: String) {
@@ -90,30 +67,32 @@ class MarketFiltersResultViewModel(
         service.removeFavorite(uid)
     }
 
-    private fun syncState(state: DataState<List<MarketItemWrapper>>) {
-        viewModelScope.launch {
-            state.viewState?.let {
-                viewState = it
-            }
-
-            state.dataOrNull?.let {
-                marketItems = it
-
-                syncMarketViewItems()
-            }
-
-            syncMenu()
-        }
-    }
-
-    private fun syncMenu() {
-        menuState = service.menu
-    }
-
     private fun syncMarketViewItems() {
-        viewItemsState = marketItems.map {
-            MarketViewItem.create(it.marketItem, service.marketField, it.favorited)
+        viewItemsState = marketItems.map { itemWrapper ->
+            val marketCap = App.numberFormatter.formatFiatShort(
+                itemWrapper.marketItem.marketCap.value,
+                itemWrapper.marketItem.marketCap.currency.symbol,
+                2
+            )
+            MarketViewItem(
+                fullCoin = itemWrapper.marketItem.fullCoin,
+                subtitle = marketCap,
+                value = App.numberFormatter.formatFiatFull(
+                    itemWrapper.marketItem.rate.value,
+                    itemWrapper.marketItem.rate.currency.symbol
+                ),
+                marketDataValue = MarketDataValue.Diff(itemWrapper.marketItem.diff),
+                rank = itemWrapper.marketItem.rank?.toString(),
+                favorited = itemWrapper.favorited
+            )
         }.toList()
     }
 
 }
+
+data class MarketFiltersUiState(
+    val viewItems: List<MarketViewItem>,
+    val viewState: ViewState,
+    val sortingField: SortingField,
+    val selectSortingField: Select<SortingField>
+)

@@ -181,8 +181,8 @@ fun EtfPage(
                             }
                             items(uiState.viewItems) { viewItem ->
                                 MarketCoinClear(
-                                    subtitle = viewItem.subtitle,
                                     title = viewItem.title,
+                                    subtitle = viewItem.subtitle,
                                     coinIconUrl = viewItem.iconUrl,
                                     coinIconPlaceholder = R.drawable.ic_platform_placeholder_24,
                                     value = viewItem.value,
