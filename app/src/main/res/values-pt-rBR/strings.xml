@@ -777,8 +777,6 @@
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
     <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
-    <string name="Appearance_BalanceConversion">CONVERSÃO DE SALDO</string>
-    <string name="Appearance_BalanceValue">VALOR DE SALDO</string>
     <string name="Appearance_Warning_CloseApplication">Alterar o ícone fechará o aplicativo</string>
     <string name="Appearance_BalanceAutoHide">Ocultar Saldo</string>
     <string name="Appearance_BalanceAutoHide_Description">Oculta automaticamente o saldo cada vez que o aplicativo é aberto, independentemente das preferências anteriores.</string>
