@@ -8,10 +8,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class ThemeService(private val localStorage: ILocalStorage) {
-    private val themes by lazy { ThemeType.values().toList() }
+    private val themes by lazy { ThemeType.entries }
+
+    val selectedTheme: ThemeType
+        get() = localStorage.currentTheme
 
     private val _optionsFlow = MutableStateFlow(
-        Select(localStorage.currentTheme, themes)
+        Select(selectedTheme, themes)
     )
     val optionsFlow = _optionsFlow.asStateFlow()
 

@@ -1006,11 +1006,12 @@
 
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_Tab">TAB SETTINGS</string>
+    <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
     <string name="Appearance_AppIcon">APP ICON</string>
-    <string name="Appearance_BalanceConversion">BALANCE CONVERSION</string>
-    <string name="Appearance_BalanceValue">BALANCE VALUE</string>
+    <string name="Appearance_BalanceConversion">Balance Conversion</string>
+    <string name="Appearance_BalanceValue">Balance Value</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_HideMarketsTab">Hide Markets</string>
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>

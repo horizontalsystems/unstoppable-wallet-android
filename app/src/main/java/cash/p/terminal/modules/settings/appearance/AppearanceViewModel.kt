@@ -72,7 +72,10 @@ class AppearanceViewModel(
         baseTokenOptions = baseTokenOptions,
         balanceViewTypeOptions = balanceViewTypeOptions,
         marketsTabHidden = marketsTabHidden,
-        balanceTabButtonsHidden = balanceTabButtonsHidden
+        balanceTabButtonsHidden = balanceTabButtonsHidden,
+        selectedTheme = themeService.selectedTheme,
+        selectedLaunchScreen = launchScreenService.selectedLaunchScreen,
+        selectedBalanceViewType = balanceViewTypeManager.balanceViewType,
     )
 
     private fun buildBaseTokenSelect(token: Token?): SelectOptional<Token> {
@@ -155,4 +158,7 @@ data class AppearanceUIState(
     val balanceViewTypeOptions: Select<BalanceViewType>,
     val marketsTabHidden: Boolean,
     val balanceTabButtonsHidden: Boolean,
+    val selectedTheme: ThemeType,
+    val selectedLaunchScreen: LaunchPage,
+    val selectedBalanceViewType: BalanceViewType,
 )

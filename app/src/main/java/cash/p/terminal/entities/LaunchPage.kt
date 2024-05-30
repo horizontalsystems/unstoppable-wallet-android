@@ -22,7 +22,7 @@ enum class LaunchPage(@StringRes val titleRes: Int, @DrawableRes val iconRes: In
         get() = TranslatableString.ResString(titleRes)
 
     companion object {
-        private val map = values().associateBy(LaunchPage::name)
+        private val map = entries.associateBy(LaunchPage::name)
 
         fun fromString(type: String?): LaunchPage? = map[type]
     }
