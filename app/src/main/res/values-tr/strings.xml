@@ -752,8 +752,6 @@
     <string name="Appearance_Tab">TAB AYARLARI</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
     <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
-    <string name="Appearance_BalanceConversion">BAKIYE ÇEVRIMI</string>
-    <string name="Appearance_BalanceValue">BAKIYE DEĞERI</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
     <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
     <string name="Appearance_BalanceAutoHide_Description">Uygulama her açıldığında, önceki tercihlere bakılmaksızın bakiyeyi otomatik olarak gizler.</string>
