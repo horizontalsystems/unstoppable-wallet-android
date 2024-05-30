@@ -749,8 +749,6 @@
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
-    <string name="Appearance_BalanceConversion">SALDOKONVERTIERUNG</string>
-    <string name="Appearance_BalanceValue">SALDO WERT</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
     <string name="Appearance_BalanceAutoHide">Auto-Ausblenden ausgleichen</string>
     <string name="Appearance_BalanceAutoHide_Description">Bei jedem Öffnen der App wird der Saldo automatisch ausgeblendet, unabhängig von den vorherigen Einstellungen.</string>
