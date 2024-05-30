@@ -27,8 +27,8 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellFooter
 import cash.p.terminal.ui.compose.components.CellMultilineLawrenceSection
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
@@ -118,8 +118,8 @@ fun CoinAuditHeader(name: String, logoUrl: String) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        CoinImage(
-            iconUrl = logoUrl,
+        HsImage(
+            url = logoUrl,
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp)

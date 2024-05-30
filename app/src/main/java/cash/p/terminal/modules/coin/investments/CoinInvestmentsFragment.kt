@@ -36,8 +36,8 @@ import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellSingleLineClear
 import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.body_jacob
 import cash.p.terminal.ui.compose.components.body_leah
@@ -146,8 +146,8 @@ fun CoinInvestmentFund(fundViewItem: FundViewItem, onClick: () -> Unit) {
             .clickable(onClick = onClick, enabled = hasWebsiteUrl),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        CoinImage(
-            iconUrl = fundViewItem.logoUrl,
+        HsImage(
+            url = fundViewItem.logoUrl,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .size(24.dp)

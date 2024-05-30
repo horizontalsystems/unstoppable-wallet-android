@@ -24,8 +24,8 @@ import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.B2
 import cash.p.terminal.ui.compose.components.Badge
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.D1
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.MultitextM1
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
@@ -60,8 +60,8 @@ fun SelectSwapCoinDialogScreen(
                             onClickItem.invoke(coinItem)
                         }
                     ) {
-                        CoinImage(
-                            iconUrl = coinItem.token.coin.imageUrl,
+                        HsImage(
+                            url = coinItem.token.coin.imageUrl,
                             alternativeUrl = coinItem.token.coin.alternativeImageUrl,
                             placeholder = coinItem.token.iconPlaceholder,
                             modifier = Modifier.size(32.dp)

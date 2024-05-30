@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SectionUniversalItem
@@ -75,8 +75,8 @@ fun BottomSheetSelectorMultiple(
                             verticalPadding = 0.dp
                         ) {
                             item.icon?.let { url ->
-                                CoinImage(
-                                    iconUrl = url,
+                                HsImage(
+                                    url = url,
                                     modifier = Modifier
                                         .padding(end = 16.dp)
                                         .size(32.dp)

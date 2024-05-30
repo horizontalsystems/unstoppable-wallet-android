@@ -51,8 +51,8 @@ import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HeaderStick
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
@@ -261,8 +261,8 @@ private fun MarketCoin(
         borderTop = true,
         onClick = onClick
     ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
+        HsImage(
+            url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier

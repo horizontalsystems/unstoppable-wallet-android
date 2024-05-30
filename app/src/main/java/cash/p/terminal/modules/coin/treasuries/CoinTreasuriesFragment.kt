@@ -36,9 +36,9 @@ import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.CellFooter
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
@@ -105,8 +105,8 @@ class CoinTreasuriesFragment : BaseComposeFragment() {
                                         SectionItemBorderedRowUniversalClear(
                                             borderBottom = true
                                         ) {
-                                            CoinImage(
-                                                iconUrl = item.fundLogoUrl,
+                                            HsImage(
+                                                url = item.fundLogoUrl,
                                                 modifier = Modifier
                                                     .padding(end = 16.dp)
                                                     .size(32.dp)

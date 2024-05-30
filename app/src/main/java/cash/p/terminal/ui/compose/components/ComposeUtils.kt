@@ -51,8 +51,8 @@ fun CoinImage(
     coin: Coin?,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
-) = CoinImage(
-    iconUrl = coin?.imageUrl,
+) = HsImage(
+    url = coin?.imageUrl,
     alternativeUrl = coin?.alternativeImageUrl,
     placeholder = coin?.imagePlaceholder,
     modifier = modifier,
@@ -64,8 +64,8 @@ fun CoinImage(
     token: Token?,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
-) = CoinImage(
-    iconUrl = token?.coin?.imageUrl,
+) = HsImage(
+    url = token?.coin?.imageUrl,
     alternativeUrl = token?.coin?.alternativeImageUrl,
     placeholder = token?.iconPlaceholder,
     modifier = modifier,
@@ -73,8 +73,8 @@ fun CoinImage(
 )
 
 @Composable
-fun CoinImage(
-    iconUrl: String?,
+fun HsImage(
+    url: String?,
     alternativeUrl: String? = null,
     placeholder: Int? = null,
     modifier: Modifier,
@@ -82,9 +82,9 @@ fun CoinImage(
 ) {
     val fallback = placeholder ?: R.drawable.coin_placeholder
     when {
-        iconUrl != null -> Image(
+        url != null -> Image(
             painter = rememberAsyncImagePainter(
-                model = iconUrl,
+                model = url,
                 error = alternativeUrl?.let {
                     rememberAsyncImagePainter(
                         model = alternativeUrl,

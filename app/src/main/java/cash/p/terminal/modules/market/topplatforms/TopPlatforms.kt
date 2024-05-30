@@ -42,9 +42,9 @@ import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.BadgeWithDiff
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketDataValueComponent
@@ -217,8 +217,8 @@ fun TopPlatformItem(item: TopPlatformViewItem, onItemClick: (Platform) -> Unit) 
         borderBottom = true,
         onClick = { onItemClick(item.platform) }
     ) {
-        CoinImage(
-            iconUrl = item.iconUrl,
+        HsImage(
+            url = item.iconUrl,
             placeholder = item.iconPlaceHolder,
             modifier = Modifier
                 .padding(end = 16.dp)

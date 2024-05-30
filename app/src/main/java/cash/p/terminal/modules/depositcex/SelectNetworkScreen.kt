@@ -17,9 +17,9 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.Badge
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.VSpacer
@@ -66,8 +66,8 @@ private fun NetworkCell(
         modifier = Modifier.padding(horizontal = 16.dp),
         verticalPadding = 0.dp
     ) {
-        CoinImage(
-            iconUrl = item.blockchain?.type?.imageUrl,
+        HsImage(
+            url = item.blockchain?.type?.imageUrl,
             placeholder = R.drawable.ic_platform_placeholder_24,
             modifier = Modifier
                 .padding(vertical = 12.dp)

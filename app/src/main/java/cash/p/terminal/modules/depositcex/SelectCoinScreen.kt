@@ -23,8 +23,8 @@ import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.Badge
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
@@ -106,8 +106,8 @@ private fun CoinCell(
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalPadding = 0.dp
         ) {
-            CoinImage(
-                iconUrl = viewItem.coinIconUrl,
+            HsImage(
+                url = viewItem.coinIconUrl,
                 alternativeUrl = viewItem.alternativeCoinUrl,
                 placeholder = viewItem.coinIconPlaceholder,
                 modifier = Modifier

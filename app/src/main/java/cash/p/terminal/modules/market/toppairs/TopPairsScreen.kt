@@ -37,9 +37,9 @@ import cash.p.terminal.modules.market.overview.TopPairViewItem
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
@@ -136,8 +136,8 @@ fun TopPairItem(
                 .padding(end = 16.dp)
                 .width(54.dp)
         ) {
-            CoinImage(
-                iconUrl = item.targetCoinUid?.coinIconUrl,
+            HsImage(
+                url = item.targetCoinUid?.coinIconUrl,
                 placeholder = R.drawable.ic_platform_placeholder_32,
                 modifier = Modifier
                     .size(32.dp)
@@ -145,8 +145,8 @@ fun TopPairItem(
                     .clip(CircleShape)
                     .align(Alignment.TopEnd)
             )
-            CoinImage(
-                iconUrl = item.baseCoinUid?.coinIconUrl,
+            HsImage(
+                url = item.baseCoinUid?.coinIconUrl,
                 placeholder = R.drawable.ic_platform_placeholder_32,
                 modifier = Modifier
                     .size(32.dp)

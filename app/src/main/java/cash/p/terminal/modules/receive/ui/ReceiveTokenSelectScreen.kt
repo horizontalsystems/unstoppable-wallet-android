@@ -26,7 +26,7 @@ import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.viewmodels.CoinForReceiveType
 import cash.p.terminal.modules.receive.viewmodels.ReceiveTokenSelectViewModel
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SectionUniversalItem
@@ -125,8 +125,8 @@ fun ReceiveCoin(
         modifier = Modifier.padding(horizontal = 16.dp),
         onClick = onClick
     ) {
-        CoinImage(
-            iconUrl = coinIconUrl,
+        HsImage(
+            url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
             placeholder = coinIconPlaceholder,
             modifier = Modifier

@@ -53,9 +53,9 @@ import cash.p.terminal.modules.balance.BalanceScreenState
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui.compose.components.HeaderStick
+import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.RowUniversal
@@ -294,10 +294,10 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                     }
                     is TransactionViewItem.Icon.Regular -> {
                         val shape = if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                        CoinImage(
+                        HsImage(
                             modifier = Modifier.size(32.dp)
                                 .clip(shape),
-                            iconUrl = icon.url,
+                            url = icon.url,
                             alternativeUrl = icon.alternativeUrl,
                             placeholder = icon.placeholder
                         )
@@ -305,13 +305,13 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                     is TransactionViewItem.Icon.Double -> {
                         val backShape = if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         val frontShape = if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                        CoinImage(
+                        HsImage(
                             modifier = Modifier
                                 .align(Alignment.TopStart)
                                 .padding(top = 4.dp, start = 6.dp)
                                 .size(24.dp)
                                 .clip(backShape),
-                            iconUrl = icon.back.url,
+                            url = icon.back.url,
                             alternativeUrl = icon.back.alternativeUrl,
                             placeholder = icon.back.placeholder,
                         )
@@ -325,13 +325,13 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                                 .background(ComposeAppTheme.colors.tyler)
                         )
 
-                        CoinImage(
+                        HsImage(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(bottom = 4.dp, end = 6.dp)
                                 .size(24.dp)
                                 .clip(frontShape),
-                            iconUrl = icon.front.url,
+                            url = icon.front.url,
                             alternativeUrl = icon.front.alternativeUrl,
                             placeholder = icon.front.placeholder,
                         )
