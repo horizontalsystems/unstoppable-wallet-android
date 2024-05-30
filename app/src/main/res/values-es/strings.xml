@@ -765,8 +765,6 @@
     <string name="Appearance_Tab">ESPECIALES DE OBJETO</string>
     <string name="Appearance_LaunchScreen">ACTUALIZAR SCREEN</string>
     <string name="Appearance_AppIcon">ICONO APP</string>
-    <string name="Appearance_BalanceConversion">CONVERSIÓN DE BALANCE</string>
-    <string name="Appearance_BalanceValue">VALLA DE BALANZA</string>
     <string name="Appearance_Warning_CloseApplication">Cambiar icono cerrará la aplicación</string>
     <string name="Appearance_BalanceAutoHide">Saldo Auto Ocultar</string>
     <string name="Appearance_BalanceAutoHide_Description">Oculta automáticamente el balance cada vez que se abre la aplicación, independientemente de las preferencias anteriores.</string>
