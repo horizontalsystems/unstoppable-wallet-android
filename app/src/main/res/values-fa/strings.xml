@@ -440,7 +440,6 @@
     <string name="Appearance_Theme">موضوع</string>
     <string name="Appearance_LaunchScreen">صفحه راه اندازی</string>
     <string name="Appearance_AppIcon">نماد برنامه</string>
-    <string name="Appearance_BalanceConversion">تبدیل تعادل</string>
     <string name="BalanceViewType_CoinValue">ارزش سکه</string>
     <string name="BalanceViewType_FiatValue">ارزش فیات</string>
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
