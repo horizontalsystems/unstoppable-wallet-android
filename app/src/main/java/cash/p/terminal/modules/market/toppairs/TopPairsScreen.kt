@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
+import cash.p.terminal.core.fiatIconUrl
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
@@ -137,34 +138,41 @@ fun TopPairItem(
                 .width(54.dp)
         ) {
 
-            val modifier = Modifier
+            val targetCoinModifier = Modifier
                 .size(32.dp)
                 .background(ComposeAppTheme.colors.tyler)
                 .clip(CircleShape)
+                .align(Alignment.TopEnd)
 
-            if (item.targetCoin!= null) {
+            if (item.targetCoin != null) {
                 CoinImage(
                     coin = item.targetCoin,
-                    modifier = modifier.align(Alignment.TopEnd)
+                    modifier = targetCoinModifier
                 )
             } else {
                 HsImage(
-                    url = "https://cdn.blocksdecoded.com/fiat-icons/${item.target}@3x.png",
+                    url = item.target.fiatIconUrl,
                     placeholder = R.drawable.ic_platform_placeholder_32,
-                    modifier = modifier.align(Alignment.TopEnd)
+                    modifier = targetCoinModifier
                 )
             }
+
+            val baseCoinModifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .background(ComposeAppTheme.colors.tyler)
+                .align(Alignment.TopStart)
 
             if (item.baseCoin != null) {
                 CoinImage(
                     coin = item.baseCoin,
-                    modifier = modifier.align(Alignment.TopStart)
+                    modifier = baseCoinModifier
                 )
             } else {
                 HsImage(
-                    url = "https://cdn.blocksdecoded.com/fiat-icons/${item.base}@3x.png",
+                    url = item.base.fiatIconUrl,
                     placeholder = R.drawable.ic_platform_placeholder_32,
-                    modifier = modifier.align(Alignment.TopStart)
+                    modifier = baseCoinModifier
                 )
             }
         }
