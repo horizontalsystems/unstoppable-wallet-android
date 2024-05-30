@@ -62,10 +62,16 @@ class MetricsPageViewModel(
         else -> throw Exception("MetricsType not supported")
     }
 
+    private val icon = when(metricsType) {
+        MetricsType.Volume24h -> "total_volume"
+        MetricsType.TotalMarketCap -> "total_mcap"
+        else -> throw Exception("MetricsType not supported")
+    }
+
     private val header = MarketModule.Header(
         title = Translator.getString(title),
         description = Translator.getString(description),
-        icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/total_volume@3x.png")
+        icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/$icon@3x.png")
     )
 
     override fun createState(): MetricsPageModule.UiState {

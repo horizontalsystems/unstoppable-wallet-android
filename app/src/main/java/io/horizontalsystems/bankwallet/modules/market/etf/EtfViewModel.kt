@@ -116,7 +116,7 @@ class EtfViewModel(
 
     private fun etfViewItem(etf: Etf, timeDuration: TimeDuration) = EtfViewItem(
         title = etf.ticker,
-        iconUrl = "https://cdn.blocksdecoded.com/header-images/${etf.ticker.lowercase()}@3x.png",
+        iconUrl = "https://cdn.blocksdecoded.com/etf-tresuries/${etf.ticker}@3x.png",
         subtitle = etf.name,
         value = etf.totalAssets?.let {
             App.numberFormatter.formatFiatShort(it, currencyManager.baseCurrency.symbol, 0)
