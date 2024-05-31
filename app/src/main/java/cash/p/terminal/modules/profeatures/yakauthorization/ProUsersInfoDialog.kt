@@ -20,7 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.findNavController
@@ -83,7 +88,7 @@ private fun ProUsersInfoScreen(navController: NavController, features: List<Stri
                     onClick = {}
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_checkbox_check),
+                        painter = painterResource(R.drawable.checkbox_active_24),
                         tint = ComposeAppTheme.colors.grey,
                         contentDescription = null,
                     )
