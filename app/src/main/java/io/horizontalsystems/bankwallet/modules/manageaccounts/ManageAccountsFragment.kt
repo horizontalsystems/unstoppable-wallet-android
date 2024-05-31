@@ -34,6 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.HsRadioButton
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -140,21 +141,14 @@ private fun AccountsSection(accounts: List<AccountViewItem>, viewModel: ManageAc
                 stat(page = StatPage.ManageWallets, event = StatEvent.Select(StatEntity.Wallet))
             }
         ) {
-            if (accountViewItem.selected) {
-                Icon(
-                    modifier = Modifier.padding(horizontal = 18.dp),
-                    painter = painterResource(id = R.drawable.ic_radion),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.jacob
-                )
-            } else {
-                Icon(
-                    modifier = Modifier.padding(horizontal = 18.dp),
-                    painter = painterResource(id = R.drawable.ic_radioff),
-                    contentDescription = null,
-                    tint = ComposeAppTheme.colors.grey
-                )
-            }
+            HsRadioButton(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                selected = accountViewItem.selected,
+                onClick = {
+                    viewModel.onSelect(accountViewItem)
+                    stat(page = StatPage.ManageWallets, event = StatEvent.Select(StatEntity.Wallet))
+                }
+            )
             Column(modifier = Modifier.weight(1f)) {
                 body_leah(text = accountViewItem.title)
                 if (accountViewItem.backupRequired) {
