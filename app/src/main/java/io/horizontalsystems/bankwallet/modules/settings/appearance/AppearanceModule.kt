@@ -54,3 +54,14 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
         fun fromTitle(title: String?): AppIcon? = titleMap[title]
     }
 }
+
+enum class PriceChangeInterval(val raw: String, override val title: TranslatableString): WithTranslatableTitle {
+    LAST_24H("24h", TranslatableString.ResString(R.string.Market_PriceChange_24H)),
+    FROM_UTC_MIDNIGHT("utc", TranslatableString.ResString(R.string.Market_PriceChange_Utc));
+
+    companion object {
+        fun fromRaw(raw: String): PriceChangeInterval? {
+            return entries.find { it.raw == raw }
+        }
+    }
+}
