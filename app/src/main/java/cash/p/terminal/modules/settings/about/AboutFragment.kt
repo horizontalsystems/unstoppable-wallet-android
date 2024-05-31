@@ -1,24 +1,15 @@
 package cash.p.terminal.modules.settings.about
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -37,12 +28,9 @@ import cash.p.terminal.modules.settings.privacy.PrivacyScreen
 import cash.p.terminal.modules.settings.terms.TermsScreen
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 
 class AboutFragment : BaseComposeFragment() {
@@ -101,10 +89,6 @@ private fun AboutScreen(
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(Modifier.height(12.dp))
-                AboutHeader(aboutViewModel.appVersion)
-                Spacer(Modifier.height(24.dp))
-                InfoTextBody(text = stringResource(R.string.SettingsTerms_Text))
-                Spacer(Modifier.height(24.dp))
                 SettingSections(aboutViewModel, navController)
                 Spacer(Modifier.height(36.dp))
             }
@@ -124,8 +108,9 @@ private fun SettingSections(
     CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
-                R.string.SettingsAboutApp_WhatsNew,
-                R.drawable.ic_info_20,
+                title = R.string.SettingsAboutApp_AppVersion,
+                icon = R.drawable.ic_info_20,
+                value = viewModel.appVersion,
                 onClick = {
                     navController.navigate(ReleaseNotesPage)
                 }
@@ -183,62 +168,4 @@ private fun SettingSections(
     )
     
     VSpacer(32.dp)
-}
-
-@Composable
-fun AboutHeader(appVersion: String) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp)
-    ) {
-        Image(
-            modifier = Modifier.size(72.dp),
-            painter = painterResource(id = R.drawable.ic_app_logo_72),
-            contentDescription = null,
-        )
-        Column(
-            Modifier.height(72.dp).padding(start = 16.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = stringResource(R.string.App_Name),
-                style = ComposeAppTheme.typography.headline1,
-                color = ComposeAppTheme.colors.leah,
-                maxLines = 1,
-            )
-            Spacer(Modifier.height(12.dp))
-            subhead2_grey(
-                text = stringResource(R.string.Settings_InfoTitleWithVersion, appVersion),
-                maxLines = 1,
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun previewAboutScreen() {
-    ComposeAppTheme {
-        Column {
-            AboutHeader("0.24")
-            Spacer(Modifier.height(32.dp))
-            CellSingleLineLawrenceSection(
-                listOf({
-                    HsSettingCell(
-                        R.string.Settings_RateUs,
-                        R.drawable.ic_star_20,
-                        showAlert = true,
-                        onClick = { }
-                    )
-                }, {
-                    HsSettingCell(
-                        R.string.Settings_ShareThisWallet,
-                        R.drawable.ic_share_20,
-                        onClick = { }
-                    )
-                })
-            )
-        }
-    }
 }

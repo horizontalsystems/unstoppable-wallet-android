@@ -1026,6 +1026,7 @@
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
     <string name="SettingsAboutApp_Site">Website</string>
     <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
+    <string name="SettingsAboutApp_AppVersion">App Version</string>
 
     <!-- Blockchain Settings  -->
 
