@@ -273,7 +273,7 @@ private fun SettingSections(
     )
 
     VSpacer(32.dp)
-
+/*
     CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
@@ -299,7 +299,7 @@ private fun SettingSections(
     )
 
     VSpacer(32.dp)
-
+*/
     CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
