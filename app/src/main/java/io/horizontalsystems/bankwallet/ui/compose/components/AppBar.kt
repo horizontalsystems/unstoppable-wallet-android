@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,9 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -187,16 +184,14 @@ private fun MenuItemSimple(menuItem: MenuItem) {
             showAlertDot = menuItem.showAlertDot,
         )
     } else {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .clickable(
-                    enabled = menuItem.enabled,
-                    onClick = menuItem.onClick
-                ),
-            text = menuItem.title.getString().toUpperCase(Locale.current),
-            style = ComposeAppTheme.typography.headline2,
-            color = color
-        )
+        ButtonPrimaryWrapper(
+            enabled = menuItem.enabled,
+            onClick = menuItem.onClick
+        ){
+            Text(
+                text = menuItem.title.getString().uppercase(),
+                color = color
+            )
+        }
     }
 }
