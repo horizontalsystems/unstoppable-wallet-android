@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -25,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
@@ -278,6 +280,36 @@ fun ButtonPrimaryYellowWithSpinner(
         enabled = enabled
     )
 }
+
+@Composable
+fun ButtonPrimaryWrapper(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    ProvideTextStyle(
+        value = ComposeAppTheme.typography.headline2
+    ) {
+        Box(
+            modifier = modifier
+                .clip(RoundedCornerShape(25.dp))
+                .defaultMinSize(
+                    minWidth = ButtonPrimaryDefaults.MinWidth,
+                    minHeight = ButtonPrimaryDefaults.MinHeight
+                )
+                .clickable(
+                    enabled = enabled,
+                    onClick = onClick,
+                )
+                .padding(ButtonPrimaryDefaults.ContentPadding),
+            contentAlignment = Alignment.Center,
+        ) {
+            content()
+        }
+    }
+}
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
