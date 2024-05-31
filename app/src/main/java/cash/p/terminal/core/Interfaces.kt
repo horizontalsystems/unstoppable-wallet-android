@@ -31,6 +31,7 @@ import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.Value
 import cash.p.terminal.modules.market.favorites.WatchlistSorting
 import cash.p.terminal.modules.settings.appearance.AppIcon
+import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.settings.security.tor.TorStatus
 import cash.p.terminal.modules.settings.terms.TermsModule
@@ -126,6 +127,9 @@ interface ILocalStorage {
     var statsLastSyncTime: Long
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
+
+    var priceChangeInterval: PriceChangeInterval
+    val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
 
     fun clear()
 }
