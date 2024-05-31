@@ -18,7 +18,6 @@ class BaseTokenManager(
         listOf(
             TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
         ).mapNotNull {
             coinManager.getToken(it)
         }
