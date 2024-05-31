@@ -31,6 +31,7 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.favorites.WatchlistSorting
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
+import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
@@ -126,6 +127,9 @@ interface ILocalStorage {
     var statsLastSyncTime: Long
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
+
+    var priceChangeInterval: PriceChangeInterval
+    val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
 
     fun clear()
 }

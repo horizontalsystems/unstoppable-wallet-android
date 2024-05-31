@@ -23,8 +23,9 @@ class AppearanceViewModel(
     private var themeOptions = themeService.optionsFlow.value
     private var marketsTabHidden = !localStorage.marketsTabEnabled
     private var balanceTabButtonsHidden = !localStorage.balanceTabButtonsEnabled
-    private var balanceViewTypeOptions =
-        buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
+    private var balanceViewTypeOptions = buildBalanceViewTypeSelect(balanceViewTypeManager.balanceViewTypeFlow.value)
+    private var priceChangeInterval = localStorage.priceChangeInterval
+    private var priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
 
     init {
         viewModelScope.launch {
@@ -63,10 +64,16 @@ class AppearanceViewModel(
         selectedTheme = themeService.selectedTheme,
         selectedLaunchScreen = launchScreenService.selectedLaunchScreen,
         selectedBalanceViewType = balanceViewTypeManager.balanceViewType,
+        priceChangeInterval = priceChangeInterval,
+        priceChangeIntervalOptions = priceChangeIntervalOptions
     )
 
     private fun buildBalanceViewTypeSelect(value: BalanceViewType): Select<BalanceViewType> {
         return Select(value, balanceViewTypeManager.viewTypes)
+    }
+
+    private fun buildPriceChangeIntervalSelect(value: PriceChangeInterval): Select<PriceChangeInterval> {
+        return Select(value, PriceChangeInterval.entries)
     }
 
     private fun handleUpdatedLaunchScreenOptions(launchScreenOptions: Select<LaunchPage>) {
@@ -122,6 +129,14 @@ class AppearanceViewModel(
         emitState()
     }
 
+    fun onSetPriceChangeInterval(priceChangeInterval: PriceChangeInterval) {
+        localStorage.priceChangeInterval = priceChangeInterval
+
+        this.priceChangeInterval = priceChangeInterval
+        this.priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
+        emitState()
+    }
+
 }
 
 data class AppearanceUIState(
@@ -134,4 +149,6 @@ data class AppearanceUIState(
     val selectedTheme: ThemeType,
     val selectedLaunchScreen: LaunchPage,
     val selectedBalanceViewType: BalanceViewType,
+    val priceChangeInterval: PriceChangeInterval,
+    val priceChangeIntervalOptions: Select<PriceChangeInterval>
 )

@@ -90,6 +90,7 @@ fun AppearanceScreen(navController: NavController) {
     var openThemeSelector by rememberSaveable { mutableStateOf(false) }
     var openLaunchPageSelector by rememberSaveable { mutableStateOf(false) }
     var openBalanceValueSelector by rememberSaveable { mutableStateOf(false) }
+    var openPriceChangeIntervalSelector by rememberSaveable { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         ModalBottomSheetLayout(
@@ -134,24 +135,33 @@ fun AppearanceScreen(navController: NavController) {
 
                     HeaderText(text = stringResource(id = R.string.Appearance_MarketsTab))
                     CellUniversalLawrenceSection(
-                        listOf {
-                            RowUniversal(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                            ) {
-                                body_leah(
-                                    text = stringResource(id = R.string.Appearance_HideMarketsTab),
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .padding(end = 16.dp)
-                                )
-                                HsSwitch(
-                                    checked = uiState.marketsTabHidden,
-                                    onCheckedChange = {
-                                        viewModel.onSetMarketTabsHidden(it)
-                                    }
+                        listOf (
+                            {
+                                RowUniversal(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                ) {
+                                    body_leah(
+                                        text = stringResource(id = R.string.Appearance_HideMarketsTab),
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(end = 16.dp)
+                                    )
+                                    HsSwitch(
+                                        checked = uiState.marketsTabHidden,
+                                        onCheckedChange = {
+                                            viewModel.onSetMarketTabsHidden(it)
+                                        }
+                                    )
+                                }
+                            },
+                            {
+                                MenuItemWithDialog(
+                                    R.string.Appearance_PriceChangeInterval,
+                                    value = uiState.priceChangeInterval.title.getString(),
+                                    onClick = { openPriceChangeIntervalSelector = true }
                                 )
                             }
-                        }
+                        )
                     )
 
                     AnimatedVisibility(visible = !uiState.marketsTabHidden) {

@@ -18,6 +18,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.favorites.WatchlistSorting
 import io.horizontalsystems.bankwallet.modules.settings.appearance.AppIcon
+import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.ILockoutStorage
@@ -83,6 +84,7 @@ class LocalStorageManager(
     private val UTXO_EXPERT_MODE = "utxo_expert_mode"
     private val RBF_ENABLED = "rbf_enabled"
     private val STATS_SYNC_TIME = "stats_sync_time"
+    private val PRICE_CHANGE_INTERVAL = "price_change_interval"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -531,4 +533,16 @@ class LocalStorageManager(
         set(value) {
             preferences.edit().putLong(STATS_SYNC_TIME, value).apply()
         }
+
+    override var priceChangeInterval: PriceChangeInterval
+        get() = preferences.getString(PRICE_CHANGE_INTERVAL, null)?.let {
+            PriceChangeInterval.fromRaw(it)
+        } ?: PriceChangeInterval.LAST_24H
+        set(value) {
+            preferences.edit().putString(PRICE_CHANGE_INTERVAL, value.raw).apply()
+
+            priceChangeIntervalFlow.update { value }
+        }
+
+    override val priceChangeIntervalFlow = MutableStateFlow(priceChangeInterval)
 }
