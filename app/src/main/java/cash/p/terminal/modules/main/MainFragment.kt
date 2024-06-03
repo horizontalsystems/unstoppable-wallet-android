@@ -15,14 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,6 +63,7 @@ import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager.SupportState
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.BadgeText
 import cash.p.terminal.ui.compose.components.HsBottomNavigation
 import cash.p.terminal.ui.compose.components.HsBottomNavigationItem
 import cash.p.terminal.ui.extensions.WalletSwitchBottomSheet
@@ -317,15 +316,9 @@ private fun BadgedIcon(
         is MainModule.BadgeType.BadgeNumber ->
             BadgedBox(
                 badge = {
-                    Badge(
-                        backgroundColor = ComposeAppTheme.colors.lucian
-                    ) {
-                        Text(
-                            text = badge.number.toString(),
-                            style = ComposeAppTheme.typography.micro,
-                            color = ComposeAppTheme.colors.white,
-                        )
-                    }
+                    BadgeText(
+                        text = badge.number.toString(),
+                    )
                 },
                 content = icon
             )
