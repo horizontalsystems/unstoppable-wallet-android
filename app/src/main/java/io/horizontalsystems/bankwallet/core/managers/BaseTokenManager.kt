@@ -36,19 +36,19 @@ class BaseTokenManager(
         setBaseToken(tokens.getOrNull(indexOfNext) ?: tokens.firstOrNull())
     }
 
-    fun setBaseToken(token: Token?) {
+    fun setBaseTokenQueryId(tokenQueryId: String) {
+        val token = TokenQuery.fromId(tokenQueryId)?.let { coinManager.getToken(it) } ?: tokens.first()
+
+        setBaseToken(token)
+    }
+
+    private fun setBaseToken(token: Token?) {
         this.token = token
         localStorage.balanceTotalCoinUid = token?.coin?.uid
 
         _baseTokenFlow.update {
             token
         }
-    }
-
-    fun setBaseTokenQueryId(tokenQueryId: String) {
-        val token = TokenQuery.fromId(tokenQueryId)?.let { coinManager.getToken(it) } ?: tokens.first()
-
-        setBaseToken(token)
     }
 
 }

@@ -24,7 +24,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,7 +39,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
@@ -48,8 +46,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.AlertHeader
-import io.horizontalsystems.bankwallet.ui.compose.components.AlertItem
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
@@ -94,7 +90,6 @@ fun AppearanceScreen(navController: NavController) {
     var openThemeSelector by rememberSaveable { mutableStateOf(false) }
     var openLaunchPageSelector by rememberSaveable { mutableStateOf(false) }
     var openBalanceValueSelector by rememberSaveable { mutableStateOf(false) }
-    var openBalanceConversionSelector by rememberSaveable { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         ModalBottomSheetLayout(
@@ -202,13 +197,6 @@ fun AppearanceScreen(navController: NavController) {
                                     value = uiState.selectedBalanceViewType.title.getString(),
                                     onClick = { openBalanceValueSelector = true }
                                 )
-                            },
-                            {
-                                MenuItemWithDialog(
-                                    R.string.Appearance_BalanceConversion,
-                                    value = uiState.baseTokenOptions.selected?.coin?.code ?: "",
-                                    onClick = { openBalanceConversionSelector = true }
-                                )
                             }
                         )
                     )
@@ -258,33 +246,6 @@ fun AppearanceScreen(navController: NavController) {
                     },
                     { openBalanceValueSelector = false }
                 )
-            }
-            if (openBalanceConversionSelector) {
-                Dialog(onDismissRequest = {
-                    openBalanceConversionSelector = false
-                }) {
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                    ) {
-                        AlertHeader(R.string.Appearance_BalanceConversion)
-                        uiState.baseTokenOptions.options.forEach { option ->
-                            AlertItem(
-                                onClick = {
-                                    viewModel.onEnterBaseToken(option)
-                                    openBalanceConversionSelector = false
-                                }
-                            ) {
-                                Text(
-                                    option.coin.code,
-                                    color = if (option == uiState.baseTokenOptions.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah,
-                                    style = ComposeAppTheme.typography.body,
-                                )
-                            }
-                        }
-                    }
-                }
             }
         }
     }
