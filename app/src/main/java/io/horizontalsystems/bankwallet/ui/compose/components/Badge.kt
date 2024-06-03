@@ -1,11 +1,11 @@
 package io.horizontalsystems.bankwallet.ui.compose.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,24 +13,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.SteelDark
 import java.math.BigDecimal
 
 @Composable
 fun Badge(modifier: Modifier = Modifier, text: String) {
-    Text(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(ComposeAppTheme.colors.jeremy)
-            .padding(horizontal = 4.dp, vertical = 2.dp),
+    BadgeText(
+        modifier = modifier,
         text = text,
-        color = ComposeAppTheme.colors.bran,
-        style = ComposeAppTheme.typography.microSB,
+        background = ComposeAppTheme.colors.jeremy,
+        textColor = ComposeAppTheme.colors.bran,
     )
 }
 
@@ -40,109 +34,63 @@ fun BadgeWithDiff(
     text: String,
     diff: BigDecimal? = null
 ) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(ComposeAppTheme.colors.jeremy)
-            .padding(horizontal = 4.dp, vertical = 2.dp)
+    BadgeBase(
+        modifier = modifier,
+        background = ComposeAppTheme.colors.jeremy
     ) {
-        Row {
+        Text(
+            text = text,
+            color = ComposeAppTheme.colors.bran,
+            style = ComposeAppTheme.typography.microSB,
+            maxLines = 1,
+        )
+        diff?.let { diffValue ->
             Text(
-                text = text,
-                color = ComposeAppTheme.colors.bran,
+                modifier = Modifier.padding(start = 4.dp),
+                text = "${sign(diffValue)}${diff.abs()}",
+                color = diffColor(diffValue),
                 style = ComposeAppTheme.typography.microSB,
                 maxLines = 1,
             )
-            diff?.let { diffValue ->
-                Text(
-                    modifier = Modifier.padding(start = 4.dp),
-                    text = "${sign(diffValue)}${diff.abs()}",
-                    color = diffColor(diffValue),
-                    style = ComposeAppTheme.typography.microSB,
-                    maxLines = 1,
-                )
-            }
         }
     }
 }
 
 @Composable
-fun BadgeRatingD(modifier: Modifier = Modifier, text: String) {
-    Text(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(ComposeAppTheme.colors.lightGrey)
-            .padding(horizontal = 4.dp, vertical = 2.dp),
-        text = text,
-        color = SteelDark,
-        style = ComposeAppTheme.typography.microSB,
-    )
-}
-
-@Composable
-fun BadgeCount(
+fun BadgeText(
     modifier: Modifier = Modifier,
     text: String,
     background: Color = ComposeAppTheme.colors.lucian,
     textColor: Color = ComposeAppTheme.colors.white,
 ) {
-    Text(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(background)
-            .padding(horizontal = 4.dp, vertical = 2.dp)
-            .defaultMinSize(minWidth = 14.dp),
-        text = text,
-        color = textColor,
-        style = ComposeAppTheme.typography.captionSB,
-        textAlign = TextAlign.Center,
-    )
-}
-
-@Composable
-fun BadgeCircle(modifier: Modifier = Modifier, text: String) {
-    Text(
-        text,
-        modifier = modifier
-            .background(ComposeAppTheme.colors.lucian, shape = CircleShape)
-            .badgeLayout(),
-        color = ComposeAppTheme.colors.white,
-        style = ComposeAppTheme.typography.subhead1,
-    )
-}
-
-@Composable
-fun BadgeStepCircle(
-    modifier: Modifier = Modifier,
-    text: String,
-    background: Color,
-    textColor: Color
-) {
-    Text(
-        text = text,
-        modifier = modifier
-            .background(background, shape = CircleShape)
-            .badgeLayout(),
-        color = textColor,
-        style = ComposeAppTheme.typography.captionSB,
-    )
-}
-
-fun Modifier.badgeLayout() =
-    layout { measurable, constraints ->
-        val placeable = measurable.measure(constraints)
-
-        val backgroundHeight = (placeable.height * 1.5).toInt()
-        val minPadding = backgroundHeight / 2
-
-        val width = maxOf(placeable.width + minPadding, backgroundHeight)
-        layout(width, backgroundHeight) {
-            placeable.place(
-                (width - placeable.width) / 2,
-                (backgroundHeight - placeable.height) / 2
-            )
-        }
+    BadgeBase(
+        modifier = modifier,
+        background = background,
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            style = ComposeAppTheme.typography.microSB,
+        )
     }
+}
+
+@Composable
+fun BadgeBase(
+    modifier: Modifier = Modifier,
+    background: Color,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(background)
+            .padding(horizontal = 6.dp, vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        content = content
+    )
+}
 
 private fun sign(value: BigDecimal): String {
     return when (value.signum()) {
@@ -154,7 +102,7 @@ private fun sign(value: BigDecimal): String {
 
 @Preview
 @Composable
-fun BagdePreview() {
+fun BadgePreview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
@@ -167,39 +115,47 @@ fun BagdePreview() {
 
 @Preview
 @Composable
-fun BagdeCountPreview() {
+fun BadgeCirclePreview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            BadgeCount(text = "55")
+            BadgeText(
+                background = ComposeAppTheme.colors.issykBlue,
+                textColor = ComposeAppTheme.colors.tyler,
+                text = "1"
+            )
         }
     }
 }
 
 @Preview
 @Composable
-fun BagdeCirclePreview() {
+fun BadgeCircleSignal_Preview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            BadgeCircle(text = "1")
+            BadgeText(
+                background = ComposeAppTheme.colors.red20,
+                textColor = ComposeAppTheme.colors.lucian,
+                text = "Sell"
+            )
         }
     }
 }
 
 @Preview
 @Composable
-fun BagdeStepCircle_Preview() {
+fun BadgeWithDiffPreview() {
     ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            BadgeStepCircle(text = "2", background = ComposeAppTheme.colors.claude,  textColor = ComposeAppTheme.colors.leah)
+            BadgeWithDiff(text = "35", diff = BigDecimal("5"))
         }
     }
 }
