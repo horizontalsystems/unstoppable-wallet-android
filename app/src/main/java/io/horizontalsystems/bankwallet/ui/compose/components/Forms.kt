@@ -102,8 +102,8 @@ fun FormsInput(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 44.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                 .background(ComposeAppTheme.colors.lawrence),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -289,8 +289,8 @@ fun FormsInputPassword(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 44.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                 .background(ComposeAppTheme.colors.lawrence),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -420,8 +420,8 @@ fun FormsInputMultiline(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp))
-                .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                .clip(RoundedCornerShape(12.dp))
+                .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                 .background(ComposeAppTheme.colors.lawrence),
         ) {
             var textState by rememberSaveable(initial, stateSaver = TextFieldValue.Saver) {
