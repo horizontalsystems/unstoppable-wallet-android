@@ -48,7 +48,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSup
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.BadgeCount
+import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
@@ -402,7 +402,7 @@ fun HsSettingCell(
         Spacer(Modifier.weight(1f))
 
         if (counterBadge != null) {
-            BadgeCount(
+            BadgeText(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 text = counterBadge
             )
