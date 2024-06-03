@@ -29,7 +29,7 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.session.WCSessionModule
 import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.BadgeCount
+import cash.p.terminal.ui.compose.components.BadgeText
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 
@@ -90,7 +90,7 @@ fun WCSessionCell(
                 subhead2_grey(text = session.subtitle)
             }
             if (session.pendingRequestsCount > 0) {
-                BadgeCount(
+                BadgeText(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     text = session.pendingRequestsCount.toString()
                 )

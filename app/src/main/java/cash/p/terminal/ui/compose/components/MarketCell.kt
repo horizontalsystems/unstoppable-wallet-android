@@ -191,14 +191,10 @@ fun SignalBadge(advice: Advice) {
         else -> stringResource(R.string.Coin_Analytics_Indicators_Risky)
     }
 
-    Text(
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(backgroundColor)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+    BadgeText(
         text = text,
-        color = textColor,
-        style = ComposeAppTheme.typography.microSB,
+        textColor = textColor,
+        background = backgroundColor
     )
 }
 

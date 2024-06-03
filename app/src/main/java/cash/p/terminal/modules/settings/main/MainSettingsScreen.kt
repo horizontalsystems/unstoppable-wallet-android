@@ -48,7 +48,7 @@ import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.BadgeCount
+import cash.p.terminal.ui.compose.components.BadgeText
 import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.InfoText
@@ -402,7 +402,7 @@ fun HsSettingCell(
         Spacer(Modifier.weight(1f))
 
         if (counterBadge != null) {
-            BadgeCount(
+            BadgeText(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 text = counterBadge
             )
