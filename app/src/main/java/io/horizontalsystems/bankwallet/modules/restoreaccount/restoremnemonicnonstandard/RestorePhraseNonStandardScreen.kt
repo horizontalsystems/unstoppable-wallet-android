@@ -166,8 +166,8 @@ fun RestorePhraseNonStandard(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(12.dp))
+                        .border(1.dp, borderColor, RoundedCornerShape(12.dp))
                         .background(ComposeAppTheme.colors.lawrence),
                 ) {
 
