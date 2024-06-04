@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import android.util.Log
-import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -43,7 +42,7 @@ class CoinOverviewChartService(
     private var chartStartTime: Long = 0
     private val cache = mutableMapOf<String, Pair<Long, List<MarketKitChartPoint>>>()
 
-    private var indicatorsEnabled = chartIndicatorManager.isEnabledFlow.value
+    private var indicatorsEnabled = chartIndicatorManager.isEnabled
 
     override suspend fun start() {
         try {
@@ -169,7 +168,7 @@ class CoinOverviewChartService(
 
             if (chartInterval == HsTimePeriod.Day1) {
                 startTimestampAdjusted = latestCoinPrice.timestamp - 24 * 60 * 60
-                val diff = latestCoinPrice.diff
+                val diff = latestCoinPrice.diff24h
                 if (diff != null) {
                     val startValue =
                         (latestCoinPrice.value * 100.toBigDecimal()) / (diff + 100.toBigDecimal())

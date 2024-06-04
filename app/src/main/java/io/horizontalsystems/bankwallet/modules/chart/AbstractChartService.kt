@@ -7,6 +7,7 @@ import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -86,6 +87,8 @@ abstract class AbstractChartService {
             try {
                 val chartPointsWrapper = itemsSingle.await()
                 chartPointsWrapperObservable.onNext(Result.success(chartPointsWrapper))
+            } catch (e: CancellationException) {
+                // Do nothing
             } catch (e: Throwable) {
                 chartPointsWrapperObservable.onNext(Result.failure(e))
             }

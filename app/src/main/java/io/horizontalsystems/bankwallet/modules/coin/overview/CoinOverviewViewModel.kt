@@ -51,7 +51,7 @@ class CoinOverviewViewModel(
     var chartIndicatorsState by mutableStateOf(
         ChartIndicatorsState(
             hasActiveSubscription = true,
-            enabled = chartIndicatorManager.isEnabledFlow.value
+            enabled = chartIndicatorManager.isEnabled
         )
     )
 
