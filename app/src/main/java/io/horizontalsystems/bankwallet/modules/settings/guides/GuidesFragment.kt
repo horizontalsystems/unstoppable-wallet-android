@@ -30,6 +30,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -110,6 +113,8 @@ fun GuidesScreen(navController: NavController) {
                                             R.id.markdownFragment,
                                             MarkdownFragment.Input(guide.fileUrl, true)
                                         )
+
+                                        stat(page = StatPage.Academy, event = StatEvent.OpenArticle(guide.fileUrl))
                                     }
                                     Spacer(modifier = Modifier.height(8.dp))
                                 }

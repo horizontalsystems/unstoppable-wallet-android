@@ -7,6 +7,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.StatSortType
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.overview.TopPairViewItem
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +78,13 @@ class TopPairsViewModel(
             isRefreshing = false
             emitState()
         }
+
+        stat(
+            page = StatPage.Markets,
+            section = StatSection.Pairs,
+            event = StatEvent.Refresh
+        )
+
     }
 
     fun onErrorClick() {
@@ -86,6 +98,12 @@ class TopPairsViewModel(
             items = sortItems(items)
             emitState()
         }
+
+        stat(
+            page = StatPage.Markets,
+            section = StatSection.Pairs,
+            event = StatEvent.SwitchSortType(if (sortDescending) StatSortType.HighestVolume else StatSortType.LowestVolume)
+        )
     }
 
     class Factory : ViewModelProvider.Factory {

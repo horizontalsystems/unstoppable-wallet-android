@@ -312,7 +312,7 @@ class MainViewModel(
                             val platform = Platform(uid, title)
                             deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
 
-                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatforms))
+                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatform))
                         }
                     }
                 }

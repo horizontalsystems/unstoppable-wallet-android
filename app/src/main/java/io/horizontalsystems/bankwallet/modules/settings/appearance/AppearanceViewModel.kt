@@ -3,6 +3,10 @@ package io.horizontalsystems.bankwallet.modules.settings.appearance
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statValue
 import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
@@ -98,18 +102,26 @@ class AppearanceViewModel(
 
     fun onEnterLaunchPage(launchPage: LaunchPage) {
         launchScreenService.setLaunchScreen(launchPage)
+
+        stat(page = StatPage.Appearance, event = StatEvent.SelectLaunchScreen(launchPage.statValue))
     }
 
     fun onEnterAppIcon(enabledAppIcon: AppIcon) {
         appIconService.setAppIcon(enabledAppIcon)
+
+        stat(page = StatPage.Appearance, event = StatEvent.SelectAppIcon(enabledAppIcon.titleText.lowercase()))
     }
 
     fun onEnterTheme(themeType: ThemeType) {
         themeService.setThemeType(themeType)
+
+        stat(page = StatPage.Appearance, event = StatEvent.SelectTheme(themeType.statValue))
     }
 
     fun onEnterBalanceViewType(viewType: BalanceViewType) {
         balanceViewTypeManager.setViewType(viewType)
+
+        stat(page = StatPage.Appearance, event = StatEvent.SelectBalanceValue(viewType.statValue))
     }
 
     fun onSetMarketTabsHidden(hidden: Boolean) {
@@ -120,6 +132,8 @@ class AppearanceViewModel(
 
         marketsTabHidden = hidden
         emitState()
+
+        stat(page = StatPage.Appearance, event = StatEvent.ShowMarketsTab(shown = !hidden))
     }
 
     fun onSetBalanceTabButtonsHidden(hidden: Boolean) {
@@ -127,6 +141,8 @@ class AppearanceViewModel(
 
         balanceTabButtonsHidden = hidden
         emitState()
+
+        stat(page = StatPage.Appearance, event = StatEvent.HideBalanceButtons(shown = !hidden))
     }
 
     fun onSetPriceChangeInterval(priceChangeInterval: PriceChangeInterval) {
@@ -135,6 +151,8 @@ class AppearanceViewModel(
         this.priceChangeInterval = priceChangeInterval
         this.priceChangeIntervalOptions = buildPriceChangeIntervalSelect(priceChangeInterval)
         emitState()
+
+        stat(page = StatPage.Appearance, event = StatEvent.SwitchPriceChangeMode(priceChangeInterval.statValue))
     }
 
 }

@@ -181,7 +181,7 @@ private fun PlatformScreen(
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
                 stat(
-                    page = StatPage.TopPlatforms,
+                    page = StatPage.TopPlatform,
                     event = StatEvent.SwitchSortType(selected.statSortType)
                 )
             },

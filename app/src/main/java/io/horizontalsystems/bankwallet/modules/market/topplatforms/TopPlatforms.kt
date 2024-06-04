@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
@@ -69,6 +70,8 @@ fun TopPlatforms(
             refreshing = uiState.isRefreshing,
             onRefresh = {
                 viewModel.refresh()
+
+                stat(page = StatPage.Markets, section = StatSection.Platforms, event = StatEvent.Refresh)
             }
         ) {
             Crossfade(uiState.viewState, label = "") { state ->
@@ -97,7 +100,8 @@ fun TopPlatforms(
                                     )
 
                                     stat(
-                                        page = StatPage.TopPlatforms,
+                                        page = StatPage.Markets,
+                                        section = StatSection.Platforms,
                                         event = StatEvent.OpenPlatform(it.uid)
                                     )
                                 },
@@ -138,7 +142,8 @@ fun TopPlatforms(
                 viewModel.onTimePeriodSelect(selected)
                 openPeriodSelector = false
                 stat(
-                    page = StatPage.TopPlatforms,
+                    page = StatPage.Markets,
+                    section = StatSection.Platforms,
                     event = StatEvent.SwitchPeriod(selected.statPeriod)
                 )
             },
@@ -153,7 +158,8 @@ fun TopPlatforms(
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
                 stat(
-                    page = StatPage.TopPlatforms,
+                    page = StatPage.Markets,
+                    section = StatSection.Platforms,
                     event = StatEvent.SwitchSortType(selected.statSortType)
                 )
             },

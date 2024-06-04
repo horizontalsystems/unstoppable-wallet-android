@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.fiatIconUrl
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -102,7 +103,8 @@ fun TopPairsScreen() {
                                             LinkHelper.openLinkInAppBrowser(context, it)
 
                                             stat(
-                                                page = StatPage.TopMarketPairs,
+                                                page = StatPage.Markets,
+                                                section = StatSection.Pairs,
                                                 event = StatEvent.Open(StatPage.ExternalMarketPair)
                                             )
                                         }

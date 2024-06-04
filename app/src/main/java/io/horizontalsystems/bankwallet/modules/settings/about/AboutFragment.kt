@@ -21,6 +21,9 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.releasenotes.ReleaseNotesScreen
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusScreen
 import io.horizontalsystems.bankwallet.modules.settings.main.HsSettingCell
@@ -113,6 +116,8 @@ private fun SettingSections(
                 value = viewModel.appVersion,
                 onClick = {
                     navController.navigate(ReleaseNotesPage)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.WhatsNew))
                 }
             )
         }
@@ -127,6 +132,8 @@ private fun SettingSections(
                 R.drawable.ic_app_status,
                 onClick = {
                     navController.navigate(AppStatusPage)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.AppStatus))
                 }
             )
         }, {
@@ -136,6 +143,8 @@ private fun SettingSections(
                 showAlert = termsShowAlert,
                 onClick = {
                     navController.navigate(TermsPage)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Terms))
                 }
             )
         }, {
@@ -144,6 +153,8 @@ private fun SettingSections(
                 R.drawable.ic_user_20,
                 onClick = {
                     navController.navigate(PrivacyPage)
+
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
                 }
             )
         })
@@ -156,13 +167,21 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.SettingsAboutApp_Github,
                 R.drawable.ic_github_20,
-                onClick = { LinkHelper.openLinkInAppBrowser(context, viewModel.githubLink) }
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, viewModel.githubLink)
+
+                    stat(page = StatPage.AboutApp, event= StatEvent.Open(StatPage.ExternalGithub))
+                }
             )
         }, {
             HsSettingCell(
                 R.string.SettingsAboutApp_Site,
                 R.drawable.ic_globe,
-                onClick = { LinkHelper.openLinkInAppBrowser(context, viewModel.appWebPageLink) }
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, viewModel.appWebPageLink)
+
+                    stat(page = StatPage.AboutApp, event= StatEvent.Open(StatPage.ExternalWebsite))
+                }
             )
         })
     )

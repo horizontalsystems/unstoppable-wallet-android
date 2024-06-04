@@ -7,8 +7,10 @@ import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.storage.StatsDao
 import io.horizontalsystems.bankwallet.entities.AccountType
+import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.entities.StatRecord
 import io.horizontalsystems.bankwallet.modules.balance.BalanceSortType
+import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
 import io.horizontalsystems.bankwallet.modules.coin.CoinModule
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule
 import io.horizontalsystems.bankwallet.modules.main.MainModule
@@ -17,10 +19,15 @@ import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
+import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule
+import io.horizontalsystems.bankwallet.modules.market.favorites.WatchlistSorting
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchSection
+import io.horizontalsystems.bankwallet.modules.market.tvl.TvlModule
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.metricchart.ProChartModule
+import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval
+import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactionInfo.options.SpeedUpCancelType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
 import io.horizontalsystems.core.toHexString
@@ -173,6 +180,15 @@ val SortingField.statSortType: StatSortType
         SortingField.TopLosers -> StatSortType.TopLosers
     }
 
+val WatchlistSorting.statSortType: StatSortType
+    get() = when (this) {
+        WatchlistSorting.Manual -> StatSortType.Manual
+        WatchlistSorting.HighestCap -> StatSortType.HighestCap
+        WatchlistSorting.LowestCap -> StatSortType.LowestCap
+        WatchlistSorting.Gainers -> StatSortType.TopGainers
+        WatchlistSorting.Losers -> StatSortType.TopLosers
+    }
+
 
 val CoinModule.Tab.statTab: StatTab
     get() = when (this) {
@@ -283,10 +299,9 @@ val MarketModule.Tab.statTab: StatTab
     get() = when (this) {
         MarketModule.Tab.Posts -> StatTab.News
         MarketModule.Tab.Watchlist -> StatTab.Watchlist
-        MarketModule.Tab.Coins -> TODO()
-        MarketModule.Tab.Platform -> TODO()
-        MarketModule.Tab.Pairs -> TODO()
-//        MarketModule.Tab.Sectors -> TODO()
+        MarketModule.Tab.Coins -> StatTab.Coins
+        MarketModule.Tab.Platform -> StatTab.Platforms
+        MarketModule.Tab.Pairs -> StatTab.Pairs
     }
 
 val MarketSearchSection.statSection: StatSection
@@ -317,7 +332,48 @@ val FilterTransactionType.statTab: StatTab
     }
 
 val SpeedUpCancelType.statResendType: StatResendType
-    get() = when(this) {
+    get() = when (this) {
         SpeedUpCancelType.SpeedUp -> StatResendType.SpeedUp
         SpeedUpCancelType.Cancel -> StatResendType.Cancel
+    }
+
+val ThemeType.statValue: String
+    get() = when (this) {
+        ThemeType.Dark -> "dark"
+        ThemeType.Light -> "light"
+        ThemeType.System -> "system"
+    }
+
+val PriceChangeInterval.statValue: String
+    get() = when (this) {
+        PriceChangeInterval.LAST_24H -> "hour_24"
+        PriceChangeInterval.FROM_UTC_MIDNIGHT -> "midnight_utc"
+    }
+
+val BalanceViewType.statValue: String
+    get() = when (this) {
+        BalanceViewType.CoinThenFiat -> "coin"
+        BalanceViewType.FiatThenCoin -> "currency"
+    }
+
+val LaunchPage.statValue: String
+    get() = when (this) {
+        LaunchPage.Auto -> "auto"
+        LaunchPage.Balance -> "balance"
+        LaunchPage.Market -> "market_overview"
+        LaunchPage.Watchlist -> "watchlist"
+    }
+
+val TvlModule.TvlDiffType.statType: String
+    get() = when (this) {
+        TvlModule.TvlDiffType.Percent -> "percent"
+        TvlModule.TvlDiffType.Currency -> "currency"
+    }
+
+val EtfModule.SortBy.statSortType: StatSortType
+    get() = when (this) {
+        EtfModule.SortBy.HighestAssets -> StatSortType.HighestAssets
+        EtfModule.SortBy.LowestAssets -> StatSortType.LowestAssets
+        EtfModule.SortBy.Inflow -> StatSortType.Inflow
+        EtfModule.SortBy.Outflow -> StatSortType.Outflow
     }

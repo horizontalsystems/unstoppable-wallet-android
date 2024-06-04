@@ -20,6 +20,10 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockContent
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -77,6 +81,8 @@ fun AppStatusScreen(
                             uiState.appStatusAsText?.let {
                                 clipboardManager.setText(AnnotatedString(it))
                                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                                stat(page = StatPage.AppStatus, event= StatEvent.Copy(StatEntity.Status))
                             }
                         }
                     )
@@ -90,6 +96,8 @@ fun AppStatusScreen(
                                     .setType("text/plain")
                                     .setText(it)
                                     .startChooser()
+
+                                stat(page = StatPage.AppStatus, event= StatEvent.Share(StatEntity.Status))
                             }
                         }
                     )
