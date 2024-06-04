@@ -292,7 +292,6 @@
     <string name="Market_Filter_TimePeriod_1M">1 Месяц</string>
     <string name="Market_Filter_TimePeriod_6M">6 Месяцев</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Год</string>
-    <string name="TimePeriod_24h">24ч</string>
     <string name="Market_Sorting_HighestCap">Наивысшей кап.</string>
     <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
     <!--Coin Markets-->
@@ -1193,7 +1192,6 @@
     <string name="Coin_Tab_Details">Аналитика</string>
     <string name="Coin_Tab_Tweets">Твиты</string>
     <string name="CoinPage_TimeDuration_Today">СГД</string>
-    <string name="CoinPage_TimeDuration_Day">24Ч</string>
     <string name="CoinPage_TimeDuration_Week">7Д</string>
     <string name="CoinPage_TimeDuration_Month">1М</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2Н</string>
