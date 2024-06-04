@@ -793,11 +793,6 @@
     <string name="BackupManager_AppSettingsTitle">Ajustes de app</string>
     <string name="BackupManager_AppSettingsDescription">Idioma, moneda, Apariencia …</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable no recopila ningún dato o utiliza herramientas de análisis que puedan exponer cualquier dato sobre sus usuarios. La cartera está diseñada para asegurar un alto nivel de privacidad para sus usuarios.</string>
-    <string name="Privacy_BulletedText1">Los datos del usuario siempre permanecen en el dispositivo del usuario.</string>
-    <string name="Privacy_BulletedText2">La cartera no recopila ningún dato sobre los usuarios.</string>
-    <string name="Privacy_BulletedText3">La cartera no recopila ningún dato sobre los usuarios.</string>
-    <string name="Privacy_BulletedText4">No hay cuentas de usuario o bases de datos que conserven los datos del usuario en otros lugares.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Añadir Nuevo</string>
