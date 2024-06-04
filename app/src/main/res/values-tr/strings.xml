@@ -241,7 +241,6 @@
     <string name="Market_Filter_TimePeriod_1M">1 Ay</string>
     <string name="Market_Filter_TimePeriod_6M">6 Ay</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Yıl</string>
-    <string name="TimePeriod_24h">24sa</string>
     <string name="Market_Sorting_HighestCap">En Yüksek</string>
     <string name="Market_Sorting_LowestCap">En Düşük</string>
     <!--Coin Markets-->
@@ -1128,7 +1127,6 @@
     <string name="Coin_Tab_Market">Marketler</string>
     <string name="Coin_Tab_Details">Analitik</string>
     <string name="CoinPage_TimeDuration_Today">Bugün</string>
-    <string name="CoinPage_TimeDuration_Day">24S</string>
     <string name="CoinPage_TimeDuration_Week">7G</string>
     <string name="CoinPage_TimeDuration_Month">1A</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2H</string>
