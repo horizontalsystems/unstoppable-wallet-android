@@ -832,11 +832,6 @@
     <string name="BackupManager_AppSettingsTitle">앱 설정</string>
     <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable은 사용자에 대한 데이터를 노출할 수 있는 데이터를 수집하거나 분석 도구를 사용하지 않습니다. 지갑은 사용자에게 높은 수준의 개인 정보를 보장하도록 설계되었습니다.</string>
-    <string name="Privacy_BulletedText1">사용자 데이터는 항상 사용자의 장치에 남아 있습니다.</string>
-    <string name="Privacy_BulletedText2">지갑은 사용자에 대한 데이터를 수집하지 않습니다.</string>
-    <string name="Privacy_BulletedText3">지갑은 사용자에 대한 데이터를 공유하지 않습니다.</string>
-    <string name="Privacy_BulletedText4">사용자 데이터를 다른 곳에 보관하는 사용자 계정이나 데이터베이스가 없습니다.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">인터넷</string>
     <!--Evm Network-->
