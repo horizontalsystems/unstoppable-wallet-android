@@ -143,12 +143,13 @@ fun ButtonSecondaryTransparent(
         ),
         content = {
             if (iconRight != null) {
-                Row {
-                    Text(
-                        title,
+                Row (
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    captionSB_leah(
+                        text = title,
                         maxLines = 1,
-                        style = ComposeAppTheme.typography.captionSB,
-                        overflow = TextOverflow.Ellipsis,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Icon(
                         modifier = Modifier.padding(start = 4.dp),
@@ -158,7 +159,11 @@ fun ButtonSecondaryTransparent(
                     )
                 }
             } else {
-                Text(title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                captionSB_leah(
+                    text = title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         },
         enabled = enabled
