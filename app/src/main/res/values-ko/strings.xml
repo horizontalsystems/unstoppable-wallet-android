@@ -284,7 +284,6 @@
     <string name="Market_Filter_TimePeriod_1M">1개월</string>
     <string name="Market_Filter_TimePeriod_6M">6 개월</string>
     <string name="Market_Filter_TimePeriod_1Y">일년</string>
-    <string name="TimePeriod_24h">24 시간</string>
     <string name="Market_Sorting_HighestCap">가장 높은 시가총액</string>
     <string name="Market_Sorting_LowestCap">가장 낮은 시가총액</string>
     <!--Coin Markets-->
@@ -1181,7 +1180,6 @@
     <string name="Coin_Tab_Details">분석</string>
     <string name="Coin_Tab_Tweets">트윗</string>
     <string name="CoinPage_TimeDuration_Today">오늘</string>
-    <string name="CoinPage_TimeDuration_Day">24시</string>
     <string name="CoinPage_TimeDuration_Week">7일</string>
     <string name="CoinPage_TimeDuration_Month">1개월</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2주</string>
