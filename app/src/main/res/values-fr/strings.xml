@@ -278,7 +278,6 @@
     <string name="Market_Filter_TimePeriod_1M">1 Mois</string>
     <string name="Market_Filter_TimePeriod_6M">6 Mois</string>
     <string name="Market_Filter_TimePeriod_1Y">1 An</string>
-    <string name="TimePeriod_24h">24 heures</string>
     <string name="Market_Sorting_HighestCap">Cap. marché la plus forte</string>
     <string name="Market_Sorting_LowestCap">Cap. marché la plus basse</string>
     <!--Coin Markets-->
