@@ -257,6 +257,17 @@ fun AppearanceScreen(navController: NavController) {
                     { openBalanceValueSelector = false }
                 )
             }
+            if (openPriceChangeIntervalSelector) {
+                AlertGroup(
+                    R.string.Appearance_PriceChangeInterval,
+                    uiState.priceChangeIntervalOptions,
+                    { selected ->
+                        viewModel.onSetPriceChangeInterval(selected)
+                        openPriceChangeIntervalSelector = false
+                    },
+                    { openPriceChangeIntervalSelector = false }
+                )
+            }
         }
     }
 }
