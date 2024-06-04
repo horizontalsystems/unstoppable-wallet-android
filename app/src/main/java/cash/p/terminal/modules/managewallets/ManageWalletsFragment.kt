@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -181,6 +182,7 @@ private fun CoinCell(
                 modifier = Modifier
                     .padding(end = 16.dp, top = 12.dp, bottom = 12.dp)
                     .size(32.dp)
+                    .clip(CircleShape)
             )
             Column(
                 modifier = Modifier

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -98,6 +99,7 @@ fun MarketCoin(
             modifier = Modifier
                 .padding(end = 16.dp)
                 .size(32.dp)
+                .clip(CircleShape)
         )
         Column(
             modifier = Modifier.fillMaxWidth()
