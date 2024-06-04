@@ -22,7 +22,8 @@ object MarketFavoritesModule {
                 repository,
                 menuService,
                 App.currencyManager,
-                App.backgroundManager
+                App.backgroundManager,
+                App.priceManager
             )
             return MarketFavoritesViewModel(service) as T
         }

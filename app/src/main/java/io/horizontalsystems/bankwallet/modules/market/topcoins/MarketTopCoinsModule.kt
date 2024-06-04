@@ -25,6 +25,7 @@ object MarketTopCoinsModule {
                 topMarketsRepository,
                 App.currencyManager,
                 App.marketFavoritesManager,
+                App.priceManager,
                 topMarket ?: defaultTopMarket,
                 sortingField ?: defaultSortingField,
             )

@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.core.managers.NftAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
+import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
@@ -171,6 +172,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
+        lateinit var priceManager: PriceManager
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
@@ -232,6 +234,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             hsApiKey = appConfig.marketApiKey,
             subscriptionManager = subscriptionManager
         )
+
+        priceManager = PriceManager(localStorage)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)

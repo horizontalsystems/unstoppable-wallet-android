@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.swappable
@@ -178,7 +179,6 @@ class BalanceViewItemFactory {
         balanceViewType: BalanceViewType
     ): BalanceViewItem {
         val wallet = item.wallet
-        val coin = wallet.coin
         val state = item.state
         val latestRate = item.coinPrice
 
@@ -261,7 +261,6 @@ class BalanceViewItemFactory {
         networkAvailable: Boolean
     ): BalanceViewItem2 {
         val wallet = item.wallet
-        val coin = wallet.coin
         val state = item.state
         val latestRate = item.coinPrice
 

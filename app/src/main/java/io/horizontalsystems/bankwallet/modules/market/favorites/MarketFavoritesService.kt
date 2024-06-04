@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -34,7 +35,8 @@ class MarketFavoritesService(
     private val repository: MarketFavoritesRepository,
     private val menuService: MarketFavoritesMenuService,
     private val currencyManager: CurrencyManager,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
+    private val priceManager: PriceManager
 ) : BackgroundManager.Listener {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var favoritesJob: Job? = null
@@ -148,6 +150,12 @@ class MarketFavoritesService(
 
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedFlow.collect {
+                fetch()
+            }
+        }
+
+        coroutineScope.launch {
+            priceManager.priceChangeIntervalFlow.collect {
                 fetch()
             }
         }

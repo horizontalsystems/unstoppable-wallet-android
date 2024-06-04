@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.coin.overview
 
 import android.util.Log
+import io.horizontalsystems.bankwallet.core.diff
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
