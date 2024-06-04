@@ -11,11 +11,12 @@ import io.horizontalsystems.bankwallet.entities.transactionrecords.nftUids
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.Blockchain
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.concurrent.CopyOnWriteArrayList
@@ -30,8 +31,8 @@ class TransactionsService(
     private val spamManager: SpamManager,
 ) : Clearable {
 
-    private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
-    val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
+    private val _itemsFlow = MutableStateFlow<List<TransactionItem>>(listOf())
+    val itemsFlow get() = _itemsFlow.asStateFlow()
 
     val syncingObservable get() = transactionSyncStateRepository.syncingObservable
 
@@ -101,7 +102,7 @@ class TransactionsService(
         transactionItems.clear()
         transactionItems.addAll(tmpList)
 
-        itemsSubject.onNext(transactionItems)
+        emitItems()
     }
 
     @Synchronized
@@ -119,7 +120,7 @@ class TransactionsService(
         }
 
         if (updated) {
-            itemsSubject.onNext(transactionItems)
+            emitItems()
         }
     }
 
@@ -134,7 +135,7 @@ class TransactionsService(
         }
 
         if (updated) {
-            itemsSubject.onNext(transactionItems)
+            emitItems()
         }
     }
 
@@ -157,7 +158,7 @@ class TransactionsService(
         }
 
         if (updated) {
-            itemsSubject.onNext(transactionItems)
+            emitItems()
         }
     }
 
@@ -170,7 +171,7 @@ class TransactionsService(
             transactionItems[i] = item.copy(currencyValue = currencyValue)
         }
 
-        itemsSubject.onNext(transactionItems)
+        emitItems()
     }
 
     @Synchronized
@@ -214,7 +215,11 @@ class TransactionsService(
 
         transactionItems.clear()
         transactionItems.addAll(tmpList)
-        itemsSubject.onNext(transactionItems)
+        emitItems()
+    }
+
+    private fun emitItems() {
+        _itemsFlow.update { transactionItems.toList() }
     }
 
     private fun getCurrencyValue(record: TransactionRecord): CurrencyValue? {
@@ -233,10 +238,6 @@ class TransactionsService(
     }
 
     private val executorService = Executors.newCachedThreadPool()
-
-    fun refreshList() {
-        itemsSubject.onNext(transactionItems)
-    }
 
     fun reload() {
         executorService.submit {
