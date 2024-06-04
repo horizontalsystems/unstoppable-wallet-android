@@ -2,17 +2,23 @@ package io.horizontalsystems.bankwallet.modules.chart
 
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.chartview.models.ChartIndicator
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 class ChartIndicatorManager(
     private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao,
     private val localStorage: ILocalStorage
 ) {
-    private val _isEnabledFlow = MutableStateFlow(localStorage.chartIndicatorsEnabled)
-    val isEnabledFlow: StateFlow<Boolean>
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    val isEnabled: Boolean
+        get() = localStorage.chartIndicatorsEnabled
+    private val _isEnabledFlow : MutableSharedFlow<Boolean> = MutableSharedFlow()
+    val isEnabledFlow: SharedFlow<Boolean>
         get() = _isEnabledFlow
 
     val allIndicatorsFlow = chartIndicatorSettingsDao.getAll()
@@ -71,12 +77,16 @@ class ChartIndicatorManager(
 
     fun enable() {
         localStorage.chartIndicatorsEnabled = true
-        _isEnabledFlow.update { true }
+        scope.launch {
+            _isEnabledFlow.emit(true)
+        }
     }
 
     fun disable() {
         localStorage.chartIndicatorsEnabled = false
-        _isEnabledFlow.update { false }
+        scope.launch {
+            _isEnabledFlow.emit(false)
+        }
     }
 
     fun enableIndicator(indicatorId: String) {

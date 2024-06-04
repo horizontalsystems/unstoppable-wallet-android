@@ -10,6 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
@@ -24,6 +25,7 @@ class CoinOverviewService(
 ) {
     val currency get() = currencyManager.baseCurrency
 
+    private var job: Job? = null
     private val coinOverviewSubject = BehaviorSubject.create<DataState<CoinOverviewItem>>()
     val coinOverviewObservable: Observable<DataState<CoinOverviewItem>>
         get() = coinOverviewSubject
@@ -54,10 +56,22 @@ class CoinOverviewService(
     }
 
     private fun fetchCoinOverview() {
-        coroutineScope.launch {
+        job = coroutineScope.launch {
             try {
-                val marketInfoOverview = marketKit.marketInfoOverviewSingle(fullCoin.coin.uid, currencyManager.baseCurrency.code, languageManager.currentLanguage).await()
-                coinOverviewSubject.onNext(DataState.Success(CoinOverviewItem(fullCoin.coin.code, marketInfoOverview, guideUrl)))
+                val marketInfoOverview = marketKit.marketInfoOverviewSingle(
+                    fullCoin.coin.uid,
+                    currencyManager.baseCurrency.code,
+                    languageManager.currentLanguage
+                ).await()
+                coinOverviewSubject.onNext(
+                    DataState.Success(
+                        CoinOverviewItem(
+                            fullCoin.coin.code,
+                            marketInfoOverview,
+                            guideUrl
+                        )
+                    )
+                )
             } catch (e: Throwable) {
                 coinOverviewSubject.onNext(DataState.Error(e))
             }
@@ -69,7 +83,7 @@ class CoinOverviewService(
     }
 
     fun refresh() {
-        stop()
+        job?.cancel()
         start()
     }
 }
