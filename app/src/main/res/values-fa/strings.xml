@@ -118,7 +118,6 @@
     <string name="Market_Filter_TimePeriod_1M">1Month</string>
     <string name="Market_Filter_TimePeriod_6M">6Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1Year</string>
-    <string name="TimePeriod_24h">24 ساعت</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">Markets %s</string>
     <!--TVL Rank-->
