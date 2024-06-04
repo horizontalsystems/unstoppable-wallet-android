@@ -233,7 +233,7 @@ fun BalanceItems(
             modifier = Modifier.fillMaxSize(),
             state = rememberSaveable(
                 accountViewItem.id,
-                viewModel.sortType,
+                uiState.sortType,
                 saver = LazyListState.Saver
             ) {
                 LazyListState()
@@ -331,10 +331,10 @@ fun BalanceItems(
             stickyHeader {
                 HeaderSorting {
                     BalanceSortingSelector(
-                        sortType = viewModel.sortType,
-                        sortTypes = viewModel.sortTypes
+                        sortType = uiState.sortType,
+                        sortTypes = uiState.sortTypes
                     ) {
-                        viewModel.sortType = it
+                        viewModel.setSortType(it)
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
