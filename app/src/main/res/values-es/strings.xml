@@ -1021,7 +1021,7 @@
     <string name="ManageAccount_LocalBackup">Copia de seguridad local</string>
     <string name="ManageAccount_RecoveryPhraseShow">Mostrar Frase</string>
     <string name="ManageAccount_NetworkSettings">Configuración de Red</string>
-    <string name="ManageAccount_Unlink">Desvincular cartera</string>
+    <string name="ManageAccount_Unlink">Eliminar Monedero</string>
     <string name="ManageAccount_BackupRequired_Title">Se requiere una copia de seg</string>
     <string name="ManageAccount_BackupRequired_Description">Necesita una Copia de seguridad %1$s antes de poder recibir %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Esta acción eliminará los monederos de este dispositivo.</string>

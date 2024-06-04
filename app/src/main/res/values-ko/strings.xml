@@ -1028,7 +1028,7 @@
     <string name="ManageAccount_LocalBackup">로컬 백업</string>
     <string name="ManageAccount_RecoveryPhraseShow">문구 표시</string>
     <string name="ManageAccount_NetworkSettings">네트워크 설정</string>
-    <string name="ManageAccount_Unlink">지갑 연결 해제</string>
+    <string name="ManageAccount_Unlink">지갑 삭제하기</string>
     <string name="ManageAccount_BackupRequired_Title">백업이 필요합니다</string>
     <string name="ManageAccount_BackupRequired_Description">%2$s를 받기 전에 %1$s를 백업해야 합니다.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">장치에서 이 지갑을 삭제합니다.</string>

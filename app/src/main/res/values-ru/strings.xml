@@ -1029,7 +1029,7 @@
     <string name="ManageAccount_LocalBackup">Локальное резервное \nкопирование</string>
     <string name="ManageAccount_RecoveryPhraseShow">Показать фразу</string>
     <string name="ManageAccount_NetworkSettings">Настройки сети</string>
-    <string name="ManageAccount_Unlink">Отключить кошелек</string>
+    <string name="ManageAccount_Unlink">Удалить кошелек</string>
     <string name="ManageAccount_BackupRequired_Title">Необходима резервная копия</string>
     <string name="ManageAccount_BackupRequired_Description">Вам нужно сделать резервную копию %1$s перед получением %2$s.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Это действие удалит ваш кошелек с этого устройства.</string>

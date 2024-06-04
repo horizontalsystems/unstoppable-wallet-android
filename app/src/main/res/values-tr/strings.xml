@@ -1028,7 +1028,7 @@
     <string name="ManageAccount_LocalBackup">Yerel Yedekleme</string>
     <string name="ManageAccount_RecoveryPhraseShow">İfadeyi Göster</string>
     <string name="ManageAccount_NetworkSettings">Ağ Ayarları</string>
-    <string name="ManageAccount_Unlink">Cüzdanın bağlantısını kaldır</string>
+    <string name="ManageAccount_Unlink">Cüzdanı Sil</string>
     <string name="ManageAccount_BackupRequired_Title">Yedekleme Gerekli</string>
     <string name="ManageAccount_BackupRequired_Description">%1$s almadan önce %2$s anahtarlarınızı yedeklemeniz gerekiyor.</string>
     <string name="ManageAccount_Delete_ConfirmationRemove">Bu işlem Cüzdanını bu cihazdan kaldıracak.</string>
