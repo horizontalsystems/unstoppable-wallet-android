@@ -1,23 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.market.platform
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.modules.market.MarketField
+import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
+import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
-import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
+import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
-import io.horizontalsystems.bankwallet.ui.compose.Select
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -25,23 +24,20 @@ class MarketPlatformViewModel(
     platform: Platform,
     private val repository: MarketPlatformCoinsRepository,
     private val favoritesManager: MarketFavoritesManager,
-) : ViewModel() {
+) : ViewModelUiState<MarketPlatformUiState>() {
 
-    private val sortingFields = SortingField.entries
+    val sortingFields = listOf(
+        SortingField.HighestCap,
+        SortingField.LowestCap,
+        SortingField.TopGainers,
+        SortingField.TopLosers,
+    )
 
-    private val marketFields = MarketField.entries
-
-    var sortingField: SortingField = SortingField.HighestCap
-        private set
-
-    var marketField: MarketField = MarketField.PriceDiff
-        private set
-
-    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
-        private set
-
-    var viewItems by mutableStateOf<List<MarketViewItem>>(listOf())
-        private set
+    private var sortingField: SortingField = SortingField.HighestCap
+    private var viewState: ViewState = ViewState.Loading
+    private var viewItems: List<MarketViewItem> = listOf()
+    private var cache: List<MarketItem> = emptyList()
+    private var isRefreshing = false
 
     val header = MarketModule.Header(
         Translator.getString(R.string.MarketPlatformCoins_PlatformEcosystem, platform.name),
@@ -52,23 +48,16 @@ class MarketPlatformViewModel(
         ImageSource.Remote(platform.iconUrl)
     )
 
-    var isRefreshing by mutableStateOf(false)
-        private set
-
-    var selectorDialogState by mutableStateOf<SelectorDialogState>(SelectorDialogState.Closed)
-        private set
-
-    var menu by mutableStateOf(
-        MarketPlatformModule.Menu(
-            sortingFieldSelect = Select(sortingField, sortingFields),
-            marketFieldSelect = Select(marketField, marketFields)
-        )
-    )
-        private set
-
     init {
         sync()
     }
+
+    override fun createState() = MarketPlatformUiState(
+        viewItems = viewItems,
+        viewState = viewState,
+        sortingField = sortingField,
+        isRefreshing = isRefreshing,
+    )
 
     fun refresh() {
         refreshWithMinLoadingSpinnerPeriod()
@@ -80,25 +69,7 @@ class MarketPlatformViewModel(
 
     fun onSelectSortingField(sortingField: SortingField) {
         this.sortingField = sortingField
-        selectorDialogState = SelectorDialogState.Closed
         sync()
-        updateMenu()
-    }
-
-    fun onSelectMarketField(marketField: MarketField) {
-        this.marketField = marketField
-        sync()
-        updateMenu()
-    }
-
-    fun onSelectorDialogDismiss() {
-        selectorDialogState = SelectorDialogState.Closed
-    }
-
-    fun showSelectorMenu() {
-        selectorDialogState = SelectorDialogState.Opened(
-            Select(sortingField, sortingFields)
-        )
     }
 
     fun onAddFavorite(coinUid: String) {
@@ -111,30 +82,53 @@ class MarketPlatformViewModel(
         sync()
     }
 
-    private fun updateMenu() {
-        menu = MarketPlatformModule.Menu(
-            sortingFieldSelect = Select(sortingField, sortingFields),
-            marketFieldSelect = Select(marketField, marketFields)
-        )
-    }
-
     private fun sync(forceRefresh: Boolean = false) {
-        viewModelScope.launch {
-            try {
-                val marketItems = repository.get(sortingField, forceRefresh)
-                val favorites = favoritesManager.getAll().map { it.coinUid }
-                viewItems = marketItems?.map {
-                    MarketViewItem.create(
-                        it,
-                        marketField,
-                        favorites.contains(it.fullCoin.coin.uid)
-                    )
-                } ?: listOf()
+        viewModelScope.launch(Dispatchers.IO) {
+            if (!forceRefresh && cache.isNotEmpty()) {
+                viewItems = cache
+                    .sort(sortingField)
+                    .map { item ->
+                        marketViewItem(item)
+                    }
                 viewState = ViewState.Success
-            } catch (e: Throwable) {
-                viewState = ViewState.Error(e)
+                emitState()
+            } else {
+                fetchFromRepository(forceRefresh)
             }
         }
+    }
+
+    private suspend fun fetchFromRepository(forceRefresh: Boolean) {
+        try {
+            viewItems = repository.get(sortingField, forceRefresh)?.map {
+                marketViewItem(it)
+            } ?: listOf()
+
+            viewState = ViewState.Success
+        } catch (e: Throwable) {
+            viewState = ViewState.Error(e)
+        }
+        emitState()
+    }
+
+    private fun marketViewItem(item: MarketItem): MarketViewItem {
+        val marketCap = App.numberFormatter.formatFiatShort(
+            item.marketCap.value,
+            item.marketCap.currency.symbol,
+            2
+        )
+        return MarketViewItem(
+            fullCoin = item.fullCoin,
+            subtitle = marketCap,
+            value = App.numberFormatter.formatFiatFull(
+                item.rate.value,
+                item.rate.currency.symbol
+            ),
+            marketDataValue = MarketDataValue.Diff(item.diff),
+            rank = item.rank?.toString(),
+            favorited = favoritesManager.getAll().map { it.coinUid }
+                .contains(item.fullCoin.coin.uid)
+        )
     }
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
@@ -144,6 +138,14 @@ class MarketPlatformViewModel(
             isRefreshing = true
             delay(1000)
             isRefreshing = false
+            emitState()
         }
     }
 }
+
+data class MarketPlatformUiState(
+    val viewItems: List<MarketViewItem>,
+    val viewState: ViewState,
+    val sortingField: SortingField,
+    val isRefreshing: Boolean,
+)

@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -32,7 +31,6 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.core.stats.statField
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.chart.ChartViewModel
@@ -40,16 +38,16 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Chart
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
+import io.horizontalsystems.bankwallet.modules.market.topcoins.OptionController
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
+import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.SortMenu
 import io.horizontalsystems.bankwallet.ui.compose.components.TopCloseButton
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
@@ -91,21 +89,23 @@ private fun PlatformScreen(
     chartViewModel: ChartViewModel = viewModel(factory = factory),
 ) {
 
+    val uiState = viewModel.uiState
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
+    var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             TopCloseButton(onCloseButtonClick)
 
             HSSwipeRefresh(
-                refreshing = viewModel.isRefreshing,
+                refreshing = uiState.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
 
                     stat(page = StatPage.TopPlatform, event = StatEvent.Refresh)
                 }
             ) {
-                Crossfade(viewModel.viewState) { state ->
+                Crossfade(uiState.viewState, label = "") { state ->
                     when (state) {
                         ViewState.Loading -> {
                             Loading()
@@ -119,19 +119,25 @@ private fun PlatformScreen(
                         }
 
                         ViewState.Success -> {
-                            viewModel.viewItems.let { viewItems ->
+                            uiState.viewItems.let { viewItems ->
                                 CoinList(
                                     items = viewItems,
                                     scrollToTop = scrollToTopAfterUpdate,
                                     onAddFavorite = { uid ->
                                         viewModel.onAddFavorite(uid)
 
-                                        stat(page = StatPage.TopPlatform, event = StatEvent.AddToWatchlist(uid))
+                                        stat(
+                                            page = StatPage.TopPlatform,
+                                            event = StatEvent.AddToWatchlist(uid)
+                                        )
                                     },
                                     onRemoveFavorite = { uid ->
                                         viewModel.onRemoveFavorite(uid)
 
-                                        stat(page = StatPage.TopPlatform, event = StatEvent.RemoveFromWatchlist(uid))
+                                        stat(
+                                            page = StatPage.TopPlatform,
+                                            event = StatEvent.RemoveFromWatchlist(uid)
+                                        )
                                     },
                                     onCoinClick = onCoinClick,
                                     preItems = {
@@ -145,27 +151,13 @@ private fun PlatformScreen(
                                         }
                                         stickyHeader {
                                             HeaderSorting(borderTop = true, borderBottom = true) {
-                                                Box(modifier = Modifier.weight(1f)) {
-                                                    SortMenu(
-                                                        viewModel.menu.sortingFieldSelect.selected.titleResId,
-                                                        viewModel::showSelectorMenu
-                                                    )
-                                                }
-                                                Box(
-                                                    modifier = Modifier.padding(
-                                                        start = 8.dp,
-                                                        end = 16.dp
-                                                    )
-                                                ) {
-                                                    ButtonSecondaryToggle(
-                                                        select = viewModel.menu.marketFieldSelect,
-                                                        onSelect = {
-                                                            viewModel.onSelectMarketField(it)
-
-                                                            stat(page = StatPage.TopPlatform, event = StatEvent.SwitchField(it.statField))
-                                                        }
-                                                    )
-                                                }
+                                                HSpacer(width = 16.dp)
+                                                OptionController(
+                                                    uiState.sortingField.titleResId,
+                                                    onOptionClick = {
+                                                        openSortingSelector = true
+                                                    }
+                                                )
                                             }
                                         }
                                     }
@@ -179,24 +171,22 @@ private fun PlatformScreen(
                 }
             }
         }
-        //Dialog
-        when (val option = viewModel.selectorDialogState) {
-            is SelectorDialogState.Opened -> {
-                AlertGroup(
-                    R.string.Market_Sort_PopupTitle,
-                    option.select,
-                    { selected ->
-                        viewModel.onSelectSortingField(selected)
-                        scrollToTopAfterUpdate = true
-
-                        stat(page = StatPage.TopPlatform, event = StatEvent.SwitchSortType(selected.statSortType))
-                    },
-                    { viewModel.onSelectorDialogDismiss() }
+    }
+    if (openSortingSelector) {
+        AlertGroup(
+            R.string.Market_Sort_PopupTitle,
+            Select(uiState.sortingField, viewModel.sortingFields),
+            { selected ->
+                scrollToTopAfterUpdate = true
+                viewModel.onSelectSortingField(selected)
+                openSortingSelector = false
+                stat(
+                    page = StatPage.TopPlatforms,
+                    event = StatEvent.SwitchSortType(selected.statSortType)
                 )
-            }
-
-            else -> {}
-        }
+            },
+            { openSortingSelector = false }
+        )
     }
 }
 
