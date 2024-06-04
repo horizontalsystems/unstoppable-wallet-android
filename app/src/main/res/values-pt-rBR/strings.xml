@@ -806,11 +806,6 @@
     <string name="BackupManager_AppSettingsTitle">Configurações do Aplicativo</string>
     <string name="BackupManager_AppSettingsDescription">Linguagem, Moeda, Aparência …</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">A Unstoppable não coleta dados nem usa ferramentas analíticas que possam expor dados sobre seus usuários. A carteira foi projetada para garantir um alto nível de privacidade para seus usuários.</string>
-    <string name="Privacy_BulletedText1">Os dados do usuário sempre permanecem em seu dispositivo.</string>
-    <string name="Privacy_BulletedText2">A carteira não coleta nenhum dado sobre os usuários.</string>
-    <string name="Privacy_BulletedText3">A carteira não coleta nenhum dado sobre os usuários.</string>
-    <string name="Privacy_BulletedText4">Não há nenhuma conta de usuário ou banco de dados mantendo os dados do usuário em algum lugar.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Adicionar novo</string>
