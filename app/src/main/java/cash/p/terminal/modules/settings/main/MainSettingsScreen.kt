@@ -239,6 +239,8 @@ private fun SettingSections(
                     value = uiState.baseCurrencyCode,
                     onClick = {
                         navController.slideFromRight(R.id.baseCurrencySettingsFragment)
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.BaseCurrency))
                     }
                 )
             },
@@ -249,6 +251,8 @@ private fun SettingSections(
                     value = uiState.currentLanguage,
                     onClick = {
                         navController.slideFromRight(R.id.languageSettingsFragment)
+
+                        stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Language))
                     }
                 )
             }

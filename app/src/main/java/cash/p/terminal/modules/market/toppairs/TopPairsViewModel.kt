@@ -7,6 +7,11 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.StatSection
+import cash.p.terminal.core.stats.StatSortType
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.overview.TopPairViewItem
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +78,13 @@ class TopPairsViewModel(
             isRefreshing = false
             emitState()
         }
+
+        stat(
+            page = StatPage.Markets,
+            section = StatSection.Pairs,
+            event = StatEvent.Refresh
+        )
+
     }
 
     fun onErrorClick() {
@@ -86,6 +98,12 @@ class TopPairsViewModel(
             items = sortItems(items)
             emitState()
         }
+
+        stat(
+            page = StatPage.Markets,
+            section = StatSection.Pairs,
+            event = StatEvent.SwitchSortType(if (sortDescending) StatSortType.HighestVolume else StatSortType.LowestVolume)
+        )
     }
 
     class Factory : ViewModelProvider.Factory {

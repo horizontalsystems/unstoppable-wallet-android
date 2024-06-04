@@ -20,6 +20,10 @@ import androidx.core.app.ShareCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.stats.StatEntity
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockContent
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockData
 import cash.p.terminal.ui.compose.ComposeAppTheme
@@ -77,6 +81,8 @@ fun AppStatusScreen(
                             uiState.appStatusAsText?.let {
                                 clipboardManager.setText(AnnotatedString(it))
                                 HudHelper.showSuccessMessage(localView, R.string.Hud_Text_Copied)
+
+                                stat(page = StatPage.AppStatus, event= StatEvent.Copy(StatEntity.Status))
                             }
                         }
                     )
@@ -90,6 +96,8 @@ fun AppStatusScreen(
                                     .setType("text/plain")
                                     .setText(it)
                                     .startChooser()
+
+                                stat(page = StatPage.AppStatus, event= StatEvent.Share(StatEntity.Status))
                             }
                         }
                     )

@@ -25,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.HFillSpacer
@@ -82,6 +85,8 @@ fun PrivacyScreen(navController: NavController) {
                         checked = uiState.uiStatsEnabled,
                         onCheckedChange = {
                             viewModel.toggleUiStats(it)
+
+                            stat(page = StatPage.Privacy, event = StatEvent.EnableUiStats(it))
                         }
                     )
                 }

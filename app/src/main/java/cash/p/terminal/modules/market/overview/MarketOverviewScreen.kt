@@ -107,7 +107,7 @@ fun MarketOverviewScreen(
                             ) {
                                 //navController.slideFromBottom(R.id.topPairsFragment)
 
-                                stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopMarketPairs))
+//                                stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopMarketPairs))
                             }
 
                             TopPlatformsBoardView(
@@ -130,7 +130,7 @@ fun MarketOverviewScreen(
 //                                        timeDuration
 //                                    )
 
-                                    stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopPlatforms))
+//                                    stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopPlatforms))
                                 }
                             )
 

@@ -8,6 +8,7 @@ import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statType
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.market.MarketModule
@@ -91,7 +92,7 @@ class TvlViewModel(
     fun onToggleTvlDiffType() {
         tvlDiffType = if (tvlDiffType == TvlDiffType.Percent) TvlDiffType.Currency else TvlDiffType.Percent
 
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField)
+        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField(tvlDiffType.statType))
     }
 
     fun onClickChainSelector() {

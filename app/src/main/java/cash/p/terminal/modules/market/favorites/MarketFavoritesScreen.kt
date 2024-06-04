@@ -17,7 +17,10 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
+import cash.p.terminal.core.stats.statPeriod
+import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -56,7 +59,7 @@ fun MarketFavoritesScreen(
         onRefresh = {
             viewModel.refresh()
 
-            stat(page = StatPage.Watchlist, event = StatEvent.Refresh)
+            stat(page = StatPage.Markets,  section = StatSection.Watchlist, event = StatEvent.Refresh)
         }
     ) {
         Crossfade(
@@ -92,16 +95,13 @@ fun MarketFavoritesScreen(
                             onRemoveFavorite = { uid ->
                                 viewModel.removeFromFavorites(uid)
 
-                                stat(
-                                    page = StatPage.Watchlist,
-                                    event = StatEvent.RemoveFromWatchlist(uid)
-                                )
+                                stat(page = StatPage.Markets,  section = StatSection.Watchlist, event = StatEvent.RemoveFromWatchlist(uid))
                             },
                             onCoinClick = { coinUid ->
                                 val arguments = CoinFragment.Input(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
 
-                                stat(page = StatPage.Watchlist, event = StatEvent.OpenCoin(coinUid))
+                                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.OpenCoin(coinUid))
                             },
                             onReorder = { from, to ->
                                 viewModel.reorder(from, to)
@@ -170,6 +170,8 @@ fun MarketFavoritesScreen(
                 manualOrderEnabled = false
                 openSortingSelector = false
                 viewModel.onSelectSortingField(selected)
+
+                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchSortType(selected.statSortType))
             },
             onDismiss = {
                 openSortingSelector = false
@@ -183,6 +185,8 @@ fun MarketFavoritesScreen(
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
+
+                stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },
             onDismiss = {
                 openPeriodSelector = false

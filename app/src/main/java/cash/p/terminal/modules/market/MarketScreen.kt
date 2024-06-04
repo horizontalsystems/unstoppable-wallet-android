@@ -29,6 +29,7 @@ import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPage
+import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.modules.coin.CoinFragment
 import cash.p.terminal.modules.market.MarketModule.Tab
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
@@ -119,6 +120,8 @@ fun TabsSection(
 
     LaunchedEffect(key1 = selectedTab, block = {
         pagerState.scrollToPage(selectedTab.ordinal)
+
+        stat(page = StatPage.Markets, event = StatEvent.SwitchTab(selectedTab.statTab))
     })
     val tabItems = tabs.map {
         TabItem(stringResource(id = it.titleResId), it == selectedTab, it)
@@ -135,19 +138,23 @@ fun TabsSection(
         when (tabs[page]) {
             Tab.Coins -> {
                 TopCoins(onCoinClick = { onCoinClick(it, navController) })
-                stat(page = StatPage.MarketOverview, section = StatSection.TopGainers, event = StatEvent.Open(StatPage.TopCoins))
             }
 
-            Tab.Watchlist -> MarketFavoritesScreen(navController)
-            Tab.Posts -> MarketPostsScreen()
+            Tab.Watchlist -> {
+                MarketFavoritesScreen(navController)
+            }
+
+            Tab.Posts -> {
+                MarketPostsScreen()
+            }
+
             Tab.Platform -> {
                 TopPlatforms(navController)
-                stat(page = StatPage.MarketOverview, event = StatEvent.Open(StatPage.TopPlatforms))
             }
-            Tab.Pairs -> TopPairsScreen()
 
-//            Tab.Sectors -> {
-//            }
+            Tab.Pairs -> {
+                TopPairsScreen()
+            }
         }
     }
 }
@@ -192,15 +199,19 @@ fun MetricsBoard(
 }
 
 private fun openMetricsPage(metricsType: MetricsType, navController: NavController) {
-    if (metricsType == MetricsType.TvlInDefi) {
-        navController.slideFromBottom(R.id.tvlFragment)
-    } else if (metricsType == MetricsType.Etf) {
-        navController.slideFromBottom(R.id.etfFragment)
-    } else {
-        navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
+    when (metricsType) {
+        MetricsType.TvlInDefi -> {
+            navController.slideFromBottom(R.id.tvlFragment)
+        }
+        MetricsType.Etf -> {
+            navController.slideFromBottom(R.id.etfFragment)
+        }
+        else -> {
+            navController.slideFromBottom(R.id.metricsPageFragment, metricsType)
+        }
     }
 
-    stat(page = StatPage.MarketOverview, event = StatEvent.Open(metricsType.statPage))
+    stat(page = StatPage.Markets, event = StatEvent.Open(metricsType.statPage))
 }
 
 private fun onCoinClick(coinUid: String, navController: NavController) {
@@ -208,5 +219,5 @@ private fun onCoinClick(coinUid: String, navController: NavController) {
 
     navController.slideFromRight(R.id.coinFragment, arguments)
 
-    stat(page = StatPage.TopCoins, event = StatEvent.OpenCoin(coinUid))
+    stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.OpenCoin(coinUid))
 }

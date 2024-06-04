@@ -7,8 +7,10 @@ import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.storage.StatsDao
 import cash.p.terminal.entities.AccountType
+import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.StatRecord
 import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.modules.balance.BalanceViewType
 import cash.p.terminal.modules.coin.CoinModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.main.MainModule
@@ -17,12 +19,18 @@ import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
+import cash.p.terminal.modules.market.etf.EtfModule
+import cash.p.terminal.modules.market.favorites.WatchlistSorting
 import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.modules.market.search.MarketSearchSection
+import cash.p.terminal.modules.market.tvl.TvlModule
 import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.modules.metricchart.ProChartModule
+import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
+import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.modules.transactions.FilterTransactionType
+import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -178,6 +186,15 @@ val SortingField.statSortType: StatSortType
         SortingField.TopLosers -> StatSortType.TopLosers
     }
 
+val WatchlistSorting.statSortType: StatSortType
+    get() = when (this) {
+        WatchlistSorting.Manual -> StatSortType.Manual
+        WatchlistSorting.HighestCap -> StatSortType.HighestCap
+        WatchlistSorting.LowestCap -> StatSortType.LowestCap
+        WatchlistSorting.Gainers -> StatSortType.TopGainers
+        WatchlistSorting.Losers -> StatSortType.TopLosers
+    }
+
 
 val CoinModule.Tab.statTab: StatTab
     get() = when (this) {
@@ -288,10 +305,9 @@ val MarketModule.Tab.statTab: StatTab
     get() = when (this) {
         MarketModule.Tab.Posts -> StatTab.News
         MarketModule.Tab.Watchlist -> StatTab.Watchlist
-        MarketModule.Tab.Coins -> TODO()
-        MarketModule.Tab.Platform -> TODO()
-        MarketModule.Tab.Pairs -> TODO()
-//        MarketModule.Tab.Sectors -> TODO()
+        MarketModule.Tab.Coins -> StatTab.Coins
+        MarketModule.Tab.Platform -> StatTab.Platforms
+        MarketModule.Tab.Pairs -> StatTab.Pairs
     }
 
 val MarketSearchSection.statSection: StatSection
@@ -322,7 +338,48 @@ val FilterTransactionType.statTab: StatTab
     }
 
 val SpeedUpCancelType.statResendType: StatResendType
-    get() = when(this) {
+    get() = when (this) {
         SpeedUpCancelType.SpeedUp -> StatResendType.SpeedUp
         SpeedUpCancelType.Cancel -> StatResendType.Cancel
+    }
+
+val ThemeType.statValue: String
+    get() = when (this) {
+        ThemeType.Dark -> "dark"
+        ThemeType.Light -> "light"
+        ThemeType.System -> "system"
+    }
+
+val PriceChangeInterval.statValue: String
+    get() = when (this) {
+        PriceChangeInterval.LAST_24H -> "hour_24"
+        PriceChangeInterval.FROM_UTC_MIDNIGHT -> "midnight_utc"
+    }
+
+val BalanceViewType.statValue: String
+    get() = when (this) {
+        BalanceViewType.CoinThenFiat -> "coin"
+        BalanceViewType.FiatThenCoin -> "currency"
+    }
+
+val LaunchPage.statValue: String
+    get() = when (this) {
+        LaunchPage.Auto -> "auto"
+        LaunchPage.Balance -> "balance"
+        LaunchPage.Market -> "market_overview"
+        LaunchPage.Watchlist -> "watchlist"
+    }
+
+val TvlModule.TvlDiffType.statType: String
+    get() = when (this) {
+        TvlModule.TvlDiffType.Percent -> "percent"
+        TvlModule.TvlDiffType.Currency -> "currency"
+    }
+
+val EtfModule.SortBy.statSortType: StatSortType
+    get() = when (this) {
+        EtfModule.SortBy.HighestAssets -> StatSortType.HighestAssets
+        EtfModule.SortBy.LowestAssets -> StatSortType.LowestAssets
+        EtfModule.SortBy.Inflow -> StatSortType.Inflow
+        EtfModule.SortBy.Outflow -> StatSortType.Outflow
     }

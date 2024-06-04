@@ -30,6 +30,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.core.stats.StatEvent
+import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.Guide
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -110,6 +113,8 @@ fun GuidesScreen(navController: NavController) {
                                             R.id.markdownFragment,
                                             MarkdownFragment.Input(guide.fileUrl, true)
                                         )
+
+                                        stat(page = StatPage.Academy, event = StatEvent.OpenArticle(guide.fileUrl))
                                     }
                                     Spacer(modifier = Modifier.height(8.dp))
                                 }

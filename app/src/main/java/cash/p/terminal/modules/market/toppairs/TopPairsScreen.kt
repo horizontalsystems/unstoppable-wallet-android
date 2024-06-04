@@ -29,6 +29,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.fiatIconUrl
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
+import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
@@ -102,7 +103,8 @@ fun TopPairsScreen() {
                                             LinkHelper.openLinkInAppBrowser(context, it)
 
                                             stat(
-                                                page = StatPage.TopMarketPairs,
+                                                page = StatPage.Markets,
+                                                section = StatSection.Pairs,
                                                 event = StatEvent.Open(StatPage.ExternalMarketPair)
                                             )
                                         }
