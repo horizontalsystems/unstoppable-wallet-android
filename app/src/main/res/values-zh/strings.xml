@@ -833,11 +833,6 @@
     <string name="BackupManager_AppSettingsTitle">应用设置</string>
     <string name="BackupManager_AppSettingsDescription">语言、 货币、 外观 ...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">不可阻挡不会收集任何数据，也不会使用可能会暴露任何用户数据的分析工具。 钱包的设计是为了确保用户高度的隐私。</string>
-    <string name="Privacy_BulletedText1">用户数据总是保留在用户的设备上。</string>
-    <string name="Privacy_BulletedText2">钱包没有收集任何有关用户的数据。</string>
-    <string name="Privacy_BulletedText3">钱包没有收集任何有关用户的数据。</string>
-    <string name="Privacy_BulletedText4">没有用户帐户或数据库存放其他地方的用户数据。</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">网络</string>
     <!--Evm Network-->
