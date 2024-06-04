@@ -287,7 +287,6 @@
     <string name="Market_Filter_TimePeriod_1M">1月</string>
     <string name="Market_Filter_TimePeriod_6M">6月</string>
     <string name="Market_Filter_TimePeriod_1Y">1年</string>
-    <string name="TimePeriod_24h">24小时</string>
     <string name="Market_Sorting_HighestCap">市值由高到低</string>
     <string name="Market_Sorting_LowestCap">市值由低到高</string>
     <!--Coin Markets-->
@@ -1177,7 +1176,6 @@
     <string name="Coin_Tab_Details">分析</string>
     <string name="Coin_Tab_Tweets">推文</string>
     <string name="CoinPage_TimeDuration_Today">今天</string>
-    <string name="CoinPage_TimeDuration_Day">24时</string>
     <string name="CoinPage_TimeDuration_Week">7天</string>
     <string name="CoinPage_TimeDuration_Month">1月</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2周</string>
