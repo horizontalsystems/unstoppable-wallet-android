@@ -122,7 +122,7 @@ class TransactionsViewModel(
         }
 
         viewModelScope.launch {
-            service.itemsObservable.asFlow().collect { items ->
+            service.itemsFlow.collect { items ->
                 handleUpdatedItems(items)
             }
         }
@@ -130,7 +130,7 @@ class TransactionsViewModel(
         viewModelScope.launch(Dispatchers.Default) {
             balanceHiddenManager.balanceHiddenFlow.collect {
                 transactionViewItem2Factory.updateCache()
-                service.refreshList()
+                handleUpdatedItems(service.itemsFlow.value)
             }
         }
     }
