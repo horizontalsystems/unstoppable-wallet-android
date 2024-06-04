@@ -251,7 +251,6 @@
     <string name="Market_Filter_TimePeriod_1M">1 Monate</string>
     <string name="Market_Filter_TimePeriod_6M">6 Monate</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Jahr</string>
-    <string name="TimePeriod_24h">24 Std</string>
     <string name="Market_Sorting_HighestCap">Höchste Obergrenze</string>
     <string name="Market_Sorting_LowestCap">Niedrigste Obergrenze</string>
     <!--Coin Markets-->
@@ -1113,7 +1112,6 @@
     <string name="Coin_Tab_Market">Märkte</string>
     <string name="Coin_Tab_Details">Analytik</string>
     <string name="CoinPage_TimeDuration_Today">Heute</string>
-    <string name="CoinPage_TimeDuration_Day">24Std</string>
     <string name="CoinPage_TimeDuration_Week">7T</string>
     <string name="CoinPage_TimeDuration_Year">1J</string>
     <string name="CoinPage_TimeDuration_Year2">2J</string>
