@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.market.favorites
 
 import cash.p.terminal.core.managers.CurrencyManager
+import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
@@ -34,7 +35,8 @@ class MarketFavoritesService(
     private val repository: MarketFavoritesRepository,
     private val menuService: MarketFavoritesMenuService,
     private val currencyManager: CurrencyManager,
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
+    private val priceManager: PriceManager
 ) : BackgroundManager.Listener {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var favoritesJob: Job? = null
@@ -148,6 +150,12 @@ class MarketFavoritesService(
 
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedFlow.collect {
+                fetch()
+            }
+        }
+
+        coroutineScope.launch {
+            priceManager.priceChangeIntervalFlow.collect {
                 fetch()
             }
         }

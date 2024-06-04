@@ -2,6 +2,7 @@ package cash.p.terminal.modules.market.topcoins
 
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
+import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
@@ -21,6 +22,7 @@ class MarketTopCoinsService(
     private val marketTopMoversRepository: MarketTopMoversRepository,
     private val currencyManager: CurrencyManager,
     private val favoritesManager: MarketFavoritesManager,
+    private val priceManager: PriceManager,
     topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
 ) {
@@ -104,6 +106,12 @@ class MarketTopCoinsService(
 
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedFlow.collect {
+                sync()
+            }
+        }
+
+        coroutineScope.launch {
+            priceManager.priceChangeIntervalFlow.collect {
                 sync()
             }
         }

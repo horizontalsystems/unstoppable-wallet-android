@@ -48,6 +48,7 @@ import cash.p.terminal.core.managers.NftAdapterManager
 import cash.p.terminal.core.managers.NftMetadataManager
 import cash.p.terminal.core.managers.NftMetadataSyncer
 import cash.p.terminal.core.managers.NumberFormatter
+import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
@@ -171,6 +172,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
         lateinit var marketKit: MarketKitWrapper
+        lateinit var priceManager: PriceManager
         lateinit var releaseNotesManager: ReleaseNotesManager
         lateinit var restoreSettingsManager: RestoreSettingsManager
         lateinit var evmSyncSourceManager: EvmSyncSourceManager
@@ -232,6 +234,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             hsApiKey = appConfig.marketApiKey,
             subscriptionManager = subscriptionManager
         )
+
+        priceManager = PriceManager(localStorage)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
         backgroundManager = BackgroundManager(this)

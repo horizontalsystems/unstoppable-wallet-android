@@ -6,6 +6,8 @@ import java.math.BigDecimal
 data class MarketInfoRaw(
     val uid: String,
     val price: BigDecimal?,
+    @SerializedName("price_change_1d")
+    val priceChange1d: BigDecimal?,
     @SerializedName("price_change_24h")
     val priceChange24h: BigDecimal?,
     @SerializedName("price_change_7d")

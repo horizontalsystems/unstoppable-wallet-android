@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.BalanceHiddenManager
-import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewType
@@ -25,7 +25,7 @@ class CexAssetViewModel(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val xRateRepository: BalanceXRateRepository,
     private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val connectivityManager: ConnectivityManager,
+    private val priceManager: PriceManager
 ) : ViewModel() {
 
     private val title = cexAsset.id
@@ -50,6 +50,12 @@ class CexAssetViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             xRateRepository.itemObservable.collect {
+                updateBalanceViewItem()
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            priceManager.priceChangeIntervalFlow.collect {
                 updateBalanceViewItem()
             }
         }
@@ -102,8 +108,7 @@ class CexAssetViewModel(
                 App.balanceHiddenManager,
                 BalanceXRateRepository("cex-asset", App.currencyManager, App.marketKit),
                 BalanceViewItemFactory(),
-                App.connectivityManager,
-
+                App.priceManager
                 ) as T
         }
     }

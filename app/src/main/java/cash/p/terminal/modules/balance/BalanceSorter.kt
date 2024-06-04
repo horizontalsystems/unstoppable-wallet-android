@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.balance
 
+import cash.p.terminal.core.diff
 import cash.p.terminal.core.order
 import java.math.BigDecimal
 

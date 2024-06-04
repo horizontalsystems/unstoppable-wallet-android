@@ -5,6 +5,7 @@ import java.math.BigDecimal
 data class MarketInfo(
     val fullCoin: FullCoin,
     val price: BigDecimal?,
+    val priceChange1d: BigDecimal?,
     val priceChange24h: BigDecimal?,
     val priceChange7d: BigDecimal?,
     val priceChange14d: BigDecimal?,
@@ -26,6 +27,7 @@ data class MarketInfo(
     constructor(marketInfoRaw: MarketInfoRaw, fullCoin: FullCoin) : this(
         fullCoin,
         marketInfoRaw.price,
+        marketInfoRaw.priceChange1d,
         marketInfoRaw.priceChange24h,
         marketInfoRaw.priceChange7d,
         marketInfoRaw.priceChange14d,

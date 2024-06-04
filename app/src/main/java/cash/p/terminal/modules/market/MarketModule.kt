@@ -15,6 +15,7 @@ import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.modules.metricchart.MetricsType
+import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -209,7 +210,12 @@ inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selec
 }
 
 fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
-    TimePeriod.TimePeriod_1D -> priceChange24h
+    TimePeriod.TimePeriod_1D -> {
+        when(App.priceManager.priceChangeInterval) {
+            PriceChangeInterval.LAST_24H ->  priceChange24h
+            PriceChangeInterval.FROM_UTC_MIDNIGHT -> priceChange1d
+        }
+    }
     TimePeriod.TimePeriod_1W -> priceChange7d
     TimePeriod.TimePeriod_2W -> priceChange14d
     TimePeriod.TimePeriod_1M -> priceChange30d

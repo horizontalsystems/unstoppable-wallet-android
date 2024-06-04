@@ -11,6 +11,7 @@ import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.factories.uriScheme
+import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -44,6 +45,7 @@ class BalanceViewModel(
     private val localStorage: ILocalStorage,
     private val wCManager: WCManager,
     private val addressHandlerFactory: AddressHandlerFactory,
+    private val priceManager: PriceManager
 ) : ViewModelUiState<BalanceUiState>(), ITotalBalance by totalBalance {
 
     private var balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value
@@ -95,6 +97,12 @@ class BalanceViewModel(
             localStorage.balanceTabButtonsEnabledFlow.collect {
                 balanceTabButtonsEnabled = it
                 emitState()
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            priceManager.priceChangeIntervalFlow.collect {
+                refreshViewItems(service.balanceItemsFlow.value)
             }
         }
 

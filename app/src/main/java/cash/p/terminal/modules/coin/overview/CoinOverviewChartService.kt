@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.coin.overview
 
 import android.util.Log
+import cash.p.terminal.core.diff
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.stats.StatEvent

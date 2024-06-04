@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import cash.p.terminal.R
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.App
+import cash.p.terminal.core.diff
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.swappable
@@ -178,7 +179,6 @@ class BalanceViewItemFactory {
         balanceViewType: BalanceViewType
     ): BalanceViewItem {
         val wallet = item.wallet
-        val coin = wallet.coin
         val state = item.state
         val latestRate = item.coinPrice
 
@@ -261,7 +261,6 @@ class BalanceViewItemFactory {
         networkAvailable: Boolean
     ): BalanceViewItem2 {
         val wallet = item.wallet
-        val coin = wallet.coin
         val state = item.state
         val latestRate = item.coinPrice
 

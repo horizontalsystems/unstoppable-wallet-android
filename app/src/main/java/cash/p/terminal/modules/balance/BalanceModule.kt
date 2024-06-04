@@ -40,6 +40,7 @@ object BalanceModule {
                 App.localStorage,
                 App.wcManager,
                 AddressHandlerFactory(App.appConfigProvider.udnApiKey),
+                App.priceManager
             ) as T
         }
     }
