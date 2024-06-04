@@ -255,7 +255,6 @@
     <string name="Market_Filter_TimePeriod_1M">1 Mes</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Año</string>
-    <string name="TimePeriod_24h">24 horas</string>
     <string name="Market_Sorting_HighestCap">Capitalización Mayor</string>
     <string name="Market_Sorting_LowestCap">Capitalización Menor</string>
     <!--Coin Markets-->
