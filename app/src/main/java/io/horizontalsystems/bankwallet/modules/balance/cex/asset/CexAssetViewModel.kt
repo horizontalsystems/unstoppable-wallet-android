@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
-import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewItemFactory
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewType
@@ -25,7 +25,7 @@ class CexAssetViewModel(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val xRateRepository: BalanceXRateRepository,
     private val balanceViewItemFactory: BalanceViewItemFactory,
-    private val connectivityManager: ConnectivityManager,
+    private val priceManager: PriceManager
 ) : ViewModel() {
 
     private val title = cexAsset.id
@@ -50,6 +50,12 @@ class CexAssetViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             xRateRepository.itemObservable.collect {
+                updateBalanceViewItem()
+            }
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            priceManager.priceChangeIntervalFlow.collect {
                 updateBalanceViewItem()
             }
         }
@@ -102,8 +108,7 @@ class CexAssetViewModel(
                 App.balanceHiddenManager,
                 BalanceXRateRepository("cex-asset", App.currencyManager, App.marketKit),
                 BalanceViewItemFactory(),
-                App.connectivityManager,
-
+                App.priceManager
                 ) as T
         }
     }

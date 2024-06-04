@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.topcoins
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
+import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -21,6 +22,7 @@ class MarketTopCoinsService(
     private val marketTopMoversRepository: MarketTopMoversRepository,
     private val currencyManager: CurrencyManager,
     private val favoritesManager: MarketFavoritesManager,
+    private val priceManager: PriceManager,
     topMarket: TopMarket = TopMarket.Top100,
     sortingField: SortingField = SortingField.HighestCap,
 ) {
@@ -104,6 +106,12 @@ class MarketTopCoinsService(
 
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedFlow.collect {
+                sync()
+            }
+        }
+
+        coroutineScope.launch {
+            priceManager.priceChangeIntervalFlow.collect {
                 sync()
             }
         }

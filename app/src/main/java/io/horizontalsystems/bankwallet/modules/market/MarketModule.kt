@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
+import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.FullCoin
@@ -209,7 +210,12 @@ inline fun <T, R : Comparable<R>> Iterable<T>.sortedByNullLast(crossinline selec
 }
 
 fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
-    TimePeriod.TimePeriod_1D -> priceChange24h
+    TimePeriod.TimePeriod_1D -> {
+        when(App.priceManager.priceChangeInterval) {
+            PriceChangeInterval.LAST_24H ->  priceChange24h
+            PriceChangeInterval.FROM_UTC_MIDNIGHT -> priceChange1d
+        }
+    }
     TimePeriod.TimePeriod_1W -> priceChange7d
     TimePeriod.TimePeriod_2W -> priceChange14d
     TimePeriod.TimePeriod_1M -> priceChange30d
