@@ -800,9 +800,12 @@
     <string name="Settings_Donate_OrSelectCoinToDonate">Ou selecione uma moeda para doar</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Imediato</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minuto</string>
-    <string name="SettingsSecurity_AutoLock_After5Min">5 Minutos</string>
-    <string name="SettingsSecurity_AutoLock_After15Min">15 Minutos</string>
-    <string name="SettingsSecurity_AutoLock_After30Min">30 Minutos</string>
+    <string name="SettingsSecurity_AutoLock_After2Min">2 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After3Min">3 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After4Min">4 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After5Min">5 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After15Min">15 minutos</string>
+    <string name="SettingsSecurity_AutoLock_After30Min">30 minutos</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>

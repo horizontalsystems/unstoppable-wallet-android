@@ -799,6 +799,9 @@
     <string name="Settings_Donate_OrSelectCoinToDonate">기부할 코인을 선택하세요</string>
     <string name="SettingsSecurity_AutoLock_Immediate">즉시</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1분</string>
+    <string name="SettingsSecurity_AutoLock_After2Min">2분</string>
+    <string name="SettingsSecurity_AutoLock_After3Min">3분</string>
+    <string name="SettingsSecurity_AutoLock_After4Min">4분</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5분</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15분</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30분</string>

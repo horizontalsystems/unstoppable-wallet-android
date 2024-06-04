@@ -19,6 +19,9 @@ object AutoLockModule {
 enum class AutoLockInterval(val raw: String, val title: Int) {
     IMMEDIATE("immediate", R.string.SettingsSecurity_AutoLock_Immediate),
     AFTER_1_MIN("1min", R.string.SettingsSecurity_AutoLock_After1Min),
+    AFTER_2_MIN("2min", R.string.SettingsSecurity_AutoLock_After2Min),
+    AFTER_3_MIN("3min", R.string.SettingsSecurity_AutoLock_After3Min),
+    AFTER_4_MIN("4min", R.string.SettingsSecurity_AutoLock_After4Min),
     AFTER_5_MIN("5min", R.string.SettingsSecurity_AutoLock_After5Min),
     AFTER_15_MIN("15min", R.string.SettingsSecurity_AutoLock_After15Min),
     AFTER_30_MIN("30min", R.string.SettingsSecurity_AutoLock_After30Min),
@@ -28,6 +31,9 @@ enum class AutoLockInterval(val raw: String, val title: Int) {
         get() = when (this) {
             IMMEDIATE -> 0
             AFTER_1_MIN -> 60
+            AFTER_2_MIN -> 2 * 60
+            AFTER_3_MIN -> 3 * 60
+            AFTER_4_MIN -> 4 * 60
             AFTER_5_MIN -> 5 * 60
             AFTER_15_MIN -> 15 * 60
             AFTER_30_MIN -> 30 * 60

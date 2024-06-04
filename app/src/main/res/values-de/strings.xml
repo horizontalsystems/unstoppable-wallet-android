@@ -797,6 +797,9 @@
     <string name="Settings_Donate_OrSelectCoinToDonate">Oder wählen Sie eine Münze zum Spenden</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Sofort</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 Minute</string>
+    <string name="SettingsSecurity_AutoLock_After2Min">2 Minuten</string>
+    <string name="SettingsSecurity_AutoLock_After3Min">3 Minuten</string>
+    <string name="SettingsSecurity_AutoLock_After4Min">4 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 Minuten</string>

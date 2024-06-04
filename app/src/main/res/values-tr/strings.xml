@@ -798,6 +798,9 @@
     <string name="Settings_Donate_OrSelectCoinToDonate">Ya bağış yapmak için bir coin seçin</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Hemen</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After2Min">2 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After3Min">3 dakika</string>
+    <string name="SettingsSecurity_AutoLock_After4Min">4 dakika</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 dakika</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 dakika</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 dakika</string>

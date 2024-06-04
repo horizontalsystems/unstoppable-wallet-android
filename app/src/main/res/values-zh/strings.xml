@@ -796,6 +796,9 @@
     <string name="Settings_Donate_OrSelectCoinToDonate">或选择一种币进行捐赠</string>
     <string name="SettingsSecurity_AutoLock_Immediate">即时的</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 分钟</string>
+    <string name="SettingsSecurity_AutoLock_After2Min">2 分钟</string>
+    <string name="SettingsSecurity_AutoLock_After3Min">3 分钟</string>
+    <string name="SettingsSecurity_AutoLock_After4Min">4 分钟</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 分钟</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 分钟</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 分钟</string>

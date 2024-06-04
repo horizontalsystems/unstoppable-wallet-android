@@ -796,6 +796,9 @@
     <string name="Settings_Donate_OrSelectCoinToDonate">Ou sélectionnez une pièce à faire un don</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
     <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
+    <string name="SettingsSecurity_AutoLock_After2Min">2 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After3Min">3 minutes</string>
+    <string name="SettingsSecurity_AutoLock_After4Min">4 minutes</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
