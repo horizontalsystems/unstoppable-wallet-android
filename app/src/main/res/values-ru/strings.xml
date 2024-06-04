@@ -845,11 +845,6 @@
     <string name="BackupManager_AppSettingsTitle">Настройки приложения</string>
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable не собирает данные и не использует инструменты аналитики, которые могут раскрывать любые данные о своих пользователях. Кошелек разработан для обеспечения высокого уровня конфиденциальности для своих пользователей.</string>
-    <string name="Privacy_BulletedText1">Данные пользователя всегда остаются на устройстве пользователя.</string>
-    <string name="Privacy_BulletedText2">Кошелек не собирает никаких данных о пользователях.</string>
-    <string name="Privacy_BulletedText3">Кошелек не передает никаких данных о пользователях.</string>
-    <string name="Privacy_BulletedText4">Нет учетных записей или баз данных, хранящих данные пользователя в другом месте.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
     <!--Evm Network-->
