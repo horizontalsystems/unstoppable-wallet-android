@@ -813,11 +813,6 @@
     <string name="BackupManager_AppSettingsTitle">Paramètres de l\'application</string>
     <string name="BackupManager_AppSettingsDescription">Langue, Devise, Apparence ...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable ne collecte aucune donnée et n\'utilise aucun outil d\'analyse susceptible d\'exposer des données sur ses utilisateurs. Le portefeuille est conçu pour assurer un haut niveau de confidentialité à ses utilisateurs.</string>
-    <string name="Privacy_BulletedText1">Les données de l\'utilisateur restent toujours sur l\'appareil de l\'utilisateur.</string>
-    <string name="Privacy_BulletedText2">Le portefeuille ne collecte aucune donnée sur les utilisateurs.</string>
-    <string name="Privacy_BulletedText3">Le portefeuille ne partage aucune donnée sur les utilisateurs.</string>
-    <string name="Privacy_BulletedText4">Aucun compte utilisateur ni aucune base de données ne conserve les données des utilisateurs à un autre endroit.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Ajouter un Nouveau</string>
