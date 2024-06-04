@@ -363,7 +363,6 @@
     <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
     <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
 
-    <string name="Market_Filter_TimePeriod_24H">24 Hours</string>
     <string name="Market_Filter_TimePeriod_1D">1 Day</string>
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
     <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
@@ -380,7 +379,6 @@
     <string name="Market_Filter_PriceChange_Negative_25_minus" translatable="false">&lt; -25%</string>
     <string name="Market_Filter_PriceChange_Negative_50_minus" translatable="false">&lt; -50%</string>
     <string name="Market_Filter_PriceChange_Negative_75_minus" translatable="false">&lt; -75%</string>
-    <string name="TimePeriod_24h">24h</string>
 
     <string name="Market_Sorting_Manual">Manual</string>
     <string name="Market_Sorting_Gainers">Gainers</string>
@@ -1524,7 +1522,7 @@
     <string name="Coin_Tab_Tweets">Tweets</string>
 
     <string name="CoinPage_TimeDuration_Today">TDY</string>
-    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Day">1D</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
