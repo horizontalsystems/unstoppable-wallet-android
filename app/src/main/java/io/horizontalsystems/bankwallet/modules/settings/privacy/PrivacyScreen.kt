@@ -25,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
@@ -81,6 +84,8 @@ fun PrivacyScreen(navController: NavController) {
                         checked = uiState.uiStatsEnabled,
                         onCheckedChange = {
                             viewModel.toggleUiStats(it)
+
+                            stat(page = StatPage.Privacy, event = StatEvent.EnableUiStats(it))
                         }
                     )
                 }

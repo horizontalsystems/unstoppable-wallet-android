@@ -14,6 +14,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statMarketTop
+import io.horizontalsystems.bankwallet.core.stats.statPeriod
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.market.MarketField
@@ -52,6 +59,8 @@ fun TopCoins(
         refreshing = uiState.isRefreshing,
         onRefresh = {
             viewModel.refresh()
+
+            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.Refresh)
         }
     ) {
         Crossfade(uiState.viewState, label = "") { viewState ->
@@ -68,8 +77,17 @@ fun TopCoins(
                     CoinList(
                         items = uiState.viewItems,
                         scrollToTop = scrollToTopAfterUpdate,
-                        onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },
-                        onRemoveFavorite = { uid -> viewModel.onRemoveFavorite(uid) },
+                        onAddFavorite = { uid ->
+                            viewModel.onAddFavorite(uid)
+
+                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.AddToWatchlist(uid))
+
+                        },
+                        onRemoveFavorite = { uid ->
+                            viewModel.onRemoveFavorite(uid)
+
+                            stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.RemoveFromWatchlist(uid))
+                        },
                         onCoinClick = onCoinClick,
                         preItems = {
                             stickyHeader {
@@ -118,6 +136,8 @@ fun TopCoins(
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
                 scrollToTopAfterUpdate = true
+
+                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchSortType(selected.statSortType))
             },
             onDismiss = {
                 openSortingSelector = false
@@ -132,6 +152,8 @@ fun TopCoins(
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
                 scrollToTopAfterUpdate = true
+
+                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchMarketTop(it.statMarketTop))
             },
             onDismiss = {
                 openTopSelector = false
@@ -145,6 +167,8 @@ fun TopCoins(
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
+
+                stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },
             onDismiss = {
                 openPeriodSelector = false

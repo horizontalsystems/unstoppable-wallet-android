@@ -15,6 +15,7 @@ enum class StatPage(val key: String) {
     AdvancedSearch("advanced_search"),
     AdvancedSearchResults("advanced_search_results"),
     Appearance("appearance"),
+    AppStatus("app_status"),
     BackupManager("backup_manager"),
     BackupPromptAfterCreate("backup_prompt_after_create"),
     BackupRequired("backup_required"),
@@ -71,6 +72,7 @@ enum class StatPage(val key: String) {
     ExternalReddit("external_reddit"),
     ExternalTelegram("external_telegram"),
     ExternalTwitter("external_twitter"),
+    ExternalWebsite("external_website"),
     Faq("faq"),
     GlobalMetricsMarketCap("global_metrics_market_cap"),
     GlobalMetricsVolume("global_metrics_volume"),
@@ -96,10 +98,10 @@ enum class StatPage(val key: String) {
     Markets("markets"),
     MarketOverview("market_overview"),
     MarketSearch("market_search"),
-    News("news"),
     NewWallet("new_wallet"),
     NewWalletAdvanced("new_wallet_advanced"),
     PrivateKeys("private_keys"),
+    Privacy("privacy"),
     PublicKeys("public_keys"),
     RateUs("rate_us"),
     Receive("receive"),
@@ -120,19 +122,17 @@ enum class StatPage(val key: String) {
     SwapProvider("swap_provider"),
     SwitchWallet("switch_wallet"),
     TellFriends("tell_friends"),
-    TopCoins("top_coins"),
-    TopMarketPairs("top_market_pairs"),
+    Terms("terms"),
     TopNftCollections("top_nft_collections"),
     TopPlatform("top_platform"),
-    TopPlatforms("top_platforms"),
     TokenPage("token_page"),
     Transactions("transactions"),
     TransactionFilter("transaction_filter"),
     TransactionInfo("transaction_info"),
     UnlinkWallet("unlink_wallet"),
     WalletConnect("wallet_connect"),
-    Watchlist("watchlist"),
     WatchWallet("watch_wallet"),
+    WhatsNew("whats_news"),
     Widget("widget"),
 }
 
@@ -150,6 +150,11 @@ enum class StatSection(val key: String) {
     TopGainers("top_gainers"),
     TopLosers("top_losers"),
     TopPlatforms("top_platforms"),
+    Coins("coins"),
+    Watchlist("watchlist"),
+    News("news"),
+    Platforms("platforms"),
+    Pairs("pairs")
 }
 
 sealed class StatEvent {
@@ -167,6 +172,8 @@ sealed class StatEvent {
     data class ExportWallet(val walletType: String) : StatEvent()
     object ExportFull : StatEvent()
 
+    data class OpenArticle(val relativeUrl: String): StatEvent()
+
     data class OpenBlockchainSettingsBtc(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvm(val chainUid: String) : StatEvent()
     data class OpenBlockchainSettingsEvmAdd(val chainUid: String) : StatEvent()
@@ -181,6 +188,18 @@ sealed class StatEvent {
     data class OpenTokenInfo(val token: Token) : StatEvent()
     data class Open(val page: StatPage) : StatEvent()
 
+    data class HideBalanceButtons(val shown: Boolean): StatEvent()
+    data class SelectTheme(val type: String): StatEvent()
+    data class SelectLaunchScreen(val type: String): StatEvent()
+    data class SelectBalanceConversion(val coinUid: String): StatEvent()
+    data class SelectBalanceValue(val type: String): StatEvent()
+    data class SelectAppIcon(val iconUid: String): StatEvent()
+    data class ShowMarketsTab(val shown: Boolean): StatEvent()
+    data class SwitchPriceChangeMode(val changeMode: String): StatEvent()
+    data class SwitchLanguage(val language: String): StatEvent()
+    data class ShowSignals(val shown: Boolean): StatEvent()
+    data class EnableUiStats(val enabled: Boolean): StatEvent()
+
     data class SwitchBaseCurrency(val code: String) : StatEvent()
     data class SwitchBtcSource(val chainUid: String, val type: BtcRestoreMode) : StatEvent()
     data class SwitchEvmSource(val chainUid: String, val type: String) : StatEvent()
@@ -193,7 +212,7 @@ sealed class StatEvent {
     data class SwitchTvlChain(val chain: String) : StatEvent()
     data class SwitchFilterType(val type: String) : StatEvent()
     object ToggleSortDirection : StatEvent()
-    object ToggleTvlField : StatEvent()
+    data class ToggleTvlField(val fieldArg: String) : StatEvent()
 
     object Refresh : StatEvent()
 
@@ -251,6 +270,7 @@ sealed class StatEvent {
             is ExportFull -> "export_full"
             is ExportWallet -> "export_wallet"
 
+            is OpenArticle -> "open_article"
             is OpenBlockchainSettingsBtc,
             is OpenBlockchainSettingsEvm,
             is OpenBlockchainSettingsEvmAdd,
@@ -264,6 +284,18 @@ sealed class StatEvent {
             is Open -> "open_page"
 
             is OpenTokenInfo -> "open_token_info"
+
+            is HideBalanceButtons -> "hide_balance_buttons"
+            is SelectTheme -> "select_theme"
+            is SelectLaunchScreen -> "select_launch_screen"
+            is SelectBalanceConversion -> "select_balance_conversion"
+            is SelectBalanceValue -> "select_balance_value"
+            is SelectAppIcon -> "select_app_icon"
+            is ShowMarketsTab -> "show_markets_tab"
+            is SwitchPriceChangeMode -> "switch_price_change_mode"
+            is SwitchLanguage -> "switch_language"
+            is ShowSignals -> "show_signals"
+            is EnableUiStats -> "enable_ui_stats"
 
             is SwapSelectTokenIn -> "swap_select_token_in"
             is SwapSelectTokenOut -> "swap_select_token_out"
@@ -328,6 +360,10 @@ sealed class StatEvent {
 
             is EnableToken -> tokenParams(token)
 
+            is OpenArticle -> mapOf(
+                StatParam.RelativeUrl to relativeUrl
+            )
+
             is OpenBlockchainSettingsBtc -> mapOf(
                 StatParam.Page to StatPage.BlockchainSettingsBtc.key,
                 StatParam.ChainUid to chainUid
@@ -374,6 +410,18 @@ sealed class StatEvent {
 
             is Open -> mapOf(StatParam.Page to page.key)
 
+            //Appearance
+            is HideBalanceButtons -> mapOf(StatParam.Shown to shown)
+            is SelectTheme -> mapOf(StatParam.Type to type)
+            is SelectLaunchScreen -> mapOf(StatParam.Type to type )
+            is SelectBalanceConversion -> mapOf(StatParam.CoinUid to coinUid)
+            is SelectBalanceValue -> mapOf(StatParam.Type to type)
+            is SelectAppIcon -> mapOf(StatParam.IconUid to iconUid)
+            is ShowMarketsTab -> mapOf(StatParam.Shown to shown)
+            is SwitchPriceChangeMode -> mapOf(StatParam.ChangeMode to changeMode)
+            is SwitchLanguage -> mapOf(StatParam.Language to language)
+            is ShowSignals -> mapOf(StatParam.Shown to shown)
+
             is SwapSelectTokenIn -> tokenParams(token)
 
             is SwapSelectTokenOut -> tokenParams(token)
@@ -402,11 +450,15 @@ sealed class StatEvent {
 
             is SwitchFilterType -> mapOf(StatParam.Type to type)
 
+            is EnableUiStats -> mapOf(StatParam.Enabled to enabled)
+
             is AddToWatchlist -> mapOf(StatParam.CoinUid to coinUid)
 
             is RemoveFromWatchlist -> mapOf(StatParam.CoinUid to coinUid)
 
             is ToggleIndicators -> mapOf(StatParam.Shown to shown)
+
+            is ToggleTvlField -> mapOf(StatParam.Field to fieldArg)
 
             is Copy -> mapOf(StatParam.Entity to entity.key)
 
@@ -436,7 +488,7 @@ sealed class StatEvent {
 
             is AddToken -> tokenParams(token) + mapOf(StatParam.Entity to StatEntity.Token.key)
 
-            is Share -> mapOf(StatParam.Entity to StatEntity.ReceiveAddress.key)
+            is Share -> mapOf(StatParam.Entity to entity.key)
 
             else -> null
         }
@@ -457,15 +509,20 @@ enum class StatParam(val key: String) {
     BitcoinCashCoinType("bitcoin_cash_coin_type"),
     CategoryUid("category_uid"),
     ChainUid("chain_uid"),
+    ChangeMode("change_mode"),
     CoinUid("coin_uid"),
     CurrencyCode("currency_code"),
     Derivation("derivation"),
+    Enabled("enabled"),
     Entity("entity"),
     Field("field"),
+    IconUid("icon_uid"),
+    Language("language"),
     MarketTop("market_top"),
     Page("page"),
     Period("period"),
     Provider("provider"),
+    RelativeUrl("relative_url"),
     Shown("shown"),
     Tab("tab"),
     TvlChain("tvl_chain"),
@@ -486,7 +543,10 @@ enum class StatTab(val key: String) {
     Incoming("incoming"),
     Outgoing("outgoing"),
     Swap("swap"),
-    Approve("approve")
+    Approve("approve"),
+    Coins("coins"),
+    Pairs("pairs"),
+    Platforms("platforms"),
 }
 
 enum class StatSortType(val key: String) {
@@ -499,6 +559,11 @@ enum class StatSortType(val key: String) {
     LowestVolume("lowest_volume"),
     TopGainers("top_gainers"),
     TopLosers("top_losers"),
+    Manual("manual"),
+    HighestAssets("highest_assets"),
+    LowestAssets("lowest_assets"),
+    Inflow("inflow"),
+    Outflow("outflow")
 }
 
 enum class StatPeriod(val key: String) {
@@ -541,6 +606,7 @@ enum class StatEntity(val key: String) {
     ReceiveAddress("receive_address"),
     RecoveryPhrase("recovery_phrase"),
     RawTransaction("raw_transaction"),
+    Status("status"),
     Token("token"),
     TransactionId("transaction_id"),
     Wallet("wallet"),

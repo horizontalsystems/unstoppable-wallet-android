@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
@@ -91,7 +92,7 @@ class TvlViewModel(
     fun onToggleTvlDiffType() {
         tvlDiffType = if (tvlDiffType == TvlDiffType.Percent) TvlDiffType.Currency else TvlDiffType.Percent
 
-        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField)
+        stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.ToggleTvlField(tvlDiffType.statType))
     }
 
     fun onClickChainSelector() {

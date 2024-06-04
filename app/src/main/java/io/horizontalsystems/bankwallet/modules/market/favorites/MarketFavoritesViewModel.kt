@@ -2,6 +2,10 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -110,6 +114,8 @@ class MarketFavoritesViewModel(
     fun onToggleSignal() {
         if (service.showSignals) {
             service.hideSignals()
+
+            stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(false))
         } else {
             showSignalsInfo = true
             emitState()
@@ -123,6 +129,8 @@ class MarketFavoritesViewModel(
 
     fun showSignals() {
         service.showSignals()
+
+        stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.ShowSignals(true))
     }
 
     fun reorder(from: Int, to: Int) {

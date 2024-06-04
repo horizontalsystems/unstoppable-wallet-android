@@ -44,6 +44,11 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.core.stats.statPeriod
+import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.GraphicLine
@@ -203,6 +208,8 @@ fun EtfPage(
             onSelect = { selected ->
                 viewModel.onSelectTimeDuration(selected)
                 openPeriodSelector = false
+
+                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },
             onDismiss = {
                 openPeriodSelector = false
@@ -216,6 +223,8 @@ fun EtfPage(
             onSelect = { selected ->
                 viewModel.onSelectSortBy(selected)
                 openSortingSelector = false
+
+                stat(page = StatPage.GlobalMetricsEtf, event = StatEvent.SwitchSortType(selected.statSortType))
             },
             onDismiss = {
                 openSortingSelector = false

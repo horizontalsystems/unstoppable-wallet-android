@@ -6,6 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.managers.LanguageManager
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.core.helpers.LocaleType
 
 class LanguageSettingsViewModel(
@@ -42,6 +45,8 @@ class LanguageSettingsViewModel(
             localStorage.relaunchBySettingChange = true
             currentLocaleTag = localeType.tag
             reloadApp = true
+
+            stat(page = StatPage.Language, event = StatEvent.SwitchLanguage(localeType.tag))
         }
     }
 

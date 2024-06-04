@@ -64,22 +64,20 @@ class TopPlatformsViewModel(
         )
     }
 
-    private fun sync(forceRefresh: Boolean = false) {
-        viewModelScope.launch {
-            try {
-                val topPlatformItems = repository.get(
-                    sortingField,
-                    timePeriod,
-                    currencyManager.baseCurrency.code,
-                    forceRefresh
-                )
-                viewItems = getViewItems(topPlatformItems)
-                viewState = ViewState.Success
-            } catch (e: Throwable) {
-                viewState = ViewState.Error(e)
-            }
-            emitState()
+    private suspend fun sync(forceRefresh: Boolean = false) {
+        try {
+            val topPlatformItems = repository.get(
+                sortingField,
+                timePeriod,
+                currencyManager.baseCurrency.code,
+                forceRefresh
+            )
+            viewItems = getViewItems(topPlatformItems)
+            viewState = ViewState.Success
+        } catch (e: Throwable) {
+            viewState = ViewState.Error(e)
         }
+        emitState()
     }
 
     private fun getViewItems(topPlatformItems: List<TopPlatformItem>): List<TopPlatformViewItem> {
@@ -105,15 +103,22 @@ class TopPlatformsViewModel(
     private fun refreshWithMinLoadingSpinnerPeriod() {
         viewModelScope.launch {
             isRefreshing = true
+            emitState()
+
             sync(true)
+
             delay(1000)
             isRefreshing = false
+            emitState()
         }
     }
 
     fun onSelectSortingField(sortingField: SortingField) {
         this.sortingField = sortingField
-        sync()
+
+        viewModelScope.launch {
+            sync()
+        }
     }
 
     fun refresh() {
@@ -126,6 +131,9 @@ class TopPlatformsViewModel(
 
     fun onTimePeriodSelect(timePeriod: TimeDuration) {
         this.timePeriod = timePeriod
-        sync()
+
+        viewModelScope.launch {
+            sync()
+        }
     }
 }
