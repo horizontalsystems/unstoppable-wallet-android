@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.os.Handler
-import android.os.HandlerThread
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IAdapterManager
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
@@ -29,20 +27,14 @@ class AdapterManager(
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager
-) : IAdapterManager, HandlerThread("A") {
+) : IAdapterManager {
 
-    private val handler: Handler
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 
     override val adaptersReadyObservable: Flowable<Map<Wallet, IAdapter>> =
         adaptersReadySubject.toFlowable(BackpressureStrategy.BUFFER)
-
-    init {
-        start()
-        handler = Handler(looper)
-    }
 
     override fun startAdapterManager() {
         coroutineScope.launch {
@@ -101,9 +93,7 @@ class AdapterManager(
     }
 
     override suspend fun refresh() {
-        handler.post {
-            adaptersMap.values.forEach { it.refresh() }
-        }
+        adaptersMap.values.forEach { it.refresh() }
 
         for (blockchain in evmBlockchainManager.allBlockchains) {
             evmBlockchainManager.getEvmKitManager(blockchain.type).evmKitWrapper?.evmKit?.refresh()
@@ -140,38 +130,6 @@ class AdapterManager(
         currentAdapters.forEach { (wallet, adapter) ->
             adapter.stop()
             adapterFactory.unlinkAdapter(wallet)
-        }
-    }
-
-    /**
-     * Partial refresh of adapters
-     * For the given list of wallets do:
-     * - remove corresponding adapters from adaptersMap and stop them
-     * - create new adapters, start and add them to adaptersMap
-     * - trigger adaptersReadySubject
-     */
-    @Synchronized
-    override fun refreshAdapters(wallets: List<Wallet>) {
-        handler.post {
-            val walletsToRefresh = wallets.filter { adaptersMap.containsKey(it) }
-
-            //remove and stop adapters
-            walletsToRefresh.forEach { wallet ->
-                adaptersMap.remove(wallet)?.let { previousAdapter ->
-                    previousAdapter.stop()
-                    adapterFactory.unlinkAdapter(wallet)
-                }
-            }
-
-            //add and start new adapters
-            walletsToRefresh.forEach { wallet ->
-                adapterFactory.getAdapterOrNull(wallet)?.let { adapter ->
-                    adaptersMap[wallet] = adapter
-                    adapter.start()
-                }
-            }
-
-            adaptersReadySubject.onNext(adaptersMap)
         }
     }
 
