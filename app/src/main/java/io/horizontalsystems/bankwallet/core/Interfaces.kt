@@ -68,7 +68,6 @@ interface IAdapterManager {
     fun getAdapterForToken(token: Token): IAdapter?
     fun getBalanceAdapterForWallet(wallet: Wallet): IBalanceAdapter?
     fun getReceiveAdapterForWallet(wallet: Wallet): IReceiveAdapter?
-    fun refreshAdapters(wallets: List<Wallet>)
     fun refreshByWallet(wallet: Wallet)
 }
 
