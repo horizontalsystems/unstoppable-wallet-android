@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.appearance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.modules.theme.ThemeService
@@ -56,8 +57,10 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
 }
 
 enum class PriceChangeInterval(val raw: String, override val title: TranslatableString): WithTranslatableTitle {
-    LAST_24H("24h", TranslatableString.ResString(R.string.Market_PriceChange_24H)),
-    FROM_UTC_MIDNIGHT("utc", TranslatableString.ResString(R.string.Market_PriceChange_Utc));
+    @SerializedName("hour_24")
+    LAST_24H("hour_24", TranslatableString.ResString(R.string.Market_PriceChange_24H)),
+    @SerializedName("midnight_utc")
+    FROM_UTC_MIDNIGHT("midnight_utc", TranslatableString.ResString(R.string.Market_PriceChange_Utc));
 
     companion object {
         fun fromRaw(raw: String): PriceChangeInterval? {
