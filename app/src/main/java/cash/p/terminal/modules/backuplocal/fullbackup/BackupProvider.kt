@@ -43,6 +43,7 @@ import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.appearance.AppIconService
 import cash.p.terminal.modules.settings.appearance.LaunchScreenService
+import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
 import io.horizontalsystems.core.toHexString
@@ -225,6 +226,8 @@ class BackupProvider(
 
         launchScreenService.setLaunchScreen(settings.launchScreen)
         localStorage.marketsTabEnabled = settings.marketsTabEnabled
+        localStorage.balanceTabButtonsEnabled = settings.balanceHideButtons ?: false
+        localStorage.priceChangeInterval = settings.priceChangeMode ?: PriceChangeInterval.LAST_24H
         currencyManager.setBaseCurrencyCode(settings.baseCurrency)
 
 
@@ -454,16 +457,18 @@ class BackupProvider(
         val settings = Settings(
             balanceViewType = balanceViewTypeManager.balanceViewTypeFlow.value,
             appIcon = localStorage.appIcon?.titleText ?: AppIcon.Main.titleText,
-            currentTheme = themeService.optionsFlow.value.selected,
+            currentTheme = themeService.selectedTheme,
             chartIndicatorsEnabled = localStorage.chartIndicatorsEnabled,
             chartIndicators = chartIndicators,
             balanceAutoHidden = balanceHiddenManager.balanceAutoHidden,
             conversionTokenQueryId = baseTokenManager.token?.tokenQuery?.id,
             language = languageManager.currentLocaleTag,
-            launchScreen = launchScreenService.optionsFlow.value.selected,
+            launchScreen = launchScreenService.selectedLaunchScreen,
             marketsTabEnabled = localStorage.marketsTabEnabled,
+            balanceHideButtons = localStorage.balanceTabButtonsEnabled,
             baseCurrency = currencyManager.baseCurrency.code,
             btcModes = btcModes,
+            priceChangeMode = localStorage.priceChangeInterval,
             evmSyncSources = evmSyncSources,
             solanaSyncSource = solanaSyncSource,
         )
@@ -705,11 +710,15 @@ data class Settings(
     val launchScreen: LaunchPage,
     @SerializedName("show_market")
     val marketsTabEnabled: Boolean,
+    @SerializedName("balance_hide_buttons")
+    val balanceHideButtons: Boolean?,
     @SerializedName("currency")
     val baseCurrency: String,
 
     @SerializedName("btc_modes")
     val btcModes: List<BtcMode>,
+    @SerializedName("price_change_mode")
+    val priceChangeMode: PriceChangeInterval?,
     @SerializedName("evm_sync_sources")
     val evmSyncSources: EvmSyncSources,
     @SerializedName("solana_sync_source")
