@@ -67,6 +67,7 @@ fun PrivacyScreen(navController: NavController) {
             BulletedText(R.string.Privacy_BulletedText2)
             BulletedText(R.string.Privacy_BulletedText3)
             VSpacer(height = 16.dp)
+            /*
             SectionUniversalLawrence {
                 CellUniversal {
                     Icon(
@@ -85,6 +86,7 @@ fun PrivacyScreen(navController: NavController) {
                     )
                 }
             }
+            */
         }
 
         Divider(
