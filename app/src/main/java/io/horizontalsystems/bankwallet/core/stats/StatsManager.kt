@@ -58,6 +58,7 @@ class StatsManager(
     private val gson by lazy { Gson() }
     private val executor = Executors.newCachedThreadPool()
     private val syncInterval = 60 * 60 // 1H in seconds
+    private val sqliteMaxVariableNumber = 999
 
     private fun getInitialUiStatsEnabled(): Boolean {
         val uiStatsEnabled = localStorage.uiStatsEnabled
@@ -114,7 +115,9 @@ class StatsManager(
 //                    Log.e("e", "send $statsArray")
                     marketKit.sendStats(statsArray, appConfigProvider.appVersion, appConfigProvider.appId).blockingGet()
 
-                    statsDao.delete(stats.map { it.id })
+                    stats.chunked(sqliteMaxVariableNumber).forEach { chunk ->
+                        statsDao.delete(chunk.map { it.id })
+                    }
                     localStorage.statsLastSyncTime = currentTime
                 }
 
