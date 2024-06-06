@@ -15,11 +15,14 @@ import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
+import io.horizontalsystems.bankwallet.modules.send.SendUiState
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
@@ -28,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.net.UnknownHostException
 
 class SendBitcoinViewModel(
@@ -43,7 +47,9 @@ class SendBitcoinViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
+    currencyManager: CurrencyManager,
 ) : ViewModelUiState<SendBitcoinUiState>() {
+    val currency = currencyManager.baseCurrency
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -114,9 +120,21 @@ class SendBitcoinViewModel(
         canBeSend = amountState.canBeSend && addressState.canBeSend && feeRateState.canBeSend,
         showAddressInput = showAddressInput,
         utxoData = if (utxoExpertModeEnabled) utxoData else null,
+        currency = currency
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
+        amountService.setAmount(amount)
+    }
+
+    fun onEnterAmountPercentage(percentage: Int) {
+        val availableBalance = amountState.availableBalance ?: return
+
+        val amount = availableBalance
+            .times(BigDecimal(percentage / 100.0))
+            .setScale(wallet.token.decimals, RoundingMode.DOWN)
+            .stripTrailingZeros()
+
         amountService.setAmount(amount)
     }
 
@@ -298,5 +316,18 @@ data class SendBitcoinUiState(
     val feeRateCaution: HSCaution?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
-    val utxoData: SendBitcoinModule.UtxoData?
-)
+    val utxoData: SendBitcoinModule.UtxoData?,
+    val currency: Currency,
+) {
+    fun sendUiState() = SendUiState(
+        availableBalance = availableBalance ?: BigDecimal.ZERO,
+        amountCaution = amountCaution,
+        addressError = addressError,
+        canBeSend = canBeSend,
+        showAddressInput = showAddressInput,
+        currency = currency,
+        amount = amount,
+        fiatAmountInputEnabled = false,
+        fiatAmount = null,
+    )
+}

@@ -37,7 +37,8 @@ object SendBitcoinModule {
                 App.btcBlockchainManager,
                 App.contactsRepository,
                 predefinedAddress == null,
-                App.localStorage
+                App.localStorage,
+                App.currencyManager,
             ) as T
         }
     }
