@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.supportedNftTypes
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.ethereumkit.core.signer.Signer
@@ -30,20 +31,20 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.net.URI
 
 class EvmKitManager(
     val chain: Chain,
-    backgroundManager: BackgroundManager,
+    private val backgroundManager: BackgroundManager,
     private val syncSourceManager: EvmSyncSourceManager
-) : BackgroundManager.Listener {
+) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var job: Job? = null
 
     init {
-        backgroundManager.registerListener(this)
-
         coroutineScope.launch {
             syncSourceManager.syncSourceObservable.asFlow().collect { blockchain ->
                 handleUpdateNetwork(blockchain)
@@ -91,6 +92,7 @@ class EvmKitManager(
             evmKitWrapper = createKitInstance(accountType, account, blockchainType)
             useCount = 0
             currentAccount = account
+            subscribeToEvents()
         }
 
         useCount++
@@ -178,25 +180,26 @@ class EvmKitManager(
         }
     }
 
+    private fun subscribeToEvents(){
+        job = coroutineScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterForeground) {
+                    evmKitWrapper?.evmKit?.let { kit ->
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            kit.refresh()
+                        }, 1000)
+                    }
+                }
+            }
+        }
+    }
+
     private fun stopEvmKit() {
+        job?.cancel()
         evmKitWrapper?.evmKit?.stop()
         evmKitWrapper = null
         currentAccount = null
     }
-
-    //
-    // BackgroundManager.Listener
-    //
-
-    override fun willEnterForeground() {
-        this.evmKitWrapper?.evmKit?.let { kit ->
-            Handler(Looper.getMainLooper()).postDelayed({
-                kit.refresh()
-            }, 1000)
-        }
-    }
-
-    override fun didEnterBackground() = Unit
 }
 
 val RpcSource.uris: List<URI>

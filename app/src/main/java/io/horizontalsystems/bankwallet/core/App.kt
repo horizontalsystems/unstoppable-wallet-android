@@ -26,7 +26,6 @@ import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
 import io.horizontalsystems.bankwallet.core.managers.AdapterManager
 import io.horizontalsystems.bankwallet.core.managers.AppVersionManager
-import io.horizontalsystems.bankwallet.core.managers.BackgroundStateChangeListener
 import io.horizontalsystems.bankwallet.core.managers.BackupManager
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
@@ -141,7 +140,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var btcBlockchainManager: BtcBlockchainManager
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
-        lateinit var backgroundStateChangeListener: BackgroundStateChangeListener
         lateinit var appConfigProvider: AppConfigProvider
         lateinit var adapterManager: IAdapterManager
         lateinit var transactionAdapterManager: TransactionAdapterManager
@@ -358,13 +356,11 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         pinComponent = PinComponent(
             pinSettingsStorage = pinSettingsStorage,
             userManager = userManager,
-            pinDbStorage = PinDbStorage(appDatabase.pinDao())
+            pinDbStorage = PinDbStorage(appDatabase.pinDao()),
+            backgroundManager = backgroundManager
         )
 
-        statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider)
-        backgroundStateChangeListener = BackgroundStateChangeListener(pinComponent, statsManager).apply {
-            backgroundManager.registerListener(this)
-        }
+        statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider, backgroundManager)
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 

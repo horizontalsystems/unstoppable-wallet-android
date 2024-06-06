@@ -1,21 +1,47 @@
 package io.horizontalsystems.bankwallet.modules.pin
 
-import android.app.Activity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.modules.pin.core.LockManager
 import io.horizontalsystems.bankwallet.modules.pin.core.PinDbStorage
 import io.horizontalsystems.bankwallet.modules.pin.core.PinManager
+import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class PinComponent(
     private val pinSettingsStorage: IPinSettingsStorage,
     private val userManager: UserManager,
-    private val pinDbStorage: PinDbStorage
+    private val pinDbStorage: PinDbStorage,
+    private val backgroundManager: BackgroundManager
 ) : IPinComponent {
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    init {
+        scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        willEnterForeground()
+                    }
+                    BackgroundManagerState.EnterBackground -> {
+                        didEnterBackground()
+                    }
+                    BackgroundManagerState.AllActivitiesDestroyed -> {
+                       lock()
+                    }
+                }
+            }
+        }
+    }
 
     private val pinManager: PinManager by lazy {
         PinManager(pinDbStorage)
@@ -106,7 +132,7 @@ class PinComponent(
         appLockManager.updateLastExitDate()
     }
 
-    override fun willEnterForeground(activity: Activity) {
+    override fun willEnterForeground() {
         appLockManager.willEnterForeground()
     }
 

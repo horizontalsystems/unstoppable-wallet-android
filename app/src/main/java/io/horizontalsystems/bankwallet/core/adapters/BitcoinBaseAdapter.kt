@@ -32,6 +32,7 @@ import io.horizontalsystems.bitcoincore.storage.FullTransaction
 import io.horizontalsystems.bitcoincore.storage.UnspentOutput
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
 import io.horizontalsystems.marketkit.models.Token
@@ -40,6 +41,11 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
@@ -47,27 +53,15 @@ import java.util.Date
 abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
     open val syncMode: BitcoinCore.SyncMode,
-    backgroundManager: BackgroundManager,
+    private val backgroundManager: BackgroundManager,
     val wallet: Wallet,
     private val confirmationsThreshold: Int,
     protected val decimal: Int = 8
-) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, BackgroundManager.Listener {
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
-    init {
-        backgroundManager.registerListener(this)
-    }
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     abstract val satoshisInBitcoin: BigDecimal
-
-    override fun willEnterForeground() {
-        super.willEnterForeground()
-        kit.onEnterForeground()
-    }
-
-    override fun didEnterBackground() {
-        super.didEnterBackground()
-        kit.onEnterBackground()
-    }
 
     //
     // Adapter implementation
@@ -173,10 +167,12 @@ abstract class BitcoinBaseAdapter(
 
     override fun start() {
         kit.start()
+        subscribeToEvents()
     }
 
     override fun stop() {
         kit.stop()
+        scope.cancel()
     }
 
     override fun refresh() {
@@ -212,6 +208,24 @@ abstract class BitcoinBaseAdapter(
             FilterTransactionType.Incoming -> TransactionFilterType.Incoming
             FilterTransactionType.Outgoing -> TransactionFilterType.Outgoing
             else -> throw UnsupportedFilterException()
+        }
+    }
+
+    private fun subscribeToEvents() {
+        scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        kit.onEnterForeground()
+                    }
+                    BackgroundManagerState.EnterBackground -> {
+                        kit.onEnterBackground()
+                    }
+                    BackgroundManagerState.AllActivitiesDestroyed -> {
+
+                    }
+                }
+            }
         }
     }
 

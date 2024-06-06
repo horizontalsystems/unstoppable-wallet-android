@@ -8,18 +8,26 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.network.Network
 import io.horizontalsystems.tronkit.transaction.Signer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class TronKitManager(
     private val appConfigProvider: AppConfigProvider,
-    backgroundManager: BackgroundManager
-) : BackgroundManager.Listener {
+    private val backgroundManager: BackgroundManager
+) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var job: Job? = null
     private val network = Network.Mainnet
     private val _kitStartedFlow = MutableStateFlow(false)
     val kitStartedFlow: StateFlow<Boolean> = _kitStartedFlow
@@ -38,14 +46,10 @@ class TronKitManager(
     val statusInfo: Map<String, Any>?
         get() = tronKitWrapper?.tronKit?.statusInfo()
 
-    init {
-        backgroundManager.registerListener(this)
-    }
-
     @Synchronized
     fun getTronKitWrapper(account: Account): TronKitWrapper {
         if (this.tronKitWrapper != null && currentAccount != account) {
-            stopKit()
+            stop()
         }
 
         if (this.tronKitWrapper == null) {
@@ -61,7 +65,7 @@ class TronKitManager(
 
                 else -> throw UnsupportedAccountException()
             }
-            startKit()
+            start()
             useCount = 0
             currentAccount = account
         }
@@ -111,34 +115,32 @@ class TronKitManager(
             useCount -= 1
 
             if (useCount < 1) {
-                stopKit()
+                stop()
             }
         }
     }
 
-    private fun stopKit() {
+    private fun stop() {
         tronKitWrapper?.tronKit?.stop()
+        job?.cancel()
         tronKitWrapper = null
         currentAccount = null
     }
 
-    private fun startKit() {
+    private fun start() {
         tronKitWrapper?.tronKit?.start()
-    }
-
-    //
-    // BackgroundManager.Listener
-    //
-
-    override fun willEnterForeground() {
-        this.tronKitWrapper?.tronKit?.let { kit ->
-            Handler(Looper.getMainLooper()).postDelayed({
-                kit.refresh()
-            }, 1000)
+        job = scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterForeground) {
+                    tronKitWrapper?.tronKit?.let { kit ->
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            kit.refresh()
+                        }, 1000)
+                    }
+                }
+            }
         }
     }
-
-    override fun didEnterBackground() = Unit
 }
 
 class TronKitWrapper(val tronKit: TronKit, val signer: Signer?)

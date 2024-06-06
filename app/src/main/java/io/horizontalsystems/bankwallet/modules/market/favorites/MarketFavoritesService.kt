@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
 import io.horizontalsystems.bankwallet.modules.market.sort
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.marketkit.models.Analytics
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -38,7 +39,7 @@ class MarketFavoritesService(
     private val currencyManager: CurrencyManager,
     private val backgroundManager: BackgroundManager,
     private val priceManager: PriceManager
-) : BackgroundManager.Listener {
+) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var favoritesJob: Job? = null
     private var marketItems: List<MarketItem> = listOf()
@@ -121,10 +122,6 @@ class MarketFavoritesService(
         }
     }
 
-    override fun willEnterForeground() {
-        fetch()
-    }
-
     fun removeFavorite(uid: String) {
         repository.removeFavorite(uid)
     }
@@ -137,7 +134,13 @@ class MarketFavoritesService(
     }
 
     fun start() {
-        backgroundManager.registerListener(this)
+        coroutineScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterForeground) {
+                    fetch()
+                }
+            }
+        }
 
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
@@ -167,7 +170,6 @@ class MarketFavoritesService(
     }
 
     fun stop() {
-        backgroundManager.unregisterListener(this)
         coroutineScope.cancel()
     }
 

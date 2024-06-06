@@ -8,6 +8,7 @@ import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Observable
@@ -22,10 +23,12 @@ class SolanaKitManager(
     private val appConfigProvider: AppConfigProvider,
     private val rpcSourceManager: SolanaRpcSourceManager,
     private val walletManager: SolanaWalletManager,
-    backgroundManager: BackgroundManager
-) : BackgroundManager.Listener {
+    private val backgroundManager: BackgroundManager
+) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var backgroundEventListenerJob: Job? = null
+    private var rpcUpdatedJob: Job? = null
     private var tokenAccountJob: Job? = null
 
     var solanaKitWrapper: SolanaKitWrapper? = null
@@ -40,16 +43,6 @@ class SolanaKitManager(
 
     val statusInfo: Map<String, Any>?
         get() = solanaKitWrapper?.solanaKit?.statusInfo()
-
-    init {
-        backgroundManager.registerListener(this)
-
-        coroutineScope.launch {
-            rpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
-                handleUpdateNetwork()
-            }
-        }
-    }
 
     private fun handleUpdateNetwork() {
         stopKit()
@@ -75,6 +68,7 @@ class SolanaKitManager(
                 else -> throw UnsupportedAccountException()
             }
             startKit()
+            subscribeToEvents()
             useCount = 0
             currentAccount = account
         }
@@ -135,6 +129,8 @@ class SolanaKitManager(
         solanaKitWrapper = null
         currentAccount = null
         tokenAccountJob?.cancel()
+        backgroundEventListenerJob?.cancel()
+        rpcUpdatedJob?.cancel()
     }
 
     private fun startKit() {
@@ -148,19 +144,25 @@ class SolanaKitManager(
         }
     }
 
-    //
-    // BackgroundManager.Listener
-    //
-
-    override fun willEnterForeground() {
-        this.solanaKitWrapper?.solanaKit?.let { kit ->
-            Handler(Looper.getMainLooper()).postDelayed({
-                kit.refresh()
-            }, 1000)
+    private fun subscribeToEvents() {
+        backgroundEventListenerJob = coroutineScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterForeground) {
+                    solanaKitWrapper?.solanaKit?.let { kit ->
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            kit.refresh()
+                        }, 1000)
+                    }
+                }
+            }
+        }
+        rpcUpdatedJob = coroutineScope.launch {
+            rpcSourceManager.rpcSourceUpdateObservable.asFlow().collect {
+                handleUpdateNetwork()
+            }
         }
     }
 
-    override fun didEnterBackground() = Unit
 }
 
 class SolanaKitWrapper(val solanaKit: SolanaKit, val signer: Signer?)

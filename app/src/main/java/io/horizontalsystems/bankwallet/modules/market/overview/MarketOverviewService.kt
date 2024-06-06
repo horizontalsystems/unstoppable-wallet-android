@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.topcoins.MarketTopMoversRepository
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.marketkit.models.MarketOverview
 import io.horizontalsystems.marketkit.models.TopMovers
 import io.reactivex.subjects.BehaviorSubject
@@ -22,7 +23,7 @@ class MarketOverviewService(
     private val marketKit: MarketKitWrapper,
     private val backgroundManager: BackgroundManager,
     private val currencyManager: CurrencyManager
-) : BackgroundManager.Listener {
+) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var topMoversJob: Job? = null
     private var marketOverviewJob: Job? = null
@@ -67,7 +68,13 @@ class MarketOverviewService(
     }
 
     fun start() {
-        backgroundManager.registerListener(this)
+        coroutineScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterForeground) {
+                    forceRefresh()
+                }
+            }
+        }
 
         coroutineScope.launch {
             currencyManager.baseCurrencyUpdatedSignal.asFlow().collect {
@@ -79,12 +86,7 @@ class MarketOverviewService(
     }
 
     fun stop() {
-        backgroundManager.unregisterListener(this)
         coroutineScope.cancel()
-    }
-
-    override fun willEnterForeground() {
-        forceRefresh()
     }
 
     fun refresh() {
