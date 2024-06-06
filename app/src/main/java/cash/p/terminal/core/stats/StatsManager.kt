@@ -59,6 +59,7 @@ class StatsManager(
     private val executor = Executors.newCachedThreadPool()
     private var statsEnabled = false   // P.CASH wallet will not sent anonymous stats
     private val syncInterval = 60 * 60 // 1H in seconds
+    private val sqliteMaxVariableNumber = 999
 
     private fun getInitialUiStatsEnabled(): Boolean {
         return false
@@ -120,7 +121,9 @@ class StatsManager(
 //                    Log.e("e", "send $statsArray")
                     marketKit.sendStats(statsArray, appConfigProvider.appVersion, appConfigProvider.appId).blockingGet()
 
-                    statsDao.delete(stats.map { it.id })
+                    stats.chunked(sqliteMaxVariableNumber).forEach { chunk ->
+                        statsDao.delete(chunk.map { it.id })
+                    }
                     localStorage.statsLastSyncTime = currentTime
                 }
 
