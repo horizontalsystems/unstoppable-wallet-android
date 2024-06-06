@@ -2,17 +2,23 @@ package io.horizontalsystems.bankwallet.modules.send.evm
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,6 +38,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.AmountInput
+import io.horizontalsystems.bankwallet.ui.AmountSuggestionBar
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
@@ -59,86 +66,103 @@ fun SendEvmScreen(
     val view = LocalView.current
 
     ComposeAppTheme {
-        SendScreen(
-            title = title,
-            onCloseClick = { navController.popBackStack() }
-        ) {
-            val focusRequester = remember { FocusRequester() }
+        var amountInputHasFocus by remember { mutableStateOf(false) }
 
-            LaunchedEffect(Unit) {
-                focusRequester.requestFocus()
-            }
+        Box(modifier = Modifier.fillMaxSize()) {
+            SendScreen(
+                title = title,
+                onCloseClick = { navController.popBackStack() }
+            ) {
+                val focusRequester = remember { FocusRequester() }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            val borderColor = when (amountCaution?.type) {
-                HSCaution.Type.Error -> ComposeAppTheme.colors.red50
-                HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
-                else -> ComposeAppTheme.colors.steel20
-            }
-
-            AmountInput(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(18.dp))
-                    .border(1.dp, borderColor, RoundedCornerShape(18.dp))
-                    .background(ComposeAppTheme.colors.lawrence)
-                    .padding(horizontal = 16.dp, vertical = 20.dp),
-                coinAmount = uiState.amount,
-                onValueChange = viewModel::onEnterAmount,
-                fiatAmount = uiState.fiatAmount,
-                currency = uiState.currency,
-                onFiatValueChange = viewModel::onEnterFiatAmount,
-                fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
-                focusRequester = focusRequester,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            AvailableBalance2(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                availableBalance = availableBalance
-            )
-
-            if (uiState.showAddressInput) {
-                Spacer(modifier = Modifier.height(16.dp))
-                HSAddressInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
-                    tokenQuery = wallet.token.tokenQuery,
-                    coinCode = wallet.coin.code,
-                    error = addressError,
-                    textPreprocessor = paymentAddressViewModel,
-                    navController = navController
-                ) {
-                    viewModel.onEnterAddress(it)
+                LaunchedEffect(Unit) {
+                    focusRequester.requestFocus()
                 }
-            }
-            ButtonPrimaryYellow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
-                title = stringResource(R.string.Send_DialogProceed),
-                onClick = {
-                    if (viewModel.hasConnection()) {
-                        viewModel.getSendData()?.let {
-                            navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
-                                R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationFragment.Input(
-                                    sendData = it,
-                                    blockchainType = viewModel.wallet.token.blockchainType
-                                )
-                            ) {
-                                if (it.success) {
-                                    navController.popBackStack()
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                val borderColor = when (amountCaution?.type) {
+                    HSCaution.Type.Error -> ComposeAppTheme.colors.red50
+                    HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
+                    else -> ComposeAppTheme.colors.steel20
+                }
+
+                AmountInput(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(18.dp))
+                        .border(1.dp, borderColor, RoundedCornerShape(18.dp))
+                        .background(ComposeAppTheme.colors.lawrence)
+                        .padding(horizontal = 16.dp, vertical = 20.dp)
+                        .onFocusChanged {
+                            amountInputHasFocus = it.hasFocus
+                        },
+                    coinAmount = uiState.amount,
+                    onValueChange = viewModel::onEnterAmount,
+                    fiatAmount = uiState.fiatAmount,
+                    currency = uiState.currency,
+                    onFiatValueChange = viewModel::onEnterFiatAmount,
+                    fiatAmountInputEnabled = uiState.fiatAmountInputEnabled,
+                    focusRequester = focusRequester,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                AvailableBalance2(
+                    coinCode = wallet.coin.code,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    availableBalance = availableBalance
+                )
+
+                if (uiState.showAddressInput) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    HSAddressInput(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        initial = prefilledData?.address?.let { Address(it) },
+                        tokenQuery = wallet.token.tokenQuery,
+                        coinCode = wallet.coin.code,
+                        error = addressError,
+                        textPreprocessor = paymentAddressViewModel,
+                        navController = navController
+                    ) {
+                        viewModel.onEnterAddress(it)
+                    }
+                }
+                ButtonPrimaryYellow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
+                    title = stringResource(R.string.Send_DialogProceed),
+                    onClick = {
+                        if (viewModel.hasConnection()) {
+                            viewModel.getSendData()?.let {
+                                navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
+                                    R.id.sendEvmConfirmationFragment,
+                                    SendEvmConfirmationFragment.Input(
+                                        sendData = it,
+                                        blockchainType = viewModel.wallet.token.blockchainType
+                                    )
+                                ) {
+                                    if (it.success) {
+                                        navController.popBackStack()
+                                    }
                                 }
                             }
+                        } else {
+                            HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
                         }
-                    } else {
-                        HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)
-                    }
+                    },
+                    enabled = proceedEnabled
+                )
+            }
+
+            AmountSuggestionBar(
+                availableBalance = uiState.availableBalance,
+                amount = uiState.amount,
+                onEnterAmountPercentage = viewModel::onEnterAmountPercentage,
+                onDelete = {
+                    viewModel.onEnterAmount(null)
                 },
-                enabled = proceedEnabled
+                inputHasFocus = amountInputHasFocus
             )
         }
     }

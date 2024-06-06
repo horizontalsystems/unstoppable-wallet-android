@@ -32,7 +32,6 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -56,8 +55,8 @@ import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.multiswap.providers.IMultiSwapProvider
 import io.horizontalsystems.bankwallet.ui.AmountInput
+import io.horizontalsystems.bankwallet.ui.AmountSuggestionBar
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Keyboard
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -80,7 +79,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
-import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.net.UnknownHostException
@@ -201,8 +199,6 @@ private fun SwapScreenInner(
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
-        val focusManager = LocalFocusManager.current
-        val keyboardState by observeKeyboardState()
         var amountInputHasFocus by remember { mutableStateOf(false) }
 
         Box(modifier = Modifier
@@ -359,24 +355,15 @@ private fun SwapScreenInner(
                 VSpacer(height = 32.dp)
             }
 
-
-            if (amountInputHasFocus && keyboardState == Keyboard.Opened) {
-                val hasNonZeroBalance =
-                    uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
-
-                SuggestionsBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
-                    onDelete = {
-                        onEnterAmount.invoke(null)
-                    },
-                    onSelect = {
-                        focusManager.clearFocus()
-                        onEnterAmountPercentage.invoke(it)
-                    },
-                    selectEnabled = hasNonZeroBalance,
-                    deleteEnabled = uiState.amountIn != null,
-                )
-            }
+            AmountSuggestionBar(
+                availableBalance = uiState.availableBalance,
+                amount = uiState.amountIn,
+                onEnterAmountPercentage = onEnterAmountPercentage,
+                onDelete = {
+                    onEnterAmount.invoke(null)
+                },
+                inputHasFocus = amountInputHasFocus
+            )
         }
     }
 }

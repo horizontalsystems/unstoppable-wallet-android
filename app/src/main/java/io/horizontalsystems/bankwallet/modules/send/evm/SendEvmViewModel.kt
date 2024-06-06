@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendUiState
 import io.horizontalsystems.marketkit.models.Token
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class SendEvmViewModel(
     val wallet: Wallet,
@@ -65,6 +66,17 @@ class SendEvmViewModel(
     )
 
     fun onEnterAmount(amount: BigDecimal?) = amountService.setAmount(amount)
+    fun onEnterAmountPercentage(percentage: Int) {
+        val availableBalance = amountState.availableBalance ?: return
+
+        val amount = availableBalance
+            .times(BigDecimal(percentage / 100.0))
+            .setScale(sendToken.decimals, RoundingMode.DOWN)
+            .stripTrailingZeros()
+
+        amountService.setAmount(amount)
+    }
+
     fun onEnterFiatAmount(v: BigDecimal?) = fiatService.setFiatAmount(v)
     fun onEnterAddress(address: Address?) = addressService.setAddress(address)
 
