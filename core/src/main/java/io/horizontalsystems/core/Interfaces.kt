@@ -1,6 +1,5 @@
 package io.horizontalsystems.core
 
-import android.app.Activity
 import io.reactivex.Flowable
 import java.util.Date
 import javax.crypto.SecretKey
@@ -37,7 +36,7 @@ interface IPinComponent {
     val isLocked: Boolean
     val pinSetFlowable: Flowable<Unit>
 
-    fun willEnterForeground(activity: Activity)
+    fun willEnterForeground()
     fun didEnterBackground()
     fun setPin(pin: String)
     fun setDuressPin(pin: String)

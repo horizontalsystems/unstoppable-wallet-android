@@ -3,46 +3,32 @@ package io.horizontalsystems.core
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val _stateFlow: MutableSharedFlow<BackgroundManagerState> = MutableSharedFlow()
+    val stateFlow: SharedFlow<BackgroundManagerState>
+        get() = _stateFlow
 
     init {
         application.registerActivityLifecycleCallbacks(this)
     }
 
-    interface Listener {
-        fun willEnterForeground(activity: Activity) {}
-        fun willEnterForeground() {}
-        fun didEnterBackground() {}
-        fun onAllActivitiesDestroyed() {}
-    }
-
     private var foregroundActivityCount: Int = 0
     private var aliveActivityCount: Int = 0
-    private var listeners: MutableList<Listener> = ArrayList()
-
-    @Synchronized
-    fun registerListener(listener: Listener) {
-        listeners.add(listener)
-    }
-
-    @Synchronized
-    fun unregisterListener(listener: Listener) {
-        listeners.remove(listener)
-    }
-
-    val inForeground: Boolean
-        get() = foregroundActivityCount > 0
-
-    val inBackground: Boolean
-        get() = foregroundActivityCount == 0
 
     @Synchronized
     override fun onActivityStarted(activity: Activity) {
         if (foregroundActivityCount == 0) {
-            listeners.forEach { listener ->
-                listener.willEnterForeground(activity)
-                listener.willEnterForeground()
+            scope.launch {
+                _stateFlow.emit(BackgroundManagerState.EnterForeground)
             }
         }
         foregroundActivityCount++
@@ -54,10 +40,9 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
 
         if (foregroundActivityCount == 0) {
             //App is in background
-            listeners.forEach { listener ->
-                listener.didEnterBackground()
+            scope.launch {
+                _stateFlow.emit(BackgroundManagerState.EnterBackground)
             }
-
         }
     }
 
@@ -71,8 +56,8 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         aliveActivityCount--
 
         if (aliveActivityCount == 0) {
-            listeners.forEach { listener ->
-                listener.onAllActivitiesDestroyed()
+            scope.launch {
+                _stateFlow.emit(BackgroundManagerState.AllActivitiesDestroyed)
             }
         }
     }
@@ -83,4 +68,8 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
+}
+
+enum class BackgroundManagerState {
+    EnterForeground, EnterBackground, AllActivitiesDestroyed
 }
