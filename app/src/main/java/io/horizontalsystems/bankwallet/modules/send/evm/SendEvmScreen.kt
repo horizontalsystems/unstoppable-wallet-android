@@ -63,6 +63,13 @@ fun SendEvmScreen(
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
         factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
     )
+    val amountParsedFromAddress = paymentAddressViewModel.amountUnique
+    LaunchedEffect(amountParsedFromAddress) {
+        amountParsedFromAddress?.let {
+            viewModel.onEnterAmount(it.amount)
+        }
+    }
+
     val view = LocalView.current
 
     ComposeAppTheme {
