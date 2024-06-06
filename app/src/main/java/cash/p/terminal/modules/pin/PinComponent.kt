@@ -1,21 +1,47 @@
 package cash.p.terminal.modules.pin
 
-import android.app.Activity
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.modules.pin.core.LockManager
 import cash.p.terminal.modules.pin.core.PinDbStorage
 import cash.p.terminal.modules.pin.core.PinManager
+import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class PinComponent(
     private val pinSettingsStorage: IPinSettingsStorage,
     private val userManager: UserManager,
-    private val pinDbStorage: PinDbStorage
+    private val pinDbStorage: PinDbStorage,
+    private val backgroundManager: BackgroundManager
 ) : IPinComponent {
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    init {
+        scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        willEnterForeground()
+                    }
+                    BackgroundManagerState.EnterBackground -> {
+                        didEnterBackground()
+                    }
+                    BackgroundManagerState.AllActivitiesDestroyed -> {
+                       lock()
+                    }
+                }
+            }
+        }
+    }
 
     private val pinManager: PinManager by lazy {
         PinManager(pinDbStorage)
@@ -106,7 +132,7 @@ class PinComponent(
         appLockManager.updateLastExitDate()
     }
 
-    override fun willEnterForeground(activity: Activity) {
+    override fun willEnterForeground() {
         appLockManager.willEnterForeground()
     }
 

@@ -30,12 +30,18 @@ import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.modules.transactions.FilterTransactionType
+import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.Instant
 import java.util.concurrent.Executors
 
@@ -48,7 +54,21 @@ class StatsManager(
     private val localStorage: ILocalStorage,
     private val marketKit: MarketKitWrapper,
     private val appConfigProvider: AppConfigProvider,
+    private val backgroundManager: BackgroundManager,
 ) {
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    init {
+        scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                if (state == BackgroundManagerState.EnterForeground) {
+                    sendStats()
+                }
+            }
+        }
+    }
+
     var uiStatsEnabled = getInitialUiStatsEnabled()
         private set
 

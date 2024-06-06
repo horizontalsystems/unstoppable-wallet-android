@@ -7,18 +7,23 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
 
-class ConnectivityManager(backgroundManager: BackgroundManager) : BackgroundManager.Listener {
+class ConnectivityManager(backgroundManager: BackgroundManager) {
 
     private val connectivityManager: ConnectivityManager by lazy {
         App.instance.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
-
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val _networkAvailabilityFlow =
         MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
@@ -32,11 +37,24 @@ class ConnectivityManager(backgroundManager: BackgroundManager) : BackgroundMana
     private var hasConnection = false
 
     init {
-        backgroundManager.registerListener(this)
+        scope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    BackgroundManagerState.EnterForeground -> {
+                        willEnterForeground()
+                    }
+                    BackgroundManagerState.EnterBackground -> {
+                        didEnterBackground()
+                    }
+                    BackgroundManagerState.AllActivitiesDestroyed -> {
+                        //do nothing
+                    }
+                }
+            }
+        }
     }
 
-    override fun willEnterForeground() {
-        super.willEnterForeground()
+    private fun willEnterForeground() {
         setInitialValues()
         try {
             connectivityManager.unregisterNetworkCallback(callback)
@@ -46,8 +64,7 @@ class ConnectivityManager(backgroundManager: BackgroundManager) : BackgroundMana
         connectivityManager.registerNetworkCallback(NetworkRequest.Builder().build(), callback)
     }
 
-    override fun didEnterBackground() {
-        super.didEnterBackground()
+    private fun didEnterBackground() {
         try {
             connectivityManager.unregisterNetworkCallback(callback)
         } catch (e: Exception) {
