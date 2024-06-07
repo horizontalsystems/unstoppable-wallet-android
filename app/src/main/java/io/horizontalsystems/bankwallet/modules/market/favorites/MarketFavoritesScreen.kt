@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
@@ -13,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -43,11 +42,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 fun MarketFavoritesScreen(
     navController: NavController
 ) {
-    val currentBackStackEntry = remember { navController.currentBackStackEntry }
-    val viewModel = viewModel<MarketFavoritesViewModel>(
-        viewModelStoreOwner = currentBackStackEntry!!,
-        factory = MarketFavoritesModule.Factory()
-    )
+    val viewModel = viewModel<MarketFavoritesViewModel>(factory = MarketFavoritesModule.Factory())
     val uiState = viewModel.uiState
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
@@ -83,12 +78,6 @@ fun MarketFavoritesScreen(
                             icon = R.drawable.ic_rate_24
                         )
                     } else {
-                        if (uiState.showSignalsInfo) {
-                            viewModel.onSignalsInfoShown()
-
-                            navController.slideFromBottom(R.id.marketSignalsFragment)
-                        }
-
                         CoinListOrderable(
                             items = uiState.viewItems,
                             scrollToTop = scrollToTopAfterUpdate,
@@ -144,8 +133,18 @@ fun MarketFavoritesScreen(
                                         HSpacer(width = 12.dp)
                                         SignalButton(
                                             turnedOn = uiState.showSignal,
-                                            onClick = {
-                                                viewModel.onToggleSignal()
+                                            onToggle = {
+                                                if (it) {
+                                                    navController.slideFromBottomForResult<MarketSignalsFragment.Result>(
+                                                        R.id.marketSignalsFragment
+                                                    ) {
+                                                        if (it.enabled) {
+                                                            viewModel.showSignals()
+                                                        }
+                                                    }
+                                                } else {
+                                                    viewModel.hideSignals()
+                                                }
                                             })
                                         HSpacer(width = 16.dp)
                                     }
@@ -157,8 +156,6 @@ fun MarketFavoritesScreen(
                         }
                     }
                 }
-
-                null -> {}
             }
         }
     }
@@ -200,8 +197,9 @@ fun MarketFavoritesScreen(
 }
 
 @Composable
-fun SignalButton(turnedOn: Boolean, onClick: () -> Unit) {
+fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
     val title = stringResource(id = R.string.Market_Signals)
+    val onClick = { onToggle.invoke(!turnedOn) }
     if (turnedOn) {
         ButtonSecondaryYellow(
             title = title,
