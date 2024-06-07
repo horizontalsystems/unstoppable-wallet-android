@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSortType
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.overview.TopPairViewItem
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -63,6 +64,8 @@ class TopPairsViewModel(
             }
             items = sortItems(pairs)
             viewState = ViewState.Success
+        } catch (e: CancellationException) {
+            // no-op
         } catch (e: Throwable) {
             viewState = ViewState.Error(e)
         }

@@ -169,6 +169,7 @@ fun MarketFavoritesScreen(
             onSelect = { selected ->
                 manualOrderEnabled = false
                 openSortingSelector = false
+                scrollToTopAfterUpdate = true
                 viewModel.onSelectSortingField(selected)
 
                 stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchSortType(selected.statSortType))
@@ -183,8 +184,9 @@ fun MarketFavoritesScreen(
             title = R.string.CoinPage_Period,
             select = Select(uiState.period, viewModel.periods),
             onSelect = { selected ->
-                viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
+                scrollToTopAfterUpdate = true
+                viewModel.onSelectPeriod(selected)
 
                 stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },

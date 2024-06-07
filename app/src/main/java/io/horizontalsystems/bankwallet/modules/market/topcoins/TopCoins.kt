@@ -167,6 +167,7 @@ fun TopCoins(
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
+                scrollToTopAfterUpdate = true
 
                 stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },

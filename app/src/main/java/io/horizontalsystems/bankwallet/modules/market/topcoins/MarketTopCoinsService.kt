@@ -10,6 +10,7 @@ import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.modules.market.category.MarketItemWrapper
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -84,6 +85,8 @@ class MarketTopCoinsService(
                 ).await()
 
                 syncItems()
+            } catch (e: CancellationException) {
+                //do nothing
             } catch (e: Throwable) {
                 stateObservable.onNext(DataState.Error(e))
             }

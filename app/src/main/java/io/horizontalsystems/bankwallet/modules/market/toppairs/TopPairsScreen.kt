@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +58,10 @@ fun TopPairsScreen() {
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
+    val state = rememberSaveable(uiState.sortDescending, saver = LazyListState.Saver) {
+        LazyListState(0, 0)
+    }
+
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
@@ -79,6 +85,7 @@ fun TopPairsScreen() {
 
                         ViewState.Success -> {
                             LazyColumn(
+                                state = state,
                                 modifier = Modifier.fillMaxSize()
                             ) {
                                 stickyHeader {
@@ -98,7 +105,7 @@ fun TopPairsScreen() {
                                     }
                                 }
                                 itemsIndexed(uiState.items) { i, item ->
-                                    TopPairItem(item, borderTop = i == 0, borderBottom = true) {
+                                    TopPairItem(item, borderBottom = true) {
                                         it.tradeUrl?.let {
                                             LinkHelper.openLinkInAppBrowser(context, it)
 
