@@ -36,7 +36,6 @@ object MarketFavoritesModule {
         val sortingField: WatchlistSorting,
         val period: TimeDuration,
         val showSignal: Boolean,
-        val showSignalsInfo: Boolean
     )
 
 }
