@@ -21,6 +21,7 @@ import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
@@ -144,7 +145,7 @@ class MarketWidget : GlanceAppWidget() {
                                             actionStartActivity(Intent(Intent.ACTION_VIEW, deeplinkUri))
                                         )
                                 ) {
-                                    Item(item = item)
+                                    Item(item = item, state.type)
                                 }
                             }
                         }
@@ -178,18 +179,25 @@ class MarketWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Item(item: MarketWidgetItem) {
+    private fun Item(item: MarketWidgetItem, type: MarketWidgetType) {
         Row(
             modifier = GlanceModifier
                 .fillMaxHeight()
                 .padding(horizontal = 16.dp),
             verticalAlignment = CenterVertically
         ) {
+           val modifier =  when(type) {
+                MarketWidgetType.Watchlist,
+                MarketWidgetType.TopGainers -> GlanceModifier.size(32.dp).cornerRadius(16.dp)
+                MarketWidgetType.TopNfts,
+                MarketWidgetType.TopPlatforms -> GlanceModifier.size(32.dp)
+            }
+
             Image(
                 provider = imageProvider(item.imageLocalPath),
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = GlanceModifier.size(24.dp)
+                contentScale= ContentScale.FillBounds,
+                modifier = modifier
             )
             Spacer(modifier = GlanceModifier.width(16.dp))
             Column {
