@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.EtfViewItem
 import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -90,6 +91,8 @@ class EtfViewModel(
                 updateViewItems()
 
                 viewState = ViewState.Success
+            } catch (e: CancellationException) {
+                // no-op
             } catch (e: Throwable) {
                 viewState = ViewState.Error(e)
             }
