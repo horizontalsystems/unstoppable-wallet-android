@@ -68,8 +68,7 @@ class MarketWidgetManager {
             }
         }
         var marketItems = marketRepository.getMarketItems(state.type)
-        marketItems =
-            marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
+        marketItems = marketItems.map { it.copy(imageLocalPath = imagePathCache[it.imageRemoteUrl]) }
 
         state = state.copy(items = marketItems, loading = false, error = null)
         setWidgetState(context, glanceId, state)
@@ -78,7 +77,8 @@ class MarketWidgetManager {
             item.copy(
                 imageLocalPath = item.imageLocalPath ?: getImage(
                     context,
-                    item.imageRemoteUrl
+                    item.imageRemoteUrl,
+                    item.alternativeRemoteUrl
                 )
             )
         }
@@ -92,19 +92,31 @@ class MarketWidgetManager {
     }
 
     @OptIn(ExperimentalCoilApi::class)
-    private suspend fun getImage(context: Context, url: String): String? {
+    private suspend fun getImage(
+        context: Context,
+        url: String,
+        alternativeUrl: String?
+    ): String? {
+        var downloadedUrl = url
         val request = ImageRequest.Builder(context)
             .data(url)
             .build()
 
         with(context.imageLoader) {
-            val result = execute(request)
-            if (result is ErrorResult) {
-                return null
+            var result = execute(request)
+            if (result is ErrorResult && alternativeUrl != null) {
+                val fallbackRequest = ImageRequest.Builder(context)
+                    .data(alternativeUrl)
+                    .build()
+                result = execute(fallbackRequest)
+                if (result is ErrorResult) {
+                    return null
+                }
+                downloadedUrl = alternativeUrl
             }
         }
 
-        val localPath = context.imageLoader.diskCache?.openSnapshot(url)?.use { snapshot ->
+        val localPath = context.imageLoader.diskCache?.openSnapshot(downloadedUrl)?.use { snapshot ->
             snapshot.data.toFile().path
         }
 
@@ -120,7 +132,7 @@ class MarketWidgetManager {
 
     private val MAX_RETRIES = 5
 
-    private suspend inline fun executeWithRetry(call: () -> Unit){
+    private suspend inline fun executeWithRetry(call: () -> Unit) {
         for (i in 0..MAX_RETRIES) {
             try {
                 call.invoke()
