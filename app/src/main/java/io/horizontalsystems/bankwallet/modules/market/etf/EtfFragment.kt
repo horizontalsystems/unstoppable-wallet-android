@@ -141,6 +141,7 @@ fun EtfPage(
                     ViewState.Success -> {
                         val listState = rememberSaveable(
                             uiState.sortBy,
+                            uiState.timeDuration,
                             saver = LazyListState.Saver
                         ) {
                             LazyListState()

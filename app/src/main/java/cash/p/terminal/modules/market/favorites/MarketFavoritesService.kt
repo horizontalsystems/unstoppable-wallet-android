@@ -13,6 +13,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.models.Analytics
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -73,6 +74,8 @@ class MarketFavoritesService(
                 if (menuService.showSignals) {
                     syncSignals()
                 }
+            } catch (e: CancellationException) {
+                // no-op
             } catch (e: Throwable) {
                 marketItemsSubject.onNext(DataState.Error(e))
             }

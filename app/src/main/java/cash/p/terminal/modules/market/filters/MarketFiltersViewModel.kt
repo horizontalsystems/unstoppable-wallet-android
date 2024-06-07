@@ -120,6 +120,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         solidDexOn = false
         goodDistributionOn = false
         selectedBlockchains = emptyList()
+        filterTradingSignal = FilterViewItemWrapper.getAny()
         updateSelectedBlockchains()
         emitState()
         reloadData()

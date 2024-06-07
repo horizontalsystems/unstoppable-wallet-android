@@ -14,6 +14,7 @@ import cash.p.terminal.core.stats.StatSortType
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.overview.TopPairViewItem
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -63,6 +64,8 @@ class TopPairsViewModel(
             }
             items = sortItems(pairs)
             viewState = ViewState.Success
+        } catch (e: CancellationException) {
+            // no-op
         } catch (e: Throwable) {
             viewState = ViewState.Error(e)
         }
