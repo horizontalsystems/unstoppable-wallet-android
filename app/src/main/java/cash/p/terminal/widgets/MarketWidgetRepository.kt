@@ -167,8 +167,8 @@ class MarketWidgetRepository(
 
         return MarketWidgetItem(
             uid = marketItem.fullCoin.coin.uid,
-            title = marketItem.fullCoin.coin.name,
-            subtitle = marketItem.fullCoin.coin.code,
+            title = marketItem.fullCoin.coin.code,
+            subtitle = marketItem.marketCap.getFormattedShort(),
             label = marketItem.fullCoin.coin.marketCapRank?.toString() ?: "",
             value = App.numberFormatter.formatFiatFull(
                 marketItem.rate.value,
