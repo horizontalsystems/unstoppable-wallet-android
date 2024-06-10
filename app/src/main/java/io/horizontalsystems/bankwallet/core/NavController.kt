@@ -11,7 +11,9 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.pin.ConfirmPinFragment
 import io.horizontalsystems.bankwallet.modules.pin.SetPinFragment
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionFragment
 import io.horizontalsystems.core.parcelable
+import io.horizontalsystems.subscriptionskit.UserSubscriptionManager
 import java.util.UUID
 
 fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null) {
@@ -51,6 +53,19 @@ fun NavController.authorizedAction(action: () -> Unit) {
         }
     } else {
         action.invoke()
+    }
+}
+
+fun NavController.paidAction(paidAction: io.horizontalsystems.subscriptionskit.IPaidAction, block: () -> Unit) {
+    if (UserSubscriptionManager.isActionAllowed(paidAction)) {
+        block.invoke()
+    } else {
+        slideFromRightForResult<BuySubscriptionFragment.Result>(
+            R.id.buySubscriptionFragment,
+            BuySubscriptionFragment.Input(paidAction)
+        ) {
+
+        }
     }
 }
 

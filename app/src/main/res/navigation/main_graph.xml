@@ -397,4 +397,7 @@
     <dialog
         android:id="@+id/wcAccountTypeNotSupportedDialog"
         android:name="io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog" />
+    <fragment
+        android:id="@+id/buySubscriptionFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionFragment"/>
 </navigation>
