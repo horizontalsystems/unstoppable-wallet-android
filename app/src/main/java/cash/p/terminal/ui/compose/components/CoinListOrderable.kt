@@ -85,7 +85,7 @@ fun CoinListOrderable(
 
                     MarketCoin(
                         title = item.fullCoin.coin.code,
-                        subtitle = item.fullCoin.coin.name,
+                        subtitle = item.subtitle,
                         coinIconUrl = item.fullCoin.coin.imageUrl,
                         alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
                         coinIconPlaceholder = item.fullCoin.iconPlaceholder,
@@ -141,7 +141,7 @@ fun CoinListOrderable(
                         content = {
                             MarketCoin(
                                 title = item.fullCoin.coin.code,
-                                subtitle = item.fullCoin.coin.name,
+                                subtitle = item.subtitle,
                                 coinIconUrl = item.fullCoin.coin.imageUrl,
                                 alternativeCoinIconUrl = item.fullCoin.coin.alternativeImageUrl,
                                 coinIconPlaceholder = item.fullCoin.iconPlaceholder,

@@ -23,7 +23,6 @@ import cash.p.terminal.core.stats.statPeriod
 import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.ui.compose.HSSwipeRefresh
@@ -43,7 +42,6 @@ fun TopCoins(
         factory = MarketTopCoinsModule.Factory(
             TopMarket.Top100,
             SortingField.TopGainers,
-            MarketField.PriceDiff
         )
     )
 ) {

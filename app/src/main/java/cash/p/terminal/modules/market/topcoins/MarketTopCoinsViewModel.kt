@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
@@ -16,7 +15,6 @@ import kotlinx.coroutines.rx2.asFlow
 
 class MarketTopCoinsViewModel(
     private val service: MarketTopCoinsService,
-    private var marketField: MarketField,
 ) : ViewModelUiState<MarketTopCoinsModule.UiState>() {
 
     private var marketItems: List<MarketItemWrapper> = listOf()
@@ -63,7 +61,7 @@ class MarketTopCoinsViewModel(
 
     private fun syncMarketViewItems() {
         viewItems = marketItems.map {
-            MarketViewItem.create(it.marketItem, marketField, it.favorited)
+            MarketViewItem.create(it.marketItem, it.favorited)
         }
         emitState()
     }

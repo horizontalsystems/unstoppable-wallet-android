@@ -2,6 +2,7 @@ package cash.p.terminal.modules.market.platform
 
 import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.sort
@@ -9,6 +10,7 @@ import cash.p.terminal.modules.market.topplatforms.Platform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class MarketPlatformCoinsRepository(
     private val platform: Platform,
@@ -25,12 +27,20 @@ class MarketPlatformCoinsRepository(
         val currentCache = itemsCache
 
         val items = if (forceRefresh || currentCache == null) {
+            val currency = currencyManager.baseCurrency
             val marketInfoItems = marketKit
-                .topPlatformCoinListSingle(platform.uid, currencyManager.baseCurrency.code)
+                .topPlatformCoinListSingle(platform.uid, currency.code)
                 .await()
 
             marketInfoItems.map { marketInfo ->
-                MarketItem.createFromCoinMarket(marketInfo, currencyManager.baseCurrency)
+                MarketItem(
+                    fullCoin = marketInfo.fullCoin,
+                    volume = CurrencyValue(currency, marketInfo.totalVolume ?: BigDecimal.ZERO),
+                    rate = CurrencyValue(currency, marketInfo.price ?: BigDecimal.ZERO),
+                    diff = marketInfo.priceChange24h,
+                    marketCap = CurrencyValue(currency, marketInfo.marketCap ?: BigDecimal.ZERO),
+                    rank = marketInfo.marketCapRank
+                )
             }
         } else {
             currentCache

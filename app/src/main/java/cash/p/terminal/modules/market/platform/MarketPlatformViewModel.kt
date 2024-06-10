@@ -2,14 +2,12 @@ package cash.p.terminal.modules.market.platform
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.market.ImageSource
-import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.MarketViewItem
@@ -111,25 +109,10 @@ class MarketPlatformViewModel(
         emitState()
     }
 
-    private fun marketViewItem(item: MarketItem): MarketViewItem {
-        val marketCap = App.numberFormatter.formatFiatShort(
-            item.marketCap.value,
-            item.marketCap.currency.symbol,
-            2
-        )
-        return MarketViewItem(
-            fullCoin = item.fullCoin,
-            subtitle = marketCap,
-            value = App.numberFormatter.formatFiatFull(
-                item.rate.value,
-                item.rate.currency.symbol
-            ),
-            marketDataValue = MarketDataValue.Diff(item.diff),
-            rank = item.rank?.toString(),
-            favorited = favoritesManager.getAll().map { it.coinUid }
-                .contains(item.fullCoin.coin.uid)
-        )
-    }
+    private fun marketViewItem(item: MarketItem): MarketViewItem = MarketViewItem.create(
+        marketItem = item,
+        favorited = favoritesManager.getAll().map { it.coinUid }.contains(item.fullCoin.coin.uid)
+    )
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
         viewModelScope.launch {

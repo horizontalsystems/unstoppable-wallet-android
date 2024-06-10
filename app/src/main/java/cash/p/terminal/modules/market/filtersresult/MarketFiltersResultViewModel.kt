@@ -1,10 +1,8 @@
 package cash.p.terminal.modules.market.filtersresult
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.App
 import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.category.MarketItemWrapper
@@ -69,22 +67,7 @@ class MarketFiltersResultViewModel(
 
     private fun syncMarketViewItems() {
         viewItemsState = marketItems.map { itemWrapper ->
-            val marketCap = App.numberFormatter.formatFiatShort(
-                itemWrapper.marketItem.marketCap.value,
-                itemWrapper.marketItem.marketCap.currency.symbol,
-                2
-            )
-            MarketViewItem(
-                fullCoin = itemWrapper.marketItem.fullCoin,
-                subtitle = marketCap,
-                value = App.numberFormatter.formatFiatFull(
-                    itemWrapper.marketItem.rate.value,
-                    itemWrapper.marketItem.rate.currency.symbol
-                ),
-                marketDataValue = MarketDataValue.Diff(itemWrapper.marketItem.diff),
-                rank = itemWrapper.marketItem.rank?.toString(),
-                favorited = itemWrapper.favorited
-            )
+            MarketViewItem.create(itemWrapper.marketItem, itemWrapper.favorited)
         }.toList()
     }
 
