@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,17 +50,16 @@ import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statSection
 import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.HeaderStick
 import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
-import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.Coin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -255,8 +255,6 @@ private fun MarketCoin(
     alternativeCoinIconUrl: String?,
     coinIconPlaceholder: Int,
     onClick: () -> Unit,
-    coinRate: String? = null,
-    marketDataValue: MarketDataValue? = null,
 ) {
 
     SectionItemBorderedRowUniversalClear(
@@ -275,9 +273,17 @@ private fun MarketCoin(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            MarketCoinFirstRow(coinCode, coinRate)
+            body_leah(
+                text = coinCode,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
             Spacer(modifier = Modifier.height(3.dp))
-            MarketCoinSecondRow(coinName, marketDataValue, null)
+            subhead2_grey(
+                text = coinName,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
