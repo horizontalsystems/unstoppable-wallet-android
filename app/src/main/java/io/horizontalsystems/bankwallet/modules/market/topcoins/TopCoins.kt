@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.core.stats.statPeriod
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
-import io.horizontalsystems.bankwallet.modules.market.MarketField
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.TopMarket
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
@@ -43,7 +42,6 @@ fun TopCoins(
         factory = MarketTopCoinsModule.Factory(
             TopMarket.Top100,
             SortingField.TopGainers,
-            MarketField.PriceDiff
         )
     )
 ) {
