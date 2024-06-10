@@ -151,29 +151,12 @@ fun TabsSection(
         userScrollEnabled = false
     ) { page ->
         when (tabs[page]) {
-            Tab.Coins -> {
-                TopCoins(onCoinClick = { onCoinClick(it, navController) })
-            }
-
-            Tab.Watchlist -> {
-                MarketFavoritesScreen(navController)
-            }
-
-            Tab.Posts -> {
-                MarketPostsScreen()
-            }
-
-            Tab.Platform -> {
-                TopPlatforms(navController)
-            }
-
-            Tab.Pairs -> {
-                TopPairsScreen()
-            }
-
-            Tab.Sectors -> {
-                TopSectorsScreen(navController)
-            }
+            Tab.Coins -> TopCoins(onCoinClick = { onCoinClick(it, navController) })
+            Tab.Watchlist -> MarketFavoritesScreen(navController)
+            Tab.Posts -> MarketPostsScreen()
+            Tab.Platform -> TopPlatforms(navController)
+            Tab.Pairs -> TopPairsScreen()
+            Tab.Sectors -> TopSectorsScreen(navController)
         }
     }
 }
