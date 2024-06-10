@@ -371,7 +371,7 @@ class HsProvider(baseUrl: String, apiKey: String) {
     }
 
     fun statusSingle(): Single<HsStatus> {
-        return service.getStatus()
+        return pirateService.getStatus()
     }
 
     fun allCoinsSingle(): Single<List<CoinResponse>> {
