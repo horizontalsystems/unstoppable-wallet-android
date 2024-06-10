@@ -2,14 +2,12 @@ package io.horizontalsystems.bankwallet.modules.market.platform
 
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
-import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
@@ -111,25 +109,10 @@ class MarketPlatformViewModel(
         emitState()
     }
 
-    private fun marketViewItem(item: MarketItem): MarketViewItem {
-        val marketCap = App.numberFormatter.formatFiatShort(
-            item.marketCap.value,
-            item.marketCap.currency.symbol,
-            2
-        )
-        return MarketViewItem(
-            fullCoin = item.fullCoin,
-            subtitle = marketCap,
-            value = App.numberFormatter.formatFiatFull(
-                item.rate.value,
-                item.rate.currency.symbol
-            ),
-            marketDataValue = MarketDataValue.Diff(item.diff),
-            rank = item.rank?.toString(),
-            favorited = favoritesManager.getAll().map { it.coinUid }
-                .contains(item.fullCoin.coin.uid)
-        )
-    }
+    private fun marketViewItem(item: MarketItem): MarketViewItem = MarketViewItem.create(
+        marketItem = item,
+        favorited = favoritesManager.getAll().map { it.coinUid }.contains(item.fullCoin.coin.uid)
+    )
 
     private fun refreshWithMinLoadingSpinnerPeriod() {
         viewModelScope.launch {

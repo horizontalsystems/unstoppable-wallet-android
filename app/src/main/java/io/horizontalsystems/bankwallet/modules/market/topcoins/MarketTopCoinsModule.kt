@@ -16,7 +16,6 @@ object MarketTopCoinsModule {
     class Factory(
         private val topMarket: TopMarket? = null,
         private val sortingField: SortingField? = null,
-        private val marketField: MarketField? = null
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -29,10 +28,7 @@ object MarketTopCoinsModule {
                 topMarket ?: defaultTopMarket,
                 sortingField ?: defaultSortingField,
             )
-            return MarketTopCoinsViewModel(
-                service,
-                marketField ?: defaultMarketField
-            ) as T
+            return MarketTopCoinsViewModel(service) as T
         }
 
         companion object {

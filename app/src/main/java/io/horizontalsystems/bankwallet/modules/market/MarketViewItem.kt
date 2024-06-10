@@ -53,7 +53,11 @@ data class MarketViewItem(
         ): MarketViewItem {
             return MarketViewItem(
                 marketItem.fullCoin,
-                marketItem.fullCoin.coin.name,
+                App.numberFormatter.formatFiatShort(
+                    marketItem.marketCap.value,
+                    marketItem.marketCap.currency.symbol,
+                    2
+                ),
                 App.numberFormatter.formatFiatFull(
                     marketItem.rate.value,
                     marketItem.rate.currency.symbol
@@ -62,47 +66,6 @@ data class MarketViewItem(
                 marketItem.rank?.toString(),
                 favorited,
                 advice
-            )
-        }
-
-        fun create(
-            marketItem: MarketItem,
-            marketField: MarketField,
-            favorited: Boolean = false,
-        ): MarketViewItem {
-            val marketDataValue = when (marketField) {
-                MarketField.MarketCap -> {
-                    val marketCapFormatted = App.numberFormatter.formatFiatShort(
-                        marketItem.marketCap.value,
-                        marketItem.marketCap.currency.symbol,
-                        2
-                    )
-
-                    MarketDataValue.MarketCap(marketCapFormatted)
-                }
-                MarketField.Volume -> {
-                    val volumeFormatted = App.numberFormatter.formatFiatShort(
-                        marketItem.volume.value,
-                        marketItem.volume.currency.symbol,
-                        2
-                    )
-
-                    MarketDataValue.Volume(volumeFormatted)
-                }
-                MarketField.PriceDiff -> {
-                    MarketDataValue.Diff(marketItem.diff)
-                }
-            }
-            return MarketViewItem(
-                marketItem.fullCoin,
-                marketItem.fullCoin.coin.name,
-                App.numberFormatter.formatFiatFull(
-                    marketItem.rate.value,
-                    marketItem.rate.currency.symbol
-                ),
-                marketDataValue,
-                marketItem.rank?.toString(),
-                favorited
             )
         }
     }

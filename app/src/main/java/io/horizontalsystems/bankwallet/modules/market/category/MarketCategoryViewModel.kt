@@ -83,7 +83,7 @@ class MarketCategoryViewModel(
     private fun syncMarketViewItems() {
         viewItemsLiveData.postValue(
             marketItems.map {
-                MarketViewItem.create(it.marketItem, marketField, it.favorited)
+                MarketViewItem.create(it.marketItem, it.favorited)
             }
         )
     }
