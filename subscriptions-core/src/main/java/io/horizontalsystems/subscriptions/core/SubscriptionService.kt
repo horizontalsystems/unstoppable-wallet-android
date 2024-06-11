@@ -1,4 +1,4 @@
-package io.horizontalsystems.subscriptionskit
+package io.horizontalsystems.subscriptions.core
 
 import android.app.Activity
 

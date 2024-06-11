@@ -2,7 +2,7 @@ package io.horizontalsystems.subscriptions.googleplay
 
 import android.content.Context
 import androidx.startup.Initializer
-import io.horizontalsystems.subscriptionskit.UserSubscriptionManager
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class SubscriptionServiceInitializer : Initializer<SubscriptionServiceGooglePlay> {
     override fun create(context: Context): SubscriptionServiceGooglePlay {

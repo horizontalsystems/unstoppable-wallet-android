@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
 
 class BuySubscriptionFragment : BaseComposeFragment() {
@@ -26,7 +27,7 @@ class BuySubscriptionFragment : BaseComposeFragment() {
     }
 
     @Parcelize
-    data class Input(val action: io.horizontalsystems.subscriptionskit.IPaidAction) : Parcelable
+    data class Input(val action: IPaidAction) : Parcelable
 
     @Parcelize
     data class Result(val result: Boolean) : Parcelable

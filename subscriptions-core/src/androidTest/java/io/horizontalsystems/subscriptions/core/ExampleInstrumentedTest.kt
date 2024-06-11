@@ -1,4 +1,4 @@
-package io.horizontalsystems.subscriptionskit
+package io.horizontalsystems.subscriptions.core
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("io.horizontalsystems.subscriptionskit.test", appContext.packageName)
+        assertEquals("io.horizontalsystems.subscriptions.core.test", appContext.packageName)
     }
 }

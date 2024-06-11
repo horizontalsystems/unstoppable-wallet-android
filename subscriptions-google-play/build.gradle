@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    implementation project(':subscriptions-kit')
+    implementation project(':subscriptions-core')
     implementation "androidx.startup:startup-runtime:1.1.1"
     def billing_version = "7.0.0"
 
