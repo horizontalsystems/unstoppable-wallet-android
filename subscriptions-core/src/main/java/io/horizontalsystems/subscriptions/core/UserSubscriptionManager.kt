@@ -1,4 +1,4 @@
-package io.horizontalsystems.subscriptionskit
+package io.horizontalsystems.subscriptions.core
 
 import android.app.Activity
 
@@ -6,7 +6,7 @@ object UserSubscriptionManager {
     private lateinit var service: SubscriptionService
 
     fun registerService(service: SubscriptionService) {
-        this.service = service
+        UserSubscriptionManager.service = service
     }
 
     fun isActionAllowed(paidAction: IPaidAction) : Boolean {

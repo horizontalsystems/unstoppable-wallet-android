@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.sectionItemBorder
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
-import io.horizontalsystems.subscriptionskit.EnableWatchlistSignals
+import io.horizontalsystems.subscriptions.core.EnableWatchlistSignals
 import kotlinx.parcelize.Parcelize
 
 class MarketSignalsFragment : BaseComposeFragment() {
