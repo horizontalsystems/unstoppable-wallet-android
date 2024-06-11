@@ -38,13 +38,13 @@ import cash.p.terminal.ui.compose.components.ListErrorView
 @Composable
 fun TopCoins(
     onCoinClick: (String) -> Unit,
-    viewModel: MarketTopCoinsViewModel = viewModel(
-        factory = MarketTopCoinsModule.Factory(
+) {
+    val viewModel = viewModel<MarketTopCoinsViewModel2>(
+        factory = MarketTopCoinsViewModel2.Factory(
             TopMarket.Top100,
             SortingField.TopGainers,
         )
     )
-) {
 
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     var openTopSelector by rememberSaveable { mutableStateOf(false) }
@@ -68,7 +68,7 @@ fun TopCoins(
                 }
 
                 is ViewState.Error -> {
-                    ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
+                    ListErrorView(stringResource(R.string.SyncError), viewModel::refresh)
                 }
 
                 ViewState.Success -> {
@@ -108,7 +108,7 @@ fun TopCoins(
                                     )
                                     HSpacer(width = 12.dp)
                                     OptionController(
-                                        uiState.timeDuration.titleResId,
+                                        uiState.period.titleResId,
                                         onOptionClick = {
                                             openPeriodSelector = true
                                         }
@@ -129,7 +129,7 @@ fun TopCoins(
     if (openSortingSelector) {
         AlertGroup(
             title = R.string.Market_Sort_PopupTitle,
-            select = Select(uiState.sortingField, viewModel.sortingFields),
+            select = Select(uiState.sortingField, uiState.sortingFields),
             onSelect = { selected ->
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
@@ -145,7 +145,7 @@ fun TopCoins(
     if (openTopSelector) {
         AlertGroup(
             title = R.string.Market_Tab_Coins,
-            select = Select(uiState.topMarket, viewModel.topMarkets),
+            select = Select(uiState.topMarket, uiState.topMarkets),
             onSelect = {
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
@@ -161,7 +161,7 @@ fun TopCoins(
     if (openPeriodSelector) {
         AlertGroup(
             title = R.string.CoinPage_Period,
-            select = Select(uiState.timeDuration, viewModel.periods),
+            select = Select(uiState.period, uiState.periods),
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
