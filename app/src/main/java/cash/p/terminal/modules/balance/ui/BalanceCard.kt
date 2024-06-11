@@ -41,9 +41,9 @@ import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.CellMultilineClear
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.RateColor
-import cash.p.terminal.ui.compose.components.RateText
 import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.diffColor
+import cash.p.terminal.ui.compose.components.diffText
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
@@ -209,8 +209,8 @@ fun BalanceCardInner(
                                             )
                                             Text(
                                                 modifier = Modifier.padding(start = 4.dp),
-                                                text = RateText(viewItem.diff),
-                                                color = RateColor(viewItem.diff),
+                                                text = diffText(viewItem.diff),
+                                                color = diffColor(viewItem.diff),
                                                 style = ComposeAppTheme.typography.subhead2,
                                                 maxLines = 1,
                                             )
