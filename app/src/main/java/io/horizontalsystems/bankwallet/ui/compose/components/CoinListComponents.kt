@@ -404,8 +404,8 @@ fun CategoryCard(
                                     ) {
                                         marketData.diff?.let { diff ->
                                             Text(
-                                                text = RateText(diff),
-                                                color = RateColor(diff),
+                                                text = diffText(diff),
+                                                color = diffColor(diff),
                                                 style = ComposeAppTheme.typography.caption,
                                                 maxLines = 1,
                                                 modifier = Modifier.padding(start = 6.dp)
