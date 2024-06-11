@@ -50,7 +50,6 @@ class BlockchainsSelectorFragment : BaseComposeFragment() {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    viewModel.updateListBySelectedBlockchains()
                     findNavController().popBackStack()
                 }
             })
