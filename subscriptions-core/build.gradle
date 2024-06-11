@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'io.horizontalsystems.subscriptionskit'
+    namespace 'io.horizontalsystems.subscriptions.core'
     compileSdk 34
 
     defaultConfig {

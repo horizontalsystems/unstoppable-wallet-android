@@ -11,9 +11,9 @@ import com.android.billingclient.api.ProductDetailsResult
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.queryProductDetails
-import io.horizontalsystems.subscriptionskit.IPaidAction
-import io.horizontalsystems.subscriptionskit.SubscriptionPlan
-import io.horizontalsystems.subscriptionskit.SubscriptionService
+import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.SubscriptionPlan
+import io.horizontalsystems.subscriptions.core.SubscriptionService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
