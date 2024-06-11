@@ -41,9 +41,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.RateColor
-import io.horizontalsystems.bankwallet.ui.compose.components.RateText
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
+import io.horizontalsystems.bankwallet.ui.compose.components.diffText
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.RotatingCircleProgressView
 import io.horizontalsystems.core.helpers.HudHelper
@@ -209,8 +209,8 @@ fun BalanceCardInner(
                                             )
                                             Text(
                                                 modifier = Modifier.padding(start = 4.dp),
-                                                text = RateText(viewItem.diff),
-                                                color = RateColor(viewItem.diff),
+                                                text = diffText(viewItem.diff),
+                                                color = diffColor(viewItem.diff),
                                                 style = ComposeAppTheme.typography.subhead2,
                                                 maxLines = 1,
                                             )

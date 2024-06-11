@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -25,25 +26,27 @@ import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 @Composable
-fun RateColor(diff: BigDecimal?) =
-    if ((diff ?: BigDecimal.ZERO) >= BigDecimal.ZERO) ComposeAppTheme.colors.remus else ComposeAppTheme.colors.lucian
-
-@Composable
-fun diffColor(value: BigDecimal) =
-    if (value.signum() >= 0) {
-        ComposeAppTheme.colors.remus
-    } else {
-        ComposeAppTheme.colors.lucian
+fun diffColor(value: BigDecimal?) : Color {
+    val diff = value ?: BigDecimal.ZERO
+    return when {
+        diff.signum() == 0 -> ComposeAppTheme.colors.grey
+        diff.signum() >= 0 -> ComposeAppTheme.colors.remus
+        else -> ComposeAppTheme.colors.lucian
     }
+}
 
 @Composable
 fun formatValueAsDiff(value: Value): String =
     App.numberFormatter.formatValueAsDiff(value)
 
 @Composable
-fun RateText(diff: BigDecimal?): String {
+fun diffText(diff: BigDecimal?): String {
     if (diff == null) return ""
-    val sign = if (diff >= BigDecimal.ZERO) "+" else "-"
+    val sign = when {
+        diff == BigDecimal.ZERO -> ""
+        diff >= BigDecimal.ZERO -> "+"
+        else -> "-"
+    }
     return App.numberFormatter.format(diff.abs(), 0, 2, sign, "%")
 }
 

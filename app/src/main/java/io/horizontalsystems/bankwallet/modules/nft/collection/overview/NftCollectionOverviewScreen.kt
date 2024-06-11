@@ -2,7 +2,14 @@ package io.horizontalsystems.bankwallet.modules.nft.collection.overview
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -19,13 +26,22 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.About
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Contracts
+import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
 import io.horizontalsystems.bankwallet.modules.nft.ui.CellLink
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.CellFooter
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.diffColor
+import io.horizontalsystems.bankwallet.ui.compose.components.diffText
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun NftCollectionOverviewScreen(
@@ -260,8 +276,8 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
                     )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = RateText(collection.oneDayVolumeDiff),
-                        color = RateColor(collection.oneDayVolumeDiff),
+                        text = diffText(collection.oneDayVolumeDiff),
+                        color = diffColor(collection.oneDayVolumeDiff),
                         style = ComposeAppTheme.typography.subhead1,
                         maxLines = 1,
                     )
