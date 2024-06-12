@@ -311,7 +311,7 @@
     <string name="Market_Filter_Neutral">Neutral</string>
     <string name="Market_Filter_StrongSell">Strong Sell</string>
     <string name="Market_Filter_Sell">Sell</string>
-    <string name="Market_Filter_RiskToTrade">Risk to Trade</string>
+    <string name="Market_Filter_RiskToTrade">Risky</string>
 
     <string name="Market_Filter_Gainers">Gainers</string>
     <string name="Market_Filter_Top_100">Top 100</string>
@@ -961,8 +961,8 @@
     <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
-    <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
-    <string name="Settings_JoinUnstoppables_Description">Stay on top of Unstoppable happenings. Be the first to know about new features, user reported issues and things we work on!</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
@@ -1796,12 +1796,12 @@
     <string name="TechnicalAdvice_InfoDescription">We use the Bollinger Bands + RSI strategy to determine trading signals. All calculations are based on daily candlesticks and provide advice for a moderately long term. The essence of the strategy is that the asset price should reach an extreme, breaking out of the Bollinger Bands channel, and the RSI should be in the overbought/oversold zone. After the price returns to the channel, there is a high probability of the price returning to the mean values or attempting to break the channel from the other side. Note that the strategy may give several false signals during strong market movements before a correct signal appears.\n\nPlease remember that it is very important to apply risk management to trading and remember to cut losses if the market situation changes!</string>
     <string name="TechnicalAdvice_ShowDetails">Show Details</string>
     <string name="TechnicalAdvice_HideDetails">Hide Details</string>
-    <string name="TechnicalAdvice_Indicators_StrongBuy">Buy Signal</string>
-    <string name="TechnicalAdvice_Indicators_Buy">Good Time to Buy</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Strong Buy</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Buy</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
-    <string name="TechnicalAdvice_Indicators_Sell">Good Time to Sell</string>
-    <string name="TechnicalAdvice_Indicators_StrongSell">Sell Signal</string>
-    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Very Risky to Trade</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Sell</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Strong Sell</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Risky</string>
 
     <string name="Detectors_TokenDetectors">Token Detectors</string>
     <string name="Detectors_GeneralDetectors">General Detectors</string>
