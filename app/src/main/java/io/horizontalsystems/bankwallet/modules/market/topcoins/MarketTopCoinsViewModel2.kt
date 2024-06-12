@@ -71,9 +71,13 @@ class MarketTopCoinsViewModel2(
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            reload()
+            try {
+                reload()
 
-            viewState = ViewState.Success
+                viewState = ViewState.Success
+            } catch (e: Throwable) {
+                viewState = ViewState.Error(e)
+            }
 
             emitState()
         }
@@ -89,9 +93,13 @@ class MarketTopCoinsViewModel2(
 
         viewModelScope.launch(Dispatchers.Default) {
             currencyManager.baseCurrencyUpdatedFlow.collect {
-                reload()
+                try {
+                    reload()
 
-                viewState = ViewState.Success
+                    viewState = ViewState.Success
+                } catch (e: Throwable) {
+                    viewState = ViewState.Error(e)
+                }
 
                 emitState()
             }
@@ -146,9 +154,13 @@ class MarketTopCoinsViewModel2(
         emitState()
 
         viewModelScope.launch(Dispatchers.Default) {
-            reload()
+            try {
+                reload()
 
-            viewState = ViewState.Success
+                viewState = ViewState.Success
+            } catch (e: Throwable) {
+                viewState = ViewState.Error(e)
+            }
 
             isRefreshing = false
             emitState()
