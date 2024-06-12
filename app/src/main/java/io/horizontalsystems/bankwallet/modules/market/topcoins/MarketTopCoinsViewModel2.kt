@@ -86,6 +86,16 @@ class MarketTopCoinsViewModel2(
                 emitState()
             }
         }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            currencyManager.baseCurrencyUpdatedFlow.collect {
+                reload()
+
+                viewState = ViewState.Success
+
+                emitState()
+            }
+        }
     }
 
     private suspend fun reload() {
