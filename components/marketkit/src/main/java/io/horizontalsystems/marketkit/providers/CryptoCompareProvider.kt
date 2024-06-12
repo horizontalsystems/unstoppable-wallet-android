@@ -46,7 +46,6 @@ class CryptoCompareProvider {
         val url: String,
         val body: String,
         val source_info: Map<String, String>,
-        val categories: String,
     )
 
 }
