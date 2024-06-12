@@ -3,7 +3,9 @@ package io.horizontalsystems.bankwallet.modules.market.topcoins
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,7 +51,6 @@ fun TopCoins(
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
     var openTopSelector by rememberSaveable { mutableStateOf(false) }
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
-    var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
 
     val uiState = viewModel.uiState
 
@@ -72,9 +73,16 @@ fun TopCoins(
                 }
 
                 ViewState.Success -> {
+                    val listState = rememberLazyListState()
+
+                    LaunchedEffect(uiState.period, uiState.topMarket, uiState.sortingField) {
+                        listState.scrollToItem(0)
+                    }
+
                     CoinList(
+                        listState = listState,
                         items = uiState.viewItems,
-                        scrollToTop = scrollToTopAfterUpdate,
+                        scrollToTop = false,
                         onAddFavorite = { uid ->
                             viewModel.onAddFavorite(uid)
 
@@ -118,9 +126,6 @@ fun TopCoins(
                             }
                         }
                     )
-                    if (scrollToTopAfterUpdate) {
-                        scrollToTopAfterUpdate = false
-                    }
                 }
             }
         }
@@ -133,7 +138,6 @@ fun TopCoins(
             onSelect = { selected ->
                 viewModel.onSelectSortingField(selected)
                 openSortingSelector = false
-                scrollToTopAfterUpdate = true
 
                 stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchSortType(selected.statSortType))
             },
@@ -149,7 +153,6 @@ fun TopCoins(
             onSelect = {
                 viewModel.onSelectTopMarket(it)
                 openTopSelector = false
-                scrollToTopAfterUpdate = true
 
                 stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchMarketTop(it.statMarketTop))
             },
@@ -165,7 +168,6 @@ fun TopCoins(
             onSelect = { selected ->
                 viewModel.onSelectPeriod(selected)
                 openPeriodSelector = false
-                scrollToTopAfterUpdate = true
 
                 stat(page = StatPage.Markets, section = StatSection.Coins, event = StatEvent.SwitchPeriod(selected.statPeriod))
             },
