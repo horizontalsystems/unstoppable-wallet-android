@@ -41,8 +41,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 fun TopCoins(
     onCoinClick: (String) -> Unit,
 ) {
-    val viewModel = viewModel<MarketTopCoinsViewModel2>(
-        factory = MarketTopCoinsViewModel2.Factory(
+    val viewModel = viewModel<MarketTopCoinsViewModel>(
+        factory = MarketTopCoinsViewModel.Factory(
             TopMarket.Top100,
             SortingField.TopGainers,
         )
