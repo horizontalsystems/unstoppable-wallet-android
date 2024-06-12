@@ -1,9 +1,10 @@
 package cash.p.terminal.modules.market
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -159,6 +159,7 @@ fun TabsSection(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MetricsBoard(
     navController: NavController,
@@ -169,7 +170,10 @@ fun MetricsBoard(
             .fillMaxWidth()
             .height(40.dp)
             .background(ComposeAppTheme.colors.tyler)
-            .horizontalScroll(rememberScrollState()),
+            .basicMarquee(
+                iterations = Int.MAX_VALUE,
+                spacing = MarqueeSpacing(0.dp)
+            ),
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
     ) {
         HSpacer(4.dp)
