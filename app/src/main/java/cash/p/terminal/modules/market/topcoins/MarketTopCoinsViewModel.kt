@@ -24,7 +24,7 @@ import kotlinx.coroutines.rx2.await
 import kotlin.enums.EnumEntries
 import kotlin.math.min
 
-class MarketTopCoinsViewModel2(
+class MarketTopCoinsViewModel(
     private var topMarket: TopMarket,
     private var sortingField: SortingField,
     private val marketKit: MarketKitWrapper,
@@ -222,7 +222,7 @@ class MarketTopCoinsViewModel2(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MarketTopCoinsViewModel2(
+            return MarketTopCoinsViewModel(
                 topMarket,
                 sortingField,
                 App.marketKit,
