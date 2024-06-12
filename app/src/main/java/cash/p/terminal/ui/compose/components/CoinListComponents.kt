@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
@@ -69,6 +70,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CoinList(
+    listState: LazyListState = rememberLazyListState(),
     items: List<MarketViewItem>,
     scrollToTop: Boolean,
     onAddFavorite: (String) -> Unit,
@@ -78,7 +80,6 @@ fun CoinList(
     preItems: LazyListScope.() -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val listState = rememberLazyListState()
     var revealedCardId by remember { mutableStateOf<String?>(null) }
 
     LazyColumn(state = listState, userScrollEnabled = userScrollEnabled) {
