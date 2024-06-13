@@ -183,10 +183,30 @@
     <string name="Market_PoweredByDefiLlamaApi">由 DefiLlama API 提供</string>
     <string name="Market_Tab_Overview">行情</string>
     <string name="Market_Tab_Posts">发现</string>
+    <string name="Market_Tab_Coins">币</string>
+    <string name="Market_Tab_Platform">平台</string>
+    <string name="Market_Tab_Pairs">配对标点</string>
+    <string name="Market_Tab_Sectors">行业</string>
     <string name="Market_Tab_Watchlist">关注</string>
     <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
     <string name="Market_Category_TopCoins">前列代币</string>
     <string name="Market_Category_TopCoins_Description">币种排名描述</string>
+    <string name="Market_Signals">信号</string>
+    <string name="Market_Volume">Volume</string>
+    <string name="Market_MarketCap">市值</string>
+    <string name="Market_TVL">TVL</string>
+    <string name="Market_Signal_Description">下面的信号是基于Bollinger Bands 和 RSI 技术价格指标的近似值。 最近30天。这些信号是算法，可以经常改变。</string>
+    <string name="Market_Signal_StrongBuy_Description">对价格上涨信心高.</string>
+    <string name="Market_Signal_Buy_Description">在不久的将来可能的价格提高.</string>
+    <string name="Market_Signal_Neutral_Descripion">没有明确的趋势，市场处于平衡状态.</string>
+    <string name="Market_Signal_Sell_Description">未来近期可能价格下跌.</string>
+    <string name="Market_Signal_StrongSell_Description">价格下跌的高概率.</string>
+    <string name="Market_Signal_Risky_Description">风险水平升高，需要谨慎.</string>
+    <string name="Market_Signal_Warning">请记住始终要进行风险管理，并注意这不是财务建议</string>
+    <string name="Market_Top_100">前100名</string>
+    <string name="Market_Top_200">Top 200</string>
+    <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_500">前500名</string>
     <string name="TopPairs_Title">热门市场交易对</string>
     <string name="TopPairs_Description">每个交易所的交易量最高的交易对</string>
     <!--Market Overview-->
@@ -203,10 +223,11 @@
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">图表</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">总市值</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin市场占比</string>
-    <string name="MarketGlobalMetrics_Volume">24h成交量</string>
+    <string name="MarketGlobalMetrics_BtcDominance">BTC市场占比</string>
+    <string name="MarketGlobalMetrics_Volume">24小时交易量</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi市值</string>
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF 输入</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">所有加密货币的总市场价值.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">比特币市值与其他加密货币市值之间比率的历史变化。\n\n通常，当比特币主导地位上升时，其他加密市场会下降，反之亦然。</string>
     <string name="MarketGlobalMetrics_VolumeDescription">加密货币市场24小时交易量.</string>
@@ -217,6 +238,15 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">所有</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">此货币还未支持</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Title">网络总流量</string>
+    <string name="MarketEtf_Description">ETF的净流入等于其现金流入减去流出</string>
+    <string name="MarketEtf_HighestAssets">最高资产</string>
+    <string name="MarketEtf_LowestAssets">最低资产</string>
+    <string name="MarketEtf_Inflow">流入</string>
+    <string name="MarketEtf_Outflow">外向流</string>
+    <string name="MarketEtf_Period_All">所有</string>
+    <string name="MarketEtf_TotalNetAssets">净资产总额</string>
     <!--Market Search-->
     <string name="EmptyResults">未发现结果</string>
     <string name="Market_Filters">高级搜索</string>
@@ -230,6 +260,8 @@
     <string name="Market_Filter_PricePeriod">价格区间</string>
     <string name="Market_Filter_TradingSignals">交易信号</string>
     <string name="Market_Filter_PriceChange">价格变化</string>
+    <string name="Market_PriceChange_24H">24 小时</string>
+    <string name="Market_PriceChange_Utc">午夜UTC</string>
     <string name="Market_Filter_Blockchains">区块链</string>
     <string name="Market_Filter_OutperformedBtc">跑赢BTC</string>
     <string name="Market_Filter_OutperformedEth">跑赢ETH</string>
@@ -248,7 +280,7 @@
     <string name="Market_Filter_Neutral">中性</string>
     <string name="Market_Filter_StrongSell">强烈建议卖出</string>
     <string name="Market_Filter_Sell">出售</string>
-    <string name="Market_Filter_RiskToTrade">交易风险</string>
+    <string name="Market_Filter_RiskToTrade">有风险</string>
     <string name="Market_Filter_Top_100">前100名</string>
     <string name="Market_Filter_Top_250">前250名</string>
     <string name="Market_Filter_Top_500">前500名</string>
@@ -283,9 +315,14 @@
     <string name="Market_Filter_TimePeriod_1W">1周</string>
     <string name="Market_Filter_TimePeriod_2W">2周</string>
     <string name="Market_Filter_TimePeriod_1M">1月</string>
+    <string name="Market_Filter_TimePeriod_3M">3月</string>
     <string name="Market_Filter_TimePeriod_6M">6月</string>
     <string name="Market_Filter_TimePeriod_1Y">1年</string>
-    <string name="TimePeriod_24h">24小时</string>
+    <string name="Market_Sorting_Manual">手册</string>
+    <string name="Market_Sorting_Gainers">涨幅最大者</string>
+    <string name="Market_Sorting_Losers">跌幅最大者</string>
+    <string name="Market_Sorting_HighestCap">市值由高到低</string>
+    <string name="Market_Sorting_LowestCap">市值由低到高</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 市场</string>
     <!--TVL Rank-->
@@ -450,7 +487,6 @@
     <string name="FeeInfo_TronFee_Title">费用</string>
     <string name="FeeInfo_TronFee_Description">估算在网络上发送特定交易所需的成本，包括能源、带宽和激活费</string>
     <string name="FeeInfo_TronActivationFee_Title">激活费</string>
-    <string name="FeeInfo_TronActivationFee_Description">正在将TRX或 TRC-10令牌传输到一个非活动帐户地址将激活帐户。</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">消耗的资源</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 是衡量存储在区块链数据库中的交易字节大小的单位。 交易越大，消耗的带宽资源就越多。\n\nEnergy 是衡量波场虚拟机在波场网络上执行特定操作所需计算量的单位。\n\n自智能合约 交易需要计算资源来执行，每笔智能合约交易都需要支付 energy费用。</string>
     <!--Tron-->
@@ -460,6 +496,8 @@
     <string name="Tron_AddressNotActive_Info">新创建的 TRON 区块链上的帐户是不活动的，无法查询或探索。它们需要激活。\n\n正在将TRX或 TRC-10令牌传输到一个不活动的帐户地址将激活该帐户。 激活Tron链上的一个新帐户需要1TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">无法将 TRX 转移给自己</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">无法传输 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">帐户未激活</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">新的TRON钱包需要至少1TRX的存款才能激活。 非活动钱包可以持有并接收代币，但在激活之前不会纠正余额。</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">请求</string>
     <string name="WalletConnect_SendRequest_Title">发送​​</string>
@@ -492,6 +530,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">没有合适的帐户</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">没有合适的 evm 套件</string>
     <string name="WalletConnect_Error_DataParsingError">数据解析错误</string>
+    <string name="WalletConnect_Error_UnsupportedChains">不支持的链条: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">不支持的方法: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">不支持的事件: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">请求找不到错误</string>
     <string name="WalletConnect_NoConnection">您没有任何已连接的dapps</string>
     <string name="WalletConnect_PendingRequests">待处理请求</string>
@@ -627,6 +668,11 @@
     <string name="Approve_Spender">消费人</string>
     <string name="Approve_YouApprove">您批准</string>
     <string name="Approve_YouRevoke">您已取消</string>
+    <!--Swap Unlock Access-->
+    <string name="Swap_Unlock_PageTitle">解锁访问</string>
+    <string name="Swap_Unlock_Subtitle">允许访问以下金额</string>
+    <string name="Swap_Unlock_Info">授权智能合约代表您进行代币交易，并指定允许的金额。这不会影响您的余额，但需要支付少量费用以进行批准。\n\n预先批准较高金额用于未来交易比按需批准更具成本效益。</string>
+    <string name="Swap_Unlock_Unlimited">无限</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">补贴</string>
     <string name="SwapInfo_AllowanceDescription">当执行令牌交换时，交易所可以代表用户花费的金额。 在进行实际互换交易之前，需要先确定足够的备抵。</string>
@@ -777,6 +823,7 @@
     <string name="Settings_Contact_ViaTelegram">通过 Telegram</string>
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
     <string name="Settings_PersonalSupport">个人支持</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>
@@ -804,17 +851,20 @@
     <string name="Appearance_Tab">TAB设置</string>
     <string name="Appearance_LaunchScreen">局域网SCREEN</string>
     <string name="Appearance_AppIcon">应用图标</string>
-    <string name="Appearance_BalanceConversion">余额配对</string>
-    <string name="Appearance_BalanceValue">平衡值</string>
+    <string name="Appearance_BalanceConversion">余额转换</string>
+    <string name="Appearance_BalanceValue">余额值</string>
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
-    <string name="Appearance_MarketsTab">市场选项卡</string>
+    <string name="Appearance_HideMarketsTab">隐藏市场</string>
+    <string name="Appearance_HideBalanceTabButtons">隐藏按钮</string>
     <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡，不管先前的偏好设置。</string>
+    <string name="Appearance_PriceChangeInterval">价格变化 %</string>
     <string name="BalanceViewType_CoinValue">币值</string>
     <string name="BalanceViewType_FiatValue">纤维值</string>
     <string name="SettingsAboutApp_Title">关于应用</string>
     <string name="SettingsAboutApp_Site">网站</string>
     <string name="SettingsAboutApp_WhatsNew">更新说明</string>
+    <string name="SettingsAboutApp_AppVersion">应用程序版本</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">区块链设置</string>
     <!-- Backup Manager -->
@@ -836,11 +886,10 @@
     <string name="BackupManager_AppSettingsTitle">应用设置</string>
     <string name="BackupManager_AppSettingsDescription">语言、 货币、 外观 ...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">不可阻挡不会收集任何数据，也不会使用可能会暴露任何用户数据的分析工具。 钱包的设计是为了确保用户高度的隐私。</string>
-    <string name="Privacy_BulletedText1">用户数据总是保留在用户的设备上。</string>
-    <string name="Privacy_BulletedText2">钱包没有收集任何有关用户的数据。</string>
-    <string name="Privacy_BulletedText3">钱包没有收集任何有关用户的数据。</string>
-    <string name="Privacy_BulletedText4">没有用户帐户或数据库存放其他地方的用户数据。</string>
+    <string name="Privacy_Information">Unstoppable 不收集暴露您私人信息的个人数据，例如币余额或地址。虽然我们收集了一些用户界面使用统计数据，但这仅用于了解我们的用户群和应用程序使用趋势。如果您希望，可以禁用此功能。</string>
+    <string name="Privacy_BulletedText2">我们没有用户账户或存储用户数据的数据库。</string>
+    <string name="Privacy_BulletedText3">如果允许，钱包将与不可阻挡团队分享应用程序使用习惯。这是为了了解我们的用户正在使用哪些功能（或未使用）。作为一个关注隐私的应用程序，我们需要一种评估我们努力的方式，如果没有这个，我们就无法知道我们构建的功能是否被使用。</string>
+    <string name="ShareUiData">共享界面数据</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">网络</string>
     <!--Evm Network-->
@@ -1151,7 +1200,7 @@
     <string name="AddToken_Blockchain">按区块链过滤</string>
     <string name="AddToken_CoinAlreadyInListWarning">该代币已在代币管理列表中</string>
     <string name="AddToken_InvalidContractAddress">请输入正确的合约地址</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
+    <string name="AddToken_InvalidBep2Symbol">无效的 BEP2 符号</string>
     <string name="AddEvmToken_Bep2NotFound">找不到 BEP2 符号</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">在 %s 区块链中找不到合同地址</string>
     <!-- Address Format Settings List -->
@@ -1187,7 +1236,7 @@
     <string name="Coin_Tab_Details">分析</string>
     <string name="Coin_Tab_Tweets">推文</string>
     <string name="CoinPage_TimeDuration_Today">今天</string>
-    <string name="CoinPage_TimeDuration_Day">24时</string>
+    <string name="CoinPage_TimeDuration_Day">1天</string>
     <string name="CoinPage_TimeDuration_Week">7天</string>
     <string name="CoinPage_TimeDuration_Month">1月</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2周</string>
@@ -1404,15 +1453,44 @@
     <string name="CoinAnalytics_SmartContractAnalysis">智能合约分析</string>
     <string name="CoinAnalytics_HighRiskItems">高风险项目</string>
     <string name="CoinAnalytics_MediumRiskItems">中等风险项目</string>
+    <string name="Coin_Analytics_Indicators_Risky">有风险</string>
     <string name="CoinAnalytics_AttentionRequired">需要注意</string>
     <string name="CoinAnalytics_PoweredByDeFi">由 De.Fi 支持</string>
     <string name="CoinAnalytics_CountItems">%d条新闻</string>
     <string name="TechnicalAdvice_Title">技术指标</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">请记住始终要进行风险管理，并注意这不是财务建议</string>
+    <string name="TechnicalAdvice_OverBought">已购买过期的</string>
+    <string name="TechnicalAdvice_OverSold">超价</string>
+    <string name="TechnicalAdvice_OverIndicators">资产不属于Bollinger频道和 %s。</string>
+    <string name="TechnicalAdvice_OverRsi"> RSI = %1$s，这也表明该资产为%2$s.</string>
+    <string name="TechnicalAdvice_OverAdvice"> 可能会有强烈的%s向动，因此最好等待资产价格回到通道中。</string>
+    <string name="TechnicalAdvice_StrongIndicators">资产是 %s，但现在它已经返回Bollinger Band 通道。这表明可能出现趋势逆转。</string>
+    <string name="TechnicalAdvice_StrongRsi">与此同时，RSI 是 %1$s, 它仍然表示它是 %2$s。</string>
+    <string name="TechnicalAdvice_StrongAdvice">这可能是一个非常强有力的进入市场的信号。请记住，在回到通道后，可能会有多次尝试%s向运动，所以不要忽视风险管理。</string>
+    <string name="TechnicalAdvice_StableRsi">与此同时，RSI为 %s，这也表明了一种扭转趋势(RSI跨越边界，占70\%%)。</string>
+    <string name="TechnicalAdvice_StableAdvice">然而，价格正在回到中度水平，但仍有上升的潜力。 牢记RSI=50和Bollinger区中部是强大的抗药性和可能的趋势逆转点。 不要忘记风险管理。</string>
+    <string name="TechnicalAdvice_NeutralRsi">RSI = $s 也证实没有强有力的趋势。</string>
+    <string name="TechnicalAdvice_NeutralIndicators">该资产处于被推销/出售区内，但此时价格已回到中立区内的Bollinger频道。 RSI 是 %s 也证实了没有强大的趋势。 因此，整体资产价格正在走向平均值，任何方向都有可能进一步发展。</string>
+    <string name="TechnicalAdvice_NeutralAdvice">一般而言，资产价格正在走向平均值，任何方向都有进一步变动的可能。</string>
+    <string name="TechnicalAdvice_OtherTitle">请注意：</string>
+    <string name="TechnicalAdvice_EmaAbove">以上</string>
+    <string name="TechnicalAdvice_EmaBelow">下面</string>
+    <string name="TechnicalAdvice_EmaGrowth">发展</string>
+    <string name="TechnicalAdvice_EmaDecrease">减少</string>
+    <string name="TechnicalAdvice_EmaAdvice">EMA 200。确定总体情绪和趋势。资产的日价格位于 EMA (%1$s) %2$s。这意味着全球资产已设定为 %3$s。</string>
+    <string name="TechnicalAdvice_MacdPositive">以上</string>
+    <string name="TechnicalAdvice_MacdNegative">下面</string>
+    <string name="TechnicalAdvice_MacdAdvice">MACD。考虑平均价格变动来评估趋势的强度。直方图的每日值为%1$s(%2$s）。该资产的价格全球可能会移动%3$s。</string>
     <string name="TechnicalAdvice_InfoTitle">技术指标</string>
+    <string name="TechnicalAdvice_InfoDescription">我们使用布林带 + RSI 策略来确定交易信号。所有计算都基于日线图，并为中长期提供建议。该策略的本质是资产价格应该达到一个极端点，突破布林带通道，并且 RSI 应该处于超买/超卖区域。在价格回到通道后，有很高的概率价格回归到平均值或尝试从另一侧突破通道。请注意，在正确信号出现之前，该策略在市场强劲波动期间可能会出现多个虚假信号。\n\n请记住，在交易中应用风险管理非常重要，如果市场情况发生变化，请记得及时止损！ </string>
     <string name="TechnicalAdvice_ShowDetails">显示详细信息</string>
     <string name="TechnicalAdvice_HideDetails">隐藏细节</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">强烈建议买入</string>
+    <string name="TechnicalAdvice_Indicators_Buy">购买</string>
     <string name="TechnicalAdvice_Indicators_Neutral">中性</string>
+    <string name="TechnicalAdvice_Indicators_Sell">出售</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">强烈建议卖出</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">有风险</string>
     <string name="Detectors_TokenDetectors">代币检测器</string>
     <string name="Detectors_GeneralDetectors">通用检测器</string>
     <string name="Detectors_IssuesCount">发布 %d</string>
@@ -1493,8 +1571,8 @@
     <string name="NftCollection_EventType_Mint">薄荷绿</string>
     <string name="NftCollection_EventType_Unknown">未知</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">涨幅榜</string>
-    <string name="RateList_TopLosers">跌幅榜</string>
+    <string name="RateList_TopGainers">涨幅最大者</string>
+    <string name="RateList_TopLosers">跌幅最大者</string>
     <string name="RateList_Posts">发现</string>
     <string name="Market_DaysAgo">%d天前</string>
     <string name="Market_HoursAgo">%d小时前</string>

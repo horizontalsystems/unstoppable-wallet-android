@@ -60,8 +60,6 @@
     <string name="Button_Share">공유</string>
     <string name="Button_Apply">적용</string>
     <string name="Button_SetAmount">금액 설정</string>
-    <string name="Error_OutOfRange">Can\'t be less than %1$s or more than %2$s</string>
-    <string name="Error_NotInteger">Wrong integer number</string>
     <string name="Error">오류</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">어떤</string>
@@ -183,10 +181,30 @@
     <string name="Market_PoweredByDefiLlamaApi">DefiLlama API에 의해 구동됩니다.</string>
     <string name="Market_Tab_Overview">개요</string>
     <string name="Market_Tab_Posts">뉴스</string>
+    <string name="Market_Tab_Coins">코인</string>
+    <string name="Market_Tab_Platform">플랫폼</string>
+    <string name="Market_Tab_Pairs">쌍</string>
+    <string name="Market_Tab_Sectors">분야</string>
     <string name="Market_Tab_Watchlist">관심 목록</string>
     <string name="Market_Tab_Watchlist_EmptyList">관심 목록이 비어 있습니다.</string>
     <string name="Market_Category_TopCoins">주요 코인</string>
     <string name="Market_Category_TopCoins_Description">시가총액 순위별 주요 코인</string>
+    <string name="Market_Signals">신호</string>
+    <string name="Market_Volume">거래량</string>
+    <string name="Market_MarketCap">시가총액</string>
+    <string name="Market_TVL">TVL</string>
+    <string name="Market_Signal_Description">아래 신호는 대략 최근 30일 동안의 볼린저 밴드와 RSI 기술적 가격 지표를 기반으로 합니다. 이러한 신호는 알고리즘에 기반하며 자주 변경될 수 있습니다.</string>
+    <string name="Market_Signal_StrongBuy_Description">가격 상승에 대한 높은 신뢰도.</string>
+    <string name="Market_Signal_Buy_Description">가까운 미래에 가능성 있는 가격 상승.</string>
+    <string name="Market_Signal_Neutral_Descripion">명확한 트렌드가 없으며, 시장은 균형 상태에 있습니다.</string>
+    <string name="Market_Signal_Sell_Description">가까운 미래에 가능성 있는 가격 하락.</string>
+    <string name="Market_Signal_StrongSell_Description">가격 하락의 높은 확률.</string>
+    <string name="Market_Signal_Risky_Description">고위험 수준, 주의가 필요합니다.</string>
+    <string name="Market_Signal_Warning">언제나 위험 관리를 적용하는 것을 기억하세요. 이것은 금융 조언이 아님을 유의하세요.</string>
+    <string name="Market_Top_100">상위 100</string>
+    <string name="Market_Top_200">상위 200</string>
+    <string name="Market_Top_300">상위 300</string>
+    <string name="Market_Top_500">상위 500</string>
     <string name="TopPairs_Title">상위 시장 페어</string>
     <string name="TopPairs_Description">각 거래소에서 거래량 상위 페어</string>
     <!--Market Overview-->
@@ -202,11 +220,12 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">%s 체인상의 모든 프로토콜의 시가총액</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">차트</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">총 시가총액</string>
-    <string name="MarketGlobalMetrics_BtcDominance">비트코인 지배도</string>
-    <string name="MarketGlobalMetrics_Volume">24시간 거래량</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">시가 총액</string>
+    <string name="MarketGlobalMetrics_BtcDominance">BTC 지배력</string>
+    <string name="MarketGlobalMetrics_Volume">24h 거래량</string>
     <string name="MarketGlobalMetrics_DefiCap">디파이(DeFi) 시가총액</string>
     <string name="MarketGlobalMetrics_TvlInDefi">디파이(DeFi)에서의 총 예치 가치</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF 유입액</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">모든 암호화폐의 총 시장 가치\" or \"모든 가상 화폐의 총 시장 가치.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">암호화폐 시장의 24시간 거래량\" or \"가상 화폐 시장의 24시간 거래량.</string>
@@ -217,6 +236,15 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">이 코인은 아직 지원되지 않습니다.</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Title">총 순유입액</string>
+    <string name="MarketEtf_Description">ETF의 순유입액은 현금 유입에서 유출을 뺀 것과 같습니다.</string>
+    <string name="MarketEtf_HighestAssets">최고 자산</string>
+    <string name="MarketEtf_LowestAssets">최저 자산</string>
+    <string name="MarketEtf_Inflow">유입</string>
+    <string name="MarketEtf_Outflow">유출</string>
+    <string name="MarketEtf_Period_All">모든</string>
+    <string name="MarketEtf_TotalNetAssets">총 순자산</string>
     <!--Market Search-->
     <string name="EmptyResults">검색 결과가 없습니다</string>
     <string name="Market_Filters">필터</string>
@@ -228,7 +256,10 @@
     <string name="Market_Filter_Volume">거래량</string>
     <string name="Market_Filter_Volume24h">거래량 (24시간)</string>
     <string name="Market_Filter_PricePeriod">가격 기간</string>
+    <string name="Market_Filter_TradingSignals">전반적인 점수가 좋거나 우수합니다</string>
     <string name="Market_Filter_PriceChange">가격 변경</string>
+    <string name="Market_PriceChange_24H">24 시간</string>
+    <string name="Market_PriceChange_Utc">UTC 자정</string>
     <string name="Market_Filter_Blockchains">블록체인</string>
     <string name="Market_Filter_OutperformedBtc">BTC를 능가했습니다</string>
     <string name="Market_Filter_OutperformedEth">ETH를 능가했습니다</string>
@@ -247,7 +278,8 @@
     <string name="Market_Filter_Neutral">보통</string>
     <string name="Market_Filter_StrongSell">강한 매도</string>
     <string name="Market_Filter_Sell">매도</string>
-    <string name="Market_Filter_RiskToTrade">거래 위험</string>
+    <string name="Market_Filter_RiskToTrade">위험</string>
+    <string name="Market_Filter_Gainers">이득자</string>
     <string name="Market_Filter_Top_100">상위 100</string>
     <string name="Market_Filter_Top_250">상위 250</string>
     <string name="Market_Filter_Top_500">상위 500</string>
@@ -282,9 +314,14 @@
     <string name="Market_Filter_TimePeriod_1W">1 일주</string>
     <string name="Market_Filter_TimePeriod_2W">이주</string>
     <string name="Market_Filter_TimePeriod_1M">1개월</string>
+    <string name="Market_Filter_TimePeriod_3M">3 개월</string>
     <string name="Market_Filter_TimePeriod_6M">6 개월</string>
     <string name="Market_Filter_TimePeriod_1Y">일년</string>
-    <string name="TimePeriod_24h">24 시간</string>
+    <string name="Market_Sorting_Manual">수동</string>
+    <string name="Market_Sorting_Gainers">이득자</string>
+    <string name="Market_Sorting_Losers">해자</string>
+    <string name="Market_Sorting_HighestCap">가장 높은 시가총액</string>
+    <string name="Market_Sorting_LowestCap">가장 낮은 시가총액</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s 시장</string>
     <!--TVL Rank-->
@@ -453,7 +490,6 @@
     <string name="FeeInfo_TronFee_Title">수수료</string>
     <string name="FeeInfo_TronFee_Description">네트워크에서 거래하는 데 드는 예상 비용입니다. (energy, bandwidth 및 활성화 수수료 제외)</string>
     <string name="FeeInfo_TronActivationFee_Title">활성화 수수료</string>
-    <string name="FeeInfo_TronActivationFee_Description">TRX나 TRC-10 토큰을 비활성화된 계정 주소로 이전하면 해당 계정이 활성화됩니다.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">소모된 자원</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 은 블록체인 데이터베이스에 저장된 트랜잭션 바이트 크기를 측정하는 단위입니다. 거래가 클수록 대역폭 자원이 더 많이 사용됩니다.\n\nEnergy 는 TRON 가상 머신이 TRON 네트워크에서 특정 작업을 수행하기 위해 필요한 계산 양을 측정하는 단위입니다. \n\n스마트 계약 트랜잭션은 실행에 계산 자원이 필요하기 때문에 각 스마트 계약 트랜잭션에는 energy 수수료를 지불해야합니다.</string>
     <!--Tron-->
@@ -463,6 +499,8 @@
     <string name="Tron_AddressNotActive_Info">TRON 블록체인에 새로 생성된 계정은 비활성화되어 있어서 조회하거나 탐색할 수 없습니다. 이 계정은 활성화되어야 합니다.\n\n비활성화된 계정 주소로 TRX 또는 TRC-10 토큰을 전송하면 계정이 활성화됩니다. 새로운 TRON 체인 계정을 활성화하려면 1 TRX의 수수료가 필요합니다.</string>
     <string name="Tron_SelfSendTrxNotAllowed">TRX를 자신에게 전송할 수 없습니다</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">0 %s을(를) 전송할 수 없습니다.</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">계정이 활성화되지 않음</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">새로운 TRON 지갑은 활성화되기 위해 최소 1 TRX의 입금이 필요합니다. 비활성 지갑은 토큰을 보유하고 받을 수는 있지만, 활성화될 때까지 잔액이 정확히 표시되지 않습니다.</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">요청</string>
     <string name="WalletConnect_SendRequest_Title">전송</string>
@@ -553,7 +591,7 @@
     <string name="Swap_EstimatedFee">예상 수수료</string>
     <string name="Swap_MaxFee">최대 수수료</string>
     <string name="Swap_Fee">수수료</string>
-    <string name="Swap_Slippage">Slippage</string>
+    <string name="Swap_Slippage">미끄러짐</string>
     <string name="Swap_Recipient">수령인</string>
     <string name="Swap_ErrorNoProviders">제공자 없음</string>
     <string name="Swap_ErrorNoQuote">제안이 없습니다</string>
@@ -630,6 +668,11 @@
     <string name="Approve_Spender">스펜더</string>
     <string name="Approve_YouApprove">승인합니다</string>
     <string name="Approve_YouRevoke">당신은 취소</string>
+    <!--Swap Unlock Access-->
+    <string name="Swap_Unlock_PageTitle">액세스 잠금 해제</string>
+    <string name="Swap_Unlock_Subtitle">다음 금액에 대한 액세스 허용</string>
+    <string name="Swap_Unlock_Info">스마트 계약에 토큰 거래 권한을 부여하여 지정된 허용 금액을 설정합니다. 귀하의 잔액에 영향을 주지 않지만 승인을 위한 소액 수수료가 발생합니다. \n\n미래 거래를 위해 미리 더 높은 금액을 승인하는 것은 요청에 따른 승인보다 비용 효율적입니다.</string>
+    <string name="Swap_Unlock_Unlimited">무제한</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">허용량</string>
     <string name="SwapInfo_AllowanceDescription">토큰 스왑을 실행할 때 거래소가 사용자를 대신하여 지출할 수 있는 금액. 실제 스왑 거래가 발생하기 전에 선행 거래 설정 충분한 여유가 필요합니다.</string>
@@ -652,7 +695,7 @@
     <string name="Transactions_Completed">완료</string>
     <string name="Transactions_Processing">처리 중</string>
     <string name="Transactions_Send">전송됨</string>
-    <string name="Transactions_Burn">Burned</string>
+    <string name="Transactions_Burn">번</string>
     <string name="Transactions_Mint">민트</string>
     <string name="Transactions_Approve">승인됨</string>
     <string name="Transactions_Swap">스왑됨</string>
@@ -780,6 +823,8 @@
     <string name="Settings_Contact_ViaTelegram">텔레그램을 통해</string>
     <string name="Settings_Contact_ViaEmail">이메일로</string>
     <string name="Settings_AutoLock">자동 잠금</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_JoinUnstoppables_Description">독점 비디오로 암호화폐를 배우고 정복하세요. 비공식적으로 우리를 알아가세요. 우리가 작업하는 것들을 가장 먼저 보실 수 있습니다.</string>
     <string name="Settings_PersonalSupport">개인 지원</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">이미 비공개 채팅을 요청하셨습니다. Telegram에서 찾아보세요.</string>
@@ -810,14 +855,17 @@
     <string name="Appearance_BalanceConversion">잔액 변환</string>
     <string name="Appearance_BalanceValue">균형 가치</string>
     <string name="Appearance_Warning_CloseApplication">아이콘을 변경하면 애플리케이션이 종료됩니다.</string>
-    <string name="Appearance_MarketsTab">시장 탭</string>
+    <string name="Appearance_HideMarketsTab">마켓 숨기기</string>
+    <string name="Appearance_HideBalanceTabButtons">숨김 버튼</string>
     <string name="Appearance_BalanceAutoHide">밸런스 자동 숨기기</string>
     <string name="Appearance_BalanceAutoHide_Description">앱이 열릴 때마다 잔고를 자동으로 숨깁니다. 이전 설정에 관계없이 적용됩니다.</string>
+    <string name="Appearance_PriceChangeInterval">가격 변경 %</string>
     <string name="BalanceViewType_CoinValue">코인 가치</string>
     <string name="BalanceViewType_FiatValue">법정 가치</string>
     <string name="SettingsAboutApp_Title">앱 정보</string>
     <string name="SettingsAboutApp_Site">웹사이트</string>
     <string name="SettingsAboutApp_WhatsNew">새로운 기능</string>
+    <string name="SettingsAboutApp_AppVersion">앱버전</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">블록 체인 설정</string>
     <!-- Backup Manager -->
@@ -839,11 +887,10 @@
     <string name="BackupManager_AppSettingsTitle">앱 설정</string>
     <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable은 사용자에 대한 데이터를 노출할 수 있는 데이터를 수집하거나 분석 도구를 사용하지 않습니다. 지갑은 사용자에게 높은 수준의 개인 정보를 보장하도록 설계되었습니다.</string>
-    <string name="Privacy_BulletedText1">사용자 데이터는 항상 사용자의 장치에 남아 있습니다.</string>
-    <string name="Privacy_BulletedText2">지갑은 사용자에 대한 데이터를 수집하지 않습니다.</string>
-    <string name="Privacy_BulletedText3">지갑은 사용자에 대한 데이터를 공유하지 않습니다.</string>
-    <string name="Privacy_BulletedText4">사용자 데이터를 다른 곳에 보관하는 사용자 계정이나 데이터베이스가 없습니다.</string>
+    <string name="Privacy_Information">Unstoppable 는 코인 잔액이나 주소와 같은 개인 정보를 노출하는 개인 데이터를 수집하지 않습니다. UI 사용 통계를 수집하긴 하지만, 이는 사용자 기반 및 앱 사용 트렌드를 이해하기 위한 것입니다. 원하신다면 비활성화할 수 있습니다.</string>
+    <string name="Privacy_BulletedText2">사용자 계정이나 사용자 데이터를 저장하는 데이터베이스가 없습니다.</string>
+    <string name="Privacy_BulletedText3">허용된 경우, 지갑은 앱 사용 습관을 Unstoppable 팀과 공유할 것입니다. 이는 사용자가 어떤 기능을 사용하고 있는지 (또는 사용하지 않는지) 이해하기 위한 것입니다. 개인 정보 보호를 중시하는 앱이지만, 우리의 노력을 평가할 방법이 필요합니다. 이를 통해 만든 기능이 사용되고 있는지 여부를 알 수 없기 때문입니다.</string>
+    <string name="ShareUiData">UI 데이터 공유</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">인터넷</string>
     <!--Evm Network-->
@@ -1194,7 +1241,7 @@
     <string name="Coin_Tab_Details">분석</string>
     <string name="Coin_Tab_Tweets">트윗</string>
     <string name="CoinPage_TimeDuration_Today">오늘</string>
-    <string name="CoinPage_TimeDuration_Day">24시</string>
+    <string name="CoinPage_TimeDuration_Day">1하루</string>
     <string name="CoinPage_TimeDuration_Week">7일</string>
     <string name="CoinPage_TimeDuration_Month">1개월</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2주</string>
@@ -1284,6 +1331,7 @@
     <string name="CoinPage_MajorHolders_InTopWallets">상위 10 소유주 중</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">총 소유주: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">리드</string>
+    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\n검색 결과가 없습니다</string>
     <string name="CoinPage_Indicators">지표</string>
     <string name="CoinPage_MovingAverages">이동 평균</string>
@@ -1410,17 +1458,48 @@
     <string name="CoinAnalytics_SmartContractAnalysis">스마트 계약 분석</string>
     <string name="CoinAnalytics_HighRiskItems">고위험 품목</string>
     <string name="CoinAnalytics_MediumRiskItems">중위험 품목</string>
+    <string name="Coin_Analytics_Indicators_Risky">위험</string>
     <string name="CoinAnalytics_AttentionRequired">주의 필요</string>
     <string name="CoinAnalytics_PoweredByDeFi">De.Fi에 의해 구동됨</string>
     <string name="CoinAnalytics_CountItems">%d 아이템</string>
     <string name="TechnicalAdvice_Title">기술적 지표</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">언제나 위험 관리를 적용하는 것을 기억하세요. 이것은 금융 조언이 아님을 유의하세요.</string>
+    <string name="TechnicalAdvice_OverBought">과매수</string>
+    <string name="TechnicalAdvice_OverSold">과매도</string>
+    <string name="TechnicalAdvice_Down">아래로</string>
+    <string name="TechnicalAdvice_Up">위로</string>
     <string name="TechnicalAdvice_OverMain">해당 자산과 관련된 행동은 위험합니다.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">%s부터 시작합니다</string>
+    <string name="TechnicalAdvice_OverIndicators">자산이 볼린저 밴드 채널 밖에 있으며 %s입니다.</string>
+    <string name="TechnicalAdvice_OverRsi"> RSI = %1$s, 이는 자산이 %2$s임을 나타냅니다.</string>
+    <string name="TechnicalAdvice_OverAdvice"> 강한 %s 방향 움직임이 있을 수 있으므로 자산 가격이 채널로 돌아오기를 기다리는 것이 좋습니다.</string>
+    <string name="TechnicalAdvice_StrongIndicators">자산이 %s이었지만 이제 볼린저 밴드 채널로 돌아왔습니다. 이는 추세 반전의 가능성을 나타냅니다.</string>
+    <string name="TechnicalAdvice_StrongRsi">한편, RSI는 %1$s이며, 여전히 %2$s임을 나타냅니다.</string>
+    <string name="TechnicalAdvice_StrongAdvice">이는 시장에 진입하기 위한 매우 강력한 신호일 수 있습니다. 채널로 돌아온 후 여러 번의 %s 방향 움직임이 있을 수 있으므로, 리스크 관리에 유의하시기 바랍니다.</string>
+    <string name="TechnicalAdvice_StableRsi">한편, RSI는 %s이며, 이는 추세 반전을 나타냅니다 (RSI가 경계선을 넘었습니다. 70\%%에서).</string>
+    <string name="TechnicalAdvice_StableAdvice">가격이 중립 수준으로 돌아가고 있지만, 여전히 상승 가능성이 있습니다. RSI = 50과 볼린저 밴드의 중간은 강한 저항선이자 추세 반전 지점일 수 있다는 점을 기억하십시오. 리스크 관리에 유의하시기 바랍니다.</string>
+    <string name="TechnicalAdvice_NeutralRsi">RSI = $s도 강한 추세의 부재를 확인합니다.</string>
+    <string name="TechnicalAdvice_NeutralIndicators">해당 자산은 과매수/과매도 구간에 있었지만, 현재 가격은 중립 구간의 볼린저 밴드 채널로 복귀했습니다. RSI가 %s이며 강한 추세의 부재를 확인합니다. 따라서 전반적으로 자산 가격은 평균화되며 더 이상의 이동은 어느 방향으로든 가능합니다.</string>
+    <string name="TechnicalAdvice_NeutralAdvice">일반적으로, 자산 가격은 평균화로 향하고 더 이상의 움직임은 어느 방향으로든 가능합니다.</string>
+    <string name="TechnicalAdvice_OtherTitle">주의하세요:</string>
+    <string name="TechnicalAdvice_EmaAbove">위</string>
+    <string name="TechnicalAdvice_EmaBelow">아래</string>
+    <string name="TechnicalAdvice_EmaGrowth">성장</string>
+    <string name="TechnicalAdvice_EmaDecrease">감소</string>
+    <string name="TechnicalAdvice_EmaAdvice">EMA 200. 전반적인 센티먼트와 트렌드를 결정합니다. 자산의 일일 가격은 EMA(%1$s)에 %2$s 위치합니다. 이는 전반적으로 자산이 %3$s으로 설정되어 있음을 의미합니다.</string>
+    <string name="TechnicalAdvice_MacdPositive">위</string>
+    <string name="TechnicalAdvice_MacdNegative">아래</string>
+    <string name="TechnicalAdvice_MacdAdvice">MACD. 평균 가격 변화를 고려하여 추세의 강도를 평가합니다. 히스토그램의 일일 값은 %1$s입니다 (%2$s). 전반적으로 자산의 가격이 %3$s 움직일 수 있습니다.</string>
     <string name="TechnicalAdvice_InfoTitle">기술적 지표</string>
+    <string name="TechnicalAdvice_InfoDescription">우리는 볼린저 밴드 + RSI 전략을 사용하여 거래 신호를 결정합니다. 모든 계산은 일일 양봉을 기반으로 하며, 중장기적인 조언을 제공합니다. 이 전략의 본질은 자산 가격이 극단에 도달하여 볼린저 밴드 채널을 벗어나야 하며, RSI가 과매수/과매도 구간에 있어야 한다는 것입니다. 가격이 채널로 복귀한 후, 가격이 평균값으로 복귀하거나 다른 측면에서 채널을 뚫으려는 높은 확률이 있습니다. 강한 시장 움직임 중에는 올바른 신호가 나타나기 전에 여러 가질 수도 있음을 유의하십시오.\n\n거래에 위험 관리를 적용하는 것이 매우 중요하며, 시장 상황이 변할 경우 손실을 줄이는 것을 기억하세요!</string>
+    <string name="TechnicalAdvice_ShowDetails">세부 정보 보기</string>
+    <string name="TechnicalAdvice_HideDetails">세부 사항 숨기기</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">강한 매수</string>
     <string name="TechnicalAdvice_Indicators_Buy">매수</string>
     <string name="TechnicalAdvice_Indicators_Neutral">보통</string>
     <string name="TechnicalAdvice_Indicators_Sell">매도</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">강한 매도</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">위험</string>
     <string name="Detectors_TokenDetectors">토큰 탐지기</string>
     <string name="Detectors_GeneralDetectors">일반 탐지기</string>
     <string name="Detectors_IssuesCount">문제점 %d</string>
@@ -1501,8 +1580,8 @@
     <string name="NftCollection_EventType_Mint">민트</string>
     <string name="NftCollection_EventType_Unknown">알 수 없음</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">최고 상승자</string>
-    <string name="RateList_TopLosers">최고 하락자</string>
+    <string name="RateList_TopGainers">이득자</string>
+    <string name="RateList_TopLosers">해자</string>
     <string name="RateList_Posts">뉴스</string>
     <string name="Market_DaysAgo">%d일 전에</string>
     <string name="Market_HoursAgo">%d시간 전에</string>
