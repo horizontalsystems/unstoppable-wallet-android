@@ -247,7 +247,7 @@
     <string name="Market_Filter_Neutral">보통</string>
     <string name="Market_Filter_StrongSell">강한 매도</string>
     <string name="Market_Filter_Sell">매도</string>
-    <string name="Market_Filter_RiskToTrade">거래 위험</string>
+    <string name="Market_Filter_RiskToTrade">위험</string>
     <string name="Market_Filter_Top_100">상위 100</string>
     <string name="Market_Filter_Top_250">상위 250</string>
     <string name="Market_Filter_Top_500">상위 500</string>
@@ -1401,6 +1401,7 @@
     <string name="TechnicalAdvice_Indicators_Neutral">보통</string>
     <string name="TechnicalAdvice_Indicators_Sell">매도</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">강한 매도</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">위험</string>
     <string name="Detectors_TokenDetectors">토큰 탐지기</string>
     <string name="Detectors_GeneralDetectors">일반 탐지기</string>
     <string name="Detectors_IssuesCount">문제점 %d</string>
