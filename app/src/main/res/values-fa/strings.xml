@@ -112,6 +112,7 @@
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
     <!-- ETF-->
     <!--Market Search-->
+    <string name="Market_Filter_RiskToTrade">پرمخاطره</string>
     <string name="Market_Filter_TimePeriod_1D">1Day</string>
     <string name="Market_Filter_TimePeriod_1W">1Week</string>
     <string name="Market_Filter_TimePeriod_2W">2Weeks</string>
@@ -669,6 +670,7 @@
     <string name="Coin_Analytics_Period_1m">۱ ماه</string>
     <string name="Coin_Analytics_Indicators_Risky">پرمخاطره</string>
     <string name="CoinAnalytics_CountItems">%d مورد</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">پرمخاطره</string>
     <string name="ActivateSubscription_Address">آدرس</string>
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
     <string name="Nfts_PriceType_Days_30">30 دی اوت</string>
