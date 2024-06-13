@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -78,6 +77,7 @@ import cash.p.terminal.ui.compose.components.subhead1_lucian
 import cash.p.terminal.ui.compose.components.subhead1_remus
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui.compose.hsRememberLazyListState
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.EtfPoint
@@ -139,14 +139,11 @@ fun EtfPage(
                     }
 
                     ViewState.Success -> {
-                        val listState = rememberSaveable(
+                        val listState = hsRememberLazyListState(
+                            2,
                             uiState.sortBy,
-                            uiState.timeDuration,
-                            saver = LazyListState.Saver
-                        ) {
-                            LazyListState()
-                        }
-
+                            uiState.timeDuration
+                        )
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             state = listState,
