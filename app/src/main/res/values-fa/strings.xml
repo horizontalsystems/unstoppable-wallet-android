@@ -109,16 +109,16 @@
     <string name="MarketPlatformCoins_PlatformEcosystem"> Ecosystem %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">نمودار</string>
-    <string name="MarketGlobalMetrics_Volume">۲۴ ساعته</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
+    <!-- ETF-->
     <!--Market Search-->
+    <string name="Market_Filter_RiskToTrade">پرمخاطره</string>
     <string name="Market_Filter_TimePeriod_1D">1Day</string>
     <string name="Market_Filter_TimePeriod_1W">1Week</string>
     <string name="Market_Filter_TimePeriod_2W">2Weeks</string>
     <string name="Market_Filter_TimePeriod_1M">1Month</string>
     <string name="Market_Filter_TimePeriod_6M">6Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1Year</string>
-    <string name="TimePeriod_24h">24 ساعت</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">Markets %s</string>
     <!--TVL Rank-->
@@ -322,6 +322,7 @@
     <string name="Approve_Error_AlreadyApproved">شما از قبل مبلغی را برای این مستمری در نظر گرفته اید</string>
     <string name="Approve_Spender">خرج کننده</string>
     <string name="Approve_YouApprove">شما تایید کردید</string>
+    <!--Swap Unlock Access-->
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">مستمری</string>
     <string name="SwapInfo_PriceImpactTitle">تأثیر قیمت</string>
@@ -439,7 +440,6 @@
     <string name="Appearance_Theme">موضوع</string>
     <string name="Appearance_LaunchScreen">صفحه راه اندازی</string>
     <string name="Appearance_AppIcon">نماد برنامه</string>
-    <string name="Appearance_BalanceConversion">تبدیل تعادل</string>
     <string name="BalanceViewType_CoinValue">ارزش سکه</string>
     <string name="BalanceViewType_FiatValue">ارزش فیات</string>
     <string name="SettingsAboutApp_Title">درباره برنامه</string>
@@ -668,7 +668,9 @@
     <string name="Coin_Analytics_Details">جزئیات</string>
     <string name="Coin_Analytics_Period_1h">۱ ساعت</string>
     <string name="Coin_Analytics_Period_1m">۱ ماه</string>
+    <string name="Coin_Analytics_Indicators_Risky">پرمخاطره</string>
     <string name="CoinAnalytics_CountItems">%d مورد</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">پرمخاطره</string>
     <string name="ActivateSubscription_Address">آدرس</string>
     <string name="Nfts_PriceType_Days_7">7 دی اوت</string>
     <string name="Nfts_PriceType_Days_30">30 دی اوت</string>

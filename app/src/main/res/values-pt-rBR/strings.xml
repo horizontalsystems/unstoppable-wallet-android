@@ -160,7 +160,6 @@
     <string name="Market_Title">Mercados</string>
     <string name="Market_Search">Buscar</string>
     <string name="Market_Search_Sections_RecentTitle">RECENTES</string>
-    <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
     <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
     <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
     <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
@@ -183,10 +182,31 @@
     <string name="Market_PoweredByDefiLlamaApi">Desenvolvido por DefiLlama API</string>
     <string name="Market_Tab_Overview">Visão Geral</string>
     <string name="Market_Tab_Posts">Notícias</string>
+    <string name="Market_Tab_Coins">Moedas</string>
+    <string name="Market_Tab_Platform">Plataformas</string>
+    <string name="Market_Tab_Pairs">Pares</string>
+    <string name="Market_Tab_Sectors">Setores</string>
     <string name="Market_Tab_Watchlist">Catálogo</string>
     <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
     <string name="Market_Category_TopCoins">Top Moedas</string>
     <string name="Market_Category_TopCoins_Description">Top moedas por classificação de capitalização de mercado</string>
+    <string name="Market_Signals">Sinais</string>
+    <string name="Market_Volume">Volume</string>
+    <string name="Market_MarketCap">Capitalização de mercado</string>
+    <string name="Market_TVL">TVL</string>
+    <string name="Market_Signal_Description">Os sinais abaixo são baseados nos indicadores técnicos de preço das Bandas de Bollinger e RSI ao longo dos últimos aproximadamente 30 dias. Esses sinais são algorítmicos e podem mudar com frequência.</string>
+    <string name="Market_Signal_StrongBuy_Description">Alta confiança em aumento de preço.</string>
+    <string name="Market_Signal_Buy_Description">Provável aumento de preço no futuro próximo.</string>
+    <string name="Market_Signal_Neutral_Descripion">Sem tendência clara, o mercado está em equilíbrio.</string>
+    <string name="Market_Signal_Sell_Description">Provável queda de preço no futuro próximo.</string>
+    <string name="Market_Signal_StrongSell_Description">Alta probabilidade de redução de preço.</string>
+    <string name="Market_Signal_Risky_Description">Nível de risco elevado, requer cuidado.</string>
+    <string name="Market_Signal_Warning">Sempre lembre-se de aplicar o gerenciamento de risco, e observe que isso não é um conselho financeiro.</string>
+    <string name="Market_Signal_TurnOn">Ligar</string>
+    <string name="Market_Top_100">Top 100</string>
+    <string name="Market_Top_200">Top 200</string>
+    <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_500">Top 500</string>
     <string name="TopPairs_Title">Principais Pares de Mercado</string>
     <string name="TopPairs_Description">Principais pares de negociação por volume em todas as bolsas</string>
     <!--Market Overview-->
@@ -202,11 +222,12 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Valor de mercado de todos procolos na cadeia %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Gráfico</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Valor Total de M.</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Dominação Bitcoin</string>
-    <string name="MarketGlobalMetrics_Volume">Volume em 24h</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Valor total de mercado</string>
+    <string name="MarketGlobalMetrics_BtcDominance">Dominação BTC</string>
+    <string name="MarketGlobalMetrics_Volume">Volume em 24 horas</string>
     <string name="MarketGlobalMetrics_DefiCap">Mercado de DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL no DeFi</string>
+    <string name="MarketGlobalMetrics_EtfInflow">Entrada de ETF</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">A mudança histórica na relação entre o capital de mercado do Bitcoin e o resto dos mercados de criptomoedas. \n\nNormalmente, quando o domínio do Bitcoin está tendendo à alta, o resto das tendências do mercado cripto para baixo e vice-versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">O volume de operação em 24h do mercado de cripto.</string>
@@ -217,6 +238,15 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">Todas</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">Esta moeda não é suportada ainda</string>
     <string name="MarketGlobalMetrics_NoCoin">Esse projeto não tem uma moeda</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Title">Total de Despesa líquida</string>
+    <string name="MarketEtf_Description">A entrada líquida de um ETF é igual a seus fluxos de caixa menos outflows.</string>
+    <string name="MarketEtf_HighestAssets">Ativos mais altos</string>
+    <string name="MarketEtf_LowestAssets">Menos Ativos</string>
+    <string name="MarketEtf_Inflow">Receita</string>
+    <string name="MarketEtf_Outflow">Despesa</string>
+    <string name="MarketEtf_Period_All">Todas</string>
+    <string name="MarketEtf_TotalNetAssets">Total de Ativos Líquidos</string>
     <!--Market Search-->
     <string name="EmptyResults">Nenhum resultado encontrado</string>
     <string name="Market_Filters">Filtros</string>
@@ -230,6 +260,8 @@
     <string name="Market_Filter_PricePeriod">Período de Preço</string>
     <string name="Market_Filter_TradingSignals">Sinais de negociação</string>
     <string name="Market_Filter_PriceChange">Mudança de Preço</string>
+    <string name="Market_PriceChange_24H">24 Horas</string>
+    <string name="Market_PriceChange_Utc">Meia-noite UTC</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">BTC superado</string>
     <string name="Market_Filter_OutperformedEth">ETH superado</string>
@@ -248,7 +280,8 @@
     <string name="Market_Filter_Neutral">Neutra</string>
     <string name="Market_Filter_StrongSell">Venda forte</string>
     <string name="Market_Filter_Sell">Irá vender</string>
-    <string name="Market_Filter_RiskToTrade">Risco de Negociação</string>
+    <string name="Market_Filter_RiskToTrade">Arriscado</string>
+    <string name="Market_Filter_Gainers">Ganhadores</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
@@ -283,9 +316,14 @@
     <string name="Market_Filter_TimePeriod_1W">1 Semana</string>
     <string name="Market_Filter_TimePeriod_2W">2 Semanas</string>
     <string name="Market_Filter_TimePeriod_1M">1 Meses</string>
+    <string name="Market_Filter_TimePeriod_3M">3 Meses</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Ano</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="Market_Sorting_Manual">Manual</string>
+    <string name="Market_Sorting_Gainers">Ganhadores</string>
+    <string name="Market_Sorting_Losers">Perdedores</string>
+    <string name="Market_Sorting_HighestCap">Maior capitalização</string>
+    <string name="Market_Sorting_LowestCap">Menor capitalização</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
@@ -454,7 +492,6 @@
     <string name="FeeInfo_TronFee_Title">Taxa</string>
     <string name="FeeInfo_TronFee_Description">O custo estimado de envio de determinada transação na rede. (Sem excluir Eneregy, Bandwidth e Taxa de Ativação)</string>
     <string name="FeeInfo_TronActivationFee_Title">Taxa de ativação</string>
-    <string name="FeeInfo_TronActivationFee_Description">Transferir tokens TRX ou TRC-10 para um endereço de conta inativo ativará a conta.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Recursos consumidos</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">A bandwidth é a unidade que mede o tamanho dos bytes de transação armazenados no banco de dados blockchain. Quanto maior a transação, mais recursos de largura de banda serão consumidos.\n\nEnergy é a unidade que mede a quantidade de computação necessária pela máquina virtual TRON para realizar operações específicas na rede TRON.\n\nComo as transações de contrato inteligente exigem recursos de computação para executar, cada transação de contrato inteligente requer o pagamento da taxa de energy.</string>
     <!--Tron-->
@@ -464,6 +501,8 @@
     <string name="Tron_AddressNotActive_Info">Contas recém-criadas no blockchain TRON estão inativas e não podem ser consultadas ou exploradas. Elas precisam ser ativadas.\n\nPara ativar uma nova conta na cadeia Tron, é necessário transferir tokens TRX ou TRC-10 para um endereço de conta inativo, juntamente com uma taxa de ativação de 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">Não é possível transferir TRX para si mesmo</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Não é possível transferir 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">Conta Não Ativa</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Novas carteiras TRON requerem um depósito mínimo de 1 TRX para se tornarem ativas. Carteiras inativas podem armazenar e receber tokens, mas não atualizarão os saldos até serem ativadas.</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Solicitar</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -631,6 +670,11 @@
     <string name="Approve_Spender">Gastador</string>
     <string name="Approve_YouApprove">Você concorda</string>
     <string name="Approve_YouRevoke">Você revoga</string>
+    <!--Swap Unlock Access-->
+    <string name="Swap_Unlock_PageTitle">Desbloquear Acesso</string>
+    <string name="Swap_Unlock_Subtitle">Permitir acesso ao seguinte valor</string>
+    <string name="Swap_Unlock_Info">Conceda permissão a um contrato inteligente para negociar tokens em seu nome, especificando a quantidade permitida. Isso não afeta seu saldo, mas incorre em uma pequena taxa para aprovação.\n\nPré-aprovar uma quantidade maior para negociações futuras é mais econômico em comparação com aprovações sob demanda.</string>
+    <string name="Swap_Unlock_Unlimited">Ilimitado</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Preço</string>
     <string name="SwapInfo_AllowanceDescription">O montante que uma exchange pode gastar em nome do usuário na execução de trocas simbólicas. É necessária uma margem suficiente para que uma transação de troca efetiva possa ocorrer.</string>
@@ -781,6 +825,8 @@
     <string name="Settings_Contact_ViaTelegram">por Telegram</string>
     <string name="Settings_Contact_ViaEmail">por e-mail</string>
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
+    <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
+    <string name="Settings_JoinUnstoppables_Description">Aprenda e domine cripto através de vídeos exclusivos. Conheça-nos informalmente. Seja o primeiro a ver as coisas em que trabalhamos.</string>
     <string name="Settings_PersonalSupport">Suporte Pessoal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Digite seu nome de conta Telegram para começar um chat de suporte pessoal com a nossa equipe. Entraremos em contato com você e começaremos a trabalhar em seu problema assim que virmos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Você já pediu um chat privado, encontre-o no Telegram</string>
@@ -811,17 +857,21 @@
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
     <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
-    <string name="Appearance_BalanceConversion">CONVERSÃO DE SALDO</string>
-    <string name="Appearance_BalanceValue">VALOR DE SALDO</string>
+    <string name="Appearance_BalanceConversion">Conversão de saldo</string>
+    <string name="Appearance_BalanceValue">Valor Patrimonial</string>
     <string name="Appearance_Warning_CloseApplication">Alterar o ícone fechará o aplicativo</string>
-    <string name="Appearance_MarketsTab">Guia de Mercados</string>
+    <string name="Appearance_HideMarketsTab">Esconder Mercados</string>
+    <string name="Appearance_HideBalanceTabButtons">Ocultar Botões</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">Esta configuração oculta os botões Enviar, Receber e Trocar na guia de saldo.</string>
     <string name="Appearance_BalanceAutoHide">Ocultar Saldo</string>
     <string name="Appearance_BalanceAutoHide_Description">Oculta automaticamente o saldo cada vez que o aplicativo é aberto, independentemente das preferências anteriores.</string>
+    <string name="Appearance_PriceChangeInterval">Mudança de Preço %</string>
     <string name="BalanceViewType_CoinValue">Valor da Moeda</string>
     <string name="BalanceViewType_FiatValue">Valor Fiat</string>
     <string name="SettingsAboutApp_Title">Sobre o App</string>
     <string name="SettingsAboutApp_Site">Site</string>
     <string name="SettingsAboutApp_WhatsNew">O que há de novo</string>
+    <string name="SettingsAboutApp_AppVersion">Versão da Aplicação</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Configurações da Blockchain</string>
     <!-- Backup Manager -->
@@ -843,11 +893,10 @@
     <string name="BackupManager_AppSettingsTitle">Configurações do Aplicativo</string>
     <string name="BackupManager_AppSettingsDescription">Linguagem, Moeda, Aparência …</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">A P.CASH não coleta dados nem usa ferramentas analíticas que possam expor dados sobre seus usuários. A carteira foi projetada para garantir um alto nível de privacidade para seus usuários.</string>
-    <string name="Privacy_BulletedText1">Os dados do usuário sempre permanecem em seu dispositivo.</string>
-    <string name="Privacy_BulletedText2">A carteira não coleta nenhum dado sobre os usuários.</string>
-    <string name="Privacy_BulletedText3">A carteira não coleta nenhum dado sobre os usuários.</string>
-    <string name="Privacy_BulletedText4">Não há nenhuma conta de usuário ou banco de dados mantendo os dados do usuário em algum lugar.</string>
+    <string name="Privacy_Information">P.CASH não coleta dados pessoais que exponham suas informações privadas, como saldos de moedas ou endereços. Embora coletemos algumas estatísticas de uso da interface do usuário, é exclusivamente para entender nossa base de usuários e tendências de uso do aplicativo. Isso pode ser desativado se você desejar.</string>
+    <string name="Privacy_BulletedText2">Não há contas de usuário ou bancos de dados armazenando dados do usuário.</string>
+    <string name="Privacy_BulletedText3">Se permitido, a carteira compartilhará os hábitos de uso do aplicativo com a equipe do P.CASH. Isso é para entender quais recursos estão sendo usados (ou não) pelos nossos usuários. Sendo um aplicativo focado em privacidade, precisamos de alguma maneira de avaliar nossos esforços e sem isso não temos ideia se os recursos que construímos estão sendo utilizados ou não.</string>
+    <string name="ShareUiData">Compartilhar Dados de UI</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
@@ -1199,7 +1248,7 @@
     <string name="Coin_Tab_Details">Análises</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">HOJE</string>
-    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Day">1D</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
@@ -1363,7 +1412,7 @@
     <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
     <string name="CoinAnalytics_TransactionCountRank">Ranking de Contador Tx</string>
     <string name="CoinAnalytics_TransactionCountRank_Description">Tokens classificados por número de transações em uma blockchain.</string>
-    <string name="CoinAnalytics_Holders">Holders</string>
+    <string name="CoinAnalytics_Holders">Detentores</string>
     <string name="CoinAnalytics_ProjectTvl">Projeto TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projeto TVB (Total de Valor Bloqueado)</string>
     <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / TVB</string>
@@ -1416,18 +1465,40 @@
     <string name="CoinAnalytics_SmartContractAnalysis">Análise de Contrato Inteligente</string>
     <string name="CoinAnalytics_HighRiskItems">Itens de Alto Risco</string>
     <string name="CoinAnalytics_MediumRiskItems">Itens de Risco Médio</string>
+    <string name="Coin_Analytics_Indicators_Risky">Arriscado</string>
     <string name="CoinAnalytics_AttentionRequired">Atenção Requerida</string>
     <string name="CoinAnalytics_PoweredByDeFi">Desenvolvido por De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Itens</string>
     <string name="TechnicalAdvice_Title">Indicadores Técnicos</string>
-    <string name="TechnicalAdvice_IndicatorsDisclaimer">Always remember to apply risk management, and note that this is not financial advice.</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">Sempre lembre-se de aplicar o gerenciamento de risco, e observe que isso não é um conselho financeiro.</string>
     <string name="TechnicalAdvice_OverBought">sobrecomprado</string>
     <string name="TechnicalAdvice_OverSold">sobrevendido</string>
-    <string name="TechnicalAdvice_Down">down</string>
-    <string name="TechnicalAdvice_Up">up</string>
-    <string name="TechnicalAdvice_OverMain">The actions with the asset are risky.</string>
-    <string name="TechnicalAdvice_OverIndicators_SignalDate">Starting from the %s</string>
+    <string name="TechnicalAdvice_Down">baixo</string>
+    <string name="TechnicalAdvice_Up">alto</string>
+    <string name="TechnicalAdvice_OverMain">As ações com o ativo são arriscadas.</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">Começando a partir do %s</string>
+    <string name="TechnicalAdvice_OverIndicators">O ativo está fora do canal das Bandas de Bollinger e %s.</string>
+    <string name="TechnicalAdvice_OverRsi"> RSI = %1$s. Isso também indica que o ativo está %2$s.</string>
+    <string name="TechnicalAdvice_OverAdvice"> Pode haver um forte movimento %s, então é melhor esperar que o preço do ativo retorne ao canal.</string>
+    <string name="TechnicalAdvice_StrongIndicators">o ativo estava %s, mas agora retornou ao canal das Bandas de Bollinger. Isso indica uma possível reversão de tendência.</string>
+    <string name="TechnicalAdvice_StrongRsi">Enquanto isso, o RSI está %1$s, o que ainda indica que está %2$s.</string>
+    <string name="TechnicalAdvice_StrongAdvice">Este pode ser um sinal muito forte para entrar no mercado. Tenha em mente que pode haver várias tentativas de movimento em direção a %s após o retorno ao canal, então não se esqueça do gerenciamento de risco.</string>
+    <string name="TechnicalAdvice_StableRsi">Enquanto isso, o RSI está %s, o que também indica uma reversão de tendência (o RSI cruzou o limite em 70\%%).</string>
+    <string name="TechnicalAdvice_StableAdvice">O preço está retornando aos níveis neutros; no entanto, ainda há potencial para movimentos ascendentes. Tenha em mente que o RSI = 50 e o meio das Bandas de Bollinger são resistências fortes e possíveis pontos de reversão de tendência. Não se esqueça do gerenciamento de risco.</string>
+    <string name="TechnicalAdvice_NeutralRsi">RSI = $s também confirma a ausência de uma tendência forte.</string>
+    <string name="TechnicalAdvice_NeutralIndicators">O ativo estava na zona de sobrecompra/sobrevenda, mas no momento o preço retornou ao canal das Bandas de Bollinger na zona neutra. O RSI está em %s, o que também confirma a ausência de uma tendência forte, então, no geral, o preço do ativo está se movendo em direção à média e movimentos adicionais são possíveis em qualquer direção.</string>
+    <string name="TechnicalAdvice_NeutralAdvice">Em geral, o preço do ativo está se movendo em direção à média e movimentos adicionais são possíveis em qualquer direção.</string>
+    <string name="TechnicalAdvice_OtherTitle">Por favor, observe:</string>
+    <string name="TechnicalAdvice_EmaAbove">acima</string>
+    <string name="TechnicalAdvice_EmaBelow">abaixo</string>
+    <string name="TechnicalAdvice_EmaGrowth">crescimento</string>
+    <string name="TechnicalAdvice_EmaDecrease">decrescente</string>
+    <string name="TechnicalAdvice_EmaAdvice">EMA 200. Determina o sentimento geral e a tendência. O preço diário do ativo está localizado %1$s o EMA (%2$s). Isso significa que globalmente o ativo está configurado para %3$s.</string>
+    <string name="TechnicalAdvice_MacdPositive">acima</string>
+    <string name="TechnicalAdvice_MacdNegative">abaixo</string>
+    <string name="TechnicalAdvice_MacdAdvice">MACD. Avalia a força da tendência considerando a mudança média de preço. O valor diário do histograma é %1$s (%2$s). O preço do ativo globalmente pode se mover %3$s.</string>
     <string name="TechnicalAdvice_InfoTitle">Indicadores Técnicos</string>
+    <string name="TechnicalAdvice_InfoDescription">Nós utilizamos a estratégia Bollinger Bands + RSI para determinar sinais de negociação. Todas as análises são baseadas em candlesticks diários e fornecem orientação para um prazo moderadamente longo. A essência da estratégia é que o preço do ativo deve atingir um extremo, saindo do canal das Bandas de Bollinger, e o RSI deve estar na zona de sobrecompra/sobrevenda. Após o preço retornar ao canal, há uma alta probabilidade de o preço retornar aos valores médios ou tentar romper o canal pelo outro lado. Note que a estratégia pode fornecer vários sinais falsos durante movimentos fortes do mercado antes de um sinal correto aparecer.\n\nPor favor, lembre-se de que é muito importante aplicar gerenciamento de risco à negociação e lembrar-se de cortar as perdas se a situação de mercado mudar!</string>
     <string name="TechnicalAdvice_ShowDetails">Mostrar detalhes</string>
     <string name="TechnicalAdvice_HideDetails">Ocultar detalhes</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Compra forte</string>
@@ -1435,6 +1506,7 @@
     <string name="TechnicalAdvice_Indicators_Neutral">Neutra</string>
     <string name="TechnicalAdvice_Indicators_Sell">Irá vender</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Venda forte</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Arriscado</string>
     <string name="Detectors_TokenDetectors">Detectores de Token</string>
     <string name="Detectors_GeneralDetectors">Detectores Gerais</string>
     <string name="Detectors_IssuesCount">Problemas %d</string>
@@ -1515,8 +1587,8 @@
     <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Desconhecido</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Maiores Altas</string>
-    <string name="RateList_TopLosers">Maiores Quedas</string>
+    <string name="RateList_TopGainers">Ganhadores</string>
+    <string name="RateList_TopLosers">Perdedores</string>
     <string name="RateList_Posts">Notícias</string>
     <string name="Market_DaysAgo">%dd atrás</string>
     <string name="Market_HoursAgo">%dh atrás</string>
