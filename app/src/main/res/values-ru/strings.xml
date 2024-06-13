@@ -255,7 +255,7 @@
     <string name="Market_Filter_Neutral">Нейтрально</string>
     <string name="Market_Filter_StrongSell">Активно продавать</string>
     <string name="Market_Filter_Sell">Продавать</string>
-    <string name="Market_Filter_RiskToTrade">Риск для торговли</string>
+    <string name="Market_Filter_RiskToTrade">Риски</string>
     <string name="Market_Filter_Top_100">Топ 100</string>
     <string name="Market_Filter_Top_250">Топ 250</string>
     <string name="Market_Filter_Top_500">Топ 500</string>
@@ -788,8 +788,7 @@
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
-    <string name="Settings_JoinUnstoppables">Присоединиться к Unstoppables</string>
-    <string name="Settings_JoinUnstoppables_Description">Будьте в курсе событий Unstoppable. Будьте первыми, кто узнает о новых возможностях, о проблемах пользователей и о том над чем мы работаем!</string>
+    <string name="Settings_JoinUnstoppables">Продолжить</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
@@ -1439,12 +1438,12 @@
     <string name="TechnicalAdvice_InfoDescription">Мы используем стратегию Bollinger Bands + RSI для определения сигналов торговли. Все расчеты основаны на ежедневных свечах и предоставляют рекомендации на среднесрочный период. Суть стратегии заключается в том, что цена актива должна достичь экстремума, выбиваясь из канала Bollinger Bands, а RSI должен находиться в зоне перекупленности/перепроданности. После того как цена возвращается в канал, существует высокая вероятность того, что цена вернется к средним значениям или попытается пробить канал с другой стороны. Обратите внимание, что стратегия может давать несколько ложных сигналов во время сильных рыночных движений, прежде чем появится правильный сигнал.\n\nПожалуйста, помните, что очень важно применять управление рисками при торговле и помнить о сокращении убытков, если ситуация на рынке изменится!</string>
     <string name="TechnicalAdvice_ShowDetails">Показать детали</string>
     <string name="TechnicalAdvice_HideDetails">Скрыть детали</string>
-    <string name="TechnicalAdvice_Indicators_StrongBuy">Сигнал на покупку</string>
-    <string name="TechnicalAdvice_Indicators_Buy">Хорошее время для покупки</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Активно покупать</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Покупать</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Нейтрально</string>
-    <string name="TechnicalAdvice_Indicators_Sell">Хорошее время для продажи</string>
-    <string name="TechnicalAdvice_Indicators_StrongSell">Сигнал на продажу</string>
-    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Очень рискованная торговля</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Продавать</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Активно продавать</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Риски</string>
     <string name="Detectors_TokenDetectors">Детекторы токенов</string>
     <string name="Detectors_GeneralDetectors">Общие детекторы</string>
     <string name="Detectors_IssuesCount">Проблемы %d</string>
