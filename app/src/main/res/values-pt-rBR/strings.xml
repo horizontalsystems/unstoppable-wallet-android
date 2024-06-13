@@ -245,7 +245,7 @@
     <string name="Market_Filter_Neutral">Neutra</string>
     <string name="Market_Filter_StrongSell">Venda forte</string>
     <string name="Market_Filter_Sell">Irá vender</string>
-    <string name="Market_Filter_RiskToTrade">Risco de Negociação</string>
+    <string name="Market_Filter_RiskToTrade">Arriscado</string>
     <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
     <string name="Market_Filter_ShowResults_Counter">Mostrar Resultados: %d</string>
     <string name="Market_Filter_Range_100M_1B">100M — 1B</string>
@@ -751,6 +751,7 @@
     <string name="Settings_Contact_ViaTelegram">por Telegram</string>
     <string name="Settings_Contact_ViaEmail">por e-mail</string>
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
+    <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
     <string name="Settings_PersonalSupport">Suporte Pessoal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Digite seu nome de conta Telegram para começar um chat de suporte pessoal com a nossa equipe. Entraremos em contato com você e começaremos a trabalhar em seu problema assim que virmos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Você já pediu um chat privado, encontre-o no Telegram</string>
@@ -1367,6 +1368,7 @@
     <string name="TechnicalAdvice_Indicators_Neutral">Neutra</string>
     <string name="TechnicalAdvice_Indicators_Sell">Irá vender</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Venda forte</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Arriscado</string>
     <string name="Detectors_TokenDetectors">Detectores de Token</string>
     <string name="Detectors_GeneralDetectors">Detectores Gerais</string>
     <string name="Detectors_IssuesCount">Problemas %d</string>
