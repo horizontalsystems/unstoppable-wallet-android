@@ -13,13 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -59,6 +57,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinFirstRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinSecondRow
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
+import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseComposeFragment() {
@@ -128,13 +127,11 @@ class TvlFragment : BaseComposeFragment() {
                         }
 
                         ViewState.Success -> {
-                            val listState = rememberSaveable(
+                            val listState = hsRememberLazyListState(
+                                2,
                                 tvlData?.chainSelect?.selected,
-                                tvlData?.sortDescending,
-                                saver = LazyListState.Saver
-                            ) {
-                                LazyListState()
-                            }
+                                tvlData?.sortDescending
+                            )
 
                             LazyColumn(
                                 state = listState,

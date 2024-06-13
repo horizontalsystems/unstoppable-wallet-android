@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +43,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketCoinClear
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.hsRememberLazyListState
 
 class MetricsPageFragment : BaseComposeFragment() {
 
@@ -110,13 +109,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                         }
 
                         ViewState.Success -> {
-                            val listState = rememberSaveable(
-                                uiState.sortDescending,
-                                saver = LazyListState.Saver
-                            ) {
-                                LazyListState()
-                            }
-
+                            val listState = hsRememberLazyListState(2, uiState.sortDescending)
                             LazyColumn(
                                 modifier = Modifier.fillMaxSize(),
                                 state = listState,
