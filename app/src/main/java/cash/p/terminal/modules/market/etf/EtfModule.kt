@@ -12,6 +12,7 @@ import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 
 object EtfModule {
@@ -31,6 +32,11 @@ object EtfModule {
         val value: String?,
         val subvalue: MarketDataValue?,
         val rank: String?,
+    )
+
+    data class RankedEtf(
+        val etf: Etf,
+        val rank: Int
     )
 
     @Immutable
