@@ -232,7 +232,7 @@
     <string name="Market_Filter_Neutral">Tarafsız</string>
     <string name="Market_Filter_StrongSell">Kuvvetli Satış</string>
     <string name="Market_Filter_Sell">Sat</string>
-    <string name="Market_Filter_RiskToTrade">Ticaret Riski</string>
+    <string name="Market_Filter_RiskToTrade">Riskli</string>
     <string name="Market_Filter_ShowResults">Sonuçları Göster</string>
     <string name="Market_Filter_ShowResults_Counter">Sonuçları Göster: %d</string>
     <string name="Market_Filter_TimePeriod_1D">1 Gün</string>
@@ -1315,7 +1315,12 @@
     <string name="CoinAnalytics_CountItems">%d adet</string>
     <string name="TechnicalAdvice_Title">Teknik Göstergeleri</string>
     <string name="TechnicalAdvice_InfoTitle">Teknik Göstergeleri</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Kuvvetli Al</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Al</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Tarafsız</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Sat</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Kuvvetli Satış</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Riskli</string>
     <string name="ActivateSubscription_Wallet">Cüzdanı</string>
     <string name="ActivateSubscription_Address">Adres</string>
     <string name="ActivateSubscription_MessageToSign">İmza için mesaj</string>
