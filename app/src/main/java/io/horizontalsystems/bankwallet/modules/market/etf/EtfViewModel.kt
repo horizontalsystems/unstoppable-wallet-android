@@ -11,6 +11,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.EtfViewItem
+import io.horizontalsystems.bankwallet.modules.market.etf.EtfModule.RankedEtf
 import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 import io.horizontalsystems.marketkit.models.HsTimePeriod
@@ -45,7 +46,7 @@ class EtfViewModel(
     private var marketDataJob: Job? = null
     private var sortBy: EtfModule.SortBy = sortByOptions.first()
     private var timeDuration: TimeDuration = timeDurations.first()
-    private var cachedEtfs: List<Etf> = listOf()
+    private var cachedEtfs: List<RankedEtf> = listOf()
     private var chartDataLoading = true
     private var etfPoints = listOf<EtfPoint>()
 
@@ -88,6 +89,8 @@ class EtfViewModel(
         marketDataJob = viewModelScope.launch(Dispatchers.IO) {
             try {
                 cachedEtfs = marketKit.etfs(currencyManager.baseCurrency.code).await()
+                    .sortedByDescending { it.totalAssets }
+                    .mapIndexed{ index, etf -> RankedEtf(etf, index + 1) }
                 updateViewItems()
 
                 viewState = ViewState.Success
@@ -102,36 +105,36 @@ class EtfViewModel(
 
     private fun updateViewItems() {
         val sorted = when (sortBy) {
-            EtfModule.SortBy.HighestAssets -> cachedEtfs.sortedByDescending { it.totalAssets }
-            EtfModule.SortBy.LowestAssets -> cachedEtfs.sortedBy { it.totalAssets }
+            EtfModule.SortBy.HighestAssets -> cachedEtfs.sortedByDescending { it.etf.totalAssets }
+            EtfModule.SortBy.LowestAssets -> cachedEtfs.sortedBy { it.etf.totalAssets }
             EtfModule.SortBy.Inflow -> cachedEtfs.sortedByDescending {
-                it.priceChangeValue(
+                it.etf.priceChangeValue(
                     timeDuration
                 )
             }
 
-            EtfModule.SortBy.Outflow -> cachedEtfs.sortedBy { it.priceChangeValue(timeDuration) }
+            EtfModule.SortBy.Outflow -> cachedEtfs.sortedBy { it.etf.priceChangeValue(timeDuration) }
         }
         viewItems = sorted.map { etf ->
             etfViewItem(etf, timeDuration)
         }
     }
 
-    private fun etfViewItem(etf: Etf, timeDuration: TimeDuration) = EtfViewItem(
-        title = etf.ticker,
-        iconUrl = "https://cdn.blocksdecoded.com/etf-tresuries/${etf.ticker}@3x.png",
-        subtitle = etf.name,
-        value = etf.totalAssets?.let {
+    private fun etfViewItem(rankedEtf: RankedEtf, timeDuration: TimeDuration) = EtfViewItem(
+        title = rankedEtf.etf.ticker,
+        iconUrl = "https://cdn.blocksdecoded.com/etf-tresuries/${rankedEtf.etf.ticker}@3x.png",
+        subtitle = rankedEtf.etf.name,
+        value = rankedEtf.etf.totalAssets?.let {
             App.numberFormatter.formatFiatShort(it, currencyManager.baseCurrency.symbol, 0)
         },
-        subvalue = etf.priceChangeValue(timeDuration)?.let {
+        subvalue = rankedEtf.etf.priceChangeValue(timeDuration)?.let {
             MarketDataValue.DiffNew(
                 Value.Currency(
                     CurrencyValue(currencyManager.baseCurrency, it)
                 )
             )
         },
-        rank = null
+        rank = rankedEtf.rank.toString()
     )
 
     private fun refreshWithMinLoadingSpinnerPeriod() {

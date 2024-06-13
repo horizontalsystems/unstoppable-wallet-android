@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.modules.market.MarketDataValue
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
+import io.horizontalsystems.marketkit.models.Etf
 import io.horizontalsystems.marketkit.models.EtfPoint
 
 object EtfModule {
@@ -31,6 +32,11 @@ object EtfModule {
         val value: String?,
         val subvalue: MarketDataValue?,
         val rank: String?,
+    )
+
+    data class RankedEtf(
+        val etf: Etf,
+        val rank: Int
     )
 
     @Immutable
