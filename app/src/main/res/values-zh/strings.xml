@@ -280,7 +280,7 @@
     <string name="Market_Filter_Neutral">中性</string>
     <string name="Market_Filter_StrongSell">强烈建议卖出</string>
     <string name="Market_Filter_Sell">出售</string>
-    <string name="Market_Filter_RiskToTrade">交易风险</string>
+    <string name="Market_Filter_RiskToTrade">有风险</string>
     <string name="Market_Filter_Top_100">前100名</string>
     <string name="Market_Filter_Top_250">前250名</string>
     <string name="Market_Filter_Top_500">前500名</string>
@@ -823,6 +823,7 @@
     <string name="Settings_Contact_ViaTelegram">通过 Telegram</string>
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
     <string name="Settings_PersonalSupport">个人支持</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>
@@ -1485,7 +1486,11 @@
     <string name="TechnicalAdvice_ShowDetails">显示详细信息</string>
     <string name="TechnicalAdvice_HideDetails">隐藏细节</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">强烈建议买入</string>
+    <string name="TechnicalAdvice_Indicators_Buy">购买</string>
     <string name="TechnicalAdvice_Indicators_Neutral">中性</string>
+    <string name="TechnicalAdvice_Indicators_Sell">出售</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">强烈建议卖出</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">有风险</string>
     <string name="Detectors_TokenDetectors">代币检测器</string>
     <string name="Detectors_GeneralDetectors">通用检测器</string>
     <string name="Detectors_IssuesCount">发布 %d</string>
