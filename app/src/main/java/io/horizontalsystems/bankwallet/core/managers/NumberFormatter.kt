@@ -8,7 +8,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
 import java.text.NumberFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
 class NumberFormatter(
@@ -115,7 +115,8 @@ class NumberFormatter(
         when (value) {
             is Value.Currency -> {
                 val currencyValue = value.currencyValue
-                formatFiatShort(currencyValue.value, currencyValue.currency.symbol, currencyValue.currency.decimal)
+                val formatted = formatFiatShort(currencyValue.value.abs(), currencyValue.currency.symbol, currencyValue.currency.decimal)
+                sign(value.currencyValue.value) + formatted
             }
             is Value.Percent -> {
                 format(value.percent.abs(), 0, 2, sign(value.percent), "%")

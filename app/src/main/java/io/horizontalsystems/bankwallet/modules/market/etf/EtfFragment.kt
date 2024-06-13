@@ -285,7 +285,12 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
     }
 
     val dailyInflowStr = dailyInflow?.let {
-        App.numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
+        val sign = when {
+            it == BigDecimal.ZERO -> ""
+            it < BigDecimal.ZERO -> "-"
+            else -> "+"
+        }
+        sign + App.numberFormatter.formatFiatShort(it.abs(), currency.symbol, currency.decimal)
     }
     val dailyInflowPositive = dailyInflow != null && dailyInflow > BigDecimal.ZERO
 
