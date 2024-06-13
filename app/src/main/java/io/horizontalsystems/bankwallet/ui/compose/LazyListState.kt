@@ -1,7 +1,12 @@
 package io.horizontalsystems.bankwallet.ui.compose
 
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.runtime.*
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 
 @Composable
 fun LazyListState.OnBottomReached(
@@ -28,4 +33,16 @@ fun LazyListState.OnBottomReached(
         snapshotFlow { shouldLoadMore.value }
             .collect { if (it) onLoadMore() }
     }
+}
+
+@Composable
+fun hsRememberLazyListState(i: Int, vararg keys: Any?): LazyListState {
+    val listState = rememberLazyListState()
+    LaunchedEffect(keys = keys) {
+        if (listState.firstVisibleItemIndex >= i) {
+            listState.scrollToItem(i)
+        }
+    }
+
+    return listState
 }
