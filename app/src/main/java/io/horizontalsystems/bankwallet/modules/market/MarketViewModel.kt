@@ -95,8 +95,8 @@ class MarketViewModel(
                 globalMarket.btcDominance?.let {
                     App.numberFormatter.format(it, 0, 2, suffix = "%")
                 } ?: "-",
-                globalMarket.btcDominance?.let { getDiff(it) } ?: "----",
-                globalMarket.btcDominance?.let { it > BigDecimal.ZERO } ?: false,
+                globalMarket.btcDominanceChange?.let { getDiff(it) } ?: "----",
+                globalMarket.btcDominanceChange?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.TotalMarketCap
             ),
             MarketOverviewViewItem(
@@ -105,7 +105,7 @@ class MarketViewModel(
                     ?: "-",
                 globalMarket.etfDailyInflow?.let {
                     val sign = if (it >= BigDecimal.ZERO) "+" else "-"
-                    "$sign${formatFiatShortened(it, baseCurrency.symbol)}"
+                    "$sign${formatFiatShortened(it.abs(), baseCurrency.symbol)}"
                 } ?: "----",
                 globalMarket.etfDailyInflow?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.Etf
