@@ -184,10 +184,31 @@
     <string name="Market_PoweredByDefiLlamaApi">Powered By DefiLlama API</string>
     <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
+    <string name="Market_Tab_Coins">Coins</string>
+    <string name="Market_Tab_Platform">Platforms</string>
+    <string name="Market_Tab_Pairs">Pairs</string>
+    <string name="Market_Tab_Sectors">Sectors</string>
     <string name="Market_Tab_Watchlist">Merkliste</string>
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
     <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
+    <string name="Market_Signals">Signals</string>
+    <string name="Market_Volume">Volume</string>
+    <string name="Market_MarketCap">Market Cap</string>
+    <string name="Market_TVL">TVL</string>
+    <string name="Market_Signal_Description">Below signals are based on the Bollinger Bands and RSI technical price indicators over approx. the last 30 days. These signals are algorithmic and can change frequently.</string>
+    <string name="Market_Signal_StrongBuy_Description">High confidence in price increase.</string>
+    <string name="Market_Signal_Buy_Description">Likely price increase in near future.</string>
+    <string name="Market_Signal_Neutral_Descripion">No clear trend, market is in equilibrium.</string>
+    <string name="Market_Signal_Sell_Description">Likely price decrease in near future.</string>
+    <string name="Market_Signal_StrongSell_Description">High probability of price decrease.</string>
+    <string name="Market_Signal_Risky_Description">Elevated risk level, requires caution.</string>
+    <string name="Market_Signal_Warning">Always remember to apply risk management, and note that this is not financial advice.</string>
+    <string name="Market_Signal_TurnOn">Turn on</string>
+    <string name="Market_Top_100">Top 100</string>
+    <string name="Market_Top_200">Top 200</string>
+    <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_500">Top 500</string>
     <string name="TopPairs_Title">Top Market Pairs</string>
     <string name="TopPairs_Description">Top trading pairs by volume in every exchanges</string>
     <!--Market Overview-->
@@ -203,11 +224,12 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Chart</string>
-    <string name="MarketGlobalMetrics_TotalMarketCap">Total M.Cap</string>
-    <string name="MarketGlobalMetrics_BtcDominance">Bitcoin-Dominanz</string>
-    <string name="MarketGlobalMetrics_Volume">24h Volume</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
+    <string name="MarketGlobalMetrics_BtcDominance">BTC Dominance</string>
+    <string name="MarketGlobalMetrics_Volume">24h Vol.</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF Inflow</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
@@ -218,6 +240,15 @@
     <string name="MarketGlobalMetrics_ChainSelectorAll">Alle</string>
     <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
+    <!-- ETF-->
+    <string name="MarketEtf_Title">Total Net Inflow</string>
+    <string name="MarketEtf_Description">The net inflow of an ETF equals its cash inflows minus outflows.</string>
+    <string name="MarketEtf_HighestAssets">Highest Assets</string>
+    <string name="MarketEtf_LowestAssets">Lowest Assets</string>
+    <string name="MarketEtf_Inflow">Inflow</string>
+    <string name="MarketEtf_Outflow">Outflow</string>
+    <string name="MarketEtf_Period_All">All</string>
+    <string name="MarketEtf_TotalNetAssets">Total Net Assets</string>
     <!--Market Search-->
     <string name="EmptyResults">No results found</string>
     <string name="Market_Filters">Filter</string>
@@ -231,6 +262,8 @@
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_TradingSignals">Trading Signals</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_PriceChange_24H">24 Hours</string>
+    <string name="Market_PriceChange_Utc">Midnight UTC</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">Übertraf BTC</string>
     <string name="Market_Filter_OutperformedEth">Übertraf ETH</string>
@@ -249,7 +282,8 @@
     <string name="Market_Filter_Neutral">Neutral</string>
     <string name="Market_Filter_StrongSell">Strong Sell</string>
     <string name="Market_Filter_Sell">Sell</string>
-    <string name="Market_Filter_RiskToTrade">Risk to Trade</string>
+    <string name="Market_Filter_RiskToTrade">Risky</string>
+    <string name="Market_Filter_Gainers">Gainers</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
@@ -284,9 +318,14 @@
     <string name="Market_Filter_TimePeriod_1W">1 Week</string>
     <string name="Market_Filter_TimePeriod_2W">2 Weeks</string>
     <string name="Market_Filter_TimePeriod_1M">1 Month</string>
+    <string name="Market_Filter_TimePeriod_3M">3 Months</string>
     <string name="Market_Filter_TimePeriod_6M">6 Months</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Year</string>
-    <string name="TimePeriod_24h">24h</string>
+    <string name="Market_Sorting_Manual">Manual</string>
+    <string name="Market_Sorting_Gainers">Gainers</string>
+    <string name="Market_Sorting_Losers">Losers</string>
+    <string name="Market_Sorting_HighestCap">Highest Cap</string>
+    <string name="Market_Sorting_LowestCap">Lowest Cap</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
@@ -305,8 +344,6 @@
     <string name="Balance_SearchingTransactions">Transaktionen werden gesucht…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Synchronisiere... %s%%</string>
-    <string name="Balance_AddCoins">Coins hinzufügen</string>
-    <string name="Balance_AddCoin">Coin hinzufügen</string>
     <string name="Balance_CoinDisabled">Deaktivierte Münze %s</string>
     <string name="Balance_Sort_Balance">Guthaben</string>
     <string name="Balance_Sort_PopupTitle">Sortieren nach</string>
@@ -315,7 +352,6 @@
     <string name="Balance_Hidden">verborgen</string>
     <string name="Balance_DownloadingBlocks">Blöcke herunterladen</string>
     <string name="Balance_ScanningBlocks">Scanne Blöcke</string>
-    <string name="Balance_Backup_Alert">Sie müssen ein Backup des %s Wallet machen, bevor Sie %s erhalten können.</string>
     <string name="Balance_NoWalletAlert">Sie haben noch keine installierten Wallets.\nErstellen Sie eine neue Wallet oder stellen Sie eine vorhandene wieder her </string>
     <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet.</string>
     <string name="Balance_WatchAccount_NoBalance">Diese Wallet-Adresse hat keinen Kontostand</string>
@@ -393,10 +429,6 @@
     <string name="Send_Error_SendToSelf">Sich selbst zu senden wird nicht unterstützt</string>
     <string name="Send_DialogAvailableBalance">Verfügbares Guthaben</string>
     <string name="Send_DialogSpeed">Transaktionsgeschwindigkeit</string>
-    <string name="Send_TxSpeed_Low">Niedrig</string>
-    <string name="Send_TxSpeed_High">Hoch</string>
-    <string name="Send_TxSpeed_Recommended">Empfohlen</string>
-    <string name="Send_TxSpeed_Custom">Benutzerdefiniert</string>
     <string name="Send_DialogFee">Gebühr:</string>
     <string name="Send_DialogProceed">Weiter</string>
     <string name="Send_LockTime_Off">Aus</string>
@@ -458,7 +490,7 @@
     <string name="FeeInfo_TronFee_Title">Fee</string>
     <string name="FeeInfo_TronFee_Description">The estimated cost of sending given transaction on the network. (Without excluding Energy, Bandwidth and Activating Fee)</string>
     <string name="FeeInfo_TronActivationFee_Title">Activation Fee</string>
-    <string name="FeeInfo_TronActivationFee_Description">Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
+    <string name="FeeInfo_TronActivationFee_Description">This address is not active. Transferring TRX or TRC-10 tokens to an inactive account address will activate the account.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Resources Consumed</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth is the unit that measures the size of the transaction bytes stored in the blockchain database. The larger the transaction, the more bandwidth resources will be consumed.\n\nEnergy is the unit that measures the amount of computation required by the TRON virtual machine to perform specific operations on the TRON network.\n\nSince smart contract transactions require computing resources to execute, each smart contract transaction requires to pay for the energy fee.</string>
     <!--Tron-->
@@ -468,6 +500,8 @@
     <string name="Tron_AddressNotActive_Info">Newly created accounts on the TRON blockchain are inactive and cannot be queried or explored. They need to be activated.\n\nTransferring TRX or TRC-10 tokens to an inactive account address will activate the account. Activating a new account on the Tron chain requires a fee of 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Cannot transfer 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">Account Not Active</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">New TRON wallets require a deposit of at least 1 TRX to become active. Inactive wallets can hold and receive tokens but won’t correct balances until activated.</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Anforderung</string>
     <string name="WalletConnect_SendRequest_Title">Senden</string>
@@ -500,6 +534,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">Kein passendes Konto</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes evm Kit</string>
     <string name="WalletConnect_Error_DataParsingError">Datenverarbeitungsfehler</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Unsupported chains: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Unsupported methods: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Unsupported events: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
     <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
     <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
@@ -610,7 +647,6 @@
     <string name="SwapSettings_Apply">Übernehmen</string>
     <string name="SwapSettings_DeadlineMinute">%s Min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse oder Domäne</string>
-    <string name="SwapSettings_FeeSettingsAlert">Eine Service-Gebühr für die Swap-Aktion auf der Plattform typischerweise entweder 0,3% oder 0,6%</string>
     <string name="SwapSettings_Error_DeadlineZero">Null Frist</string>
     <string name="SwapSettings_Error_SlippageZero">Null Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">Ihre Transaktion wird wahrscheinlich fehlschlagen.</string>
@@ -636,6 +672,11 @@
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">Sie genehmigen</string>
     <string name="Approve_YouRevoke">Du widerrufen</string>
+    <!--Swap Unlock Access-->
+    <string name="Swap_Unlock_PageTitle">Unlock Access</string>
+    <string name="Swap_Unlock_Subtitle">Allow access to the following amount</string>
+    <string name="Swap_Unlock_Info">Grant permission to a smart contract for token trading on your behalf, specifying the allowed amount. No impact on your balance, but incurs a small fee for approval.\n\nPre-approving a higher amount for future trades is cost-effective compared to on-demand approvals.</string>
+    <string name="Swap_Unlock_Unlimited">Unlimited</string>
     <!--Uniswap Info -->
     <string name="SwapInfo_AllowanceTitle">Vergütung</string>
     <string name="SwapInfo_AllowanceDescription">Der Betrag, den ein Austausch im Namen des Benutzers ausgeben kann, wenn Token Swaps ausgeführt werden. Bevor eine tatsächliche Swap-Transaktion durchgeführt werden kann, ist eine vorherige Transaktion erforderlich, die ausreichende Zertifikate festlegt.</string>
@@ -786,6 +827,8 @@
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
     <string name="Settings_AutoLock">Auto-Lock</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
     <string name="Settings_PersonalSupport">Personal Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Enter your Telegram account name to start a personal support chat with our team. We\'ll get back to you and start working on your problem as soon as we see it.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">You\'ve already requested a private chat, find it on Telegram</string>
@@ -811,19 +854,25 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
+    <string name="Appearance_MarketsTab">MARKETS TAB</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
     <string name="Appearance_AppIcon">APP ICON</string>
-    <string name="Appearance_BalanceConversion">SALDOKONVERTIERUNG</string>
-    <string name="Appearance_BalanceValue">SALDO WERT</string>
+    <string name="Appearance_BalanceConversion">Balance Conversion</string>
+    <string name="Appearance_BalanceValue">Balance Value</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
-    <string name="Appearance_MarketsTab">Markt-Tab</string>
+    <string name="Appearance_HideMarketsTab">Hide Markets</string>
+    <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">This configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
+    <string name="Appearance_PriceChangeInterval">Price Change %</string>
     <string name="BalanceViewType_CoinValue">Coin Value</string>
     <string name="BalanceViewType_FiatValue">Fiat Value</string>
     <string name="SettingsAboutApp_Title">Über die App</string>
     <string name="SettingsAboutApp_Site">Webseite</string>
     <string name="SettingsAboutApp_WhatsNew">Das ist neu</string>
+    <string name="SettingsAboutApp_AppVersion">App Version</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Blockchain Einstellungen</string>
     <!-- Backup Manager -->
@@ -845,11 +894,11 @@
     <string name="BackupManager_AppSettingsTitle">App Settings</string>
     <string name="BackupManager_AppSettingsDescription">Language, Currency, Appearance …</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unaufhaltsam sammelt keine Daten oder verwendet Analysewerkzeuge, die möglicherweise Daten über ihre Nutzer enthüllen. Die Brieftasche ist so konzipiert, dass sie den Benutzern ein hohes Maß an Privatsphäre garantiert.</string>
-    <string name="Privacy_BulletedText1">Benutzerdaten bleiben immer auf dem Gerät des Benutzers.</string>
-    <string name="Privacy_BulletedText2">Das Wallet sammelt keine Daten über Benutzer.</string>
-    <string name="Privacy_BulletedText3">Das Wallet teilt keine Daten über Benutzer.</string>
-    <string name="Privacy_BulletedText4">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten woanders speichern.</string>
+    <string name="Privacy_Information">Unstoppable doesn\'t collect personal data that expose your private information i.e. coin balances or addresses. While we gather some UI usage statistics, it\'s solely for understanding our user base and app usage trends. That can be disabled if you wish.</string>
+    <string name="Privacy_BulletedText1">The wallet does not gather any personal data.</string>
+    <string name="Privacy_BulletedText2">There are no user accounts or databases storing user data.</string>
+    <string name="Privacy_BulletedText3">If allowed the wallet will share app usage habits with Unstoppable team. This is to understand which features are being used (or not) by our users. Being a privacy focused app we need some way to evaluate our efforts and without this we have no idea whether the features we built are being used or not.</string>
+    <string name="ShareUiData">Share UI data</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
@@ -1104,6 +1153,7 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
+    <string name="ExtendedKey_AccountInfo">To do</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Private Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
@@ -1202,7 +1252,7 @@
     <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">TDY</string>
-    <string name="CoinPage_TimeDuration_Day">24H</string>
+    <string name="CoinPage_TimeDuration_Day">1D</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2W</string>
@@ -1419,6 +1469,7 @@
     <string name="CoinAnalytics_SmartContractAnalysis">Smart Contract Analysis</string>
     <string name="CoinAnalytics_HighRiskItems">High Risk Items</string>
     <string name="CoinAnalytics_MediumRiskItems">Medium Risk Items</string>
+    <string name="Coin_Analytics_Indicators_Risky">Risky</string>
     <string name="CoinAnalytics_AttentionRequired">Attention Required</string>
     <string name="CoinAnalytics_PoweredByDeFi">Powered by De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Items</string>
@@ -1454,12 +1505,12 @@
     <string name="TechnicalAdvice_InfoDescription">We use the Bollinger Bands + RSI strategy to determine trading signals. All calculations are based on daily candlesticks and provide advice for a moderately long term. The essence of the strategy is that the asset price should reach an extreme, breaking out of the Bollinger Bands channel, and the RSI should be in the overbought/oversold zone. After the price returns to the channel, there is a high probability of the price returning to the mean values or attempting to break the channel from the other side. Note that the strategy may give several false signals during strong market movements before a correct signal appears.\n\nPlease remember that it is very important to apply risk management to trading and remember to cut losses if the market situation changes!</string>
     <string name="TechnicalAdvice_ShowDetails">Show Details</string>
     <string name="TechnicalAdvice_HideDetails">Hide Details</string>
-    <string name="TechnicalAdvice_Indicators_StrongBuy">Buy Signal</string>
-    <string name="TechnicalAdvice_Indicators_Buy">Good Time to Buy</string>
+    <string name="TechnicalAdvice_Indicators_StrongBuy">Strong Buy</string>
+    <string name="TechnicalAdvice_Indicators_Buy">Buy</string>
     <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
-    <string name="TechnicalAdvice_Indicators_Sell">Good Time to Sell</string>
-    <string name="TechnicalAdvice_Indicators_StrongSell">Sell Signal</string>
-    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Very Risky to Trade</string>
+    <string name="TechnicalAdvice_Indicators_Sell">Sell</string>
+    <string name="TechnicalAdvice_Indicators_StrongSell">Strong Sell</string>
+    <string name="TechnicalAdvice_Indicators_RiskyToTrade">Risky</string>
     <string name="Detectors_TokenDetectors">Token Detectors</string>
     <string name="Detectors_GeneralDetectors">General Detectors</string>
     <string name="Detectors_IssuesCount">Issues %d</string>
@@ -1540,8 +1591,8 @@
     <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Unbekannt</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Top Gainers</string>
-    <string name="RateList_TopLosers">Top Verlierer</string>
+    <string name="RateList_TopGainers">Gainers</string>
+    <string name="RateList_TopLosers">Losers</string>
     <string name="RateList_Posts">News</string>
     <string name="Market_DaysAgo">%dd. ago</string>
     <string name="Market_HoursAgo">%dh. ago</string>
@@ -1553,6 +1604,7 @@
     <string name="BalanceSyncError_ButtonReport">Melden</string>
     <string name="BalanceSyncError_ReportButtonExplanation">Der Fehlertext wird in die Zwischenablage kopiert, falls Sie den Fehler melden möchten.</string>
     <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
     <string name="ReleaseNotes_FollowUs">Folge Uns</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
