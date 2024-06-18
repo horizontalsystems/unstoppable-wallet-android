@@ -1,16 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.recoveryphrase
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
@@ -95,49 +93,56 @@ private fun RecoveryPhraseScreen(
             )
         }
     ) {
-        Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-            AppBar(
-                title = stringResource(R.string.RecoveryPhrase_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = navController::popBackStack)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Info_Title),
-                        icon = R.drawable.ic_info_24,
-                        onClick = {
-                            FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
-
-                            stat(page = StatPage.RecoveryPhrase, event = StatEvent.Open(StatPage.Info))
-                        }
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = stringResource(R.string.RecoveryPhrase_Title),
+                    navigationIcon = {
+                        HsBackButton(onClick = navController::popBackStack)
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Info_Title),
+                            icon = R.drawable.ic_info_24,
+                            onClick = {
+                                FaqManager.showFaqPage(navController, FaqManager.faqPathPrivateKeys)
+                                stat(
+                                    page = StatPage.RecoveryPhrase,
+                                    event = StatEvent.Open(StatPage.Info)
+                                )
+                            }
+                        )
                     )
                 )
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Spacer(Modifier.height(12.dp))
-                TextImportantWarning(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    text = stringResource(R.string.PrivateKeys_NeverShareWarning)
-                )
-                Spacer(Modifier.height(24.dp))
-                var hidden by remember { mutableStateOf(true) }
-                SeedPhraseList(viewModel.wordsNumbered, hidden) {
-                    hidden = !hidden
-
-                    stat(page = StatPage.RecoveryPhrase, event = StatEvent.ToggleHidden)
-                }
-                Spacer(Modifier.height(24.dp))
-                PassphraseCell(viewModel.passphrase, hidden)
             }
-            ActionButton(R.string.Alert_Copy) {
-                coroutineScope.launch {
-                    sheetState.show()
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier.padding(paddingValues),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState()),
+                ) {
+                    VSpacer(12.dp)
+                    TextImportantWarning(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        text = stringResource(R.string.PrivateKeys_NeverShareWarning)
+                    )
+                    VSpacer(24.dp)
+                    var hidden by remember { mutableStateOf(true) }
+                    SeedPhraseList(viewModel.wordsNumbered, hidden) {
+                        hidden = !hidden
+                        stat(page = StatPage.RecoveryPhrase, event = StatEvent.ToggleHidden)
+                    }
+                    VSpacer(24.dp)
+                    PassphraseCell(viewModel.passphrase, hidden)
+                }
+                ActionButton(R.string.Alert_Copy) {
+                    coroutineScope.launch {
+                        sheetState.show()
+                    }
                 }
             }
         }

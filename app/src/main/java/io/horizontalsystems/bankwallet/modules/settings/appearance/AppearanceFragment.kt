@@ -23,7 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -92,21 +92,22 @@ fun AppearanceScreen(navController: NavController) {
     var openBalanceValueSelector by rememberSaveable { mutableStateOf(false) }
     var openPriceChangeIntervalSelector by rememberSaveable { mutableStateOf(false) }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
-        ModalBottomSheetLayout(
-            sheetState = sheetState,
-            sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-            sheetContent = {
-                AppCloseWarningBottomSheet(
-                    onCloseClick = { scope.launch { sheetState.hide() } },
-                    onChangeClick = {
-                        selectedAppIcon?.let { viewModel.onEnterAppIcon(it) }
-                        scope.launch { sheetState.hide() }
-                    }
-                )
-            }
-        ) {
-            Column {
+    ModalBottomSheetLayout(
+        sheetState = sheetState,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetContent = {
+            AppCloseWarningBottomSheet(
+                onCloseClick = { scope.launch { sheetState.hide() } },
+                onChangeClick = {
+                    selectedAppIcon?.let { viewModel.onEnterAppIcon(it) }
+                    scope.launch { sheetState.hide() }
+                }
+            )
+        }
+    ) {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
                 AppBar(
                     title = stringResource(R.string.Settings_Appearance),
                     navigationIcon = {
@@ -114,160 +115,161 @@ fun AppearanceScreen(navController: NavController) {
                     },
                     menuItems = listOf(),
                 )
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues),
+            ) {
+                VSpacer(height = 12.dp)
+                CellUniversalLawrenceSection(
+                    listOf {
+                        MenuItemWithDialog(
+                            R.string.Settings_Theme,
+                            value = uiState.selectedTheme.title.getString(),
+                            onClick = { openThemeSelector = true }
+                        )
+                    }
+                )
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                ) {
-                    VSpacer(height = 12.dp)
-                    CellUniversalLawrenceSection(
-                        listOf {
+                VSpacer(24.dp)
+
+                HeaderText(text = stringResource(id = R.string.Appearance_MarketsTab))
+                CellUniversalLawrenceSection(
+                    listOf(
+                        {
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+                                body_leah(
+                                    text = stringResource(id = R.string.Appearance_HideMarketsTab),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(end = 16.dp)
+                                )
+                                HsSwitch(
+                                    checked = uiState.marketsTabHidden,
+                                    onCheckedChange = {
+                                        viewModel.onSetMarketTabsHidden(it)
+                                    }
+                                )
+                            }
+                        },
+                        {
                             MenuItemWithDialog(
-                                R.string.Settings_Theme,
-                                value = uiState.selectedTheme.title.getString(),
-                                onClick = { openThemeSelector = true }
+                                R.string.Appearance_PriceChangeInterval,
+                                value = uiState.priceChangeInterval.title.getString(),
+                                onClick = { openPriceChangeIntervalSelector = true }
                             )
                         }
                     )
+                )
 
-                    VSpacer(24.dp)
-
-                    HeaderText(text = stringResource(id = R.string.Appearance_MarketsTab))
-                    CellUniversalLawrenceSection(
-                        listOf (
-                            {
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                ) {
-                                    body_leah(
-                                        text = stringResource(id = R.string.Appearance_HideMarketsTab),
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(end = 16.dp)
-                                    )
-                                    HsSwitch(
-                                        checked = uiState.marketsTabHidden,
-                                        onCheckedChange = {
-                                            viewModel.onSetMarketTabsHidden(it)
-                                        }
-                                    )
-                                }
-                            },
-                            {
+                AnimatedVisibility(visible = !uiState.marketsTabHidden) {
+                    Column {
+                        VSpacer(32.dp)
+                        CellUniversalLawrenceSection(
+                            listOf {
                                 MenuItemWithDialog(
-                                    R.string.Appearance_PriceChangeInterval,
-                                    value = uiState.priceChangeInterval.title.getString(),
-                                    onClick = { openPriceChangeIntervalSelector = true }
+                                    R.string.Settings_LaunchScreen,
+                                    value = uiState.selectedLaunchScreen.title.getString(),
+                                    onClick = { openLaunchPageSelector = true }
                                 )
                             }
                         )
-                    )
-
-                    AnimatedVisibility(visible = !uiState.marketsTabHidden) {
-                        Column {
-                            VSpacer(32.dp)
-                            CellUniversalLawrenceSection(
-                                listOf {
-                                    MenuItemWithDialog(
-                                        R.string.Settings_LaunchScreen,
-                                        value = uiState.selectedLaunchScreen.title.getString(),
-                                        onClick = { openLaunchPageSelector = true }
-                                    )
-                                }
-                            )
-                        }
                     }
-
-                    VSpacer(24.dp)
-                    HeaderText(text = stringResource(id = R.string.Appearance_BalanceTab))
-                    CellUniversalLawrenceSection(
-                        listOf(
-                            {
-                                RowUniversal(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                ) {
-                                    body_leah(
-                                        text = stringResource(id = R.string.Appearance_HideBalanceTabButtons),
-                                        modifier = Modifier
-                                            .weight(1f)
-                                            .padding(end = 16.dp)
-                                    )
-                                    HsSwitch(
-                                        checked = uiState.balanceTabButtonsHidden,
-                                        onCheckedChange = {
-                                            viewModel.onSetBalanceTabButtonsHidden(it)
-                                        }
-                                    )
-                                }
-                            },
-                            {
-                                MenuItemWithDialog(
-                                    R.string.Appearance_BalanceValue,
-                                    value = uiState.selectedBalanceViewType.title.getString(),
-                                    onClick = { openBalanceValueSelector = true }
-                                )
-                            }
-                        )
-                    )
-
-                    VSpacer(24.dp)
-                    HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
-                    AppIconSection(uiState.appIconOptions) {
-                        scope.launch {
-                            selectedAppIcon = it
-                            sheetState.show()
-                        }
-                    }
-
-                    VSpacer(32.dp)
                 }
-            }
-            //Dialogs
-            if (openThemeSelector) {
-                AlertGroup(
-                    R.string.Settings_Theme,
-                    uiState.themeOptions,
-                    { selected ->
-                        viewModel.onEnterTheme(selected)
-                        openThemeSelector = false
-                    },
-                    { openThemeSelector = false }
+
+                VSpacer(24.dp)
+                HeaderText(text = stringResource(id = R.string.Appearance_BalanceTab))
+                CellUniversalLawrenceSection(
+                    listOf(
+                        {
+                            RowUniversal(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+                                body_leah(
+                                    text = stringResource(id = R.string.Appearance_HideBalanceTabButtons),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(end = 16.dp)
+                                )
+                                HsSwitch(
+                                    checked = uiState.balanceTabButtonsHidden,
+                                    onCheckedChange = {
+                                        viewModel.onSetBalanceTabButtonsHidden(it)
+                                    }
+                                )
+                            }
+                        },
+                        {
+                            MenuItemWithDialog(
+                                R.string.Appearance_BalanceValue,
+                                value = uiState.selectedBalanceViewType.title.getString(),
+                                onClick = { openBalanceValueSelector = true }
+                            )
+                        }
+                    )
                 )
+
+                VSpacer(24.dp)
+                HeaderText(text = stringResource(id = R.string.Appearance_AppIcon))
+                AppIconSection(uiState.appIconOptions) {
+                    scope.launch {
+                        selectedAppIcon = it
+                        sheetState.show()
+                    }
+                }
+
+                VSpacer(32.dp)
             }
-            if (openLaunchPageSelector) {
-                AlertGroup(
-                    R.string.Settings_LaunchScreen,
-                    uiState.launchScreenOptions,
-                    { selected ->
-                        viewModel.onEnterLaunchPage(selected)
-                        openLaunchPageSelector = false
-                    },
-                    { openLaunchPageSelector = false }
-                )
-            }
-            if (openBalanceValueSelector) {
-                AlertGroup(
-                    R.string.Appearance_BalanceValue,
-                    uiState.balanceViewTypeOptions,
-                    { selected ->
-                        viewModel.onEnterBalanceViewType(selected)
-                        openBalanceValueSelector = false
-                    },
-                    { openBalanceValueSelector = false }
-                )
-            }
-            if (openPriceChangeIntervalSelector) {
-                AlertGroup(
-                    R.string.Appearance_PriceChangeInterval,
-                    uiState.priceChangeIntervalOptions,
-                    { selected ->
-                        viewModel.onSetPriceChangeInterval(selected)
-                        openPriceChangeIntervalSelector = false
-                    },
-                    { openPriceChangeIntervalSelector = false }
-                )
-            }
+        }
+        //Dialogs
+        if (openThemeSelector) {
+            AlertGroup(
+                R.string.Settings_Theme,
+                uiState.themeOptions,
+                { selected ->
+                    viewModel.onEnterTheme(selected)
+                    openThemeSelector = false
+                },
+                { openThemeSelector = false }
+            )
+        }
+        if (openLaunchPageSelector) {
+            AlertGroup(
+                R.string.Settings_LaunchScreen,
+                uiState.launchScreenOptions,
+                { selected ->
+                    viewModel.onEnterLaunchPage(selected)
+                    openLaunchPageSelector = false
+                },
+                { openLaunchPageSelector = false }
+            )
+        }
+        if (openBalanceValueSelector) {
+            AlertGroup(
+                R.string.Appearance_BalanceValue,
+                uiState.balanceViewTypeOptions,
+                { selected ->
+                    viewModel.onEnterBalanceViewType(selected)
+                    openBalanceValueSelector = false
+                },
+                { openBalanceValueSelector = false }
+            )
+        }
+        if (openPriceChangeIntervalSelector) {
+            AlertGroup(
+                R.string.Appearance_PriceChangeInterval,
+                uiState.priceChangeIntervalOptions,
+                { selected ->
+                    viewModel.onSetPriceChangeInterval(selected)
+                    openPriceChangeIntervalSelector = false
+                },
+                { openPriceChangeIntervalSelector = false }
+            )
         }
     }
 }

@@ -1,8 +1,23 @@
 package io.horizontalsystems.bankwallet.modules.basecurrency
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -18,7 +33,17 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 
@@ -80,29 +105,32 @@ private fun BaseCurrencyScreen(
             )
         }
     ) {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                title = stringResource(R.string.SettingsCurrency_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
-            )
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = stringResource(R.string.SettingsCurrency_Title),
+                    navigationIcon = {
+                        HsBackButton(onClick = { navController.popBackStack() })
+                    }
+                )
+            }
+        ) { paddingValues ->
             Column(
-                Modifier.verticalScroll(rememberScrollState())
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues)
             ) {
-                Spacer(Modifier.height(12.dp))
+                VSpacer(12.dp)
                 CellUniversalLawrenceSection(viewModel.popularItems) { item ->
                     CurrencyCell(
                         item.currency.code,
                         item.currency.symbol,
                         item.currency.flag,
-                        item.selected,
-                        { viewModel.onSelectBaseCurrency(item.currency) }
-                    )
+                        item.selected
+                    ) { viewModel.onSelectBaseCurrency(item.currency) }
                 }
-                Spacer(Modifier.height(24.dp))
+                VSpacer(24.dp)
                 HeaderText(
                     stringResource(R.string.SettingsCurrency_Other)
                 )
@@ -111,11 +139,10 @@ private fun BaseCurrencyScreen(
                         item.currency.code,
                         item.currency.symbol,
                         item.currency.flag,
-                        item.selected,
-                        { viewModel.onSelectBaseCurrency(item.currency) }
-                    )
+                        item.selected
+                    ) { viewModel.onSelectBaseCurrency(item.currency) }
                 }
-                Spacer(Modifier.height(24.dp))
+                VSpacer(24.dp)
             }
         }
     }
