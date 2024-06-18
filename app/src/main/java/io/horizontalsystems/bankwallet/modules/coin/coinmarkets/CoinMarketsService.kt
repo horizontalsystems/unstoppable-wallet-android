@@ -9,7 +9,6 @@ import io.horizontalsystems.marketkit.models.MarketTicker
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
@@ -19,7 +18,7 @@ class CoinMarketsService(
     private val currencyManager: CurrencyManager,
     private val marketKit: MarketKitWrapper,
 ) {
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var marketTickers = listOf<MarketTicker>()
 
     private var verifiedType: VerifiedType = VerifiedType.All
