@@ -153,83 +153,87 @@ private fun MainScreen(
             )
         },
     ) {
-        Box(Modifier.fillMaxSize()) {
-            Scaffold(
-                backgroundColor = ComposeAppTheme.colors.tyler,
-                bottomBar = {
-                    Column {
-                        if (uiState.torEnabled) {
-                            TorStatusView()
-                        }
-                        HsBottomNavigation(
-                            backgroundColor = ComposeAppTheme.colors.tyler,
-                            elevation = 10.dp
-                        ) {
-                            uiState.mainNavItems.forEach { item ->
-                                HsBottomNavigationItem(
-                                    icon = {
-                                        BadgedIcon(item.badge) {
-                                            Icon(
-                                                painter = painterResource(item.mainNavItem.iconRes),
-                                                contentDescription = stringResource(item.mainNavItem.titleRes)
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            bottomBar = {
+                Column {
+                    if (uiState.torEnabled) {
+                        TorStatusView()
+                    }
+                    HsBottomNavigation(
+                        backgroundColor = ComposeAppTheme.colors.tyler,
+                        elevation = 10.dp
+                    ) {
+                        uiState.mainNavItems.forEach { item ->
+                            HsBottomNavigationItem(
+                                icon = {
+                                    BadgedIcon(item.badge) {
+                                        Icon(
+                                            painter = painterResource(item.mainNavItem.iconRes),
+                                            contentDescription = stringResource(item.mainNavItem.titleRes)
+                                        )
+                                    }
+                                },
+                                selected = item.selected,
+                                enabled = item.enabled,
+                                selectedContentColor = ComposeAppTheme.colors.jacob,
+                                unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
+                                onClick = {
+                                    viewModel.onSelect(item.mainNavItem)
+
+                                    stat(
+                                        page = StatPage.Main,
+                                        event = StatEvent.SwitchTab(item.mainNavItem.statTab)
+                                    )
+                                },
+                                onLongClick = {
+                                    if (item.mainNavItem == MainNavigation.Balance) {
+                                        coroutineScope.launch {
+                                            modalBottomSheetState.show()
+
+                                            stat(
+                                                page = StatPage.Main,
+                                                event = StatEvent.Open(StatPage.SwitchWallet)
                                             )
                                         }
-                                    },
-                                    selected = item.selected,
-                                    enabled = item.enabled,
-                                    selectedContentColor = ComposeAppTheme.colors.jacob,
-                                    unselectedContentColor = if (item.enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.grey50,
-                                    onClick = {
-                                        viewModel.onSelect(item.mainNavItem)
-
-                                        stat(page = StatPage.Main, event = StatEvent.SwitchTab(item.mainNavItem.statTab))
-                                    },
-                                    onLongClick = {
-                                        if (item.mainNavItem == MainNavigation.Balance) {
-                                            coroutineScope.launch {
-                                                modalBottomSheetState.show()
-
-                                                stat(page = StatPage.Main, event = StatEvent.Open(StatPage.SwitchWallet))
-                                            }
-                                        }
                                     }
-                                )
-                            }
-                        }
-                    }
-                }
-            ) {
-                BackHandler(enabled = modalBottomSheetState.isVisible) {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                    }
-                }
-                Column(modifier = Modifier.padding(it)) {
-                    LaunchedEffect(key1 = selectedPage, block = {
-                        pagerState.scrollToPage(selectedPage)
-                    })
-
-                    HorizontalPager(
-                        modifier = Modifier.weight(1f),
-                        state = pagerState,
-                        userScrollEnabled = false,
-                        verticalAlignment = Alignment.Top
-                    ) { page ->
-                        when (uiState.mainNavItems[page].mainNavItem) {
-                            MainNavigation.Market -> MarketScreen(fragmentNavController)
-                            MainNavigation.Balance -> BalanceScreen(fragmentNavController)
-                            MainNavigation.Transactions -> TransactionsScreen(
-                                fragmentNavController,
-                                transactionsViewModel
+                                }
                             )
-
-                            MainNavigation.Settings -> SettingsScreen(fragmentNavController)
                         }
                     }
                 }
             }
-            HideContentBox(uiState.contentHidden)
+        ) {
+            BackHandler(enabled = modalBottomSheetState.isVisible) {
+                coroutineScope.launch {
+                    modalBottomSheetState.hide()
+                }
+            }
+            Column(modifier = Modifier.padding(it)) {
+                LaunchedEffect(key1 = selectedPage, block = {
+                    pagerState.scrollToPage(selectedPage)
+                })
+
+                HorizontalPager(
+                    modifier = Modifier.weight(1f),
+                    state = pagerState,
+                    userScrollEnabled = false,
+                    verticalAlignment = Alignment.Top
+                ) { page ->
+                    when (uiState.mainNavItems[page].mainNavItem) {
+                        MainNavigation.Market -> MarketScreen(fragmentNavController)
+                        MainNavigation.Balance -> BalanceScreen(fragmentNavController)
+                        MainNavigation.Transactions -> TransactionsScreen(
+                            fragmentNavController,
+                            transactionsViewModel
+                        )
+
+                        MainNavigation.Settings -> SettingsScreen(fragmentNavController)
+                    }
+                }
+            }
         }
+        HideContentBox(uiState.contentHidden)
     }
 
     if (uiState.showWhatsNew) {
@@ -304,7 +308,10 @@ private fun HideContentBox(contentHidden: Boolean) {
     } else {
         Modifier
     }
-    Box(Modifier.fillMaxSize().then(backgroundModifier))
+    Box(
+        Modifier
+            .fillMaxSize()
+            .then(backgroundModifier))
 }
 
 @Composable

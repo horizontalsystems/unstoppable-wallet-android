@@ -3,9 +3,7 @@ package cash.p.terminal.modules.coin.investments
 import android.os.Parcelable
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -78,50 +77,64 @@ private fun CoinInvestmentsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val viewItems by viewModel.viewItemsLiveData.observeAsState()
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = stringResource(R.string.CoinPage_FundsInvested),
-            navigationIcon = {
-                HsBackButton(onClick = onClickNavigation)
-            }
-        )
-
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.CoinPage_FundsInvested),
+                navigationIcon = {
+                    HsBackButton(onClick = onClickNavigation)
+                }
+            )
+        }
+    ) { innerPadding ->
         HSSwipeRefresh(
             refreshing = isRefreshing,
-            onRefresh = viewModel::refresh
-        ) {
-            Crossfade(viewState) { viewState ->
-                when (viewState) {
-                    ViewState.Loading -> {
-                        Loading()
-                    }
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+            onRefresh = viewModel::refresh,
+            content = {
+                Crossfade(viewState, label = "") { viewState ->
+                    when (viewState) {
+                        ViewState.Loading -> {
+                            Loading()
+                        }
 
-                    is ViewState.Error -> {
-                        ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
-                    }
+                        is ViewState.Error -> {
+                            ListErrorView(
+                                stringResource(R.string.SyncError),
+                                viewModel::onErrorClick
+                            )
+                        }
 
-                    ViewState.Success -> {
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            viewItems?.forEach { viewItem ->
-                                item {
-                                    CoinInvestmentHeader(viewItem.amount, viewItem.info)
+                        ViewState.Success -> {
+                            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                                viewItems?.forEach { viewItem ->
+                                    item {
+                                        CoinInvestmentHeader(viewItem.amount, viewItem.info)
 
-                                    Spacer(modifier = Modifier.height(12.dp))
-                                }
-                                item {
-                                    CellSingleLineLawrenceSection(viewItem.fundViewItems) { fundViewItem ->
-                                        CoinInvestmentFund(fundViewItem) { onClickFundUrl(fundViewItem.url) }
+                                        Spacer(modifier = Modifier.height(12.dp))
                                     }
-                                    Spacer(modifier = Modifier.height(24.dp))
+                                    item {
+                                        CellSingleLineLawrenceSection(viewItem.fundViewItems) { fundViewItem ->
+                                            CoinInvestmentFund(fundViewItem) {
+                                                onClickFundUrl(
+                                                    fundViewItem.url
+                                                )
+                                            }
+                                        }
+                                        Spacer(modifier = Modifier.height(24.dp))
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    null -> {}
+                        null -> {}
+                    }
                 }
             }
-        }
+        )
     }
 }
 

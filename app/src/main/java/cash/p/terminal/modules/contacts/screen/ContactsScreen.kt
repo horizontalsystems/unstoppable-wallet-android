@@ -4,10 +4,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +48,7 @@ import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
 import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 import io.horizontalsystems.core.SnackbarDuration
@@ -166,112 +167,120 @@ fun ContactsScreen(
 
         }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            SearchBar(
-                title = stringResource(R.string.Contacts),
-                searchHintText = stringResource(R.string.Market_Search_Hint),
-                menuItems = buildList {
-                    if (uiState.showAddContact) {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Contacts_NewContact),
-                                icon = R.drawable.icon_user_plus,
-                                tint = ComposeAppTheme.colors.jacob,
-                                onClick = onNavigateToCreateContact
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                SearchBar(
+                    title = stringResource(R.string.Contacts),
+                    searchHintText = stringResource(R.string.Market_Search_Hint),
+                    menuItems = buildList {
+                        if (uiState.showAddContact) {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Contacts_NewContact),
+                                    icon = R.drawable.icon_user_plus,
+                                    tint = ComposeAppTheme.colors.jacob,
+                                    onClick = onNavigateToCreateContact
+                                )
                             )
-                        )
-                    }
-                    if (uiState.showMoreOptions) {
-                        add(
-                            MenuItem(
-                                title = TranslatableString.ResString(R.string.Contacts_ActionMore),
-                                icon = R.drawable.ic_more2_20,
-                                tint = ComposeAppTheme.colors.jacob,
-                                enabled = true,
-                                onClick = {
-                                    showMoreSelectorDialog = true
-                                }
-                            )
-                        )
-                    }
-                },
-                onClose = onNavigateToBack,
-                onSearchTextChanged = { text ->
-                    viewModel.onEnterQuery(text)
-                }
-            )
-            if (uiState.contacts.isNotEmpty()) {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    Spacer(Modifier.height(12.dp))
-                    CellUniversalLawrenceSection(uiState.contacts) { contact ->
-                        Contact(contact) {
-                            if (viewModel.shouldShowReplaceWarning(contact)) {
-                                coroutineScope.launch {
-                                    bottomSheetType = ContactsScreenBottomSheetType.ReplaceAddressConfirmation
-                                    selectedContact = contact
-                                    bottomSheetState.show()
-                                }
-                            } else {
-                                onNavigateToContact(contact)
-                            }
                         }
+                        if (uiState.showMoreOptions) {
+                            add(
+                                MenuItem(
+                                    title = TranslatableString.ResString(R.string.Contacts_ActionMore),
+                                    icon = R.drawable.ic_more2_20,
+                                    tint = ComposeAppTheme.colors.jacob,
+                                    enabled = true,
+                                    onClick = {
+                                        showMoreSelectorDialog = true
+                                    }
+                                )
+                            )
+                        }
+                    },
+                    onClose = onNavigateToBack,
+                    onSearchTextChanged = { text ->
+                        viewModel.onEnterQuery(text)
                     }
-                    Spacer(Modifier.height(32.dp))
-                }
-            } else {
-                if (uiState.searchMode) {
-                    ListEmptyView(
-                        text = stringResource(R.string.EmptyResults),
-                        icon = R.drawable.ic_not_found
-                    )
-                } else {
-                    ScreenMessageWithAction(
-                        text = stringResource(R.string.Contacts_NoContacts),
-                        icon = R.drawable.icon_user_plus
-                    ) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 48.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Contacts_AddNewContact),
-                            onClick = onNavigateToCreateContact
-                        )
-                    }
-                }
+                )
             }
-
-            if (showMoreSelectorDialog) {
-                SelectorDialogCompose(
-                    title = stringResource(R.string.Contacts_ActionMore),
-                    items = ContactsModule.ContactsAction.values().map {
-                        (SelectorItem(stringResource(it.title), false, it))
-                    },
-                    onDismissRequest = {
-                        showMoreSelectorDialog = false
-                    },
-                    onSelectItem = { action ->
-                        when (action) {
-                            ContactsModule.ContactsAction.Restore -> {
-                                if (viewModel.shouldShowRestoreWarning()) {
+        ) { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues)
+            ) {
+                if (uiState.contacts.isNotEmpty()) {
+                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                        VSpacer(12.dp)
+                        CellUniversalLawrenceSection(uiState.contacts) { contact ->
+                            Contact(contact) {
+                                if (viewModel.shouldShowReplaceWarning(contact)) {
                                     coroutineScope.launch {
-                                        bottomSheetType = ContactsScreenBottomSheetType.RestoreContactsConfirmation
+                                        bottomSheetType =
+                                            ContactsScreenBottomSheetType.ReplaceAddressConfirmation
+                                        selectedContact = contact
                                         bottomSheetState.show()
                                     }
                                 } else {
-                                    restoreLauncher.launch(arrayOf("application/json"))
+                                    onNavigateToContact(contact)
                                 }
                             }
-
-                            ContactsModule.ContactsAction.Backup -> {
-                                App.pinComponent.keepUnlocked()
-                                backupLauncher.launch(viewModel.backupFileName)
-                            }
                         }
-                    })
+                        VSpacer(32.dp)
+                    }
+                } else {
+                    if (uiState.searchMode) {
+                        ListEmptyView(
+                            text = stringResource(R.string.EmptyResults),
+                            icon = R.drawable.ic_not_found
+                        )
+                    } else {
+                        ScreenMessageWithAction(
+                            text = stringResource(R.string.Contacts_NoContacts),
+                            icon = R.drawable.icon_user_plus
+                        ) {
+                            ButtonPrimaryYellow(
+                                modifier = Modifier
+                                    .padding(horizontal = 48.dp)
+                                    .fillMaxWidth(),
+                                title = stringResource(R.string.Contacts_AddNewContact),
+                                onClick = onNavigateToCreateContact
+                            )
+                        }
+                    }
+                }
+
+                if (showMoreSelectorDialog) {
+                    SelectorDialogCompose(
+                        title = stringResource(R.string.Contacts_ActionMore),
+                        items = ContactsModule.ContactsAction.values().map {
+                            (SelectorItem(stringResource(it.title), false, it))
+                        },
+                        onDismissRequest = {
+                            showMoreSelectorDialog = false
+                        },
+                        onSelectItem = { action ->
+                            when (action) {
+                                ContactsModule.ContactsAction.Restore -> {
+                                    if (viewModel.shouldShowRestoreWarning()) {
+                                        coroutineScope.launch {
+                                            bottomSheetType =
+                                                ContactsScreenBottomSheetType.RestoreContactsConfirmation
+                                            bottomSheetState.show()
+                                        }
+                                    } else {
+                                        restoreLauncher.launch(arrayOf("application/json"))
+                                    }
+                                }
+
+                                ContactsModule.ContactsAction.Backup -> {
+                                    App.pinComponent.keepUnlocked()
+                                    backupLauncher.launch(viewModel.backupFileName)
+                                }
+                            }
+                        })
+                }
             }
         }
     }
@@ -291,7 +300,12 @@ fun Contact(
                 text = contact.name,
                 maxLines = 1
             )
-            subhead2_grey(text = stringResource(R.string.Contacts_AddressesCount, contact.addresses.size))
+            subhead2_grey(
+                text = stringResource(
+                    R.string.Contacts_AddressesCount,
+                    contact.addresses.size
+                )
+            )
         }
         Image(
             modifier = Modifier.size(20.dp),
