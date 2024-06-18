@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.chartview.models.ChartIndicator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -14,7 +13,7 @@ class ChartIndicatorManager(
     private val chartIndicatorSettingsDao: ChartIndicatorSettingsDao,
     private val localStorage: ILocalStorage
 ) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.Default)
     val isEnabled: Boolean
         get() = localStorage.chartIndicatorsEnabled
     private val _isEnabledFlow : MutableSharedFlow<Boolean> = MutableSharedFlow()
