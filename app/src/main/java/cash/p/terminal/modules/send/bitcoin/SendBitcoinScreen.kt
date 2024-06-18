@@ -100,10 +100,6 @@ fun SendBitcoinNavHost(
             UtxoExpertModeScreen(
                 adapter = viewModel.adapter,
                 token = viewModel.wallet.token,
-                address = viewModel.uiState.address,
-                memo = viewModel.uiState.memo,
-                value = viewModel.uiState.amount,
-                feeRate = viewModel.uiState.feeRate,
                 customUnspentOutputs = viewModel.customUnspentOutputs,
                 updateUnspentOutputs = {
                     viewModel.updateCustomUnspentOutputs(it)
