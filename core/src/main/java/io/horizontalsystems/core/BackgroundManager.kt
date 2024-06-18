@@ -5,14 +5,13 @@ import android.app.Application
 import android.os.Bundle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.Default)
     private val _stateFlow: MutableSharedFlow<BackgroundManagerState> = MutableSharedFlow()
     val stateFlow: SharedFlow<BackgroundManagerState>
         get() = _stateFlow

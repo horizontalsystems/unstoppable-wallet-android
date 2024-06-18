@@ -13,7 +13,6 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class PinComponent(
@@ -23,7 +22,7 @@ class PinComponent(
     private val backgroundManager: BackgroundManager
 ) : IPinComponent {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     init {
         scope.launch {

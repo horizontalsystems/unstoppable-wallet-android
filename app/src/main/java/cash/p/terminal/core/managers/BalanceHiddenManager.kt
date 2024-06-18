@@ -5,7 +5,6 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -25,7 +24,7 @@ class BalanceHiddenManager(
 
     private val _balanceHiddenFlow = MutableStateFlow(localStorage.balanceHidden)
     val balanceHiddenFlow = _balanceHiddenFlow.asStateFlow()
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     init {
         scope.launch {

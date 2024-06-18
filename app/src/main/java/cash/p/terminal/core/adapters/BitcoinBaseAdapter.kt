@@ -43,7 +43,6 @@ import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -59,7 +58,7 @@ abstract class BitcoinBaseAdapter(
     protected val decimal: Int = 8
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val scope = CoroutineScope(Dispatchers.Default)
 
     abstract val satoshisInBitcoin: BigDecimal
 
