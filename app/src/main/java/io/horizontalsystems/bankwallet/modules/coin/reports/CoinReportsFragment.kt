@@ -2,13 +2,13 @@ package io.horizontalsystems.bankwallet.modules.coin.reports
 
 import android.os.Parcelable
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -62,51 +62,62 @@ private fun CoinReportsScreen(
     val isRefreshing by viewModel.isRefreshingLiveData.observeAsState(false)
     val reportViewItems by viewModel.reportViewItemsLiveData.observeAsState()
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-        AppBar(
-            title = stringResource(R.string.CoinPage_Reports),
-            navigationIcon = {
-                HsBackButton(onClick = onClickNavigation)
-            }
-        )
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.CoinPage_Reports),
+                navigationIcon = {
+                    HsBackButton(onClick = onClickNavigation)
+                }
+            )
+        }
+    ) { padding ->
         HSSwipeRefresh(
             refreshing = isRefreshing,
-            onRefresh = viewModel::refresh
-        ) {
-            Crossfade(viewState) { viewState ->
-                when (viewState) {
-                    ViewState.Loading -> {
-                        Loading()
-                    }
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize(),
+            onRefresh = viewModel::refresh,
+            content = {
+                Crossfade(viewState, label = "") { viewState ->
+                    when (viewState) {
+                        ViewState.Loading -> {
+                            Loading()
+                        }
 
-                    is ViewState.Error -> {
-                        ListErrorView(stringResource(R.string.SyncError), viewModel::onErrorClick)
-                    }
+                        is ViewState.Error -> {
+                            ListErrorView(
+                                stringResource(R.string.SyncError),
+                                viewModel::onErrorClick
+                            )
+                        }
 
-                    ViewState.Success -> {
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            reportViewItems?.let {
-                                items(it) { report ->
-                                    Spacer(modifier = Modifier.height(12.dp))
-                                    CellNews(
-                                        source = report.author,
-                                        title = report.title,
-                                        body = report.body,
-                                        date = report.date,
-                                    ) {
-                                        onClickReportUrl(report.url)
+                        ViewState.Success -> {
+                            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                                reportViewItems?.let {
+                                    items(it) { report ->
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                        CellNews(
+                                            source = report.author,
+                                            title = report.title,
+                                            body = report.body,
+                                            date = report.date,
+                                        ) {
+                                            onClickReportUrl(report.url)
+                                        }
                                     }
-                                }
-                                item {
-                                    Spacer(modifier = Modifier.height(12.dp))
+                                    item {
+                                        Spacer(modifier = Modifier.height(12.dp))
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    null -> {}
+                        null -> {}
+                    }
                 }
             }
-        }
+        )
     }
 }

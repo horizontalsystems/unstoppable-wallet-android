@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.restoreaccount.restoreblockchain
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
@@ -18,6 +16,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +44,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellMultilineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
@@ -153,24 +153,29 @@ fun ManageWalletsScreen(
             }
         },
     ) {
-        Column(
-            modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                title = stringResource(R.string.Restore_Title),
-                navigationIcon = {
-                    HsBackButton(onClick = onBackClick)
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Restore),
-                        onClick = { viewModel.onRestore() },
-                        enabled = doneButtonEnabled
-                    )
-                ),
-            )
-
-            LazyColumn {
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = stringResource(R.string.Restore_Title),
+                    navigationIcon = {
+                        HsBackButton(onClick = onBackClick)
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Restore),
+                            onClick = { viewModel.onRestore() },
+                            enabled = doneButtonEnabled
+                        )
+                    ),
+                )
+            }
+        ) { paddingValues ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
                 item {
                     Spacer(modifier = Modifier.height(12.dp))
                     Divider(
@@ -208,7 +213,7 @@ fun ManageWalletsScreen(
                                         modifier = Modifier.padding(top = 1.dp)
                                     )
                                 }
-                                Spacer(Modifier.width(12.dp))
+                                HSpacer(12.dp)
                                 if (viewItem.hasSettings) {
                                     HsIconButton(
                                         onClick = { viewModel.onClickSettings(viewItem.item) }
@@ -233,7 +238,10 @@ fun ManageWalletsScreen(
     }
 }
 
-private fun onItemClick(viewItem: CoinViewItem<Blockchain>, viewModel: RestoreBlockchainsViewModel) {
+private fun onItemClick(
+    viewItem: CoinViewItem<Blockchain>,
+    viewModel: RestoreBlockchainsViewModel
+) {
     if (viewItem.enabled) {
         viewModel.disable(viewItem.item)
     } else {

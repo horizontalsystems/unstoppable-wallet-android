@@ -2,10 +2,8 @@ package io.horizontalsystems.bankwallet.modules.contacts.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +15,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,6 +55,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
@@ -155,29 +155,32 @@ fun ContactScreen(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = ComposeAppTheme.colors.tyler)
-        ) {
-            AppBar(
-                title = uiState.headerTitle.getString(),
-                navigationIcon = {
-                    HsBackButton {
-                        confirmNavigateToBack()
-                    }
-                },
-                menuItems = listOf(
-                    MenuItem(
-                        title = TranslatableString.ResString(R.string.Button_Save),
-                        enabled = uiState.saveEnabled,
-                        onClick = viewModel::onSave
+        Scaffold(
+            backgroundColor = ComposeAppTheme.colors.tyler,
+            topBar = {
+                AppBar(
+                    title = uiState.headerTitle.getString(),
+                    navigationIcon = {
+                        HsBackButton {
+                            confirmNavigateToBack()
+                        }
+                    },
+                    menuItems = listOf(
+                        MenuItem(
+                            title = TranslatableString.ResString(R.string.Button_Save),
+                            enabled = uiState.saveEnabled,
+                            onClick = viewModel::onSave
+                        )
                     )
                 )
-            )
-
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                Spacer(Modifier.height(12.dp))
+            }
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                VSpacer(12.dp)
                 FormsInput(
                     modifier = Modifier
                         .focusRequester(focusRequester)
@@ -210,7 +213,7 @@ fun ContactScreen(
                     }
                 )
 
-                Spacer(Modifier.height(32.dp))
+                VSpacer(32.dp)
             }
         }
     }
