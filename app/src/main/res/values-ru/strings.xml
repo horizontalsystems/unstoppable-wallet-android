@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Не задан параметр</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Отменить</string>
     <string name="Alert_Copy">Скопировать</string>
     <string name="Alert_Close">Закрыть</string>
