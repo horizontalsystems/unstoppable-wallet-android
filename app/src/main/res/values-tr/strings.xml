@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parametre ayarlanmadı</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">İptal</string>
     <string name="Alert_Copy">Kopyala</string>
     <string name="Alert_Close">Kapat</string>
