@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parâmetro não está definido</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Alert_Close">Fechar</string>
@@ -18,7 +17,6 @@
     <string name="Button_Disable">Desativar</string>
     <string name="Button_ScanQr">Escanear QR Code</string>
     <string name="Button_Close">Fechar</string>
-    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Concluído</string>
     <string name="Button_Retry">Tentar de novo</string>
     <string name="Button_Change">Alterar</string>
@@ -109,7 +107,6 @@
     <string name="Language_Czech">Tcheco</string>
     <string name="Language_Portuguese">Português</string>
     <!--Rate App-->
-    <string name="RateApp_Title_Rate_This_App">GM!</string>
     <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
     <string name="RateApp_Button_RateIt">Avaliar</string>
     <string name="RateApp_Button_NotNow">Agora não</string>
@@ -191,9 +188,7 @@
     <string name="Market_Category_TopCoins">Top Moedas</string>
     <string name="Market_Category_TopCoins_Description">Top moedas por classificação de capitalização de mercado</string>
     <string name="Market_Signals">Sinais</string>
-    <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">Capitalização de mercado</string>
-    <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">Os sinais abaixo são baseados nos indicadores técnicos de preço das Bandas de Bollinger e RSI ao longo dos últimos aproximadamente 30 dias. Esses sinais são algorítmicos e podem mudar com frequência.</string>
     <string name="Market_Signal_StrongBuy_Description">Alta confiança em aumento de preço.</string>
     <string name="Market_Signal_Buy_Description">Provável aumento de preço no futuro próximo.</string>
@@ -203,10 +198,6 @@
     <string name="Market_Signal_Risky_Description">Nível de risco elevado, requer cuidado.</string>
     <string name="Market_Signal_Warning">Sempre lembre-se de aplicar o gerenciamento de risco, e observe que isso não é um conselho financeiro.</string>
     <string name="Market_Signal_TurnOn">Ligar</string>
-    <string name="Market_Top_100">Top 100</string>
-    <string name="Market_Top_200">Top 200</string>
-    <string name="Market_Top_300">Top 300</string>
-    <string name="Market_Top_500">Top 500</string>
     <string name="TopPairs_Title">Principais Pares de Mercado</string>
     <string name="TopPairs_Description">Principais pares de negociação por volume em todas as bolsas</string>
     <!--Market Overview-->
@@ -262,7 +253,6 @@
     <string name="Market_Filter_PriceChange">Mudança de Preço</string>
     <string name="Market_PriceChange_24H">24 Horas</string>
     <string name="Market_PriceChange_Utc">Meia-noite UTC</string>
-    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">BTC superado</string>
     <string name="Market_Filter_OutperformedEth">ETH superado</string>
     <string name="Market_Filter_OutperformedBnb">BNB superado</string>
@@ -282,36 +272,20 @@
     <string name="Market_Filter_Sell">Irá vender</string>
     <string name="Market_Filter_RiskToTrade">Arriscado</string>
     <string name="Market_Filter_Gainers">Ganhadores</string>
-    <string name="Market_Filter_Top_100">Top 100</string>
-    <string name="Market_Filter_Top_250">Top 250</string>
-    <string name="Market_Filter_Top_500">Top 500</string>
-    <string name="Market_Filter_Top_1000">Top 1000</string>
-    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
     <string name="Market_Filter_ShowResults_Counter">Mostrar Resultados: %d</string>
-    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
-    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
-    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
     <string name="Market_Filter_Range_100M_1B">100M — 1B</string>
     <string name="Market_Filter_Range_1B_5B">1B — 5B</string>
-    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
-    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
-    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
     <string name="Market_Filter_Range_40M_200M">40M — 200M</string>
     <string name="Market_Filter_Range_200M_2B">200M — 2B</string>
     <string name="Market_Filter_Range_2B_10B">2B — 10B</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
-    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
     <string name="Market_Filter_Range_50M_200M">50M — 200M</string>
     <string name="Market_Filter_Range_200M_1B">200M — 1B</string>
     <string name="Market_Filter_Range_1B_10B">1B — 10B</string>
     <string name="Market_Filter_Range_10B_50B">10B — 50B</string>
-    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
-    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
     <string name="Market_Filter_Range_500M_2B">500M — 2B</string>
     <string name="Market_Filter_Range_10B_100B">10B — 100B</string>
     <string name="Market_Filter_Range_100B_500B">100B — 500B</string>
-    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
     <string name="Market_Filter_TimePeriod_1D">1 Dia</string>
     <string name="Market_Filter_TimePeriod_1W">1 Semana</string>
     <string name="Market_Filter_TimePeriod_2W">2 Semanas</string>
@@ -319,7 +293,6 @@
     <string name="Market_Filter_TimePeriod_3M">3 Meses</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Ano</string>
-    <string name="Market_Sorting_Manual">Manual</string>
     <string name="Market_Sorting_Gainers">Ganhadores</string>
     <string name="Market_Sorting_Losers">Perdedores</string>
     <string name="Market_Sorting_HighestCap">Maior capitalização</string>
@@ -340,7 +313,6 @@
     <string name="Balance_SyncedUntil">até %s</string>
     <string name="Balance_Syncing">Sincronizando...</string>
     <string name="Balance_SearchingTransactions">Procurando transações...</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando… %s%%</string>
     <string name="Balance_CoinDisabled">Desativar moeda %s</string>
     <string name="Balance_Sort_Balance">Saldo</string>
@@ -371,7 +343,6 @@
     <string name="Balance_Receive_AddressType">Tipo de endereço</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
     <string name="Balance_NotRelayedAmount_Title">Transmissão</string>
-    <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
     <string name="Balance_Receive_WatchAddressAlert">Este endereço é o endereço da conta monitorada</string>
     <string name="Balance_Receive_AddressMemoAlert">Forneça o Memo necessário (Tag) e envie apenas tokens compatíveis com a rede. Outros serão perdidos.</string>
@@ -509,7 +480,6 @@
     <string name="WalletConnect_ApproveRequest_Title">Aprovar</string>
     <string name="WalletConnect_SwapRequest_Title">Trocar</string>
     <string name="WalletConnect_UnknownRequest_Title">Chamada de Contrato</string>
-    <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_SignedTransactions">Transações Assinadas</string>
     <string name="WalletConnect_Approve_Hint">Ao clicar em conectar, você permite que este aplicativo visualize seu endereço público. Esta é uma importante etapa de segurança para proteger seus dados contra possíveis riscos de phishing.</string>
     <string name="WalletConnect_Ready_Hint">Você pode ir ao navegador. Não feche esta página enquanto interage no navegador.</string>
@@ -593,7 +563,6 @@
     <string name="Swap_EstimatedFee">Taxa estimada</string>
     <string name="Swap_MaxFee">Taxa máxima</string>
     <string name="Swap_Fee">Taxa</string>
-    <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Destinatário</string>
     <string name="Swap_ErrorNoProviders">Sem provedores</string>
     <string name="Swap_ErrorNoQuote">Sem ofertas</string>
@@ -623,8 +592,6 @@
     <string name="Swap_Provider">Provedor</string>
     <string name="Swap_Providers">Provedores</string>
     <string name="Swap_SelectSwapProvider_Title">Swap Service</string>
-    <string name="Swap_AmountEstimated">(est)</string>
-    <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moeda</string>
     <string name="Swap_SwapRouteNotFound">Via não encontrada</string>
@@ -643,10 +610,8 @@
     <string name="SwapSettings_RecipientAddressTitle">Endereço do Destinatário</string>
     <string name="SwapSettings_RecipientAddressDescription">Após a operação de câmbio, o valor será transferido para o endereço especificado</string>
     <string name="SwapSettings_Apply">Aplicar</string>
-    <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Endereço ou Domínio</string>
     <string name="SwapSettings_Error_DeadlineZero">Sem prazo</string>
-    <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
     <string name="SwapSettings_Error_SlippageTooLow">É provável que sua transação falhe.</string>
     <string name="SwapSettings_Error_SlippageTooHigh">Tolerância do Slippage não pode ser maior que %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Endereço inválido</string>
@@ -710,7 +675,6 @@
     <string name="Transaction_Unlimited_CoinCode">ilimitado %s</string>
     <string name="Transaction_Unlimited">ilimitado</string>
     <string name="Transactions_All">Todas</string>
-    <string name="Transactions_Filter_Blockchain">Blockchain</string>
     <string name="Transactions_Filter_Coin">Moeda</string>
     <string name="Transactions_Filter_Contacts">Contatos</string>
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
@@ -734,10 +698,8 @@
     <string name="TransactionInfo_Transaction">Transação</string>
     <string name="TransactionInfo_Title">Informações sobre a transação</string>
     <string name="TransactionInfo_Approval">Aprovação de troca</string>
-    <string name="TransactionInfo_Status">Status</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Date">Data</string>
-    <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Serviço</string>
     <string name="TransactionInfo_RawTransaction">Transação bruta</string>
     <string name="TransactionInfo_ContactName">Nome do Contato</string>
@@ -811,7 +773,6 @@
     <string name="Settings_Title">Configurações</string>
     <string name="Settings_SecurityCenter">Segurança</string>
     <string name="Settings_Notifications">Notificações</string>
-    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Moeda base</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_Theme">Tema</string>
@@ -831,7 +792,6 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Digite seu nome de conta Telegram para começar um chat de suporte pessoal com a nossa equipe. Entraremos em contato com você e começaremos a trabalhar em seu problema assim que virmos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Você já pediu um chat privado, encontre-o no Telegram</string>
     <string name="Settings_PersonalSupport_Account">Conta</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Solicitado</string>
     <string name="Settings_PersonalSupport_Request">Solicitar</string>
     <string name="Settings_PersonalSupport_NewRequest">Nova solicitação</string>
@@ -895,7 +855,6 @@
     <string name="Privacy_BulletedText3">Se permitido, a carteira compartilhará os hábitos de uso do aplicativo com a equipe do Unstoppable. Isso é para entender quais recursos estão sendo usados (ou não) pelos nossos usuários. Sendo um aplicativo focado em privacidade, precisamos de alguma maneira de avaliar nossos esforços e sem isso não temos ideia se os recursos que construímos estão sendo utilizados ou não.</string>
     <string name="ShareUiData">Compartilhar Dados de UI</string>
     <!-- Security Center -->
-    <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Adicionar novo</string>
     <string name="EvmNetwork_Added">Adicionado</string>
@@ -940,7 +899,6 @@
     <string name="SettingsSecurity_SyncModeBlockchair">API Blockchair</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Rápido, Sem Privado</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">Devagar, Sem Privado</string>
-    <string name="SettingsSecurity_SyncModeBlockchain">Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchainDescription">Lento, Privado.</string>
     <string name="SetDuressPin_Title">Senha do Modo Coação</string>
     <string name="SetDuressPin_Description">Defina uma senha para o modo de Coação</string>
@@ -1039,7 +997,6 @@
 \nEmbora a carteira Unstoppable suporte ambos, recomenda-se usar uma carteira Bitcoin Cash operando no formato TYPE145.</string>
     <string name="ManageCoins_ContractAddress">ENDEREÇO DE CONTRACT</string>
     <!-- Experimental Feature -->
-    <string name="ExperimentalFeatures_Title">Experimental</string>
     <string name="ExperimentalFeatures_Description">Os recursos abaixo são experimentais e devem ser usados com cautela. Enquanto nós testamos minuciosamente esses recursos usando nossos próprios fundos cripto, nós não podemos garantir que eles funcionarão como esperado em todos os casos possíveis.</string>
     <!-- Bitcoin Hodling -->
     <string name="BitcoinHodling_Description">Isso permite que você envie Bitcoins que não podem ser gastos até uma data especificada. \n\nO destinatário de tais transações deve usar o aplicativo de carteira Unstoppable versão 0.10 ou mais recente, com o formato de endereço BIP44 para Bitcoin. \n\nSomente a carteira Unstoppable pode identificar corretamente tais transações na rede Bitcoin, bem como permitir que o receptor gaste esses Bitcoins após o período de bloqueio expirar. \n\nSe você é um HOLDER, você pode usar este recurso para se forçar a manter seus Bitcoins enviando tais transações para si mesmo. \n\nSendo um recurso experimental, o valor máximo por transação é limitado a 0,5 BTC.</string>
@@ -1201,12 +1158,10 @@
     <string name="AddToken_Symbol">Símbolo</string>
     <string name="AddToken_CoinCode">Código da Moeda</string>
     <string name="AddToken_Decimals">Decimais</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">Coin Type(s)</string>
     <string name="AddToken_AlreadyAdded">JÁ ADICIONADO</string>
     <string name="AddToken_AddressOrSymbol">Endereço do Contrato</string>
     <string name="AddToken_ChooseToken">Escolha os tokens</string>
-    <string name="AddToken_Blockchain">Blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token já está na lista de moedas</string>
     <string name="AddToken_InvalidContractAddress">Endereço do contrato inválido</string>
     <string name="AddToken_InvalidBep2Symbol">Símbolo BEP2 inválido</string>
@@ -1229,7 +1184,6 @@
     <string name="Tor_Connection_Title">Conexão</string>
     <string name="Tor_Connection_Enable">Ativar Tor</string>
     <string name="Tor_Connection_Disable">Desativar Tor</string>
-    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Iniciando o Tor...</string>
     <string name="Tor_Status_Error">Erro ao iniciar o Tor!</string>
     <string name="TorPage_Connecting">Conectando Tor…</string>
@@ -1243,14 +1197,8 @@
     <string name="Coin_Tab_Overview">Preço</string>
     <string name="Coin_Tab_Market">Mercados</string>
     <string name="Coin_Tab_Details">Análises</string>
-    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">HOJE</string>
-    <string name="CoinPage_TimeDuration_Day">1D</string>
-    <string name="CoinPage_TimeDuration_Week">7D</string>
-    <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
-    <string name="CoinPage_TimeDuration_Month3">3M</string>
-    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1A</string>
     <string name="CoinPage_TimeDuration_Year2">2A</string>
     <string name="CoinPage_TimeDuration_Year5">5A</string>
@@ -1284,13 +1232,9 @@
     <string name="CoinPage_Category">Categoria</string>
     <string name="CoinPage_Categories">Categorias</string>
     <string name="CoinPage_Contracts">Contratos</string>
-    <string name="CoinPage_Blockchains">Blockchains</string>
-    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Tipos de moeda</string>
-    <string name="CoinPage_Links">Links</string>
     <string name="CoinPage_Guide">Guia</string>
     <string name="CoinPage_Website">Site</string>
-    <string name="CoinPage_Whitepaper">Whitepaper</string>
     <string name="CoinPage_Twitter_NotAvailable">Nenhum twitter disponível</string>
     <string name="CoinPage_Twitter_NoTweets">Não há tweets ainda</string>
     <string name="CoinPage_Twitter_Quoted">Citação @%s</string>
@@ -1301,11 +1245,6 @@
     <string name="CoinPage_DilutedMarketCap">Cap. De Mercado diluído</string>
     <string name="CoinPage_inCirculation">Em Circulação</string>
     <string name="CoinPage_TotalSupply">Fornecimento total</string>
-    <string name="CoinPage_MarketCap_Thousand">K</string>
-    <string name="CoinPage_MarketCap_Million">M</string>
-    <string name="CoinPage_MarketCap_Billion">B</string>
-    <string name="CoinPage_MarketCap_Trillion">T</string>
-    <string name="CoinPage_MarketCap_Quadrillion">Q</string>
     <string name="CoinPage_MarketCap_TvlRation">Proporção de Capital de M. / TVL</string>
     <string name="CoinPage_MarketCap_TvlRation_Description">A proporção do limite de mercado do token do projeto sobre sua TVL.</string>
     <string name="CoinPage_Volume">Volume</string>
@@ -1546,11 +1485,9 @@
     <string name="NftAsset_Properties">Propriedades</string>
     <string name="NftAsset_Description">Descrição</string>
     <string name="NftAsset_Details">Detalhes</string>
-    <string name="NftAsset_Links">Links</string>
     <string name="NftAsset_ContractAddress">Endereço do Contrato</string>
     <string name="NftAsset_TokenId">ID do Token</string>
     <string name="NftAsset_TokenStandard">Critérios do Token</string>
-    <string name="NftAsset_Blockchain">Blockchain</string>
     <string name="NftAsset_Links_Website">Site</string>
     <string name="PoweredBy_OpenSeaAPI">Desenvolvido por API do OpenSea</string>
     <string name="Nft_TopCollections">Principais Coleções NFT</string>
@@ -1563,7 +1500,6 @@
     <string name="NftCollection_AveragePrice">Média de todo o período</string>
     <string name="NftCollection_ItemsCount">%d Itens</string>
     <string name="NftCollection_TodaysSales">Today\'s Sales</string>
-    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s / Item</string>
     <string name="NftCollection_Royalty">Direitos Autorais</string>
     <string name="NftCollection_InceptionDate">Data de Início</string>
@@ -1581,7 +1517,6 @@
     <string name="NftCollection_EventType_Custom">Personalizado</string>
     <string name="NftCollection_EventType_Payout">Pagamento</string>
     <string name="NftCollection_EventType_BulkCancel">Cancelar vários</string>
-    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Desconhecido</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Ganhadores</string>
