@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">انصراف</string>
     <string name="Alert_Copy">رونوشت</string>
     <string name="Alert_Close">بستن</string>
