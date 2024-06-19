@@ -2,7 +2,6 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parámetro no establecido</string>
-    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Alert_Close">Cerrar</string>
@@ -71,7 +70,6 @@
     <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
     <string name="Intro_Wallet_Screen2Description">No te encierres y no dejes que otros te hagan eso.</string>
     <string name="Intro_Wallet_Screen3Title">Actúa sin Fronteras</string>
@@ -191,21 +189,14 @@
     <string name="Market_Category_TopCoins">Monedas Top</string>
     <string name="Market_Category_TopCoins_Description">Mejores monedas por rango de límite de mercado</string>
     <string name="Market_Signals">Señales</string>
-    <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">Cap. de Mercado</string>
-    <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">Las señales a continuación se basan en los indicadores técnicos de precio Bollinger Bands y RSI durante aproximadamente los últimos 30 días. Estas señales son algorítmicas y pueden cambiar con frecuencia.</string>
     <string name="Market_Signal_StrongBuy_Description">Alta confianza en aumento del precio.</string>
     <string name="Market_Signal_Buy_Description">Probable aumento del precio en el futuro cercano.</string>
     <string name="Market_Signal_Neutral_Descripion">No hay una tendencia clara, el mercado está en equilibrio.</string>
     <string name="Market_Signal_Sell_Description">Probable disminución del precio en el futuro cercano.</string>
-    <string name="Market_Signal_StrongSell_Description">High probability of price decrease.</string>
     <string name="Market_Signal_Risky_Description">Nivel de riesgo elevado, requiere precaución.</string>
     <string name="Market_Signal_Warning">Recuerda siempre aplicar gestión de riesgos, y ten en cuenta que esto no es un consejo financiero.</string>
-    <string name="Market_Top_100">Top 100</string>
-    <string name="Market_Top_200">Top 200</string>
-    <string name="Market_Top_300">Top 300</string>
-    <string name="Market_Top_500">Top 500</string>
     <string name="TopPairs_Title">Mejores pares de mercado</string>
     <string name="TopPairs_Description">Mejores pares de trading por volumen en cada bolsa</string>
     <!--Market Overview-->
@@ -260,7 +251,6 @@
     <string name="Market_Filter_PriceChange">Cambio de Precio</string>
     <string name="Market_PriceChange_24H">24 Horas</string>
     <string name="Market_PriceChange_Utc">Medianoche UTC</string>
-    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">BTC superado</string>
     <string name="Market_Filter_OutperformedEth">ETH superado</string>
     <string name="Market_Filter_OutperformedBnb">BNB superado</string>
@@ -275,41 +265,12 @@
     <string name="Market_Filter_GoodDistribution_Description">La puntuación general es Buena o Excelente</string>
     <string name="Market_Filter_StrongBuy">Compra fuerte</string>
     <string name="Market_Filter_Buy">Comprar</string>
-    <string name="Market_Filter_Neutral">Neutral</string>
     <string name="Market_Filter_StrongSell">Vender fuerte</string>
     <string name="Market_Filter_Sell">Vender</string>
     <string name="Market_Filter_RiskToTrade">Arriesgado</string>
     <string name="Market_Filter_Gainers">Ganadores</string>
-    <string name="Market_Filter_Top_100">Top 100</string>
-    <string name="Market_Filter_Top_250">Top 250</string>
-    <string name="Market_Filter_Top_500">Top 500</string>
-    <string name="Market_Filter_Top_1000">Top 1000</string>
-    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
     <string name="Market_Filter_ShowResults_Counter">Mostrar resultados: %d</string>
-    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
-    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
-    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
-    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
-    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
-    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
-    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
-    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
-    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
-    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
-    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
-    <string name="Market_Filter_Range_10B_More">&gt; 10B</string>
-    <string name="Market_Filter_Range_0_50M">&lt; 50M</string>
-    <string name="Market_Filter_Range_50M_200M">50M - 200M</string>
-    <string name="Market_Filter_Range_200M_1B">200M - 1B</string>
-    <string name="Market_Filter_Range_1B_10B">1B - 10B</string>
-    <string name="Market_Filter_Range_10B_50B">10B - 50B</string>
-    <string name="Market_Filter_Range_50B_More">&gt; 50B</string>
-    <string name="Market_Filter_Range_0_500M">&lt; 500M</string>
-    <string name="Market_Filter_Range_500M_2B">500M - 2B</string>
-    <string name="Market_Filter_Range_10B_100B">10B - 100B</string>
-    <string name="Market_Filter_Range_100B_500B">100B - 500B</string>
-    <string name="Market_Filter_Range_500B_More">&gt; 500B</string>
     <string name="Market_Filter_TimePeriod_1D">1 día</string>
     <string name="Market_Filter_TimePeriod_1W">1 Semana</string>
     <string name="Market_Filter_TimePeriod_2W">2 Semanas</string>
@@ -317,7 +278,6 @@
     <string name="Market_Filter_TimePeriod_3M">3 Meses</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Año</string>
-    <string name="Market_Sorting_Manual">Manual</string>
     <string name="Market_Sorting_Gainers">Ganadores</string>
     <string name="Market_Sorting_Losers">Perdedores</string>
     <string name="Market_Sorting_HighestCap">Capitalización Mayor</string>
@@ -338,7 +298,6 @@
     <string name="Balance_SyncedUntil">hasta %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_SearchingTransactions">Buscando transacciones…</string>
-    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando... %s%%</string>
     <string name="Balance_CoinDisabled">Moneda deshabilitada %s</string>
     <string name="Balance_Sort_Balance">Saldo</string>
@@ -542,8 +501,6 @@
     <string name="WalletConnect_NotSupportedDescription">El tipo de cartera actual %s no es compatible con WalletConnect</string>
     <string name="WalletConnect_Unnamed">Sin nombre</string>
     <string name="WalletConnect_DAppUnknown">dApp desconocida</string>
-    <string name="WalletConnect_Pairings">Pairings</string>
-    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Borrar todo</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">¿Desea eliminar todos los dAps emparejados?</string>
     <string name="WalletConnect_Pairings_Delete">Eliminar</string>
@@ -615,8 +572,6 @@
     <string name="Swap_Provider">Proveedor</string>
     <string name="Swap_Providers">Proveedores</string>
     <string name="Swap_SelectSwapProvider_Title">Proveedor de intercambio</string>
-    <string name="Swap_AmountEstimated">(est)</string>
-    <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(máx)</string>
     <string name="Swap_AmountTypeCoin">Moneda</string>
     <string name="Swap_SwapRouteNotFound">Ruta no localizada</string>
@@ -635,7 +590,6 @@
     <string name="SwapSettings_RecipientAddressTitle">Dirección del destinatario</string>
     <string name="SwapSettings_RecipientAddressDescription">Después de la operación de cambio, el monto se transferirá a la dirección especificada</string>
     <string name="SwapSettings_Apply">Aplicar</string>
-    <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Dominio o dirección</string>
     <string name="SwapSettings_Error_DeadlineZero">Cero límite</string>
     <string name="SwapSettings_Error_SlippageZero">Cero deslizamiento</string>
@@ -689,7 +643,6 @@
     <string name="Transactions_Completed">Finalizado</string>
     <string name="Transactions_Processing">Procesando</string>
     <string name="Transactions_Send">Enviado</string>
-    <string name="Transactions_Burn">Burned</string>
     <string name="Transactions_Approve">Aprobar</string>
     <string name="Transactions_Swap">Cambiado</string>
     <string name="Transactions_Failed">Falla</string>
@@ -728,7 +681,6 @@
     <string name="TransactionInfo_Status">Estado</string>
     <string name="TransactionInfo_Status_Confirmed">Confirmado</string>
     <string name="TransactionInfo_Date">Fecha</string>
-    <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Servicio</string>
     <string name="TransactionInfo_RawTransaction">Transacción sin procesar</string>
     <string name="TransactionInfo_ContactName">Nombre de contacto</string>
@@ -815,7 +767,6 @@
     <string name="Settings_Contact_ViaTelegram">vía Telegram</string>
     <string name="Settings_Contact_ViaEmail">vía E-mail</string>
     <string name="Settings_AutoLock">Bloqueo automático</string>
-    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
     <string name="Settings_PersonalSupport">Soporte personal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Introduzca su nombre de cuenta de Telegram para iniciar un chat de asistencia personal con nuestro equipo. Nos pondremos en contacto contigo y comenzaremos a trabajar en tu problema tan pronto como lo veamos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Ya has solicitado un chat privado, encuentra en Telegram</string>
@@ -943,7 +894,6 @@
     <string name="SettingsTerms_Bugs">Puede haber problemas de software no descubiertos en el código que permite que esta aplicación funcione mal.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
-    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contáctenos</string>
     <!--Setting_Notifications-->
@@ -1112,7 +1062,6 @@
     <string name="EvmPrivateKey_Warning">Esta clave es para todas las blockchains compatibles con EVM. No la comparta con nadie.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Bip32 Root Key -->
-    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Toca para mostrar la clave privada</string>
     <!-- Private Keys -->
@@ -1120,7 +1069,6 @@
     <string name="PrivateKeys_EvmPrivateKey">Clave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Otorga un control total sobre criptomonedas basadas en Ethereum, Binance Smart Chain, etc dentro de cada monedero correspondiente.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Otorga total control sobre los activos de la respectiva cartera.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Otorga control total sobre Bitcoin y otras criptomonedas basadas en UTXO, es decir, Litecoin, Bitcoin Cash, Dash, etc. dentro de su respectiva cartera.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca comparta su frase de recuperación con nadie. El equipo imparable nunca pedirá su frase de recuperación.</string>
     <!-- Public Keys -->
@@ -1169,7 +1117,6 @@
     <string name="AddToken_Symbol">Símbolo</string>
     <string name="AddToken_CoinCode">Código de moneda</string>
     <string name="AddToken_Decimals">Decimales</string>
-    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TIPOS DE COIN</string>
     <string name="AddToken_AlreadyAdded">YA AGREGADO</string>
     <string name="AddToken_AddressOrSymbol">Dirección del contrato</string>
@@ -1177,7 +1124,6 @@
     <string name="AddToken_Blockchain">Filtrar por blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Este token ya está en la lista del gestor de monedas</string>
     <string name="AddToken_InvalidContractAddress">Dirección del contrato inválida</string>
-    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
     <string name="AddEvmToken_Bep2NotFound">Símbolo BEP2 no encontrado</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Dirección del contrato no encontrada en la cadena de bloques %s</string>
     <!-- Address Format Settings List -->
@@ -1197,7 +1143,6 @@
     <string name="Tor_Connection_Title">Conexión</string>
     <string name="Tor_Connection_Enable">Activar Tor</string>
     <string name="Tor_Connection_Disable">Desactivar Tor</string>
-    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Iniciando Tor...</string>
     <string name="Tor_Status_Error">¡Error iniciando Tor!</string>
     <string name="TorPage_Connecting">Conectando Tor…</string>
@@ -1211,7 +1156,6 @@
     <string name="Coin_Tab_Overview">Precio</string>
     <string name="Coin_Tab_Market">Mercados</string>
     <string name="Coin_Tab_Details">Estadísticas</string>
-    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Hoy</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2 S</string>
     <string name="CoinPage_TimeDuration_Year">1A</string>
@@ -1247,8 +1191,6 @@
     <string name="CoinPage_Category">Categoría</string>
     <string name="CoinPage_Categories">Categorías</string>
     <string name="CoinPage_Contracts">Contratos</string>
-    <string name="CoinPage_Blockchains">Blockchains</string>
-    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Tipo de moneda</string>
     <string name="CoinPage_Links">Enlaces</string>
     <string name="CoinPage_Guide">Instructivos</string>
@@ -1413,7 +1355,6 @@
     <string name="Coin_Analytics_Indicators_StrongSell">Vender fuerte</string>
     <string name="Coin_Analytics_Indicators_Sell">Vender</string>
     <string name="Coin_Analytics_Indicators_Buy">Comprar</string>
-    <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
     <string name="Coin_Analytics_Indicators_NoData">No hay datos</string>
     <string name="CoinAnalytics_SmartContractAnalysis">Análisis de contratos inteligente</string>
     <string name="CoinAnalytics_HighRiskItems">Elementos de Alto Riesgo</string>
@@ -1421,6 +1362,7 @@
     <string name="CoinAnalytics_PoweredByDeFi">Desarrollado por De.Fi</string>
     <string name="CoinAnalytics_CountItems">%d Artículos</string>
     <string name="TechnicalAdvice_Title">Indicadores técnicos</string>
+    <string name="TechnicalAdvice_IndicatorsDisclaimer">Recuerda siempre aplicar gestión de riesgos, y ten en cuenta que esto no es un consejo financiero.</string>
     <string name="TechnicalAdvice_StrongRsi">Mientras tanto, el RSI es %1$s, lo que aún indica que está %2$s.</string>
     <string name="TechnicalAdvice_StrongAdvice">Este podría ser una señal muy fuerte para ingresar al mercado. Ten en cuenta que puede haber varios intentos de movimiento hacia %s después de regresar al canal, así que no olvides el manejo del riesgo.</string>
     <string name="TechnicalAdvice_StableRsi">Mientras tanto, el RSI es %s, lo que también indica una reversión de la tendencia (el RSI cruzó el límite del 70\%%).</string>
@@ -1442,7 +1384,6 @@
     <string name="TechnicalAdvice_HideDetails">Ocultar Detalles</string>
     <string name="TechnicalAdvice_Indicators_StrongBuy">Compra fuerte</string>
     <string name="TechnicalAdvice_Indicators_Buy">Comprar</string>
-    <string name="TechnicalAdvice_Indicators_Neutral">Neutral</string>
     <string name="TechnicalAdvice_Indicators_Sell">Vender</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Vender fuerte</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">Arriesgado</string>
