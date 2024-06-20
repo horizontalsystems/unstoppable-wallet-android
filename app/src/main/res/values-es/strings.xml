@@ -200,8 +200,10 @@
     <string name="Market_Signal_Buy_Description">Probable aumento del precio en el futuro cercano.</string>
     <string name="Market_Signal_Neutral_Descripion">No hay una tendencia clara, el mercado está en equilibrio.</string>
     <string name="Market_Signal_Sell_Description">Probable disminución del precio en el futuro cercano.</string>
+    <string name="Market_Signal_StrongSell_Description">Alta probabilidad de disminución del precio.</string>
     <string name="Market_Signal_Risky_Description">Nivel de riesgo elevado, requiere precaución.</string>
     <string name="Market_Signal_Warning">Recuerda siempre aplicar gestión de riesgos, y ten en cuenta que esto no es un consejo financiero.</string>
+    <string name="Market_Signal_TurnOn">Activar</string>
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
@@ -223,6 +225,7 @@
     <string name="MarketGlobalMetrics_Chart">Diagrama</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Capitalización Total</string>
     <string name="MarketGlobalMetrics_BtcDominance">Dominio de BTC</string>
+    <string name="MarketGlobalMetrics_Volume">Vol. de 24h</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap. DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrada ETF</string>
@@ -317,6 +320,7 @@
     <string name="Market_Filter_TimePeriod_3M">3 Meses</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Año</string>
+    <string name="Market_Sorting_Manual">Manual</string>
     <string name="Market_Sorting_Gainers">Ganadores</string>
     <string name="Market_Sorting_Losers">Perdedores</string>
     <string name="Market_Sorting_HighestCap">Capitalización Mayor</string>
@@ -529,6 +533,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">No hay cuenta adecuada</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">No hay kit de evm adecuado</string>
     <string name="WalletConnect_Error_DataParsingError">Error de análisis de datos</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Cadenas no compatibles: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Métodos no soportados: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Eventos no soportados: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Petición no encontrada error</string>
     <string name="WalletConnect_NoConnection">No tienes ninguna dapps conectadas</string>
     <string name="WalletConnect_PendingRequests">Solicitudes Pendientes</string>
@@ -846,6 +853,8 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">ESPECIALES DE OBJETO</string>
+    <string name="Appearance_MarketsTab">MARKETS TAB</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">ACTUALIZAR SCREEN</string>
     <string name="Appearance_AppIcon">ICONO APP</string>
     <string name="Appearance_BalanceConversion">Conversión de balance</string>
@@ -1137,6 +1146,7 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Toca para mostrar la clave privada</string>
+    <string name="ExtendedKey_AccountInfo">Para hacer</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Claves privadas</string>
     <string name="PrivateKeys_EvmPrivateKey">Clave Privada EVM</string>
