@@ -225,6 +225,7 @@
     <string name="MarketGlobalMetrics_Chart">Graphique</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Cap totale</string>
     <string name="MarketGlobalMetrics_BtcDominance">Pourcentage de Dominance du BTC</string>
+    <string name="MarketGlobalMetrics_Volume">Vol. 24h</string>
     <string name="MarketGlobalMetrics_DefiCap">Cap DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrées d\'ETF</string>
@@ -488,6 +489,7 @@
     <string name="FeeInfo_TronFee_Title">Frais</string>
     <string name="FeeInfo_TronFee_Description">Le coût estimé pour envoyer une transaction donnée sur le réseau (sans exclure les coûts d\'énergie, de bande passante et d\'activation)</string>
     <string name="FeeInfo_TronActivationFee_Title">Frais d\'activation</string>
+    <string name="FeeInfo_TronActivationFee_Description">Cette adresse n\'est pas active. Le transfert de jetons TRX ou TRC-10 vers une adresse de compte inactive activera le compte.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Ressources consommées</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">La bande passante est l\'unité qui mesure la taille des octets de transaction stockés dans la base de données blockchain. Plus la transaction est grande, plus la bande passante sera consommée.\n\nL\'énergie est l\'unité qui mesure le montant de calcul requis par la machine virtuelle TRON pour effectuer des opérations spécifiques sur le réseau TRON.\n\nÉtant donné que les transactions de contrats intelligents nécessitent des ressources informatiques pour être exécutées, chaque transaction de contrat intelligent nécessite le paiement de frais d\'énergie.</string>
     <!--Tron-->
@@ -531,6 +533,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">Aucun compte approprié</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Aucun kit evm approprié</string>
     <string name="WalletConnect_Error_DataParsingError">Erreur d\'analyse des données</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Chaînes non prises en charge : %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Méthodes non prises en charge : %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Événements non pris en charge : %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Erreur de requête non trouvée</string>
     <string name="WalletConnect_NoConnection">Vous n\'avez aucune dapp connectée</string>
     <string name="WalletConnect_PendingRequests">Demandes en attente</string>
@@ -822,6 +827,7 @@
     <string name="Settings_Contact_ViaEmail">par e-mail</string>
     <string name="Settings_AutoLock">Verrouillage automatique</string>
     <string name="Settings_JoinUnstoppables">Soyez Unstoppable</string>
+    <string name="Settings_JoinUnstoppables_Description">Apprenez et maîtrisez les crypto-monnaies grâce à des vidéos exclusives. Faites connaissance avec nous de manière informelle. Soyez les premiers à voir les projets sur lesquels nous travaillons.</string>
     <string name="Settings_PersonalSupport">Assistance Personnelle</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Entrez le nom de votre compte Telegram pour commencer une conversation de soutien personnelle avec notre équipe. Nous reviendrons vers vous et commencerons à travailler sur votre problème dès que nous le verrons.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Vous avez déjà demandé une conversation privée, la trouver sur Telegram</string>
@@ -847,6 +853,8 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 heure</string>
     <string name="Appearance_Theme">Thème</string>
     <string name="Appearance_Tab">PARAMÈTRES DES TAB</string>
+    <string name="Appearance_MarketsTab">TAB DES MARCHÉS</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
     <string name="Appearance_BalanceConversion">Conversion du solde</string>
@@ -854,6 +862,7 @@
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_HideMarketsTab">Masquer les marchés</string>
     <string name="Appearance_HideBalanceTabButtons">Masquer les boutons</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">Cette configuration masque les boutons Envoyer, Recevoir et Permuter dans l\'onglet Balance.</string>
     <string name="Appearance_BalanceAutoHide">Masquer le Solde Automatiquement</string>
     <string name="Appearance_BalanceAutoHide_Description">Masque automatiquement le solde à chaque ouverture de l\'application, indépendamment des préférences précédentes.</string>
     <string name="Appearance_PriceChangeInterval">Variation de prix %</string>
@@ -885,6 +894,7 @@
     <string name="BackupManager_AppSettingsDescription">Langue, Devise, Apparence ...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable ne collecte pas de données personnelles exposant vos informations privées, telles que les soldes de coins ou les adresses. Bien que nous recueillions certaines statistiques d\'utilisation de l\'interface utilisateur, cela sert uniquement à comprendre notre base d\'utilisateurs et les tendances d\'utilisation de l\'application. Cela peut être désactivé si vous le souhaitez.</string>
+    <string name="Privacy_BulletedText1">Le portefeuille ne recueille aucune donnée personnelle.</string>
     <string name="Privacy_BulletedText2">Il n\'y a pas de comptes utilisateurs ni de bases de données stockant les données des utilisateurs.</string>
     <string name="Privacy_BulletedText3">Si autorisé, le portefeuille partagera les habitudes d\'utilisation de l\'application avec l\'équipe d\'Unstoppable. Cela permet de comprendre quelles fonctionnalités sont utilisées (ou non) par nos utilisateurs. Étant une application axée sur la confidentialité, nous avons besoin d\'une manière d\'évaluer nos efforts, et sans cela, nous n\'avons aucune idée si les fonctionnalités que nous avons développées sont utilisées ou non.</string>
     <string name="ShareUiData">Partager les données UI</string>
@@ -1138,6 +1148,7 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Appuyez pour afficher la clé privée</string>
+    <string name="ExtendedKey_AccountInfo">À faire</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Clés privées</string>
     <string name="PrivateKeys_EvmPrivateKey">Clé privée EVM</string>
@@ -1461,6 +1472,8 @@
     <string name="TechnicalAdvice_IndicatorsDisclaimer">N\'oubliez pas d\'appliquer une gestion des risques, et notez que ceci n\'est pas un conseil financier.</string>
     <string name="TechnicalAdvice_OverBought">suracheté</string>
     <string name="TechnicalAdvice_OverSold">sursoldé</string>
+    <string name="TechnicalAdvice_Down">moins</string>
+    <string name="TechnicalAdvice_Up">plus</string>
     <string name="TechnicalAdvice_OverMain">Les actions liées à l\'actif comportent des risques.</string>
     <string name="TechnicalAdvice_OverIndicators_SignalDate">À partir du %s</string>
     <string name="TechnicalAdvice_OverIndicators">L\'actif est en dehors du canal de bandes de Bollinger et %s.</string>
