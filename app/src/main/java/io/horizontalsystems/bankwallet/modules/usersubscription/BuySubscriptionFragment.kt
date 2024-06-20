@@ -11,7 +11,10 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
+import io.horizontalsystems.bankwallet.core.slideFromRightForResult
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
@@ -30,7 +33,7 @@ class BuySubscriptionFragment : BaseComposeFragment() {
     data class Input(val action: IPaidAction) : Parcelable
 
     @Parcelize
-    data class Result(val result: Boolean) : Parcelable
+    class Result : Parcelable
 }
 
 @Composable
@@ -39,7 +42,7 @@ private fun BuySubscriptionScreen(navController: NavController, activity: Fragme
 
     val uiState = viewModel.uiState
 
-    val plans = uiState.plans
+    val subscriptions = uiState.subscriptions
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -53,12 +56,18 @@ private fun BuySubscriptionScreen(navController: NavController, activity: Fragme
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            plans.forEach { plan ->
+            subscriptions.forEach { subscription ->
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
-                    title = plan.name,
+                    title = subscription.name,
                     onClick = {
-                        viewModel.launchPurchaseFlow(plan.id, activity)
+                        navController.slideFromRightForResult<BuySubscriptionChoosePlanFragment.Result>(
+                            R.id.buySubscriptionChoosePlanFragment,
+                            BuySubscriptionChoosePlanFragment.Input(subscription.id)
+                        ) {
+                            navController.setNavigationResultX(BuySubscriptionFragment.Result())
+                            navController.popBackStack()
+                        }
                     }
                 )
                 VSpacer(height = 12.dp)

@@ -13,11 +13,15 @@ object UserSubscriptionManager {
         return service.isActionAllowed(paidAction)
     }
 
-    suspend fun getPlans(): List<SubscriptionPlan> {
-        return service.getPlans()
+    suspend fun getSubscriptions(): List<Subscription> {
+        return service.getSubscriptions()
     }
 
-    fun launchPurchaseFlow(planId: String, activity: Activity) {
-        service.launchPurchaseFlow(planId, activity)
+    suspend fun launchPurchaseFlow(subscriptionId: String, planId: String, activity: Activity): HSPurchase? {
+        return service.launchPurchaseFlow(subscriptionId, planId, activity)
+    }
+
+    fun getBasePlans(subscriptionId: String): List<BasePlan> {
+        return service.getBasePlans(subscriptionId)
     }
 }
