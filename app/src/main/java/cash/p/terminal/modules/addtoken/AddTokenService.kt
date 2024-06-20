@@ -33,6 +33,7 @@ class AddTokenService(
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
+        BlockchainType.Solana
     )
 
     val blockchains = marketKit
@@ -51,6 +52,9 @@ class AddTokenService(
             )
             BlockchainType.Tron -> {
                 AddTronTokenBlockchainService.getInstance(blockchain)
+            }
+            BlockchainType.Solana -> {
+                AddSolanaTokenBlockchainService.getInstance(blockchain)
             }
             else -> AddEvmTokenBlockchainService.getInstance(blockchain)
         }
