@@ -203,6 +203,7 @@
     <string name="Market_Signal_StrongSell_Description">价格下跌的高概率.</string>
     <string name="Market_Signal_Risky_Description">风险水平升高，需要谨慎.</string>
     <string name="Market_Signal_Warning">请记住始终要进行风险管理，并注意这不是财务建议</string>
+    <string name="Market_Signal_TurnOn">打开</string>
     <string name="Market_Top_100">前100名</string>
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
@@ -281,6 +282,7 @@
     <string name="Market_Filter_StrongSell">强烈建议卖出</string>
     <string name="Market_Filter_Sell">出售</string>
     <string name="Market_Filter_RiskToTrade">有风险</string>
+    <string name="Market_Filter_Gainers">涨幅最大者</string>
     <string name="Market_Filter_Top_100">前100名</string>
     <string name="Market_Filter_Top_250">前250名</string>
     <string name="Market_Filter_Top_500">前500名</string>
@@ -487,6 +489,7 @@
     <string name="FeeInfo_TronFee_Title">费用</string>
     <string name="FeeInfo_TronFee_Description">估算在网络上发送特定交易所需的成本，包括能源、带宽和激活费</string>
     <string name="FeeInfo_TronActivationFee_Title">激活费</string>
+    <string name="FeeInfo_TronActivationFee_Description">此地址未激活。传输TRX或 TRC-10代币到非活动帐户地址将激活该帐户。</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">消耗的资源</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth 是衡量存储在区块链数据库中的交易字节大小的单位。 交易越大，消耗的带宽资源就越多。\n\nEnergy 是衡量波场虚拟机在波场网络上执行特定操作所需计算量的单位。\n\n自智能合约 交易需要计算资源来执行，每笔智能合约交易都需要支付 energy费用。</string>
     <!--Tron-->
@@ -824,6 +827,7 @@
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_JoinUnstoppables_Description">通过独家视频学习和掌握加密。非正式地了解我们。成为第一个看看我们正在工作的事情。</string>
     <string name="Settings_PersonalSupport">个人支持</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>
@@ -849,6 +853,8 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 小时</string>
     <string name="Appearance_Theme">主题</string>
     <string name="Appearance_Tab">TAB设置</string>
+    <string name="Appearance_MarketsTab">市场标签</string>
+    <string name="Appearance_BalanceTab">余额标签</string>
     <string name="Appearance_LaunchScreen">局域网SCREEN</string>
     <string name="Appearance_AppIcon">应用图标</string>
     <string name="Appearance_BalanceConversion">余额转换</string>
@@ -856,6 +862,7 @@
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_HideMarketsTab">隐藏市场</string>
     <string name="Appearance_HideBalanceTabButtons">隐藏按钮</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">此配置隐藏平衡选项卡上的发送、接收和交换按钮。</string>
     <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡，不管先前的偏好设置。</string>
     <string name="Appearance_PriceChangeInterval">价格变化 %</string>
@@ -887,6 +894,7 @@
     <string name="BackupManager_AppSettingsDescription">语言、 货币、 外观 ...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable 不收集暴露您私人信息的个人数据，例如币余额或地址。虽然我们收集了一些用户界面使用统计数据，但这仅用于了解我们的用户群和应用程序使用趋势。如果您希望，可以禁用此功能。</string>
+    <string name="Privacy_BulletedText1">钱包没有收集任何个人数据。</string>
     <string name="Privacy_BulletedText2">我们没有用户账户或存储用户数据的数据库。</string>
     <string name="Privacy_BulletedText3">如果允许，钱包将与不可阻挡团队分享应用程序使用习惯。这是为了了解我们的用户正在使用哪些功能（或未使用）。作为一个关注隐私的应用程序，我们需要一种评估我们努力的方式，如果没有这个，我们就无法知道我们构建的功能是否被使用。</string>
     <string name="ShareUiData">共享界面数据</string>
@@ -1138,6 +1146,7 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
+    <string name="ExtendedKey_AccountInfo">待办</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">私钥</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
@@ -1461,6 +1470,10 @@
     <string name="TechnicalAdvice_IndicatorsDisclaimer">请记住始终要进行风险管理，并注意这不是财务建议</string>
     <string name="TechnicalAdvice_OverBought">已购买过期的</string>
     <string name="TechnicalAdvice_OverSold">超价</string>
+    <string name="TechnicalAdvice_Down">down</string>
+    <string name="TechnicalAdvice_Up">up</string>
+    <string name="TechnicalAdvice_OverMain">资产的行动是有风险的。</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">从 %s 开始</string>
     <string name="TechnicalAdvice_OverIndicators">资产不属于Bollinger频道和 %s。</string>
     <string name="TechnicalAdvice_OverRsi"> RSI = %1$s，这也表明该资产为%2$s.</string>
     <string name="TechnicalAdvice_OverAdvice"> 可能会有强烈的%s向动，因此最好等待资产价格回到通道中。</string>
@@ -1584,6 +1597,7 @@
     <string name="BalanceSyncError_ButtonReport">报告</string>
     <string name="BalanceSyncError_ReportButtonExplanation">如果您决定报告错误文本，将复制到剪贴板。</string>
     <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">加入未加入的</string>
     <string name="ReleaseNotes_FollowUs">关注我们</string>
     <string name="CoinPage_Chart_Locked">锁住</string>
     <string name="ProUsersInfo_Title">专业用户</string>

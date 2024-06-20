@@ -160,6 +160,7 @@
     <string name="Market_Title">Mercados</string>
     <string name="Market_Search">Buscar</string>
     <string name="Market_Search_Sections_RecentTitle">RECENTES</string>
+    <string name="Market_Search_Sections_PopularTitle">POPULAR</string>
     <string name="Market_FilterSection_MarketParameters">PARÂMETROS DE MERCADO</string>
     <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
     <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
@@ -492,6 +493,7 @@
     <string name="FeeInfo_TronFee_Title">Taxa</string>
     <string name="FeeInfo_TronFee_Description">O custo estimado de envio de determinada transação na rede. (Sem excluir Eneregy, Bandwidth e Taxa de Ativação)</string>
     <string name="FeeInfo_TronActivationFee_Title">Taxa de ativação</string>
+    <string name="FeeInfo_TronActivationFee_Description">Este endereço não está ativo. A transferência de tokens TRX ou TRC-10 para um endereço de conta inativo irá ativar a conta.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Recursos consumidos</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">A bandwidth é a unidade que mede o tamanho dos bytes de transação armazenados no banco de dados blockchain. Quanto maior a transação, mais recursos de largura de banda serão consumidos.\n\nEnergy é a unidade que mede a quantidade de computação necessária pela máquina virtual TRON para realizar operações específicas na rede TRON.\n\nComo as transações de contrato inteligente exigem recursos de computação para executar, cada transação de contrato inteligente requer o pagamento da taxa de energy.</string>
     <!--Tron-->
@@ -535,6 +537,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">Sem conta adequada</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Nenhum kit evm adequado</string>
     <string name="WalletConnect_Error_DataParsingError">Erro de análise de dados</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Correntes não suportadas: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Métodos não suportados: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Eventos não suportados: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Pedido não encontrado erro</string>
     <string name="WalletConnect_NoConnection">Você não tem nenhum Dapps conectado</string>
     <string name="WalletConnect_PendingRequests">Solicitações Pendentes</string>
@@ -852,6 +857,8 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>
+    <string name="Appearance_MarketsTab">TAB MARKETS</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
     <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
     <string name="Appearance_BalanceConversion">Conversão de saldo</string>
@@ -891,6 +898,7 @@
     <string name="BackupManager_AppSettingsDescription">Linguagem, Moeda, Aparência …</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable não coleta dados pessoais que exponham suas informações privadas, como saldos de moedas ou endereços. Embora coletemos algumas estatísticas de uso da interface do usuário, é exclusivamente para entender nossa base de usuários e tendências de uso do aplicativo. Isso pode ser desativado se você desejar.</string>
+    <string name="Privacy_BulletedText1">A carteira não coleta nenhum dado pessoal.</string>
     <string name="Privacy_BulletedText2">Não há contas de usuário ou bancos de dados armazenando dados do usuário.</string>
     <string name="Privacy_BulletedText3">Se permitido, a carteira compartilhará os hábitos de uso do aplicativo com a equipe do Unstoppable. Isso é para entender quais recursos estão sendo usados (ou não) pelos nossos usuários. Sendo um aplicativo focado em privacidade, precisamos de alguma maneira de avaliar nossos esforços e sem isso não temos ideia se os recursos que construímos estão sendo utilizados ou não.</string>
     <string name="ShareUiData">Compartilhar Dados de UI</string>
@@ -1147,6 +1155,7 @@
     <string name="Bip32RootKey">Chave Raiz BIP32</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Toque para mostrar a chave privada</string>
+    <string name="ExtendedKey_AccountInfo">Para fazer</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Chave Privada</string>
     <string name="PrivateKeys_EvmPrivateKey">Chave Privada EVM</string>
@@ -1597,6 +1606,7 @@
     <string name="BalanceSyncError_ButtonReport">Reportar</string>
     <string name="BalanceSyncError_ReportButtonExplanation">O texto de erro será copiado para a área de transferência caso você decida reportá-lo.</string>
     <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE EM REPARÁVEIS</string>
     <string name="ReleaseNotes_FollowUs">Siga a gente</string>
     <string name="CoinPage_Chart_Locked">Bloqueado</string>
     <string name="ProUsersInfo_Title">Usuários Pro</string>
