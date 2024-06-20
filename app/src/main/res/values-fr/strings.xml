@@ -203,6 +203,7 @@
     <string name="Market_Signal_StrongSell_Description">Probabilité élevée de diminution du prix.</string>
     <string name="Market_Signal_Risky_Description">Niveau de risque élevé, nécessite de la prudence.</string>
     <string name="Market_Signal_Warning">N\'oubliez pas d\'appliquer une gestion des risques, et notez que ceci n\'est pas un conseil financier.</string>
+    <string name="Market_Signal_TurnOn">Activer</string>
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
@@ -261,6 +262,7 @@
     <string name="Market_Filter_PriceChange">Variation de prix</string>
     <string name="Market_PriceChange_24H">24 Heures</string>
     <string name="Market_PriceChange_Utc">Minuit UTC</string>
+    <string name="Market_Filter_Blockchains">Blockchains</string>
     <string name="Market_Filter_OutperformedBtc">A surpassé BTC</string>
     <string name="Market_Filter_OutperformedEth">A surpassé ETH</string>
     <string name="Market_Filter_OutperformedBnb">A surpassé BNB</string>
@@ -848,6 +850,7 @@
     <string name="Appearance_LaunchScreen">ÉCRAN DE LÉCHARGEMENT</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
     <string name="Appearance_BalanceConversion">Conversion du solde</string>
+    <string name="Appearance_BalanceValue">Valeur du solde</string>
     <string name="Appearance_Warning_CloseApplication">La modification de l\'icône fermera l\'application</string>
     <string name="Appearance_HideMarketsTab">Masquer les marchés</string>
     <string name="Appearance_HideBalanceTabButtons">Masquer les boutons</string>
@@ -867,6 +870,7 @@
     <string name="BackupManager_RestoreBackup">Restaurer la sauvegarde</string>
     <string name="BackupManager_CreateBackup">Créer une nouvelle sauvegarde</string>
     <string name="BackupManager_BаckupFile">Fichier de sauvegarde</string>
+    <string name="BackupManager_Wallets">WALLETS</string>
     <string name="BackupManager_Other">AUTRE</string>
     <string name="BackupManager_Restore">Restaurer</string>
     <string name="BackupManager_BackupFileContents">Liste des contenus dans le fichier de sauvegarde.</string>
@@ -885,6 +889,7 @@
     <string name="Privacy_BulletedText3">Si autorisé, le portefeuille partagera les habitudes d\'utilisation de l\'application avec l\'équipe d\'Unstoppable. Cela permet de comprendre quelles fonctionnalités sont utilisées (ou non) par nos utilisateurs. Étant une application axée sur la confidentialité, nous avons besoin d\'une manière d\'évaluer nos efforts, et sans cela, nous n\'avons aucune idée si les fonctionnalités que nous avons développées sont utilisées ou non.</string>
     <string name="ShareUiData">Partager les données UI</string>
     <!-- Security Center -->
+    <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Ajouter un Nouveau</string>
     <string name="EvmNetwork_Added">Ajouté</string>
@@ -946,6 +951,7 @@
     <string name="DuressPin_Notes_PasscodeChange_Description">La modification du code d\'accès en mode Duress modifiera également le code d\'accès actuel pour ce mode.</string>
     <string name="DuressPinSelectAccounts_Title">Sélectionnez les portefeuilles</string>
     <string name="DuressPinSelectAccounts_Description">Sélectionnez les portefeuilles qui seront affichés en mode Duresse.</string>
+    <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
     <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">REGARDER LES WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Le portefeuille Unstoppable est conçu pour ceux qui cherchent à investir et à stocker des cryptomonnaies de manière privée et indépendante.\n\nC\'est un portefeuille non-dépositaire, peer-to-peer où seul l\'utilisateur a le contrôle sur les fonds. Il ne collecte aucune donnée et garde l\'utilisateur indépendant en ne verrouillant pas les fonds de l\'utilisateur sur une application spécifique de portefeuille.\n\nLe portefeuille Unstoppable est entièrement open-source et tout le monde peut confirmer que l\'application fonctionne exactement comme il le prétend.</string>
@@ -1137,6 +1143,7 @@
     <string name="PrivateKeys_EvmPrivateKey">Clé privée EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Permet un contrôle total des crypto-monnaies basées sur l\'EVM, c\'est-à-dire Ethereum, Binance Smart Chain, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Permet d\'exercer un contrôle total sur les actifs du portefeuille correspondant.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Permet un contrôle total du Bitcoin et des autres crypto-monnaies basées sur l\'UTXO, c\'est-à-dire Litecoin, Bitcoin Cash, Dash, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_NeverShareWarning">Ne partagez jamais votre phrase de récupération avec quiconque. Une équipe imparable ne demandera jamais votre phrase de récupération.</string>
     <!-- Public Keys -->
@@ -1185,6 +1192,7 @@
     <string name="AddToken_Symbol">Symbole</string>
     <string name="AddToken_CoinCode">Code de la pièce</string>
     <string name="AddToken_Decimals">Decimales</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">TYPES DE COINS</string>
     <string name="AddToken_AlreadyAdded">DÉJÀ AJOUTÉ</string>
     <string name="AddToken_AddressOrSymbol">Adresse du contrat</string>
@@ -1192,6 +1200,7 @@
     <string name="AddToken_Blockchain">Filtrer par blockchain</string>
     <string name="AddToken_CoinAlreadyInListWarning">Ce token figure déjà sur la liste du gestionnaire des pièces</string>
     <string name="AddToken_InvalidContractAddress">Adresse du contrat invalide</string>
+    <string name="AddToken_InvalidBep2Symbol">Invalid BEP2 symbol</string>
     <string name="AddEvmToken_Bep2NotFound">Symbole BEP2 introuvable</string>
     <string name="AddEvmToken_ContractAddressNotFoundInBlockchain">Adresse du contrat introuvable dans la blockchain %s</string>
     <!-- Address Format Settings List -->
@@ -1204,12 +1213,14 @@
     <!-- Blockchain Settings -->
     <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restaurer la source</string>
     <string name="BlockchainSettings_SyncModeChangeAlert_Content">Après cette modification, le portefeuille devra se resynchroniser avec la blockchain %s.</string>
+    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Commun avant 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Commun après 2018</string>
     <!-- Tor -->
     <string name="Tor_Connection_Title">Connexion</string>
     <string name="Tor_Connection_Enable">Activer Tor</string>
     <string name="Tor_Connection_Disable">Désactiver Tor</string>
+    <string name="Tor_Alert_Title">Internet</string>
     <string name="Tor_Status_Starting">Démarrage de Tor...</string>
     <string name="Tor_Status_Error">Erreur lors du démarrage de Tor !</string>
     <string name="TorPage_Connecting">Connexion à Tor…</string>
@@ -1223,10 +1234,14 @@
     <string name="Coin_Tab_Overview">Prix</string>
     <string name="Coin_Tab_Market">Marchés</string>
     <string name="Coin_Tab_Details">Analyses</string>
+    <string name="Coin_Tab_Tweets">Tweets</string>
     <string name="CoinPage_TimeDuration_Today">Aujourd\'hui</string>
     <string name="CoinPage_TimeDuration_Day">1J</string>
     <string name="CoinPage_TimeDuration_Week">7J</string>
+    <string name="CoinPage_TimeDuration_Month">1M</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2S</string>
+    <string name="CoinPage_TimeDuration_Month3">3M</string>
+    <string name="CoinPage_TimeDuration_HalfYear">6M</string>
     <string name="CoinPage_TimeDuration_Year">1J</string>
     <string name="CoinPage_TimeDuration_Year2">2A</string>
     <string name="CoinPage_TimeDuration_Year5">5A</string>
@@ -1235,6 +1250,7 @@
     <string name="CoinPage_TradingVolume">Volume de trading</string>
     <string name="CoinPage_MajorHolders">Porteurs majeurs</string>
     <string name="CoinPage_MajorHolders_InfoDescription">Le nombre de tokens détenus par les 10 meilleurs portefeuilles. Les tokens des projets de qualité sont généralement largement distribués.</string>
+    <string name="CoinPage_Audits">Audits</string>
     <string name="CoinPage_Audits_Empty">Aucun rapport d\'audit</string>
     <string name="CoinPage_Audits_PoweredBy">Propulsé par Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Problèmes : %d</string>
@@ -1252,12 +1268,15 @@
     <string name="CoinPage_SecurityParams_Decentralized">Décentralisé</string>
     <string name="CoinPage_SecurityParams_ConfiscationResistance">Résistance à la saisie</string>
     <string name="CoinPage_SecurityParams_CensorshipResistance">Résistance à la censure</string>
+    <string name="CoinPage_SecurityParams_Audits">Audits</string>
     <string name="CoinPage_Range24">Plage de 24h</string>
     <string name="CoinPage_About">À propos de</string>
     <string name="CoinPage_Overview">Synthèse</string>
     <string name="CoinPage_Category">Catégorie</string>
     <string name="CoinPage_Categories">Catégories</string>
     <string name="CoinPage_Contracts">Contrats</string>
+    <string name="CoinPage_Blockchains">Blockchains</string>
+    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">Types de pièces</string>
     <string name="CoinPage_Links">Liens</string>
     <string name="CoinPage_Guide">Tutoriel</string>
@@ -1273,6 +1292,8 @@
     <string name="CoinPage_DilutedMarketCap">Cap. marché diluée</string>
     <string name="CoinPage_inCirculation">Offre en Circulation</string>
     <string name="CoinPage_TotalSupply">Offre totale</string>
+    <string name="CoinPage_MarketCap_Thousand">K</string>
+    <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">G</string>
     <string name="CoinPage_MarketCap_Trillion">MM</string>
     <string name="CoinPage_MarketCap_Quadrillion">P</string>
@@ -1315,6 +1336,7 @@
     <string name="CoinPage_MacdSettingsDescription">Le MACD (Moving Average Average Convergence Divergence MACD) est un indicateur d\'élan qui suit la relation entre deux EMA du prix d\'un titre. Il signale l\'achat ou la vente d\'opportunités lorsque la ligne MACD (EMA moins 12 périodes de l\'EMA) traverse l\'EMA de 9 périodes, connue sous le nom de ligne de signal.</string>
     <string name="CoinPage_InsufficientData">Données insuffisantes</string>
     <string name="CoinPage_InsufficientDataError">Il n\'y a pas assez de points de données pour afficher l\'indicateur EMA 1. Veuillez ajuster la période de temps pour générer une vue de la ligne moyenne mobile. Pas assez de point pour afficher EMA 1.</string>
+    <string name="CoinPage_Type">Type</string>
     <string name="CoinPage_Period">Période</string>
     <string name="CoinPage_RsiLength">Longueur RSI</string>
     <string name="CoinPage_FastLength">Longueur rapide</string>
@@ -1381,6 +1403,7 @@
     <string name="CoinAnalytics_Holders">Titres</string>
     <string name="CoinAnalytics_ProjectTvl">Projet TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Projet TVL (valeur totale verrouillée)</string>
+    <string name="CoinAnalytics_TvlRatio">M.Cap / TVL Ratio</string>
     <string name="CoinAnalytics_ProjectRevenue">Revenus du projet</string>
     <string name="CoinAnalytics_ProjectFee">Frais de projet</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Classement en fonction des revenus du projet</string>
@@ -1392,6 +1415,7 @@
     <string name="CoinAnalytics_OtherData">Autres données</string>
     <string name="CoinAnalytics_Reports">Rapports</string>
     <string name="CoinAnalytics_Funding">Financement</string>
+    <string name="Coin_Analytics_Audits">Audits</string>
     <string name="Coin_Analytics_Last30d">30 derniers j.</string>
     <string name="Coin_Analytics_Current">actuel</string>
     <string name="Coin_Analytics_Rank">Rang</string>
@@ -1399,6 +1423,7 @@
     <string name="Coin_Analytics_30DayUniqueAddress">Adresses uniques de 30 jours</string>
     <string name="Coin_Analytics_30DayVolume">Volume sur 30 jours</string>
     <string name="Coin_Analytics_OverallScore">Sous total</string>
+    <string name="Coin_Analytics_OverallScore_Excellent">Excellent</string>
     <string name="Coin_Analytics_OverallScore_Good">Bon</string>
     <string name="Coin_Analytics_OverallScore_Fair">Équitable</string>
     <string name="Coin_Analytics_OverallScore_Poor">Mauvais</string>
@@ -1447,6 +1472,7 @@
     <string name="TechnicalAdvice_StableRsi">Pendant ce temps, le RSI est %s, ce qui indique également un renversement de tendance (le RSI a franchi la limite à 70\%%).</string>
     <string name="TechnicalAdvice_StableAdvice">Le prix revient à des niveaux neutres, cependant, il existe encore un potentiel de mouvement à la hausse. Gardez à l\'esprit que le RSI = 50 et le milieu des bandes de Bollinger sont des résistances fortes et des points possibles de renversement de tendance. N\'oubliez pas la gestion des risques.</string>
     <string name="TechnicalAdvice_NeutralRsi">Le RSI = $s confirme également l\'absence d\'une forte tendance.</string>
+    <string name="TechnicalAdvice_NeutralIndicators">L\'actif se trouvait dans la zone de surachat/survente, mais pour le moment, le prix est revenu dans le canal de Bandes de Bollinger dans la zone neutre. Le RSI est %s, ce qui confirme également l\'absence d\'une forte tendance, donc dans l\'ensemble, le prix de l\'actif se rapproche de la moyenne et un mouvement ultérieur est possible dans n\'importe quelle direction.</string>
     <string name="TechnicalAdvice_NeutralAdvice">En général, le prix de l\'actif se rapproche de la moyenne et un mouvement ultérieur est possible dans n\'importe quelle direction.</string>
     <string name="TechnicalAdvice_OtherTitle">Veuillez noter:</string>
     <string name="TechnicalAdvice_EmaAbove">au-dessus</string>
@@ -1526,6 +1552,7 @@
     <string name="NftCollection_AveragePrice">Moyenne du temps</string>
     <string name="NftCollection_ItemsCount">%d éléments</string>
     <string name="NftCollection_TodaysSales">Vendeurs d\'aujourd\'hui</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s par NFT</string>
     <string name="NftCollection_Royalty">Redevance</string>
     <string name="NftCollection_InceptionDate">Date de création</string>
@@ -1543,6 +1570,7 @@
     <string name="NftCollection_EventType_Custom">Personnalisé</string>
     <string name="NftCollection_EventType_Payout">Versement</string>
     <string name="NftCollection_EventType_BulkCancel">Annuler en bloc</string>
+    <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Inconnu</string>
     <!--Rate list-->
     <string name="RateList_TopGainers">Gagnants</string>
@@ -1558,6 +1586,7 @@
     <string name="BalanceSyncError_ButtonReport">Signaler</string>
     <string name="BalanceSyncError_ReportButtonExplanation">Le texte de l\'erreur sera copié dans votre presse-papiers si vous décidez de le signaler.</string>
     <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">REJOIGNEZ LES UNSTOPPABLES</string>
     <string name="ReleaseNotes_FollowUs">Suivez-nous</string>
     <string name="CoinPage_Chart_Locked">Verrouillé</string>
     <string name="ProUsersInfo_Title">Utilisateur Pro</string>
@@ -1654,6 +1683,7 @@
     <string name="CexDeposit_AddressDescription">Votre adresse pour le dépôt %s</string>
     <string name="CexDeposit_DepositWarning">Envoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
     <string name="CexDeposit_MemoWarning">Mémo (tag) est requis ou vous perdrez vos pièces.\n\nEnvoyer seulement %s à cette adresse. Envoyer d\'autres types de jetons à cette adresse entraînera leur perte ultime.</string>
+    <string name="CexDeposit_Important">Important</string>
     <string name="CexDeposit_MemoAlertText">A la fois un mémo (tag) et l\'adresse sont nécessaires pour s\'assurer que les actifs sont reçus. Sinon, vos fonds seront perdus.</string>
     <string name="Cex_Error_FailedToConnectApiKey">Impossible de connecter votre clé API</string>
     <!--Cex Withdraw Module-->
@@ -1666,6 +1696,7 @@
     <string name="CexWithdraw_EmailVerificationCode">Code de vérification</string>
     <string name="CexWithdraw_GoogleAuthenticationCode">Code Google Authenticator</string>
     <string name="CexWithdraw_GetCode">Réenvoyer</string>
+    <string name="CexWithdraw_GetCodeSeconds">%s sec</string>
     <string name="CexWithdraw_EmailVerificationInfo">Entrez le code de vérification envoyé à votre adresse e-mail.</string>
     <string name="CexWithdraw_GoogleAuthenticationInfo">Entrez le code de votre application Google Authenticator.</string>
     <string name="CexWithdraw_Withdraw">Retraits</string>
