@@ -2,6 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Parámetro no establecido</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
     <string name="Alert_Close">Cerrar</string>
@@ -45,6 +46,7 @@
     <string name="Button_Search">Buscar</string>
     <string name="Button_Back">Atrás</string>
     <string name="Button_Copy">Copiar</string>
+    <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Eliminar</string>
     <string name="Button_LearnMore">Aprender más</string>
     <string name="Button_Activate">Activar</string>
@@ -70,6 +72,7 @@
     <string name="AccountRecovery_MigrationRecommended">Este monedero parece usar un carácter no estándar en tu lista de palabras secretas y/o una frase de contraseña. Si no logras ver un saldo o transacciones, continua leyenda para obtener más detalles.\n\nHAGA CLIC PARA OBTENER MÁS INFORMACIÓN</string>
     <string name="AccountRecovery_MigrationRequired">Esta es una cartera no estándar. \n\nCLICK PARA CONTRAR MÁS INFO</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Desencadenar Activos</string>
     <string name="Intro_Wallet_Screen2Description">No te encierres y no dejes que otros te hagan eso.</string>
     <string name="Intro_Wallet_Screen3Title">Actúa sin Fronteras</string>
@@ -189,7 +192,9 @@
     <string name="Market_Category_TopCoins">Monedas Top</string>
     <string name="Market_Category_TopCoins_Description">Mejores monedas por rango de límite de mercado</string>
     <string name="Market_Signals">Señales</string>
+    <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">Cap. de Mercado</string>
+    <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">Las señales a continuación se basan en los indicadores técnicos de precio Bollinger Bands y RSI durante aproximadamente los últimos 30 días. Estas señales son algorítmicas y pueden cambiar con frecuencia.</string>
     <string name="Market_Signal_StrongBuy_Description">Alta confianza en aumento del precio.</string>
     <string name="Market_Signal_Buy_Description">Probable aumento del precio en el futuro cercano.</string>
@@ -269,8 +274,24 @@
     <string name="Market_Filter_Sell">Vender</string>
     <string name="Market_Filter_RiskToTrade">Arriesgado</string>
     <string name="Market_Filter_Gainers">Ganadores</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
     <string name="Market_Filter_ShowResults_Counter">Mostrar resultados: %d</string>
+    <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
+    <string name="Market_Filter_Range_5M_20M">5M - 20M</string>
+    <string name="Market_Filter_Range_20M_100M">20M - 100M</string>
+    <string name="Market_Filter_Range_100M_1B">100M - 1B</string>
+    <string name="Market_Filter_Range_1B_5B">1B - 5B</string>
+    <string name="Market_Filter_Range_5B_More">&gt; 5B</string>
+    <string name="Market_Filter_Range_0_10M">&lt; 10M</string>
+    <string name="Market_Filter_Range_10M_40M">10M - 40M</string>
+    <string name="Market_Filter_Range_40M_200M">40M - 200M</string>
+    <string name="Market_Filter_Range_200M_2B">200M - 2B</string>
+    <string name="Market_Filter_Range_2B_10B">2B - 10B</string>
     <string name="Market_Filter_TimePeriod_1D">1 día</string>
     <string name="Market_Filter_TimePeriod_1W">1 Semana</string>
     <string name="Market_Filter_TimePeriod_2W">2 Semanas</string>
@@ -298,6 +319,7 @@
     <string name="Balance_SyncedUntil">hasta %s</string>
     <string name="Balance_Syncing">Sincronizando ...</string>
     <string name="Balance_SearchingTransactions">Buscando transacciones…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Sincronizando... %s%%</string>
     <string name="Balance_CoinDisabled">Moneda deshabilitada %s</string>
     <string name="Balance_Sort_Balance">Saldo</string>
@@ -454,6 +476,8 @@
     <string name="Tron_AddressNotActive_Info">Las cuentas recién creadas en la cadena de bloques TRON están inactivas y no se pueden consultar ni explorar. Necesitan ser activadas.\n\nPara activar una cuenta inactiva, transfiera tokens TRX o TRC-10 a su dirección. Para activar una nueva cuenta en la cadena Tron, se requiere una cuota de 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">No se puede transferir TRX a ti mismo</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">No se puede transferir 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">Cuenta No Activa</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Las nuevas billeteras TRON requieren un depósito de al menos 1 TRX para activarse. Las billeteras inactivas pueden mantener y recibir tokens, pero no corregirán los saldos hasta que se activen.</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Pedido</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -767,6 +791,7 @@
     <string name="Settings_Contact_ViaTelegram">vía Telegram</string>
     <string name="Settings_Contact_ViaEmail">vía E-mail</string>
     <string name="Settings_AutoLock">Bloqueo automático</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
     <string name="Settings_PersonalSupport">Soporte personal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Introduzca su nombre de cuenta de Telegram para iniciar un chat de asistencia personal con nuestro equipo. Nos pondremos en contacto contigo y comenzaremos a trabajar en tu problema tan pronto como lo veamos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Ya has solicitado un chat privado, encuentra en Telegram</string>
@@ -894,6 +919,7 @@
     <string name="SettingsTerms_Bugs">Puede haber problemas de software no descubiertos en el código que permite que esta aplicación funcione mal.</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">Compartir</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Contáctenos</string>
     <!--Setting_Notifications-->
