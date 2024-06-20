@@ -65,7 +65,7 @@ fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
             R.id.buySubscriptionFragment,
             BuySubscriptionFragment.Input(paidAction)
         ) {
-
+            block.invoke()
         }
     }
 }
