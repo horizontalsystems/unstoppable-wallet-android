@@ -491,6 +491,7 @@
     <string name="FeeInfo_TronFee_Title">Комиссия</string>
     <string name="FeeInfo_TronFee_Description">Ориентировочные затраты на отправку данной транзакции по сети (без учёта energy, Bandwidth и комиссии за активацию) предполагаются</string>
     <string name="FeeInfo_TronActivationFee_Title">Комиссия за активацию</string>
+    <string name="FeeInfo_TronActivationFee_Description">Этот адрес не активен. Перевод TRX или токенов TRC-10 на неактивный адрес активирует аккаунт.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Расходуемые ресурсы</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth - это единица, которая измеряет размер байт транзакции, хранящихся в базе данных блокчейна. Чем больше транзакция, тем больше bandwidth будет потребляться.\n\nEnergy — это единица, измеряющая количество вычислений, требуемых виртуальной машиной TRON для выполнения конкретных операций в сети TRON.\n\nПоскольку транзакции смарт-контракта требуют выполнения вычислительных ресурсов, каждая сделка по контракту требует оплаты energy комиссии.</string>
     <!--Tron-->
@@ -534,6 +535,7 @@
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего evm kit</string>
     <string name="WalletConnect_Error_DataParsingError">Ошибка разбора данных</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Неподдерживаемые чейны: %s</string>
     <string name="WalletConnect_Error_UnsupportedMethods">Неподдерживаемые методы: %s</string>
     <string name="WalletConnect_Error_UnsupportedEvents">Неподдерживаемые события: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Запрос не найден</string>
@@ -853,6 +855,8 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
+    <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
+    <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
     <string name="Appearance_BalanceConversion">Конвертация баланса</string>
@@ -860,6 +864,7 @@
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
     <string name="Appearance_HideMarketsTab">Скрыть рынки</string>
     <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">Эта конфигурация скрывает кнопки Отправить, Получить и Обмен на вкладке баланса.</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения, независимо от предыдущих настроек.</string>
     <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
@@ -1143,6 +1148,7 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
+    <string name="ExtendedKey_AccountInfo">Выполнить</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
@@ -1593,6 +1599,7 @@
     <string name="BalanceSyncError_ButtonReport">Пожаловаться</string>
     <string name="BalanceSyncError_ReportButtonExplanation">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
     <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">Be Unstoppable</string>
     <string name="ReleaseNotes_FollowUs">Мы в соцсетях</string>
     <string name="CoinPage_Chart_Locked">Заблокировано</string>
     <string name="ProUsersInfo_Title">Pro-пользователь</string>
