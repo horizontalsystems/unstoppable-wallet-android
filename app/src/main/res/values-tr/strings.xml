@@ -8,6 +8,7 @@
     <string name="Alert_Close">Kapat</string>
     <string name="Alert_Loading">Yükleniyor...</string>
     <string name="Alert_Restart">Yeniden başlat</string>
+    <string name="Suspended">ASKIYA ALINDI</string>
     <string name="Action_Undo">GERİ ALMA</string>
     <string name="Button_Show">Göster</string>
     <string name="Button_Hide">Gizle</string>
@@ -59,6 +60,8 @@
     <string name="Button_Share">Paylaş</string>
     <string name="Button_Apply">Uygula</string>
     <string name="Button_SetAmount">Miktarı Ayarla</string>
+    <string name="Error_OutOfRange">%1$s\'den küçük veya %2$s\'den büyük olamaz</string>
+    <string name="Error_NotInteger">Hatalı tam sayı numarası</string>
     <string name="Error">Hata</string>
     <string name="NotAvailable">N/A</string>
     <string name="Any">Herhangi</string>
@@ -200,6 +203,7 @@
     <string name="Market_Signal_StrongSell_Description">Fiyatın yüksek olasılıkla düşeceği.</string>
     <string name="Market_Signal_Risky_Description">Yüksek risk seviyesi, dikkat gerektirir.</string>
     <string name="Market_Signal_Warning">Her zaman risk yönetimini uygulamayı unutmayın ve bu finansal tavsiye değildir.</string>
+    <string name="Market_Signal_TurnOn">Aç</string>
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
@@ -221,6 +225,7 @@
     <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Toplam Piyasa Değeri</string>
     <string name="MarketGlobalMetrics_BtcDominance">BTC Hakimiyeti</string>
+    <string name="MarketGlobalMetrics_Volume">24s Hacim</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF Girişi</string>
@@ -321,7 +326,9 @@
     <string name="Market_Sorting_HighestCap">En Yüksek</string>
     <string name="Market_Sorting_LowestCap">En Düşük</string>
     <!--Coin Markets-->
+    <string name="CoinMarket_Title">%s Markets</string>
     <!--TVL Rank-->
+    <string name="TvlRank_MultiChain">Multi-Chain</string>
     <!--Balance-->
     <string name="Balance_Withdraw">Hesaptan Çek</string>
     <string name="Balance_Title">Bakiye</string>
@@ -486,6 +493,7 @@
     <string name="FeeInfo_TronFee_Title">Masraf</string>
     <string name="FeeInfo_TronFee_Description">Ağda belirli bir işlemi göndermenin tahmini maliyeti. (Enerji, Bant Genişliği ve Aktivasyon Ücreti hariç)</string>
     <string name="FeeInfo_TronActivationFee_Title">Aktivasyon ücreti</string>
+    <string name="FeeInfo_TronActivationFee_Description">Bu adres aktif değil. TRX veya TRC-10 jetonlarını aktif olmayan bir hesap adresine transfer etmek, hesabı aktif hale getirecektir.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Tüketilen Kaynaklar</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Band Width, blockchain veritabanında saklanan işlem baytlarının boyutunu ölçen birimdir. İşlem ne kadar büyük olursa, o kadar fazla bant genişliği kaynağı tüketilir.\n\nEnergy, TRON sanal makinesinin TRON ağında belirli işlemleri gerçekleştirmek için ihtiyaç duyduğu hesaplama miktarını ölçen birimdir.\n\nAkıllı sözleşmeden beri işlemlerin yürütülmesi için bilgi işlem kaynakları gerekir, her akıllı sözleşme işleminin energy ücretini ödemesi gerekir.</string>
     <!--Tron-->
@@ -529,6 +537,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">Uygun hesap yok</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Uygun evm kiti yok</string>
     <string name="WalletConnect_Error_DataParsingError">Veri ayrıştırma hatası</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Desteklenmeyen zincirler: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Desteklenmeyen yöntemler: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Desteklenmeyen olaylar: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">İstek bulunamadı hatası</string>
     <string name="WalletConnect_NoConnection">Bağlı dapp\'niz yok</string>
     <string name="WalletConnect_PendingRequests">bekleyen istekler</string>
@@ -822,8 +833,10 @@
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
     <string name="Settings_JoinUnstoppables_Description">Özel videolar aracılığıyla kripto para birimini öğrenin ve ustalaşın. Bizi resmi olmayan bir şekilde tanıyın. Üzerinde çalıştığımız şeyleri ilk gören siz olun.</string>
     <string name="Settings_PersonalSupport">Kişisel Destek</string>
+    <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Takımımızla kişisel destek sohbeti başlatmak için Telegram hesap adınızı girin. Sorununuzu gördüğümüzde hemen size geri dönecek ve çalışmaya başlayacağız.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Zaten özel bir sohbet talep ettiniz, bunu Telegram\'da bulun</string>
     <string name="Settings_PersonalSupport_Account">Hesap</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Talep Edildi</string>
     <string name="Settings_PersonalSupport_Request">İstek</string>
     <string name="Settings_PersonalSupport_NewRequest">Yeni istek</string>
@@ -844,9 +857,16 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 saat</string>
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">TAB AYARLARI</string>
+    <string name="Appearance_MarketsTab">MARKETS TAB</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">BAŞLANGIÇ EKRANI</string>
     <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
+    <string name="Appearance_BalanceConversion">Bakiye çevrimi</string>
+    <string name="Appearance_BalanceValue">Bakiye değeri</string>
     <string name="Appearance_Warning_CloseApplication">Simgeyi değiştirmek uygulamayı kapatır</string>
+    <string name="Appearance_HideMarketsTab">Piyasaları Gizle</string>
+    <string name="Appearance_HideBalanceTabButtons">Düğmeleri Gizle</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">Bu yapılandırma, Bakiye sekmesinde Gönder, Al ve Değiştir düğmelerini gizler.</string>
     <string name="Appearance_BalanceAutoHide">Denge Otomatik Gizleme</string>
     <string name="Appearance_BalanceAutoHide_Description">Uygulama her açıldığında, önceki tercihlere bakılmaksızın bakiyeyi otomatik olarak gizler.</string>
     <string name="Appearance_PriceChangeInterval">Fiyat Değişimi %</string>
@@ -878,6 +898,7 @@
     <string name="BackupManager_AppSettingsDescription">Dil, Para Birimi, Görünüm...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable, coin bakiyelerinizi veya adreslerinizi açığa çıkaran kişisel verileri toplamaz. Biraz kullanıcı arayüzü kullanım istatistikleri topluyoruz, ancak bunlar yalnızca kullanıcı tabanımızı ve uygulama kullanım eğilimlerini anlamak içindir. İsterseniz bunu devre dışı bırakabilirsiniz.</string>
+    <string name="Privacy_BulletedText1">Cüzdan herhangi bir kişisel veri toplamaz.</string>
     <string name="Privacy_BulletedText2">Kullanıcı hesapları veya kullanıcı verilerini depolayan veritabanları yoktur.</string>
     <string name="Privacy_BulletedText3">İzin verilirse, cüzdan, Unstoppable ekibiyle uygulama kullanım alışkanlıklarını paylaşacak. Bu, kullanıcılarımızın hangi özellikleri kullandığını (veya kullanmadığını) anlamak için. Gizliliğe odaklanan bir uygulama olarak, çabalarımızı değerlendirmenin bir yolu olmalı ve bu olmadan, oluşturduğumuz özelliklerin kullanılıp kullanılmadığını bilmiyoruz.</string>
     <string name="ShareUiData">UI Verilerini Paylaş</string>
@@ -1245,19 +1266,26 @@
     <string name="CoinPage_TimeDuration_All">Hepsi</string>
     <string name="CoinPage_Markets">Marketler</string>
     <string name="CoinPage_TradingVolume">İşlem Hacmi</string>
+    <string name="CoinPage_MajorHolders">Önemli Sahipler</string>
     <string name="CoinPage_MajorHolders_InfoDescription">İlk 10 cüzdanda tutulan token sayısı. Kaliteli projeler genellikle geniş bir şekilde dağıtılmış tokene sahiptir.</string>
     <string name="CoinPage_Audits">Denetimler</string>
     <string name="CoinPage_Audits_Empty">Denetim raporu yok</string>
+    <string name="CoinPage_Audits_PoweredBy">Defiyield.app tarafından desteklenmektedir</string>
+    <string name="CoinPage_Audits_Issues">Sorunlar: %d</string>
     <string name="CoinPage_InvestorData">Yatırımcı Verileri</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filtreler</string>
+    <string name="CoinPage_Treasuries_PoweredBy">Bitcointreasuries.net tarafından desteklenmektedir</string>
     <string name="CoinPage_Reports">Raporlar</string>
     <string name="CoinPage_FundsInvested">Yatırılan Fonlar</string>
     <string name="CoinPage_SecurityParams_Privacy">Gizlilik</string>
     <string name="CoinPage_SecurityParams_Low">Yavaş</string>
     <string name="CoinPage_SecurityParams_Medium">Ortadüzey</string>
     <string name="CoinPage_SecurityParams_High">Hızlı</string>
+    <string name="CoinPage_SecurityParams_Issuance">Çıkarım</string>
     <string name="CoinPage_SecurityParams_Centralized">Merkezi</string>
     <string name="CoinPage_SecurityParams_Decentralized">Merkezi olmayan</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance">El koyma direnci</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance">Sansür direnci</string>
     <string name="CoinPage_SecurityParams_Audits">Denetimler</string>
     <string name="CoinPage_Range24">24 Saatlik Aralık</string>
     <string name="CoinPage_About">Hakkında</string>
@@ -1309,6 +1337,7 @@
     <string name="CoinPage_TvlMCapRatio">MCap / TVL Ratio</string>
     <string name="CoinPage_TvlMCapRatio_Description">Proje tokenının piyasa değeri ile TVL\'si üzerinden oranı.</string>
     <string name="CoinPage_TvlDescription">Kredi teminatı veya likidite havuzu şeklinde platforma yatırılan sermaye.</string>
+    <string name="CoinPage_Contract">%s Contract</string>
     <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
     <string name="CoinPage_MajorHolders_TopWallets">En Üst Cüzdanlar</string>
     <string name="CoinPage_MajorHolders_Description">Yukarıdaki grafik, ilk 10 cüzdan tarafından tutulan dolaşımdaki tüm tokenlerin \%%\'sini göstermektedir. \%% ne kadar düşük olursa, madeni para o kadar fazla dağıtılır.</string>
@@ -1597,6 +1626,7 @@
     <!--Widget-->
     <string name="WidgetList_Config_Title">Türü Seç</string>
     <string name="NftAssetActivity_Empty">Henüz öğe etkinliği yok</string>
+    <string name="Widget_EnableAutostartWarning">Bu widget\'ın düzgün çalışması için Otomatik Başlatmayı etkinleştirmelisiniz.</string>
     <!--Alert-->
     <string name="Alert_KeysInvalidatedTitle">Android anahtar deposu hatası</string>
     <string name="Alert_KeysInvalidatedDescription">Android cihazınızın kilidi değiştirildiğinden cüzdan bilginizi tutan şifreli dosya artık geçersiz</string>
