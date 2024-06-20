@@ -2,6 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">Le paramètre n\'est pas défini</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Annuler</string>
     <string name="Alert_Copy">Copier</string>
     <string name="Alert_Close">Fermer</string>
@@ -17,6 +18,7 @@
     <string name="Button_Disable">Désactiver</string>
     <string name="Button_ScanQr">QR Code à scanner</string>
     <string name="Button_Close">Fermer</string>
+    <string name="Button_Ok">OK</string>
     <string name="Button_Done">Fait</string>
     <string name="Button_Retry">Réessayer</string>
     <string name="Button_Change">Changer</string>
@@ -61,6 +63,7 @@
     <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
     <string name="Error">Erreur</string>
+    <string name="NotAvailable">n/a</string>
     <string name="Any">N\'importe lequel</string>
     <string name="SyncError">Erreur de synchronisation. Réessayez</string>
     <string name="PercentTitle">Pourcent</string>
@@ -133,6 +136,7 @@
     <string name="Select_Coins">Crypto Monnaie</string>
     <string name="SelectContacts_All">Tout</string>
     <string name="Restore_BirthdayHeight">Hauteur de l\'anniversaire</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">Hauteur de l\'anniversaire de Zcash</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Saisissez la hauteur de l\'anniversaire du portefeuille pour une synchronisation plus rapide.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (facultatif)</string>
@@ -145,6 +149,7 @@
     <string name="ImportCexAccount_SelectCex">Essayez CEX</string>
     <string name="ImportCexAccount_SelectCexDescription">Sélectionnez l\'exchange centralisé auquel vous voulez vous connecter.</string>
     <string name="ImportCexAccountBinance_Description">Veuillez renseigner vos clés API (API Keys and Secrets) pour pouvoir vous connecter à votre exchange de cryptomonnaies.</string>
+    <string name="ImportCexAccountBinance_ApiKey">Clé API</string>
     <string name="ImportCexAccountBinance_SecretKey">Code Secret</string>
     <!--Backup-->
     <string name="Backup_Confirmation_CheckTitle">Vérification…</string>
@@ -187,7 +192,9 @@
     <string name="Market_Category_TopCoins">Top des coins</string>
     <string name="Market_Category_TopCoins_Description">Top des coins par cap de marché</string>
     <string name="Market_Signals">Signaux</string>
+    <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">Cap. marché</string>
+    <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">Les signaux ci-dessous sont basés sur les indicateurs techniques de prix Bollinger Bands et RSI sur environ les 30 derniers jours. Ces signaux sont algorithmiques et peuvent changer fréquemment.</string>
     <string name="Market_Signal_StrongBuy_Description">Haute confiance dans l\'augmentation des prix.</string>
     <string name="Market_Signal_Buy_Description">Probable augmentation du prix dans un futur proche.</string>
@@ -196,6 +203,10 @@
     <string name="Market_Signal_StrongSell_Description">Probabilité élevée de diminution du prix.</string>
     <string name="Market_Signal_Risky_Description">Niveau de risque élevé, nécessite de la prudence.</string>
     <string name="Market_Signal_Warning">N\'oubliez pas d\'appliquer une gestion des risques, et notez que ceci n\'est pas un conseil financier.</string>
+    <string name="Market_Top_100">Top 100</string>
+    <string name="Market_Top_200">Top 200</string>
+    <string name="Market_Top_300">Top 300</string>
+    <string name="Market_Top_500">Top 500</string>
     <string name="TopPairs_Title">Principaux paires de marché</string>
     <string name="TopPairs_Description">Principales paires de trading par volume sur chaque bourse</string>
     <!--Market Overview-->
@@ -269,6 +280,11 @@
     <string name="Market_Filter_Sell">Vendre</string>
     <string name="Market_Filter_RiskToTrade">Risqué</string>
     <string name="Market_Filter_Gainers">Gagnants</string>
+    <string name="Market_Filter_Top_100">Top 100</string>
+    <string name="Market_Filter_Top_250">Top 250</string>
+    <string name="Market_Filter_Top_500">Top 500</string>
+    <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Afficher les résultats</string>
     <string name="Market_Filter_ShowResults_Counter">Afficher les résultats : %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5mn</string>
@@ -520,6 +536,8 @@
     <string name="WalletConnect_Address">Adresse</string>
     <string name="WalletConnect_Network">Réseau</string>
     <string name="WalletConnect_Input">Entrées</string>
+    <string name="WalletConnect_Version1">Version 1.0</string>
+    <string name="WalletConnect_Version2">Version 2.0</string>
     <string name="WalletConnect_I_Trust">Je fais confiance à</string>
     <string name="WalletConnect_Note">Remarque</string>
     <string name="WalletConnect_LegacySignWarning">Signer ce message peut être dangereux. Cette signature peut potentiellement effectuer toute opération au nom de votre compte, y compris en donnant le contrôle total de votre compte et de tous ses actifs au site requérant. Ne signez ce message que si vous savez ce que vous faites ou si vous faites entièrement confiance au site requérant.</string>
@@ -527,6 +545,7 @@
     <string name="WalletConnect_Unnamed">Inconnu</string>
     <string name="WalletConnect_DAppUnknown">DApp inconnu</string>
     <string name="WalletConnect_Pairings">Paires de Devises</string>
+    <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Tout Supprimer</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Voulez-vous supprimer tous les dApss appariés ?</string>
     <string name="WalletConnect_Pairings_Delete">Supprimer</string>
@@ -598,7 +617,9 @@
     <string name="Swap_Provider">Service</string>
     <string name="Swap_Providers">Service</string>
     <string name="Swap_SelectSwapProvider_Title">Fournisseur swap</string>
+    <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(montant minimal)</string>
+    <string name="Swap_AmountMax">(max)</string>
     <string name="Swap_AmountTypeCoin">Pièce</string>
     <string name="Swap_SwapRouteNotFound">Route inconnue</string>
     <string name="Swap_YouPay">Vous payez</string>
@@ -608,6 +629,7 @@
     <string name="SwapConfirm_FetchingFinalQuote">Récupération du devis final</string>
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Paramètres de swap</string>
+    <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Effet de glissement</string>
     <string name="SwapSettings_SlippageDescription">Votre transaction sera annulée si le prix évolue défavorablement au-delà de ce pourcentage</string>
     <string name="SwapSettings_DeadlineTitle">Date limite de transaction</string>
@@ -615,6 +637,7 @@
     <string name="SwapSettings_RecipientAddressTitle">Adresse du destinataire</string>
     <string name="SwapSettings_RecipientAddressDescription">Le montant sera transféré à l\'adresse indiquée après l\'opération de change</string>
     <string name="SwapSettings_Apply">Appliquer</string>
+    <string name="SwapSettings_DeadlineMinute">%s min</string>
     <string name="SwapSettings_RecipientPlaceholder">Adresse ou domaine</string>
     <string name="SwapSettings_Error_DeadlineZero">Délai Zéro</string>
     <string name="SwapSettings_Error_SlippageZero">Zéro Slippage</string>
@@ -628,6 +651,7 @@
     <!-- Swap Confirmation -->
     <string name="Swap_Confirmation">Valider</string>
     <string name="Swap_Confirmation_Guaranteed">Garanti</string>
+    <string name="Swap_Confirmation_Maximum">Maximum</string>
     <string name="Swap_Confirmation_Estimated">Estimé</string>
     <!--Approve-->
     <string name="Approve_Title">Swap approuvé</string>
@@ -682,6 +706,7 @@
     <string name="Transactions_All">Tout</string>
     <string name="Transactions_Filter_Blockchain">Filtrer par blockchain</string>
     <string name="Transactions_Filter_Coin">Pièce</string>
+    <string name="Transactions_Filter_Contacts">Contacts</string>
     <string name="Transactions_Filter_AllBlockchains">Toutes les blockchains</string>
     <string name="Transactions_Filter_AllCoins">Toutes les pièces</string>
     <string name="Transactions_Filter_AllContacts">Tous les contacts</string>
@@ -707,6 +732,7 @@
     <string name="TransactionInfo_Status_Confirmed">Confirmé</string>
     <string name="TransactionInfo_Date">Date du Virement</string>
     <string name="TransactionInfo_Id">Identifiant</string>
+    <string name="TransactionInfo_Service">Service</string>
     <string name="TransactionInfo_RawTransaction">Transaction brute</string>
     <string name="TransactionInfo_ContactName">Nom du contact</string>
     <string name="TransactionInfo_To">À</string>
@@ -798,6 +824,7 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Entrez le nom de votre compte Telegram pour commencer une conversation de soutien personnelle avec notre équipe. Nous reviendrons vers vous et commencerons à travailler sur votre problème dès que nous le verrons.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Vous avez déjà demandé une conversation privée, la trouver sur Telegram</string>
     <string name="Settings_PersonalSupport_Account">Compte</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Demandé</string>
     <string name="Settings_PersonalSupport_Request">Requête</string>
     <string name="Settings_PersonalSupport_NewRequest">Nouvelle demande</string>
@@ -805,11 +832,13 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
+    <string name="Settings_DonateToken">Donate %s</string>
     <string name="Settings_DonateWith">Donnez avec</string>
     <string name="Settings_Donate_GetAddress">Adresse du don</string>
     <string name="Settings_Donate_Addresses">Adresses</string>
     <string name="Settings_Donate_OrSelectCoinToDonate">Ou sélectionnez une pièce à faire un don</string>
     <string name="SettingsSecurity_AutoLock_Immediate">Immédiat</string>
+    <string name="SettingsSecurity_AutoLock_After1Min">1 minute</string>
     <string name="SettingsSecurity_AutoLock_After5Min">5 minutes</string>
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
@@ -897,6 +926,7 @@
     <string name="SettingsSecurity_SortingBip69Short">Déterministe</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Indexation lexicographique</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Rapide, Privé, Centralisé</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Filtrer par blockchain</string>
@@ -948,6 +978,7 @@
     <string name="NotificationBottomMenu_LongTerm">Long terme 6M</string>
     <string name="NotificationBottomMenu_Long">Longue</string>
     <!-- Settings Launch Screen -->
+    <string name="SettingsLaunchScreen_Auto">Auto</string>
     <string name="SettingsLaunchScreen_Balance">Solde</string>
     <string name="SettingsLaunchScreen_MarketOverview">Vue d\'ensemble du marché</string>
     <string name="SettingsLaunchScreen_Watchlist">Liste de suivi</string>
@@ -1098,6 +1129,7 @@
     <string name="EvmPrivateKey_Warning">Cette clé est pour toutes les blockchains compatibles EVM. Ne la partagez avec personne.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Appuyez pour afficher la clé privée</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Appuyez pour afficher la clé privée</string>
     <!-- Private Keys -->
@@ -1584,6 +1616,7 @@
     <!--Biometric Auth texts-->
     <string name="BiometricAuth_DialogTitle">Scanner biométrique</string>
     <!--Contacts-->
+    <string name="Contacts">Contacts</string>
     <string name="Contacts_Backup">Sauvegarder les contacts</string>
     <string name="Contacts_Restore">Restaurer les contacts</string>
     <string name="Contacts_Restore_Warning">Cette action écrasera complètement vos contacts et supprimera votre liste de contacts existante. Voulez-vous remplacer votre liste de contacts ? </string>
