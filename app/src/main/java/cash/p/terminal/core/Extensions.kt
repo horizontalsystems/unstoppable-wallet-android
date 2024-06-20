@@ -1,5 +1,8 @@
 package cash.p.terminal.core
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Parcelable
 import android.widget.ImageView
@@ -226,4 +229,10 @@ suspend fun <T> retryWhen(
         delay(1000)
     }
     return block()
+}
+
+fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }
