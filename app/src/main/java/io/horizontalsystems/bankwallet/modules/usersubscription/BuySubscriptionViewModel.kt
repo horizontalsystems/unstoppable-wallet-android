@@ -1,30 +1,27 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription
 
-import android.app.Activity
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.subscriptions.core.SubscriptionPlan
+import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
 class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
-    private var plans = listOf<SubscriptionPlan>()
-
-    override fun createState() = BuySubscriptionUiState(
-        plans = plans
-    )
-
-    fun launchPurchaseFlow(planId: String, activity: Activity) {
-        UserSubscriptionManager.launchPurchaseFlow(planId, activity)
-    }
+    private var subscriptions = listOf<Subscription>()
 
     init {
         viewModelScope.launch {
-            plans = UserSubscriptionManager.getPlans()
+            subscriptions = UserSubscriptionManager.getSubscriptions()
 
             emitState()
         }
     }
+
+    override fun createState() = BuySubscriptionUiState(
+        subscriptions = subscriptions
+    )
 }
 
-data class BuySubscriptionUiState(val plans: List<SubscriptionPlan>)
+data class BuySubscriptionUiState(
+    val subscriptions: List<Subscription>
+)

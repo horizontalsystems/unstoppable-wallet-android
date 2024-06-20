@@ -554,6 +554,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
                 else -> signingInfo?.signingCertificateHistory // Send one with signingCertificateHistory
             }
         } else {
+            @Suppress("DEPRECATION")
             packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
         }
 
