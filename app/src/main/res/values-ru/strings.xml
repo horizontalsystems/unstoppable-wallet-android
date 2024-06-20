@@ -862,6 +862,7 @@
     <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения, независимо от предыдущих настроек.</string>
+    <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
@@ -890,6 +891,7 @@
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable не собирает персональные данные, которые могут раскрывать вашу частную информацию, такую как балансы монет или адреса. Мы собираем некоторую статистику использования интерфейса исключительно для понимания нашей пользовательской базы и тенденций использования приложения. Эта функция может быть отключена по вашему желанию.</string>
+    <string name="Privacy_BulletedText1">Кошелек не собирает личные данные.</string>
     <string name="Privacy_BulletedText2">Здесь нет пользовательских аккаунтов или баз данных для хранения данных пользователей.</string>
     <string name="Privacy_BulletedText3">Если разрешено, кошелек будет делиться с командой Unstoppable информацией о привычках использования приложения. Это необходимо для понимания, какие функции используются (или нет) нашими пользователями. В качестве приложения, ориентированного на конфиденциальность, нам нужен способ оценить наши усилия, и без этого мы не сможем определить, используются ли построенные нами функции или нет.</string>
     <string name="ShareUiData">Поделиться данными UI</string>
