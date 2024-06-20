@@ -2,6 +2,7 @@
 <resources>
     <!--Common-->
     <string name="Error_ParameterNotSet">参数未设置</string>
+    <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">取消</string>
     <string name="Alert_Copy">复制</string>
     <string name="Alert_Close">关闭</string>
@@ -71,6 +72,7 @@
     <string name="AccountRecovery_MigrationRecommended">这个钱包似乎在其密码列表和/或密码短语中使用了非标准字符。 如果您没有看到余额或交易，请阅读下面的详细信息。\n\n点击获取更多信息</string>
     <string name="AccountRecovery_MigrationRequired">这是一个不符合标准的钱包。 详情请阅读下文。\n\n点击获取更多信息</string>
     <!--Intro-->
+    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">资产解绑</string>
     <string name="Intro_Wallet_Screen2Description">请勿绑定您自己，也不要让别人对您这样做.</string>
     <string name="Intro_Wallet_Screen3Title">进入无国界</string>
@@ -134,6 +136,7 @@
     <string name="Select_Coins">选择货币</string>
     <string name="SelectContacts_All">所有</string>
     <string name="Restore_BirthdayHeight">生日高度</string>
+    <string name="Restore_ZCash">ZCash</string>
     <string name="Restore_ZCash_BirthdayHeight">%s 生日高度</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">输入钱包的生日高度以便实现更快同步。</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (可选)</string>
@@ -189,7 +192,9 @@
     <string name="Market_Category_TopCoins">前列代币</string>
     <string name="Market_Category_TopCoins_Description">币种排名描述</string>
     <string name="Market_Signals">信号</string>
+    <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">市值</string>
+    <string name="Market_TVL">TVL</string>
     <string name="Market_Signal_Description">下面的信号是基于Bollinger Bands 和 RSI 技术价格指标的近似值。 最近30天。这些信号是算法，可以经常改变。</string>
     <string name="Market_Signal_StrongBuy_Description">对价格上涨信心高.</string>
     <string name="Market_Signal_Buy_Description">在不久的将来可能的价格提高.</string>
@@ -199,6 +204,8 @@
     <string name="Market_Signal_Risky_Description">风险水平升高，需要谨慎.</string>
     <string name="Market_Signal_Warning">请记住始终要进行风险管理，并注意这不是财务建议</string>
     <string name="Market_Top_100">前100名</string>
+    <string name="Market_Top_200">Top 200</string>
+    <string name="Market_Top_300">Top 300</string>
     <string name="Market_Top_500">前500名</string>
     <string name="TopPairs_Title">热门市场交易对</string>
     <string name="TopPairs_Description">每个交易所的交易量最高的交易对</string>
@@ -274,6 +281,7 @@
     <string name="Market_Filter_StrongSell">强烈建议卖出</string>
     <string name="Market_Filter_Sell">出售</string>
     <string name="Market_Filter_RiskToTrade">有风险</string>
+    <string name="Market_Filter_Gainers">涨幅最大者</string>
     <string name="Market_Filter_Top_100">前100名</string>
     <string name="Market_Filter_Top_250">前250名</string>
     <string name="Market_Filter_Top_500">前500名</string>
@@ -332,6 +340,7 @@
     <string name="Balance_SyncedUntil">直到 %s</string>
     <string name="Balance_Syncing">正在同步...</string>
     <string name="Balance_SearchingTransactions">正在搜索交易…</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">正在同步... %s%%</string>
     <string name="Balance_CoinDisabled">已禁用代币%s</string>
     <string name="Balance_Sort_Balance">余额</string>
@@ -362,6 +371,7 @@
     <string name="Balance_Receive_AddressType">地址类型</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
     <string name="Balance_NotRelayedAmount_Title">广播</string>
+    <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
     <string name="Balance_Receive_WatchAddressAlert">该地址是被监视账户的地址</string>
     <string name="Balance_Receive_AddressMemoAlert">提供必需的备忘录（标签），并仅发送兼容网络的代币。其他将会丢失。</string>
@@ -814,10 +824,12 @@
     <string name="Settings_Contact_ViaTelegram">通过 Telegram</string>
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
+    <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
     <string name="Settings_PersonalSupport">个人支持</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">您已经请求了一个私聊，在Telegram 上找到它</string>
     <string name="Settings_PersonalSupport_Account">账户</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">已申请</string>
     <string name="Settings_PersonalSupport_Request">请求</string>
     <string name="Settings_PersonalSupport_NewRequest">新建请求</string>
@@ -845,6 +857,7 @@
     <string name="Appearance_Warning_CloseApplication">更改图标将关闭应用程序</string>
     <string name="Appearance_HideMarketsTab">隐藏市场</string>
     <string name="Appearance_HideBalanceTabButtons">隐藏按钮</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">此配置隐藏平衡选项卡上的发送、接收和交换按钮。</string>
     <string name="Appearance_BalanceAutoHide">自动隐藏余额</string>
     <string name="Appearance_BalanceAutoHide_Description">每次打开应用程序时自动隐藏平衡，不管先前的偏好设置。</string>
     <string name="Appearance_PriceChangeInterval">价格变化 %</string>
@@ -886,6 +899,7 @@
     <string name="EvmNetwork_Added">已添加</string>
     <string name="EvmNetwork_SyncMode">同步模式</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">添加 RPC 源</string>
     <string name="AddEvmSyncSource_Name">名称</string>
     <string name="AddEvmSyncSource_BasicAuthentication">基本认证(可选)</string>
@@ -918,8 +932,10 @@
     <string name="SettingsSecurity_NotificationsDisabledWarning">已禁用Unstoppable钱包应用通知。您必须开启通知并允许后台应用刷新才能接收价格变更警报。</string>
     <string name="SettingsSecurity_SortingShuffle">随机排序</string>
     <string name="SettingsSecurity_SortingShuffleDescription">随机索引</string>
+    <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">词典索引</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">快速、私密、中心化</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Blockchain</string>
     <string name="SettingsSecurity_SyncModeBlockchain">按区块链过滤</string>
@@ -950,6 +966,7 @@
     <string name="SettingsTerms_Bugs">这个应用程序的代码可能会出现未发现的软件问题，可能导致应用程序故障。</string>
     <!--Setting_Tell Friends-->
     <string name="SettingsShare_Title">分享</string>
+    <string name="SettingsShare_Text">Be Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">联系我们</string>
     <!--Setting_Notifications-->
@@ -1120,6 +1137,7 @@
     <string name="EvmPrivateKey_Warning">此密钥适用于所有EVM兼容的区块链。请不要与任何人分享。</string>
     <string name="EvmPrivateKey_ShowPrivateKey">点击显示私钥</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">点击显示私钥</string>
     <!-- Private Keys -->
@@ -1127,6 +1145,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">授予对基于加密货币的EVM的完全控制，即在相应钱包内的以太坊、币安智能链等。</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">授予对相应钱包上的资产的完全控制。</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
     <!-- Public Keys -->
@@ -1175,6 +1194,7 @@
     <string name="AddToken_Symbol">标志</string>
     <string name="AddToken_CoinCode">代币代码</string>
     <string name="AddToken_Decimals">小数</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">焦炭类型</string>
     <string name="AddToken_AlreadyAdded">已经加入</string>
     <string name="AddToken_AddressOrSymbol">智能合约地址</string>
@@ -1258,6 +1278,7 @@
     <string name="CoinPage_Categories">分类</string>
     <string name="CoinPage_Contracts">合约</string>
     <string name="CoinPage_Blockchains">区块链</string>
+    <string name="CoinPage_Bips">BIPs</string>
     <string name="CoinPage_CoinTypes">代币平台选择</string>
     <string name="CoinPage_Links">链接</string>
     <string name="CoinPage_Guide">指南</string>
@@ -1442,6 +1463,10 @@
     <string name="TechnicalAdvice_IndicatorsDisclaimer">请记住始终要进行风险管理，并注意这不是财务建议</string>
     <string name="TechnicalAdvice_OverBought">已购买过期的</string>
     <string name="TechnicalAdvice_OverSold">超价</string>
+    <string name="TechnicalAdvice_Down">down</string>
+    <string name="TechnicalAdvice_Up">up</string>
+    <string name="TechnicalAdvice_OverMain">资产的行动是有风险的。</string>
+    <string name="TechnicalAdvice_OverIndicators_SignalDate">从 %s 开始</string>
     <string name="TechnicalAdvice_OverIndicators">资产不属于Bollinger频道和 %s。</string>
     <string name="TechnicalAdvice_OverRsi"> RSI = %1$s，这也表明该资产为%2$s.</string>
     <string name="TechnicalAdvice_OverAdvice"> 可能会有强烈的%s向动，因此最好等待资产价格回到通道中。</string>
@@ -1531,6 +1556,7 @@
     <string name="NftCollection_AveragePrice">全部时间平均值</string>
     <string name="NftCollection_ItemsCount">%d条新闻</string>
     <string name="NftCollection_TodaysSales">今天的卖家</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s 每NFT</string>
     <string name="NftCollection_Royalty">荣耀</string>
     <string name="NftCollection_InceptionDate">起始日期</string>
@@ -1567,6 +1593,7 @@
     <string name="ReleaseNotes_FollowUs">关注我们</string>
     <string name="CoinPage_Chart_Locked">锁住</string>
     <string name="ProUsersInfo_Title">专业用户</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">附加令牌信息</string>
     <string name="ProUsersInfo_Description">若要启用此数据，您应该获得精灵等级的 UW NFTs “Coin Info+”\n\n也可以访问下面的数据：</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX 音量和等级</string>
