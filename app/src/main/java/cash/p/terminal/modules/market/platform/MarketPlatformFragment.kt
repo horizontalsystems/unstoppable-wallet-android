@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Surface
@@ -192,37 +191,34 @@ private fun PlatformScreen(
 
 @Composable
 private fun HeaderContent(title: String, description: String, image: ImageSource) {
-    Column {
-        Row(
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .background(ComposeAppTheme.colors.tyler)
+    ) {
+        Column(
             modifier = Modifier
-                .height(100.dp)
-                .padding(horizontal = 16.dp)
-                .background(ComposeAppTheme.colors.tyler)
+                .padding(top = 12.dp, bottom = 16.dp)
+                .weight(1f)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .weight(1f)
-            ) {
-                title3_leah(
-                    text = title,
-                )
-                subhead2_grey(
-                    text = description,
-                    modifier = Modifier.padding(top = 4.dp),
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            Image(
-                painter = image.painter(),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(start = 24.dp)
-                    .size(32.dp),
+            title3_leah(
+                text = title,
+            )
+            subhead2_grey(
+                text = description,
+                modifier = Modifier.padding(top = 4.dp),
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis
             )
         }
+        Image(
+            painter = image.painter(),
+            contentDescription = null,
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(start = 24.dp)
+                .size(32.dp),
+        )
     }
 }
 
