@@ -98,8 +98,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey50
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.captionSB_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.observeKeyboardState
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.CoroutineScope
@@ -522,7 +522,7 @@ fun SuggestionsBar(
                                 onClick.invoke(wordItem, suggestion)
                             }
                         ) {
-                            subhead1_leah(text = suggestion)
+                            captionSB_leah(text = suggestion)
                         }
                         Spacer(modifier = Modifier.width(12.dp))
                     }
