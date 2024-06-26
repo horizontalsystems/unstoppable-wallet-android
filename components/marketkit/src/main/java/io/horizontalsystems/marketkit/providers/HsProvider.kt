@@ -21,9 +21,9 @@ import java.util.*
 
 class HsProvider(baseUrl: String, apiKey: String) {
 
-    // TODO: Temporary workaround for Cosanta
-    private var cosantaLastPrice: BigDecimal? = null
-    private var cosantaLastChange: BigDecimal? = null
+    // TODO: Temporary workaround for Cosanta and wDASH
+    private val lastPrices = mutableMapOf<String, BigDecimal?>()
+    private val lastChanges = mutableMapOf<String, BigDecimal?>()
 
     // TODO Remove old base URL https://api-dev.blocksdecoded.com/v1 and switch it to new servers
     private val pirateService by lazy {
@@ -105,6 +105,67 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.coinCategoryMarketPoints(categoryUid, timePeriod.value, currencyCode)
     }
 
+    private fun fetchPlaceCoinPrice(coinUid: String, requestUid: String, coinPrices: List<CoinPriceResponse>, currencyCode: String, mutableCoinPrices: MutableList<CoinPriceResponse>) {
+        val response = coinPrices.find { it.uid == coinUid }
+        if (response == null) {
+            val disposable = fetchPiratePlaceCoinInfo(requestUid)
+                    .subscribe({
+                        val currency = currencyCode.lowercase()
+                        val price = when (currency) {
+                            "usd" -> it.price.usd
+                            "btc" -> it.price.btc
+                            "eur" -> it.price.eur
+                            "gbp" -> it.price.gbp
+                            "jpy" -> it.price.jpy
+                            "aud" -> it.price.aud
+                            "ars" -> it.price.aud
+                            "brl" -> it.price.brl
+                            "cad" -> it.price.cad
+                            "chf" -> it.price.chf
+                            "cny" -> it.price.cny
+                            "hkd" -> it.price.hkd
+                            "huf" -> it.price.hkd
+                            "ils" -> it.price.ils
+                            "inr" -> it.price.inr
+                            "nok" -> it.price.inr
+                            "php" -> it.price.inr
+                            "rub" -> it.price.rub
+                            "sgd" -> it.price.sgd
+                            "zar" -> it.price.zar
+                            else -> null
+                        }
+                        val priceChange = it.changes.price.percentage24h[currency]
+                        if (price != null && priceChange != null) {
+                            lastPrices[coinUid] = price
+                            lastChanges[coinUid] = priceChange
+                            val coinPriceResponse = CoinPriceResponse(
+                                    uid = coinUid,
+                                    price = price,
+                                    priceChange24h = priceChange,
+                                    priceChange1d = priceChange,
+                                    lastUpdated = Instant.now().epochSecond
+                            )
+                            mutableCoinPrices.add(coinPriceResponse)
+                        }
+                    }, {
+                        Log.e("PiratePlace", "sync() error", it)
+                    })
+        } else {
+            lastPrices[coinUid]?.let { price ->
+                lastChanges[coinUid]?.let { change ->
+                    val coinPriceResponse = CoinPriceResponse(
+                            uid = coinUid,
+                            price = price,
+                            priceChange24h = change,
+                            priceChange1d = change,
+                            lastUpdated = Instant.now().epochSecond
+                    )
+                    mutableCoinPrices.add(coinPriceResponse)
+                }
+            }
+        }
+    }
+
     fun getCoinPrices(
         coinUids: List<String>,
         walletCoinUids: List<String>,
@@ -123,51 +184,10 @@ class HsProvider(baseUrl: String, apiKey: String) {
                 //  TODO: replace to pirate place API
                 val mutableCoinPrices = coinPrices.toMutableList()
                 if ("cosanta" in coinUids) {
-                    val cosantaResponse = coinPrices.find { it.uid == "cosanta" }
-                    if (cosantaResponse == null){
-                        val disposable = fetchPiratePlaceCoinInfo("cosanta")
-                                .subscribe({
-                                    val currency = currencyCode.lowercase()
-                                    cosantaLastPrice = when (currency){
-                                        "usd" -> it.price.usd
-                                        "btc" -> it.price.btc
-                                        "eur" -> it.price.eur
-                                        "gbp" -> it.price.gbp
-                                        "jpy" -> it.price.jpy
-                                        "aud" -> it.price.aud
-                                        "ars" -> it.price.aud
-                                        "brl" -> it.price.brl
-                                        "cad" -> it.price.cad
-                                        "chf" -> it.price.chf
-                                        "cny" -> it.price.cny
-                                        "hkd" -> it.price.hkd
-                                        "huf" -> it.price.hkd
-                                        "ils" -> it.price.ils
-                                        "inr" -> it.price.inr
-                                        "nok" -> it.price.inr
-                                        "php" -> it.price.inr
-                                        "rub" -> it.price.rub
-                                        "sgd" -> it.price.sgd
-                                        "zar" -> it.price.zar
-                                        else -> null
-                                    }
-                                    if (cosantaLastPrice != null) {
-                                        cosantaLastChange = it.changes.price.percentage24h[currency]
-                                    }
-                                },{
-                                    Log.e("PiratePlace", "sync() error", it)
-                                })
-                        if (cosantaLastPrice != null){
-                            val addCosanta = CoinPriceResponse(
-                                    uid = "cosanta",
-                                    price = cosantaLastPrice,
-                                    priceChange24h = cosantaLastChange,
-                                    priceChange1d = cosantaLastChange,
-                                    lastUpdated = Instant.now().epochSecond
-                            )
-                            mutableCoinPrices.add(addCosanta)
-                        }
-                    }
+                    fetchPlaceCoinPrice("cosanta", "cosanta", coinPrices, currencyCode, mutableCoinPrices)
+                }
+                if ("wdash" in coinUids) {
+                    fetchPlaceCoinPrice("wdash","dash", coinPrices, currencyCode, mutableCoinPrices)
                 }
                 mutableCoinPrices.mapNotNull { coinPriceResponse ->
                     coinPriceResponse.coinPrice(currencyCode)
