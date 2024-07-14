@@ -170,13 +170,17 @@ class ZcashAdapter(
     private val balance: BigDecimal
         get() {
             val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
-            return walletBalance.available.convertZatoshiToZec(decimalCount)
+            return walletBalance.available.convertZatoshiToZec(decimalCount) +
+                    walletBalance.pending.convertZatoshiToZec(decimalCount)
         }
 
     private val balanceLocked: BigDecimal
         get() {
-            val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
-            return walletBalance.pending.convertZatoshiToZec(decimalCount)
+            // TODO: Waiting when adjust option MIN_CONFIRMATIONS will appear in
+            //  zcash-android-wallet-sdk
+            // val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
+            // return walletBalance.pending.convertZatoshiToZec(decimalCount)
+            return BigDecimal.ZERO
         }
 
     override val balanceUpdatedFlowable: Flowable<Unit>
@@ -236,7 +240,9 @@ class ZcashAdapter(
 
     override val availableBalance: BigDecimal
         get() {
-            val available = synchronizer.saplingBalances.value?.available ?: Zatoshi(0)
+            val available = (synchronizer.saplingBalances.value?.available ?: Zatoshi(0)) +
+                    (synchronizer.saplingBalances.value?.pending ?: Zatoshi(0))
+
             val defaultFee = ZcashSdk.MINERS_FEE
 
             return if (available <= defaultFee) {
