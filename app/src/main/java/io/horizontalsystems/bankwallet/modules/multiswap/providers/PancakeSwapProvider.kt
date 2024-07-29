@@ -8,6 +8,7 @@ object PancakeSwapProvider : BaseUniswapProvider() {
     override val title = "PancakeSwap"
     override val url = "https://pancakeswap.finance/"
     override val icon = R.drawable.pancake
+    override val priority = 0
 
     override fun supports(blockchainType: BlockchainType): Boolean {
         return blockchainType == BlockchainType.BinanceSmartChain

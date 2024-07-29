@@ -35,7 +35,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_green50
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
@@ -126,13 +125,6 @@ private fun SwapSelectProviderScreenInner(
                             text = provider.title,
                             textAlign = TextAlign.End
                         )
-                        if (i == 0) {
-                            VSpacer(height = 1.dp)
-                            subhead2_green50(
-                                text = stringResource(R.string.Swap_BestPrice),
-                                textAlign = TextAlign.End
-                            )
-                        }
                     }
                     HFillSpacer(minWidth = 8.dp)
                     Column(horizontalAlignment = Alignment.End) {

@@ -32,6 +32,7 @@ object OneInchProvider : EvmSwapProvider() {
     override val title = "1inch"
     override val url = "https://app.1inch.io/"
     override val icon = R.drawable.oneinch
+    override val priority = 100
     private val oneInchKit by lazy { OneInchKit.getInstance(App.appConfigProvider.oneInchApiKey) }
     private const val PARTNER_FEE: Float = 0.3F
     private const val PARTNER_ADDRESS: String = "0xe42BBeE8389548fAe35C09072065b7fEc582b590"
