@@ -9,6 +9,7 @@ object UniswapV3Provider : BaseUniswapV3Provider(DexType.Uniswap) {
     override val title = "Uniswap V3"
     override val url = "https://uniswap.org/"
     override val icon = R.drawable.uniswap_v3
+    override val priority = 0
 
     override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
         BlockchainType.Ethereum,
