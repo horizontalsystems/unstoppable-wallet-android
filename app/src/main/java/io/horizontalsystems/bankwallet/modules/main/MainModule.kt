@@ -28,6 +28,7 @@ object MainModule {
                 App.localStorage,
                 App.wcSessionManager,
                 App.wcManager,
+                App.networkManager,
             ) as T
         }
     }

@@ -1,12 +1,14 @@
 package io.horizontalsystems.bankwallet.modules.main
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IBackupManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.IRateAppManager
 import io.horizontalsystems.bankwallet.core.ITermsManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
@@ -41,6 +43,7 @@ class MainViewModel(
     private val localStorage: ILocalStorage,
     wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
+    private val networkManager: INetworkManager
 ) : ViewModelUiState<MainModule.UiState>() {
 
     private var wcPendingRequestsCount = 0
@@ -320,9 +323,32 @@ class MainViewModel(
                 }
             }
 
+            deeplinkString.startsWith("https://unstoppable.money/referral") -> {
+                val userId: String? = deepLink.getQueryParameter("userId")
+                val referralCode: String? = deepLink.getQueryParameter("referralCode")
+                if (userId != null && referralCode != null) {
+                    registerApp(userId, referralCode)
+                }
+            }
+
             else -> {}
         }
         return Pair(tab, deeplinkPage)
+    }
+
+    private fun registerApp(userId: String, referralCode: String) {
+        viewModelScope.launch {
+            try {
+                val response = networkManager.registerApp(userId, referralCode)
+                if (response.success) {
+                    //do nothing
+                } else {
+                    Log.e("MainViewModel", "registerApp api fail message: ${response.message}")
+                }
+            } catch (e: Exception) {
+                Log.e("MainViewModel", "registerApp error: ", e)
+            }
+        }
     }
 
     private fun syncNavigation() {
