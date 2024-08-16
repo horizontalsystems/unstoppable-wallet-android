@@ -53,6 +53,11 @@ class NetworkManager : INetworkManager {
     override suspend fun getBep2Tokens(): List<Bep2TokenInfoService.Bep2Token> {
         return Bep2TokenInfoService.service().tokens()
     }
+
+    override suspend fun registerApp(userId: String, referralCode: String)
+            : MiniAppRegisterService.RegisterAppResponse {
+        return MiniAppRegisterService.service().registerApp(userId, referralCode)
+    }
 }
 
 object ServiceFullTransaction {
@@ -143,6 +148,28 @@ object ServiceChangeLogs {
         @Headers("Content-Type: application/json")
         suspend fun getReleaseNotes(@Url path: String): JsonObject
     }
+}
+
+object MiniAppRegisterService {
+    private val apiUrl = "https://be.unstoppable.money/"
+
+    fun service(): UnstoppableApi {
+        return APIClient.retrofit(apiUrl, 60)
+            .create(UnstoppableApi::class.java)
+    }
+
+    interface UnstoppableApi {
+        @GET("api/v1/tasks/registerApp")
+        suspend fun registerApp(
+            @Query("userId") userId: String,
+            @Query("referralCode") referralCode: String
+        ): RegisterAppResponse
+    }
+
+    data class RegisterAppResponse(
+        val success: Boolean,
+        val message: String
+    )
 }
 
 object APIClient {
