@@ -185,14 +185,30 @@
     <string name="Market_PoweredByDefiLlamaApi">Работает на DefiLlama API</string>
     <string name="Market_Tab_Overview">Обзор</string>
     <string name="Market_Tab_Posts">Новости</string>
+    <string name="Market_Tab_Coins">Монеты</string>
+    <string name="Market_Tab_Platform">Платформы</string>
+    <string name="Market_Tab_Pairs">Пары</string>
     <string name="Market_Tab_Sectors">Секторы</string>
     <string name="Market_Tab_Watchlist">Избранное</string>
     <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
+    <string name="Market_Signals">Сигналы</string>
+    <string name="Market_Volume">Объем</string>
     <string name="Market_MarketCap">Рын. капитализация</string>
+    <string name="Market_TVL">TVL</string>
+    <string name="Market_Signal_Description">Нижеследующие сигналы основаны на технических индикаторах ценового диапазона Боллинджера и RSI за последние приблизительно 30 дней. Эти сигналы алгоритмические и могут часто изменяться.</string>
+    <string name="Market_Signal_StrongBuy_Description">Высокая уверенность в повышении цен.</string>
+    <string name="Market_Signal_Buy_Description">Вероятное увеличение цены в ближайшем будущем.</string>
+    <string name="Market_Signal_Neutral_Descripion">Нет чёткого тренда, рынок находится в равновесии.</string>
+    <string name="Market_Signal_Sell_Description">Вероятное снижение цен в ближайшем будущем.</string>
+    <string name="Market_Signal_StrongSell_Description">Высокая вероятность снижения цены.</string>
+    <string name="Market_Signal_Risky_Description">Повышенный уровень риска, требует осторожности.</string>
     <string name="Market_Signal_Warning">Всегда помните о применении управления рисками, и обратите внимание, что это не финансовый совет.</string>
+    <string name="Market_Signal_TurnOn">Включить</string>
     <string name="Market_Top_100">Топ 100</string>
+    <string name="Market_Top_200">Топ 200</string>
+    <string name="Market_Top_300">Топ 300</string>
     <string name="Market_Top_500">Топ 500</string>
     <string name="TopPairs_Title">Лучшие рыночные пары</string>
     <string name="TopPairs_Description">Лучшие торговые пары по объему на каждой бирже</string>
@@ -209,9 +225,12 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Капитализация рынка всех протоколов на блокчейне %s</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">График</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Общая капитализация</string>
     <string name="MarketGlobalMetrics_BtcDominance">Доминирование BTC</string>
+    <string name="MarketGlobalMetrics_Volume">Объём</string>
     <string name="MarketGlobalMetrics_DefiCap">Капитализация DeFi</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF приток</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">Историческое изменение соотношения рыночной капитализации биткойнов к остальным криптовалютным рынкам. \n\nОбычно, в этом случае биткойны доминируют над остальными тенденциями криптовалютного рынка наоборот.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">24-часовой объем крипторынка.</string>
@@ -223,7 +242,14 @@
     <string name="MarketGlobalMetrics_CoinNotSupported">Этот токен еще не поддерживается</string>
     <string name="MarketGlobalMetrics_NoCoin">У этого проекта нет токена</string>
     <!-- ETF-->
+    <string name="MarketEtf_Title">Общий чистый приток</string>
+    <string name="MarketEtf_Description">Чистый приток (net inflow) ETF равен разнице между поступлениями и оттоками наличных средств.</string>
+    <string name="MarketEtf_HighestAssets">Наивысшие активы</string>
+    <string name="MarketEtf_LowestAssets">Наименьшие активы</string>
+    <string name="MarketEtf_Inflow">Приток</string>
+    <string name="MarketEtf_Outflow">Расход</string>
     <string name="MarketEtf_Period_All">Все</string>
+    <string name="MarketEtf_TotalNetAssets">Всего чистых активов</string>
     <!--Market Search-->
     <string name="EmptyResults">Ничего не найдено</string>
     <string name="Market_Filters">Фильтры</string>
@@ -237,6 +263,8 @@
     <string name="Market_Filter_PricePeriod">Ценовой период</string>
     <string name="Market_Filter_TradingSignals">Торговые сигналы</string>
     <string name="Market_Filter_PriceChange">Изменение цены</string>
+    <string name="Market_PriceChange_24H">24 Часа</string>
+    <string name="Market_PriceChange_Utc">Полночь по UTC</string>
     <string name="Market_Filter_Blockchains">Блокчейны</string>
     <string name="Market_Filter_OutperformedBtc">Обошел BTC</string>
     <string name="Market_Filter_OutperformedEth">Обошел ETH</string>
@@ -256,6 +284,7 @@
     <string name="Market_Filter_StrongSell">Активно продавать</string>
     <string name="Market_Filter_Sell">Продавать</string>
     <string name="Market_Filter_RiskToTrade">Риски</string>
+    <string name="Market_Filter_Gainers">Показывают рост</string>
     <string name="Market_Filter_Top_100">Топ 100</string>
     <string name="Market_Filter_Top_250">Топ 250</string>
     <string name="Market_Filter_Top_500">Топ 500</string>
@@ -290,8 +319,12 @@
     <string name="Market_Filter_TimePeriod_1W">1 Неделя</string>
     <string name="Market_Filter_TimePeriod_2W">2 Недели</string>
     <string name="Market_Filter_TimePeriod_1M">1 Месяц</string>
+    <string name="Market_Filter_TimePeriod_3M">3 Месяца</string>
     <string name="Market_Filter_TimePeriod_6M">6 Месяцев</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Год</string>
+    <string name="Market_Sorting_Manual">Вручную</string>
+    <string name="Market_Sorting_Gainers">Показывают рост</string>
+    <string name="Market_Sorting_Losers">Теряют в цене</string>
     <string name="Market_Sorting_HighestCap">Наивысшей кап.</string>
     <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
     <!--Coin Markets-->
@@ -310,6 +343,7 @@
     <string name="Balance_SyncedUntil">до %s</string>
     <string name="Balance_Syncing">Синхронизация…</string>
     <string name="Balance_SearchingTransactions">Поиск транзакций...</string>
+    <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Синхронизация… %s%%</string>
     <string name="Balance_CoinDisabled">Отключена монета %s</string>
     <string name="Balance_Sort_Balance">По балансу</string>
@@ -457,6 +491,7 @@
     <string name="FeeInfo_TronFee_Title">Комиссия</string>
     <string name="FeeInfo_TronFee_Description">Ориентировочные затраты на отправку данной транзакции по сети (без учёта energy, Bandwidth и комиссии за активацию) предполагаются</string>
     <string name="FeeInfo_TronActivationFee_Title">Комиссия за активацию</string>
+    <string name="FeeInfo_TronActivationFee_Description">Этот адрес не активен. Перевод TRX или токенов TRC-10 на неактивный адрес активирует аккаунт.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Расходуемые ресурсы</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandwidth - это единица, которая измеряет размер байт транзакции, хранящихся в базе данных блокчейна. Чем больше транзакция, тем больше bandwidth будет потребляться.\n\nEnergy — это единица, измеряющая количество вычислений, требуемых виртуальной машиной TRON для выполнения конкретных операций в сети TRON.\n\nПоскольку транзакции смарт-контракта требуют выполнения вычислительных ресурсов, каждая сделка по контракту требует оплаты energy комиссии.</string>
     <!--Tron-->
@@ -466,6 +501,8 @@
     <string name="Tron_AddressNotActive_Info">Недавно созданные учетные записи в блокчейне TRON неактивны и не могут быть запрошены или изучены. Они должны быть активированы.\n\nАктивация новой учетной записи в цепочке Tron требует комиссию в размере 1 TRX. Для активации достаточно просто перевести токены TRX или TRC-10 на неактивный адрес аккаунта</string>
     <string name="Tron_SelfSendTrxNotAllowed">Невозможно отправить TRX самому себе</string>
     <string name="Tron_ZeroAmountTrxNotAllowed">Невозможно отправить 0 %s</string>
+    <string name="Tron_TokenPage_AddressNotActive_Title">Аккаунт не активен</string>
+    <string name="Tron_TokenPage_AddressNotActive_Info">Новым кошелькам TRON требуется депозит как минимум 1 TRX для активации. Неактивные кошельки могут принимать и хранить токены, но не будут корректировать балансы до момента активации.</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Запрос</string>
     <string name="WalletConnect_SendRequest_Title">Отправить</string>
@@ -498,6 +535,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">Нет подходящей учетной записи</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Нет подходящего evm kit</string>
     <string name="WalletConnect_Error_DataParsingError">Ошибка разбора данных</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Неподдерживаемые чейны: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Неподдерживаемые методы: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Неподдерживаемые события: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Запрос не найден</string>
     <string name="WalletConnect_NoConnection">У вас нет подключенных dapps</string>
     <string name="WalletConnect_PendingRequests">Ожидающие запросы</string>
@@ -789,10 +829,12 @@
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
+    <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
     <string name="Settings_PersonalSupport_Account">Аккаунт</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
     <string name="Settings_PersonalSupport_Requested">Запрошено</string>
     <string name="Settings_PersonalSupport_Request">Запрос</string>
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
@@ -813,16 +855,25 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <string name="Appearance_Theme">ТЕМА</string>
     <string name="Appearance_Tab">НАСТРОЙКИ ВКЛАДКИ</string>
+    <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
+    <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_LaunchScreen">ЗАПУСК ЭКРАНА</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
+    <string name="Appearance_BalanceConversion">Конвертация баланса</string>
+    <string name="Appearance_BalanceValue">Значение баланса</string>
     <string name="Appearance_Warning_CloseApplication">Изменение значка закроет приложение</string>
+    <string name="Appearance_HideMarketsTab">Скрыть рынки</string>
+    <string name="Appearance_HideBalanceTabButtons">Скрыть кнопки</string>
+    <string name="Appearance_HideBalanceTabButtonsDescription">Эта конфигурация скрывает кнопки Отправить, Получить и Обмен на вкладке баланса.</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения, независимо от предыдущих настроек.</string>
+    <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
     <string name="SettingsAboutApp_Title">О приложении</string>
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что нового</string>
+    <string name="SettingsAboutApp_AppVersion">Версия приложения</string>
     <!-- Blockchain Settings  -->
     <string name="BlockchainSettings_Title">Настройки блокчейна</string>
     <!-- Backup Manager -->
@@ -844,6 +895,11 @@
     <string name="BackupManager_AppSettingsTitle">Настройки приложения</string>
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
+    <string name="Privacy_Information">Unstoppable не собирает персональные данные, которые могут раскрывать вашу частную информацию, такую как балансы монет или адреса. Мы собираем некоторую статистику использования интерфейса исключительно для понимания нашей пользовательской базы и тенденций использования приложения. Эта функция может быть отключена по вашему желанию.</string>
+    <string name="Privacy_BulletedText1">Кошелек не собирает личные данные.</string>
+    <string name="Privacy_BulletedText2">Здесь нет пользовательских аккаунтов или баз данных для хранения данных пользователей.</string>
+    <string name="Privacy_BulletedText3">Если разрешено, кошелек будет делиться с командой Unstoppable информацией о привычках использования приложения. Это необходимо для понимания, какие функции используются (или нет) нашими пользователями. В качестве приложения, ориентированного на конфиденциальность, нам нужен способ оценить наши усилия, и без этого мы не сможем определить, используются ли построенные нами функции или нет.</string>
+    <string name="ShareUiData">Поделиться данными UI</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
     <!--Evm Network-->
@@ -851,6 +907,7 @@
     <string name="EvmNetwork_Added">Добавлено</string>
     <string name="EvmNetwork_SyncMode">Режим синхронизации</string>
     <!--Add RPC Source-->
+    <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Добавить источник RPC</string>
     <string name="AddEvmSyncSource_Name">По названию</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Базовая авторизация (опц.)</string>
@@ -886,6 +943,7 @@
     <string name="SettingsSecurity_SortingBip69Short">Детерминированный</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic Bip69</string>
     <string name="SettingsSecurity_SortingBip69Description">Лексикографическая индексация</string>
+    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Быстрый, Конфиденциальный, Централизованный</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">API + Блокчейн</string>
     <string name="SettingsSecurity_SyncModeBlockchain">Блокчейн</string>
@@ -1087,8 +1145,10 @@
     <string name="EvmPrivateKey_Warning">Этот ключ предназначен для всех EVM-совместимых блокчейнов. Не передавайте его никому.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
     <!-- Bip32 Root Key -->
+    <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Нажмите, чтобы показать приватный ключ</string>
+    <string name="ExtendedKey_AccountInfo">Выполнить</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Приватные ключи</string>
     <string name="PrivateKeys_EvmPrivateKey">Приватный ключ EVM</string>
@@ -1143,6 +1203,7 @@
     <string name="AddToken_Symbol">Символ</string>
     <string name="AddToken_CoinCode">Код токена</string>
     <string name="AddToken_Decimals">Десятичные знаки</string>
+    <string name="AddToken_Dots">…</string>
     <string name="AddToken_CoinTypes">ТИПЫ ТОКЕНОВ</string>
     <string name="AddToken_AlreadyAdded">УЖЕ ДОБАВЛЕНО</string>
     <string name="AddToken_AddressOrSymbol">Адрес контракта</string>
@@ -1186,6 +1247,7 @@
     <string name="Coin_Tab_Details">Аналитика</string>
     <string name="Coin_Tab_Tweets">Твиты</string>
     <string name="CoinPage_TimeDuration_Today">СГД</string>
+    <string name="CoinPage_TimeDuration_Day">1Д</string>
     <string name="CoinPage_TimeDuration_Week">7Д</string>
     <string name="CoinPage_TimeDuration_Month">1М</string>
     <string name="CoinPage_TimeDuration_TwoWeeks">2Н</string>
@@ -1503,6 +1565,7 @@
     <string name="NftCollection_AveragePrice">Средняя оценка за все время</string>
     <string name="NftCollection_ItemsCount">%d Элементов</string>
     <string name="NftCollection_TodaysSales">Продажи за сегодня</string>
+    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
     <string name="NftCollection_AveragePriceDescription">~%s за NFT</string>
     <string name="NftCollection_Royalty">Вознаграждение</string>
     <string name="NftCollection_InceptionDate">Дата старта</string>
@@ -1523,6 +1586,8 @@
     <string name="NftCollection_EventType_Mint">Минт</string>
     <string name="NftCollection_EventType_Unknown">Неизвестная</string>
     <!--Rate list-->
+    <string name="RateList_TopGainers">Показывают рост</string>
+    <string name="RateList_TopLosers">Теряют в цене</string>
     <string name="RateList_Posts">Новости</string>
     <string name="Market_DaysAgo">%dд назад</string>
     <string name="Market_HoursAgo">%dч назад</string>
@@ -1534,9 +1599,11 @@
     <string name="BalanceSyncError_ButtonReport">Пожаловаться</string>
     <string name="BalanceSyncError_ReportButtonExplanation">Сообщение об ошибке будет скопировано в ваш буфер обмена данными на случай, если вы решите о ней сообщить.</string>
     <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">Be Unstoppable</string>
     <string name="ReleaseNotes_FollowUs">Мы в соцсетях</string>
     <string name="CoinPage_Chart_Locked">Заблокировано</string>
     <string name="ProUsersInfo_Title">Pro-пользователь</string>
+    <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
     <string name="ProUsersInfo_SubTitle">Дополнительная информация о токене</string>
     <string name="ProUsersInfo_Description">Чтобы включить эти данные, вы должны получить бронзовый уровень UW NFTs “Coin Info+”\n\nТакже вы получите доступ к данным ниже:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX объем и рейтинг</string>

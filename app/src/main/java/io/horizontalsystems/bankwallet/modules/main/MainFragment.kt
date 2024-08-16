@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.main
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
@@ -38,6 +37,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.findActivity
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -73,21 +73,17 @@ import kotlinx.coroutines.launch
 class MainFragment : BaseComposeFragment() {
 
     private val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
-    private var intentUri: Uri? = null
 
     @Composable
     override fun GetContent(navController: NavController) {
         MainScreenWithRootedDeviceCheck(
             transactionsViewModel = transactionsViewModel,
-            deepLink = intentUri,
             navController = navController,
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        intentUri = activity?.intent?.data
-        activity?.intent?.data = null //clear intent data
 
         requireActivity().onBackPressedDispatcher.addCallback(
             this,
@@ -103,14 +99,13 @@ class MainFragment : BaseComposeFragment() {
 @Composable
 private fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
-    deepLink: Uri?,
     navController: NavController,
     rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory())
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
-        MainScreen(transactionsViewModel, deepLink, navController)
+        MainScreen(transactionsViewModel, navController)
     }
 }
 
@@ -118,16 +113,26 @@ private fun MainScreenWithRootedDeviceCheck(
 @Composable
 private fun MainScreen(
     transactionsViewModel: TransactionsViewModel,
-    deepLink: Uri?,
     fragmentNavController: NavController,
-    viewModel: MainViewModel = viewModel(factory = MainModule.Factory(deepLink))
+    viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
     val uiState = viewModel.uiState
+    val context = LocalContext.current
     val selectedPage = uiState.selectedTabIndex
     val pagerState = rememberPagerState(initialPage = selectedPage) { uiState.mainNavItems.size }
 
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+    LaunchedEffect(Unit) {
+        context.findActivity()?.let { activity ->
+            activity.intent?.data?.let { uri ->
+                viewModel.handleDeepLink(uri)
+                activity.intent?.data = null //clear intent data
+            }
+        }
+    }
+
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,

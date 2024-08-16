@@ -12,6 +12,7 @@ interface IMultiSwapProvider {
     val title: String
     val url: String
     val icon: Int
+    val priority: Int
 
     fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
         return tokenFrom.blockchainType == tokenTo.blockchainType &&

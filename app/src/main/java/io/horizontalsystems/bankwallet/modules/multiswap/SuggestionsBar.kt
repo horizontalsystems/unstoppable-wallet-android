@@ -38,7 +38,7 @@ fun SuggestionsBar(
                         Text(
                             text = "$percent%",
                             modifier = modifier,
-                            style = ComposeAppTheme.typography.subhead1,
+                            style = ComposeAppTheme.typography.captionSB,
                             color = if (selectEnabled) {
                                 ComposeAppTheme.colors.leah
                             } else {

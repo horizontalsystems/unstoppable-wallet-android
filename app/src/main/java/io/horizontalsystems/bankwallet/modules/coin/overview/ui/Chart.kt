@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
-import androidx.compose.material.ScrollableTabRow
 import androidx.compose.material.Tab
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -64,6 +63,7 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.GraphicBars
 import io.horizontalsystems.bankwallet.ui.compose.components.GraphicBarsWithNegative
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsPeriodsScrollableTabRow
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TabButtonSecondaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
@@ -702,28 +702,31 @@ fun <T> ChartTab(modifier: Modifier = Modifier, tabItems: List<TabItem<T>>, onSe
     val tabIndex = tabItems.indexOfFirst { it.selected }
 
     TabPeriod(modifier = modifier) {
-        ScrollableTabRow(
+        HsPeriodsScrollableTabRow(
             selectedTabIndex = tabIndex,
             modifier = Modifier,
             backgroundColor = Color.Transparent,
-            edgePadding = 0.dp,
+            edgePadding = 12.dp,
             indicator = {},
             divider = {}
         ) {
             tabItems.forEachIndexed { index, tabItem ->
                 val selected = tabIndex == index
-
-                Tab(
-                    selected = selected,
-                    onClick = { },
+                Row(
+                    modifier = Modifier.padding(horizontal = 4.dp)
                 ) {
-                    TabButtonSecondaryTransparent(
-                        title = tabItem.title,
-                        onSelect = {
-                            onSelect.invoke(tabItem.item)
-                        },
-                        selected = selected
-                    )
+                    Tab(
+                        selected = selected,
+                        onClick = { },
+                    ) {
+                        TabButtonSecondaryTransparent(
+                            title = tabItem.title,
+                            onSelect = {
+                                onSelect.invoke(tabItem.item)
+                            },
+                            selected = selected
+                        )
+                    }
                 }
             }
         }

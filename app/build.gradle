@@ -19,7 +19,7 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 111
+        versionCode 114
         versionName "0.40.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -275,7 +275,7 @@ dependencies {
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     implementation 'com.github.horizontalsystems:market-kit-android:636ca4d'
-    implementation 'com.github.horizontalsystems:solana-kit-android:ec238b4'
+    implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'

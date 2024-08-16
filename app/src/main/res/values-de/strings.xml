@@ -204,6 +204,7 @@
     <string name="Market_Signal_StrongSell_Description">Hohe Wahrscheinlichkeit für Preissenkungen.</string>
     <string name="Market_Signal_Risky_Description">Erhöhtes Risikoniveau, erfordert Vorsicht.</string>
     <string name="Market_Signal_Warning">Denken Sie immer daran, das Risikomanagement anzuwenden und beachten Sie, dass dies keine finanzielle Beratung ist.</string>
+    <string name="Market_Signal_TurnOn">Aktivieren</string>
     <string name="Market_Top_100">Top 100</string>
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
@@ -223,9 +224,12 @@
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Marktkapitalisierung aller Protokolle auf der %s Kette</string>
     <!--Market Global Metrics-->
     <string name="MarketGlobalMetrics_Chart">Diagramm</string>
+    <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
     <string name="MarketGlobalMetrics_BtcDominance">BTC-Dominanz in Prozent</string>
+    <string name="MarketGlobalMetrics_Volume">24 Std. Vol.</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi MK</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF Inflow</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Gesamtmarktwert aller Kryptowährungen.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance trending higher the rest of the crypto market trends down and vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">Das 24h Handelsvolumen des Krypto-Marktes.</string>
@@ -237,6 +241,7 @@
     <string name="MarketGlobalMetrics_CoinNotSupported">Diese Münze wird noch nicht unterstützt</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
+    <string name="MarketEtf_Title">Gesamtnettonzufluss</string>
     <string name="MarketEtf_Description">Der Nettogeldzufluss eines ETFs entspricht seinen Geldeingängen abzüglich der Abflüsse.</string>
     <string name="MarketEtf_HighestAssets">Höchste Vermögenswerte</string>
     <string name="MarketEtf_LowestAssets">Niedrigste Vermögenswerte</string>
@@ -485,6 +490,7 @@
     <string name="FeeInfo_TronFee_Title">Gebühr</string>
     <string name="FeeInfo_TronFee_Description">Die geschätzten Kosten für den Versand einer Transaktion im Netzwerk (ohne Energie-, Bandbreiten- und Aktivierungsgebühren)</string>
     <string name="FeeInfo_TronActivationFee_Title">Aktivierungsgebühr</string>
+    <string name="FeeInfo_TronActivationFee_Description">Diese Adresse ist nicht aktiv. Die Übertragung von TRX- oder TRC-10-Token an eine inaktive Account-Adresse wird das Konto aktivieren.</string>
     <string name="FeeInfo_TronResourcesConsumed_Title">Verbrauchte Ressourcen</string>
     <string name="FeeInfo_TronResourcesConsumed_Description">Bandbreite ist die Einheit, die die Größe der in der Blockchain-Datenbank gespeicherten Transaktionsbytes misst. Je größer die Transaktion, desto mehr Ressourcen werden verbraucht.\n\nEnergie ist die Einheit, die die Anzahl der Berechnungen misst, die von der virtuellen TRON-Maschine benötigt werden, um bestimmte Operationen im TRON-Netzwerk durchzuführen.\n\nDa intelligente Vertragsabschlüsse die Verwendung von Rechnerressourcen erfordern, muss für jeden Smart Contract eine Energiegebühr bezahlt werden.</string>
     <!--Tron-->
@@ -528,6 +534,9 @@
     <string name="WalletConnect_Error_NoSuitableAccount">Kein passendes Konto</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">Kein passendes evm Kit</string>
     <string name="WalletConnect_Error_DataParsingError">Datenverarbeitungsfehler</string>
+    <string name="WalletConnect_Error_UnsupportedChains">Nicht unterstützte Ketten: %s</string>
+    <string name="WalletConnect_Error_UnsupportedMethods">Nicht unterstützte Methoden: %s</string>
+    <string name="WalletConnect_Error_UnsupportedEvents">Nicht unterstützte Ereignisse: %s</string>
     <string name="WalletConnect_Error_RequestNotFoundError">Anforderungsfehler nicht gefunden</string>
     <string name="WalletConnect_NoConnection">Du hast keine verbundenen Dapps</string>
     <string name="WalletConnect_PendingRequests">Ausstehende Anfragen</string>
@@ -819,6 +828,7 @@
     <string name="Settings_Contact_ViaEmail">per e-Mail</string>
     <string name="Settings_AutoLock">Auto-Sperren</string>
     <string name="Settings_JoinUnstoppables">Sei unaufhaltsam</string>
+    <string name="Settings_JoinUnstoppables_Description">Lernen Sie Kryptographie über exklusive Videos. Lernen Sie uns informell kennen. Sei der Erste, der Dinge sieht, an denen wir arbeiten.</string>
     <string name="Settings_PersonalSupport">Persönlicher Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Geben Sie Ihren Telegram-Kontonamen ein, um einen persönlichen Support-Chat mit unserem Team zu starten. Wir werden uns mit Ihnen in Verbindung setzen und anfangen, an Ihrem Problem zu arbeiten, sobald wir es sehen.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Sie haben bereits einen privaten Chat angefordert, finden Sie ihn auf Telegram</string>
@@ -844,7 +854,10 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 Stunde</string>
     <string name="Appearance_Theme">THEMA</string>
     <string name="Appearance_Tab">TAB EINSTELLUNGEN</string>
+    <string name="Appearance_MarketsTab">MARKETS TAB</string>
+    <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_LaunchScreen">STARTBILDSCHIRM</string>
+    <string name="Appearance_AppIcon">APP ICON</string>
     <string name="Appearance_BalanceConversion">Saldokonvertierung</string>
     <string name="Appearance_BalanceValue">Saldo Wert</string>
     <string name="Appearance_Warning_CloseApplication">Das Ändern des Symbols schließt die Anwendung</string>
@@ -882,6 +895,7 @@
     <string name="BackupManager_AppSettingsDescription">Sprache, Währung, Erscheinung ...</string>
     <!-- Privacy  -->
     <string name="Privacy_Information">Unstoppable sammelt keine persönlichen Daten, die Ihre privaten Informationen offen legen, z.B. Münzsalden oder Adressen. Während wir einige UI-Nutzungsstatistiken sammeln, dient es allein dazu, unsere Benutzer- und App-Nutzungstrends zu verstehen. Dies kann deaktiviert werden, wenn Sie es wünschen.</string>
+    <string name="Privacy_BulletedText1">Die Brieftasche sammelt keine persönlichen Daten.</string>
     <string name="Privacy_BulletedText2">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten speichern.</string>
     <string name="Privacy_BulletedText3">Wenn erlaubt, teilt die Brieftasche App-Nutzungsgewohnheiten mit dem unaufhaltsamen Team. Dies ist zu verstehen, welche Funktionen von unseren Benutzern verwendet werden (oder nicht). Als datenschutzorientierte App brauchen wir eine Möglichkeit, unsere Bemühungen zu bewerten, und ohne dies haben wir keine Ahnung, ob die von uns erstellten Funktionen genutzt werden oder nicht.</string>
     <string name="ShareUiData">UI-Daten teilen</string>
@@ -953,6 +967,7 @@
     <string name="DuressPinSelectAccounts_Title">Wallets auswählen</string>
     <string name="DuressPinSelectAccounts_Description">Wählen Sie die Wallets, die im Duress Modus angezeigt werden.</string>
     <string name="DuressPinSelectAccounts_SectionWallets_Title">WALLETS</string>
+    <string name="DuressPinSelectAccounts_SectionWatchWallets_Title">WATCH WALLETS</string>
     <!--Setting_Terms-->
     <string name="SettingsTerms_Text">Die unaufhaltsame Brieftasche ist für diejenigen gedacht, die Kryptowährungen auf private und unabhängige Weise investieren und speichern möchten.\n\nEs ist eine nicht-Custodial, Peer-to-Peer-Wallet, bei der nur der Benutzer die Kontrolle über das Guthaben hat. Es sammelt keine Daten und hält den Benutzer unabhängig, indem er das Guthaben des Benutzers nicht an eine bestimmte Wallet-App sperrt.\n\nDie unaufhaltsame Brieftasche ist vollständig Open-Source und jeder kann bestätigen, dass die App genau so funktioniert, wie sie es vorgibt.</string>
     <string name="SettingsTerms_Backup">Sicheres Backup der Wiederherstellungsausdrücke für jede Wallet. Dies ist die einzige Möglichkeit, den Zugriff auf Gelder zurückzugewinnen, wenn die App nicht funktioniert.</string>
@@ -1136,6 +1151,7 @@
     <string name="Bip32RootKey">BIP32 Root Key</string>
     <!-- Account Extended Keys -->
     <string name="ExtendedKey_TapToShowPrivateKey">Tippen um privaten Schlüssel anzuzeigen</string>
+    <string name="ExtendedKey_AccountInfo">To do</string>
     <!-- Private Keys -->
     <string name="PrivateKeys_Title">Private Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
@@ -1264,6 +1280,8 @@
     <string name="CoinPage_SecurityParams_Issuance">Ausgabe</string>
     <string name="CoinPage_SecurityParams_Centralized">Zentralisiert</string>
     <string name="CoinPage_SecurityParams_Decentralized">Dezentralisiert</string>
+    <string name="CoinPage_SecurityParams_ConfiscationResistance">Confiscation-resistance</string>
+    <string name="CoinPage_SecurityParams_CensorshipResistance">Censorship-resistance</string>
     <string name="CoinPage_SecurityParams_Audits">Prüfungen</string>
     <string name="CoinPage_Range24">24h Range</string>
     <string name="CoinPage_About">Info</string>
@@ -1301,6 +1319,7 @@
     <string name="CoinPage_AddToWallet">Zum Wallet hinzugefügt</string>
     <string name="CoinPage_InWallet">In Wallet</string>
     <string name="CoinPage_Favorite">Favorit</string>
+    <string name="CoinPage_Unfavorite">Unfavorite</string>
     <string name="CoinPage_Performance_Week">1 Woche</string>
     <string name="CoinPage_Performance_Month">1 Monate</string>
     <string name="CoinPage_ReadMore">Lesen Sie mehr</string>
@@ -1557,6 +1576,7 @@
     <string name="NftCollection_EventType_SelectorTitle">Ereignistyp auswählen</string>
     <string name="NftCollection_EventType_All">Alle</string>
     <string name="NftCollection_EventType_List">Liste</string>
+    <string name="NftCollection_EventType_Sale">Sale</string>
     <string name="NftCollection_EventType_Cancelled">Abbrechen</string>
     <string name="NftCollection_EventType_BidEntered">Gebot eingegeben</string>
     <string name="NftCollection_EventType_BidWithdrawn">Gebot zurückgezogen</string>
@@ -1582,6 +1602,7 @@
     <string name="BalanceSyncError_ButtonReport">Melden</string>
     <string name="BalanceSyncError_ReportButtonExplanation">Der Fehlertext wird in die Zwischenablage kopiert, falls Sie den Fehler melden möchten.</string>
     <!--Release notes-->
+    <string name="ReleaseNotes_JoinUnstoppables">UNSTOPPABLES beitreten</string>
     <string name="ReleaseNotes_FollowUs">Folge Uns</string>
     <string name="CoinPage_Chart_Locked">Gesperrt</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
