@@ -282,7 +282,7 @@
     <string name="Market_Filter_StrongSell">Venda forte</string>
     <string name="Market_Filter_Sell">Irá vender</string>
     <string name="Market_Filter_RiskToTrade">Arriscado</string>
-    <string name="Market_Filter_Gainers">Ganhadores</string>
+    <string name="Market_Filter_Gainers">Altas</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
@@ -321,8 +321,8 @@
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Ano</string>
     <string name="Market_Sorting_Manual">Manual</string>
-    <string name="Market_Sorting_Gainers">Ganhadores</string>
-    <string name="Market_Sorting_Losers">Perdedores</string>
+    <string name="Market_Sorting_Gainers">Altas</string>
+    <string name="Market_Sorting_Losers">Baixas</string>
     <string name="Market_Sorting_HighestCap">Maior capitalização</string>
     <string name="Market_Sorting_LowestCap">Menor capitalização</string>
     <!--Coin Markets-->
@@ -1593,8 +1593,8 @@
     <string name="NftCollection_EventType_Mint">Mint</string>
     <string name="NftCollection_EventType_Unknown">Desconhecido</string>
     <!--Rate list-->
-    <string name="RateList_TopGainers">Ganhadores</string>
-    <string name="RateList_TopLosers">Perdedores</string>
+    <string name="RateList_TopGainers">Altas</string>
+    <string name="RateList_TopLosers">Baixas</string>
     <string name="RateList_Posts">Notícias</string>
     <string name="Market_DaysAgo">%dd atrás</string>
     <string name="Market_HoursAgo">%dh atrás</string>
