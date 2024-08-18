@@ -1,6 +1,6 @@
 Carteira Unstoppable é construída propositalmente como uma ferramenta de gerenciamento descentralizada para criptomoedas.
 
-It is engineered to serve privacy-conscious individuals looking to manage and invest in Bitcoin, Ethereum and other cryptocurrencies in a sovereign and professional manner.
+Ela foi desenvolvida para atender pessoas preocupadas com a privacidade e buscam gerenciar e investir em Bitcoin, Ethereum e outras criptomoedas de maneira soberana e profissional.
 
 Unstoppable construída com o seguinte em mente:
 
@@ -20,9 +20,9 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 - Universal Wallet >> Ele suporta todos os blockchains convencionais e é construído de maneira compatível com o padrão, permitindo que os usuários usem apenas um aplicativo de carteira para todas as criptomoedas.
 
-- A Bitcoin Wallet >> The wallet packs some of the most advanced Bitcoin features available: SPV enabled, BIP 44/49/84/86/69 compliant, Bitcoin timelocks, custom transaction fees, and more.
+— Uma carteira Bitcoin >> A carteira reúne alguns dos recursos mais avançados do Bitcoin disponíveis: habilitado para SPV, compatível com BIP 44/49/84/86/69, bloqueios de tempo para Bitcoin, taxas de transação personalizadas e muito mais.
 
-- A DeFi Wallet >> Full support for decentralized token swaps on Ethereum, Binance Smart Chain, Polygon, Avalanche, Solana, and more. Além disso, a capacidade de interagir com qualquer serviço inteligente baseado em contratos na blockchain através do protocolo WalletConnect.
+— Uma carteira DeFi >> Suporte total para trocas de tokens descentralizadas em Ethereum, Binance Smart Chain, Polygon, Avalanche, Solana e muito mais. Além disso, a capacidade de interagir com qualquer serviço inteligente baseado em contratos na blockchain através do protocolo WalletConnect.
 
 - Ethereum Wallet >> Suporte completo para a blockchain Ethereum, o seu ecossistema crescente de tokens (ERC20, tokens NFT, etc., e outros serviços descentralizados como ENS (Serviço de Nome (Ethereum).
 
@@ -38,7 +38,7 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 — Carteira descentralizada >> Projetada para trabalhar com as principais blockchains de forma descentralizada onde um aplicativo não depende de nenhum servidor de um provedor de carteiras para enviar/receber transações, mas interage com as redes blockchain diretamente.
 
-— Focada em Privacidade>> Projetado para permitir a privacidade, mesmo nos cenários mais violadores de privacidade. Não há contas de usuário mantendo seus registros, nenhuma verificação de identidade que arrisque expor suas finanças para o mundo e nenhuma interação com as camadas financeiras tradicionais. The app is partially TOR enabled and VPN support coming soon.
+— Focada em Privacidade>> Projetado para permitir a privacidade, mesmo nos cenários mais violadores de privacidade. Não há contas de usuário mantendo seus registros, nenhuma verificação de identidade que arrisque expor suas finanças para o mundo e nenhuma interação com as camadas financeiras tradicionais. O aplicativo é parcialmente habilitado para TOR e o suporte a VPN estará disponível em breve.
 
 — Totalmente Open Source >> Talvez o aplicativo de carteira mais transparente construído até agora. O processo de produção de 4 anos do aplicativo está abertamente acessível on-line, com 100% do código para qualquer pessoa avaliar ou reutilizar em outros projetos. Verificado e auditado por terceiros.
 
