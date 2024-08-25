@@ -1,24 +1,24 @@
-Carteira Unstoppable é construída propositalmente como uma ferramenta de gerenciamento descentralizada para criptomoedas.
+A carteira Unstoppable é construída propositalmente como uma ferramenta de gerenciamento descentralizada para criptomoedas.
 
-Ela foi desenvolvida para atender pessoas preocupadas com a privacidade e buscam gerenciar e investir em Bitcoin, Ethereum e outras criptomoedas de maneira soberana e profissional.
+Ela foi desenvolvida para atender pessoas preocupadas com a privacidade que buscam gerenciar e investir em Bitcoin, Ethereum e outras criptomoedas de maneira soberana e profissional.
 
-Unstoppable construída com o seguinte em mente:
+A Unstoppable foi construída com o seguinte em mente:
 
-— O capital deve ser gratuito >> Criado para fornecer aos usuários um controle genuinamente independente sobre o seu capital.
+— O Capital Deve ser Livre >> Criada para fornecer aos usuários um controle genuinamente independente sobre o seu capital.
 
-— O Capital deve ser sem fronteiras >> Funciona fora da camada financeira tradicional e atua como uma faca suíça para o mundo das finanças descentralizadas (DeFi).
+— O Capital Deve ser Sem Fronteiras>> Funciona fora da camada financeira tradicional e atua como uma faca suíça para o mundo das finanças descentralizadas (DeFi).
 
-- O capital deve ser privado >> Não vaza dados privados, não tem meios de rastrear os usuários e tomar medidas adicionais para garantir a privacidade em várias camadas.
+— O Capital Deve ser Privado>> Não vaza dados privados, não tem meios de rastrear os usuários e toma medidas adicionais para garantir a privacidade em várias camadas.
 
 Se as frases acima combinam com você, a Unstoppable será para você! E estamos aqui para nos concentrar em suas necessidades exclusivas e atendê-lo da melhor maneira possível.
 
-CARACTERÍSTICAS DA CARTEIRA:
+RECURSOS DA CARTEIRA:
 
-— Multi-carteira sem custódia>> Gerencie qualquer número de criptomoedas através de múltiplas carteiras de portifólio de forma sem custódia. Esta carteira é como o seu próprio banco onde você é o único cliente e o único responsável. Ela é projetada para manter os ativos seguros e fáceis de restaurar, mesmo se o telefone for roubado e adulterado.
+— Multi-Carteira Sem Custódia>> Gerencie qualquer número de criptomoedas através de múltiplas carteiras de portifólio de forma sem custódia. Esta carteira é como o seu próprio banco onde você é o único cliente e o único responsável. Ela é projetada para manter os ativos seguros e fáceis de restaurar, mesmo se o telefone for roubado e adulterado.
 
-- Carteira orientada para o investimento >> Unstoppable traz análises de mercado de criptomoedas inigualáveis para o seu dispositivo: classificação avançada, categorização com curadoria, filtragem de pesquisa abrangente e recursos de alerta baseados em eventos.
+— Carteira orientada para o investimento >> A Unstoppable traz análises de mercado de criptomoedas inigualáveis para o seu dispositivo: classificação avançada, categorização com curadoria, filtragem de pesquisa abrangente e recursos de alerta baseados em eventos.
 
-- Universal Wallet >> Ele suporta todos os blockchains convencionais e é construído de maneira compatível com o padrão, permitindo que os usuários usem apenas um aplicativo de carteira para todas as criptomoedas.
+— Carteira Universal >> Ela suporta todas as blockchains convencionais sendo construída de maneira compatível com o padrão, permitindo que os usuários usem apenas um aplicativo de carteira para todas as criptomoedas.
 
 — Uma carteira Bitcoin >> A carteira reúne alguns dos recursos mais avançados do Bitcoin disponíveis: habilitado para SPV, compatível com BIP 44/49/84/86/69, bloqueios de tempo para Bitcoin, taxas de transação personalizadas e muito mais.
 
@@ -26,19 +26,19 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 - Ethereum Wallet >> Suporte completo para a blockchain Ethereum, o seu ecossistema crescente de tokens (ERC20, tokens NFT, etc., e outros serviços descentralizados como ENS (Serviço de Nome (Ethereum).
 
-- Ethereum L2 Wallet >> Artbitrum, Optimizm, suporte Polygon.
+— Carteira Ethereum L2 >> Artbitrum, Optimizm, suporte Polygon.
 
-- Carteira Avalanche >> Suporte completo para a blockchain Avalanche C-Chain.
+— Carteira Avalanche >> Suporte completo para a blockchain Avalanche C-Chain.
 
-- Carteira Binance >> Suporte total para Corrente Binance original (incl. BEP2) e Binance Smart Chain.
+- Carteira Binance >> Suporte total para Corretora Binance original (incl. BEP2) e Binance Smart Chain.
 
-— Crypto Academy >> O aplicativo inclui dois cursos destinados a integrar o novo mundo das criptomoedas e do ecossistema DeFi de forma fácil de compreender, cobrindo aspectos essenciais da segurança das criptomoedas, armazenamento, privacidade, transação, troca e muito mais.
+— Academia Cripto>> O aplicativo inclui dois cursos destinados a integrar o novo mundo das criptomoedas e do ecossistema DeFi de forma fácil de compreender, cobrindo aspectos essenciais da segurança das criptomoedas, armazenamento, privacidade, transação, troca e muito mais.
 
 — Carteira para Moedas de Privacidade >> Suporta totalmente as principais moedas de privacidade (ZCash, DASH) de forma SPV. Uma das muito poucas carteiras capazes de apoiar transações Zcash totalmente protegidas, bem como a capacidade de privatizar transações em Bitcoin.
 
 — Carteira descentralizada >> Projetada para trabalhar com as principais blockchains de forma descentralizada onde um aplicativo não depende de nenhum servidor de um provedor de carteiras para enviar/receber transações, mas interage com as redes blockchain diretamente.
 
-— Focada em Privacidade>> Projetado para permitir a privacidade, mesmo nos cenários mais violadores de privacidade. Não há contas de usuário mantendo seus registros, nenhuma verificação de identidade que arrisque expor suas finanças para o mundo e nenhuma interação com as camadas financeiras tradicionais. O aplicativo é parcialmente habilitado para TOR e o suporte a VPN estará disponível em breve.
+— Focada em Privacidade>> Projetado para permitir a privacidade, mesmo nos cenários mais violadores. Não há contas de usuário mantendo seus registros, nenhuma verificação de identidade que arrisque expor suas finanças para o mundo e nenhuma interação com as camadas financeiras tradicionais. O aplicativo é parcialmente habilitado para TOR e o suporte a VPN estará disponível em breve.
 
 — Totalmente Open Source >> Talvez o aplicativo de carteira mais transparente construído até agora. O processo de produção de 4 anos do aplicativo está abertamente acessível on-line, com 100% do código para qualquer pessoa avaliar ou reutilizar em outros projetos. Verificado e auditado por terceiros.
 
