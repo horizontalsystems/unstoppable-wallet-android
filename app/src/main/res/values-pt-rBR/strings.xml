@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common-->
-    <string name="Error_ParameterNotSet">Parâmetro não está definido</string>
+    <string name="Error_ParameterNotSet">O parâmetro não está definido</string>
     <string name="LargeNumberFormat">%1$s%2$s</string>
     <string name="Alert_Cancel">Cancelar</string>
     <string name="Alert_Copy">Copiar</string>
@@ -96,7 +96,7 @@
     <string name="CreateWallet_Error_EmptyPassphrase">A senha não pode estar vazia</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Por favor, use apenas símbolos suportados: <![CDATA[A-Z a-z 0-9 \' " ` & / ? : ; . , ~ * $ = + - [ ](){} <> \ _ # @ £% ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Confirmação da senha não coincide</string>
-    <string name="CreateWallet_PassphraseDescription">Frases secretas adicionam camada de segurança adicional para carteiras. Para restaurar essa carteira, o usuário exigia uma frase de recuperação e uma frase secreta.\n\nAs frases secretas também facilitam para os usuários ter muitas carteiras com várias moedas usando um único mnemônico, mas com senhas diferentes.</string>
+    <string name="CreateWallet_PassphraseDescription">As frases secretas adicionam uma camada de segurança adicional para carteiras. Para restaurar essa carteira, é exigido do usuário uma frase de recuperação e uma frase secreta.\n\nAs frases secretas também facilitam para os usuários ter muitas carteiras com várias moedas usando um único mnemônico, mas com senhas diferentes.</string>
     <!--Languages-->
     <string name="Language_English">Inglês</string>
     <string name="Language_Japanese">Japonês</string>
@@ -110,7 +110,7 @@
     <string name="Language_Portuguese">Português</string>
     <!--Rate App-->
     <string name="RateApp_Title_Rate_This_App">GM!</string>
-    <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para que ela possa ir mais longe.</string>
+    <string name="RateApp_Description_Rate_This_App">Gostou da Unstoppable? Compartilhe seus comentários e ideias para irmos mais longe.</string>
     <string name="RateApp_Button_RateIt">Avaliar</string>
     <string name="RateApp_Button_NotNow">Agora não</string>
     <!--Restore-->
@@ -165,12 +165,12 @@
     <string name="Market_FilterSection_PriceParameters">PARÂMETROS DE PREÇO</string>
     <string name="Market_FilterSection_NetworkParameters">PARÂMETROS DE REDE</string>
     <string name="Market_FilterSection_Indicators">INDICADORES</string>
-    <string name="Market_Field_HighestCap">Maior capitalização</string>
-    <string name="Market_Field_LowestCap">Menor capitalização</string>
-    <string name="Market_Field_HighestVolume">Maior volume</string>
-    <string name="Market_Field_LowestVolume">Menor volume</string>
+    <string name="Market_Field_HighestCap">Maior Capitalização</string>
+    <string name="Market_Field_LowestCap">Menor Capitalização</string>
+    <string name="Market_Field_HighestVolume">Maior Volume</string>
+    <string name="Market_Field_LowestVolume">Menor Volume</string>
     <string name="Market_Field_HighestPrice">Maior preço</string>
-    <string name="Market_Field_LowestPrice">Menor preço</string>
+    <string name="Market_Field_LowestPrice">Menor Preço</string>
     <string name="Market_Sort_PopupTitle">Organizar por</string>
     <string name="Market_TotalMarketCap">Valor Total de M.</string>
     <string name="Market_BtcDominance">Dominação BTC</string>
@@ -807,7 +807,7 @@
     <!--Markdown-->
     <string name="Markdown_Error_NotFound">Página não encontrada</string>
     <!--Setting_Currency-->
-    <string name="SettingsCurrency_Title">Moeda base</string>
+    <string name="SettingsCurrency_Title">Moeda Base</string>
     <string name="SettingsCurrency_Other">OUTRA</string>
     <string name="SettingsCurrency_DisclaimerTitle">Aviso Legal</string>
     <string name="SettingsCurrency_DisclaimerText">Os dados da taxa de câmbio são fornecidos por um serviço de terceiros - Coingecko.com. \n\nO aplicativo de carteira Unstoppable não garante que esses valores sejam sempre corretos e que correspondam aos dados do mercado. A chance de inconsistência é maior se você selecionar qualquer moeda base que não seja %s.</string>
@@ -897,7 +897,7 @@
     <string name="BackupManager_AppSettingsTitle">Configurações do Aplicativo</string>
     <string name="BackupManager_AppSettingsDescription">Linguagem, Moeda, Aparência …</string>
     <!-- Privacy  -->
-    <string name="Privacy_Information">Unstoppable não coleta dados pessoais que exponham suas informações privadas, como saldos de moedas ou endereços. Embora coletemos algumas estatísticas de uso da interface do usuário, é exclusivamente para entender nossa base de usuários e tendências de uso do aplicativo. Isso pode ser desativado se você desejar.</string>
+    <string name="Privacy_Information">A Unstoppable não coleta dados pessoais que exponham suas informações privadas, como saldos de moedas ou endereços. Embora coletamos algumas estatísticas de uso da interface do usuário, isto é exclusivamente para entender nossa base de usuários e tendências de uso do aplicativo. Isso pode ser desativado se você desejar.</string>
     <string name="Privacy_BulletedText1">A carteira não coleta nenhum dado pessoal.</string>
     <string name="Privacy_BulletedText2">Não há contas de usuário ou bancos de dados armazenando dados do usuário.</string>
     <string name="Privacy_BulletedText3">Se permitido, a carteira compartilhará os hábitos de uso do aplicativo com a equipe do Unstoppable. Isso é para entender quais recursos estão sendo usados (ou não) pelos nossos usuários. Sendo um aplicativo focado em privacidade, precisamos de alguma maneira de avaliar nossos esforços e sem isso não temos ideia se os recursos que construímos estão sendo utilizados ou não.</string>
@@ -936,7 +936,7 @@
     <string name="SettingsSecurity_EditDuressPin">Editar Senha do Modo Coação</string>
     <string name="SettingsSecurity_DisableDuressPin">Desabilitar senha de cobrança</string>
     <string name="SettingsSecurity_DuressPinDescription">Um modo especializado projetado para manter as carteiras selecionadas seguras sob coação.</string>
-    <string name="SettingsSecurity_ManageKeys">Gerenciar carteiras</string>
+    <string name="SettingsSecurity_ManageKeys">Gerenciar Carteiras</string>
     <string name="SettingsSecurity_AppRestartWarning">Esta ação reiniciará Carteira Unstoppable.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Anonimize sua internet completamente enquanto estiver usando este aplicativo. Nota: em alguns casos, o recurso WalletConnect para apps DeFi pode ser muito lento ou nem funcionar.</string>
     <string name="SettingsSecurity_NotificationsDisabledWarning">As notificações do aplicativo da carteira Unstoppable estão desativadas. Você precisa ativar as notificações e permitir a atualização do aplicativo em segundo plano para poder receber alertas de alteração de preço.</string>
@@ -1054,7 +1054,7 @@
     <!-- Testnet Settings -->
     <string name="TestnetSettings_Description">Esta opção ativa a rede de testes Goerli da Ethereum apenas para o token GoerliETH e adiciona-a ao gerenciador de moedas.\n\nApenas afeta o token GoerliETH enquanto todos os outros tokens EVM e Ethereum operam sobre o mainnet. Em outras palavras, apenas as transações em GoerliETH passam pelo teste Goerli, enquanto todas as outras transferências token, incluindo ETH passam pelo mainnet.</string>
     <!--Manage Accounts-->
-    <string name="ManageAccounts_Title">Gerenciar carteiras</string>
+    <string name="ManageAccounts_Title">Gerenciar Carteiras</string>
     <string name="ManageAccounts_CreateNewWallet">Criar</string>
     <string name="ManageAccounts_ImportWallet">Restaurar</string>
     <string name="ManageAccounts_WatchAddress">Ver Endereço</string>
