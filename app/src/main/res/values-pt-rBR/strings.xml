@@ -1352,18 +1352,18 @@
     <string name="CoinPage_EmaSettingsDescription">O EMA, SMA e WMA são médias móveis usadas em análise técnica:\n\nEMA enfatiza preços recentes para reações mais rápidas.\nSMA indica dados de preços médios para uma visão geral de tendência.\nSaldos WMA e redução de ruído por ponderação linearmente de dados recentes.</string>
     <string name="CoinPage_RsiSettingsDescription">O Índice de Força Relativa (RSI) é um oscilador de momentum que mede a velocidade e a mudança de preços, identificando supercomprados (acima de 70) ou supervendidos (abaixo de 30) condições de mercado. Ele também pode detectar reversões de preço através de divergências.</string>
     <string name="CoinPage_MacdSettingsDescription">A Divergência de Convergência Média em Movimento (MACD) é um indicador de momento que acompanha a relação entre dois EMAs de um preço de segurança. Sinais de compra ou venda de oportunidades quando a linha MACD (EMA de 12 períodos menos 26-period EMA) cruza o EMA de 9 períodos, conhecido como a linha de sinal.</string>
-    <string name="CoinPage_InsufficientData">Dados insuficientes</string>
+    <string name="CoinPage_InsufficientData">Dados Insuficientes</string>
     <string name="CoinPage_InsufficientDataError">Não há dados suficientes para exibir o indicador EMA 1. Por favor, ajuste o período de tempo para gerar uma visão da linha móvel. Não há ponto suficiente para exibir EMA 1.</string>
     <string name="CoinPage_Type">Tipo</string>
     <string name="CoinPage_Period">Período</string>
     <string name="CoinPage_RsiLength">Comprimento RSI</string>
     <string name="CoinPage_FastLength">Comprimento Rápido</string>
     <string name="CoinPage_SlowLength">Comprimento Lento</string>
-    <string name="CoinPage_SignalSmoothing">Suavização de sinal</string>
+    <string name="CoinPage_SignalSmoothing">Suavização de Sinal</string>
     <string name="CoinPage_IndicatorsAlertText">Indicadores disponíveis apenas para usuários Premium Unstoppable.</string>
     <string name="CoinPage_AiGeneratedText">Esta é uma descrição gerada por IA com base no material de referência fornecido para a criptomoeda em questão. Pode conter erros.</string>
     <string name="CoinPage_MarketsLabel_Verified">VERIFICADO</string>
-    <string name="CoinPage_MarketsVerifiedMenu_Verified">Confirmado</string>
+    <string name="CoinPage_MarketsVerifiedMenu_Verified">Verificado</string>
     <string name="CoinPage_MarketsVerifiedMenu_All">Todas</string>
     <string name="CoinAnalytics_CexVolume_Info1">Volume total de trading para o token em corretoras centralizadas durante um período de 30 dias.</string>
     <string name="CoinAnalytics_CexVolume_Info2">Gráfico mostrando a variação no volume diário de negociação do token nas principais corretoras centralizadas durante um período de 1 ano.</string>
@@ -1606,8 +1606,8 @@
     <string name="BalanceSyncError_ButtonReport">Reportar</string>
     <string name="BalanceSyncError_ReportButtonExplanation">O texto de erro será copiado para a área de transferência caso você decida reportá-lo.</string>
     <!--Release notes-->
-    <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE EM REPARÁVEIS</string>
-    <string name="ReleaseNotes_FollowUs">Siga a gente</string>
+    <string name="ReleaseNotes_JoinUnstoppables">JUNTE-SE À UNSTOPPABLE</string>
+    <string name="ReleaseNotes_FollowUs">Siga-nos</string>
     <string name="CoinPage_Chart_Locked">Bloqueado</string>
     <string name="ProUsersInfo_Title">Usuários Pro</string>
     <string name="ProUsersInfo_UnstoppablePass">Senha Unstoppable</string>
