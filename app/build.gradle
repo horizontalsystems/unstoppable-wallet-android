@@ -19,8 +19,8 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 113
-        versionName "0.39.3"
+        versionCode 114
+        versionName "0.39.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ksp {
