@@ -23,6 +23,7 @@ abstract class CoreApp : Application() {
 
     abstract fun localizedContext(): Context
     abstract fun getApplicationSignatures(): List<ByteArray>
+    abstract val isSwapEnabled: Boolean
 
     fun localeAwareContext(base: Context): Context {
         return LocaleHelper.onAttach(base)

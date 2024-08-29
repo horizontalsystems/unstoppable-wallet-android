@@ -306,16 +306,18 @@ fun BalanceItems(
                                 }
                             }
                         )
-                        HSpacer(8.dp)
-                        ButtonPrimaryCircle(
-                            icon = R.drawable.ic_swap_24,
-                            contentDescription = stringResource(R.string.Swap),
-                            onClick = {
-                                navController.slideFromRight(R.id.multiswap)
+                        if (viewModel.isSwapEnabled) {
+                            HSpacer(8.dp)
+                            ButtonPrimaryCircle(
+                                icon = R.drawable.ic_swap_24,
+                                contentDescription = stringResource(R.string.Swap),
+                                onClick = {
+                                    navController.slideFromRight(R.id.multiswap)
 
-                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
-                            }
-                        )
+                                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                                }
+                            )
+                        }
                     }
                     VSpacer(12.dp)
                 }
