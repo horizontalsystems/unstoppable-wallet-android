@@ -27,7 +27,7 @@ class HsProvider(baseUrl: String, apiKey: String) {
 
     // TODO Remove old base URL https://api-dev.blocksdecoded.com/v1 and switch it to new servers
     private val pirateService by lazy {
-        RetrofitUtils.build("https://p.cash/s1/", mapOf("apikey" to apiKey))
+        RetrofitUtils.build("https://pirate.cash/s1/", mapOf("apikey" to apiKey))
                 .create(MarketService::class.java)
     }
 
