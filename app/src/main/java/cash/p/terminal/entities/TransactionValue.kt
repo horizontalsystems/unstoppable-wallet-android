@@ -28,6 +28,15 @@ sealed class TransactionValue {
 
     open val nftUid: NftUid? = null
 
+    data class JettonValue(
+        val name: String,
+        val symbol: String,
+        override val decimals: Int,
+        val value: BigDecimal
+    ) : TransactionValue() {
+
+    }
+
     data class CoinValue(val token: Token, val value: BigDecimal) : TransactionValue() {
         override val coin: Coin = token.coin
         override val badge: String? = token.badge

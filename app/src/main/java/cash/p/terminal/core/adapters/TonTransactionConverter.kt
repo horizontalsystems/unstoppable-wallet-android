@@ -4,11 +4,18 @@ import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.entities.TransactionValue
-import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.TransactionSource
+import cash.p.terminal.modules.transactions.TransactionStatus
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.tonkit.models.AccountAddress
+import io.horizontalsystems.tonkit.models.Action
 import io.horizontalsystems.tonkit.models.Event
+import io.horizontalsystems.tonkit.models.Jetton
 import java.math.BigDecimal
+import java.math.BigInteger
 
 class TonTransactionConverter(
     private val coinManager: ICoinManager,
@@ -17,71 +24,114 @@ class TonTransactionConverter(
     private val baseToken: Token,
     private val evmLabelManager: EvmLabelManager
 ) {
-    fun createTransactionRecord(event: Event): TransactionRecord {
-//        val amount = transaction.amount?.toBigDecimal()?.movePointLeft(decimals)
+    val address = tonKitWrapper.tonKit.receiveAddress
 
-//        val value = if (transaction.type == TransactionType.Outgoing) {
-//            amount?.negate()
-//        } else {
-//            amount
-//        } ?: BigDecimal.ZERO
+    fun createTransactionRecord(event: Event): TonTransactionRecord {
+        val actions = event.actions.map { action ->
+            val status = when (action.status) {
+                Action.Status.OK -> TransactionStatus.Completed
+                Action.Status.FAILED -> TransactionStatus.Failed
+            }
 
-//        val fee = transaction.fee?.toBigDecimal()?.movePointLeft(decimals)
+            TonTransactionRecord.Action(
+                type = getActionType(action),
+                status = status
+            )
+        }
 
-//        val type = when (transaction.type) {
-//            TransactionType.Incoming -> TonTransactionRecord.Type.Incoming
-//            TransactionType.Outgoing -> TonTransactionRecord.Type.Outgoing
-//            TransactionType.Unknown -> TonTransactionRecord.Type.Unknown
-//        }
-        val type = TonTransactionRecord.Type.Incoming
-
-//        event.actions.forEach { action: Action ->
-//
-//            when (action.type) {
-//                Action.Type.TonTransfer -> {
-//                    action.tonTransfer?.let { tonTransfer ->
-//
-//                    }
-//                }
-//                Action.Type.JettonTransfer -> TODO()
-//                Action.Type.JettonBurn -> TODO()
-//                Action.Type.JettonMint -> TODO()
-//                Action.Type.ContractDeploy -> TODO()
-//                Action.Type.JettonSwap -> TODO()
-//                Action.Type.SmartContract -> TODO()
-//                Action.Type.Unknown -> TODO()
-//            }
-//        }
-
-        return TonTransactionRecord(
-            uid = event.id,
-            transactionHash = event.id,
-            logicalTime = event.lt,
-            blockHeight = null,
-            confirmationsThreshold = null,
-            timestamp = event.timestamp,
-            source = source,
-            mainValue = TransactionValue.CoinValue(baseToken, BigDecimal.ZERO),
-//            fee = fee?.let { TransactionValue.CoinValue(wallet.token, it) },
-            fee = null,
-//            memo = transaction.memo,
-            memo = null,
-            type = type,
-//            transfers = transaction.transfers.map { createTransferRecord(it) }
-            transfers = listOf()
-        )
+        return TonTransactionRecord(source, event, baseToken, actions)
     }
 
+    private fun convertAmount(amount: BigInteger, decimal: Int, negative: Boolean): BigDecimal {
+        var significandAmount = amount.toBigDecimal().movePointLeft(decimal).stripTrailingZeros()
 
-    //    private fun createTransferRecord(transfer: TonTransfer): TonTransactionTransfer {
-//        val amount = transfer.amount.toBigDecimal().movePointLeft(decimals)
-//        return TonTransactionTransfer(
-//            src = transfer.src.getNonBounceable(),
-//            dest = transfer.dest.getNonBounceable(),
-//            amount = TransactionValue.CoinValue(wallet.token, amount),
-//        )
-//    }
+        if (significandAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return BigDecimal.ZERO
+        }
 
+        if (negative) {
+            significandAmount = significandAmount.negate()
+        }
 
+        return significandAmount
+    }
 
+    private fun tonValue(value: BigInteger, negative: Boolean): TransactionValue {
+        val amount = convertAmount(value, baseToken.decimals, negative)
+        return TransactionValue.CoinValue(baseToken, amount)
+    }
+
+    private fun jettonValue(jetton: Jetton, value: BigInteger, negative: Boolean): TransactionValue {
+        val query = TokenQuery(BlockchainType.Ton, TokenType.Jetton(jetton.address.toUserFriendly(bounceable = true)))
+
+        val token = coinManager.getToken(query)
+
+        return if (token != null) {
+            TransactionValue.CoinValue(token, convertAmount(value, token.decimals, negative))
+        } else {
+            TransactionValue.JettonValue(
+                jetton.name,
+                jetton.symbol,
+                jetton.decimals,
+                convertAmount(value, jetton.decimals, negative)
+            )
+        }
+    }
+
+    private fun format(address: AccountAddress): String {
+        return address.address.toUserFriendly(bounceable = !address.isWallet)
+    }
+
+    private fun getActionType(action: Action): TonTransactionRecord.Action.Type {
+        action.tonTransfer?.let { tonTransfer ->
+            return when {
+                tonTransfer.sender.address == address -> {
+                    TonTransactionRecord.Action.Type.Send(
+                        value = tonValue(tonTransfer.amount, true),
+                        to = format(tonTransfer.recipient),
+                        sentToSelf = tonTransfer.recipient.address == address,
+                        comment = tonTransfer.comment
+                    )
+                }
+
+                tonTransfer.recipient.address == address -> {
+                    TonTransactionRecord.Action.Type.Receive(
+                        value = tonValue(tonTransfer.amount, false),
+                        from = format(tonTransfer.sender),
+                        comment = tonTransfer.comment
+                    )
+                }
+
+                else -> TonTransactionRecord.Action.Type.Unsupported("Ton Transfer")
+            }
+        }
+
+        action.jettonTransfer?.let { jettonTransfer ->
+            val recipient = jettonTransfer.recipient
+            val sender = jettonTransfer.sender
+
+            return when {
+                jettonTransfer.sender?.address == address && recipient != null -> {
+                    TonTransactionRecord.Action.Type.Send(
+                        value = jettonValue(jettonTransfer.jetton, jettonTransfer.amount, true),
+                        to = format(recipient),
+                        sentToSelf = jettonTransfer.recipient?.address == address,
+                        comment = jettonTransfer.comment
+                    )
+                }
+
+                jettonTransfer.recipient?.address == address && sender != null -> {
+                    TonTransactionRecord.Action.Type.Receive(
+                        value = jettonValue(jettonTransfer.jetton, jettonTransfer.amount, false),
+                        from = format(sender),
+                        comment = jettonTransfer.comment
+                    )
+                }
+
+                else -> TonTransactionRecord.Action.Type.Unsupported("Jetton Transfer")
+            }
+        }
+
+        return TonTransactionRecord.Action.Type.Unsupported(action.type.name)
+    }
 }
