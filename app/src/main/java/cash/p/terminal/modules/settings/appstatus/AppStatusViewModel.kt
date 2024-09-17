@@ -15,6 +15,7 @@ import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockContent
@@ -36,6 +37,7 @@ class AppStatusViewModel(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val binanceKitManager: BinanceKitManager,
     private val tronKitManager: TronKitManager,
+    private val tonKitManager: TonKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
@@ -203,6 +205,10 @@ class AppStatusViewModel(
             blockchainStatus["Tron"] = statusInfo
         }
 
+        tonKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Ton"] = statusInfo
+        }
+
         solanaKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Solana"] = statusInfo
         }
@@ -211,13 +217,6 @@ class AppStatusViewModel(
             ?.let { wallet ->
                 (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
                     blockchainStatus["Zcash"] = adapter.statusInfo
-                }
-            }
-
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
-            ?.let { wallet ->
-                (adapterManager.getAdapterForWallet(wallet) as? TonAdapter)?.let { adapter ->
-                    blockchainStatus["Ton"] = adapter.statusInfo
                 }
             }
 

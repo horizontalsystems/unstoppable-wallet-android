@@ -19,6 +19,7 @@ object AppStatusModule {
                 App.evmBlockchainManager,
                 App.binanceKitManager,
                 App.tronKitManager,
+                App.tonKitManager,
                 App.solanaKitManager,
                 App.btcBlockchainManager,
             )

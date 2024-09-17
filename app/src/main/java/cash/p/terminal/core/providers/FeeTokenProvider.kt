@@ -14,7 +14,9 @@ class FeeTokenProvider(
         val tokenQuery = when (token.type) {
             is TokenType.Eip20,
             is TokenType.Spl,
-            is TokenType.Bep2 -> {
+            is TokenType.Bep2,
+            is TokenType.Jetton,
+            -> {
                 TokenQuery(token.blockchainType, TokenType.Native)
             }
             TokenType.Native,

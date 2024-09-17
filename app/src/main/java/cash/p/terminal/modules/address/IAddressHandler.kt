@@ -13,7 +13,7 @@ import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.tonkit.TonKit
+import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tronkit.account.AddressHandler
 import org.web3j.ens.EnsResolver
 
@@ -290,7 +290,7 @@ class AddressHandlerTon : IAddressHandler {
     override val blockchainType = BlockchainType.Ton
 
     override fun isSupported(value: String) = try {
-        TonKit.validate(value)
+        TonKit.validateAddress(value)
         true
     } catch (e: Exception) {
         false

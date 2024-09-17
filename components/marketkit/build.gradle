@@ -7,7 +7,8 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    namespace 'io.horizontalsystems.marketkit'
+    compileSdk 34
 
     defaultConfig {
         minSdk min_sdk_version
@@ -24,16 +25,14 @@ android {
         }
     }
 
-    kotlinOptions {
-        jvmTarget = '17'
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    namespace 'io.horizontalsystems.marketkit'
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {

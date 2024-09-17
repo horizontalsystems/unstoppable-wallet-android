@@ -14,12 +14,15 @@ import cash.p.terminal.core.adapters.ECashAdapter
 import cash.p.terminal.core.adapters.Eip20Adapter
 import cash.p.terminal.core.adapters.EvmAdapter
 import cash.p.terminal.core.adapters.EvmTransactionsAdapter
+import cash.p.terminal.core.adapters.JettonAdapter
 import cash.p.terminal.core.adapters.LitecoinAdapter
 import cash.p.terminal.core.adapters.SolanaAdapter
 import cash.p.terminal.core.adapters.SolanaTransactionConverter
 import cash.p.terminal.core.adapters.SolanaTransactionsAdapter
 import cash.p.terminal.core.adapters.SplAdapter
 import cash.p.terminal.core.adapters.TonAdapter
+import cash.p.terminal.core.adapters.TonTransactionConverter
+import cash.p.terminal.core.adapters.TonTransactionsAdapter
 import cash.p.terminal.core.adapters.Trc20Adapter
 import cash.p.terminal.core.adapters.TronAdapter
 import cash.p.terminal.core.adapters.TronTransactionConverter
@@ -32,6 +35,7 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.transactions.TransactionSource
@@ -48,6 +52,7 @@ class AdapterFactory(
     private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val tronKitManager: TronKitManager,
+    private val tonKitManager: TonKitManager,
     private val backgroundManager: BackgroundManager,
     private val restoreSettingsManager: RestoreSettingsManager,
     private val coinManager: ICoinManager,
@@ -83,6 +88,12 @@ class AdapterFactory(
         val tronKitWrapper = tronKitManager.getTronKitWrapper(wallet.account)
 
         return Trc20Adapter(tronKitWrapper, address, wallet)
+    }
+
+    private fun getJettonAdapter(wallet: Wallet, address: String): IAdapter {
+        val tonKitWrapper = tonKitManager.getTonKitWrapper(wallet.account)
+
+        return JettonAdapter(tonKitWrapper, address, wallet)
     }
 
     fun getAdapterOrNull(wallet: Wallet) = try {
@@ -148,7 +159,7 @@ class AdapterFactory(
                 TronAdapter(tronKitManager.getTronKitWrapper(wallet.account))
             }
             BlockchainType.Ton -> {
-                TonAdapter(wallet)
+                TonAdapter(tonKitManager.getTonKitWrapper(wallet.account))
             }
 
             else -> null
@@ -162,6 +173,7 @@ class AdapterFactory(
         }
         is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)
         is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
+        is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
         is TokenType.Unsupported -> null
     }
 
@@ -199,6 +211,14 @@ class AdapterFactory(
         return TronTransactionsAdapter(tronKitWrapper, tronTransactionConverter)
     }
 
+    fun tonTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
+        val tonKitWrapper = tonKitManager.getTonKitWrapper(source.account)
+        val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: return null
+        val tonTransactionConverter = TonTransactionConverter(coinManager, tonKitWrapper, source, baseToken, evmLabelManager)
+
+        return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
+    }
+
     fun unlinkAdapter(wallet: Wallet) {
         when (val blockchainType = wallet.transactionSource.blockchain.type) {
             BlockchainType.Ethereum,
@@ -217,6 +237,9 @@ class AdapterFactory(
             }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(wallet.account)
+            }
+            BlockchainType.Ton -> {
+                tonKitManager.unlink(wallet.account)
             }
             else -> Unit
         }
@@ -237,6 +260,9 @@ class AdapterFactory(
             }
             BlockchainType.Tron -> {
                 tronKitManager.unlink(transactionSource.account)
+            }
+            BlockchainType.Ton -> {
+                tonKitManager.unlink(transactionSource.account)
             }
             else -> Unit
         }

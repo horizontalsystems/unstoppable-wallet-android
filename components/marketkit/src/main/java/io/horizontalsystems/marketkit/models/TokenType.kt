@@ -36,6 +36,9 @@ sealed class TokenType : Parcelable {
     data class Spl(val address: String) : TokenType()
 
     @Parcelize
+    data class Jetton(val address: String) : TokenType()
+
+    @Parcelize
     data class Unsupported(val type: String, val reference: String) : TokenType()
 
     val id: String
@@ -45,6 +48,7 @@ sealed class TokenType : Parcelable {
                 is Eip20 -> listOf("eip20", address)
                 is Bep2 -> listOf("bep2", symbol)
                 is Spl -> listOf("spl", address)
+                is Jetton -> listOf("the-open-network", address)
                 is AddressTyped -> listOf("address_type", type.name.lowercase())
                 is Derived -> listOf("derived", derivation.name.lowercase())
                 is Unsupported -> if (reference.isNotBlank()) {
@@ -62,6 +66,7 @@ sealed class TokenType : Parcelable {
             is Eip20 -> Value("eip20", address)
             is Bep2 -> Value("bep2", symbol)
             is Spl -> Value("spl", address)
+            is Jetton -> Value("the-open-network", address)
             is AddressTyped -> Value("address_type", type.name)
             is Derived -> Value("derived", derivation.name)
             is Unsupported -> Value(type, reference)
@@ -93,6 +98,12 @@ sealed class TokenType : Parcelable {
                 "spl" -> {
                     if (reference.isNotBlank()) {
                         return Spl(reference)
+                    }
+                }
+
+                "the-open-network" -> {
+                    if (reference.isNotBlank()) {
+                        return Jetton(reference)
                     }
                 }
 

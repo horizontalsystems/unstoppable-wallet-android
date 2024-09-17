@@ -70,7 +70,8 @@ val Token.protocolInfo: String
         }
         is TokenType.Eip20,
         is TokenType.Bep2,
-        is TokenType.Spl -> protocolType ?: ""
+        is TokenType.Spl,
+        is TokenType.Jetton -> protocolType ?: ""
         else -> ""
     }
 
@@ -82,6 +83,7 @@ val Token.typeInfo: String
         is TokenType.Eip20 -> type.address.shorten()
         is TokenType.Bep2 -> type.symbol
         is TokenType.Spl -> type.address.shorten()
+        is TokenType.Jetton -> type.address.shorten()
         is TokenType.Unsupported -> ""
     }
 
@@ -90,6 +92,7 @@ val Token.copyableTypeInfo: String?
         is TokenType.Eip20 -> type.address
         is TokenType.Bep2 -> type.symbol
         is TokenType.Spl -> type.address
+        is TokenType.Jetton -> type.address
         else -> null
     }
 
@@ -118,6 +121,7 @@ val TokenQuery.protocolType: String?
         }
 
         is TokenType.Bep2 -> "BEP2"
+        is TokenType.Jetton -> "JETTON"
         else -> blockchainType.title
     }
 
@@ -161,7 +165,7 @@ val TokenQuery.isSupported: Boolean
             tokenType is TokenType.Native || tokenType is TokenType.Eip20
         }
         BlockchainType.Ton -> {
-            tokenType is TokenType.Native
+            tokenType is TokenType.Native || tokenType is TokenType.Jetton
         }
         is BlockchainType.Unsupported -> false
     }
@@ -190,6 +194,8 @@ val Blockchain.description: String
     }
 
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
+
+fun Blockchain.jettonUrl(address: String) = "https://tonscan.org/address/$address"
 
 fun Blockchain.bep2TokenUrl(symbol: String) = "https://explorer.binance.org/asset/$symbol"
 

@@ -9,6 +9,7 @@ import cash.p.terminal.core.bep2TokenUrl
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.core.jettonUrl
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -33,6 +34,9 @@ class ConfiguredTokenInfoViewModel(
             }
             is TokenType.Spl -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
+            }
+            is TokenType.Jetton -> {
+                ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.jettonUrl(type.address))
             }
             is TokenType.Derived -> {
                 ConfiguredTokenInfoType.Bips(token.blockchain.name)
