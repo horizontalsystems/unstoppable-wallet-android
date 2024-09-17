@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
+import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TronKitManager
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.modules.settings.appstatus.AppStatusModule.BlockContent
@@ -36,6 +37,7 @@ class AppStatusViewModel(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val binanceKitManager: BinanceKitManager,
     private val tronKitManager: TronKitManager,
+    private val tonKitManager: TonKitManager,
     private val solanaKitManager: SolanaKitManager,
     private val btcBlockchainManager: BtcBlockchainManager,
 ) : ViewModelUiState<AppStatusModule.UiState>() {
@@ -203,6 +205,10 @@ class AppStatusViewModel(
             blockchainStatus["Tron"] = statusInfo
         }
 
+        tonKitManager.statusInfo?.let { statusInfo ->
+            blockchainStatus["Ton"] = statusInfo
+        }
+
         solanaKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Solana"] = statusInfo
         }
@@ -211,13 +217,6 @@ class AppStatusViewModel(
             ?.let { wallet ->
                 (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter)?.let { adapter ->
                     blockchainStatus["Zcash"] = adapter.statusInfo
-                }
-            }
-
-        walletManager.activeWallets.firstOrNull { it.token.blockchainType == BlockchainType.Ton }
-            ?.let { wallet ->
-                (adapterManager.getAdapterForWallet(wallet) as? TonAdapter)?.let { adapter ->
-                    blockchainStatus["Ton"] = adapter.statusInfo
                 }
             }
 

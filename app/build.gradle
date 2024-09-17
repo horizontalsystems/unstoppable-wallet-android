@@ -269,12 +269,13 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:ton-kit-kmm:f1fd301'
+//    implementation 'com.github.horizontalsystems:ton-kit-kmm:f1fd301'
+    implementation 'com.github.horizontalsystems:ton-kit-android:ac42eb9'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:47db768'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:3d83900'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
-    implementation 'com.github.horizontalsystems:market-kit-android:636ca4d'
+    implementation 'com.github.horizontalsystems:market-kit-android:55dde9c'
     implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK

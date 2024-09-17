@@ -16,6 +16,7 @@ import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.eip20TokenUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.isSupported
+import io.horizontalsystems.bankwallet.core.jettonUrl
 import io.horizontalsystems.bankwallet.core.order
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.shorten
@@ -154,6 +155,22 @@ class CoinOverviewViewModel(
                         && token.blockchainType.supports(accountTypeNotWatch)
 
                 when (val tokenType = token.type) {
+                    is TokenType.Jetton -> {
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = tokenType.address.shorten(),
+                                copyValue = tokenType.address,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = token.blockchain.jettonUrl(tokenType.address),
+                                name = token.blockchain.name,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
                     is TokenType.Eip20 -> {
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.token == token }

@@ -60,6 +60,7 @@ import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
+import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
 import io.horizontalsystems.bankwallet.core.managers.TronAccountManager
@@ -162,6 +163,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var binanceKitManager: BinanceKitManager
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
+        lateinit var tonKitManager: TonKitManager
         lateinit var numberFormatter: IAppNumberFormatter
         lateinit var feeCoinProvider: FeeTokenProvider
         lateinit var accountCleaner: IAccountCleaner
@@ -274,6 +276,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
 
         tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
+        tonKitManager = TonKitManager(backgroundManager)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
@@ -343,13 +346,23 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             binanceKitManager = binanceKitManager,
             solanaKitManager = solanaKitManager,
             tronKitManager = tronKitManager,
+            tonKitManager = tonKitManager,
             backgroundManager = backgroundManager,
             restoreSettingsManager = restoreSettingsManager,
             coinManager = coinManager,
             evmLabelManager = evmLabelManager,
             localStorage = localStorage
         )
-        adapterManager = AdapterManager(walletManager, adapterFactory, btcBlockchainManager, evmBlockchainManager, binanceKitManager, solanaKitManager, tronKitManager)
+        adapterManager = AdapterManager(
+            walletManager,
+            adapterFactory,
+            btcBlockchainManager,
+            evmBlockchainManager,
+            binanceKitManager,
+            solanaKitManager,
+            tronKitManager,
+            tonKitManager,
+        )
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         feeCoinProvider = FeeTokenProvider(marketKit)

@@ -27,7 +27,8 @@ class AdapterManager(
     private val evmBlockchainManager: EvmBlockchainManager,
     private val binanceKitManager: BinanceKitManager,
     private val solanaKitManager: SolanaKitManager,
-    private val tronKitManager: TronKitManager
+    private val tronKitManager: TronKitManager,
+    private val tonKitManager: TonKitManager
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
@@ -111,6 +112,7 @@ class AdapterManager(
         binanceKitManager.binanceKit?.refresh()
         solanaKitManager.solanaKitWrapper?.solanaKit?.refresh()
         tronKitManager.tronKitWrapper?.tronKit?.refresh()
+        tonKitManager.tonKitWrapper?.tonKit?.refresh()
     }
 
     @Synchronized
