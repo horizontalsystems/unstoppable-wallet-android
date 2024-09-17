@@ -8,6 +8,8 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.tonkit.models.Event
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -71,39 +73,68 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
         TODO()
 //        return tonKit.estimateFee().toBigDecimal().movePointLeft(decimals)
     }
+
+    companion object {
+        fun getAmount(kitAmount: Long): BigDecimal {
+            return kitAmount.toBigDecimal().movePointLeft(9).stripTrailingZeros()
+        }
+    }
 }
 
 class TonTransactionRecord(
-    uid: String,
-    transactionHash: String,
-    val logicalTime: Long,
-    blockHeight: Int?,
-    confirmationsThreshold: Int?,
-    timestamp: Long,
-    failed: Boolean = false,
-    spam: Boolean = false,
     source: TransactionSource,
-    override val mainValue: TransactionValue,
-    val fee: TransactionValue?,
-    val memo: String?,
-    val type: Type,
-    val transfers: List<TonTransactionTransfer>
+    event: Event,
+    baseToken: Token,
+    val actions: List<Action>
 ) : TransactionRecord(
-    uid,
-    transactionHash,
-    0,
-    blockHeight,
-    confirmationsThreshold,
-    timestamp,
-    failed,
-    spam,
-    source,
+    uid = event.id,
+    transactionHash = event.id,
+    transactionIndex = 0,
+    blockHeight = null,
+    confirmationsThreshold = null,
+    timestamp = event.timestamp,
+    failed = false,
+    spam = event.scam,
+    source = source,
 ) {
-    enum class Type {
-        Incoming, Outgoing, Unknown
+    val lt = event.lt
+    val inProgress = event.inProgress
+    val fee = TransactionValue.CoinValue(baseToken, TonAdapter.getAmount(event.extra))
+
+    override fun status(lastBlockHeight: Int?) = when {
+        inProgress -> TransactionStatus.Pending
+        else -> TransactionStatus.Completed
     }
 
-    override fun status(lastBlockHeight: Int?) = TransactionStatus.Completed
+    override val mainValue: TransactionValue?
+        get() = actions.singleOrNull()?.let { action ->
+            when (val type = action.type) {
+                is Action.Type.Receive -> type.value
+                is Action.Type.Send -> type.value
+                is Action.Type.Unsupported -> null
+            }
+        }
+
+    data class Action(
+        val type: Type,
+        val status: TransactionStatus
+    ) {
+        sealed class Type {
+            data class Send(
+                val value: TransactionValue,
+                val to: String,
+                val sentToSelf: Boolean,
+                val comment: String?,
+            ) : Type()
+
+            data class Receive(
+                val value: TransactionValue,
+                val from: String,
+                val comment: String?,
+            ) : Type()
+
+            data class Unsupported(val type: String) : Type()
+        }
+    }
 }
 
-data class TonTransactionTransfer(val src: String, val dest: String, val amount: TransactionValue.CoinValue)
