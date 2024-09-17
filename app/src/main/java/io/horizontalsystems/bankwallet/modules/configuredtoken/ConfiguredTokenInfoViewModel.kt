@@ -9,6 +9,7 @@ import io.horizontalsystems.bankwallet.core.bep2TokenUrl
 import io.horizontalsystems.bankwallet.core.eip20TokenUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
+import io.horizontalsystems.bankwallet.core.jettonUrl
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -33,6 +34,9 @@ class ConfiguredTokenInfoViewModel(
             }
             is TokenType.Spl -> {
                 ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.eip20TokenUrl(type.address))
+            }
+            is TokenType.Jetton -> {
+                ConfiguredTokenInfoType.Contract(type.address, token.blockchain.type.imageUrl, token.blockchain.jettonUrl(type.address))
             }
             is TokenType.Derived -> {
                 ConfiguredTokenInfoType.Bips(token.blockchain.name)
