@@ -3,6 +3,7 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.BalanceData
 import cash.p.terminal.core.managers.TonKitWrapper
+import cash.p.terminal.core.managers.toAdapterState
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.tonkit.Address
 import io.reactivex.BackpressureStrategy
@@ -43,7 +44,7 @@ class JettonAdapter(tonKitWrapper: TonKitWrapper, addressStr: String, wallet: Wa
         }
         coroutineScope.launch {
             tonKit.jettonSyncStateFlow.collect {
-                balanceState = convertToAdapterState(it)
+                balanceState = it.toAdapterState()
                 balanceStateUpdatedSubject.onNext(Unit)
             }
         }

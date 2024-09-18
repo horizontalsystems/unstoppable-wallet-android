@@ -94,35 +94,84 @@ class TransactionInfoViewItemFactory(
             }
 
             is TonTransactionRecord -> {
-                when (transaction.type) {
-                    TonTransactionRecord.Type.Incoming -> {
-                        transaction.transfers.forEach { transfer ->
-                            itemSections.add(
-                                getReceiveSectionItems(
-                                    value = transfer.amount,
-                                    fromAddress = transfer.src,
-                                    coinPrice = rates[transfer.amount.coinUid],
-                                    hideAmount = transactionItem.hideAmount,
-                                )
-                            )
-                        }
-                    }
-                    TonTransactionRecord.Type.Outgoing -> {
-                        transaction.transfers.forEach { transfer ->
-                            itemSections.add(
+                transaction.actions.forEach { action ->
+                    val itemsForAction = mutableListOf<TransactionInfoViewItem>()
+
+                    val actionType = action.type
+                    when (actionType) {
+                        is TonTransactionRecord.Action.Type.Send -> {
+                            itemsForAction.addAll(
                                 getSendSectionItems(
-                                    value = transfer.amount,
-                                    toAddress = transfer.dest,
-                                    coinPrice = rates[transfer.amount.coinUid],
+                                    value = actionType.value,
+                                    toAddress = actionType.to,
+                                    coinPrice = rates[actionType.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                    sentToSelf = actionType.sentToSelf,
+                                )
+                            )
+                            actionType.comment?.let {
+                                itemsForAction.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                            }
+                        }
+                        is TonTransactionRecord.Action.Type.Receive -> {
+                            itemsForAction.addAll(
+                                getReceiveSectionItems(
+                                    value = actionType.value,
+                                    fromAddress = actionType.from,
+                                    coinPrice = rates[actionType.value.coinUid],
                                     hideAmount = transactionItem.hideAmount,
                                 )
                             )
+                            actionType.comment?.let {
+                                itemsForAction.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                            }
                         }
+                        is TonTransactionRecord.Action.Type.Unsupported -> {
+                            itemsForAction.add(Value("Action", actionType.type))
+                        }
+//                        case let .burn(value):
+//                            viewItems = sendSection(source: record.source, transactionValue: value, to: zeroAddress, rates: item.rates, balanceHidden: balanceHidden)
+//
+//                        case let .mint(value):
+//                            viewItems = receiveSection(source: record.source, transactionValue: value, from: zeroAddress, rates: item.rates, balanceHidden: balanceHidden)
+//
+//                        case let .swap(routerName, routerAddress, valueIn, valueOut):
+//                            viewItems = [
+//                                amount(source: record.source, title: youPayString(status: status), subtitle: fullBadge(transactionValue: valueIn), transactionValue: valueIn, rate: _rate(valueIn), type: type(value: valueIn, .outgoing), balanceHidden: balanceHidden),
+//                                amount(source: record.source, title: youGetString(status: status), subtitle: fullBadge(transactionValue: valueOut), transactionValue: valueOut, rate: _rate(valueOut), type: type(value: valueOut, .incoming), balanceHidden: balanceHidden),
+//                                .service(value: routerName ?? routerAddress.shortened),
+//                            ]
+//
+//                            if let priceString = priceString(valueIn: valueIn, valueOut: valueOut, coinPriceIn: _rate(valueIn)) {
+//                                viewItems.append(.price(price: priceString))
+//                            }
+//
+//                        case let .contractDeploy(interfaces):
+//                            viewItems = [
+//                                .actionTitle(iconName: nil, iconDimmed: false, title: "transactions.contract_deploy".localized, subTitle: interfaces.joined(separator: ", ")),
+//                            ]
+//
+//                        case let .contractCall(address, value, operation):
+//                            viewItems = [
+//                                .actionTitle(iconName: record.source.blockchainType.iconPlain32, iconDimmed: false, title: "transactions.contract_call".localized, subTitle: operation),
+//                                .to(value: address, valueTitle: nil, contactAddress: nil)
+//                            ]
+//
+//                            viewItems.append(contentsOf: sendSection(source: record.source, transactionValue: value, to: nil, rates: item.rates, balanceHidden: balanceHidden))
+//
+//                        case let .unsupported(type):
+//                            viewItems = [.fee(title: "Action", value: type)]
+//                        }
                     }
-                    TonTransactionRecord.Type.Unknown -> {
+
+                    if (action.status == TransactionStatus.Failed) {
+                        itemsForAction.add(Status(action.status))
                     }
+
+                    itemSections.add(itemsForAction)
                 }
-                addMemoItem(transaction.memo, miscItemsSection)
+
+//            feeViewItem = record.fee.map { .fee(title: "tx_info.fee".localized, value: feeString(transactionValue: $0, rate: _rate($0))) }
             }
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
@@ -856,9 +905,7 @@ class TransactionInfoViewItemFactory(
             }
 
             is TonTransactionRecord -> {
-                if (transaction.fee != null) {
-                    items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
-                }
+                items.add(getFeeItem(transaction.fee, rates[transaction.fee.coinUid], status))
             }
 
             is BitcoinOutgoingTransactionRecord ->

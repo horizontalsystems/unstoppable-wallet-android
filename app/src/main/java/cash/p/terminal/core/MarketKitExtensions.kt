@@ -195,7 +195,7 @@ val Blockchain.description: String
 
 fun Blockchain.eip20TokenUrl(address: String) = eip3091url?.replace("\$ref", address)
 
-fun Blockchain.jettonUrl(address: String) = "https://tonscan.org/address/$address"
+fun Blockchain.jettonUrl(address: String) = "https://tonviewer.com/$address"
 
 fun Blockchain.bep2TokenUrl(symbol: String) = "https://explorer.binance.org/asset/$symbol"
 

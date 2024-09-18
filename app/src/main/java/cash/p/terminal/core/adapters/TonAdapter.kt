@@ -4,6 +4,7 @@ import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.BalanceData
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
+import cash.p.terminal.core.managers.toAdapterState
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.TransactionSource
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import kotlin.math.absoluteValue
 
 class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9), ISendTonAdapter {
 
@@ -37,7 +39,7 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
         }
         coroutineScope.launch {
             tonKit.syncStateFlow.collect {
-                balanceState = convertToAdapterState(it)
+                balanceState = it.toAdapterState()
                 balanceStateUpdatedSubject.onNext(Unit)
             }
         }
@@ -99,7 +101,7 @@ class TonTransactionRecord(
 ) {
     val lt = event.lt
     val inProgress = event.inProgress
-    val fee = TransactionValue.CoinValue(baseToken, TonAdapter.getAmount(event.extra))
+    val fee = TransactionValue.CoinValue(baseToken, TonAdapter.getAmount(event.extra.absoluteValue))
 
     override fun status(lastBlockHeight: Int?) = when {
         inProgress -> TransactionStatus.Pending

@@ -34,6 +34,23 @@ sealed class TransactionValue {
         override val decimals: Int,
         val value: BigDecimal
     ) : TransactionValue() {
+        override val fullName = name
+        override val coinUid = symbol
+        override val coinCode = symbol
+        override val coin = null
+        override val badge = null
+        override val coinIconUrl = null
+        override val alternativeCoinIconUrl = null
+        override val coinIconPlaceholder = null
+        override val decimalValue = value
+        override val zeroValue: Boolean
+            get() = value.compareTo(BigDecimal.ZERO) == 0
+        override val isMaxValue: Boolean
+            get() = value.isMaxValue(decimals)
+        override val abs: TransactionValue
+            get() = copy(value = value.abs())
+        override val formattedString: String
+            get() = "n/a"
 
     }
 
