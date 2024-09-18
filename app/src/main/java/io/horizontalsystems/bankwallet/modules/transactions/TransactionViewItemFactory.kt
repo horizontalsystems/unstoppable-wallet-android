@@ -3,9 +3,6 @@ package io.horizontalsystems.bankwallet.modules.transactions
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
-import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Incoming
-import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Outgoing
-import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord.Type.Unknown
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.EvmLabelManager
 import io.horizontalsystems.bankwallet.core.providers.Translator
@@ -92,6 +89,8 @@ class TransactionViewItemFactory(
             is TransactionValue.TokenValue -> {
                 TransactionViewItem.Icon.Regular(value.coinIconUrl, value.alternativeCoinIconUrl, value.coinIconPlaceholder)
             }
+
+            is TransactionValue.JettonValue -> TODO()
         }
 
     private fun doubleValueIconType(
@@ -124,6 +123,8 @@ class TransactionViewItemFactory(
                     frontAlternativeUrl = primaryValue.alternativeCoinIconUrl
                     frontPlaceHolder = primaryValue.coinIconPlaceholder
                 }
+
+                is TransactionValue.JettonValue -> TODO()
             }
         } else {
             frontRectangle = false
@@ -147,6 +148,8 @@ class TransactionViewItemFactory(
                     backAlternativeUrl = secondaryValue.alternativeCoinIconUrl
                     backPlaceHolder = secondaryValue.coinIconPlaceholder
                 }
+
+                is TransactionValue.JettonValue -> TODO()
             }
         } else {
             backRectangle = false
@@ -456,35 +459,99 @@ class TransactionViewItemFactory(
             getColoredValue(it, ColorName.Grey)
         }
 
-        val singleTransfer = record.transfers.singleOrNull()
+        val iconX: TransactionViewItem.Icon
+        var sentToSelf = false
 
-        when (record.type) {
-            Incoming -> {
-                title = Translator.getString(R.string.Transactions_Receive)
-                subtitle = if (singleTransfer == null) {
-                    Translator.getString(R.string.Transactions_Multiple)
-                } else {
-                    Translator.getString(R.string.Transactions_From, mapped(singleTransfer.src, record.blockchainType))
+        val action = record.actions.singleOrNull()
+
+        if (action != null) {
+            when (val actionType = action.type) {
+                is TonTransactionRecord.Action.Type.Send -> {
+                    title = Translator.getString(R.string.Transactions_Send)
+                    subtitle = Translator.getString(R.string.Transactions_To, mapped(actionType.to, record.blockchainType))
+
+                    primaryValue = getColoredValue(actionType.value, ColorName.Lucian)
+
+                    sentToSelf = actionType.sentToSelf
+
+                    iconX = singleValueIconType(actionType.value)
+
+//                    if let currencyValue = item.currencyValue {
+//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
+//                    }
                 }
+                is TonTransactionRecord.Action.Type.Receive -> {
+                    title = Translator.getString(R.string.Transactions_Receive)
+                    subtitle = Translator.getString(
+                        R.string.Transactions_From,
+                        mapped(actionType.from, record.blockchainType)
+                    )
 
-                primaryValue = getColoredValue(record.mainValue, ColorName.Remus)
-            }
-            Outgoing -> {
-                title = Translator.getString(R.string.Transactions_Send)
-                subtitle = if (singleTransfer == null) {
-                    Translator.getString(R.string.Transactions_Multiple)
-                } else {
-                    Translator.getString(R.string.Transactions_To, mapped(singleTransfer.dest, record.blockchainType))
+                    primaryValue = getColoredValue(actionType.value, ColorName.Remus)
+                    iconX = singleValueIconType(actionType.value)
+
+//                    if let currencyValue = item.currencyValue {
+//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
+//                    }
                 }
+                is TonTransactionRecord.Action.Type.Unsupported -> {
+                    title = Translator.getString(R.string.Transactions_TonTransaction)
+                    subtitle = actionType.type
+                    primaryValue = null
+                    secondaryValue = null
 
-                primaryValue = getColoredValue(record.mainValue, ColorName.Lucian)
+
+                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+
+                }
             }
-            Unknown -> {
-                title = Translator.getString(R.string.Transactions_Unknown)
-                subtitle = Translator.getString(R.string.Transactions_Unknown_Description)
-                primaryValue = null
-                secondaryValue = null
-            }
+//                switch action.type {
+//                case let .send(value, to, _sentToSelf, _):
+//                case let .receive(value, from, _):
+//                case let .burn(value):
+//                    iconType = singleValueIconType(source: record.source, value: value)
+//                    title = "transactions.burn".localized
+//                    subTitle = value.fullName
+//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: value), type: type(value: value, .outgoing))
+//
+//                    if let currencyValue = item.currencyValue {
+//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
+//                    }
+//                case let .mint(value):
+//                    iconType = singleValueIconType(source: record.source, value: value)
+//                    title = "transactions.mint".localized
+//                    subTitle = value.fullName
+//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: value), type: type(value: value, .incoming))
+//
+//                    if let currencyValue = item.currencyValue {
+//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
+//                    }
+//                case let .swap(routerName, routerAddress, valueIn, valueOut):
+//                    iconType = doubleValueIconType(source: record.source, primaryValue: valueOut, secondaryValue: valueIn)
+//                    title = "transactions.swap".localized
+//                    subTitle = routerName ?? routerAddress.shortened
+//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: valueOut), type: type(value: valueOut, .incoming))
+//                    secondaryValue = BaseTransactionsViewModel.Value(text: coinString(from: valueIn), type: type(value: valueIn, .outgoing))
+//                case let .contractDeploy(interfaces):
+//                    iconType = .localIcon(imageName: item.record.source.blockchainType.iconPlain32)
+//                    title = "transactions.contract_deploy".localized
+//                    subTitle = interfaces.joined(separator: ", ")
+//                case let .contractCall(address, value, _):
+//                    iconType = .localIcon(imageName: item.record.source.blockchainType.iconPlain32)
+//                    title = "transactions.contract_call".localized
+//                    subTitle = address.shortened
+//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: value), type: type(value: value, .outgoing))
+//
+//                    if let currencyValue = item.currencyValue {
+//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
+//                    }
+//                case let .unsupported(type):
+//                }
+        } else {
+            iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+            title = Translator.getString(R.string.Transactions_TonTransaction)
+            subtitle = Translator.getString(R.string.Transactions_Multiple)
+            primaryValue = null
         }
 
         return TransactionViewItem(
@@ -495,8 +562,9 @@ class TransactionViewItemFactory(
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             showAmount = showAmount,
+            sentToSelf = sentToSelf,
             date = Date(record.timestamp * 1000),
-            icon = icon ?: singleValueIconType(record.mainValue)
+            icon = icon ?: iconX
         )
     }
 
@@ -1056,6 +1124,8 @@ class TransactionViewItemFactory(
             is TransactionValue.TokenValue -> {
                 currencyValue?.let { getColoredValue(it, ColorName.Grey) }
             }
+
+            is TransactionValue.JettonValue -> TODO()
         }
 
     private fun getValues(

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.core.managers
 
 import android.os.Handler
 import android.os.Looper
+import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.entities.Account
@@ -12,6 +13,7 @@ import io.horizontalsystems.hdwalletkit.Curve
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tonkit.models.Network
+import io.horizontalsystems.tonkit.models.SyncState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -153,4 +155,10 @@ fun TonKit.statusInfo(): Map<String, Any> {
 //        put("Balance Sync State", balanceState)
 //            put("Transaction Sync State", transactionsState)
     }
+}
+
+fun SyncState.toAdapterState(): AdapterState = when (this) {
+    is SyncState.NotSynced -> AdapterState.NotSynced(error)
+    is SyncState.Synced -> AdapterState.Synced
+    is SyncState.Syncing -> AdapterState.Syncing()
 }

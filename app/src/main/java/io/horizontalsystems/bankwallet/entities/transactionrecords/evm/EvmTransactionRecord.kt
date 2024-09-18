@@ -84,6 +84,7 @@ open class EvmTransactionRecord(
 
                     is TransactionValue.RawValue -> value
                     is TransactionValue.NftValue -> value.copy(value = totalValue)
+                    is TransactionValue.JettonValue -> value
                 }
 
                 if (totalValue > BigDecimal.ZERO) {
