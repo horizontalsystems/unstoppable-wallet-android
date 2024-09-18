@@ -73,7 +73,8 @@ class TonTransactionConverter(
                 jetton.name,
                 jetton.symbol,
                 jetton.decimals,
-                convertAmount(value, jetton.decimals, negative)
+                convertAmount(value, jetton.decimals, negative),
+                jetton.image
             )
         }
     }

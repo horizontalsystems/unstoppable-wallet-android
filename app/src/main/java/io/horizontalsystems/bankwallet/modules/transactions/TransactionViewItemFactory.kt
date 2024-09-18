@@ -86,11 +86,10 @@ class TransactionViewItemFactory(
 
             is TransactionValue.CoinValue,
             is TransactionValue.RawValue,
+            is TransactionValue.JettonValue,
             is TransactionValue.TokenValue -> {
                 TransactionViewItem.Icon.Regular(value.coinIconUrl, value.alternativeCoinIconUrl, value.coinIconPlaceholder)
             }
-
-            is TransactionValue.JettonValue -> TODO()
         }
 
     private fun doubleValueIconType(
@@ -1121,11 +1120,10 @@ class TransactionViewItemFactory(
 
             is TransactionValue.CoinValue,
             is TransactionValue.RawValue,
+            is TransactionValue.JettonValue,
             is TransactionValue.TokenValue -> {
                 currencyValue?.let { getColoredValue(it, ColorName.Grey) }
             }
-
-            is TransactionValue.JettonValue -> TODO()
         }
 
     private fun getValues(
