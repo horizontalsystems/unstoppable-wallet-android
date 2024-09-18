@@ -4,6 +4,7 @@ import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.ISendTonAdapter
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
@@ -18,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import kotlin.math.absoluteValue
 
 class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9), ISendTonAdapter {
 
@@ -37,7 +39,7 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
         }
         coroutineScope.launch {
             tonKit.syncStateFlow.collect {
-                balanceState = convertToAdapterState(it)
+                balanceState = it.toAdapterState()
                 balanceStateUpdatedSubject.onNext(Unit)
             }
         }
@@ -99,7 +101,7 @@ class TonTransactionRecord(
 ) {
     val lt = event.lt
     val inProgress = event.inProgress
-    val fee = TransactionValue.CoinValue(baseToken, TonAdapter.getAmount(event.extra))
+    val fee = TransactionValue.CoinValue(baseToken, TonAdapter.getAmount(event.extra.absoluteValue))
 
     override fun status(lastBlockHeight: Int?) = when {
         inProgress -> TransactionStatus.Pending

@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.core.adapters
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
+import io.horizontalsystems.bankwallet.core.managers.toAdapterState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.tonkit.Address
 import io.reactivex.BackpressureStrategy
@@ -43,7 +44,7 @@ class JettonAdapter(tonKitWrapper: TonKitWrapper, addressStr: String, wallet: Wa
         }
         coroutineScope.launch {
             tonKit.jettonSyncStateFlow.collect {
-                balanceState = convertToAdapterState(it)
+                balanceState = it.toAdapterState()
                 balanceStateUpdatedSubject.onNext(Unit)
             }
         }
