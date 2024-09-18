@@ -1,5 +1,6 @@
 package cash.p.terminal.entities
 
+import cash.p.terminal.R
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
@@ -32,16 +33,17 @@ sealed class TransactionValue {
         val name: String,
         val symbol: String,
         override val decimals: Int,
-        val value: BigDecimal
+        val value: BigDecimal,
+        val image: String?
     ) : TransactionValue() {
         override val fullName = name
         override val coinUid = symbol
         override val coinCode = symbol
         override val coin = null
-        override val badge = null
-        override val coinIconUrl = null
+        override val badge = "JETTON"
+        override val coinIconUrl = image
         override val alternativeCoinIconUrl = null
-        override val coinIconPlaceholder = null
+        override val coinIconPlaceholder = R.drawable.the_open_network_jetton
         override val decimalValue = value
         override val zeroValue: Boolean
             get() = value.compareTo(BigDecimal.ZERO) == 0
