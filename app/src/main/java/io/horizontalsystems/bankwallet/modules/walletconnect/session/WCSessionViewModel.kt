@@ -69,7 +69,7 @@ class WCSessionViewModel(
         "wallet_switchEthereumChain"
     )
 
-    private val supportedEvents = listOf("chainChanged", "accountsChanged" /*"connect", "disconnect", "message"*/)
+    private val supportedEvents = listOf("chainChanged", "accountsChanged", "connect", "disconnect", "message")
 
     override fun createState() = WCSessionUiState(
         peerMeta = peerMeta,
