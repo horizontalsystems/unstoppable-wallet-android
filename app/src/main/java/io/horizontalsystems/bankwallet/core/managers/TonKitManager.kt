@@ -1,7 +1,5 @@
 package io.horizontalsystems.bankwallet.core.managers
 
-import android.os.Handler
-import android.os.Looper
 import io.horizontalsystems.bankwallet.core.AdapterState
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
@@ -17,6 +15,7 @@ import io.horizontalsystems.tonkit.models.SyncState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -125,9 +124,8 @@ class TonKitManager(
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {
                     tonKitWrapper?.tonKit?.let { kit ->
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            kit.refresh()
-                        }, 1000)
+                        delay(1000)
+                        kit.refresh()
                     }
                 }
             }

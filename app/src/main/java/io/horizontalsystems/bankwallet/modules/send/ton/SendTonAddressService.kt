@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.send.ton
 
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.tonkit.FriendlyAddress
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -8,8 +11,7 @@ import kotlinx.coroutines.flow.update
 class SendTonAddressService(prefilledAddress: String?) {
     private var address: Address? = prefilledAddress?.let { Address(it) }
     private var addressError: Throwable? = null
-    var tonAddress: String? = prefilledAddress
-        private set
+    private var tonAddress: FriendlyAddress? = prefilledAddress?.let { FriendlyAddress.parse(it) }
 
     private val _stateFlow = MutableStateFlow(
         State(
@@ -34,7 +36,11 @@ class SendTonAddressService(prefilledAddress: String?) {
         tonAddress = null
         val address = this.address ?: return
 
-        tonAddress = address.hex
+        try {
+            tonAddress = FriendlyAddress.parse(address.hex)
+        } catch (e: Exception) {
+            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+        }
     }
 
     private fun emitState() {
@@ -50,7 +56,7 @@ class SendTonAddressService(prefilledAddress: String?) {
 
     data class State(
         val address: Address?,
-        val tonAddress: String?,
+        val tonAddress: FriendlyAddress?,
         val addressError: Throwable?,
         val canBeSend: Boolean
     )

@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
@@ -58,24 +57,30 @@ class SendTonViewModel(
     private val logger: AppLogger = AppLogger("send-ton")
 
     init {
-        amountService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAmountState(it)
+        viewModelScope.launch(Dispatchers.Default) {
+            amountService.stateFlow.collect {
+                handleUpdatedAmountState(it)
+            }
         }
-        addressService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedAddressState(it)
+        viewModelScope.launch(Dispatchers.Default) {
+            addressService.stateFlow.collect {
+                handleUpdatedAddressState(it)
+            }
         }
-        feeService.stateFlow.collectWith(viewModelScope) {
-            handleUpdatedFeeState(it)
+        viewModelScope.launch(Dispatchers.Default) {
+            feeService.stateFlow.collect {
+                handleUpdatedFeeState(it)
+            }
         }
-        xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
-            coinRate = it
+        viewModelScope.launch(Dispatchers.Default) {
+            xRateService.getRateFlow(sendToken.coin.uid).collect {
+                coinRate = it
+            }
         }
-        xRateService.getRateFlow(feeToken.coin.uid).collectWith(viewModelScope) {
-            feeCoinRate = it
-        }
-
-        viewModelScope.launch {
-            feeService.start()
+        viewModelScope.launch(Dispatchers.Default) {
+            xRateService.getRateFlow(feeToken.coin.uid).collect {
+                feeCoinRate = it
+            }
         }
     }
 
@@ -122,7 +127,10 @@ class SendTonViewModel(
     }
 
     fun onEnterMemo(memo: String) {
-        this.memo = memo.ifBlank { null }
+        viewModelScope.launch(Dispatchers.Default) {
+            this@SendTonViewModel.memo = memo.ifBlank { null }
+            feeService.setMemo(this@SendTonViewModel.memo)
+        }
     }
 
     private suspend fun send() = withContext(Dispatchers.IO) {
@@ -146,22 +154,24 @@ class SendTonViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private fun handleUpdatedAmountState(amountState: SendTonAmountService.State) {
+    private suspend fun handleUpdatedAmountState(amountState: SendTonAmountService.State) {
         this.amountState = amountState
+
+        feeService.setAmount(amountState.amount)
 
         emitState()
     }
 
-    private fun handleUpdatedAddressState(addressState: SendTonAddressService.State) {
+    private suspend fun handleUpdatedAddressState(addressState: SendTonAddressService.State) {
         this.addressState = addressState
+
+        feeService.setTonAddress(addressState.tonAddress)
 
         emitState()
     }
 
     private fun handleUpdatedFeeState(feeState: SendTonFeeService.State) {
         this.feeState = feeState
-
-        amountService.setFee(feeState.fee)
 
         emitState()
     }
