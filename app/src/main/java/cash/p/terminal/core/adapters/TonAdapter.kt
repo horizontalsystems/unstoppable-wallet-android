@@ -10,6 +10,9 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.TransactionSource
 import cash.p.terminal.modules.transactions.TransactionStatus
 import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.tonkit.FriendlyAddress
+import io.horizontalsystems.tonkit.core.TonKit.SendAmount
+import io.horizontalsystems.tonkit.models.Account
 import io.horizontalsystems.tonkit.models.Event
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -28,12 +31,12 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private var balance = BigDecimal.ZERO
+    private var balance = getBalanceFromAccount(tonKit.account)
 
     override fun start() {
         coroutineScope.launch {
-            tonKit.accountFlow.collect {
-                balance = it?.balance?.toBigDecimal()?.movePointLeft(decimals) ?: BigDecimal.ZERO
+            tonKit.accountFlow.collect { account ->
+                balance = getBalanceFromAccount(account)
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
@@ -43,6 +46,10 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
                 balanceStateUpdatedSubject.onNext(Unit)
             }
         }
+    }
+
+    private fun getBalanceFromAccount(account: Account?): BigDecimal {
+        return account?.balance?.toBigDecimal()?.movePointLeft(decimals) ?: BigDecimal.ZERO
     }
 
     override fun stop() {
@@ -66,14 +73,18 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
     override val availableBalance: BigDecimal
         get() = balance
 
-    override suspend fun send(amount: BigDecimal, address: String, memo: String?) {
-        TODO()
-//        tonKit.send(address, amount.movePointRight(decimals).toBigInteger().toString(), memo)
+    override suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?) {
+        tonKit.send(address, SendAmount.Amount(amount.movePointRight(decimals).toBigInteger()), memo)
     }
 
-    override suspend fun estimateFee(): BigDecimal {
-        TODO()
-//        return tonKit.estimateFee().toBigDecimal().movePointLeft(decimals)
+    override suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?): BigDecimal {
+        val estimateFee = tonKit.estimateFee(
+            address,
+            SendAmount.Amount(amount.movePointRight(decimals).toBigInteger()),
+            memo
+        )
+
+        return estimateFee.toBigDecimal(decimals).stripTrailingZeros()
     }
 
     companion object {
