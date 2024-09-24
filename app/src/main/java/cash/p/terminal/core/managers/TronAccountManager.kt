@@ -151,7 +151,8 @@ class TronAccountManager(
                             type = foundToken.tokenType,
                             coinName = token.coin.name,
                             coinCode = token.coin.code,
-                            tokenDecimals = token.decimals
+                            tokenDecimals = token.decimals,
+                            coinImage = token.coin.image
                         )
                     )
                 } else if (foundToken.tokenInfo != null) {
@@ -160,7 +161,8 @@ class TronAccountManager(
                             type = foundToken.tokenType,
                             coinName = foundToken.tokenInfo.tokenName,
                             coinCode = foundToken.tokenInfo.tokenSymbol,
-                            tokenDecimals = foundToken.tokenInfo.tokenDecimal
+                            tokenDecimals = foundToken.tokenInfo.tokenDecimal,
+                            coinImage = null
                         )
                     )
                 }
@@ -174,7 +176,8 @@ class TronAccountManager(
                             type = tokenType,
                             coinName = token.coin.name,
                             coinCode = token.coin.code,
-                            tokenDecimals = token.decimals
+                            tokenDecimals = token.decimals,
+                            coinImage = token.coin.image
                         )
                     )
                 }
@@ -221,7 +224,8 @@ class TronAccountManager(
                 accountId = account.id,
                 coinName = tokenInfo.coinName,
                 coinCode = tokenInfo.coinCode,
-                coinDecimals = tokenInfo.tokenDecimals
+                coinDecimals = tokenInfo.tokenDecimals,
+                coinImage = tokenInfo.coinImage
             )
         }
 
@@ -234,7 +238,8 @@ class TronAccountManager(
         val type: TokenType,
         val coinName: String,
         val coinCode: String,
-        val tokenDecimals: Int
+        val tokenDecimals: Int,
+        val coinImage: String?,
     )
 
     data class FoundToken(

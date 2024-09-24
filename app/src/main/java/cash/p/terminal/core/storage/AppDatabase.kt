@@ -34,6 +34,7 @@ import cash.p.terminal.core.storage.migrations.Migration_55_56
 import cash.p.terminal.core.storage.migrations.Migration_56_57
 import cash.p.terminal.core.storage.migrations.Migration_57_58
 import cash.p.terminal.core.storage.migrations.Migration_58_59
+import cash.p.terminal.core.storage.migrations.Migration_59_60
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
 import cash.p.terminal.entities.EnabledWallet
@@ -59,7 +60,7 @@ import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 59, exportSchema = false, entities = [
+@Database(version = 60, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -151,7 +152,8 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_55_56,
                             Migration_56_57,
                             Migration_57_58,
-                            Migration_58_59
+                            Migration_58_59,
+                            Migration_59_60,
                     )
                     .build()
         }

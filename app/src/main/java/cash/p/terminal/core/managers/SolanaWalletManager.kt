@@ -31,7 +31,8 @@ class SolanaWalletManager(
                     accountId = account.id,
                     coinName = token.coin.name,
                     coinCode = token.coin.code,
-                    coinDecimals = token.decimals
+                    coinDecimals = token.decimals,
+                    coinImage = token.coin.image
             )
         }
 

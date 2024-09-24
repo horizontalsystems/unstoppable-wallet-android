@@ -286,8 +286,8 @@ class EvmAccountManager(
                 accountId = account.id,
                 coinName = tokenInfo.coinName,
                 coinCode = tokenInfo.coinCode,
-                coinDecimals = tokenInfo.tokenDecimals
-
+                coinDecimals = tokenInfo.tokenDecimals,
+                coinImage = null
             )
         }
 

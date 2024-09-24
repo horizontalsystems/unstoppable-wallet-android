@@ -3,7 +3,12 @@ package cash.p.terminal.modules.addtoken
 import cash.p.terminal.core.INetworkManager
 import cash.p.terminal.core.customCoinUid
 import cash.p.terminal.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 
 class AddBep2TokenBlockchainService(
     private val blockchain: Blockchain,
@@ -26,7 +31,11 @@ class AddBep2TokenBlockchainService(
             ?: throw AddTokenService.TokenError.NotFound
         val tokenQuery = tokenQuery(reference)
         return Token(
-            coin = Coin(tokenQuery.customCoinUid, tokenInfo.name, tokenInfo.original_symbol),
+            coin = Coin(
+                uid = tokenQuery.customCoinUid,
+                name = tokenInfo.name,
+                code = tokenInfo.original_symbol
+            ),
             blockchain = blockchain,
             type = tokenQuery.tokenType,
             decimals = 0

@@ -33,7 +33,11 @@ class AddSolanaTokenBlockchainService(
         val tokenInfo = tokenProvider.getTokenInfo(reference)
         val tokenQuery = tokenQuery(reference)
         return Token(
-            coin = Coin(tokenQuery.customCoinUid, tokenInfo.name, tokenInfo.symbol, tokenInfo.decimals),
+            coin = Coin(
+                uid = tokenQuery.customCoinUid,
+                name = tokenInfo.name,
+                code = tokenInfo.symbol
+            ),
             blockchain = blockchain,
             type = tokenQuery.tokenType,
             decimals = tokenInfo.decimals

@@ -6,6 +6,7 @@ import cash.p.terminal.core.customCoinUid
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.EnabledWallet
 import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 
@@ -35,7 +36,12 @@ class WalletStorage(
                 val blockchain = blockchains.firstOrNull { it.uid == tokenQuery.blockchainType.uid } ?: return@mapNotNull null
 
                 val token = Token(
-                    coin = io.horizontalsystems.marketkit.models.Coin(coinUid, enabledWallet.coinName, enabledWallet.coinCode),
+                    coin = Coin(
+                        uid = coinUid,
+                        name = enabledWallet.coinName,
+                        code = enabledWallet.coinCode,
+                        image = enabledWallet.coinImage
+                    ),
                     blockchain = blockchain,
                     type = tokenQuery.tokenType,
                     decimals = enabledWallet.coinDecimals
@@ -80,7 +86,8 @@ class WalletStorage(
             index,
             wallet.coin.name,
             wallet.coin.code,
-            wallet.decimal
+            wallet.decimal,
+            wallet.coin.image
         )
     }
 }

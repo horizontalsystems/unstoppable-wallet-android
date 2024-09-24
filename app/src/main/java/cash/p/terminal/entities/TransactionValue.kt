@@ -29,7 +29,7 @@ sealed class TransactionValue {
 
     open val nftUid: NftUid? = null
 
-    data gclass JettonValue(
+    data class JettonValue(
         val name: String,
         val symbol: String,
         override val decimals: Int,
