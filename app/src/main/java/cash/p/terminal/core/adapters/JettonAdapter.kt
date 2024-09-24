@@ -2,10 +2,12 @@ package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.AdapterState
 import cash.p.terminal.core.BalanceData
+import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
 import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.tonkit.Address
+import io.horizontalsystems.tonkit.FriendlyAddress
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -15,14 +17,21 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
-class JettonAdapter(tonKitWrapper: TonKitWrapper, addressStr: String, wallet: Wallet) : BaseTonAdapter(tonKitWrapper, wallet.decimal) {
+class JettonAdapter(
+    tonKitWrapper: TonKitWrapper,
+    addressStr: String,
+    wallet: Wallet,
+) : BaseTonAdapter(tonKitWrapper, wallet.decimal), ISendTonAdapter {
 
     private val address = Address.parse(addressStr)
+    private var jettonBalance = tonKit.jettonBalanceMap[address]
 
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
-    private var balance = BigDecimal.ZERO
+    private val balance: BigDecimal
+        get() = jettonBalance?.balance?.toBigDecimal()?.movePointLeft(decimals)
+            ?: BigDecimal.ZERO
 
     override var balanceState: AdapterState = AdapterState.Syncing()
     override val balanceStateUpdatedFlowable: Flowable<Unit>
@@ -36,9 +45,8 @@ class JettonAdapter(tonKitWrapper: TonKitWrapper, addressStr: String, wallet: Wa
 
     override fun start() {
         coroutineScope.launch {
-            tonKit.jettonBalanceMapFlow.collect {
-                val jettonBalance = it[address]
-                balance = jettonBalance?.balance?.toBigDecimal()?.movePointLeft(decimals) ?: BigDecimal.ZERO
+            tonKit.jettonBalanceMapFlow.collect { jettonBalanceMap ->
+                jettonBalance = jettonBalanceMap[address]
                 balanceUpdatedSubject.onNext(Unit)
             }
         }
@@ -55,5 +63,32 @@ class JettonAdapter(tonKitWrapper: TonKitWrapper, addressStr: String, wallet: Wa
     }
 
     override fun refresh() {
+    }
+
+    override val availableBalance: BigDecimal
+        get() = balance
+
+    override suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?) {
+        tonKit.send(
+            jettonBalance?.walletAddress!!,
+            address,
+            amount.movePointRight(decimals).toBigInteger(),
+            memo
+        )
+    }
+
+    override suspend fun estimateFee(
+        amount: BigDecimal,
+        address: FriendlyAddress,
+        memo: String?,
+    ): BigDecimal {
+        val estimateFee = tonKit.estimateFee(
+            jettonBalance?.walletAddress!!,
+            address,
+            amount.movePointRight(decimals).toBigInteger(),
+            memo
+        )
+
+        return estimateFee.toBigDecimal(decimals).stripTrailingZeros()
     }
 }
