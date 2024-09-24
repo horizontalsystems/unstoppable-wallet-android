@@ -1,14 +1,16 @@
 package io.horizontalsystems.bankwallet.modules.send.ton
 
 import io.horizontalsystems.bankwallet.core.ISendTonAdapter
-import kotlinx.coroutines.Dispatchers
+import io.horizontalsystems.tonkit.FriendlyAddress
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
 class SendTonFeeService(private val adapter: ISendTonAdapter) {
+    private var memo: String? = null
+    private var address: FriendlyAddress? = null
+    private var amount: BigDecimal? = null
 
     private var fee: BigDecimal? = null
     private val _stateFlow = MutableStateFlow(
@@ -18,9 +20,36 @@ class SendTonFeeService(private val adapter: ISendTonAdapter) {
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    suspend fun start() = withContext(Dispatchers.IO) {
-        fee = adapter.estimateFee()
+    private suspend fun refreshFee() {
+        val amount = amount
+        val address = address
+        val memo = memo
 
+        fee = if (amount != null && address != null) {
+            adapter.estimateFee(amount, address, memo)
+        } else {
+            null
+        }
+    }
+
+    suspend fun setAmount(amount: BigDecimal?) {
+        this.amount = amount
+
+        refreshFee()
+        emitState()
+    }
+
+    suspend fun setTonAddress(address: FriendlyAddress?) {
+        this.address = address
+
+        refreshFee()
+        emitState()
+    }
+
+    suspend fun setMemo(memo: String?) {
+        this.memo = memo
+
+        refreshFee()
         emitState()
     }
 
