@@ -22,5 +22,6 @@ data class EnabledWallet(
         val walletOrder: Int? = null,
         val coinName: String? = null,
         val coinCode: String? = null,
-        val coinDecimals: Int? = null
+        val coinDecimals: Int? = null,
+        val coinImage: String?
 )
