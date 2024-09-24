@@ -7,7 +7,11 @@ import io.horizontalsystems.erc20kit.core.Eip20Provider
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.RpcSource
-import io.horizontalsystems.marketkit.models.*
+import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.rx2.await
 
 class AddEvmTokenBlockchainService(
@@ -32,7 +36,11 @@ class AddEvmTokenBlockchainService(
         val tokenInfo = eip20Provider.getTokenInfo(Address(reference)).await()
         val tokenQuery = tokenQuery(reference)
         return Token(
-            coin = Coin(tokenQuery.customCoinUid, tokenInfo.tokenName, tokenInfo.tokenSymbol, tokenInfo.tokenDecimal),
+            coin = Coin(
+                uid = tokenQuery.customCoinUid,
+                name = tokenInfo.tokenName,
+                code = tokenInfo.tokenSymbol
+            ),
             blockchain = blockchain,
             type = tokenQuery.tokenType,
             decimals = tokenInfo.tokenDecimal

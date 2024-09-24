@@ -150,7 +150,8 @@ class BackupProvider(
                 accountId = account.id,
                 coinName = it.coinName,
                 coinCode = it.coinCode,
-                coinDecimals = it.decimals
+                coinDecimals = it.decimals,
+                coinImage = null
             )
         }
         walletManager.saveEnabledWallets(enabledWallets)
@@ -180,7 +181,8 @@ class BackupProvider(
                     accountId = account.id,
                     coinName = it.coinName,
                     coinCode = it.coinCode,
-                    coinDecimals = it.decimals
+                    coinDecimals = it.decimals,
+                    coinImage = null
                 )
             }
 
