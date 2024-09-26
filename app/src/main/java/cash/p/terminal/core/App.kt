@@ -60,6 +60,7 @@ import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TermsManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
+import cash.p.terminal.core.managers.TonAccountManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TorManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
@@ -318,6 +319,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             tokenAutoEnableManager
         )
         tronAccountManager.start()
+
+        val tonAccountManager = TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
+        tonAccountManager.start()
 
         systemInfoManager = SystemInfoManager(appConfigProvider)
 
