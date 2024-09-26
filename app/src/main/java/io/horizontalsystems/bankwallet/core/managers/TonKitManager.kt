@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TonKitManager(
-    private val backgroundManager: BackgroundManager
+    private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.Default)
     private var job: Job? = null
@@ -77,7 +77,7 @@ class TonKitManager(
 
     private fun createKitInstance(
         accountType: AccountType.Mnemonic,
-        account: Account
+        account: Account,
     ): TonKitWrapper {
         val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
         val privateKey = hdWallet.privateKey(0)
@@ -94,7 +94,7 @@ class TonKitManager(
 
     private fun createKitInstance(
         accountType: AccountType.TonAddress,
-        account: Account
+        account: Account,
     ): TonKitWrapper {
         val walletType = TonKit.WalletType.Watch(accountType.address)
         val kit = TonKit.getInstance(walletType, Network.MainNet, App.instance, account.id)
@@ -137,24 +137,10 @@ class TonKitManager(
 
 class TonKitWrapper(val tonKit: TonKit)
 
-fun TonKit.refresh() {
-}
-
-private suspend fun TonKit.start() {
-    this.sync()
-}
-
-private fun TonKit.stop() {
-}
-
-val TonKit.network: Network
-    get() = Network.MainNet
-
-fun TonKit.statusInfo(): Map<String, Any> {
-    return buildMap {
-//        put("Balance Sync State", balanceState)
-//            put("Transaction Sync State", transactionsState)
-    }
+fun TonKit.statusInfo() = buildMap {
+    put("Sync State", syncStateFlow.value)
+    put("Event Sync State", eventSyncStateFlow.value)
+    put("Jetton Sync State", jettonSyncStateFlow.value)
 }
 
 val Jetton.tokenType

@@ -4,7 +4,6 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
-import io.horizontalsystems.bankwallet.core.managers.network
 import io.horizontalsystems.bankwallet.core.managers.statusInfo
 import io.horizontalsystems.tonkit.models.Network
 

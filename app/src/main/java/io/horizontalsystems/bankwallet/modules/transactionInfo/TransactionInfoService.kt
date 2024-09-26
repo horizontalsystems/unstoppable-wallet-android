@@ -76,7 +76,37 @@ class TransactionInfoService(
             val coinUids = mutableListOf<String?>()
 
             val txCoinTypes = when (val tx = transactionRecord) {
-                is TonTransactionRecord -> listOf(tx.mainValue?.coinUid, tx.fee.coinUid)
+                is TonTransactionRecord -> buildList {
+                    add(tx.mainValue?.coinUid)
+                    add(tx.fee.coinUid)
+
+                    tx.actions.forEach { action ->
+                        val actionType = action.type
+                        when (actionType) {
+                            is TonTransactionRecord.Action.Type.Burn -> {
+                                add(actionType.value.coinUid)
+                            }
+                            is TonTransactionRecord.Action.Type.ContractCall -> {
+                                add(actionType.value.coinUid)
+                            }
+                            is TonTransactionRecord.Action.Type.Mint -> {
+                                add(actionType.value.coinUid)
+                            }
+                            is TonTransactionRecord.Action.Type.Receive -> {
+                                add(actionType.value.coinUid)
+                            }
+                            is TonTransactionRecord.Action.Type.Send -> {
+                                add(actionType.value.coinUid)
+                            }
+                            is TonTransactionRecord.Action.Type.Swap -> {
+                                add(actionType.valueIn.coinUid)
+                                add(actionType.valueOut.coinUid)
+                            }
+                            is TonTransactionRecord.Action.Type.ContractDeploy,
+                            is TonTransactionRecord.Action.Type.Unsupported -> Unit
+                        }
+                    }
+                }
                 is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is SwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
