@@ -214,7 +214,12 @@ class AdapterFactory(
     fun tonTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val tonKitWrapper = tonKitManager.getTonKitWrapper(source.account)
         val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: return null
-        val tonTransactionConverter = TonTransactionConverter(coinManager, tonKitWrapper, source, baseToken, evmLabelManager)
+        val tonTransactionConverter = TonTransactionConverter(
+            tonKitWrapper.tonKit.receiveAddress,
+            coinManager,
+            source,
+            baseToken
+        )
 
         return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
     }

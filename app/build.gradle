@@ -179,6 +179,12 @@ android {
             substitute module('com.tinder.scarlet:message-adapter-gson:0.1.12') using module('com.github.WalletConnect.Scarlet:message-adapter-gson:1.0.0')
             substitute module('com.tinder.scarlet:lifecycle-android:0.1.12') using module('com.github.WalletConnect.Scarlet:lifecycle-android:1.0.0')
         }
+
+        resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.squareup.okhttp3') {
+                details.useVersion "4.12.0"
+            }
+        }
     }
 
 }
@@ -232,7 +238,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.11.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.11.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation "androidx.biometric:biometric:$biometric_version"
 
@@ -269,7 +275,7 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:ton-kit-android:b632c02'
+    implementation 'com.github.horizontalsystems:ton-kit-android:e907480'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:47db768'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:3d83900'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'

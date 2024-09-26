@@ -182,7 +182,7 @@ class BalanceViewModel(
 
         stat(page = StatPage.Balance, event = StatEvent.Refresh)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             isRefreshing = true
             emitState()
 
