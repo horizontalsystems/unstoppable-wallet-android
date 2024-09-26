@@ -4,7 +4,6 @@ import cash.p.terminal.core.IAdapter
 import cash.p.terminal.core.IBalanceAdapter
 import cash.p.terminal.core.IReceiveAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
-import cash.p.terminal.core.managers.network
 import cash.p.terminal.core.managers.statusInfo
 import io.horizontalsystems.tonkit.models.Network
 

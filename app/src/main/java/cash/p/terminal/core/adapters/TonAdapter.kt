@@ -124,6 +124,11 @@ class TonTransactionRecord(
             when (val type = action.type) {
                 is Action.Type.Receive -> type.value
                 is Action.Type.Send -> type.value
+                is Action.Type.Burn -> type.value
+                is Action.Type.Mint -> type.value
+                is Action.Type.ContractCall -> type.value
+                is Action.Type.ContractDeploy,
+                is Action.Type.Swap,
                 is Action.Type.Unsupported -> null
             }
         }
@@ -144,6 +149,25 @@ class TonTransactionRecord(
                 val value: TransactionValue,
                 val from: String,
                 val comment: String?,
+            ) : Type()
+
+            data class Burn(val value: TransactionValue) : Type()
+
+            data class Mint(val value: TransactionValue) : Type()
+
+            data class Swap(
+                val routerName: String?,
+                val routerAddress: String,
+                val valueIn: TransactionValue,
+                val valueOut: TransactionValue
+            ) : Type()
+
+            data class ContractDeploy(val interfaces: List<String>) : Type()
+
+            data class ContractCall(
+                val address: String,
+                val value: TransactionValue,
+                val operation: String
             ) : Type()
 
             data class Unsupported(val type: String) : Type()

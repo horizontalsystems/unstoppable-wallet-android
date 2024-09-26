@@ -116,7 +116,7 @@ class BalanceAdapterRepository(
         return null
     }
 
-    fun refresh() {
+    suspend fun refresh() {
         adapterManager.refresh()
     }
 

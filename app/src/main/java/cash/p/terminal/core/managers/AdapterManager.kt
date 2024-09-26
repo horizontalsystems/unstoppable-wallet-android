@@ -100,7 +100,7 @@ class AdapterManager(
         initAdapters(walletManager.activeWallets)
     }
 
-    override fun refresh() {
+    override suspend fun refresh() {
         handler.post {
             adaptersMap.values.forEach { it.refresh() }
         }

@@ -53,7 +53,7 @@ object FaqManager {
             val response = OkHttpClient().newCall(request).execute()
 
             val listType = object : TypeToken<List<FaqMap>>() {}.type
-            val list: List<FaqMap> = gson.fromJson(response.body.charStream(), listType)
+            val list: List<FaqMap> = gson.fromJson(response.body?.charStream(), listType)
             response.close()
 
             list

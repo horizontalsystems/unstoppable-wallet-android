@@ -178,7 +178,7 @@ class BalanceService(
         sortAndEmitItems()
     }
 
-    fun refresh() {
+    suspend fun refresh() {
         xRateRepository.refresh()
         adapterRepository.refresh()
     }

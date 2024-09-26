@@ -6,6 +6,7 @@ import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.core.shorten
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
@@ -116,14 +117,13 @@ class TransactionViewItemFactory(
 
                 is TransactionValue.CoinValue,
                 is TransactionValue.RawValue,
+                is TransactionValue.JettonValue,
                 is TransactionValue.TokenValue -> {
                     frontRectangle = false
                     frontUrl = primaryValue.coinIconUrl
                     frontAlternativeUrl = primaryValue.alternativeCoinIconUrl
                     frontPlaceHolder = primaryValue.coinIconPlaceholder
                 }
-
-                is TransactionValue.JettonValue -> TODO()
             }
         } else {
             frontRectangle = false
@@ -474,10 +474,6 @@ class TransactionViewItemFactory(
                     sentToSelf = actionType.sentToSelf
 
                     iconX = singleValueIconType(actionType.value)
-
-//                    if let currencyValue = item.currencyValue {
-//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
-//                    }
                 }
                 is TonTransactionRecord.Action.Type.Receive -> {
                     title = Translator.getString(R.string.Transactions_Receive)
@@ -488,10 +484,6 @@ class TransactionViewItemFactory(
 
                     primaryValue = getColoredValue(actionType.value, ColorName.Remus)
                     iconX = singleValueIconType(actionType.value)
-
-//                    if let currencyValue = item.currencyValue {
-//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
-//                    }
                 }
                 is TonTransactionRecord.Action.Type.Unsupported -> {
                     title = Translator.getString(R.string.Transactions_TonTransaction)
@@ -501,51 +493,39 @@ class TransactionViewItemFactory(
 
 
                     iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
-
+                }
+                is TonTransactionRecord.Action.Type.Burn -> {
+                    iconX = singleValueIconType(actionType.value)
+                    title = Translator.getString(R.string.Transactions_Burn)
+                    subtitle = actionType.value.fullName
+                    primaryValue = getColoredValue(actionType.value, ColorName.Lucian)
+                }
+                is TonTransactionRecord.Action.Type.ContractCall -> {
+                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                    title = Translator.getString(R.string.Transactions_ContractCall)
+                    subtitle = actionType.address.shorten()
+                    primaryValue = getColoredValue(actionType.value, ColorName.Lucian)
+                }
+                is TonTransactionRecord.Action.Type.ContractDeploy -> {
+                    iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
+                    title = Translator.getString(R.string.Transactions_ContractDeploy)
+                    subtitle = actionType.interfaces.joinToString()
+                    primaryValue = null
+                }
+                is TonTransactionRecord.Action.Type.Mint -> {
+                    iconX = singleValueIconType(actionType.value)
+                    title = Translator.getString(R.string.Transactions_Mint)
+                    subtitle = actionType.value.fullName
+                    primaryValue = getColoredValue(actionType.value, ColorName.Remus)
+                }
+                is TonTransactionRecord.Action.Type.Swap -> {
+                    iconX = doubleValueIconType(actionType.valueOut, actionType.valueIn)
+                    title = Translator.getString(R.string.Transactions_Swap)
+                    subtitle = actionType.routerName ?: actionType.routerAddress.shorten()
+                    primaryValue = getColoredValue(actionType.valueOut, ColorName.Remus)
+                    secondaryValue = getColoredValue(actionType.valueIn, ColorName.Lucian)
                 }
             }
-//                switch action.type {
-//                case let .send(value, to, _sentToSelf, _):
-//                case let .receive(value, from, _):
-//                case let .burn(value):
-//                    iconType = singleValueIconType(source: record.source, value: value)
-//                    title = "transactions.burn".localized
-//                    subTitle = value.fullName
-//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: value), type: type(value: value, .outgoing))
-//
-//                    if let currencyValue = item.currencyValue {
-//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
-//                    }
-//                case let .mint(value):
-//                    iconType = singleValueIconType(source: record.source, value: value)
-//                    title = "transactions.mint".localized
-//                    subTitle = value.fullName
-//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: value), type: type(value: value, .incoming))
-//
-//                    if let currencyValue = item.currencyValue {
-//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
-//                    }
-//                case let .swap(routerName, routerAddress, valueIn, valueOut):
-//                    iconType = doubleValueIconType(source: record.source, primaryValue: valueOut, secondaryValue: valueIn)
-//                    title = "transactions.swap".localized
-//                    subTitle = routerName ?? routerAddress.shortened
-//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: valueOut), type: type(value: valueOut, .incoming))
-//                    secondaryValue = BaseTransactionsViewModel.Value(text: coinString(from: valueIn), type: type(value: valueIn, .outgoing))
-//                case let .contractDeploy(interfaces):
-//                    iconType = .localIcon(imageName: item.record.source.blockchainType.iconPlain32)
-//                    title = "transactions.contract_deploy".localized
-//                    subTitle = interfaces.joined(separator: ", ")
-//                case let .contractCall(address, value, _):
-//                    iconType = .localIcon(imageName: item.record.source.blockchainType.iconPlain32)
-//                    title = "transactions.contract_call".localized
-//                    subTitle = address.shortened
-//                    primaryValue = BaseTransactionsViewModel.Value(text: coinString(from: value), type: type(value: value, .outgoing))
-//
-//                    if let currencyValue = item.currencyValue {
-//                        secondaryValue = BaseTransactionsViewModel.Value(text: currencyString(from: currencyValue), type: .secondary)
-//                    }
-//                case let .unsupported(type):
-//                }
         } else {
             iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
             title = Translator.getString(R.string.Transactions_TonTransaction)

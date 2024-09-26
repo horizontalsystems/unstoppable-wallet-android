@@ -69,7 +69,7 @@ class TransactionInfoViewItemFactory(
     private val evmLabelManager: EvmLabelManager,
     private val resendEnabled: Boolean,
     private val contactsRepo: ContactsRepository,
-    private val blockchainType: BlockchainType
+    private val blockchainType: BlockchainType,
 ) {
     private val zeroAddress = "0x0000000000000000000000000000000000000000"
 
@@ -110,9 +110,15 @@ class TransactionInfoViewItemFactory(
                                 )
                             )
                             actionType.comment?.let {
-                                itemsForAction.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                                itemsForAction.add(
+                                    Value(
+                                        getString(R.string.TransactionInfo_Memo),
+                                        it
+                                    )
+                                )
                             }
                         }
+
                         is TonTransactionRecord.Action.Type.Receive -> {
                             itemsForAction.addAll(
                                 getReceiveSectionItems(
@@ -123,34 +129,58 @@ class TransactionInfoViewItemFactory(
                                 )
                             )
                             actionType.comment?.let {
-                                itemsForAction.add(Value(getString(R.string.TransactionInfo_Memo), it))
+                                itemsForAction.add(
+                                    Value(
+                                        getString(R.string.TransactionInfo_Memo),
+                                        it
+                                    )
+                                )
                             }
                         }
-                        is TonTransactionRecord.Action.Type.Unsupported -> {
-                            itemsForAction.add(Value("Action", actionType.type))
+
+                        is TonTransactionRecord.Action.Type.Burn -> {
+                            itemsForAction.addAll(
+                                getSendSectionItems(
+                                    value = actionType.value,
+                                    toAddress = null,
+                                    coinPrice = rates[actionType.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount
+                                )
+                            )
                         }
-//                        case let .burn(value):
-//                            viewItems = sendSection(source: record.source, transactionValue: value, to: zeroAddress, rates: item.rates, balanceHidden: balanceHidden)
-//
-//                        case let .mint(value):
-//                            viewItems = receiveSection(source: record.source, transactionValue: value, from: zeroAddress, rates: item.rates, balanceHidden: balanceHidden)
-//
-//                        case let .swap(routerName, routerAddress, valueIn, valueOut):
-//                            viewItems = [
-//                                amount(source: record.source, title: youPayString(status: status), subtitle: fullBadge(transactionValue: valueIn), transactionValue: valueIn, rate: _rate(valueIn), type: type(value: valueIn, .outgoing), balanceHidden: balanceHidden),
-//                                amount(source: record.source, title: youGetString(status: status), subtitle: fullBadge(transactionValue: valueOut), transactionValue: valueOut, rate: _rate(valueOut), type: type(value: valueOut, .incoming), balanceHidden: balanceHidden),
-//                                .service(value: routerName ?? routerAddress.shortened),
-//                            ]
-//
-//                            if let priceString = priceString(valueIn: valueIn, valueOut: valueOut, coinPriceIn: _rate(valueIn)) {
-//                                viewItems.append(.price(price: priceString))
-//                            }
-//
+
+                        is TonTransactionRecord.Action.Type.Mint -> {
+                            itemsForAction.addAll(
+                                getReceiveSectionItems(
+                                    value = actionType.value,
+                                    fromAddress = zeroAddress,
+                                    coinPrice = rates[actionType.value.coinUid],
+                                    hideAmount = transactionItem.hideAmount,
+                                )
+                            )
+                        }
+
+                        is TonTransactionRecord.Action.Type.Swap -> {
+                            itemsForAction.addAll(
+                                getSwapEventSectionItems(
+                                    valueIn = actionType.valueIn,
+                                    valueOut = actionType.valueOut,
+                                    rates = rates,
+                                    amount = null,
+                                    hideAmount = transactionItem.hideAmount,
+                                    hasRecipient = false
+                                )
+                            )
+                        }
+
+                        is TonTransactionRecord.Action.Type.ContractDeploy -> {
 //                        case let .contractDeploy(interfaces):
 //                            viewItems = [
 //                                .actionTitle(iconName: nil, iconDimmed: false, title: "transactions.contract_deploy".localized, subTitle: interfaces.joined(separator: ", ")),
 //                            ]
-//
+                        }
+
+                        is TonTransactionRecord.Action.Type.ContractCall -> {
 //                        case let .contractCall(address, value, operation):
 //                            viewItems = [
 //                                .actionTitle(iconName: record.source.blockchainType.iconPlain32, iconDimmed: false, title: "transactions.contract_call".localized, subTitle: operation),
@@ -158,10 +188,11 @@ class TransactionInfoViewItemFactory(
 //                            ]
 //
 //                            viewItems.append(contentsOf: sendSection(source: record.source, transactionValue: value, to: nil, rates: item.rates, balanceHidden: balanceHidden))
-//
-//                        case let .unsupported(type):
-//                            viewItems = [.fee(title: "Action", value: type)]
-//                        }
+                        }
+
+                        is TonTransactionRecord.Action.Type.Unsupported -> {
+                            itemsForAction.add(Value("Action", actionType.type))
+                        }
                     }
 
                     if (action.status == TransactionStatus.Failed) {
@@ -286,7 +317,13 @@ class TransactionInfoViewItemFactory(
                 )
 
             is ContractCallTransactionRecord -> {
-                itemSections.add(getContractMethodSectionItems(transaction.method, transaction.contractAddress, transaction.blockchainType))
+                itemSections.add(
+                    getContractMethodSectionItems(
+                        transaction.method,
+                        transaction.contractAddress,
+                        transaction.blockchainType
+                    )
+                )
 
                 for (event in transaction.outgoingEvents) {
                     itemSections.add(
@@ -314,7 +351,13 @@ class TransactionInfoViewItemFactory(
             }
 
             is TronContractCallTransactionRecord -> {
-                itemSections.add(getContractMethodSectionItems(transaction.method, transaction.contractAddress, transaction.blockchainType))
+                itemSections.add(
+                    getContractMethodSectionItems(
+                        transaction.method,
+                        transaction.contractAddress,
+                        transaction.blockchainType
+                    )
+                )
 
                 for (event in transaction.outgoingEvents) {
                     itemSections.add(
@@ -397,7 +440,8 @@ class TransactionInfoViewItemFactory(
                 itemSections.add(
                     listOf(
                         Transaction(
-                            transaction.transaction.contract?.label ?: getString(R.string.Transactions_ContractCall),
+                            transaction.transaction.contract?.label
+                                ?: getString(R.string.Transactions_ContractCall),
                             "",
                             TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
                         )
@@ -415,21 +459,33 @@ class TransactionInfoViewItemFactory(
                     )
                 )
 
-                miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
+                miscItemsSection.addAll(
+                    getBitcoinSectionItems(
+                        transaction,
+                        transactionItem.lastBlockInfo
+                    )
+                )
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
             is BitcoinOutgoingTransactionRecord -> {
                 sentToSelf = transaction.sentToSelf
-                itemSections.add(getSendSectionItems(
-                    value = transaction.value,
-                    toAddress = transaction.to,
-                    coinPrice = rates[transaction.value.coinUid],
-                    hideAmount = transactionItem.hideAmount,
-                    sentToSelf = transaction.sentToSelf
-                ))
+                itemSections.add(
+                    getSendSectionItems(
+                        value = transaction.value,
+                        toAddress = transaction.to,
+                        coinPrice = rates[transaction.value.coinUid],
+                        hideAmount = transactionItem.hideAmount,
+                        sentToSelf = transaction.sentToSelf
+                    )
+                )
 
-                miscItemsSection.addAll(getBitcoinSectionItems(transaction, transactionItem.lastBlockInfo))
+                miscItemsSection.addAll(
+                    getBitcoinSectionItems(
+                        transaction,
+                        transactionItem.lastBlockInfo
+                    )
+                )
                 addMemoItem(transaction.memo, miscItemsSection)
             }
 
@@ -524,10 +580,24 @@ class TransactionInfoViewItemFactory(
 
         itemSections.add(getStatusSectionItems(transaction, status, rates))
         if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
-            itemSections.add(listOf(SpeedUpCancel(transactionHash = transaction.transactionHash, blockchainType = transaction.blockchainType)))
+            itemSections.add(
+                listOf(
+                    SpeedUpCancel(
+                        transactionHash = transaction.transactionHash,
+                        blockchainType = transaction.blockchainType
+                    )
+                )
+            )
             itemSections.add(listOf(TransactionInfoViewItem.Description(translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
         } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
-            itemSections.add(listOf(SpeedUpCancel(transactionHash = transaction.transactionHash, blockchainType = transaction.blockchainType)))
+            itemSections.add(
+                listOf(
+                    SpeedUpCancel(
+                        transactionHash = transaction.transactionHash,
+                        blockchainType = transaction.blockchainType
+                    )
+                )
+            )
             itemSections.add(listOf(TransactionInfoViewItem.Description(translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
         }
         itemSections.add(getExplorerSectionItems(transactionItem.explorerData))
@@ -536,12 +606,13 @@ class TransactionInfoViewItemFactory(
     }
 
     private fun getContact(address: String?): Contact? {
-        return contactsRepo.getContactsFiltered(blockchainType, addressQuery = address).firstOrNull()
+        return contactsRepo.getContactsFiltered(blockchainType, addressQuery = address)
+            .firstOrNull()
     }
 
     private fun addMemoItem(
         memo: String?,
-        miscItemsSection: MutableList<TransactionInfoViewItem>
+        miscItemsSection: MutableList<TransactionInfoViewItem>,
     ) {
         if (!memo.isNullOrBlank()) {
             miscItemsSection.add(
@@ -555,10 +626,11 @@ class TransactionInfoViewItemFactory(
         fromAddress: String?,
         coinPrice: CurrencyValue?,
         hideAmount: Boolean,
-        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf()
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
     ): List<TransactionInfoViewItem> {
         val mint = fromAddress == zeroAddress
-        val title: String = if (mint) getString(R.string.Transactions_Mint) else getString(R.string.Transactions_Receive)
+        val title: String =
+            if (mint) getString(R.string.Transactions_Mint) else getString(R.string.Transactions_Receive)
 
         val amount: TransactionInfoViewItem
         val rate: TransactionInfoViewItem?
@@ -582,7 +654,13 @@ class TransactionInfoViewItemFactory(
         if (!mint && fromAddress != null) {
             val contact = getContact(fromAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_From), fromAddress, contact == null, blockchainType, StatSection.AddressFrom)
+                Address(
+                    getString(R.string.TransactionInfo_From),
+                    fromAddress,
+                    contact == null,
+                    blockchainType,
+                    StatSection.AddressFrom
+                )
             )
             contact?.let {
                 items.add(
@@ -602,23 +680,36 @@ class TransactionInfoViewItemFactory(
         coinPrice: CurrencyValue?,
         hideAmount: Boolean,
         sentToSelf: Boolean = false,
-        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf()
+        nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
     ): List<TransactionInfoViewItem> {
         val burn = toAddress == zeroAddress
 
-        val title: String = if (burn) getString(R.string.Transactions_Burn) else getString(R.string.Transactions_Send)
+        val title: String =
+            if (burn) getString(R.string.Transactions_Burn) else getString(R.string.Transactions_Send)
 
         val amount: TransactionInfoViewItem
         val rate: TransactionInfoViewItem?
 
         when (value) {
             is TransactionValue.NftValue -> {
-                amount = getNftAmount(title, value, if (sentToSelf) null else false, hideAmount, nftMetadata[value.nftUid])
+                amount = getNftAmount(
+                    title,
+                    value,
+                    if (sentToSelf) null else false,
+                    hideAmount,
+                    nftMetadata[value.nftUid]
+                )
                 rate = null
             }
 
             else -> {
-                amount = getAmount(coinPrice, value, if (sentToSelf) null else false, hideAmount, AmountType.Sent)
+                amount = getAmount(
+                    coinPrice,
+                    value,
+                    if (sentToSelf) null else false,
+                    hideAmount,
+                    AmountType.Sent
+                )
                 rate = getHistoricalRate(coinPrice, value)
             }
         }
@@ -628,7 +719,13 @@ class TransactionInfoViewItemFactory(
         if (!burn && toAddress != null) {
             val contact = getContact(toAddress)
             items.add(
-                Address(getString(R.string.TransactionInfo_To), toAddress, contact == null, blockchainType, StatSection.AddressTo)
+                Address(
+                    getString(R.string.TransactionInfo_To),
+                    toAddress,
+                    contact == null,
+                    blockchainType,
+                    StatSection.AddressTo
+                )
             )
 
             contact?.let {
@@ -647,7 +744,7 @@ class TransactionInfoViewItemFactory(
         rates: Map<String, CurrencyValue>,
         amount: SwapTransactionRecord.Amount?,
         hideAmount: Boolean,
-        hasRecipient: Boolean
+        hasRecipient: Boolean,
     ) = buildList {
         valueIn?.let {
             add(
@@ -679,7 +776,7 @@ class TransactionInfoViewItemFactory(
         rates: Map<String, CurrencyValue>,
         exchangeAddress: String,
         valueOut: TransactionValue?,
-        valueIn: TransactionValue?
+        valueIn: TransactionValue?,
     ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             Value(
@@ -808,7 +905,13 @@ class TransactionInfoViewItemFactory(
                 value.badge,
                 AmountType.Approved
             ),
-            Address(getString(R.string.TransactionInfo_Spender), spenderAddress, contact == null, blockchainType, StatSection.AddressSpender)
+            Address(
+                getString(R.string.TransactionInfo_Spender),
+                spenderAddress,
+                contact == null,
+                blockchainType,
+                StatSection.AddressSpender
+            )
         )
 
         contact?.let {
@@ -821,7 +924,7 @@ class TransactionInfoViewItemFactory(
     private fun getContractMethodSectionItems(
         method: String?,
         contractAddress: String,
-        blockchainType: BlockchainType
+        blockchainType: BlockchainType,
     ) = listOf(
         Transaction(
             method ?: getString(R.string.Transactions_ContractCall),
@@ -830,7 +933,10 @@ class TransactionInfoViewItemFactory(
         )
     )
 
-    private fun getBitcoinSectionItems(transaction: BitcoinTransactionRecord, lastBlockInfo: LastBlockInfo?): List<TransactionInfoViewItem> {
+    private fun getBitcoinSectionItems(
+        transaction: BitcoinTransactionRecord,
+        lastBlockInfo: LastBlockInfo?,
+    ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf()
 
         transaction.conflictingHash?.let { conflictingHash ->
@@ -857,10 +963,13 @@ class TransactionInfoViewItemFactory(
     private fun getStatusSectionItems(
         transaction: TransactionRecord,
         status: TransactionStatus,
-        rates: Map<String, CurrencyValue?>
+        rates: Map<String, CurrencyValue?>,
     ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
-            Value(getString(R.string.TransactionInfo_Date), dateHelper.getFullDate(Date(transaction.timestamp * 1000))),
+            Value(
+                getString(R.string.TransactionInfo_Date),
+                dateHelper.getFullDate(Date(transaction.timestamp * 1000))
+            ),
             Status(status)
         )
 
@@ -929,12 +1038,16 @@ class TransactionInfoViewItemFactory(
     private fun getExplorerSectionItems(explorerData: TransactionInfoModule.ExplorerData): List<TransactionInfoViewItem> =
         listOf(
             Explorer(
-                translator.getString(R.string.TransactionInfo_ButtonViewOnExplorerName, explorerData.title),
+                translator.getString(
+                    R.string.TransactionInfo_ButtonViewOnExplorerName,
+                    explorerData.title
+                ),
                 explorerData.url
             )
         )
 
-    private fun getDoubleSpendViewItem(transactionHash: String, conflictingHash: String) = DoubleSpend(transactionHash, conflictingHash)
+    private fun getDoubleSpendViewItem(transactionHash: String, conflictingHash: String) =
+        DoubleSpend(transactionHash, conflictingHash)
 
     private fun getLockStateItem(lockState: TransactionLockState?): TransactionInfoViewItem? {
         return lockState?.let {
@@ -978,20 +1091,23 @@ class TransactionInfoViewItemFactory(
             }
         } ?: "---"
         val fiatValueColored = ColoredValue(valueInFiat, ColorName.Grey)
-        val coinValueFormatted = if (hideAmount) "*****" else value.decimalValue?.let { decimalValue ->
-            val sign = when (incoming) {
-                true -> "+"
-                false -> "-"
-                else -> ""
-            }
-            val valueWithCoinCode = numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
-            if (amount is SwapTransactionRecord.Amount.Extremum && incoming != null) {
-                val suffix = if (incoming) getString(R.string.Swap_AmountMin) else getString(R.string.Swap_AmountMax)
-                "$sign$valueWithCoinCode $suffix"
-            } else {
-                "$sign$valueWithCoinCode"
-            }
-        } ?: "---"
+        val coinValueFormatted =
+            if (hideAmount) "*****" else value.decimalValue?.let { decimalValue ->
+                val sign = when (incoming) {
+                    true -> "+"
+                    false -> "-"
+                    else -> ""
+                }
+                val valueWithCoinCode =
+                    numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
+                if (amount is SwapTransactionRecord.Amount.Extremum && incoming != null) {
+                    val suffix =
+                        if (incoming) getString(R.string.Swap_AmountMin) else getString(R.string.Swap_AmountMax)
+                    "$sign$valueWithCoinCode $suffix"
+                } else {
+                    "$sign$valueWithCoinCode"
+                }
+            } ?: "---"
 
         val color = if (hasRecipient && incoming == true) {
             ColorName.Lucian
@@ -1022,7 +1138,7 @@ class TransactionInfoViewItemFactory(
         value: TransactionValue.NftValue,
         incoming: Boolean?,
         hideAmount: Boolean,
-        nftMetadata: NftAssetBriefMetadata?
+        nftMetadata: NftAssetBriefMetadata?,
     ): TransactionInfoViewItem {
         val valueFormatted = if (hideAmount) "*****" else value.decimalValue.let { decimalValue ->
             val sign = when {
@@ -1031,7 +1147,8 @@ class TransactionInfoViewItemFactory(
                 decimalValue > BigDecimal.ZERO -> "+"
                 else -> ""
             }
-            val valueWithCoinCode = numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
+            val valueWithCoinCode =
+                numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
             "$sign$valueWithCoinCode"
         }
 
@@ -1069,7 +1186,10 @@ class TransactionInfoViewItemFactory(
         return Value(getString(R.string.TransactionInfo_HistoricalRate), rateValue)
     }
 
-    private fun getFee(transactionValue: TransactionValue, rate: CurrencyValue?): TransactionInfoViewItem {
+    private fun getFee(
+        transactionValue: TransactionValue,
+        rate: CurrencyValue?,
+    ): TransactionInfoViewItem {
         val feeAmountString = getFeeAmountString(rate, transactionValue)
 
         return Value(getString(R.string.TransactionInfo_Fee), feeAmountString)
@@ -1078,20 +1198,24 @@ class TransactionInfoViewItemFactory(
     private fun getFeeItem(
         transactionValue: TransactionValue,
         rate: CurrencyValue?,
-        status: TransactionStatus
+        status: TransactionStatus,
     ): TransactionInfoViewItem {
         val feeAmountString = getFeeAmountString(rate, transactionValue)
         val feeTitle: String = when (status) {
             TransactionStatus.Pending -> getString(R.string.TransactionInfo_FeeEstimated)
             is TransactionStatus.Processing,
             TransactionStatus.Failed,
-            TransactionStatus.Completed -> getString(R.string.TransactionInfo_Fee)
+            TransactionStatus.Completed,
+            -> getString(R.string.TransactionInfo_Fee)
         }
 
         return Value(feeTitle, feeAmountString)
     }
 
-    private fun getFeeAmountString(rate: CurrencyValue?, transactionValue: TransactionValue): String {
+    private fun getFeeAmountString(
+        rate: CurrencyValue?,
+        transactionValue: TransactionValue,
+    ): String {
         val feeInFiat = rate?.let {
             transactionValue.decimalValue?.let { decimalValue ->
                 numberFormatter.formatFiatFull(

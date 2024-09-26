@@ -1,8 +1,6 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.ICoinManager
-import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.modules.transactions.TransactionSource
 import cash.p.terminal.modules.transactions.TransactionStatus
@@ -10,6 +8,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.models.AccountAddress
 import io.horizontalsystems.tonkit.models.Action
 import io.horizontalsystems.tonkit.models.Event
@@ -18,13 +17,11 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 class TonTransactionConverter(
+    private val address: Address,
     private val coinManager: ICoinManager,
-    private val tonKitWrapper: TonKitWrapper,
     private val source: TransactionSource,
-    private val baseToken: Token,
-    private val evmLabelManager: EvmLabelManager
+    private val baseToken: Token
 ) {
-    val address = tonKitWrapper.tonKit.receiveAddress
 
     fun createTransactionRecord(event: Event): TonTransactionRecord {
         val actions = event.actions.map { action ->
@@ -131,6 +128,45 @@ class TonTransactionConverter(
 
                 else -> TonTransactionRecord.Action.Type.Unsupported("Jetton Transfer")
             }
+        }
+
+        action.jettonBurn?.let { jettonBurn ->
+            return TonTransactionRecord.Action.Type.Burn(
+                value = jettonValue(jettonBurn.jetton, jettonBurn.amount, true)
+            )
+        }
+
+        action.jettonMint?.let { jettonMint ->
+            return TonTransactionRecord.Action.Type.Mint(
+                value = jettonValue(jettonMint.jetton, jettonMint.amount, false)
+            )
+        }
+
+        action.contractDeploy?.let { contractDeploy ->
+            return TonTransactionRecord.Action.Type.ContractDeploy(
+                interfaces = contractDeploy.interfaces
+            )
+        }
+
+        action.jettonSwap?.let { jettonSwap ->
+            return TonTransactionRecord.Action.Type.Swap(
+                routerName = jettonSwap.router.name,
+                routerAddress = format(jettonSwap.router),
+                valueIn = jettonSwap.jettonMasterIn?.let {
+                    jettonValue(it, jettonSwap.amountIn, true)
+                } ?: tonValue(jettonSwap.tonIn ?: BigInteger.ZERO, true),
+                valueOut = jettonSwap.jettonMasterOut?.let {
+                    jettonValue(it, jettonSwap.amountOut, false)
+                } ?: tonValue(jettonSwap.tonOut ?: BigInteger.ZERO, false),
+            )
+        }
+
+        action.smartContractExec?.let { smartContractExec ->
+            return TonTransactionRecord.Action.Type.ContractCall(
+                address = format(smartContractExec.contract),
+                value = tonValue(smartContractExec.tonAttached, true),
+                operation = smartContractExec.operation
+            )
         }
 
         return TonTransactionRecord.Action.Type.Unsupported(action.type.name)
