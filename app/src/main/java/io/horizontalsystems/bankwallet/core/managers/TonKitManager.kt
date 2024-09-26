@@ -9,7 +9,9 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hdwalletkit.Curve
 import io.horizontalsystems.hdwalletkit.HDWallet
+import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tonkit.core.TonKit
+import io.horizontalsystems.tonkit.models.Jetton
 import io.horizontalsystems.tonkit.models.Network
 import io.horizontalsystems.tonkit.models.SyncState
 import kotlinx.coroutines.CoroutineScope
@@ -154,6 +156,9 @@ fun TonKit.statusInfo(): Map<String, Any> {
 //            put("Transaction Sync State", transactionsState)
     }
 }
+
+val Jetton.tokenType
+    get() = TokenType.Jetton(address.toUserFriendly(true))
 
 fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> AdapterState.NotSynced(error)

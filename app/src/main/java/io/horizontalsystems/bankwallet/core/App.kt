@@ -60,6 +60,7 @@ import io.horizontalsystems.bankwallet.core.managers.SubscriptionManager
 import io.horizontalsystems.bankwallet.core.managers.SystemInfoManager
 import io.horizontalsystems.bankwallet.core.managers.TermsManager
 import io.horizontalsystems.bankwallet.core.managers.TokenAutoEnableManager
+import io.horizontalsystems.bankwallet.core.managers.TonAccountManager
 import io.horizontalsystems.bankwallet.core.managers.TonKitManager
 import io.horizontalsystems.bankwallet.core.managers.TorManager
 import io.horizontalsystems.bankwallet.core.managers.TransactionAdapterManager
@@ -319,6 +320,9 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             tokenAutoEnableManager
         )
         tronAccountManager.start()
+
+        val tonAccountManager = TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
+        tonAccountManager.start()
 
         systemInfoManager = SystemInfoManager(appConfigProvider)
 
