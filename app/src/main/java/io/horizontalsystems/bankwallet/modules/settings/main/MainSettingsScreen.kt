@@ -107,6 +107,21 @@ private fun SettingSections(
     VSpacer(32.dp)
 
     CellUniversalLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.Settings_GetYourTokens,
+                R.drawable.ic_uwt2_24,
+                ComposeAppTheme.colors.jacob,
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot")
+                }
+            )
+        }
+    )
+
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
         listOf({
             HsSettingCell(
                 R.string.SettingsSecurity_ManageKeys,
