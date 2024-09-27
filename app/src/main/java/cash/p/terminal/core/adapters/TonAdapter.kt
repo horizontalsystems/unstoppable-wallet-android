@@ -73,17 +73,17 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
     override val availableBalance: BigDecimal
         get() = balance
 
+    private fun getSendAmount(amount: BigDecimal) = when {
+        amount.compareTo(availableBalance) == 0 -> SendAmount.Max
+        else -> SendAmount.Amount(amount.movePointRight(decimals).toBigInteger())
+    }
+
     override suspend fun send(amount: BigDecimal, address: FriendlyAddress, memo: String?) {
-        tonKit.send(address, SendAmount.Amount(amount.movePointRight(decimals).toBigInteger()), memo)
+        tonKit.send(address, getSendAmount(amount), memo)
     }
 
     override suspend fun estimateFee(amount: BigDecimal, address: FriendlyAddress, memo: String?): BigDecimal {
-        val estimateFee = tonKit.estimateFee(
-            address,
-            SendAmount.Amount(amount.movePointRight(decimals).toBigInteger()),
-            memo
-        )
-
+        val estimateFee = tonKit.estimateFee(address, getSendAmount(amount), memo)
         return estimateFee.toBigDecimal(decimals).stripTrailingZeros()
     }
 

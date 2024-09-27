@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendTonAdapter
+import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.xrate.XRateService
@@ -25,7 +26,12 @@ object SendTonModule {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendTonAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
+                    val amountService = SendTonAmountService(
+                        amountValidator = amountValidator,
+                        coinCode = wallet.coin.code,
+                        availableBalance = adapter.availableBalance,
+                        leaveSomeBalanceForFee = wallet.token.type.isNative
+                    )
                     val addressService = SendTonAddressService(predefinedAddress)
                     val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
