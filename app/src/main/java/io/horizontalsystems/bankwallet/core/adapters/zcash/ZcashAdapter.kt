@@ -156,7 +156,7 @@ class ZcashAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val balanceData: BalanceData
-        get() = BalanceData(balance, balanceLocked)
+        get() = BalanceData(balance, pending = balancePending)
 
     val statusInfo: Map<String, Any>
         get() {
@@ -173,7 +173,7 @@ class ZcashAdapter(
             return walletBalance.available.convertZatoshiToZec(decimalCount)
         }
 
-    private val balanceLocked: BigDecimal
+    private val balancePending: BigDecimal
         get() {
             val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
             return walletBalance.pending.convertZatoshiToZec(decimalCount)
