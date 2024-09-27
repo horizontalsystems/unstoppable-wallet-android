@@ -156,7 +156,7 @@ class ZcashAdapter(
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
     override val balanceData: BalanceData
-        get() = BalanceData(balance, balanceLocked)
+        get() = BalanceData(balance, pending = balancePending)
 
     val statusInfo: Map<String, Any>
         get() {
@@ -174,7 +174,7 @@ class ZcashAdapter(
                     walletBalance.pending.convertZatoshiToZec(decimalCount)
         }
 
-    private val balanceLocked: BigDecimal
+    private val balancePending: BigDecimal
         get() {
             // TODO: Waiting when adjust option MIN_CONFIRMATIONS will appear in
             //  zcash-android-wallet-sdk
