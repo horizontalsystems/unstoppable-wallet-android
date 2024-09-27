@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendTonAdapter
+import io.horizontalsystems.bankwallet.core.isNative
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -25,7 +26,12 @@ object SendTonModule {
                     val amountValidator = AmountValidator()
                     val coinMaxAllowedDecimals = wallet.token.decimals
 
-                    val amountService = SendTonAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
+                    val amountService = SendTonAmountService(
+                        amountValidator = amountValidator,
+                        coinCode = wallet.coin.code,
+                        availableBalance = adapter.availableBalance,
+                        leaveSomeBalanceForFee = wallet.token.type.isNative
+                    )
                     val addressService = SendTonAddressService(predefinedAddress)
                     val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
