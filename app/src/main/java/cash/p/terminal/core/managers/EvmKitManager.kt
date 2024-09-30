@@ -2,9 +2,9 @@ package cash.p.terminal.core.managers
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.supportedNftTypes
 import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
@@ -20,7 +20,6 @@ import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.nftkit.core.NftKit
-import io.horizontalsystems.nftkit.models.NftType
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.TokenFactory.UnsupportedChainError
 import io.horizontalsystems.uniswapkit.UniswapKit
@@ -145,24 +144,25 @@ class EvmKitManager(
         }
         OneInchKit.addDecorators(evmKit)
 
-        var nftKit: NftKit? = null
-        val supportedNftTypes = blockchainType.supportedNftTypes
-        if (supportedNftTypes.isNotEmpty()) {
-            val nftKitInstance = NftKit.getInstance(App.instance, evmKit)
-            supportedNftTypes.forEach {
-                when (it) {
-                    NftType.Eip721 -> {
-                        nftKitInstance.addEip721TransactionSyncer()
-                        nftKitInstance.addEip721Decorators()
-                    }
-                    NftType.Eip1155 -> {
-                        nftKitInstance.addEip1155TransactionSyncer()
-                        nftKitInstance.addEip1155Decorators()
-                    }
-                }
-            }
-            nftKit = nftKitInstance
-        }
+        val nftKit: NftKit? = null
+//        var nftKit: NftKit? = null
+//        val supportedNftTypes = blockchainType.supportedNftTypes
+//        if (supportedNftTypes.isNotEmpty()) {
+//            val nftKitInstance = NftKit.getInstance(App.instance, evmKit)
+//            supportedNftTypes.forEach {
+//                when (it) {
+//                    NftType.Eip721 -> {
+//                        nftKitInstance.addEip721TransactionSyncer()
+//                        nftKitInstance.addEip721Decorators()
+//                    }
+//                    NftType.Eip1155 -> {
+//                        nftKitInstance.addEip1155TransactionSyncer()
+//                        nftKitInstance.addEip1155Decorators()
+//                    }
+//                }
+//            }
+//            nftKit = nftKitInstance
+//        }
 
         evmKit.start()
 
@@ -175,6 +175,7 @@ class EvmKitManager(
             useCount -= 1
 
             if (useCount < 1) {
+                Log.d("AAA", "stopEvmKit()")
                 stopEvmKit()
             }
         }
