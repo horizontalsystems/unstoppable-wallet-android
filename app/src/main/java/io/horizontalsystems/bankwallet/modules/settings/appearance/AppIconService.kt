@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class AppIconService(private val localStorage: ILocalStorage) {
-    private val appIcons by lazy { AppIcon.values().asList() }
+    private val appIcons by lazy { AppIcon.entries }
 
     private val _optionsFlow = MutableStateFlow(
         Select(localStorage.appIcon ?: AppIcon.Main, appIcons)
@@ -27,7 +27,7 @@ class AppIconService(private val localStorage: ILocalStorage) {
         val enabled = PackageManager.COMPONENT_ENABLED_STATE_ENABLED
         val disabled = PackageManager.COMPONENT_ENABLED_STATE_DISABLED
 
-        AppIcon.values().forEach { item ->
+        AppIcon.entries.forEach { item ->
             App.instance.packageManager.setComponentEnabledSetting(
                 ComponentName(App.instance, item.launcherName),
                 if (appIcon == item) enabled else disabled,

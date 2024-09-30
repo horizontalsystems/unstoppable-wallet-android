@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,15 +46,12 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.B2
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.D1
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.MultitextM1
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -323,12 +319,13 @@ private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (Ap
         AppIconsRow(rows[0], appIconOptions.selected, onAppIconSelect)
         AppIconsRow(rows[1], appIconOptions.selected, onAppIconSelect)
         AppIconsRow(rows[2], appIconOptions.selected, onAppIconSelect)
+        AppIconsRow(rows[3], appIconOptions.selected, onAppIconSelect)
     }
 }
 
 @Composable
 private fun AppIconsRow(
-    chunk: List<AppIcon>,
+    chunk: List<AppIcon?>,
     selected: AppIcon,
     onAppIconSelect: (AppIcon) -> Unit
 ) {
@@ -338,21 +335,19 @@ private fun AppIconsRow(
             .padding(horizontal = 14.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        IconBox(
-            chunk[0].icon,
-            chunk[0].title.getString(),
-            chunk[0] == selected,
-        ) { onAppIconSelect(chunk[0]) }
-        IconBox(
-            chunk[1].icon,
-            chunk[1].title.getString(),
-            chunk[1] == selected,
-        ) { onAppIconSelect(chunk[1]) }
-        IconBox(
-            chunk[2].icon,
-            chunk[2].title.getString(),
-            chunk[2] == selected
-        ) { onAppIconSelect(chunk[2]) }
+        for (i in 0 until 3) {
+            val appIcon = chunk.getOrNull(i)
+            if (appIcon != null) {
+                IconBox(
+                    appIcon.icon,
+                    appIcon.title.getString(),
+                    appIcon == selected
+                ) { onAppIconSelect(appIcon) }
+            } else {
+                // Invisible element to preserve space
+                Spacer(modifier = Modifier.size(60.dp))
+            }
+        }
     }
 }
 
@@ -388,60 +383,6 @@ private fun IconBox(
         }
     }
 
-}
-
-@Composable
-private fun RowMultilineSelect(
-    title: String,
-    subtitle: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
-    ) {
-        MultitextM1(
-            title = { B2(text = title) },
-            subtitle = { D1(text = subtitle) }
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        if (selected) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_checkmark_20),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-            )
-        }
-    }
-}
-
-@Composable
-fun RowSelect(
-    imageContent: @Composable RowScope.() -> Unit,
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit
-) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        onClick = onClick
-    ) {
-        imageContent.invoke(this)
-        body_leah(
-            text = text,
-            modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp)
-        )
-        if (selected) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_checkmark_20),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-            )
-        }
-    }
 }
 
 @Composable
