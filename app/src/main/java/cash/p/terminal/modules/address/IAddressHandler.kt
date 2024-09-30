@@ -109,6 +109,7 @@ class AddressHandlerUdn(
             BlockchainType.BinanceChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
+            BlockchainType.Base,
             BlockchainType.Avalanche,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
@@ -138,6 +139,7 @@ class AddressHandlerUdn(
                 BlockchainType.Avalanche -> "AVAX"
                 BlockchainType.Ethereum,
                 BlockchainType.Optimism,
+                BlockchainType.Base,
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom -> "ERC20"

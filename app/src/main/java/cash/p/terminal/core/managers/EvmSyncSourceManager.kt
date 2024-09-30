@@ -38,6 +38,7 @@ class EvmSyncSourceManager(
             BlockchainType.ArbitrumOne -> TransactionSource.arbiscan(appConfigProvider.arbiscanApiKey)
             BlockchainType.Gnosis -> TransactionSource.gnosis(appConfigProvider.gnosisscanApiKey)
             BlockchainType.Fantom -> TransactionSource.fantom(appConfigProvider.ftmscanApiKey)
+            BlockchainType.Base -> TransactionSource.basescan(appConfigProvider.basescanApiKey)
             else -> throw Exception("Non-supported EVM blockchain")
         }
     }
@@ -125,6 +126,33 @@ class EvmSyncSourceManager(
                     "Omnia",
                     RpcSource.Http(
                         listOf(URI("https://endpoints.omniatech.io/v1/op/mainnet/public")),
+                        null
+                    ),
+                    defaultTransactionSource(blockchainType)
+                )
+            )
+
+            BlockchainType.Base -> listOf(
+                evmSyncSource(
+                    blockchainType,
+                    "Base",
+                    RpcSource.baseRpcHttp(),
+                    defaultTransactionSource(blockchainType)
+                ),
+                evmSyncSource(
+                    blockchainType,
+                    "LlamaNodes",
+                    RpcSource.Http(
+                        listOf(URI("https://base.llamarpc.com")),
+                        null
+                    ),
+                    defaultTransactionSource(blockchainType)
+                ),
+                evmSyncSource(
+                    blockchainType,
+                    "Omnia",
+                    RpcSource.Http(
+                        listOf(URI("https://endpoints.omniatech.io/v1/base/mainnet/public")),
                         null
                     ),
                     defaultTransactionSource(blockchainType)

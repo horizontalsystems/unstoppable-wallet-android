@@ -96,6 +96,7 @@ class BalanceViewItemFactory {
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
+        BlockchainType.Base,
         BlockchainType.Solana,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,

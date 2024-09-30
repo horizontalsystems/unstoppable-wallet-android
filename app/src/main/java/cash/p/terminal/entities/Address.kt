@@ -48,6 +48,7 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
+        BlockchainType.Base,
         BlockchainType.ArbitrumOne,
         BlockchainType.Solana,
         BlockchainType.Gnosis,

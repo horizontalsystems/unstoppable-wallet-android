@@ -32,6 +32,7 @@ object AddressInputModule {
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
+                BlockchainType.Base,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
                 BlockchainType.ArbitrumOne -> {
@@ -83,6 +84,7 @@ object AddressInputModule {
                 BlockchainType.Polygon,
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
+                BlockchainType.Base,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
                 BlockchainType.ArbitrumOne -> {

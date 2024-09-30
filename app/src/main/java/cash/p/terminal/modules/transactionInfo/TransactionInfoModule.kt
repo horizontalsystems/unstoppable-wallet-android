@@ -71,6 +71,6 @@ data class TransactionInfoItem(
 val BlockchainType.resendable: Boolean
     get() =
         when (this) {
-            BlockchainType.Optimism, BlockchainType.ArbitrumOne -> false
+            BlockchainType.Optimism, BlockchainType.Base, BlockchainType.ArbitrumOne -> false
             else -> true
         }

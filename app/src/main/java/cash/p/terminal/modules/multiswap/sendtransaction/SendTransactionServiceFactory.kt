@@ -10,6 +10,7 @@ object SendTransactionServiceFactory {
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
+        BlockchainType.Base,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom -> SendTransactionServiceEvm(blockchainType)
