@@ -34,6 +34,7 @@ class AddTokenService(
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
+        BlockchainType.Base,
         BlockchainType.Solana
     )
 

@@ -58,6 +58,9 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val ftmscanApiKey by lazy {
         Translator.getString(R.string.ftmscanApiKey)
     }
+    val basescanApiKey by lazy {
+        Translator.getString(R.string.basescanApiKey)
+    }
     val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }
@@ -138,6 +141,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
             BlockchainType.Polygon to "0x731352dcF66014156B1560B832B56069e7b38ab1",
             BlockchainType.Avalanche to "0x731352dcF66014156B1560B832B56069e7b38ab1",
             BlockchainType.Optimism to "0x731352dcF66014156B1560B832B56069e7b38ab1",
+            BlockchainType.Base to "0x731352dcF66014156B1560B832B56069e7b38ab1",
             BlockchainType.ArbitrumOne to "0x731352dcF66014156B1560B832B56069e7b38ab1",
             BlockchainType.Solana to "ELFQmFXqdS6C1zVqZifs7WAmLKovdEPbWSnqomhZoK3B",
             BlockchainType.Gnosis to "0x731352dcF66014156B1560B832B56069e7b38ab1",

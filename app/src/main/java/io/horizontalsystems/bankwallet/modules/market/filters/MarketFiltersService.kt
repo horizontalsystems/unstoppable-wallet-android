@@ -32,6 +32,7 @@ class MarketFiltersService(
         BlockchainType.Unsupported("moonriver"),
         BlockchainType.Unsupported("okex-chain"),
         BlockchainType.Optimism,
+        BlockchainType.Base,
         BlockchainType.Polygon,
         BlockchainType.Unsupported("solana"),
         BlockchainType.Unsupported("sora"),
