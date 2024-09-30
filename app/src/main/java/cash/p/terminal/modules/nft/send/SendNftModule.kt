@@ -3,7 +3,6 @@ package cash.p.terminal.modules.nft.send
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.adapters.nft.INftAdapter
-import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.NftMetadataManager
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.entities.DataState
@@ -21,8 +20,7 @@ object SendNftModule {
         val nftBalance: Int,
         private val adapter: INftAdapter,
         private val sendEvmAddressService: SendEvmAddressService,
-        private val nftMetadataManager: NftMetadataManager,
-        private val evmKitWrapper: EvmKitWrapper
+        private val nftMetadataManager: NftMetadataManager
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

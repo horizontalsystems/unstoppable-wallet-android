@@ -46,7 +46,7 @@ class NftAdapterManager(
 
     @Synchronized
     private fun initAdapters(wallets: List<Wallet>) {
-        val currentAdapters = adaptersMap.toMap()
+        val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
 
         val nftKeys = wallets.map { NftKey(it.account, it.token.blockchainType) }.distinct()
@@ -54,7 +54,7 @@ class NftAdapterManager(
         for (nftKey in nftKeys) {
             if (nftKey.blockchainType.supportedNftTypes.isEmpty()) continue
 
-            val adapter = currentAdapters[nftKey]
+            val adapter = currentAdapters.remove(nftKey)
 
             if (adapter != null) {
                 adaptersMap[nftKey] = adapter
@@ -68,6 +68,10 @@ class NftAdapterManager(
             } else {
                 // Init other blockchain adapter here (e.g. Solana)
             }
+        }
+
+        currentAdapters.forEach { (nftKey, _) ->
+            evmBlockchainManager.getEvmKitManager(nftKey.blockchainType).unlink(nftKey.account)
         }
 
         _adaptersUpdatedFlow.update { adaptersMap.toMap() }

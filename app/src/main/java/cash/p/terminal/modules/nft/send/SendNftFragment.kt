@@ -89,18 +89,13 @@ private fun getFactory(nftUidString: String): SendNftModule.Factory? {
 
     val evmNftRecord = (nftRecord as? EvmNftRecord) ?: return null
 
-    val evmKitWrapper = App.evmBlockchainManager
-        .getEvmKitManager(nftUid.blockchainType)
-        .getEvmKitWrapper(account, nftUid.blockchainType)
-
     return SendNftModule.Factory(
         evmNftRecord,
         nftUid,
         nftRecord.balance,
         adapter,
         SendEvmAddressService(),
-        App.nftMetadataManager,
-        evmKitWrapper
+        App.nftMetadataManager
     )
 }
 
