@@ -16,7 +16,8 @@ object UniswapV3Provider : BaseUniswapV3Provider(DexType.Uniswap) {
         BlockchainType.ArbitrumOne,
 //            BlockchainType.Optimism,
         BlockchainType.Polygon,
-        BlockchainType.BinanceSmartChain
+        BlockchainType.BinanceSmartChain,
+        BlockchainType.Base,
         -> true
         else -> false
     }
