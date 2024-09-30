@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.nft.send
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.adapters.nft.INftAdapter
-import io.horizontalsystems.bankwallet.core.managers.EvmKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.NftMetadataManager
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -21,8 +20,7 @@ object SendNftModule {
         val nftBalance: Int,
         private val adapter: INftAdapter,
         private val sendEvmAddressService: SendEvmAddressService,
-        private val nftMetadataManager: NftMetadataManager,
-        private val evmKitWrapper: EvmKitWrapper
+        private val nftMetadataManager: NftMetadataManager
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
