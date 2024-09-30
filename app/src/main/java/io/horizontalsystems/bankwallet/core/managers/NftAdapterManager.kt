@@ -59,11 +59,14 @@ class NftAdapterManager(
             if (adapter != null) {
                 adaptersMap[nftKey] = adapter
             } else if (evmBlockchainManager.getBlockchain(nftKey.blockchainType) != null) {
-                val evmKitWrapper =
-                    evmBlockchainManager.getEvmKitManager(nftKey.blockchainType).getEvmKitWrapper(nftKey.account, nftKey.blockchainType)
+                val evmKitManager = evmBlockchainManager.getEvmKitManager(nftKey.blockchainType)
+                val evmKitWrapper = evmKitManager.getEvmKitWrapper(nftKey.account, nftKey.blockchainType)
 
-                evmKitWrapper.nftKit?.let { nftKit ->
+                val nftKit = evmKitWrapper.nftKit
+                if (nftKit != null) {
                     adaptersMap[nftKey] = EvmNftAdapter(nftKey.blockchainType, nftKit, evmKitWrapper.evmKit.receiveAddress)
+                } else {
+                    evmKitManager.unlink(nftKey.account)
                 }
             } else {
                 // Init other blockchain adapter here (e.g. Solana)
