@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">금액 설정</string>
     <string name="Balance_Receive_AddressType">주소 유형</string>
     <string name="Balance_LockedAmount_Title">잠김</string>
+    <string name="Balance_ProcessingBalance_Title">처리 중</string>
     <string name="Balance_NotRelayedAmount_Title">방송</string>
     <string name="Balance_Receive_Memo">메모 (태그)</string>
     <string name="Balance_Error_InvalidQrCode">인식할 수 없음</string>
@@ -402,6 +403,7 @@
     <string name="Send_Rbf_Description">이 옵션을 통해 거래가 멈춘 상태에서 수수료를 증가시켜 거래를 다시 보낼 수 있습니다.</string>
     <string name="Send_RbfEnabled">활성화</string>
     <string name="Send_RbfDisabled">비활성화됨</string>
+    <string name="Send_Utxo_AvailableBalance">사용 가능한 잔액</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_Domain">도메인</string>
     <string name="Send_Confirmation_YouSend">보냅니다</string>
