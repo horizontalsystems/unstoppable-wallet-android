@@ -113,7 +113,6 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
-import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
 import io.reactivex.plugins.RxJavaPlugins
@@ -531,17 +530,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         localeAwareContext(this)
     }
 
-    override val isSwapEnabled: Boolean by lazy {
-        val signatures = listOf(
-            "b797339fb356afce5160fe49274ee17a1c1816db", // appcenter
-            "5afb2517b06caac7f108ba9d96ad826f1c4ba30c", // hs
-        )
-
-        val applicationSignatures = App.instance.getApplicationSignatures()
-        applicationSignatures.none {
-            signatures.contains(it.toHexString())
-        }
-    }
+    override val isSwapEnabled = true
 
     override fun getApplicationSignatures() = try {
         val signatureList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
