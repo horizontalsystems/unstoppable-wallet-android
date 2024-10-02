@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">Définir le montant</string>
     <string name="Balance_Receive_AddressType">Type d\'adresse</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
+    <string name="Balance_ProcessingBalance_Title">Traitement en cours</string>
     <string name="Balance_NotRelayedAmount_Title">Diffusion</string>
     <string name="Balance_Receive_Memo">Mémo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
@@ -402,6 +403,7 @@
     <string name="Send_Rbf_Description">Ce choix vous permet de renvoyer une transaction bloquée en augmentant le montant des frais.</string>
     <string name="Send_RbfEnabled">Activé</string>
     <string name="Send_RbfDisabled">Désactivé</string>
+    <string name="Send_Utxo_AvailableBalance">Solde disponible</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_Domain">Domaine</string>
     <string name="Send_Confirmation_YouSend">Vous envoyez</string>
