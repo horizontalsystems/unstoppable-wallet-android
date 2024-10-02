@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">Miktarı Ayarla</string>
     <string name="Balance_Receive_AddressType">Adres tipi</string>
     <string name="Balance_LockedAmount_Title">Kilitli</string>
+    <string name="Balance_ProcessingBalance_Title">İşleniyor</string>
     <string name="Balance_NotRelayedAmount_Title">Yayınlama</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Tanıyamıyorum</string>
@@ -402,6 +403,7 @@
     <string name="Send_Rbf_Description">Bu seçenek, takılı kalmış bir işlemi ücret miktarını artırarak yeniden göndermenizi sağlar.</string>
     <string name="Send_RbfEnabled">Etkinleştirildi</string>
     <string name="Send_RbfDisabled">Etkisizleştirildi</string>
+    <string name="Send_Utxo_AvailableBalance">Mevcut Bakiye</string>
     <string name="Send_Confirmation_Title">Onayla</string>
     <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
