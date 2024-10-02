@@ -373,6 +373,7 @@
     <string name="Balance_Receive_SetAmount">Установить сумму</string>
     <string name="Balance_Receive_AddressType">Тип адреса</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
+    <string name="Balance_ProcessingBalance_Title">В процессе</string>
     <string name="Balance_NotRelayedAmount_Title">Трансляция</string>
     <string name="Balance_Receive_Memo">Memo(Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
@@ -404,6 +405,7 @@
     <string name="Send_Rbf_Description">Эта опция позволяет повторно отправить застрявшую транзакцию, увеличивая сумму комиссии.</string>
     <string name="Send_RbfEnabled">Вкл.</string>
     <string name="Send_RbfDisabled">Выкл.</string>
+    <string name="Send_Utxo_AvailableBalance">Доступный баланс</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_Domain">Домен</string>
     <string name="Send_Confirmation_YouSend">Вы отправляете</string>
