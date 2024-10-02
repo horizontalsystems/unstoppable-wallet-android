@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">设定金额</string>
     <string name="Balance_Receive_AddressType">地址类型</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
+    <string name="Balance_ProcessingBalance_Title">正在处理</string>
     <string name="Balance_NotRelayedAmount_Title">广播</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
@@ -402,6 +403,7 @@
     <string name="Send_Rbf_Description">此选项允许您通过增加手续费金额来重新发送卡住的交易。</string>
     <string name="Send_RbfEnabled">已启用</string>
     <string name="Send_RbfDisabled">已禁用</string>
+    <string name="Send_Utxo_AvailableBalance">可用余额</string>
     <string name="Send_Confirmation_Title">确认</string>
     <string name="Send_Confirmation_Domain">域名</string>
     <string name="Send_Confirmation_YouSend">您发送</string>
