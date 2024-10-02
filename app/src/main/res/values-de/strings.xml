@@ -372,6 +372,7 @@
     <string name="Balance_Receive_SetAmount">Setze Betrag</string>
     <string name="Balance_Receive_AddressType">Adresstyp</string>
     <string name="Balance_LockedAmount_Title">Gesperrt</string>
+    <string name="Balance_ProcessingBalance_Title">In Bearbeitung</string>
     <string name="Balance_NotRelayedAmount_Title">Übertragung</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Kann nicht erkennen</string>
@@ -403,6 +404,7 @@
     <string name="Send_Rbf_Description">Diese Option ermöglicht es Ihnen, eine festsitzende Transaktion erneut zu senden, indem Sie die Höhe der Gebühr erhöhen.</string>
     <string name="Send_RbfEnabled">Aktiviert</string>
     <string name="Send_RbfDisabled">Deaktiviert</string>
+    <string name="Send_Utxo_AvailableBalance">Verfügbares Guthaben</string>
     <string name="Send_Confirmation_Title">Bestätigen</string>
     <string name="Send_Confirmation_Domain">Domäne</string>
     <string name="Send_Confirmation_YouSend">Sie Senden</string>
