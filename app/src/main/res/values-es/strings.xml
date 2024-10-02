@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">Asignar cantidad</string>
     <string name="Balance_Receive_AddressType">Tipo de dirección</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
+    <string name="Balance_ProcessingBalance_Title">Procesando</string>
     <string name="Balance_NotRelayedAmount_Title">Transmisión</string>
     <string name="Balance_Receive_Memo">Memo (Etiqueta)</string>
     <string name="Balance_Error_InvalidQrCode">No se puede reconocer</string>
@@ -402,6 +403,7 @@
     <string name="Send_Rbf_Description">Esta opción le permite volver a enviar una transacción bloqueada aumentando la cantidad de la tarifa.</string>
     <string name="Send_RbfEnabled">Activado</string>
     <string name="Send_RbfDisabled">Desabilitado</string>
+    <string name="Send_Utxo_AvailableBalance">Saldo disponible</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_Domain">Dominio</string>
     <string name="Send_Confirmation_YouSend">Usted envía</string>
