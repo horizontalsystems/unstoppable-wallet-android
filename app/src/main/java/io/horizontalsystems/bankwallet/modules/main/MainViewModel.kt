@@ -151,7 +151,6 @@ class MainViewModel(
 
         updateSettingsBadge()
         updateTransactionsTabEnabled()
-        showWhatsNew()
     }
 
     override fun createState() = MainModule.UiState(
@@ -172,6 +171,7 @@ class MainViewModel(
 
     fun whatsNewShown() {
         showWhatsNew = false
+        releaseNotesManager.updateShownAppVersion()
         emitState()
     }
 
@@ -189,6 +189,11 @@ class MainViewModel(
     fun onResume() {
         contentHidden = pinComponent.isLocked
         emitState()
+        viewModelScope.launch {
+            if (!pinComponent.isLocked && releaseNotesManager.shouldShowChangeLog()) {
+                showWhatsNew()
+            }
+        }
     }
 
     fun onSelect(mainNavItem: MainNavigation) {
@@ -359,14 +364,10 @@ class MainViewModel(
         emitState()
     }
 
-    private fun showWhatsNew() {
-        viewModelScope.launch {
-            if (releaseNotesManager.shouldShowChangeLog()) {
-                delay(2000)
-                showWhatsNew = true
-                emitState()
-            }
-        }
+    private suspend fun showWhatsNew() {
+        delay(2000)
+        showWhatsNew = true
+        emitState()
     }
 
     private fun updateSettingsBadge() {

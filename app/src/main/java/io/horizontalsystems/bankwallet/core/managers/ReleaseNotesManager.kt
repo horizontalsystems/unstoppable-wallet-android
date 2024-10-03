@@ -22,7 +22,6 @@ class ReleaseNotesManager(
 
         if (shownForVersion != null) {
             return if (Version(currentAppVersion) > Version(shownForVersion)) {
-                updateShownAppVersion()
                 true
             } else {
                 false
@@ -34,7 +33,7 @@ class ReleaseNotesManager(
         return false
     }
 
-    private fun updateShownAppVersion() {
+    fun updateShownAppVersion() {
         localStorage.changelogShownForAppVersion = systemInfoManager.appVersion
     }
 

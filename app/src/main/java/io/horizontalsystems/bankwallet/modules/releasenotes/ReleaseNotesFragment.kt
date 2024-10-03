@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.releasenotes
 
 import android.os.Parcelable
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
+import io.horizontalsystems.bankwallet.modules.main.MainModule
+import io.horizontalsystems.bankwallet.modules.main.MainViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownContent
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -52,8 +55,13 @@ class ReleaseNotesFragment : BaseComposeFragment() {
 fun ReleaseNotesScreen(
     closeablePopup: Boolean,
     onCloseClick: () -> Unit,
-    viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory())
+    viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory()),
+    mainViewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
+    BackHandler() {
+        mainViewModel.whatsNewShown()
+        onCloseClick.invoke()
+    }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -64,7 +72,10 @@ fun ReleaseNotesScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
-                            onClick = onCloseClick
+                            onClick = {
+                                mainViewModel.whatsNewShown()
+                                onCloseClick.invoke()
+                            }
                         )
                     )
                 )
