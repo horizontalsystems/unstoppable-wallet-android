@@ -247,6 +247,7 @@ private fun MainScreen(
                 R.id.releaseNotesFragment,
                 ReleaseNotesFragment.Input(true)
             )
+            viewModel.whatsNewShown()
         }
     }
 

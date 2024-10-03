@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.INetworkManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.entities.ViewState
 import cash.p.terminal.modules.markdown.MarkdownBlock
@@ -21,6 +22,7 @@ class ReleaseNotesViewModel(
     private val networkManager: INetworkManager,
     private val contentUrl: String,
     private val connectivityManager: ConnectivityManager,
+    private val releaseNotesManager: ReleaseNotesManager,
     appConfigProvider: AppConfigProvider
 ) : ViewModel() {
 
@@ -49,6 +51,10 @@ class ReleaseNotesViewModel(
     fun retry() {
         viewState = ViewState.Loading
         loadContent()
+    }
+
+    fun whatsNewShown() {
+        releaseNotesManager.updateShownAppVersion()
     }
 
     private fun loadContent() {

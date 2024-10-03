@@ -24,8 +24,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
-import cash.p.terminal.modules.main.MainModule
-import cash.p.terminal.modules.main.MainViewModel
 import cash.p.terminal.modules.markdown.MarkdownContent
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -56,10 +54,9 @@ fun ReleaseNotesScreen(
     closeablePopup: Boolean,
     onCloseClick: () -> Unit,
     viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory()),
-    mainViewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
     BackHandler() {
-        mainViewModel.whatsNewShown()
+        viewModel.whatsNewShown()
         onCloseClick.invoke()
     }
 
@@ -73,7 +70,7 @@ fun ReleaseNotesScreen(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
                             onClick = {
-                                mainViewModel.whatsNewShown()
+                                viewModel.whatsNewShown()
                                 onCloseClick.invoke()
                             }
                         )
