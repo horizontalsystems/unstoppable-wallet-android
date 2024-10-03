@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.releasenotes
 
 import android.os.Parcelable
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
+import cash.p.terminal.modules.main.MainModule
+import cash.p.terminal.modules.main.MainViewModel
 import cash.p.terminal.modules.markdown.MarkdownContent
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
@@ -52,8 +55,13 @@ class ReleaseNotesFragment : BaseComposeFragment() {
 fun ReleaseNotesScreen(
     closeablePopup: Boolean,
     onCloseClick: () -> Unit,
-    viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory())
+    viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory()),
+    mainViewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
+    BackHandler() {
+        mainViewModel.whatsNewShown()
+        onCloseClick.invoke()
+    }
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -64,7 +72,10 @@ fun ReleaseNotesScreen(
                         MenuItem(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
-                            onClick = onCloseClick
+                            onClick = {
+                                mainViewModel.whatsNewShown()
+                                onCloseClick.invoke()
+                            }
                         )
                     )
                 )
