@@ -24,8 +24,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
-import io.horizontalsystems.bankwallet.modules.main.MainModule
-import io.horizontalsystems.bankwallet.modules.main.MainViewModel
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownContent
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -56,10 +54,9 @@ fun ReleaseNotesScreen(
     closeablePopup: Boolean,
     onCloseClick: () -> Unit,
     viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory()),
-    mainViewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
     BackHandler() {
-        mainViewModel.whatsNewShown()
+        viewModel.whatsNewShown()
         onCloseClick.invoke()
     }
 
@@ -73,7 +70,7 @@ fun ReleaseNotesScreen(
                             title = TranslatableString.ResString(R.string.Button_Close),
                             icon = R.drawable.ic_close,
                             onClick = {
-                                mainViewModel.whatsNewShown()
+                                viewModel.whatsNewShown()
                                 onCloseClick.invoke()
                             }
                         )

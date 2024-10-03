@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.markdown.MarkdownBlock
@@ -21,6 +22,7 @@ class ReleaseNotesViewModel(
     private val networkManager: INetworkManager,
     private val contentUrl: String,
     private val connectivityManager: ConnectivityManager,
+    private val releaseNotesManager: ReleaseNotesManager,
     appConfigProvider: AppConfigProvider
 ) : ViewModel() {
 
@@ -48,6 +50,10 @@ class ReleaseNotesViewModel(
     fun retry() {
         viewState = ViewState.Loading
         loadContent()
+    }
+
+    fun whatsNewShown() {
+        releaseNotesManager.updateShownAppVersion()
     }
 
     private fun loadContent() {
