@@ -171,7 +171,6 @@ class MainViewModel(
 
     fun whatsNewShown() {
         showWhatsNew = false
-        releaseNotesManager.updateShownAppVersion()
         emitState()
     }
 

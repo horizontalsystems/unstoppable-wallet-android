@@ -12,6 +12,7 @@ object ReleaseNotesModule {
                 App.networkManager,
                 App.releaseNotesManager.releaseNotesUrl,
                 App.connectivityManager,
+                App.releaseNotesManager,
                 App.appConfigProvider
             ) as T
         }
