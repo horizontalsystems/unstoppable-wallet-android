@@ -712,6 +712,7 @@
     <string name="Transactions_ContractCall">Chamada de Contrato</string>
     <string name="Transactions_ExternalContractCall">Ligação Externa</string>
     <string name="Transactions_ContractCreation">Criação de Contrato</string>
+    <string name="Transactions_ContractDeploy">Implantação de Contrato</string>
     <string name="Transactions_To">para %s</string>
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited_CoinCode">ilimitado %s</string>
@@ -801,6 +802,7 @@
     <string name="Info_LockTime_Description_Static">O remetente enviou esses fundos com um fechamento de gastos que expirará na data mostrada. \n\nNão se preocupe, o Bitcoin recebido já é seu, mas até que o período de bloqueio expire, você não pode gastá-los na rede Bitcoin.</string>
     <string name="Info_NotRelayed_Title">Transmissão</string>
     <string name="Info_NotRelayed_Description">A transação que detém esse valor foi transmitida, mas ainda não foi aceita pela rede.</string>
+    <string name="Info_ProcessingBalance_Title">Processando quantia</string>
     <string name="Info_ProcessingBalance_Description">Transações com esse valor ainda estão sincronizando. Quando forem confirmadas, esses tokens estarão disponíveis para gastar</string>
     <string name="Info_DoubleSpend_Title">Gasto Duplo</string>
     <string name="Info_DoubleSpend_Description">Risco de Gasto Duplo! Existe outra transação na Blockchain que está tentando gastar entradas usadas nesta transação. Apenas uma transação será aceita pela rede</string>
