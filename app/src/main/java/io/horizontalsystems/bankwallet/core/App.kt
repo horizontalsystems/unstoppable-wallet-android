@@ -115,6 +115,7 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -198,6 +199,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var backupProvider: BackupProvider
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
+        lateinit var tonConnectKit: TonConnectKit
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -450,6 +452,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
 
         spamManager = SpamManager(localStorage)
+
+        tonConnectKit = TonConnectKit.getInstance(this)
 
         startTasks()
     }

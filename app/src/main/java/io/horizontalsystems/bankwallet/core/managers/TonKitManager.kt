@@ -79,15 +79,7 @@ class TonKitManager(
         accountType: AccountType.Mnemonic,
         account: Account,
     ): TonKitWrapper {
-        val hdWallet = HDWallet(accountType.seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
-        val privateKey = hdWallet.privateKey(0)
-        var privateKeyBytes = privateKey.privKeyBytes
-        if (privateKeyBytes.size > 32) {
-            privateKeyBytes = privateKeyBytes.copyOfRange(1, privateKeyBytes.size)
-        }
-        val walletType = TonKit.WalletType.Seed(privateKeyBytes)
-
-        val kit = TonKit.getInstance(walletType, Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(accountType.toTonKitWalletType(), Network.MainNet, App.instance, account.id)
 
         return TonKitWrapper(kit)
     }
@@ -96,8 +88,7 @@ class TonKitManager(
         accountType: AccountType.TonAddress,
         account: Account,
     ): TonKitWrapper {
-        val walletType = TonKit.WalletType.Watch(accountType.address)
-        val kit = TonKit.getInstance(walletType, Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(accountType.toTonKitWalletType(), Network.MainNet, App.instance, account.id)
 
         return TonKitWrapper(kit)
     }
@@ -150,4 +141,21 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.NotSynced -> AdapterState.NotSynced(error)
     is SyncState.Synced -> AdapterState.Synced
     is SyncState.Syncing -> AdapterState.Syncing()
+}
+
+fun AccountType.toTonKitWalletType() = when (this) {
+    is AccountType.Mnemonic -> {
+        val hdWallet = HDWallet(seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
+        val privateKey = hdWallet.privateKey(0)
+        var privateKeyBytes = privateKey.privKeyBytes
+        if (privateKeyBytes.size > 32) {
+            privateKeyBytes = privateKeyBytes.copyOfRange(1, privateKeyBytes.size)
+        }
+        TonKit.WalletType.Seed(privateKeyBytes)
+
+    }
+    is AccountType.TonAddress -> {
+        TonKit.WalletType.Watch(address)
+    }
+    else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to TonKit.WalletType")
 }
