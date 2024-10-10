@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.walletconnect.session.Status
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
@@ -98,17 +98,15 @@ fun DropDownCell(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.weight(1f))
-        Row {
-            body_leah(
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            subhead1_leah(
                 text = value,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
             if (enabled) {
+                HSpacer(8.dp)
                 Icon(
-                    modifier = Modifier
-                        .padding(start = 4.dp, top = 2.dp)
-                        .align(Alignment.CenterVertically),
                     painter = painterResource(id = R.drawable.ic_down_arrow_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey

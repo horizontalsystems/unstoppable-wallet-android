@@ -602,6 +602,15 @@
     <string name="Tron_TokenPage_AddressNotActive_Title">Account Not Active</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">New TRON wallets require a deposit of at least 1 TRX to become active. Inactive wallets can hold and receive tokens but won’t correct balances until activated.</string>
 
+    <!--TonConnect-->
+    <string name="TonConnect_Title" translatable="false">Ton Connect</string>
+    <string name="TonConnect_NewConnect">New Connection</string>
+    <string name="TonConnect_Error_InvalidUrl">Invalid URL Address</string>
+    <string name="TonConnect_Unnamed">Unnamed</string>
+    <string name="TonConnect_Url" translatable="false">URL</string>
+    <string name="TonConnect_Wallet">Wallet</string>
+    <string name="TonConnect_ChooseWallet">Choose a Wallet</string>
+
     <!--WalletConnect-->
     <string name="WalletConnect_Title" translatable="false">WalletConnect</string>
     <string name="WalletConnect_Request">Request</string>
@@ -974,6 +983,7 @@
     <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect" translatable="false">WalletConnect</string>
+    <string name="Settings_TonConnect" translatable="false">Ton Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
