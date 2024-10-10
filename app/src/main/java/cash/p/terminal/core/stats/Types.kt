@@ -131,6 +131,7 @@ enum class StatPage(val key: String) {
     TransactionInfo("transaction_info"),
     UnlinkWallet("unlink_wallet"),
     WalletConnect("wallet_connect"),
+    TonConnect("ton_connect"),
     WatchWallet("watch_wallet"),
     WhatsNew("whats_news"),
     Widget("widget"),

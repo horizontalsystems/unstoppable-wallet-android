@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.walletconnect.session.Status
 import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.body_leah
 import cash.p.terminal.ui.compose.components.subhead1_leah
 import cash.p.terminal.ui.compose.components.subhead2_grey
 
@@ -98,17 +98,15 @@ fun DropDownCell(
             overflow = TextOverflow.Ellipsis,
         )
         Spacer(Modifier.weight(1f))
-        Row {
-            body_leah(
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            subhead1_leah(
                 text = value,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
             if (enabled) {
+                HSpacer(8.dp)
                 Icon(
-                    modifier = Modifier
-                        .padding(start = 4.dp, top = 2.dp)
-                        .align(Alignment.CenterVertically),
                     painter = painterResource(id = R.drawable.ic_down_arrow_20),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey

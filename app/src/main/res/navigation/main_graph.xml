@@ -395,6 +395,12 @@
         android:id="@+id/wcListFragment"
         android:name="cash.p.terminal.modules.walletconnect.list.WCListFragment"/>
     <fragment
+        android:id="@+id/tcListFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectMainFragment"/>
+    <fragment
+        android:id="@+id/tcNewFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment"/>
+    <fragment
         android:id="@+id/wcPairingsFragment"
         android:name="cash.p.terminal.modules.walletconnect.pairing.WCPairingsFragment"/>
     <dialog
