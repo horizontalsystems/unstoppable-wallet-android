@@ -454,6 +454,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         spamManager = SpamManager(localStorage)
 
         tonConnectKit = TonConnectKit.getInstance(this)
+        tonConnectKit.start()
 
         startTasks()
     }

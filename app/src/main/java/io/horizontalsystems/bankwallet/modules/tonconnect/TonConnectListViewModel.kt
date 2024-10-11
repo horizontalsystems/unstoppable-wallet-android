@@ -31,6 +31,8 @@ class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
     }
 
     fun setConnectionUri(v: String) {
+        error = null
+
         try {
             dAppRequestEntity = tonConnectKit.readData(v)
         } catch (e: Throwable) {
@@ -41,6 +43,11 @@ class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
 
     fun onDappRequestHandled() {
         dAppRequestEntity = null
+        emitState()
+    }
+
+    fun onErrorHandled() {
+        error = null
         emitState()
     }
 

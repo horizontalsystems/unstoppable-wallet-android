@@ -34,6 +34,7 @@ import cash.p.terminal.ui.compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListEmptyView
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -44,11 +45,14 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
     val coroutineScope = rememberCoroutineScope()
 
     val viewModel = viewModel<TonConnectListViewModel>()
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.setConnectionUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.setConnectionUri(
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                )
+            }
         }
-    }
 
     val uiState = viewModel.uiState
 
@@ -60,19 +64,13 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
         }
     }
 
-
-
-//    when (viewModel.connectionResult) {
-//        ConnectionResult.Error -> {
-//            LaunchedEffect(viewModel.connectionResult) {
-//                delay(300)
-//                invalidUrlBottomSheetState.show()
-//            }
-//            viewModel.onRouteHandled()
-//        }
-//
-//        else -> Unit
-//    }
+    LaunchedEffect(uiState.error) {
+        uiState.error?.let {
+            delay(300)
+            invalidUrlBottomSheetState.show()
+            viewModel.onErrorHandled()
+        }
+    }
 
     LaunchedEffect(Unit) {
         if (deepLinkUri != null) {
@@ -152,7 +150,14 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
                             .padding(start = 16.dp, end = 16.dp)
                             .fillMaxWidth(),
                         title = stringResource(R.string.TonConnect_NewConnect),
-                        onClick = { qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true)) }
+                        onClick = {
+                            qrScannerLauncher.launch(
+                                QRScannerActivity.getScanQrIntent(
+                                    context,
+                                    true
+                                )
+                            )
+                        }
                     )
                 }
             }
