@@ -20,22 +20,36 @@ class TonConnectNewViewModel(
     private var accounts: List<Account> = listOf()
     private var account = App.accountManager.activeAccount
     private var finish = false
+    private var error: Throwable? = null
+    private var toast: String? = null
 
     override fun createState() = TonConnectNewUiState(
         manifest = manifest,
         accounts = accounts,
         account = account,
         finish = finish,
+        error = error,
+        toast = toast,
     )
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            manifest = tonConnectKit.getManifest(requestEntity.payload.manifestUrl)
-            emitState()
+            try {
+                manifest = tonConnectKit.getManifest(requestEntity.payload.manifestUrl)
+                emitState()
+            } catch (e: Throwable) {
+                error = NoManifestError()
+                emitState()
+            }
         }
 
         accounts = App.accountManager.accounts.filter {
             it.type is AccountType.Mnemonic
+        }
+
+        if (accounts.isEmpty()) {
+            error = NoTonAccountError()
+            emitState()
         }
     }
 
@@ -46,10 +60,15 @@ class TonConnectNewViewModel(
 
     fun connect() {
         viewModelScope.launch {
-            val manifest = manifest ?: throw IllegalArgumentException("Empty manifest")
-            val account = account ?: throw IllegalArgumentException("Empty account")
-            tonConnectKit.connect(requestEntity, manifest, account.type.toTonKitWalletType(), false)
-            finish = true
+            try {
+                val manifest = manifest ?: throw NoManifestError()
+                val account = account ?: throw IllegalArgumentException("Empty account")
+                tonConnectKit.connect(requestEntity, manifest, account.type.toTonKitWalletType(), false)
+                finish = true
+            } catch (e: Throwable) {
+                toast = e.message?.nullIfBlank() ?: e.javaClass.simpleName
+            }
+
             emitState()
         }
     }
@@ -58,11 +77,24 @@ class TonConnectNewViewModel(
         finish = true
         emitState()
     }
+
+    fun onToastShow() {
+        toast = null
+        emitState()
+    }
 }
+
+sealed class TonConnectError : Error()
+class NoManifestError : TonConnectError()
+class NoTonAccountError : TonConnectError()
 
 data class TonConnectNewUiState(
     val manifest: DAppManifestEntity?,
     val accounts: List<Account>,
     val account: Account?,
-    val finish: Boolean
-)
+    val finish: Boolean,
+    val error: Throwable?,
+    val toast: String?
+) {
+    val connectEnabled get() = error == null && account != null
+}
