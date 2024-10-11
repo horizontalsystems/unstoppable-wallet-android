@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.tonconnect
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.walletconnect.session.ui.DropDownCell
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
@@ -40,6 +42,7 @@ import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
 import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui.compose.components.TextImportantError
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.VSpacer
 
@@ -54,6 +57,13 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
     LaunchedEffect(uiState.finish) {
         if (uiState.finish) {
             navController.popBackStack()
+        }
+    }
+
+    LaunchedEffect(uiState.toast) {
+        uiState.toast?.let {
+            Toast.makeText(App.instance, it, Toast.LENGTH_SHORT).show()
+            viewModel.onToastShow()
         }
     }
 
@@ -78,6 +88,7 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
                         modifier = Modifier.fillMaxWidth(),
                         title = stringResource(R.string.Button_Connect),
                         onClick = viewModel::connect,
+                        enabled = uiState.connectEnabled
                     )
                     VSpacer(16.dp)
                     ButtonPrimaryDefault(
@@ -145,7 +156,7 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
                     add {
                         DropDownCell(
                             stringResource(R.string.TonConnect_Wallet),
-                            uiState.account?.name ?: "",
+                            uiState.account?.name ?: stringResource(R.string.TonConnect_ChooseWallet),
                             enabled = true,
                             onSelect = {
                                 showSortTypeSelectorDialog = true
@@ -156,11 +167,25 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
             )
 
             Spacer(Modifier.height(12.dp))
-            TextImportantWarning(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                text = stringResource(R.string.WalletConnect_Approve_Hint)
-            )
+
+            if (uiState.error != null) {
+                TextImportantError(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = uiState.error.message?.nullIfBlank() ?: uiState.error.javaClass.simpleName
+                )
+            } else {
+                TextImportantWarning(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    text = stringResource(R.string.WalletConnect_Approve_Hint)
+                )
+            }
+
             Spacer(Modifier.height(24.dp))
         }
     }
+}
+
+fun String.nullIfBlank(): String? {
+    if (this.isBlank()) return null
+    return this
 }
