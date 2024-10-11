@@ -78,10 +78,6 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
         }
     }
 
-//    LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
-//        viewModel.refreshList()
-//    }
-
     ModalBottomSheetLayout(
         sheetState = invalidUrlBottomSheetState,
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
@@ -113,16 +109,7 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
                     title = stringResource(R.string.TonConnect_Title),
                     navigationIcon = {
                         HsBackButton(onClick = { navController.popBackStack() })
-                    },
-//                    menuItems = listOf(
-//                        MenuItem(
-//                            title = TranslatableString.ResString(R.string.Info_Title),
-//                            icon = R.drawable.ic_info_24,
-//                            onClick = {
-//                                FaqManager.showFaqPage(navController, FaqManager.faqPathDefiRisks)
-//                            }
-//                        )
-//                    )
+                    }
                 )
             }
         ) {

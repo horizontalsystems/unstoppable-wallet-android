@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,7 +30,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import cash.p.terminal.R
-import cash.p.terminal.core.App
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.walletconnect.session.ui.DropDownCell
 import cash.p.terminal.modules.walletconnect.session.ui.TitleValueCell
@@ -52,6 +52,7 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
         TonConnectNewViewModel(requestEntity)
     })
 
+    val context = LocalContext.current
     val uiState = viewModel.uiState
 
     LaunchedEffect(uiState.finish) {
@@ -62,7 +63,7 @@ fun TonConnectNewScreen(navController: NavController, requestEntity: DAppRequest
 
     LaunchedEffect(uiState.toast) {
         uiState.toast?.let {
-            Toast.makeText(App.instance, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
             viewModel.onToastShow()
         }
     }
