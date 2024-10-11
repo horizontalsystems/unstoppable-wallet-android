@@ -125,9 +125,7 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
                         TonConnectSessionList(
                             dapps = dapps,
                             navController = navController,
-                            onDelete = {
-
-                            }
+                            onDelete = viewModel::disconnect
                         )
                     }
                 }
