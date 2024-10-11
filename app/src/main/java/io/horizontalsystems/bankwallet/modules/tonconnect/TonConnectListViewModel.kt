@@ -51,6 +51,10 @@ class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
         emitState()
     }
 
+    fun disconnect(dapp: DAppEntity) {
+        TODO()
+    }
+
 }
 
 
