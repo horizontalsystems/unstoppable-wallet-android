@@ -42,13 +42,15 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCa
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.showDivider
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 
 @Composable
 fun TonConnectSessionList(
-    dapps: List<DAppEntity>,
+    dapps: Map<String, List<DAppEntity>>,
     navController: NavController,
     onDelete: (DAppEntity) -> Unit
 ) {
@@ -61,20 +63,31 @@ fun TonConnectSessionList(
 //    }
 
     LazyColumn(contentPadding = PaddingValues(top = 12.dp, bottom = 32.dp)) {
-        TCSection(
-            dapps,
-            navController,
-            revealedCardId,
-            onReveal = { id ->
-                if (revealedCardId != id) {
-                    revealedCardId = id
-                }
-            },
-            onConceal = {
-                revealedCardId = null
-            },
-            onDelete = onDelete
-        )
+        dapps.forEach { (groupTitle, list) ->
+            item {
+                HeaderText(text = groupTitle.uppercase())
+            }
+
+            TCSection(
+                list,
+                navController,
+                revealedCardId,
+                onReveal = { id ->
+                    if (revealedCardId != id) {
+                        revealedCardId = id
+                    }
+                },
+                onConceal = {
+                    revealedCardId = null
+                },
+                onDelete = onDelete
+            )
+
+            item {
+                VSpacer(24.dp)
+            }
+        }
+
     }
 }
 
