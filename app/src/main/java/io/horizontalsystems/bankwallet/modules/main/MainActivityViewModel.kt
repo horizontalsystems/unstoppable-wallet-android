@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
@@ -14,6 +15,7 @@ import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationError
+import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -22,11 +24,13 @@ class MainActivityViewModel(
     private val pinComponent: IPinComponent,
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
+    private val tonConnectKit: TonConnectKit
 ) : ViewModel() {
 
     val navigateToMainLiveData = MutableLiveData(false)
     val wcEvent = MutableLiveData<Wallet.Model?>()
+    val tcSendRequest = MutableLiveData<SendRequestEntity?>()
 
     init {
         viewModelScope.launch {
@@ -39,10 +43,19 @@ class MainActivityViewModel(
                 wcEvent.postValue(it)
             }
         }
+        viewModelScope.launch {
+            tonConnectKit.sendRequestFlow.collect {
+                tcSendRequest.postValue(it)
+            }
+        }
     }
 
     fun onWcEventHandled() {
         wcEvent.postValue(null)
+    }
+
+    fun onTcSendRequestHandled() {
+        tcSendRequest.postValue(null)
     }
 
     fun validate() {
@@ -74,7 +87,15 @@ class MainActivityViewModel(
     class Factory : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainActivityViewModel(App.userManager, App.accountManager, App.pinComponent, App.systemInfoManager, App.keyStoreManager, App.localStorage) as T
+            return MainActivityViewModel(
+                App.userManager,
+                App.accountManager,
+                App.pinComponent,
+                App.systemInfoManager,
+                App.keyStoreManager,
+                App.localStorage,
+                App.tonConnectManager.kit,
+            ) as T
         }
     }
 }

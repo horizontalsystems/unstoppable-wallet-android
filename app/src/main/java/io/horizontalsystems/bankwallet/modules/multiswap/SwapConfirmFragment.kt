@@ -21,7 +21,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.badge
+import io.horizontalsystems.bankwallet.core.iconPlaceholder
+import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -37,6 +40,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.HsImageCircle
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
@@ -243,22 +247,49 @@ fun TokenRow(
     borderTop: Boolean = true,
     title: String,
     amountColor: Color,
+) = TokenRowPure(
+    fiatAmount,
+    borderTop,
+    currency,
+    title,
+    amountColor,
+    token.coin.imageUrl,
+    token.coin.alternativeImageUrl,
+    token.iconPlaceholder,
+    token.badge,
+    amount?.let { CoinValue(token, it).getFormattedFull() }
+)
+
+@Composable
+fun TokenRowPure(
+    fiatAmount: BigDecimal?,
+    borderTop: Boolean = true,
+    currency: Currency,
+    title: String,
+    amountColor: Color,
+    imageUrl: String?,
+    alternativeImageUrl: String?,
+    imagePlaceholder: Int?,
+    badge: String?,
+    amountFormatted: String?,
 ) {
     CellUniversal(borderTop = borderTop) {
-        CoinImage(
-            token = token,
-            modifier = Modifier.size(32.dp)
+        HsImageCircle(
+            modifier = Modifier.size(32.dp),
+            url = imageUrl,
+            alternativeUrl = alternativeImageUrl,
+            placeholder = imagePlaceholder
         )
         HSpacer(width = 16.dp)
         Column {
             subhead2_leah(text = title)
             VSpacer(height = 1.dp)
-            caption_grey(text = token.badge ?: stringResource(id = R.string.CoinPlatforms_Native))
+            caption_grey(text = badge ?: stringResource(id = R.string.CoinPlatforms_Native))
         }
         HFillSpacer(minWidth = 16.dp)
         Column(horizontalAlignment = Alignment.End) {
             Text(
-                text = amount?.let { CoinValue(token, it).getFormattedFull() } ?: "---",
+                text = amountFormatted ?: "---",
                 style = ComposeAppTheme.typography.subhead1,
                 color = amountColor,
             )

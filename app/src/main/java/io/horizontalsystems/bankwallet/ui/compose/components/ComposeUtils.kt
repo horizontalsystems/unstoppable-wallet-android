@@ -68,13 +68,30 @@ fun CoinImage(
     token: Token?,
     modifier: Modifier,
     colorFilter: ColorFilter? = null
-) = HsImage(
-    url = token?.coin?.imageUrl,
-    alternativeUrl = token?.coin?.alternativeImageUrl,
-    placeholder = token?.iconPlaceholder,
-    modifier = modifier.clip(CircleShape),
-    colorFilter = colorFilter
+) = HsImageCircle(
+    modifier,
+    token?.coin?.imageUrl,
+    token?.coin?.alternativeImageUrl,
+    token?.iconPlaceholder,
+    colorFilter
 )
+
+@Composable
+fun HsImageCircle(
+    modifier: Modifier,
+    url: String?,
+    alternativeUrl: String? = null,
+    placeholder: Int? = null,
+    colorFilter: ColorFilter? = null
+) {
+    HsImage(
+        url = url,
+        alternativeUrl = alternativeUrl,
+        placeholder = placeholder,
+        modifier = modifier.clip(CircleShape),
+        colorFilter = colorFilter
+    )
+}
 
 @Composable
 fun HsImage(

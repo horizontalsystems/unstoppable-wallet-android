@@ -61,6 +61,12 @@ class MainActivity : BaseActivity() {
                 viewModel.onWcEventHandled()
             }
         }
+
+        viewModel.tcSendRequest.observe(this) { tcEvent ->
+            if (tcEvent != null) {
+                navController.slideFromBottom(R.id.tcSendRequestFragment)
+            }
+        }
     }
 
     private fun validate() = try {

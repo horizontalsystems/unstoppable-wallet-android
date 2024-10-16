@@ -5,11 +5,12 @@ import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
 
-    private val tonConnectKit = App.tonConnectKit
+    private val tonConnectKit = App.tonConnectManager.kit
 
     private var dapps: List<DAppEntity> = listOf()
     private var dAppRequestEntity: DAppRequestEntity? = null
@@ -52,7 +53,9 @@ class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
     }
 
     fun disconnect(dapp: DAppEntity) {
-        TODO()
+        viewModelScope.launch(Dispatchers.Default) {
+            tonConnectKit.disconnect(dapp)
+        }
     }
 
 }

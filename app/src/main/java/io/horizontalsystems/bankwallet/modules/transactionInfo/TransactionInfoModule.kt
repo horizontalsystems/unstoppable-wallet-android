@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
@@ -13,7 +12,6 @@ import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object TransactionInfoModule {
@@ -33,12 +31,7 @@ object TransactionInfoModule {
                 App.balanceHiddenManager.balanceHidden,
             )
             val factory = TransactionInfoViewItemFactory(
-                App.numberFormatter,
-                Translator,
-                DateHelper,
-                App.evmLabelManager,
                 transactionSource.blockchain.type.resendable,
-                App.contactsRepository,
                 transactionSource.blockchain.type
             )
 
