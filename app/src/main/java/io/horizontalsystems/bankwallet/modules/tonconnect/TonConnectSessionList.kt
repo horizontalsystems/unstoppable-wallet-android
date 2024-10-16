@@ -2,7 +2,6 @@ package cash.p.terminal.modules.tonconnect
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -142,13 +141,7 @@ fun TCSessionCell(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(shape)
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable {
-//                navController.slideFromBottom(
-//                    R.id.wcSessionFragment,
-//                    WCSessionModule.Input(session.sessionTopic)
-//                )
-            },
+            .background(ComposeAppTheme.colors.lawrence),
         contentAlignment = Alignment.Center
     ) {
         if (showDivider) {
@@ -186,16 +179,6 @@ fun TCSessionCell(
                 )
                 subhead2_grey(text = dapp.manifest.host)
             }
-//            if (dapp.pendingRequestsCount > 0) {
-//                BadgeText(
-//                    modifier = Modifier.padding(horizontal = 8.dp),
-//                    text = dapp.pendingRequestsCount.toString()
-//                )
-//            }
-            Image(
-                painter = painterResource(id = R.drawable.ic_arrow_right),
-                contentDescription = null
-            )
         }
     }
 }
