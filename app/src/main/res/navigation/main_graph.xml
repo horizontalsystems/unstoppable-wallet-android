@@ -398,6 +398,9 @@
         android:id="@+id/tcListFragment"
         android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectMainFragment"/>
     <fragment
+        android:id="@+id/tcSendRequestFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectSendRequestFragment"/>
+    <fragment
         android:id="@+id/tcNewFragment"
         android:name="io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectNewFragment"/>
     <fragment
