@@ -34,7 +34,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
-import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
@@ -171,15 +170,13 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                                         amountFormatted = valueOutAmountFormatted,
                                     )
                                 }
-//                    is TonTransactionRecord.Action.Type.Burn -> { }
-//                    is TonTransactionRecord.Action.Type.ContractCall -> { }
-//                    is TonTransactionRecord.Action.Type.ContractDeploy -> { }
-//                    is TonTransactionRecord.Action.Type.Mint -> { }
-//                    is TonTransactionRecord.Action.Type.Receive -> { }
-//                    is TonTransactionRecord.Action.Type.Send -> { }
-                                is TonTransactionRecord.Action.Type.Unsupported -> {
-                                    TextImportantWarning(text = actionType.type)
-                                }
+//                                is TonTransactionRecord.Action.Type.Burn -> {}
+//                                is TonTransactionRecord.Action.Type.ContractCall -> {}
+//                                is TonTransactionRecord.Action.Type.ContractDeploy -> {}
+//                                is TonTransactionRecord.Action.Type.Mint -> {}
+//                                is TonTransactionRecord.Action.Type.Receive -> {}
+//                                is TonTransactionRecord.Action.Type.Send -> {}
+//                                is TonTransactionRecord.Action.Type.Unsupported -> {}
                                 else -> {
                                     CellUniversal(borderTop = false) {
                                         subhead2_grey(text = stringResource(R.string.Send_Confirmation_Action))
