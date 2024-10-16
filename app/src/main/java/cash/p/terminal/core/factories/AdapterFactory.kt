@@ -43,6 +43,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.tonkit.Address
 
 class AdapterFactory(
     private val context: Context,
@@ -214,15 +215,25 @@ class AdapterFactory(
 
     fun tonTransactionsAdapter(source: TransactionSource): ITransactionsAdapter? {
         val tonKitWrapper = tonKitManager.getTonKitWrapper(source.account)
-        val baseToken = coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: return null
-        val tonTransactionConverter = TonTransactionConverter(
-            tonKitWrapper.tonKit.receiveAddress,
+        val address = tonKitWrapper.tonKit.receiveAddress
+
+        val tonTransactionConverter = tonTransactionConverter(address, source) ?: return null
+
+        return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
+    }
+
+    fun tonTransactionConverter(
+        address: Address,
+        source: TransactionSource,
+    ): TonTransactionConverter? {
+        val query = TokenQuery(BlockchainType.Ton, TokenType.Native)
+        val baseToken = coinManager.getToken(query) ?: return null
+        return TonTransactionConverter(
+            address,
             coinManager,
             source,
             baseToken
         )
-
-        return TonTransactionsAdapter(tonKitWrapper, tonTransactionConverter)
     }
 
     fun unlinkAdapter(wallet: Wallet) {

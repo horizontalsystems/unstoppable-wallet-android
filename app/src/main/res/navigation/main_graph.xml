@@ -398,6 +398,9 @@
         android:id="@+id/tcListFragment"
         android:name="cash.p.terminal.modules.tonconnect.TonConnectMainFragment"/>
     <fragment
+        android:id="@+id/tcSendRequestFragment"
+        android:name="cash.p.terminal.modules.tonconnect.TonConnectSendRequestFragment"/>
+    <fragment
         android:id="@+id/tcNewFragment"
         android:name="cash.p.terminal.modules.tonconnect.TonConnectNewFragment"/>
     <fragment

@@ -489,6 +489,7 @@
     <string name="Send_Confirmation_EstimateTime">Duration</string>
     <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
+    <string name="Send_Confirmation_Action">Action</string>
 
     <string name="Send_Success">\u2713 Sent</string>
 

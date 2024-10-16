@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class TonConnectNewViewModel(
     private val requestEntity: DAppRequestEntity,
 ) : ViewModelUiState<TonConnectNewUiState>() {
-    private val tonConnectKit = App.tonConnectKit
+    private val tonConnectKit = App.tonConnectManager.kit
 
     private var manifest: DAppManifestEntity? = null
     private var accounts: List<Account> = listOf()
@@ -63,7 +63,7 @@ class TonConnectNewViewModel(
             try {
                 val manifest = manifest ?: throw NoManifestError()
                 val account = account ?: throw IllegalArgumentException("Empty account")
-                tonConnectKit.connect(requestEntity, manifest, account.type.toTonKitWalletType(), false)
+                tonConnectKit.connect(requestEntity, manifest, account.id, account.type.toTonKitWalletType(), false)
                 finish = true
             } catch (e: Throwable) {
                 toast = e.message?.nullIfBlank() ?: e.javaClass.simpleName

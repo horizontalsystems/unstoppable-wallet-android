@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ITransactionsAdapter
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
@@ -13,7 +12,6 @@ import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.NftMetadataService
 import cash.p.terminal.modules.transactions.TransactionItem
-import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object TransactionInfoModule {
@@ -33,12 +31,7 @@ object TransactionInfoModule {
                 App.balanceHiddenManager.balanceHidden,
             )
             val factory = TransactionInfoViewItemFactory(
-                App.numberFormatter,
-                Translator,
-                DateHelper,
-                App.evmLabelManager,
                 transactionSource.blockchain.type.resendable,
-                App.contactsRepository,
                 transactionSource.blockchain.type
             )
 

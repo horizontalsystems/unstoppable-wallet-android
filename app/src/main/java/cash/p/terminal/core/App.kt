@@ -61,6 +61,7 @@ import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TermsManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TonAccountManager
+import cash.p.terminal.core.managers.TonConnectManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TorManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
@@ -115,7 +116,6 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -199,7 +199,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var backupProvider: BackupProvider
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
-        lateinit var tonConnectKit: TonConnectKit
+        lateinit var tonConnectManager: TonConnectManager
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -453,8 +453,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         spamManager = SpamManager(localStorage)
 
-        tonConnectKit = TonConnectKit.getInstance(this)
-        tonConnectKit.start()
+        tonConnectManager = TonConnectManager(this, adapterFactory)
+        tonConnectManager.start()
 
         startTasks()
     }
