@@ -44,7 +44,9 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
     val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
-    val viewModel = viewModel<TonConnectListViewModel>()
+    val viewModel = viewModel<TonConnectListViewModel>(initializer = {
+        TonConnectListViewModel(deepLinkUri)
+    })
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -69,12 +71,6 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
             delay(300)
             invalidUrlBottomSheetState.show()
             viewModel.onErrorHandled()
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        if (deepLinkUri != null) {
-            viewModel.setConnectionUri(deepLinkUri)
         }
     }
 

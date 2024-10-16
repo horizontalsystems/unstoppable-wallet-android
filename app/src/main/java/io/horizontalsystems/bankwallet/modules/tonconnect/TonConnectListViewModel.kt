@@ -8,7 +8,7 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
+class TonConnectListViewModel(deepLinkUri: String?) : ViewModelUiState<TonConnectListUiState>() {
 
     private val tonConnectKit = App.tonConnectManager.kit
 
@@ -28,6 +28,10 @@ class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
                 dapps = it
                 emitState()
             }
+        }
+
+        deepLinkUri?.let {
+            setConnectionUri(it)
         }
     }
 
