@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.utils.ModuleField
@@ -45,7 +46,7 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
     val coroutineScope = rememberCoroutineScope()
 
     val viewModel = viewModel<TonConnectListViewModel>(initializer = {
-        TonConnectListViewModel(deepLinkUri)
+        TonConnectListViewModel(deepLinkUri, App.accountManager)
     })
     val qrScannerLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

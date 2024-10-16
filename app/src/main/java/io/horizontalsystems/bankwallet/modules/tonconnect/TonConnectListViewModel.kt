@@ -4,17 +4,23 @@ import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TonConnectListViewModel(deepLinkUri: String?) : ViewModelUiState<TonConnectListUiState>() {
+class TonConnectListViewModel(
+    deepLinkUri: String?,
+    accountManager: IAccountManager,
+) : ViewModelUiState<TonConnectListUiState>() {
 
     private val tonConnectKit = App.tonConnectManager.kit
 
-    private var dapps: List<DAppEntity> = listOf()
+    private var dapps = mapOf<String, List<DAppEntity>>()
     private var dAppRequestEntity: DAppRequestEntity? = null
     private var error: Throwable? = null
+
+    private val accountNamesById = accountManager.accounts.associate { it.id to it.name }
 
     override fun createState() = TonConnectListUiState(
         dapps = dapps,
@@ -25,7 +31,7 @@ class TonConnectListViewModel(deepLinkUri: String?) : ViewModelUiState<TonConnec
     init {
         viewModelScope.launch {
             tonConnectKit.getDApps().collect {
-                dapps = it
+                dapps = it.groupBy { accountNamesById[it.walletId] ?: it.walletId }
                 emitState()
             }
         }
@@ -66,7 +72,7 @@ class TonConnectListViewModel(deepLinkUri: String?) : ViewModelUiState<TonConnec
 
 
 data class TonConnectListUiState(
-    val dapps: List<DAppEntity>,
+    val dapps: Map<String, List<DAppEntity>>,
     val dAppRequestEntity: DAppRequestEntity?,
     val error: Throwable?
 )
