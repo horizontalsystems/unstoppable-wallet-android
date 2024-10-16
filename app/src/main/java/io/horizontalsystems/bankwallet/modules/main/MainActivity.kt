@@ -62,9 +62,16 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        viewModel.tcSendRequest.observe(this) { tcEvent ->
-            if (tcEvent != null) {
+        viewModel.tcSendRequest.observe(this) { request ->
+            if (request != null) {
                 navController.slideFromBottom(R.id.tcSendRequestFragment)
+            }
+        }
+
+        viewModel.tcDappRequest.observe(this) { request ->
+            if (request != null) {
+                navController.slideFromBottom(R.id.tcNewFragment, request)
+                viewModel.onTcDappRequestHandled()
             }
         }
     }

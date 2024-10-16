@@ -5,17 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
+import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
+import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.UserManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCDelegate
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationError
-import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -25,12 +26,13 @@ class MainActivityViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
     private val localStorage: ILocalStorage,
-    private val tonConnectKit: TonConnectKit
+    private val tonConnectManager: TonConnectManager
 ) : ViewModel() {
 
     val navigateToMainLiveData = MutableLiveData(false)
     val wcEvent = MutableLiveData<Wallet.Model?>()
     val tcSendRequest = MutableLiveData<SendRequestEntity?>()
+    val tcDappRequest = MutableLiveData<DAppRequestEntity?>()
 
     init {
         viewModelScope.launch {
@@ -44,8 +46,13 @@ class MainActivityViewModel(
             }
         }
         viewModelScope.launch {
-            tonConnectKit.sendRequestFlow.collect {
+            tonConnectManager.sendRequestFlow.collect {
                 tcSendRequest.postValue(it)
+            }
+        }
+        viewModelScope.launch {
+            tonConnectManager.dappRequestFlow.collect {
+                tcDappRequest.postValue(it)
             }
         }
     }
@@ -56,6 +63,10 @@ class MainActivityViewModel(
 
     fun onTcSendRequestHandled() {
         tcSendRequest.postValue(null)
+    }
+
+    fun onTcDappRequestHandled() {
+        tcDappRequest.postValue(null)
     }
 
     fun validate() {
@@ -94,7 +105,7 @@ class MainActivityViewModel(
                 App.systemInfoManager,
                 App.keyStoreManager,
                 App.localStorage,
-                App.tonConnectManager.kit,
+                App.tonConnectManager,
             ) as T
         }
     }
