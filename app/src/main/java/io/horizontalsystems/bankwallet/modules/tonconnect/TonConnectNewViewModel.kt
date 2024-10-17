@@ -5,7 +5,7 @@ import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.managers.toTonKitWalletType
+import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +63,13 @@ class TonConnectNewViewModel(
             try {
                 val manifest = manifest ?: throw NoManifestError()
                 val account = account ?: throw IllegalArgumentException("Empty account")
-                tonConnectKit.connect(requestEntity, manifest, account.id, account.type.toTonKitWalletType(), false)
+
+                tonConnectKit.connect(
+                    requestEntity,
+                    manifest,
+                    account.id,
+                    account.type.toTonWalletFullAccess()
+                )
                 finish = true
             } catch (e: Throwable) {
                 toast = e.message?.nullIfBlank() ?: e.javaClass.simpleName
