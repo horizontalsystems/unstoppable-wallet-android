@@ -8,14 +8,14 @@ import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.TonConnectManager
 import cash.p.terminal.core.managers.TonKitWrapper
-import cash.p.terminal.core.managers.toTonKitWalletType
+import cash.p.terminal.core.managers.toTonWalletFullAccess
 import cash.p.terminal.core.meta
 import cash.p.terminal.entities.Currency
 import cash.p.terminal.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
-import io.horizontalsystems.tonkit.core.TonKit
+import io.horizontalsystems.tonkit.core.TonWallet
 import io.horizontalsystems.tonkit.models.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ class TonConnectSendRequestViewModel(
     private var tonTransactionRecord: TonTransactionRecord? = null
     private var currency = App.currencyManager.baseCurrency
 
-    private var tonWallet: TonKit.WalletType? = null
+    private var tonWallet: TonWallet.FullAccess? = null
     private var tonKitWrapper: TonKitWrapper? = null
     private var tonEvent: Event? = null
 
@@ -65,7 +65,7 @@ class TonConnectSendRequestViewModel(
             return
         }
 
-        val tonWallet = account.type.toTonKitWalletType().also {
+        val tonWallet = account.type.toTonWalletFullAccess().also {
             tonWallet = it
         }
         val tonKitWrapper = App.tonKitManager.getNonActiveTonKitWrapper(account).also {

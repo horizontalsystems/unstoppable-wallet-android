@@ -22,6 +22,7 @@ import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tonkit.core.TonKit
+import io.horizontalsystems.tonkit.core.TonWallet
 import io.horizontalsystems.tonkit.models.Jetton
 import io.horizontalsystems.tonkit.models.Network
 import io.horizontalsystems.tonkit.models.SyncState
@@ -103,7 +104,7 @@ class TonKitManager(
         accountType: AccountType.Mnemonic,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonKitWalletType(), Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
 
         return TonKitWrapper(kit)
     }
@@ -112,7 +113,7 @@ class TonKitManager(
         accountType: AccountType.TonAddress,
         account: Account,
     ): TonKitWrapper {
-        val kit = TonKit.getInstance(accountType.toTonKitWalletType(), Network.MainNet, App.instance, account.id)
+        val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
 
         return TonKitWrapper(kit)
     }
@@ -288,7 +289,13 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.Syncing -> AdapterState.Syncing()
 }
 
-fun AccountType.toTonKitWalletType() = when (this) {
+fun AccountType.toTonWalletFullAccess(): TonWallet.FullAccess {
+    val toTonWallet = toTonWallet()
+
+    return toTonWallet as? TonWallet.FullAccess ?: throw IllegalArgumentException("Watch Only")
+}
+
+fun AccountType.toTonWallet() = when (this) {
     is AccountType.Mnemonic -> {
         val hdWallet = HDWallet(seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
         val privateKey = hdWallet.privateKey(0)
@@ -296,11 +303,11 @@ fun AccountType.toTonKitWalletType() = when (this) {
         if (privateKeyBytes.size > 32) {
             privateKeyBytes = privateKeyBytes.copyOfRange(1, privateKeyBytes.size)
         }
-        TonKit.WalletType.Seed(privateKeyBytes)
+        TonWallet.Seed(privateKeyBytes)
 
     }
     is AccountType.TonAddress -> {
-        TonKit.WalletType.Watch(address)
+        TonWallet.WatchOnly(address)
     }
     else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to TonKit.WalletType")
 }
