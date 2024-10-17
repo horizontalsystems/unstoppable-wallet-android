@@ -275,9 +275,9 @@ object TonHelper {
 class TonKitWrapper(val tonKit: TonKit)
 
 fun TonKit.statusInfo() = buildMap {
-    put("Sync State", syncStateFlow.value)
-    put("Event Sync State", eventSyncStateFlow.value)
-    put("Jetton Sync State", jettonSyncStateFlow.value)
+    put("Sync State", syncStateFlow.value.toAdapterState())
+    put("Event Sync State", eventSyncStateFlow.value.toAdapterState())
+    put("Jetton Sync State", jettonSyncStateFlow.value.toAdapterState())
 }
 
 val Jetton.tokenType
