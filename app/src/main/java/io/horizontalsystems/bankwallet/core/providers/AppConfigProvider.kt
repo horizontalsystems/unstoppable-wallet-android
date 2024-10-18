@@ -35,31 +35,31 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.twitterBearerToken)
     }
     val etherscanApiKey by lazy {
-        Translator.getString(R.string.etherscanKey)
+        Translator.getString(R.string.etherscanKey).split(",")
     }
     val bscscanApiKey by lazy {
-        Translator.getString(R.string.bscscanKey)
+        Translator.getString(R.string.bscscanKey).split(",")
     }
     val polygonscanApiKey by lazy {
-        Translator.getString(R.string.polygonscanKey)
+        Translator.getString(R.string.polygonscanKey).split(",")
     }
     val snowtraceApiKey by lazy {
-        Translator.getString(R.string.snowtraceApiKey)
+        Translator.getString(R.string.snowtraceApiKey).split(",")
     }
     val optimisticEtherscanApiKey by lazy {
-        Translator.getString(R.string.optimisticEtherscanApiKey)
+        Translator.getString(R.string.optimisticEtherscanApiKey).split(",")
     }
     val arbiscanApiKey by lazy {
-        Translator.getString(R.string.arbiscanApiKey)
+        Translator.getString(R.string.arbiscanApiKey).split(",")
     }
     val gnosisscanApiKey by lazy {
-        Translator.getString(R.string.gnosisscanApiKey)
+        Translator.getString(R.string.gnosisscanApiKey).split(",")
     }
     val ftmscanApiKey by lazy {
-        Translator.getString(R.string.ftmscanApiKey)
+        Translator.getString(R.string.ftmscanApiKey).split(",")
     }
     val basescanApiKey by lazy {
-        Translator.getString(R.string.basescanApiKey)
+        Translator.getString(R.string.basescanApiKey).split(",")
     }
     val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
