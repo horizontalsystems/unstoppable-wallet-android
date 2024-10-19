@@ -398,12 +398,14 @@
     <string name="Send_UtxoExpertMode">Modo Especialista UTxO</string>
     <string name="Send_Utxo_Description">Selecionar manualmente UTxO para gastar os fundos no saldo</string>
     <string name="Send_Utxo_SendTo">Enviar Para</string>
-    <string name="Send_Utxo_Change">Alterar</string>
+    <string name="Send_Utxo_Change">Troco</string>
     <string name="Send_Rbf">Substituir pela Taxa</string>
     <string name="Send_Rbf_Description">Essa opção permite que você reenvie uma transação travada aumentando o valor da taxa.</string>
     <string name="Send_RbfEnabled">Ativado</string>
     <string name="Send_RbfDisabled">Desativado</string>
     <string name="Send_Utxo_AvailableBalance">Saldo Disponível</string>
+    <string name="Send_Utxo_UnselectAll">Desmarcar Tudo</string>
+    <string name="Send_Utxo_SelectAll">Marcar tudo</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_Domain">Domínio</string>
     <string name="Send_Confirmation_YouSend">Você Envia</string>
@@ -449,7 +451,7 @@
     <!-- Send Evm Settings -->
     <string name="SendEvmSettings_Title">Avançado</string>
     <string name="SendEvmSettings_Nonce">Nonce de Transação</string>
-    <string name="SendEvmSettings_Nonce_Info">O nonce é um valor inteiro exclusivo para uma transação dentro da carteira do usuário. Ele normalmente aumenta com cada transação enviada e não precisa ser alterado. Os usuários avançados podem defini-lo igual a um nonce de uma transação pendente para cancelar e substituir essa transação, desde que a nova transação tenha uma taxa suficientemente alta para evitar que a antiga seja confirmada (por exemplo, eles podem querer acelerar sua confirmação, ou alterar totalmente os parâmetros da transação). Quando várias transações pendentes têm o mesmo nonce, apenas uma é confirmada, geralmente aquela com a taxa mais alta.</string>
+    <string name="SendEvmSettings_Nonce_Info">O nonce é um valor inteiro exclusivo para uma transação dentro da carteira do usuário. Normalmente aumenta com cada transação enviada e não precisa ser alterado. Os usuários avançados podem defini-lo igual a um nonce de uma transação pendente para cancelar e substituir essa transação, desde que a nova transação tenha uma taxa suficientemente alta para evitar que a antiga seja confirmada (por exemplo, eles podem querer acelerar sua confirmação, ou alterar totalmente os parâmetros da transação). Quando várias transações pendentes têm o mesmo nonce, apenas uma é confirmada, geralmente aquela com a taxa mais alta.</string>
     <string name="SendEvmSettings_Error_NonceUsed_Title">Usado Nonce</string>
     <string name="SendEvmSettings_Error_NonceUsed">Já existe uma transação executada com este nonce.</string>
     <!-- Fee Settings -->
@@ -722,7 +724,7 @@
     <string name="Transactions_Filter_Coin">Moeda</string>
     <string name="Transactions_Filter_Contacts">Contatos</string>
     <string name="Transactions_Filter_AllBlockchains">Todas Blockchains</string>
-    <string name="Transactions_Filter_AllCoins">Todas as moedas</string>
+    <string name="Transactions_Filter_AllCoins">Todas as Moedas</string>
     <string name="Transactions_Filter_AllContacts">Todos os Contatos</string>
     <string name="Transactions_Filter_ChooseCoin">Escolher Moeda</string>
     <string name="Transactions_Filter_ChooseBlockchain">Escolher Blockchain</string>
@@ -823,7 +825,7 @@
     <string name="Settings_SecurityCenter">Segurança</string>
     <string name="Settings_Notifications">Notificações</string>
     <string name="Settings_ExperimentalFeatures">Experimental</string>
-    <string name="Settings_BaseCurrency">Moeda base</string>
+    <string name="Settings_BaseCurrency">Moeda Base</string>
     <string name="Settings_Language">Idioma</string>
     <string name="Settings_Theme">Tema</string>
     <string name="Settings_Terms">Termos</string>
@@ -1026,7 +1028,7 @@
     <string name="Hud_Text_Done">Concluído</string>
     <string name="Hud_Text_Verified">Confirmado</string>
     <string name="Hud_Text_EmailAddressCopied">Endereço de e-mail copiado</string>
-    <string name="Hud_Added_To_Watchlist">Adicionado à Lista</string>
+    <string name="Hud_Added_To_Watchlist">Adicionado ao Catálogo</string>
     <string name="Hud_Added_To_Wallet">Adicionado à Carteira</string>
     <string name="Hud_Removed_From_Wallet">Removido da Carteira</string>
     <string name="Hud_Already_In_Wallet">Já adicionado à carteira</string>
@@ -1199,7 +1201,7 @@
     <string name="AddCoin_CreateKey">Criar</string>
     <string name="AddCoin_RestoreKey">Restaurar</string>
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Escolha Blockchain</string>
+    <string name="AddTokenDialog_Title">Escolher Blockchain</string>
     <string name="AddTokenDialog_Subtitle">Adicionando Token</string>
     <string name="AddTokenDialog_Erc20Tokens">Tokens ERC20</string>
     <string name="AddTokenDialog_Bep20Tokens">Tokens BEP20</string>
@@ -1680,7 +1682,7 @@
     <string name="Contacts_NewContact">Novo Contato</string>
     <string name="Contacts_AddNewContact">Adicionar um Novo Contato</string>
     <string name="Contacts_NameHint">Nome</string>
-    <string name="Contacts_AddAddress">Adicionar endereço</string>
+    <string name="Contacts_AddAddress">Adicionar Endereço</string>
     <string name="Contacts_AddAddress_NewContact">Criar Novo Contato</string>
     <string name="Contacts_AddAddress_ExistingContact">Adicionar ao Contato Existente</string>
     <string name="Contacts_AddAddress_Replace">Substituir</string>
