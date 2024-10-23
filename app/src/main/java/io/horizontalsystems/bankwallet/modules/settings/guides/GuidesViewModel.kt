@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.entities.DataState
-import io.horizontalsystems.bankwallet.entities.Guide
 import io.horizontalsystems.bankwallet.entities.GuideCategory
 import io.horizontalsystems.bankwallet.entities.ViewState
 import kotlinx.coroutines.launch
@@ -18,7 +17,7 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
         private set
     var selectedCategory by mutableStateOf<GuideCategory?>(null)
         private set
-    var guides by mutableStateOf<List<Guide>>(listOf())
+    var expandedSections by mutableStateOf(setOf<String>())
         private set
 
     var viewState by mutableStateOf<ViewState>(ViewState.Loading)
@@ -42,7 +41,6 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
 
     fun onSelectCategory(category: GuideCategory) {
         selectedCategory = category
-        guides = category.guides
     }
 
     override fun onCleared() {
@@ -52,6 +50,14 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
     private fun didFetchGuideCategories(guideCategories: List<GuideCategory>) {
         categories = guideCategories
         onSelectCategory(guideCategories.first())
+    }
+
+    fun toggleSection(sectionTitle: String, expanded: Boolean) {
+        expandedSections = if (expanded) {
+            expandedSections.minus(sectionTitle)
+        } else {
+            expandedSections.plus(sectionTitle)
+        }
     }
 
 }

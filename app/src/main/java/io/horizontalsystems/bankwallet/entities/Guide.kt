@@ -1,21 +1,26 @@
 package io.horizontalsystems.bankwallet.entities
 
-import java.util.*
-
 data class Guide(
-        val title: String,
-        val updatedAt: Date,
-        val imageUrl: String?,
-        val fileUrl: String
+    val title: String,
+    val markdown: String,
 )
 
 data class GuideCategory(
-        val id: String,
-        val category: String,
-        val guides: List<Guide>)
+    val category: String,
+    val sections: List<GuideSection>
+)
 
 data class GuideCategoryMultiLang(
-        val id: String,
-        val category: Map<String,String>){
-        var guides = listOf<Map<String, Guide>>()
-}
+    val category: Map<String, String>,
+    val sections: List<GuideSectionMultiLang>
+)
+
+data class GuideSection(
+    val title: String,
+    val items: List<Guide>
+)
+
+data class GuideSectionMultiLang(
+    val title: Map<String, String>,
+    val items: List<Map<String, Guide>>
+)
