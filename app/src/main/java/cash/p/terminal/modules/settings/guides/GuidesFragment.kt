@@ -52,10 +52,12 @@ class GuidesFragment : BaseComposeFragment() {
 fun GuidesScreen(navController: NavController) {
     val viewModel = viewModel<GuidesViewModel>(factory = GuidesModule.Factory())
 
-    val viewState = viewModel.viewState
-    val categories = viewModel.categories
-    val selectedCategory = viewModel.selectedCategory
-    val expandedSections = viewModel.expandedSections
+    val uiState = viewModel.uiState
+
+    val viewState = uiState.viewState
+    val categories = uiState.categories
+    val selectedCategory = uiState.selectedCategory
+    val expandedSections = uiState.expandedSections
 
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(

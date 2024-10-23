@@ -1,27 +1,25 @@
 package cash.p.terminal.modules.settings.guides
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.GuideCategory
 import cash.p.terminal.entities.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
-class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
+class GuidesViewModel(private val repository: GuidesRepository) : ViewModelUiState<GuidesUiState>() {
+    private var viewState: ViewState = ViewState.Loading
+    private var categories = listOf<GuideCategory>()
+    private var selectedCategory: GuideCategory? = null
+    private var expandedSections = setOf<String>()
 
-    var categories by mutableStateOf<List<GuideCategory>>(listOf())
-        private set
-    var selectedCategory by mutableStateOf<GuideCategory?>(null)
-        private set
-    var expandedSections by mutableStateOf(setOf<String>())
-        private set
-
-    var viewState by mutableStateOf<ViewState>(ViewState.Loading)
-        private set
+    override fun createState() = GuidesUiState(
+        viewState = viewState,
+        categories = categories,
+        selectedCategory = selectedCategory,
+        expandedSections = expandedSections
+    )
 
     init {
         viewModelScope.launch {
@@ -29,6 +27,7 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
                 viewModelScope.launch {
                     dataState.viewState?.let {
                         viewState = it
+                        emitState()
                     }
 
                     if (dataState is DataState.Success) {
@@ -41,15 +40,7 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
 
     fun onSelectCategory(category: GuideCategory) {
         selectedCategory = category
-    }
-
-    override fun onCleared() {
-        repository.clear()
-    }
-
-    private fun didFetchGuideCategories(guideCategories: List<GuideCategory>) {
-        categories = guideCategories
-        onSelectCategory(guideCategories.first())
+        emitState()
     }
 
     fun toggleSection(sectionTitle: String, expanded: Boolean) {
@@ -58,6 +49,25 @@ class GuidesViewModel(private val repository: GuidesRepository) : ViewModel() {
         } else {
             expandedSections.plus(sectionTitle)
         }
+
+        emitState()
     }
 
+    override fun onCleared() {
+        repository.clear()
+    }
+
+    private fun didFetchGuideCategories(guideCategories: List<GuideCategory>) {
+        categories = guideCategories
+        selectedCategory = guideCategories.first()
+
+        emitState()
+    }
 }
+
+data class GuidesUiState(
+    val viewState: ViewState,
+    val categories: List<GuideCategory>,
+    val selectedCategory: GuideCategory?,
+    val expandedSections: Set<String>
+)
