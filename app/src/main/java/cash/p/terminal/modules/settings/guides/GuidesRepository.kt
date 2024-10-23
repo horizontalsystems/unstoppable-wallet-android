@@ -7,6 +7,7 @@ import cash.p.terminal.core.retryWhen
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.GuideCategory
 import cash.p.terminal.entities.GuideCategoryMultiLang
+import cash.p.terminal.entities.GuideSection
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
@@ -68,8 +69,14 @@ class GuidesRepository(
     private fun getCategoriesByLocalLanguage(categoriesMultiLanguage: Array<GuideCategoryMultiLang>, language: String, fallbackLanguage: String) =
         categoriesMultiLanguage.map { categoriesMultiLang ->
             val categoryTitle = categoriesMultiLang.category[language] ?: categoriesMultiLang.category[fallbackLanguage] ?: ""
-            val guides = categoriesMultiLang.guides.mapNotNull { it[language] ?: it[fallbackLanguage] }
 
-            GuideCategory(categoriesMultiLang.id, categoryTitle, guides.sortedByDescending { it.updatedAt })
+            val sections = categoriesMultiLang.sections.map { sectionMultiLang ->
+                val sectionTitle = sectionMultiLang.title[language] ?: sectionMultiLang.title[fallbackLanguage] ?: ""
+                val items = sectionMultiLang.items.mapNotNull {
+                    it[language] ?: it[fallbackLanguage]
+                }
+                GuideSection(sectionTitle, items)
+            }
+            GuideCategory(categoryTitle, sections)
         }
 }

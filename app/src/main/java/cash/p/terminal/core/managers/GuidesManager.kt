@@ -42,10 +42,8 @@ object GuidesManager {
             val jsonObject = json.asJsonObject
 
             return Guide(
-                    jsonObject.get("title").asString,
-                    context.deserialize(jsonObject.get("updated_at"), Date::class.java),
-                    jsonObject["image"].asString?.let { absolutify(it) },
-                    absolutify(jsonObject["file"].asString)
+                jsonObject.get("title").asString,
+                absolutify(jsonObject.get("markdown").asString)
             )
         }
 
