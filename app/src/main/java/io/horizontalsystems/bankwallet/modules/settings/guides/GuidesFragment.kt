@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -97,7 +98,11 @@ fun GuidesScreen(navController: NavController) {
                                 state = listState,
                                 contentPadding = PaddingValues(bottom = 32.dp)
                             ) {
-                                selectedCategory.sections.forEachIndexed { i, section ->
+                                val sections = selectedCategory.sections
+                                val sectionsSize = sections.size
+
+                                sections.forEachIndexed { i, section ->
+                                    val lastSection = i == sectionsSize - 1
                                     val sectionTitle = section.title
                                     val expanded = expandedSections.contains(sectionTitle)
                                     item {
@@ -136,6 +141,14 @@ fun GuidesScreen(navController: NavController) {
                                                 }
                                             ) {
                                                 body_leah(guide.title)
+                                            }
+                                        }
+                                        if (lastSection) {
+                                            item {
+                                                Divider(
+                                                    thickness = 1.dp,
+                                                    color = ComposeAppTheme.colors.steel10
+                                                )
                                             }
                                         }
                                     }
