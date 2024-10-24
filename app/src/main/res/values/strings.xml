@@ -268,8 +268,8 @@
     <string name="MarketGlobalMetrics_BtcDominance">BTC Dominance</string>
     <string name="MarketGlobalMetrics_Volume">24h Vol.</string>
     <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
-    <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
-    <string name="MarketGlobalMetrics_EtfInflow">ETF Inflow</string>
+    <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
+    <string name="MarketGlobalMetrics_EtfInflow">ETF</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
     <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance is trending higher, the rest of the crypto market trends downwards and vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
