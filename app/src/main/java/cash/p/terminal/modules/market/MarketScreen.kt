@@ -1,22 +1,26 @@
 package cash.p.terminal.modules.market
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,14 +45,14 @@ import cash.p.terminal.modules.metricchart.MetricsType
 import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.TranslatableString
 import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.ScrollableTabs
 import cash.p.terminal.ui.compose.components.TabItem
+import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.caption_bran
-import cash.p.terminal.ui.compose.components.caption_grey
 import cash.p.terminal.ui.compose.components.caption_lucian
 import cash.p.terminal.ui.compose.components.caption_remus
+import cash.p.terminal.ui.compose.components.micro_grey
 
 @Composable
 fun MarketScreen(navController: NavController) {
@@ -167,38 +171,40 @@ fun MetricsBoard(
 ) {
     Row(
         modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth()
-            .height(40.dp)
-            .background(ComposeAppTheme.colors.tyler)
-            .basicMarquee(
-                iterations = Int.MAX_VALUE,
-                spacing = MarqueeSpacing(0.dp)
-            ),
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            .height(IntrinsicSize.Min)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
     ) {
-        HSpacer(4.dp)
-        marketOverviewItems.forEach { item ->
-            Row(
+        marketOverviewItems.forEachIndexed { index, item ->
+            if (index != 0) {
+                Box(
+                    Modifier
+                        .fillMaxHeight()
+                        .width(1.dp)
+                        .background(color = ComposeAppTheme.colors.steel10)
+                )
+            }
+            Column(
                 modifier = Modifier
                     .clickable {
                         openMetricsPage(item.metricsType, navController)
                     }
-                    .padding(8.dp)
+                    .padding(12.dp)
+                    .weight(1f)
             ) {
-                HSpacer(12.dp)
-                caption_grey(text = item.title)
-                HSpacer(4.dp)
+                micro_grey(text = item.title)
+                VSpacer(4.dp)
                 caption_bran(text = item.value)
-                HSpacer(4.dp)
+                VSpacer(4.dp)
                 if (item.changePositive) {
                     caption_remus(text = item.change)
                 } else {
                     caption_lucian(text = item.change)
                 }
-                HSpacer(12.dp)
             }
         }
-        HSpacer(4.dp)
     }
 }
 

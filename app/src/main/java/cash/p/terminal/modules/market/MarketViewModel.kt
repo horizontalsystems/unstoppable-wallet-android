@@ -91,13 +91,11 @@ class MarketViewModel(
                 MetricsType.Volume24h
             ),
             MarketOverviewViewItem(
-                Translator.getString(R.string.MarketGlobalMetrics_BtcDominance),
-                globalMarket.btcDominance?.let {
-                    App.numberFormatter.format(it, 0, 2, suffix = "%")
-                } ?: "-",
-                globalMarket.btcDominanceChange?.let { getDiff(it) } ?: "----",
-                globalMarket.btcDominanceChange?.let { it > BigDecimal.ZERO } ?: false,
-                MetricsType.TotalMarketCap
+                Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
+                globalMarket.tvl?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
+                globalMarket.tvlChange?.let { getDiff(it) } ?: "----",
+                globalMarket.tvlChange?.let { it > BigDecimal.ZERO } ?: false,
+                MetricsType.TvlInDefi
             ),
             MarketOverviewViewItem(
                 Translator.getString(R.string.MarketGlobalMetrics_EtfInflow),
@@ -109,13 +107,6 @@ class MarketViewModel(
                 } ?: "----",
                 globalMarket.etfDailyInflow?.let { it > BigDecimal.ZERO } ?: false,
                 MetricsType.Etf
-            ),
-            MarketOverviewViewItem(
-                Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
-                globalMarket.tvl?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                globalMarket.tvlChange?.let { getDiff(it) } ?: "----",
-                globalMarket.tvlChange?.let { it > BigDecimal.ZERO } ?: false,
-                MetricsType.TvlInDefi
             )
         )
 
