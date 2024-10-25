@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
@@ -194,14 +195,30 @@ fun MetricsBoard(
                     .padding(12.dp)
                     .weight(1f)
             ) {
-                micro_grey(text = item.title)
+                micro_grey(
+                    text = item.title,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
                 VSpacer(4.dp)
-                caption_bran(text = item.value)
+                caption_bran(
+                    text = item.value,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1
+                )
                 VSpacer(4.dp)
                 if (item.changePositive) {
-                    caption_remus(text = item.change)
+                    caption_remus(
+                        text = item.change,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
                 } else {
-                    caption_lucian(text = item.change)
+                    caption_lucian(
+                        text = item.change,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
                 }
             }
         }
