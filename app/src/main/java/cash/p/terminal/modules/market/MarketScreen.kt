@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.market
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,6 +52,7 @@ import cash.p.terminal.ui.compose.components.ScrollableTabs
 import cash.p.terminal.ui.compose.components.TabItem
 import cash.p.terminal.ui.compose.components.VSpacer
 import cash.p.terminal.ui.compose.components.caption_bran
+import cash.p.terminal.ui.compose.components.caption_grey
 import cash.p.terminal.ui.compose.components.caption_lucian
 import cash.p.terminal.ui.compose.components.caption_remus
 import cash.p.terminal.ui.compose.components.micro_grey
@@ -101,7 +103,9 @@ fun MarketScreen(navController: NavController) {
                 .padding(it)
                 .background(ComposeAppTheme.colors.tyler)
         ) {
-            MetricsBoard(navController, uiState.marketOverviewItems)
+            Crossfade(uiState.marketOverviewItems) {
+                MetricsBoard(navController, it)
+            }
             Divider(
                 color = ComposeAppTheme.colors.steel10,
                 thickness = 1.dp
@@ -202,20 +206,26 @@ fun MetricsBoard(
                 )
                 VSpacer(4.dp)
                 caption_bran(
-                    text = item.value,
+                    text = item.value ?: "---",
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
                 VSpacer(4.dp)
-                if (item.changePositive) {
+                if (item.changePositive == null) {
+                    caption_grey(
+                        text = item.change ?: "---",
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
+                    )
+                } else if (item.changePositive) {
                     caption_remus(
-                        text = item.change,
+                        text = item.change ?: "---",
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1
                     )
                 } else {
                     caption_lucian(
-                        text = item.change,
+                        text = item.change ?: "---",
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 1
                     )

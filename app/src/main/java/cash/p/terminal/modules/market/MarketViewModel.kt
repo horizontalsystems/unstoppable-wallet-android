@@ -31,7 +31,7 @@ class MarketViewModel(
 
     val tabs = Tab.entries.toTypedArray()
     private var marketOverviewJob: Job? = null
-    private var marketOverviewItems: List<MarketOverviewViewItem> = listOf()
+    private var marketOverviewItems = getMarketMetrics(null, currencyManager.baseCurrency)
     private var selectedTab: Tab = getInitialTab(localStorage.launchPage)
 
     init {
@@ -72,45 +72,42 @@ class MarketViewModel(
     }
 
     private fun getMarketMetrics(
-        globalMarket: MarketGlobal,
-        baseCurrency: Currency
+        globalMarket: MarketGlobal?,
+        baseCurrency: Currency,
     ): List<MarketOverviewViewItem> {
-        val metrics: List<MarketOverviewViewItem> = listOf(
+        return listOf(
             MarketOverviewViewItem(
                 Translator.getString(R.string.MarketGlobalMetrics_TotalMarketCap),
-                globalMarket.marketCap?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                globalMarket.marketCapChange?.let { getDiff(it) } ?: "----",
-                globalMarket.marketCapChange?.let { it > BigDecimal.ZERO } ?: false,
+                globalMarket?.marketCap?.let { formatFiatShortened(it, baseCurrency.symbol) },
+                globalMarket?.marketCapChange?.let { getDiff(it) },
+                globalMarket?.marketCapChange?.let { it > BigDecimal.ZERO },
                 MetricsType.TotalMarketCap
             ),
             MarketOverviewViewItem(
                 Translator.getString(R.string.MarketGlobalMetrics_Volume),
-                globalMarket.volume?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                globalMarket.volumeChange?.let { getDiff(it) } ?: "----",
-                globalMarket.volumeChange?.let { it > BigDecimal.ZERO } ?: false,
+                globalMarket?.volume?.let { formatFiatShortened(it, baseCurrency.symbol) },
+                globalMarket?.volumeChange?.let { getDiff(it) },
+                globalMarket?.volumeChange?.let { it > BigDecimal.ZERO },
                 MetricsType.Volume24h
             ),
             MarketOverviewViewItem(
                 Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
-                globalMarket.tvl?.let { formatFiatShortened(it, baseCurrency.symbol) } ?: "-",
-                globalMarket.tvlChange?.let { getDiff(it) } ?: "----",
-                globalMarket.tvlChange?.let { it > BigDecimal.ZERO } ?: false,
+                globalMarket?.tvl?.let { formatFiatShortened(it, baseCurrency.symbol) },
+                globalMarket?.tvlChange?.let { getDiff(it) },
+                globalMarket?.tvlChange?.let { it > BigDecimal.ZERO },
                 MetricsType.TvlInDefi
             ),
             MarketOverviewViewItem(
                 Translator.getString(R.string.MarketGlobalMetrics_EtfInflow),
-                globalMarket.etfTotalInflow?.let { formatFiatShortened(it, baseCurrency.symbol) }
-                    ?: "-",
-                globalMarket.etfDailyInflow?.let {
+                globalMarket?.etfTotalInflow?.let { formatFiatShortened(it, baseCurrency.symbol) },
+                globalMarket?.etfDailyInflow?.let {
                     val sign = if (it >= BigDecimal.ZERO) "+" else "-"
                     "$sign${formatFiatShortened(it.abs(), baseCurrency.symbol)}"
-                } ?: "----",
-                globalMarket.etfDailyInflow?.let { it > BigDecimal.ZERO } ?: false,
+                },
+                globalMarket?.etfDailyInflow?.let { it > BigDecimal.ZERO },
                 MetricsType.Etf
             )
         )
-
-        return metrics
     }
 
     private fun getDiff(it: BigDecimal): String {
