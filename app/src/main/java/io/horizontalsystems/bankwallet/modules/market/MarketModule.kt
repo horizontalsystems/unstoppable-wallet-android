@@ -47,9 +47,9 @@ object MarketModule {
 
     data class MarketOverviewViewItem(
         val title: String,
-        val value: String,
-        val change: String,
-        val changePositive: Boolean,
+        val value: String?,
+        val change: String?,
+        val changePositive: Boolean?,
         val metricsType: MetricsType,
     )
 
