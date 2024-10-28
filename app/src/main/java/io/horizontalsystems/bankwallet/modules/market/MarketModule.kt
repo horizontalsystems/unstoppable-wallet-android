@@ -14,11 +14,11 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.modules.market.filters.TimePeriod
-import io.horizontalsystems.bankwallet.modules.metricchart.MetricsType
 import io.horizontalsystems.bankwallet.modules.settings.appearance.PriceChangeInterval
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.WithTranslatableTitle
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.marketkit.models.MarketGlobal
 import io.horizontalsystems.marketkit.models.MarketInfo
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -42,15 +42,8 @@ object MarketModule {
 
     data class UiState(
         val selectedTab: Tab,
-        val marketOverviewItems: List<MarketOverviewViewItem>
-    )
-
-    data class MarketOverviewViewItem(
-        val title: String,
-        val value: String?,
-        val change: String?,
-        val changePositive: Boolean?,
-        val metricsType: MetricsType,
+        val marketGlobal: MarketGlobal?,
+        val currency: Currency
     )
 
     enum class Tab(@StringRes val titleResId: Int) {
