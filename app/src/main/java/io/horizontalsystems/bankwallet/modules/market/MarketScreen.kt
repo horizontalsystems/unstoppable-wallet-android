@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -36,6 +38,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.core.stats.statPage
 import io.horizontalsystems.bankwallet.core.stats.statTab
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.MarketModule.Tab
 import io.horizontalsystems.bankwallet.modules.market.favorites.MarketFavoritesScreen
@@ -56,6 +59,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.micro_grey
+import io.horizontalsystems.marketkit.models.MarketGlobal
+import java.math.BigDecimal
 
 @Composable
 fun MarketScreen(navController: NavController) {
@@ -103,8 +108,8 @@ fun MarketScreen(navController: NavController) {
                 .padding(it)
                 .background(ComposeAppTheme.colors.tyler)
         ) {
-            Crossfade(uiState.marketOverviewItems) {
-                MetricsBoard(navController, it)
+            Crossfade(uiState.marketGlobal, label = "") {
+                MetricsBoard(navController, it, uiState.currency)
             }
             Divider(
                 color = ComposeAppTheme.colors.steel10,
@@ -168,11 +173,22 @@ fun TabsSection(
     }
 }
 
+private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
+    return App.numberFormatter.formatFiatShort(value, symbol, 2)
+}
+
+private fun getDiff(it: BigDecimal): String {
+    val sign = if (it >= BigDecimal.ZERO) "+" else "-"
+    return App.numberFormatter.format(it.abs(), 0, 2, sign, "%")
+}
+
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MetricsBoard(
     navController: NavController,
-    marketOverviewItems: List<MarketModule.MarketOverviewViewItem>
+    marketGlobal: MarketGlobal?,
+    currency: Currency
 ) {
     Row(
         modifier = Modifier
@@ -182,55 +198,110 @@ fun MetricsBoard(
             .clip(RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
     ) {
-        marketOverviewItems.forEachIndexed { index, item ->
-            if (index != 0) {
-                Box(
-                    Modifier
-                        .fillMaxHeight()
-                        .width(1.dp)
-                        .background(color = ComposeAppTheme.colors.steel10)
-                )
+        MarketTotalCard(
+            title = stringResource(R.string.MarketGlobalMetrics_TotalMarketCap),
+            value = marketGlobal?.marketCap,
+            change = marketGlobal?.marketCapChange,
+            currency = currency,
+            onClick = {
+                openMetricsPage(MetricsType.TotalMarketCap, navController)
             }
-            Column(
-                modifier = Modifier
-                    .clickable {
-                        openMetricsPage(item.metricsType, navController)
-                    }
-                    .padding(12.dp)
-                    .weight(1f)
-            ) {
-                micro_grey(
-                    text = item.title,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-                VSpacer(4.dp)
-                caption_bran(
-                    text = item.value ?: "---",
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-                VSpacer(4.dp)
-                if (item.changePositive == null) {
-                    caption_grey(
-                        text = item.change ?: "---",
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
-                } else if (item.changePositive) {
-                    caption_remus(
-                        text = item.change ?: "---",
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
-                } else {
-                    caption_lucian(
-                        text = item.change ?: "---",
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1
-                    )
-                }
+        )
+
+        VDivider()
+
+        MarketTotalCard(
+            title = stringResource(R.string.MarketGlobalMetrics_Volume),
+            value = marketGlobal?.volume,
+            change = marketGlobal?.volumeChange,
+            currency = currency,
+            onClick = {
+                openMetricsPage(MetricsType.Volume24h, navController)
             }
+        )
+
+        VDivider()
+
+        MarketTotalCard(
+            title = stringResource(R.string.MarketGlobalMetrics_TvlInDefi),
+            value = marketGlobal?.tvl,
+            change = marketGlobal?.tvlChange,
+            currency = currency,
+            onClick = {
+                openMetricsPage(MetricsType.TvlInDefi, navController)
+            }
+        )
+
+        VDivider()
+
+        MarketTotalCard(
+            title = stringResource(R.string.MarketGlobalMetrics_EtfInflow),
+            value = marketGlobal?.etfTotalInflow,
+            change = marketGlobal?.etfDailyInflow,
+            currency = currency,
+            onClick = {
+                openMetricsPage(MetricsType.Etf, navController)
+            }
+        )
+    }
+}
+
+@Composable
+private fun VDivider() {
+    Box(
+        Modifier
+            .fillMaxHeight()
+            .width(1.dp)
+            .background(color = ComposeAppTheme.colors.steel10)
+    )
+}
+
+@Composable
+private fun RowScope.MarketTotalCard(
+    title: String,
+    value: BigDecimal?,
+    change: BigDecimal?,
+    currency: Currency,
+    onClick: () -> Unit,
+) {
+    val changeStr = change?.let { getDiff(it) }
+    val changePositive = change?.let { it > BigDecimal.ZERO }
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .padding(12.dp)
+            .clickable(onClick = onClick)
+    ) {
+        micro_grey(
+            text = title,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
+        VSpacer(4.dp)
+        caption_bran(
+            text = value?.let { formatFiatShortened(it, currency.symbol) } ?: "---",
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
+        VSpacer(4.dp)
+        if (changePositive == null) {
+            caption_grey(
+                text = changeStr ?: "---",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        } else if (changePositive) {
+            caption_remus(
+                text = changeStr ?: "---",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+        } else {
+            caption_lucian(
+                text = changeStr ?: "---",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
         }
     }
 }
