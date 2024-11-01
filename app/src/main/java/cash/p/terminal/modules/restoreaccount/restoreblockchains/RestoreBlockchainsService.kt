@@ -32,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import java.util.concurrent.CopyOnWriteArrayList
 
 class RestoreBlockchainsService(
     private val accountName: String,
@@ -50,7 +51,7 @@ class RestoreBlockchainsService(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private var tokens = listOf<Token>()
-    private val enabledTokens = mutableListOf<Token>()
+    private val enabledTokens = CopyOnWriteArrayList<Token>()
 
     private var restoreSettingsMap = mutableMapOf<Token, RestoreSettings>()
 
