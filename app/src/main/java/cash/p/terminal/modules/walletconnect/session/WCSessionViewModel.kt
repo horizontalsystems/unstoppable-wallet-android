@@ -40,7 +40,8 @@ class WCSessionViewModel(
 ) : ViewModelUiState<WCSessionUiState>() {
 
     val closeLiveEvent = SingleLiveEvent<Unit>()
-    val showErrorLiveEvent = SingleLiveEvent<Unit>()
+    val showErrorLiveEvent = SingleLiveEvent<String?>()
+    val showNoInternetErrorLiveEvent = SingleLiveEvent<Unit>()
 
     private var peerMeta: PeerMetaItem? = null
     private var closeEnabled = false
@@ -280,7 +281,7 @@ class WCSessionViewModel(
         val proposal = proposal ?: return
 
         if (!connectivityManager.isConnected) {
-            showErrorLiveEvent.postValue(Unit)
+            showNoInternetErrorLiveEvent.postValue(Unit)
             return
         }
 
@@ -295,7 +296,7 @@ class WCSessionViewModel(
         val proposal = proposal ?: return
 
         if (!connectivityManager.isConnected) {
-            showErrorLiveEvent.postValue(Unit)
+            showNoInternetErrorLiveEvent.postValue(Unit)
             return
         }
 
@@ -305,13 +306,18 @@ class WCSessionViewModel(
         }
 
         viewModelScope.launch {
-            approve(proposal.proposerPublicKey)
+            try {
+                approve(proposal.proposerPublicKey)
+            } catch (t: Throwable) {
+                WCDelegate.sessionProposalEvent = null
+                showErrorLiveEvent.postValue(t.message)
+            }
         }
     }
 
     fun disconnect() {
         if (!connectivityManager.isConnected) {
-            showErrorLiveEvent.postValue(Unit)
+            showNoInternetErrorLiveEvent.postValue(Unit)
             return
         }
 
