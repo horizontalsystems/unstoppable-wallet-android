@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.transactionInfo
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -48,11 +50,16 @@ import io.horizontalsystems.bankwallet.ui.compose.components.WarningMessageCell
 
 class TransactionInfoFragment : BaseComposeFragment() {
 
-    private val viewModelTxs by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewItem = viewModelTxs.tmpItemToShow
+        val viewModelTxs: TransactionsViewModel? = try {
+            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
+        } catch (e: IllegalStateException) {
+            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
+            null
+        }
+
+        val viewItem = viewModelTxs?.tmpItemToShow
         if (viewItem == null) {
             navController.popBackStack(R.id.transactionInfoFragment, true)
             return
