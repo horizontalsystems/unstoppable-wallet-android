@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.transactions
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.badge
 import cash.p.terminal.core.slideFromRight
@@ -44,10 +46,20 @@ import cash.p.terminal.ui.compose.components.body_leah
 
 class TransactionsFilterFragment : BaseComposeFragment() {
 
-    private val viewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment)
-
     @Composable
     override fun GetContent(navController: NavController) {
+        val viewModel: TransactionsViewModel? = try {
+            navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }.value
+        } catch (e: IllegalStateException) {
+            Toast.makeText(App.instance, "ViewModel is Null", Toast.LENGTH_SHORT).show()
+            null
+        }
+
+        if (viewModel == null) {
+            navController.popBackStack(R.id.filterCoinFragment, true)
+            return
+        }
+
         FilterScreen(
             navController,
             viewModel

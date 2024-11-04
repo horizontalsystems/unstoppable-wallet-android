@@ -31,10 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.findActivity
@@ -72,14 +73,24 @@ import kotlinx.coroutines.launch
 
 class MainFragment : BaseComposeFragment() {
 
-    private val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
-
     @Composable
     override fun GetContent(navController: NavController) {
-        MainScreenWithRootedDeviceCheck(
-            transactionsViewModel = transactionsViewModel,
-            navController = navController,
-        )
+        val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
+
+        backStackEntry?.let {
+            val viewModel = ViewModelProvider(backStackEntry.viewModelStore,  TransactionsModule.Factory())
+                .get(TransactionsViewModel::class.java)
+            MainScreenWithRootedDeviceCheck(
+                transactionsViewModel = viewModel,
+                navController = navController,
+            )
+        } ?: run {
+            // Back stack entry doesn't exist, restart activity
+            val intent = requireActivity().intent
+            intent.data = null
+            requireActivity().finishAffinity()
+            startActivity(intent)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -355,5 +366,13 @@ private fun BadgedIcon(
                 icon()
             }
         }
+    }
+}
+
+fun NavController.safeGetBackStackEntry(destinationId: Int): NavBackStackEntry? {
+    return try {
+        this.getBackStackEntry(destinationId)
+    } catch (e: IllegalArgumentException) {
+        null
     }
 }
