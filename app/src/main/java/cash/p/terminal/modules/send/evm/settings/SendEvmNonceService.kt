@@ -29,7 +29,11 @@ class SendEvmNonceService(
     val stateFlow: Flow<DataState<State>> = _stateFlow
 
     suspend fun start() {
-        latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
+        try {
+            latestNonce = evmKit.getNonce(DefaultBlockParameter.Latest).await()
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
 
         val fixedNonce = fixedNonce
 
