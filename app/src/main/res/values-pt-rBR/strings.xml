@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">Definir Quantidade</string>
     <string name="Balance_Receive_AddressType">Tipo de endereço</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
+    <string name="Balance_ProcessingBalance_Title">Processando</string>
     <string name="Balance_NotRelayedAmount_Title">Transmissão</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
@@ -402,6 +403,9 @@
     <string name="Send_Rbf_Description">Essa opção permite que você reenvie uma transação travada aumentando o valor da taxa.</string>
     <string name="Send_RbfEnabled">Ativado</string>
     <string name="Send_RbfDisabled">Desativado</string>
+    <string name="Send_Utxo_AvailableBalance">Saldo Disponível</string>
+    <string name="Send_Utxo_UnselectAll">Desmarcar Tudo</string>
+    <string name="Send_Utxo_SelectAll">Marcar tudo</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_Domain">Domínio</string>
     <string name="Send_Confirmation_YouSend">Enviar</string>
@@ -505,6 +509,11 @@
     <string name="Tron_ZeroAmountTrxNotAllowed">Não é possível transferir 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Conta Não Ativa</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Novas carteiras TRON requerem um depósito mínimo de 1 TRX para se tornarem ativas. Carteiras inativas podem armazenar e receber tokens, mas não atualizarão os saldos até serem ativadas.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">Nova Conexão</string>
+    <string name="TonConnect_Error_InvalidUrl">Endereço URL Inválido</string>
+    <string name="TonConnect_Unnamed">Sem nome</string>
+    <string name="TonConnect_Wallet">Carteira</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Solicitar</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -710,6 +719,7 @@
     <string name="Transactions_ContractCall">Chamada de Contrato</string>
     <string name="Transactions_ExternalContractCall">Ligação Externa</string>
     <string name="Transactions_ContractCreation">Criação de contrato</string>
+    <string name="Transactions_ContractDeploy">Implantação de Contrato</string>
     <string name="Transactions_To">para %s</string>
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited_CoinCode">ilimitado %s</string>
@@ -728,6 +738,7 @@
     <string name="Transactions_Swaps">Trocas</string>
     <string name="Transactions_Approvals">Aprovações</string>
     <string name="Transactions_Unknown">Transação Desconhecida</string>
+    <string name="Transactions_TonTransaction">Transação TON</string>
     <string name="Transactions_Unknown_Description">Transação não pôde ser analisada</string>
     <string name="Transactions_Multiple">Múltiplo</string>
     <string name="Transactions_Filter">Filtro</string>
@@ -798,6 +809,8 @@
     <string name="Info_LockTime_Description_Static">O remetente enviou esses fundos com um fechamento de gastos que expirará na data mostrada. \n\nNão se preocupe, o Bitcoin recebido já é seu, mas até que o período de bloqueio expire, você não pode gastá-los na rede Bitcoin.</string>
     <string name="Info_NotRelayed_Title">Transmissão</string>
     <string name="Info_NotRelayed_Description">A transação que detém esse valor foi transmitida, mas ainda não foi aceita pela rede.</string>
+    <string name="Info_ProcessingBalance_Title">Processando quantia</string>
+    <string name="Info_ProcessingBalance_Description">Transações com esse valor ainda estão sincronizando. Quando forem confirmadas, esses tokens estarão disponíveis para gastar</string>
     <string name="Info_DoubleSpend_Title">Gasto Duplo</string>
     <string name="Info_DoubleSpend_Description">Risco de Gasto Duplo! Existe outra transação na Blockchain que está tentando gastar entradas usadas nesta transação. Apenas uma transação será aceita pela rede</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
@@ -836,7 +849,7 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Digite seu nome de conta Telegram para começar um chat de suporte pessoal com a nossa equipe. Entraremos em contato com você e começaremos a trabalhar em seu problema assim que virmos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Você já pediu um chat privado, encontre-o no Telegram</string>
     <string name="Settings_PersonalSupport_Account">Conta</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@usuário</string>
     <string name="Settings_PersonalSupport_Requested">Solicitado</string>
     <string name="Settings_PersonalSupport_Request">Solicitar</string>
     <string name="Settings_PersonalSupport_NewRequest">Nova solicitação</string>
@@ -844,6 +857,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">Juntos, com o seu apoio, podemos fazer este aplicativo ainda melhor!</string>
     <string name="Settings_Donate">Doar</string>
+    <string name="Settings_GetYourTokens">Pegue seus tokens</string>
     <string name="Settings_DonateToken">Doe %s</string>
     <string name="Settings_DonateWith">Doar com</string>
     <string name="Settings_Donate_GetAddress">Endereço de Doação</string>
@@ -858,7 +872,7 @@
     <string name="Appearance_Theme">TEMA</string>
     <string name="Appearance_Tab">DEFINIÇÕES DO TAB</string>
     <string name="Appearance_MarketsTab">TAB MARKETS</string>
-    <string name="Appearance_BalanceTab">BALANCE TAB</string>
+    <string name="Appearance_BalanceTab">ABA SALDO</string>
     <string name="Appearance_LaunchScreen">TELA DE INÍCIO</string>
     <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
     <string name="Appearance_BalanceConversion">Conversão de saldo</string>
