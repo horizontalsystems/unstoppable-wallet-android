@@ -138,6 +138,7 @@
     <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
     <string name="Balance_Hidden">پنهان</string>
     <string name="Balance_WatchAccount_NoBalance">این آدرس کیف پول موجودی ندارد</string>
+    <string name="Balance_ProcessingBalance_Title">پردازش</string>
     <string name="Balance_SendHint_CoinName">نام سکه</string>
     <!--Send NFT-->
     <string name="SendNft_Title">ارسال</string>
@@ -148,6 +149,7 @@
     <string name="Send_Button_Paste">چسباندن</string>
     <string name="Send_Button_Max">حداکثر</string>
     <string name="Send_Utxo_Change">تغییر</string>
+    <string name="Send_Utxo_AvailableBalance">موجودی در دسترس</string>
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_Domain">دامنه</string>
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
