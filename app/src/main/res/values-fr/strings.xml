@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">Définir le montant</string>
     <string name="Balance_Receive_AddressType">Type d\'adresse</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
+    <string name="Balance_ProcessingBalance_Title">Traitement en cours</string>
     <string name="Balance_NotRelayedAmount_Title">Diffusion</string>
     <string name="Balance_Receive_Memo">Mémo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
@@ -402,6 +403,9 @@
     <string name="Send_Rbf_Description">Ce choix vous permet de renvoyer une transaction bloquée en augmentant le montant des frais.</string>
     <string name="Send_RbfEnabled">Activé</string>
     <string name="Send_RbfDisabled">Désactivé</string>
+    <string name="Send_Utxo_AvailableBalance">Solde disponible</string>
+    <string name="Send_Utxo_UnselectAll">Tout désélectionner</string>
+    <string name="Send_Utxo_SelectAll">Tout sélectionner</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_Domain">Domaine</string>
     <string name="Send_Confirmation_YouSend">Vous envoyez</string>
@@ -706,6 +710,7 @@
     <string name="Transactions_ContractCall">Appel de contrat</string>
     <string name="Transactions_ExternalContractCall">Appel externe</string>
     <string name="Transactions_ContractCreation">Création du contrat</string>
+    <string name="Transactions_ContractDeploy">Déploiement du contrat</string>
     <string name="Transactions_To">a %s</string>
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited_CoinCode">%s illimité</string>
@@ -724,6 +729,7 @@
     <string name="Transactions_Swaps">Echanger</string>
     <string name="Transactions_Approvals">Approbations</string>
     <string name="Transactions_Unknown">Transaction inconnue</string>
+    <string name="Transactions_TonTransaction">Transaction TON</string>
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
     <string name="Transactions_Multiple">Multiples</string>
     <string name="Transactions_Filter">Filtre</string>
@@ -794,6 +800,8 @@
     <string name="Info_LockTime_Description_Static">L\'expéditeur a envoyé ces fonds avec un délai prédéfini qui se terminera à la date indiquée.\n\nPas de soucis, les Bitcoins reçues sont déjà à vous mais vous devez attendre l\'expiration de la période de verrouillage pour les dépenser sur le réseau Bitcoin.</string>
     <string name="Info_NotRelayed_Title">Diffuser</string>
     <string name="Info_NotRelayed_Description">La transaction contenant ce montant a été diffusée mais n\'a pas encore été acceptée par le réseau.</string>
+    <string name="Info_ProcessingBalance_Title">Montant en cours de traitement</string>
+    <string name="Info_ProcessingBalance_Description">Les transactions de ce montant sont encore en cours de synchronisation. Une fois confirmés, ces jetons seront disponibles</string>
     <string name="Info_DoubleSpend_Title">Double dépense</string>
     <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau</string>
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
@@ -840,6 +848,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
+    <string name="Settings_GetYourTokens">Obtenir vos tokens</string>
     <string name="Settings_DonateToken">Donate %s</string>
     <string name="Settings_DonateWith">Donnez avec</string>
     <string name="Settings_Donate_GetAddress">Adresse du don</string>
