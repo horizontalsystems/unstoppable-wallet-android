@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -71,6 +72,8 @@ fun BadgeText(
             text = text,
             color = textColor,
             style = ComposeAppTheme.typography.microSB,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

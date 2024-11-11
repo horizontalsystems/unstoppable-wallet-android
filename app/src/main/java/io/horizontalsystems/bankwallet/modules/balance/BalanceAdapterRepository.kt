@@ -17,6 +17,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
+import java.net.UnknownHostException
 
 class BalanceAdapterRepository(
     private val adapterManager: IAdapterManager,
@@ -107,11 +108,15 @@ class BalanceAdapterRepository(
     }
 
     suspend fun warning(wallet: Wallet): BalanceWarning? {
-        if (wallet.token.blockchainType is BlockchainType.Tron) {
-            (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.let { adapter ->
-                if (!adapter.isAddressActive(adapter.receiveAddress))
-                    return BalanceWarning.TronInactiveAccountWarning
+        try {
+            if (wallet.token.blockchainType is BlockchainType.Tron) {
+                (adapterManager.getAdapterForWallet(wallet) as? BaseTronAdapter)?.let { adapter ->
+                    if (!adapter.isAddressActive(adapter.receiveAddress))
+                        return BalanceWarning.TronInactiveAccountWarning
+                }
             }
+        } catch (e: UnknownHostException) {
+            e.printStackTrace()
         }
         return null
     }
