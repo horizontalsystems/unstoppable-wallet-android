@@ -404,8 +404,8 @@
     <string name="Send_RbfEnabled">활성화</string>
     <string name="Send_RbfDisabled">비활성화됨</string>
     <string name="Send_Utxo_AvailableBalance">사용 가능한 잔액</string>
-    <string name="Send_Utxo_UnselectAll">取消全选</string>
-    <string name="Send_Utxo_SelectAll">全选</string>
+    <string name="Send_Utxo_UnselectAll">전체 선택 해제</string>
+    <string name="Send_Utxo_SelectAll">전체 선택</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_Domain">도메인</string>
     <string name="Send_Confirmation_YouSend">보냅니다</string>
@@ -714,7 +714,7 @@
     <string name="Transactions_ContractCall">계약 콜</string>
     <string name="Transactions_ExternalContractCall">외부 콜</string>
     <string name="Transactions_ContractCreation">계약 생성</string>
-    <string name="Transactions_ContractDeploy">部署合约</string>
+    <string name="Transactions_ContractDeploy">컨트랙트 배포</string>
     <string name="Transactions_To">%s에게</string>
     <string name="Transactions_From">%s부터</string>
     <string name="Transaction_Unlimited_CoinCode">무제한 %s</string>
@@ -733,6 +733,7 @@
     <string name="Transactions_Swaps">스왑</string>
     <string name="Transactions_Approvals">승인</string>
     <string name="Transactions_Unknown">알 수 없는 트랜잭션</string>
+    <string name="Transactions_TonTransaction">TON 거래</string>
     <string name="Transactions_Unknown_Description">트랜잭션을 구문 분석할 수 없습니다</string>
     <string name="Transactions_Multiple">다수</string>
     <string name="Transactions_Filter">필터</string>
@@ -803,6 +804,8 @@
     <string name="Info_LockTime_Description_Static">발송자는 이러한 자금들을 표시된 날짜에 만료가 되는 잠금 지출과 함께 보냈습니다.\n\n걱정 하지마십시오, 수신된 비트코인은 이미 귀하의 것입니다 하지만 잠금 기간이 만료될때 까지 비트코인 네트워크에서 사용하실 수 없습니다.</string>
     <string name="Info_NotRelayed_Title">방송</string>
     <string name="Info_NotRelayed_Description">이 금액을 보유한 거래는 방송되었지만 아직 네트워크에서 수락되지 않았습니다.</string>
+    <string name="Info_ProcessingBalance_Title">처리 중인 금액</string>
+    <string name="Info_ProcessingBalance_Description">해당 금액의 거래가 아직 동기화 중입니다. 확인되면 이 토큰을 사용할 수 있습니다.</string>
     <string name="Info_DoubleSpend_Title">이중 지출</string>
     <string name="Info_DoubleSpend_Description">이중 지출 위험! 블록 체인에 있는 거래에 지출된 정보를 사용하려는 또 다른 거래가 있습니다. 네트워크는 하나의 거래만 수용합니다</string>
     <string name="Info_DoubleSpend_ThisTx">이 Tx</string>
@@ -849,6 +852,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
     <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
     <string name="Settings_Donate">후원하기</string>
+    <string name="Settings_GetYourTokens">토큰 받기</string>
     <string name="Settings_DonateToken">기부하기 %s</string>
     <string name="Settings_DonateWith">기부하기</string>
     <string name="Settings_Donate_GetAddress">기부 주소</string>
