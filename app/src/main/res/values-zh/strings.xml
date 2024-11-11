@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">设定金额</string>
     <string name="Balance_Receive_AddressType">地址类型</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
+    <string name="Balance_ProcessingBalance_Title">正在处理</string>
     <string name="Balance_NotRelayedAmount_Title">广播</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
@@ -402,6 +403,9 @@
     <string name="Send_Rbf_Description">此选项允许您通过增加手续费金额来重新发送卡住的交易。</string>
     <string name="Send_RbfEnabled">已启用</string>
     <string name="Send_RbfDisabled">已禁用</string>
+    <string name="Send_Utxo_AvailableBalance">可用余额</string>
+    <string name="Send_Utxo_UnselectAll">取消全选</string>
+    <string name="Send_Utxo_SelectAll">全选</string>
     <string name="Send_Confirmation_Title">确认</string>
     <string name="Send_Confirmation_Domain">域名</string>
     <string name="Send_Confirmation_YouSend">您发送</string>
@@ -706,6 +710,7 @@
     <string name="Transactions_ContractCall">合约调用</string>
     <string name="Transactions_ExternalContractCall">外部呼叫</string>
     <string name="Transactions_ContractCreation">合约创建</string>
+    <string name="Transactions_ContractDeploy">部署合约</string>
     <string name="Transactions_To">接收人%s</string>
     <string name="Transactions_From">发送人%s</string>
     <string name="Transaction_Unlimited_CoinCode">无限%s</string>
@@ -724,6 +729,7 @@
     <string name="Transactions_Swaps">掉期交易</string>
     <string name="Transactions_Approvals">批准</string>
     <string name="Transactions_Unknown">未知交易</string>
+    <string name="Transactions_TonTransaction">TON交易</string>
     <string name="Transactions_Unknown_Description">无法解析交易</string>
     <string name="Transactions_Multiple">多种</string>
     <string name="Transactions_Filter">筛选器</string>
@@ -794,6 +800,8 @@
     <string name="Info_LockTime_Description_Static">汇款人通过将在所显示日期失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
     <string name="Info_NotRelayed_Title">广播</string>
     <string name="Info_NotRelayed_Description">此金额的交易已广播，但尚未被网络接受。</string>
+    <string name="Info_ProcessingBalance_Title">处理金额</string>
+    <string name="Info_ProcessingBalance_Description">此金额的交易仍在同步中。确认后，这些代币将可用于支付。</string>
     <string name="Info_DoubleSpend_Title">双复支付</string>
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此交易</string>
@@ -840,6 +848,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
     <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
     <string name="Settings_Donate">捐助</string>
+    <string name="Settings_GetYourTokens">获取代币</string>
     <string name="Settings_DonateToken">捐赠%s</string>
     <string name="Settings_DonateWith">捐赠方式</string>
     <string name="Settings_Donate_GetAddress">捐款地址</string>
