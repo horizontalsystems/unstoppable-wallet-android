@@ -373,6 +373,7 @@
     <string name="Balance_Receive_SetAmount">Установить сумму</string>
     <string name="Balance_Receive_AddressType">Тип адреса</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
+    <string name="Balance_ProcessingBalance_Title">В процессе</string>
     <string name="Balance_NotRelayedAmount_Title">Трансляция</string>
     <string name="Balance_Receive_Memo">Memo(Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
@@ -404,6 +405,9 @@
     <string name="Send_Rbf_Description">Эта опция позволяет повторно отправить застрявшую транзакцию, увеличивая сумму комиссии.</string>
     <string name="Send_RbfEnabled">Вкл.</string>
     <string name="Send_RbfDisabled">Выкл.</string>
+    <string name="Send_Utxo_AvailableBalance">Доступный баланс</string>
+    <string name="Send_Utxo_UnselectAll">Отменить выбор</string>
+    <string name="Send_Utxo_SelectAll">Выбрать все</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_Domain">Домен</string>
     <string name="Send_Confirmation_YouSend">Вы отправляете</string>
@@ -726,6 +730,7 @@
     <string name="Transactions_Swaps">Обмены</string>
     <string name="Transactions_Approvals">Разрешения</string>
     <string name="Transactions_Unknown">Неизвестная транзакция</string>
+    <string name="Transactions_TonTransaction">Транзакция TON</string>
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
     <string name="Transactions_Filter">Фильтр</string>
@@ -796,6 +801,8 @@
     <string name="Info_LockTime_Description_Static">Эти средства были отправлены с временной блокировкой, которая истекает в указанную дату.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете их потратить в сети Bitcoin.</string>
     <string name="Info_NotRelayed_Title">Передача</string>
     <string name="Info_NotRelayed_Description">Транзакция, содержащая эту сумму, транслирована, но еще не принята сетью.</string>
+    <string name="Info_ProcessingBalance_Title">Обрабатываемая сумма</string>
+    <string name="Info_ProcessingBalance_Description">Транзакции на эту сумму все еще синхронизируются. После подтверждения эти токены будут доступны для использования</string>
     <string name="Info_DoubleSpend_Title">Двойная трата</string>
     <string name="Info_DoubleSpend_Description">Риск двойной траты! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
@@ -842,6 +849,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержи нас</string>
+    <string name="Settings_GetYourTokens">Получи токены UWT</string>
     <string name="Settings_DonateToken">Пожертвовать %s</string>
     <string name="Settings_DonateWith">Поддержи нас</string>
     <string name="Settings_Donate_GetAddress">Получить адрес</string>
