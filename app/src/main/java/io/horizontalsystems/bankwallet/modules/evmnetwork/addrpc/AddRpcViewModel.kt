@@ -14,6 +14,7 @@ import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.marketkit.models.Blockchain
 import java.net.MalformedURLException
 import java.net.URI
+import java.net.URISyntaxException
 
 class AddRpcViewModel(
     private val blockchain: Blockchain,
@@ -50,7 +51,7 @@ class AddRpcViewModel(
             if (!hasRequiredProtocol) {
                 throw MalformedURLException()
             }
-        } catch (e: MalformedURLException) {
+        } catch (e: Throwable) {
             urlCaution = Caution(Translator.getString(R.string.AddEvmSyncSource_Error_InvalidUrl), Caution.Type.Error)
             syncState()
             return
