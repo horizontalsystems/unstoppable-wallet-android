@@ -69,6 +69,8 @@ class MainActivityViewModel(
             throw MainScreenValidationError.UserAuthentication()
         } catch (e: KeyStoreValidationError.KeyIsInvalid) {
             throw MainScreenValidationError.KeyInvalidated()
+        } catch (e: RuntimeException) {
+            throw MainScreenValidationError.KeystoreRuntimeException()
         }
 
         if (accountManager.isAccountsEmpty && !localStorage.mainShowedOnce) {
@@ -106,4 +108,5 @@ sealed class MainScreenValidationError : Exception() {
     class NoSystemLock : MainScreenValidationError()
     class KeyInvalidated : MainScreenValidationError()
     class UserAuthentication : MainScreenValidationError()
+    class KeystoreRuntimeException : MainScreenValidationError()
 }

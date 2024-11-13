@@ -1,11 +1,13 @@
 package cash.p.terminal.modules.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import com.walletconnect.web3.wallet.client.Wallet
 import cash.p.terminal.R
+import cash.p.terminal.core.App
 import cash.p.terminal.core.BaseActivity
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.intro.IntroActivity
@@ -85,5 +87,8 @@ class MainActivity : BaseActivity() {
         finish()
     } catch (e: MainScreenValidationError.Unlock) {
         LockScreenActivity.start(this)
+    } catch (e: MainScreenValidationError.KeystoreRuntimeException) {
+        Toast.makeText(App.instance, "Issue with Keystore", Toast.LENGTH_SHORT).show()
+        finish()
     }
 }
