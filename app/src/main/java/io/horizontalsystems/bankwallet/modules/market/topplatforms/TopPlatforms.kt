@@ -68,6 +68,7 @@ fun TopPlatforms(
     Column {
         HSSwipeRefresh(
             refreshing = uiState.isRefreshing,
+            topPadding = 44,
             onRefresh = {
                 viewModel.refresh()
 
