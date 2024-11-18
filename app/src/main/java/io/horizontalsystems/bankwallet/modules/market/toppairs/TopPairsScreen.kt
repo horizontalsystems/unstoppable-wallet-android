@@ -67,6 +67,7 @@ fun TopPairsScreen() {
     ) {
         Column(modifier = Modifier.padding(it)) {
             HSSwipeRefresh(
+                topPadding = 44,
                 refreshing = uiState.isRefreshing,
                 onRefresh = viewModel::refresh
             ) {
