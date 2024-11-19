@@ -27,14 +27,18 @@ open class EvmCommonGasDataService(
         }
 
         return evmKit.estimateGas(stubTransactionData, gasPrice)
-                .map { estimatedGasLimit ->
-                    val gasLimit = if (surchargeRequired) EvmFeeModule.surcharged(estimatedGasLimit) else estimatedGasLimit
-                    GasData(
-                        gasLimit = gasLimit,
-                        estimatedGasLimit = estimatedGasLimit,
-                        gasPrice = gasPrice
-                    )
-                }
+            .onErrorResumeNext {
+                evmKit.estimateGas(stubTransactionData)
+            }
+            .map { estimatedGasLimit ->
+                val gasLimit =
+                    if (surchargeRequired) EvmFeeModule.surcharged(estimatedGasLimit) else estimatedGasLimit
+                GasData(
+                    gasLimit = gasLimit,
+                    estimatedGasLimit = estimatedGasLimit,
+                    gasPrice = gasPrice
+                )
+            }
     }
 
     companion object {
