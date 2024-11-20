@@ -337,9 +337,15 @@ class WCSessionViewModel(
             if (Web3Wallet.getSessionProposals().isNotEmpty()) {
                 val blockchains = getSupportedBlockchains(accountNonNull)
                 val namespaces = getSupportedNamespaces(blockchains.map { it.getAccount() })
-                val sessionProposal: Wallet.Model.SessionProposal = requireNotNull(
-                    Web3Wallet.getSessionProposals()
-                        .find { it.proposerPublicKey == proposalPublicKey })
+                val sessionProposal: Wallet.Model.SessionProposal = try {
+                    requireNotNull(
+                        Web3Wallet.getSessionProposals()
+                            .find { it.proposerPublicKey == proposalPublicKey })
+                } catch (e: Exception) {
+                    continuation.resumeWithException(e)
+                    WCDelegate.sessionProposalEvent = null
+                    return@suspendCoroutine
+                }
                 val sessionNamespaces = Web3Wallet.generateApprovedNamespaces(
                     sessionProposal = sessionProposal,
                     supportedNamespaces = namespaces
