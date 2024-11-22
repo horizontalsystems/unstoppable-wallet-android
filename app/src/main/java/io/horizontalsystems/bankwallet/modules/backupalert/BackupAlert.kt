@@ -13,7 +13,7 @@ import kotlinx.coroutines.delay
 fun BackupAlert(navController: NavController) {
     val viewModel = viewModel<BackupAlertViewModel>()
 
-    LifecycleResumeEffect {
+    LifecycleResumeEffect(Unit) {
         viewModel.resume()
 
         onPauseOrDispose {

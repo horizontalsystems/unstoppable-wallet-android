@@ -1,9 +1,10 @@
 package io.horizontalsystems.bankwallet.ui.compose
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RippleConfiguration
 import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -67,23 +68,11 @@ fun ComposeAppTheme(
 
 }
 
-object AppRippleTheme : RippleTheme {
-    // Here you should return the ripple color you want
-    // and not use the defaultRippleColor extension on RippleTheme.
-    // Using that will override the ripple color set in DarkMode
-    // or when you set light parameter to false
-    @Composable
-    override fun defaultColor(): Color = RippleTheme.defaultRippleColor(
-        if (isSystemInDarkTheme()) Color.White else Color.Black,
-        lightTheme = true
-    )
+private val MyRippleAlpha = RippleAlpha(0.5f, 0.5f, 0.5f, 0.5f)
 
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(
-        Color.Black,
-        lightTheme = true
-    )
-}
+@OptIn(ExperimentalMaterialApi::class)
+val MyRippleConfiguration =
+    RippleConfiguration(color = Color.Black, rippleAlpha = MyRippleAlpha)
 
 object ComposeAppTheme {
     val colors: Colors
