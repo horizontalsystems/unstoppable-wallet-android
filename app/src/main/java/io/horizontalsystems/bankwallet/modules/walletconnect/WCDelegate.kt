@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.walletconnect
 
-import android.util.Log
 import com.walletconnect.android.Core
 import com.walletconnect.android.CoreClient
 import com.walletconnect.web3.wallet.client.Wallet
@@ -130,25 +129,25 @@ object WCDelegate : Web3Wallet.WalletDelegate, CoreClient.CoreDelegate {
         }
     }
 
-    override fun onProposalExpired(proposal: Wallet.Model.ExpiredProposal) {
-        Log.e("TAG", "onProposalExpired: ", )
-    }
-
-    override fun onRequestExpired(request: Wallet.Model.ExpiredRequest) {
-        Log.e("TAG", "onRequestExpired: ", )
-    }
-
-    override fun onSessionExtend(session: Wallet.Model.Session) {
-        Log.e("TAG", "onSessionExtend: ", )
-    }
-
-    override fun onPairingExpired(expiredPairing: Core.Model.ExpiredPairing) {
-        Log.e("TAG", "onPairingExpired: ", )
-    }
-
-    override fun onPairingState(pairingState: Core.Model.PairingState) {
-        Log.e("TAG", "onPairingState: $pairingState", )
-    }
+//    override fun onProposalExpired(proposal: Wallet.Model.ExpiredProposal) {
+//        Log.e("TAG", "onProposalExpired: ", )
+//    }
+//
+//    override fun onRequestExpired(request: Wallet.Model.ExpiredRequest) {
+//        Log.e("TAG", "onRequestExpired: ", )
+//    }
+//
+//    override fun onSessionExtend(session: Wallet.Model.Session) {
+//        Log.e("TAG", "onSessionExtend: ", )
+//    }
+//
+//    override fun onPairingExpired(expiredPairing: Core.Model.ExpiredPairing) {
+//        Log.e("TAG", "onPairingExpired: ", )
+//    }
+//
+//    override fun onPairingState(pairingState: Core.Model.PairingState) {
+//        Log.e("TAG", "onPairingState: $pairingState", )
+//    }
 
 //    fun deleteAccountAllPairings(currentAccountTopics: List<String>) {
 //        Web3Wallet.getListOfActiveSessions()
