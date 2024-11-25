@@ -45,6 +45,10 @@ android {
         resValue "string", "walletConnectAppMetaDataUrl", "p.cash"
         resValue "string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/piratecash/pcash-wallet-ios/master/UnstoppableWallet/UnstoppableWallet/AppIcon.xcassets/AppIcon.appiconset/p.cash_1024.png"
         resValue "string", "accountsBackupFileSalt", "pcash"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
     }
 
     buildFeatures {
