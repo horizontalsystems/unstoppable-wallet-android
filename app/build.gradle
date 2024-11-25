@@ -43,6 +43,10 @@ android {
         resValue "string", "walletConnectAppMetaDataUrl", "unstoppable.money"
         resValue "string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png"
         resValue "string", "accountsBackupFileSalt", "unstoppable"
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
     }
 
     buildFeatures {
