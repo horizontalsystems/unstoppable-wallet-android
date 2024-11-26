@@ -1023,6 +1023,12 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hour</string>
 
+    <!--Premium Banner-->
+    <string name="SettingsBanner_GetPremium">Get Premium</string>
+    <string name="SettingsBanner_FreeFor7Days">Free for 7 days</string>
+    <string name="SettingsBanner_PremiumBannerHighlightedWord">Full Power</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Unleash the Full Power of Unstoppable Wallet</string>
+
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>

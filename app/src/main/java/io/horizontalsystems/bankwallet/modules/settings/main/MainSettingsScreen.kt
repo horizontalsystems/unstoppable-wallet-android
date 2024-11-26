@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -89,18 +90,9 @@ private fun SettingSections(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_Donate,
-                R.drawable.ic_heart_filled_24,
-                ComposeAppTheme.colors.jacob,
-                onClick = {
-                    navController.slideFromRight(R.id.donateTokenSelectFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
-                }
-            )
+    PremiumBanner(
+        onClick = {
+            Toast.makeText(context, "Hello world", Toast.LENGTH_SHORT).show()
         }
     )
 
@@ -356,6 +348,23 @@ private fun SettingSections(
                 }
             )
         })
+    )
+
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.Settings_Donate,
+                R.drawable.ic_heart_filled_24,
+                ComposeAppTheme.colors.jacob,
+                onClick = {
+                    navController.slideFromRight(R.id.donateTokenSelectFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
+                }
+            )
+        }
     )
 
     VSpacer(32.dp)
