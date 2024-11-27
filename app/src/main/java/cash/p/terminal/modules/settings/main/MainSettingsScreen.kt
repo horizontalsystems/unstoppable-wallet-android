@@ -111,9 +111,8 @@ private fun SettingSections(
             HsSettingCell(
                 R.string.Settings_GetYourTokens,
                 R.drawable.ic_uwt2_24,
-                ComposeAppTheme.colors.jacob,
                 onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/BeUnstoppable_bot")
+                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/piratecash_bot")
                 }
             )
         }
