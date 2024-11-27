@@ -25,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
+import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectMainFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.list.WCListFragment
@@ -327,10 +328,10 @@ class MainViewModel(
                 }
             }
 
-//            deeplinkString.startsWith("tc:") -> {
-//                deeplinkPage = DeeplinkPage(R.id.tcListFragment, TonConnectMainFragment.Input(deeplinkString))
-//                tab = MainNavigation.Settings
-//            }
+            deeplinkString.startsWith("tc:") -> {
+                deeplinkPage = DeeplinkPage(R.id.tcListFragment, TonConnectMainFragment.Input(deeplinkString))
+                tab = MainNavigation.Settings
+            }
 
             deeplinkString.startsWith("https://unstoppable.money/referral") -> {
                 val userId: String? = deepLink.getQueryParameter("userId")
