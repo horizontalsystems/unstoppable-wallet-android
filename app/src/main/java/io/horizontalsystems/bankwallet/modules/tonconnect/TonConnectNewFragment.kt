@@ -1,9 +1,9 @@
-package io.horizontalsystems.bankwallet.modules.tonconnect
+package cash.p.terminal.modules.tonconnect
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.requireInput
 
 class TonConnectNewFragment : BaseComposeFragment() {
     @Composable

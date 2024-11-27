@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.tonconnect
+package cash.p.terminal.modules.tonconnect
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
+import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.core.getInput
 import kotlinx.parcelize.Parcelize
 
 class TonConnectMainFragment : BaseComposeFragment() {

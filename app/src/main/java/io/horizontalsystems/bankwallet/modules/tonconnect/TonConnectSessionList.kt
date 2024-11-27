@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.tonconnect
+package cash.p.terminal.modules.tonconnect
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,15 +36,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.ActionsRow
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.DraggableCardSimple
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.getShape
-import io.horizontalsystems.bankwallet.modules.walletconnect.list.ui.showDivider
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
-import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import cash.p.terminal.R
+import cash.p.terminal.modules.walletconnect.list.ui.ActionsRow
+import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
+import cash.p.terminal.modules.walletconnect.list.ui.getShape
+import cash.p.terminal.modules.walletconnect.list.ui.showDivider
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui.compose.components.subhead2_grey
 
 @Composable
 fun TonConnectSessionList(

@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.tonconnect
+package cash.p.terminal.modules.tonconnect
 
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -22,18 +22,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.Caution
-import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.utils.ModuleField
-import io.horizontalsystems.bankwallet.modules.contacts.screen.ConfirmationBottomSheet
-import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.qrscanner.QRScannerActivity
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
+import cash.p.terminal.R
+import cash.p.terminal.core.Caution
+import cash.p.terminal.core.slideFromBottom
+import cash.p.terminal.core.utils.ModuleField
+import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
+import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
+import cash.p.terminal.modules.qrscanner.QRScannerActivity
+import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui.compose.components.ListEmptyView
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)

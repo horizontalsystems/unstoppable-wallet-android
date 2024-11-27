@@ -1,13 +1,13 @@
-package io.horizontalsystems.bankwallet.modules.tonconnect
+package cash.p.terminal.modules.tonconnect
 
 import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.managers.toTonKitWalletType
-import io.horizontalsystems.bankwallet.entities.Account
-import io.horizontalsystems.bankwallet.entities.AccountType
+import cash.p.terminal.core.App
+import cash.p.terminal.core.ViewModelUiState
+import cash.p.terminal.core.managers.toTonKitWalletType
+import cash.p.terminal.entities.Account
+import cash.p.terminal.entities.AccountType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

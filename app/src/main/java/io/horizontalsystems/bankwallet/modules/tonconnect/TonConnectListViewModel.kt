@@ -1,10 +1,10 @@
-package io.horizontalsystems.bankwallet.modules.tonconnect
+package cash.p.terminal.modules.tonconnect
 
 import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
-import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import cash.p.terminal.core.App
+import cash.p.terminal.core.ViewModelUiState
 import kotlinx.coroutines.launch
 
 class TonConnectListViewModel : ViewModelUiState<TonConnectListUiState>() {
