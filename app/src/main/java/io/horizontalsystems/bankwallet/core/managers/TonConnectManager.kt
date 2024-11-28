@@ -9,8 +9,13 @@ import io.horizontalsystems.tonkit.tonconnect.TonConnectKit
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
-class TonConnectManager(context: Context, val adapterFactory: AdapterFactory) {
-    val kit = TonConnectKit.getInstance(context)
+class TonConnectManager(
+    context: Context,
+    val adapterFactory: AdapterFactory,
+    appName: String,
+    appVersion: String,
+) {
+    val kit = TonConnectKit.getInstance(context, appName, appVersion)
     val transactionSigner = TonKit.getTransactionSigner(TonKit.getTonApi(Network.MainNet))
 
     val sendRequestFlow by kit::sendRequestFlow

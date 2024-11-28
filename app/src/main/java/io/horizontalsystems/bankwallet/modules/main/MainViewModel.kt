@@ -328,6 +328,7 @@ class MainViewModel(
                 }
             }
 
+            deeplinkString.startsWith("unstoppable.money:") ||
             deeplinkString.startsWith("tc:") -> {
                 deeplinkPage = DeeplinkPage(R.id.tcListFragment, TonConnectMainFragment.Input(deeplinkString))
                 tab = MainNavigation.Settings

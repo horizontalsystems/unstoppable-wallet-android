@@ -453,7 +453,12 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         spamManager = SpamManager(localStorage)
 
-        tonConnectManager = TonConnectManager(this, adapterFactory)
+        tonConnectManager = TonConnectManager(
+            context = this,
+            adapterFactory = adapterFactory,
+            appName = "Unstoppable Wallet",
+            appVersion = appConfigProvider.appVersion
+        )
         tonConnectManager.start()
 
         startTasks()
