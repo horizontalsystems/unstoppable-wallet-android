@@ -243,7 +243,10 @@ class BalanceViewModel(
 
     fun handleScannedData(scannedText: String) {
         viewModelScope.launch {
-            if (scannedText.startsWith("tc:")) {
+            if (
+                scannedText.startsWith("tc:") ||
+                scannedText.startsWith("https://unstoppable.money/ton-connect")
+            ) {
                 App.tonConnectManager.handle(scannedText)
             } else {
                 val wcUriVersion = WalletConnectListModule.getVersionFromUri(scannedText)
