@@ -32,6 +32,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Darkest
 import io.horizontalsystems.bankwallet.ui.compose.SteelLight
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
@@ -189,14 +190,17 @@ fun ButtonsGroupWithDarkShade(
                 .height(24.dp)
                 .background(
                     brush = Brush.verticalGradient(
-                        listOf(ComposeAppTheme.colors.transparent, ComposeAppTheme.colors.dark)
+                        listOf(
+                            ComposeAppTheme.colors.transparent,
+                            Darkest
+                        )
                     )
                 )
         )
         Box(
             modifier = Modifier
-                .background(ComposeAppTheme.colors.dark)
-                .padding(bottom = 8.dp) // With 24dp offset actual padding will be 32dp
+                .background(Darkest)
+                .padding(bottom = 8.dp)
         ) {
             buttonsContent()
         }

@@ -34,7 +34,6 @@ import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.Darkest
 import io.horizontalsystems.bankwallet.ui.compose.Light
 import io.horizontalsystems.bankwallet.ui.compose.Steel20
 import io.horizontalsystems.bankwallet.ui.compose.SteelLight
@@ -70,12 +70,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import kotlinx.coroutines.launch
 
-enum class PlanTab(@StringRes val titleResId: Int) {
+enum class PremiumPlanType(@StringRes val titleResId: Int) {
     ProPlan(R.string.Premium_PlanPro),
     VipPlan(R.string.Premium_PlanVip);
 }
 
-private val yellowGradient = Brush.horizontalGradient(
+val yellowGradient = Brush.horizontalGradient(
     colors = listOf(
         Color(0xFFFFD000),
         Color(0xFFFFA800),
@@ -92,6 +92,7 @@ fun SelectPremiumPlanScreen(
     onCloseClick: () -> Unit = {}
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val selectedTabIndex = remember { mutableStateOf(0) }
     val animationSpec = remember {
         Animatable(0f)
             .run {
@@ -108,16 +109,23 @@ fun SelectPremiumPlanScreen(
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             SelectSubscriptionBottomSheet(
+                type = PremiumPlanType.entries[selectedTabIndex.value],
                 onDismiss = {
                     coroutineScope.launch {
                         modalBottomSheetState.hide()
+                    }
+                },
+                onSubscribeClick = { type ->
+                    coroutineScope.launch {
+                        modalBottomSheetState.hide()
+                        navController.navigate("premium_subscribed_page?type=${type.name}")
                     }
                 }
             )
         },
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.dark,
+            backgroundColor = Darkest,
             topBar = {
                 TitleCenteredTopBar(
                     modifier = Modifier.padding(top = 24.dp),
@@ -148,7 +156,12 @@ fun SelectPremiumPlanScreen(
                         textAlign = TextAlign.Center
                     )
                     VSpacer(24.dp)
-                    PlanTabs()
+                    PlanTabs(
+                        selectedTabIndex = selectedTabIndex.value,
+                        onTabChange = { index ->
+                            selectedTabIndex.value = index
+                        }
+                    )
                     VSpacer(32.dp)
                 }
 
@@ -182,7 +195,9 @@ fun SelectPremiumPlanScreen(
 
 @Composable
 fun SelectSubscriptionBottomSheet(
-    onDismiss: () -> Unit
+    type: PremiumPlanType,
+    onDismiss: () -> Unit,
+    onSubscribeClick: (PremiumPlanType) -> Unit
 ) {
     val selectedItem = remember { mutableIntStateOf(0) }
     BottomSheetHeader(
@@ -240,7 +255,7 @@ fun SelectSubscriptionBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Premium_Get7DaysFree),
                 onClick = {
-
+                    onSubscribeClick(type)
                 }
             )
             VSpacer(12.dp)
@@ -311,11 +326,13 @@ fun SubscriptionOption(
 }
 
 @Composable
-private fun PlanTabs() {
-    val tabs = PlanTab.entries.toTypedArray()
-    val selectedTabIndex = remember { mutableStateOf(0) }
-    val selectedTab by remember { mutableStateOf(PlanTab.ProPlan) }
-    val pagerState = rememberPagerState(initialPage = selectedTab.ordinal) { tabs.size }
+private fun PlanTabs(
+    selectedTabIndex: Int,
+    onTabChange: (Int) -> Unit
+) {
+    val tabs = PremiumPlanType.entries.toTypedArray()
+
+    val pagerState = rememberPagerState(initialPage = selectedTabIndex) { tabs.size }
     val scrollScope = rememberCoroutineScope()
 
     Column(
@@ -324,13 +341,13 @@ private fun PlanTabs() {
             .clip(RoundedCornerShape(12.dp)),
     ) {
         TabRow(
-            selectedTabIndex = selectedTabIndex.value,
+            selectedTabIndex = selectedTabIndex,
             backgroundColor = Color(0xFF111111), // Dark background
             contentColor = Color(0xFFEDD716),
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     Modifier
-                        .tabIndicatorOffset(tabPositions[selectedTabIndex.value])
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .height(0.dp), // No indicator line
                     color = Color.Transparent
                 )
@@ -338,16 +355,16 @@ private fun PlanTabs() {
         ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
-                    selected = selectedTabIndex.value == index,
+                    selected = selectedTabIndex == index,
                     onClick = {
-                        selectedTabIndex.value = index
+                        onTabChange(index)
                         scrollScope.launch {
                             pagerState.scrollToPage(index)
                         }
                     },
                     modifier = Modifier.background(
                         brush =
-                        if (selectedTabIndex.value == index) yellowGradient else steelBrush
+                        if (selectedTabIndex == index) yellowGradient else steelBrush
                     ),
                 ) {
                     Row(
@@ -359,13 +376,13 @@ private fun PlanTabs() {
                         Icon(
                             painter = painterResource(if (index == 0) R.drawable.prem_star_yellow_16 else R.drawable.prem_crown_yellow_16),
                             contentDescription = null,
-                            tint = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
+                            tint = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = stringResource(tab.titleResId),
-                            color = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
+                            color = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
                             style = ComposeAppTheme.typography.captionSB
                         )
                     }
@@ -378,8 +395,8 @@ private fun PlanTabs() {
             userScrollEnabled = false
         ) { page ->
             when (tabs[page]) {
-                PlanTab.ProPlan -> ProPlanItems()
-                PlanTab.VipPlan -> VipPlanItems()
+                PremiumPlanType.ProPlan -> ProPlanItems()
+                PremiumPlanType.VipPlan -> VipPlanItems()
             }
         }
     }

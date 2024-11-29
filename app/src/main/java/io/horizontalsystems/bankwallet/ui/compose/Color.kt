@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.ui.compose
 
 import androidx.compose.ui.graphics.Color
 
+val Darkest = Color(0xFF0F1014)
 val Dark = Color(0xFF13151A)
 val Light = Color(0xFFF0F0F0)
 val LightGrey = Color(0xFFC8C7CC)
