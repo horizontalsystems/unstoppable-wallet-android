@@ -2,7 +2,6 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -45,6 +44,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
+import io.horizontalsystems.bankwallet.modules.premium.PremiumActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -92,7 +92,8 @@ private fun SettingSections(
 
     PremiumBanner(
         onClick = {
-            Toast.makeText(context, "Hello world", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, PremiumActivity::class.java)
+            context.startActivity(intent)
         }
     )
 

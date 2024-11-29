@@ -1029,6 +1029,41 @@
     <string name="SettingsBanner_PremiumBannerHighlightedWord">Full Power</string>
     <string name="SettingsBanner_PremiumBannerDescription">Unleash the Full Power of Unstoppable Wallet</string>
 
+    <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
+    <string name="Premium_ChoosePlanForYou">Choose the plan</string>
+    <string name="Premium_PlanPro">PRO</string>
+    <string name="Premium_PlanVip">VIP</string>
+    <string name="Premium_SelectSubscription">Select Subscription</string>
+    <string name="Premium_EnjoyFirst7DaysFree_Description">Enjoy the first 7 days FREE. You can cancel your App Store subscription at any time.</string>
+    <string name="Premium_EnjoyFirst7DaysFree">Enjoy the first 7 days FREE.</string>
+    <string name="Premium_Get7DaysFree">Get 7 days FREE.</string>
+    <string name="Premium_AddPromoCode">Add Promo Code</string>
+    <string name="Premium_TryForFree">Try for FREE</string>
+    <string name="Premium_Restore">Restore</string>
+    <string name="Premium_Annually">Annually</string>
+    <string name="Premium_Monthly">Monthly</string>
+
+    <string name="Premium_UpgradeFeature_1">Vip Support</string>
+    <string name="Premium_UpgradeFeature_2">Vip Chat Group</string>
+    <string name="Premium_UpgradeFeature_3">Token Insights</string>
+    <string name="Premium_UpgradeFeature_4">Trade Signals</string>
+    <string name="Premium_UpgradeFeature_5">Favorable Swaps</string>
+    <string name="Premium_UpgradeFeature_6">Transaction Speed Tools</string>
+    <string name="Premium_UpgradeFeature_7">Duress Mode</string>
+    <string name="Premium_UpgradeFeature_8">Address Verification</string>
+    <string name="Premium_UpgradeFeature_9">Privacy Mode</string>
+
+    <string name="Premium_UpgradeFeature_Description_1">Fast response support.</string>
+    <string name="Premium_UpgradeFeature_Description_2">Private chat with exclusive information.</string>
+    <string name="Premium_UpgradeFeature_Description_3">Full analytics and data about tokens.</string>
+    <string name="Premium_UpgradeFeature_Description_4">Signals for confident trading.</string>
+    <string name="Premium_UpgradeFeature_Description_5">Swaps with no extra fees.</string>
+    <string name="Premium_UpgradeFeature_Description_6">Speed up and cancel transactions.</string>
+    <string name="Premium_UpgradeFeature_Description_7">Hides main wallets in case of coercion.</string>
+    <string name="Premium_UpgradeFeature_Description_8">Additional address check for fraud prevention.</string>
+    <string name="Premium_UpgradeFeature_Description_9">Full disconnection from data collection.</string>
+
     <string name="Appearance_Theme">THEME</string>
     <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>

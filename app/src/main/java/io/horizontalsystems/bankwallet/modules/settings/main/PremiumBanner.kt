@@ -32,16 +32,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.premium.highlightText
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 
 
 @Composable
@@ -133,7 +130,11 @@ fun PremiumBanner(onClick: () -> Unit) {
                     .padding(start = 16.dp)
                     .padding(end = 8.dp)
             ) {
-                headline1_leah(stringResource(R.string.SettingsBanner_GetPremium))
+                Text(
+                    text = stringResource(R.string.SettingsBanner_GetPremium),
+                    style = ComposeAppTheme.typography.headline1,
+                    color = ComposeAppTheme.colors.white,
+                )
 
                 VSpacer(12.dp)
 
@@ -202,41 +203,6 @@ private fun AutoSizedText(
                 maxLines = maxLines,
                 color = Color.White,
             )
-        }
-    }
-}
-
-@Composable
-private fun highlightText(
-    text: String,
-    highlightPart: String,
-    color: Color
-): AnnotatedString {
-
-    return buildAnnotatedString {
-        val highlightIndex = text
-            .lowercase()
-            .indexOf(highlightPart.lowercase())
-
-        if (highlightIndex != -1) {
-            append(text.substring(0, highlightIndex))
-
-            withStyle(
-                SpanStyle(color = color)
-            ) {
-                append(
-                    text.substring(
-                        highlightIndex,
-                        highlightIndex + highlightPart.length
-                    )
-                )
-            }
-
-            append(
-                text.substring(highlightIndex + highlightPart.length)
-            )
-        } else {
-            append(text)
         }
     }
 }
