@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoVi
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Status
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Value
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionViewItemFactoryHelper
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionViewItemFactoryHelper.getSwapEventSectionItems
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
@@ -229,7 +228,7 @@ object TonHelper {
 
             is TonTransactionRecord.Action.Type.Swap -> {
                 itemsForAction.addAll(
-                    getSwapEventSectionItems(
+                    TransactionViewItemFactoryHelper.getSwapEventSectionItems(
                         valueIn = actionType.valueIn,
                         valueOut = actionType.valueOut,
                         rates = rates,
