@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -24,6 +25,12 @@ class MainActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         validate()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        viewModel.setIntent(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +83,8 @@ class MainActivity : BaseActivity() {
                 viewModel.onTcDappRequestHandled()
             }
         }
+
+        viewModel.setIntent(intent)
     }
 
     private fun validate() = try {

@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.main
 
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +34,7 @@ class MainActivityViewModel(
     val wcEvent = MutableLiveData<Wallet.Model?>()
     val tcSendRequest = MutableLiveData<SendRequestEntity?>()
     val tcDappRequest = MutableLiveData<DAppRequestEntity?>()
+    val intentLiveData = MutableLiveData<Intent?>()
 
     init {
         viewModelScope.launch {
@@ -95,6 +97,14 @@ class MainActivityViewModel(
 
     fun onNavigatedToMain() {
         navigateToMainLiveData.postValue(false)
+    }
+
+    fun setIntent(intent: Intent) {
+        intentLiveData.postValue(intent)
+    }
+
+    fun intentHandled() {
+        intentLiveData.postValue(null)
     }
 
     class Factory : ViewModelProvider.Factory {

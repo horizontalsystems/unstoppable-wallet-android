@@ -46,6 +46,7 @@
 
         <activity
             android:name=".modules.main.MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.App.Starting"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
