@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.main
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -15,7 +14,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BadgedBox
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -23,6 +21,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -38,7 +39,6 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.findActivity
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -72,6 +72,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainFragment : BaseComposeFragment() {
+    private val mainActivityViewModel by activityViewModels<MainActivityViewModel>()
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -83,6 +84,7 @@ class MainFragment : BaseComposeFragment() {
             MainScreenWithRootedDeviceCheck(
                 transactionsViewModel = viewModel,
                 navController = navController,
+                mainActivityViewModel = mainActivityViewModel
             )
         } ?: run {
             // Back stack entry doesn't exist, restart activity
@@ -108,39 +110,37 @@ class MainFragment : BaseComposeFragment() {
 private fun MainScreenWithRootedDeviceCheck(
     transactionsViewModel: TransactionsViewModel,
     navController: NavController,
-    rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory())
+    rootedDeviceViewModel: RootedDeviceViewModel = viewModel(factory = RootedDeviceModule.Factory()),
+    mainActivityViewModel: MainActivityViewModel
 ) {
     if (rootedDeviceViewModel.showRootedDeviceWarning) {
         RootedDeviceScreen { rootedDeviceViewModel.ignoreRootedDeviceWarning() }
     } else {
-        MainScreen(transactionsViewModel, navController)
+        MainScreen(mainActivityViewModel, transactionsViewModel, navController)
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun MainScreen(
+    mainActivityViewModel: MainActivityViewModel,
     transactionsViewModel: TransactionsViewModel,
     fragmentNavController: NavController,
     viewModel: MainViewModel = viewModel(factory = MainModule.Factory())
 ) {
+    val activityIntent by mainActivityViewModel.intentLiveData.observeAsState()
+    LaunchedEffect(activityIntent) {
+        activityIntent?.data?.let {
+            mainActivityViewModel.intentHandled()
+            viewModel.handleDeepLink(it)
+        }
+    }
+
     val uiState = viewModel.uiState
-    val context = LocalContext.current
     val selectedPage = uiState.selectedTabIndex
     val pagerState = rememberPagerState(initialPage = selectedPage) { uiState.mainNavItems.size }
 
     val coroutineScope = rememberCoroutineScope()
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-
-    LaunchedEffect(Unit) {
-        context.findActivity()?.let { activity ->
-            activity.intent?.data?.let { uri ->
-                viewModel.handleDeepLink(uri)
-                activity.intent?.data = null //clear intent data
-            }
-        }
-    }
-
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
