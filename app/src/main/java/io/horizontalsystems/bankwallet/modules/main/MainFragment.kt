@@ -86,10 +86,7 @@ class MainFragment : BaseComposeFragment() {
             )
         } ?: run {
             // Back stack entry doesn't exist, restart activity
-            val intent = requireActivity().intent
-            intent.data = null
-            requireActivity().finishAffinity()
-            startActivity(intent)
+            requireActivity().recreate()
         }
     }
 

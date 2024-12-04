@@ -100,7 +100,7 @@ class ZcashAdapter(
                     max(network.saplingActivationHeight.value, height)
                 }
                 ?.let {
-                    BlockHeight.new(network, it)
+                    BlockHeight.new(it)
                 }
         }
 
@@ -256,6 +256,7 @@ class ZcashAdapter(
             is AddressType.Invalid -> throw ZcashError.InvalidAddress
             is AddressType.Transparent -> ZCashAddressType.Transparent
             is AddressType.Shielded -> ZCashAddressType.Shielded
+            is AddressType.Tex -> ZCashAddressType.Shielded
             AddressType.Unified -> ZCashAddressType.Unified
         }
     }
