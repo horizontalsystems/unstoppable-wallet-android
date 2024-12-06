@@ -25,7 +25,7 @@ class LitecoinAdapter(
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), LitecoinKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), LitecoinKit.Listener, ISendBitcoinAdapter {
 
     constructor(
         wallet: Wallet,
@@ -95,7 +95,7 @@ class LitecoinAdapter(
 
 
     companion object {
-        private const val confirmationsThreshold = 3
+        private const val confirmationsThreshold = 1
 
         private fun createKit(
             wallet: Wallet,

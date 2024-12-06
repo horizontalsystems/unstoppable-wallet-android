@@ -23,7 +23,7 @@ class DashAdapter(
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), DashKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), DashKit.Listener, ISendBitcoinAdapter {
 
     constructor(wallet: Wallet, syncMode: BitcoinCore.SyncMode, backgroundManager: BackgroundManager) :
             this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
@@ -87,7 +87,7 @@ class DashAdapter(
         kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/dash/address/${it.address}") }
 
     companion object {
-        private const val confirmationsThreshold = 3
+        private const val confirmationsThreshold = 1
 
         private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): DashKit {
             val account = wallet.account
