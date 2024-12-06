@@ -54,11 +54,11 @@ abstract class BitcoinBaseAdapter(
     open val syncMode: BitcoinCore.SyncMode,
     private val backgroundManager: BackgroundManager,
     val wallet: Wallet,
-    private val confirmationsThreshold: Int,
     protected val decimal: Int = 8
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
 
     private val scope = CoroutineScope(Dispatchers.Default)
+    private var transactionConfirmationsThreshold = 3
 
     abstract val satoshisInBitcoin: BigDecimal
 
@@ -396,7 +396,7 @@ abstract class BitcoinBaseAdapter(
                         transactionHash = transaction.transactionHash,
                         transactionIndex = transaction.transactionIndex,
                         blockHeight = transaction.blockHeight,
-                        confirmationsThreshold = confirmationsThreshold,
+                        confirmationsThreshold = transactionConfirmationsThreshold,
                         timestamp = transaction.timestamp,
                         fee = satoshiToBTC(transaction.fee),
                         failed = transaction.status == TransactionStatus.INVALID,
@@ -417,7 +417,7 @@ abstract class BitcoinBaseAdapter(
                     transactionHash = transaction.transactionHash,
                     transactionIndex = transaction.transactionIndex,
                     blockHeight = transaction.blockHeight,
-                    confirmationsThreshold = confirmationsThreshold,
+                    confirmationsThreshold = transactionConfirmationsThreshold,
                     timestamp = transaction.timestamp,
                     fee = satoshiToBTC(transaction.fee),
                     failed = transaction.status == TransactionStatus.INVALID,
@@ -440,7 +440,7 @@ abstract class BitcoinBaseAdapter(
                     transactionHash = transaction.transactionHash,
                     transactionIndex = transaction.transactionIndex,
                     blockHeight = transaction.blockHeight,
-                    confirmationsThreshold = confirmationsThreshold,
+                    confirmationsThreshold = transactionConfirmationsThreshold,
                     timestamp = transaction.timestamp,
                     fee = satoshiToBTC(transaction.fee),
                     failed = transaction.status == TransactionStatus.INVALID,

@@ -25,7 +25,7 @@ class BitcoinAdapter(
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
     wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), BitcoinKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), BitcoinKit.Listener, ISendBitcoinAdapter {
 
     constructor(
         wallet: Wallet,
@@ -99,7 +99,7 @@ class BitcoinAdapter(
         kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/bitcoin/address/${it.address}") }
 
     companion object {
-        private const val confirmationsThreshold = 3
+        private const val confirmationsThreshold = 1
 
         private fun createKit(
             wallet: Wallet,
