@@ -13,7 +13,8 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.StatSortType
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.overview.TopPairViewItem
+import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.marketkit.models.TopPair
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
+import java.math.BigDecimal
 
 class TopPairsViewModel(
     private val marketKit: MarketKitWrapper,
@@ -124,3 +126,51 @@ data class TopPairsUiState(
     val viewState: ViewState,
     val sortDescending: Boolean,
 )
+
+data class TopPairViewItem(
+    val title: String,
+    val rank: String,
+    val name: String,
+    val base: String,
+    val baseCoinUid: String?,
+    val baseCoin: Coin?,
+    val target: String,
+    val targetCoinUid: String?,
+    val targetCoin: Coin?,
+    val iconUrl: String?,
+    val tradeUrl: String?,
+    val volume: BigDecimal,
+    val volumeInFiat: String,
+    val price: String?
+) {
+    companion object {
+        fun createFromTopPair(topPair: TopPair, currencySymbol: String): TopPairViewItem {
+            val volumeStr = App.numberFormatter.formatFiatShort(topPair.volume, currencySymbol, 2)
+
+            val priceStr = topPair.price?.let {
+                App.numberFormatter.formatCoinShort(
+                    it,
+                    topPair.target,
+                    8
+                )
+            }
+
+            return TopPairViewItem(
+                title = "${topPair.base}/${topPair.target}",
+                name = topPair.marketName ?: "",
+                base = topPair.base,
+                baseCoinUid = topPair.baseCoinUid,
+                baseCoin = topPair.baseCoin,
+                target = topPair.target,
+                targetCoinUid = topPair.targetCoinUid,
+                targetCoin = topPair.targetCoin,
+                iconUrl = topPair.marketLogo,
+                rank = topPair.rank.toString(),
+                tradeUrl = topPair.tradeUrl,
+                volume = topPair.volume,
+                volumeInFiat = volumeStr,
+                price = priceStr,
+            )
+        }
+    }
+}

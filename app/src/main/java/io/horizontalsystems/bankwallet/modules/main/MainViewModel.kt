@@ -24,7 +24,6 @@ import io.horizontalsystems.bankwallet.entities.LaunchPage
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.main.MainModule.MainNavigation
 import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
-import io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment
 import io.horizontalsystems.bankwallet.modules.tonconnect.TonConnectMainFragment
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCSessionManager
@@ -294,15 +293,6 @@ class MainViewModel(
                             deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it))
 
                             stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
-                        }
-                    }
-
-                    deeplinkString.contains("nft-collection") -> {
-                        val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
-                        if (uid != null && blockchainTypeUid != null) {
-                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
-
-                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopNftCollections))
                         }
                     }
 

@@ -226,9 +226,6 @@
         android:id="@+id/blockchainsSelectorFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.BlockchainsSelectorFragment"/>
     <fragment
-        android:id="@+id/marketTopNftCollectionsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.market.topnftcollections.TopNftCollectionsFragment"/>
-    <fragment
         android:id="@+id/marketCategoryFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"/>
     <fragment
@@ -281,18 +278,6 @@
     <fragment
         android:id="@+id/etfFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.etf.EtfFragment" />
-    <fragment
-        android:id="@+id/nftsFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.holdings.NftHoldingsFragment" />
-    <fragment
-        android:id="@+id/nftAssetFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.asset.NftAssetFragment" />
-    <fragment
-        android:id="@+id/nftSendFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.send.SendNftFragment" />
-    <fragment
-        android:id="@+id/nftCollectionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.nft.collection.NftCollectionFragment"/>
     <fragment
         android:id="@+id/sendXFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.SendFragment" />
