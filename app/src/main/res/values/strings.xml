@@ -9,14 +9,10 @@
 
     <string name="Alert_Cancel">Cancel</string>
     <string name="Alert_Copy">Copy</string>
-    <string name="Alert_Close">Close</string>
     <string name="Alert_Loading">Loading...</string>
-    <string name="Alert_Restart">Restart</string>
     <string name="Alert_Skip" translatable="false">SKIP</string>
     <string name="Alert_Select" translatable="false">SELECT</string>
     <string name="Suspended">SUSPENDED</string>
-
-    <string name="Action_Undo">UNDO</string>
 
     <string name="Button_Show">Show</string>
     <string name="Button_Hide">Hide</string>
@@ -31,39 +27,29 @@
     <string name="Button_Retry">Retry</string>
     <string name="Button_Change">Change</string>
     <string name="Button_Add">Add</string>
-    <string name="Button_Approve">Approve</string>
     <string name="Button_Confirm">Confirm</string>
     <string name="Button_Refresh">Refresh</string>
     <string name="Button_Connect">Connect</string>
     <string name="Button_Reject">Reject</string>
     <string name="Button_Disconnect">Disconnect</string>
-    <string name="Button_Start">Start</string>
     <string name="Button_Create">Create</string>
     <string name="Button_Advanced">Advanced</string>
     <string name="Button_Restore">Import</string>
-    <string name="Button_WatchAddress">Watch Address</string>
     <string name="Button_Reset">Reset</string>
-    <string name="Button_Reconnect">Reconnect</string>
     <string name="Button_Understand">I Understand</string>
     <string name="Button_Switch">Switch</string>
     <string name="Button_Remove">Remove</string>
     <string name="Button_Save">Save</string>
     <string name="Button_IAgree">I Agree</string>
     <string name="Button_Continue">Continue</string>
-    <string name="Button_Send">Send</string>
     <string name="Button_Search">Search</string>
     <string name="Button_Back">Back</string>
     <string name="Button_Copy">Copy</string>
     <string name="Button_Browser">Browser</string>
     <string name="Button_Delete">Delete</string>
     <string name="Button_LearnMore">Learn More</string>
-    <string name="Button_Activate">Activate</string>
     <string name="Button_Sign">Sign</string>
-    <string name="Button_Activating">Activating</string>
     <string name="Button_GetApiKeys">Get API Keys</string>
-    <string name="Button_Login">Log In</string>
-    <string name="Button_SignUp">Sign Up</string>
-    <string name="Button_Submit">Submit</string>
     <string name="Button_TryAgain">Try Again</string>
     <string name="Button_Share">Share</string>
     <string name="Button_Apply">Apply</string>
@@ -78,8 +64,6 @@
 
     <string name="FooterText" translatable="false">© Horizontal Systems 2022</string>
 
-    <string name="PercentTitle">Percent</string>
-
     <string name="Keyboard">Keyboard</string>
 
     <string name="AccountRecovery_Note">Note</string>
@@ -88,7 +72,6 @@
 
     <!--Intro-->
 
-    <string name="Intro_Wallet_Screen1Description">Be Unstoppable</string>
     <string name="Intro_Wallet_Screen2Title">Unchain Assets</string>
     <string name="Intro_Wallet_Screen2Description">Don\'t lock yourself in and don\'t let others do that to you.</string>
     <string name="Intro_Wallet_Screen3Title">Go Borderless</string>
@@ -102,8 +85,6 @@
 
     <!--Welcome-->
 
-    <string name="Welcome_PrivacySettings">Privacy Settings</string>
-
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Advanced</string>
     <string name="CreateWallet_Mnemonic">Recovery Phrase</string>
@@ -113,7 +94,6 @@
     <string name="ConfirmPassphrase">Confirm</string>
     <string name="CreateWallet_N_WordsRecommended">%s words (recommended)</string>
     <string name="CreateWallet_N_Words">%s words</string>
-    <string name="CreateWallet_PassphraseConfirm">Confirm</string>
     <string name="CreateWallet_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="CreateWallet_Error_PassphraseForbiddenSymbols">Please use only supported symbols: <![CDATA[A-Z a-z 0-9 \' " ` & / ? ! : ; . , ~ * $ = + - [ ](){} <> \ _ # @ | % ]]></string>
     <string name="CreateWallet_Error_InvalidConfirmation">Passphrase confirmation does not match</string>
@@ -140,14 +120,11 @@
 
     <!--Restore-->
     <string name="Restore_Advanced_Title">Advanced</string>
-    <string name="Restore_Mnemonic_Description">Enter your wallet recovery phrase (aka mnemonic) which consists of 12, 15, 18, 21 or 24 words and may include additional alphanumeric password.</string>
-    <string name="Restore_ValidationFailed">Incorrect Key</string>
     <string name="Restore_Error_MnemonicWordCount">Wrong words count. It must be between 12 or 24 words. You entered: %d</string>
     <string name="Restore_Error_EmptyPassphrase">Passphrase cannot be empty</string>
     <string name="Restore_InvalidChecksum">Invalid Checksum</string>
     <string name="Restore_PassphraseDescription">Enter the passphrase you used when creating this recovery phrase. Restoring an existing wallet with a new passphrase will generate a brand new wallet.</string>
     <string name="Restore_Title">Choose Blockchains</string>
-    <string name="Restore_Key">Key</string>
     <string name="Restore_By">Import By</string>
     <string name="Restore_RestoreBy">Import By</string>
     <string name="Restore_RecoveryPhrase">Recovery Phrase</string>
@@ -161,13 +138,10 @@
 
     <string name="Restore_PrivateKey_InvalidKey">Invalid Key</string>
 
-    <string name="Select_Coins">Choose Coins</string>
-
     <string name="SelectContacts_All">All</string>
 
     <string name="Restore_BirthdayHeight">Birthday Height</string>
     <string name="Restore_ZCash">ZCash</string>
-    <string name="Restore_ZCash_BirthdayHeight">Zcash Birthday Height</string>
     <string name="Restore_ZCash_BirthdayHeight_Hint">Enter wallet\'s birthday height for faster synchronization.</string>
     <string name="Restore_ZCash_Birthday_Hint">000000000 (optional)</string>
     <string name="Restore_ZCash_RestoreAsNew">Restore as New</string>
@@ -184,8 +158,6 @@
     <string name="ImportCexAccountBinance_SecretKey">Secret Key</string>
 
     <!--Backup-->
-
-    <string name="Backup_Confirmation_CheckTitle">Check…</string>
 
     <!--Market-->
 
@@ -204,19 +176,10 @@
     <string name="Market_Field_LowestCap">Lowest Cap</string>
     <string name="Market_Field_HighestVolume">Highest Volume</string>
     <string name="Market_Field_LowestVolume">Lowest Volume</string>
-    <string name="Market_Field_HighestPrice">Highest Price</string>
-    <string name="Market_Field_LowestPrice">Lowest Price</string>
     <string name="Market_Sort_PopupTitle">Sort by</string>
-    <string name="Market_TotalMarketCap">Total M.Cap</string>
     <string name="Market_BtcDominance">BTC Dominance</string>
-    <string name="Market_Volume24h">24h Volume</string>
-    <string name="Market_TvlDeFi">TVL in DeFi</string>
-    <string name="Market_DeFiCap">DeFi Cap</string>
     <string name="Market_SeeAll">See All</string>
     <string name="Market_PoweredByApi">Powered By CoinGeko API</string>
-    <string name="Market_PoweredByHorizontalApi">Powered By Horizontal API</string>
-    <string name="Market_PoweredByDefiLlamaApi">Powered By DefiLlama API</string>
-    <string name="Market_Tab_Overview">Overview</string>
     <string name="Market_Tab_Posts">News</string>
     <string name="Market_Tab_Coins">Coins</string>
     <string name="Market_Tab_Platform">Platforms</string>
@@ -225,7 +188,6 @@
     <string name="Market_Tab_Watchlist">Watchlist</string>
     <string name="Market_Tab_Watchlist_EmptyList">Your watchlist is empty.</string>
     <string name="Market_Category_TopCoins">Top Coins</string>
-    <string name="Market_Category_TopCoins_Description">Top Coins by market cap rank</string>
     <string name="Market_Signals">Signals</string>
     <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">Market Cap</string>
@@ -245,40 +207,25 @@
     <string name="Market_Top_300">Top 300</string>
     <string name="Market_Top_500">Top 500</string>
 
-    <string name="TopPairs_Title">Top Market Pairs</string>
-    <string name="TopPairs_Description">Top trading pairs by volume in every exchanges</string>
-
     <!--Market Overview-->
-    <string name="Market_Overview_TopPairs">Top Market Pairs</string>
-    <string name="Market_Overview_TopSectors">Top Sectors</string>
-    <string name="Market_Overview_Sectors">Sectors</string>
 
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Top Platforms</string>
-    <string name="MarketTopPlatforms_PlatofrmsRank">Top Blockchain Platforms</string>
-    <string name="MarketTopPlatforms_Description">Leading blockchain platforms by cumulative market of projects built on top.</string>
     <string name="MarketTopPlatforms_Protocols">Protocols: %s</string>
 
     <string name="MarketPlatformCoins_PlatformEcosystem">%s Ecosystem</string>
     <string name="MarketPlatformCoins_PlatformEcosystemDescription">Market cap of all protocols on the %s chain</string>
 
     <!--Market Global Metrics-->
-    <string name="MarketGlobalMetrics_Chart">Chart</string>
     <string name="MarketGlobalMetrics_TotalMarketCap">Total Cap</string>
-    <string name="MarketGlobalMetrics_BtcDominance">BTC Dominance</string>
     <string name="MarketGlobalMetrics_Volume">24h Vol.</string>
-    <string name="MarketGlobalMetrics_DefiCap">DeFi Cap</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF</string>
     <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
-    <string name="MarketGlobalMetrics_BtcDominanceDescription">The historical change in ratio between the market cap of Bitcoin to the rest of the cryptocurrency markets. \n\nTypically, when Bitcoin dominance is trending higher, the rest of the crypto market trends downwards and vice versa.</string>
     <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
-    <string name="MarketGlobalMetrics_VolumeDescriptionCoin">The historical change in daily aggregate trading volume for %s</string>
-    <string name="MarketGlobalMetrics_DefiCapDescription">Total market value of DeFi projects.</string>
     <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
-    <string name="MarketGlobalMetrics_CoinNotSupported">This coin is not supported yet</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn\'t have a coin</string>
 
     <!-- ETF-->
@@ -289,7 +236,6 @@
     <string name="MarketEtf_LowestAssets">Lowest Assets</string>
     <string name="MarketEtf_Inflow">Inflow</string>
     <string name="MarketEtf_Outflow">Outflow</string>
-    <string name="MarketEtf_Period_All">All</string>
     <string name="MarketEtf_TotalNetAssets">Total Net Assets</string>
 
     <!--Market Search-->
@@ -297,7 +243,6 @@
     <string name="Market_Filters">Filters</string>
     <string name="Market_AdvancedSearch_Results">Results</string>
     <string name="Market_Search_Hint">Search</string>
-    <string name="Market_Search_BrowseCategories">Browse categories</string>
     <string name="Market_Filter_ChooseSet">Choose Set</string>
     <string name="Market_Filter_MarketCap">Market Cap</string>
     <string name="Market_Filter_Volume">Trading Volume</string>
@@ -327,7 +272,6 @@
     <string name="Market_Filter_Sell">Sell</string>
     <string name="Market_Filter_RiskToTrade">Risky</string>
 
-    <string name="Market_Filter_Gainers">Gainers</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>
     <string name="Market_Filter_Top_500">Top 500</string>
@@ -387,7 +331,6 @@
     <string name="Market_Sorting_LowestCap">Lowest Cap</string>
 
     <!--Coin Markets-->
-    <string name="CoinMarket_Title">%s Markets</string>
 
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-Chain</string>
@@ -397,7 +340,6 @@
     <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
-    <string name="Balance_Swap">Swap</string>
     <string name="Balance_Deposit">Deposit</string>
     <string name="Balance_Receive">Receive</string>
     <string name="Balance_Address">Address</string>
@@ -407,24 +349,15 @@
     <string name="Balance_SearchingTransactions">Searching transactions…</string>
     <string name="Balance_FoundTx">%s tx</string>
     <string name="Balance_Syncing_WithProgress">Syncing… %s%%</string>
-    <string name="Balance_CoinDisabled">Disabled coin %s</string>
     <string name="Balance_Sort_Balance">Balance</string>
     <string name="Balance_Sort_PopupTitle">Sort by</string>
     <string name="Balance_Sort_Az">Name</string>
     <string name="Balance_Sort_24hPriceChange">Price Change</string>
-    <string name="Balance_Hidden">hidden</string>
-    <string name="Balance_DownloadingBlocks">Downloading Blocks</string>
-    <string name="Balance_ScanningBlocks">Scanning Blocks</string>
-    <string name="Balance_NoWalletAlert">You don\'t have any installed wallets yet.\nCreate a new wallet or restore an existing one </string>
     <string name="Balance_NoCoinsAlert">You haven\'t added any coins to this wallet.</string>
-    <string name="Balance_WatchAccount_NoBalance">This wallet address doesn\'t have any balance</string>
     <string name="Balance_NoAssetsToSend">You have no assets to send.</string>
-    <string name="Balance_NoAssetsToSwap">You have no assets to swap.</string>
     <string name="Balance_Network">Network</string>
     <string name="Balance_Format">Format</string>
     <string name="Balance_NetworkSelectDescription">Choose network to get an address to receive.</string>
-    <string name="Balance_ReceiveAddressHint">Your address for depositing %s</string>
-    <string name="Balance_ReceiveWatchAddressHint">Watch address of %s</string>
     <string name="Balance_Receive_AddressFormatDescription">Choose a format for providing an address to receive.</string>
     <string name="Balance_Receive_AddressFormat">Address Format</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">The Cash Address format is preferred for receiving Bitcoin Cash (BCH) due to its improved user experience and compatibility. However, both address formats can be used interchangeably to receive BCH, regardless of the sender\'s address format.</string>
@@ -433,7 +366,6 @@
     <string name="Balance_Receive_NotActive">Not active</string>
     <string name="Balance_Receive_Amount">Amount</string>
     <string name="Balance_Receive_SetAmount">Set Amount</string>
-    <string name="Balance_Receive_AddressType">Address type</string>
     <string name="Balance_LockedAmount_Title">Locked</string>
     <string name="Balance_ProcessingBalance_Title">Processing</string>
     <string name="Balance_NotRelayedAmount_Title">Broadcasting</string>
@@ -450,7 +382,6 @@
 
     <!--Send NFT-->
     <string name="SendNft_Title">Send</string>
-    <string name="SendNft_Error_NotEnoughtBalance">Not Enough Balance</string>
 
     <!--Send-->
 
@@ -467,8 +398,6 @@
     <string name="Send_Utxos" translatable="false">UTxOs</string>
     <string name="Send_UtxoExpertMode">UTxO Expert Mode</string>
     <string name="Send_Utxo_Description">Manually select UTxO to spend the funds in the balance</string>
-    <string name="Send_Utxo_SendTo">Send To</string>
-    <string name="Send_Utxo_Change">Change</string>
     <string name="Send_Rbf">Replace by Fee</string>
     <string name="Send_Rbf_Description">This option allows you to resend a stuck transaction by increasing the amount of the fee.</string>
     <string name="Send_RbfEnabled">Enabled</string>
@@ -478,17 +407,12 @@
     <string name="Send_Utxo_SelectAll">Sellect All</string>
 
     <string name="Send_Confirmation_Title">Confirm</string>
-    <string name="Send_Confirmation_Domain">Domain</string>
     <string name="Send_Confirmation_YouSend">You Send</string>
-    <string name="Send_Confirmation_Amount">Amount</string>
     <string name="Send_Confirmation_To">To</string>
     <string name="Send_Confirmation_Own">Own</string>
     <string name="Send_Confirmation_Method">Method</string>
     <string name="Send_Confirmation_Nonce" translatable="false">Nonce</string>
-    <string name="Send_Confirmation_Receiver">Receiver</string>
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
-    <string name="Send_Confirmation_EstimateTime">Duration</string>
-    <string name="Send_Confirmation_LockTime" translatable="false">TimeLock</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_Confirmation_Action">Action</string>
 
@@ -496,23 +420,16 @@
 
     <string name="ScanQr_CameraPermission_Title">Camera permission</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Please grant the camera permission</string>
-    <string name="ScanQr_NoCameraPermission">No camera permission</string>
     <string name="ScanQr_CameraPermissionDeniedText">Access to your camera for this app was denied, you can go to settings and allow access</string>
     <string name="ScanQr_GoToSettings">Go to Settings</string>
 
-    <string name="Send_Error_IncorrectAddress">Incorrect Address</string>
     <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
-    <string name="Send_Error_BalanceAmount">Balance %s</string>
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
-    <string name="Send_Error_MinRequiredBalance">Min. required remainder %s</string>
-    <string name="Send_Error_TransparentAddress">Unstoppable doesn\'t support payments to a transparent address</string>
     <string name="Send_Error_SendToSelf">Sending to yourself is not supported</string>
 
     <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
-    <string name="Send_TxSpeed_CustomFeeHint" translatable="false">sat/byte</string>
-    <string name="Send_DialogFee">Fee</string>
     <string name="Send_DialogMemoHint" translatable="false">Memo</string>
     <string name="Send_DialogProceed">Next</string>
     <string name="Send_DialogLockTime" translatable="false">TimeLock</string>
@@ -522,7 +439,6 @@
     <string name="Send_LockTime_HalfYear">6 months</string>
     <string name="Send_LockTime_Year">1 year</string>
     <string name="Send_Sending">Sending</string>
-    <string name="Send_FeeRate">Fee Rate</string>
 
     <string name="Send_Token_InsufficientFeeAlert">Transaction fees for %1$s (%2$s) paid in %3$s. You need %4$s.</string>
     <string name="Send_Warning_LowFee">Warning! Risk of getting stuck</string>
@@ -542,12 +458,6 @@
 
     <!-- Fee Settings -->
 
-    <string name="FeeSettings_Title">Fee Settings</string>
-    <string name="FeeSettings_Reset">Reset</string>
-    <string name="FeeSettings_FeeLegacy">Max Fee</string>
-    <string name="FeeSettings_FeeLegacy_Info">The maximum expected total fee for the given transaction. Typically, the actual transaction fee is going to be lower.</string>
-    <string name="FeeSettings_Fee">Max Fee</string>
-    <string name="FeeSettings_Fee_Info">The maximum estimated transaction fee to be paid for this transaction, computed based on the gas limit, max fee rate and max priority fee values below. The actual fee paid will normally be lower.</string>
     <string name="FeeSettings_NetworkFee">Network Fee</string>
     <string name="FeeSettings_NetworkFee_Info">The estimated cost of sending given transaction on the network.</string>
     <string name="FeeSettings_GasLimit" translatable="false">Gas Limit</string>
@@ -566,7 +476,6 @@
     <string name="FeeSettings_RiskOfGettingStuck">To ensure speedy execution of the transaction the max fee rate (subtracted max. miner tip) should be higher than current base fee rate. If not transaction may remain pending until condition is met.</string>
     <string name="FeeSettings_Overpricing_Title">Fee Too High</string>
     <string name="FeeSettings_Overpricing">The set transaction fee is higher than necessary for processing this transaction now.</string>
-    <string name="FeeSettings_Info_IUnderstand">I Understand</string>
     <string name="FeeSettings_FeeRate">Fee Rate (SAT/BYTE)</string>
     <string name="FeeSettings_FeeRate_RecommendedInfo">Here is the recommended value for hitting the next 2 blocks</string>
     <string name="FeeSettings_FeeRate_Info">Blockchains require users to pay network fees when sending transactions. The fees are higher when a lot of transactions are taking place on the network.
@@ -595,7 +504,6 @@
 
     <!--Tron-->
     <string name="Tron_AddressNotActive_Warning">This address is not active</string>
-    <string name="Tron_AddressNotActive_Warning_Short">(not active)</string>
     <string name="Tron_AddressNotActive_Title">Not Active Address</string>
     <string name="Tron_AddressNotActive_Info">Newly created accounts on the TRON blockchain are inactive and cannot be queried or explored. They need to be activated.\n\nTransferring TRX or TRC-10 tokens to an inactive account address will activate the account. Activating a new account on the Tron chain requires a fee of 1 TRX</string>
     <string name="Tron_SelfSendTrxNotAllowed">Cannot transfer TRX to yourself</string>
@@ -614,35 +522,21 @@
 
     <!--WalletConnect-->
     <string name="WalletConnect_Title" translatable="false">WalletConnect</string>
-    <string name="WalletConnect_Request">Request</string>
-    <string name="WalletConnect_SendRequest_Title">Send</string>
-    <string name="WalletConnect_ApproveRequest_Title">Approve</string>
-    <string name="WalletConnect_SwapRequest_Title">Swap</string>
-    <string name="WalletConnect_UnknownRequest_Title">Contract Call</string>
     <string name="WalletConnect_Url" translatable="false">URL</string>
     <string name="WalletConnect_Status">Status</string>
-    <string name="WalletConnect_SignedTransactions">Signed Transactions</string>
     <string name="WalletConnect_Approve_Hint">By clicking connect, you allow this app to view your public address. This is important security step to protect your data from potential phishing risks.</string>
-    <string name="WalletConnect_Ready_Hint">You can go to the browser. Do not close this page while interacting in the browser.</string>
     <string name="WalletConnect_Reconnect_Hint">Failed to establish connection. Try reconnecting again.</string>
     <string name="WalletConnect_Error_InvalidUrl">Invalid URL Address</string>
-    <string name="WalletConnect_NotSupportedV2">WalletConnect v2 is not supported</string>
-    <string name="WalletConnect_Requirement">Requirement</string>
-    <string name="WalletConnect_Alert">Alert</string>
     <string name="WalletConnect_Status_Offline">Offline</string>
     <string name="WalletConnect_Status_Online">Online</string>
     <string name="WalletConnect_Status_Connecting">Connecting…</string>
     <string name="WalletConnect_NewConnect">New Connection</string>
-    <string name="WalletConnect_Disconnecting">Disconnecting</string>
     <string name="WalletConnect_SignMessageRequest_Title">Sign Request</string>
-    <string name="WalletConnect_SignMessageRequest_Domain">Domain</string>
     <string name="WalletConnect_SignMessageRequest_dApp" translatable="false">dApp</string>
     <string name="WalletConnect_SignMessageRequest_ShowMessageTitle">Message to sign</string>
-    <string name="WalletConnect_SignMessageRequest_SignMessageHint">Please sign a message to authenticate</string>
     <string name="WalletConnect_SignMessageRequest_ButtonSign">Sign</string>
     <string name="WalletConnect_Error_NoWallet">You need to create or import a wallet before you can use WalletConnect</string>
     <string name="WalletConnect_Error_NeedBackup">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
-    <string name="WalletConnect_Error_WatchAccount">This feature does not work with the watch only wallets, you need to switch to a restored or created wallet </string>
     <string name="WalletConnect_Error_UnsupportedChainId">Unsupported Blockchain</string>
     <string name="WalletConnect_Error_NoSuitableAccount">No suitable account</string>
     <string name="WalletConnect_Error_NoSuitableEvmKit">No suitable evm kit</string>
@@ -654,32 +548,19 @@
     <string name="WalletConnect_NoConnection">You don\’t have any connected dapps</string>
     <string name="WalletConnect_PendingRequests">Pending Requests</string>
     <string name="WalletConnect_ActiveWallet">Active Wallet</string>
-    <string name="WalletConnect_Address">Address</string>
-    <string name="WalletConnect_Network">Network</string>
-    <string name="WalletConnect_Input">Input</string>
-    <string name="WalletConnect_Version1">Version 1.0</string>
-    <string name="WalletConnect_Version2">Version 2.0</string>
-    <string name="WalletConnect_I_Trust">I trust</string>
-    <string name="WalletConnect_Note">Note</string>
-    <string name="WalletConnect_LegacySignWarning">Signing this message can be dangerous. This signature could potentially perform any operation on behalf of your account, including giving full control of your account and all of its assets to the requesting site. Sign this message only if you know what you are doing or fully trust the requesting site.</string>
     <string name="WalletConnect_NotSupportedDescription">You current wallet type %s does not support WalletConnect</string>
     <string name="WalletConnect_Unnamed">Unnamed</string>
-    <string name="WalletConnect_DAppUnknown">Unknown dApp</string>
     <string name="WalletConnect_Pairings">Pairings</string>
     <string name="WalletConnect_PairedDApps">Paired dApps</string>
     <string name="WalletConnect_Pairings_DeleteAll">Delete All</string>
     <string name="WalletConnect_Pairings_ConfirmationDeleteAll">Do you want to delete all paired dApss?</string>
     <string name="WalletConnect_Pairings_Delete">Delete</string>
     <string name="WalletConnect_DeleteAllPairs">Delete All Pairs</string>
-    <string name="WalletConnect_UnsupportedRequest_Title">Unsupported Request</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningTitle">Unsupported</string>
-    <string name="WalletConnect_UnsupportedRequest_WarningDescription">This request format is not supported by the wallet</string>
 
     <!--EthereumTransaction-->
     <string name="EthereumTransaction_Warning_Title">Warning</string>
     <string name="EthereumTransaction_Error_Title">Error</string>
     <string name="EthereumTransaction_Error_InsufficientBalance_Title">Insufficient Balance</string>
-    <string name="EthereumTransaction_Error_InsufficientBalance">The transaction requires %s for sending</string>
     <string name="EthereumTransaction_Error_InsufficientBalanceForFee">The current %s balance is below the amount required to process this transaction, including the transaction fee.</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit_Title">Low Fee</string>
     <string name="EthereumTransaction_Error_LowerThanBaseGasLimit">The set transaction fee amount is insufficient for processing this transaction now.</string>
@@ -693,35 +574,23 @@
     <!--Swap-->
 
     <string name="Swap">Swap</string>
-    <string name="Swap_BestPrice">Best Price</string>
     <string name="Swap_FromAmountTitle">You Pay</string>
     <string name="Swap_ToAmountTitle">You Get</string>
-    <string name="Swap_AmountHint" translatable="false">0</string>
     <string name="Swap_FiatPriceImpact" translatable="false">(%s%%)</string>
     <string name="Swap_Percent" translatable="false">%s%%</string>
-    <string name="Swap_Estimated">ESTIMATED</string>
     <string name="Swap_TokenSelectorTitle">Select</string>
-    <string name="Swap_Balance">Available balance</string>
     <string name="Swap_Allowance">Allowance</string>
     <string name="Swap_Price">Price</string>
     <string name="Swap_AvailableBalance">Available Balance</string>
-    <string name="Swap_SellPrice">Sell Price</string>
-    <string name="Swap_BuyPrice">Buy Price</string>
     <string name="Swap_PriceImpact">Price Impact</string>
     <string name="Swap_PriceImpactTooHigh">Unstoppable has disabled swap action for this trade because you\'re getting an extremely unfavorable price. This is due to extremely low liquidity.\nIf you still want to swap please use %s website instead.</string>
     <string name="Swap_PriceImpactWarning">Important! You\'re getting an extremely unfavorable price. This is due to extremely low liquidity.</string>
     <string name="Swap_MinimumReceived">Guaranteed Amount</string>
-    <string name="Swap_EstimatedFee">Estimated Fee</string>
-    <string name="Swap_MaxFee">Max Fee</string>
-    <string name="Swap_Fee">Fee</string>
     <string name="Swap_Slippage">Slippage</string>
     <string name="Swap_Recipient">Recipient</string>
     <string name="Swap_ErrorNoProviders">No Providers</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
-    <string name="Swap_ErrorBalanceNotAvailable">Balance n/a</string>
-    <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
-    <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
     <string name="Swap_ErrorHighPriceImpact">High price impact</string>
     <string name="Swap_ErrorTokenNotEnabled">Token Not Enabled</string>
     <string name="Swap_ErrorWalletSyncing">Wallet is Syncing</string>
@@ -738,17 +607,9 @@
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
     <string name="Swap_Quoting">Quoting</string>
-    <string name="Swap_MaximumPaid">Maximum Amount</string>
-    <string name="Swap_MinimumGot">Guaranteed Amount</string>
-    <string name="Swap_PoweredBy">Powered by</string>
-    <string name="Swap_Provider">Provider</string>
     <string name="Swap_Providers">Providers</string>
-    <string name="Swap_SelectSwapProvider_Title">Swap Provider</string>
-    <string name="Swap_AmountEstimated">(est)</string>
     <string name="Swap_AmountMin">(min)</string>
     <string name="Swap_AmountMax">(max)</string>
-    <string name="Swap_AmountTypeCoin">Coin</string>
-    <string name="Swap_SwapRouteNotFound">Route not found</string>
     <string name="Swap_YouPay">You Pay</string>
     <string name="Swap_YouGet">You Get</string>
     <string name="Swap_Confirm_Title">Confirm</string>
@@ -757,7 +618,6 @@
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>
-    <string name="SwapSettings_Service">Service</string>
     <string name="SwapSettings_SlippageTitle">Slippage Tolerance</string>
     <string name="SwapSettings_SlippageDescription">Your transaction will revert if the price changes unfavorably by more than this percentage</string>
     <string name="SwapSettings_DeadlineTitle">Transaction Deadline</string>
@@ -766,7 +626,6 @@
     <string name="SwapSettings_RecipientAddressDescription">After the exchange operation, the amount will be transferred to the specified address</string>
     <string name="SwapSettings_Apply">Apply</string>
     <string name="SwapSettings_DeadlineMinute">%s min</string>
-    <string name="SwapSettings_RecipientPlaceholder">Address or domain</string>
 
     <string name="SwapSettings_Error_DeadlineZero">Zero Deadline</string>
     <string name="SwapSettings_Error_SlippageZero">Zero Slippage</string>
@@ -774,25 +633,13 @@
     <string name="SwapSettings_Error_SlippageTooHigh">Slippage Tolerance can’t be more than %s%%</string>
     <string name="SwapSettings_Error_InvalidAddress">Invalid address</string>
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Invalid %s address</string>
-    <string name="SwapSettings_Error_InvalidSlippage">Invalid Slippage</string>
-    <string name="SwapSettings_Error_InvalidDeadline">Invalid Deadline</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Your transaction may be frontrun</string>
 
     <!-- Swap Confirmation -->
-    <string name="Swap_Confirmation">Confirmation</string>
-    <string name="Swap_Confirmation_Guaranteed">Guaranteed</string>
-    <string name="Swap_Confirmation_Maximum">Maximum</string>
-    <string name="Swap_Confirmation_Estimated">Estimated</string>
 
     <!--Approve-->
 
-    <string name="Approve_Title">Swap Approve</string>
     <string name="Approve_RevokeAndApproveInfo">You can exchange %s, or you need to revoke and approve the new amount</string>
-    <string name="Approve_ButtonRevoke">Revoke</string>
-    <string name="Approve_ButtonRevoking">Revoking</string>
-    <string name="Approve_ButtonApprove">Approve</string>
-    <string name="Approve_Info">You should grant permission to a smart contract to swap given token on your behalf. This permission sets amount that can be used by a smart contract. It doesn\'t affect your balance but requires a small fee to execute approval transaction. \n\nWhile it may be done on demand before each trade, it\'s cheaper to approve higher amount in advance for future trades.</string>
-    <string name="Approve_Error_AlreadyApproved">You already have an allowance for this amount</string>
     <string name="Approve_Spender">Spender</string>
     <string name="Approve_YouApprove">You Approve</string>
     <string name="Approve_YouRevoke">You Revoke</string>
@@ -811,20 +658,14 @@
     <string name="SwapInfo_AllowanceDescription">The amount an exchange can spend on a user\’s behalf when executing token swaps. A proceeding transaction setting sufficient allowance is required before an actual swap transaction can take place.</string>
     <string name="SwapInfo_PriceImpactTitle">Price Impact</string>
     <string name="SwapInfo_PriceImpactDescription">The expected price deviation from a shown price, typically increases with the swap amount.</string>
-    <string name="SwapInfo_GuaranteedAmountTitle">Guaranteed Amount</string>
-    <string name="SwapInfo_MaxSpendTitle">Maximum Spend</string>
 
     <!--Deposit-->
 
     <string name="Deposit_Title">Receive %s</string>
-    <string name="Deposit_Share">Share</string>
-    <string name="Deposit_Your_Address">Your Address</string>
-    <string name="Deposit_Address">Address</string>
 
     <!--Transactions-->
 
     <string name="Transactions_Title">Transactions</string>
-    <string name="Transactions_FilterAll">ALL</string>
     <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
@@ -870,11 +711,8 @@
 
     <!--Transaction Info-->
 
-    <string name="TransactionInfo_Transaction">Transaction</string>
     <string name="TransactionInfo_Title">Transaction Info</string>
-    <string name="TransactionInfo_Approval">Swap Approval</string>
     <string name="TransactionInfo_Status">Status</string>
-    <string name="TransactionInfo_Status_Confirmed">Confirmed</string>
     <string name="TransactionInfo_Date">Date</string>
     <string name="TransactionInfo_Id">ID</string>
     <string name="TransactionInfo_Service">Service</string>
@@ -894,19 +732,12 @@
     <string name="TransactionInfo_DoubleSpendNote">Double Spend Risk!</string>
     <string name="TransactionInfo_ButtonViewOnExplorerName">View on %s</string>
     <string name="TransactionInfo_Price">Price</string>
-    <string name="TransactionInfo_YouPay">You Pay</string>
-    <string name="TransactionInfo_YouPaid">You Paid</string>
-    <string name="TransactionInfo_YouGet">You Get</string>
     <string name="TransactionInfo_YouGot">You Got</string>
     <string name="TransactionInfo_YouSent">You Sent</string>
     <string name="TransactionInfo_Received">Received</string>
     <string name="TransactionInfo_Sent">Sent</string>
     <string name="TransactionInfo_Approved">Approved</string>
-    <string name="TransactionInfo_Resend">Resend</string>
-    <string name="TransactionInfo_RevokeApproval">Revoke Approval</string>
-    <string name="TransactionInfo_Options">Options</string>
     <string name="TransactionInfo_SpeedUp">Speed Up</string>
-    <string name="TransactionInfo_Cancel">Cancel</string>
     <string name="TransactionInfo_SpamWarning">This transaction is suspicious and can be a scam.\nPlease do not copy any addresses from this transaction.</string>
     <string name="TransactionInfo_SpeedUpDescription">This action will attempt to invalidate the previous transaction by resending it with a higher fee.</string>
 
@@ -938,7 +769,6 @@
 
     <string name="Info_LockTime_Title" translatable="false">TimeLock</string>
     <string name="Info_LockTime_Description">The sender sent these funds with a spending lock that will expire on %s.\n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you can not spend them on the Bitcoin network.</string>
-    <string name="Info_LockTime_Description_Static">The sender sent these funds with a spending lock that will expire on the shown date. \n\nNo worries, the received Bitcoins are already yours, but until the lock period expires you cannot spend them on the Bitcoin network.</string>
 
     <string name="Info_NotRelayed_Title">Broadcast</string>
     <string name="Info_NotRelayed_Description">The transaction holding this amount is broadcasted but not yet accepted by the network.</string>
@@ -964,14 +794,11 @@
     <string name="SettingsCurrency_Other">OTHER</string>
     <string name="SettingsCurrency_DisclaimerTitle">Disclaimer</string>
     <string name="SettingsCurrency_DisclaimerText">The exchange rate data is provided by a third party service - Coingecko.com.\n\nThe Unstoppable wallet app doesn\'t guarantee these values are always correct and matches market data. The chance for inconsistency is higher if you select any base currency other than %s.</string>
-    <string name="SettingsCurrency_Understand">I Understand</string>
 
     <!--Settings-->
 
     <string name="Settings_Title">Settings</string>
     <string name="Settings_SecurityCenter">Security</string>
-    <string name="Settings_Notifications">Notifications</string>
-    <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
     <string name="Settings_Theme">Theme</string>
@@ -1034,7 +861,6 @@
     <string name="Premium_ChoosePlanForYou">Choose the plan</string>
     <string name="Premium_PlanPro">PRO</string>
     <string name="Premium_PlanVip">VIP</string>
-    <string name="Premium_SelectSubscription">Select Subscription</string>
     <string name="Premium_EnjoyFirst7DaysFree_Description">Enjoy the first 7 days FREE. You can cancel your App Store subscription at any time.</string>
     <string name="Premium_EnjoyFirst7DaysFree">Enjoy the first 7 days FREE.</string>
     <string name="Premium_Get7DaysFree">Get 7 days FREE.</string>
@@ -1067,18 +893,13 @@
     <string name="Premium_UpgradeFeature_Description_8">Additional address check for fraud prevention.</string>
     <string name="Premium_UpgradeFeature_Description_9">Full disconnection from data collection.</string>
 
-    <string name="Appearance_Theme">THEME</string>
-    <string name="Appearance_Tab">TAB SETTINGS</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
-    <string name="Appearance_LaunchScreen">LAUNCH SCREEN</string>
     <string name="Appearance_AppIcon">APP ICON</string>
-    <string name="Appearance_BalanceConversion">Balance Conversion</string>
     <string name="Appearance_BalanceValue">Balance Value</string>
     <string name="Appearance_Warning_CloseApplication">Changing icon will close application</string>
     <string name="Appearance_HideMarketsTab">Hide Markets</string>
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
-    <string name="Appearance_HideBalanceTabButtonsDescription">This configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
@@ -1089,7 +910,6 @@
     <string name="SettingsAboutApp_Title">About App</string>
     <string name="SettingsAboutApp_Github" translatable="false">Github</string>
     <string name="SettingsAboutApp_Site">Website</string>
-    <string name="SettingsAboutApp_WhatsNew">What\'s New</string>
     <string name="SettingsAboutApp_AppVersion">App Version</string>
 
     <!-- Blockchain Settings  -->
@@ -1129,19 +949,15 @@
 
     <!-- Security Center -->
 
-    <string name="SecurityCenter_Internet">INTERNET</string>
-
     <!--Evm Network-->
 
     <string name="EvmNetwork_AddNew">Add New</string>
     <string name="EvmNetwork_Added">Added</string>
-    <string name="EvmNetwork_SyncMode">Sync Mode</string>
 
     <!--Add RPC Source-->
 
     <string name="AddEvmSyncSource_RpcUrl">RPC Url</string>
     <string name="AddEvmSyncSource_AddRPCSource">Add RPC Source</string>
-    <string name="AddEvmSyncSource_Name">Name</string>
     <string name="AddEvmSyncSource_BasicAuthentication">Basic Auth(optional)</string>
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Source with this url already exists</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Entered url is invalid. Valid url must have one of the following schemes: https, wss</string>
@@ -1166,9 +982,7 @@
 
     <!--Setting_Security-->
 
-    <string name="SettingsSecurity_Privacy">Privacy</string>
     <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
-    <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
     <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
     <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
@@ -1179,7 +993,6 @@
     <string name="SettingsSecurity_ManageKeys">Manage Wallets</string>
     <string name="SettingsSecurity_AppRestartWarning">This action will restart Unstoppable Wallet.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Fully anonymize your internet while using this app. Note, in some cases WalletConnect feature for DeFi apps may be very slow or not work at all.</string>
-    <string name="SettingsSecurity_NotificationsDisabledWarning">The notifications for the Unstoppable Wallet app are disabled. You need to turn on Notifications and allow background app refresh in order to be able to receive price change alerts.</string>
     <string name="SettingsSecurity_SortingShuffle">Shuffle</string>
     <string name="SettingsSecurity_SortingShuffleDescription">Random Indexing</string>
     <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
@@ -1214,9 +1027,6 @@
 
     <!--Setting_Terms-->
 
-    <string name="SettingsTerms_Text">The Unstoppable wallet is built for those looking to invest and store cryptocurrencies in a private and independent manner.
-\n\nIt\'s a non-custodial, peer-to-peer wallet where only the user has control over the funds. It doesn\'t collect any data and keeps the user independent by not locking the user\'s funds to a specific wallet app.
-\n\nThe Unstoppable wallet is fully open-source and anyone can confirm the app works exactly as it claims to.</string>
     <string name="SettingsTerms_Backup">Securely backup recovery phrases for each wallet. It\'s the only way to regain access to funds if the app malfunctions.</string>
     <string name="SettingsTerms_PrivateKeys">The wallet recovery phrases are randomly generated on the device during setup and are not stored elsewhere.</string>
     <string name="SettingsTerms_DisablingPin">Disabling unlock PIN (code) on the smartphone deletes all wallets from the app. Recovery phrases will be needed to restore access to funds.</string>
@@ -1234,29 +1044,6 @@
 
     <!--Setting_Notifications-->
 
-    <string name="SettingsNotifications_Description">Set price change alerts for the coins you would like to watch.\n\nYou will be alerted when the change in price for the last 24 hours exceeds the selected threshold.\n\nPrice Trend Alert warns of a trend change for the short 1 week, for the long 6 month.</string>
-    <string name="SettingsNotifications_NotificationsDisabledWarning">The notifications for Unstoppable Wallet app are disabled. You need to turn them on in order to be able to receive price change alerts.</string>
-    <string name="SettingsNotifications_TurnOn">Turn on in Settings</string>
-    <string name="SettingsNotifications_Off">Off</string>
-    <string name="SettingsNotifications_DeactivateAll">Reset All</string>
-    <string name="SettingsNotifications_PushNotification">Push Notification</string>
-
-    <string name="Notification_Title">Notifications</string>
-    <string name="Notification_PriceUp">%1$s price: Up %2$s%% ⬆️</string>
-    <string name="Notification_PriceDown">%1$s price: Down %2$s%% ⬇️</string>
-    <string name="Notification_TrendUp">%s trend: Up 📈</string>
-    <string name="Notification_TrendDown">%s trend: Down 📉</string>
-
-    <string name="NotificationBottomMenu_Change24h">Price Change 24h</string>
-    <string name="NotificationBottomMenu_2" translatable="false">2%</string>
-    <string name="NotificationBottomMenu_5" translatable="false">5%</string>
-    <string name="NotificationBottomMenu_10" translatable="false">10%</string>
-    <string name="NotificationBottomMenu_PriceTrendChange">Trend Change</string>
-    <string name="NotificationBottomMenu_ShortTerm">Short Term 7D</string>
-    <string name="NotificationBottomMenu_Short">Short</string>
-    <string name="NotificationBottomMenu_LongTerm">Long Term 6M</string>
-    <string name="NotificationBottomMenu_Long">Long</string>
-
     <!-- Settings Launch Screen -->
 
     <string name="SettingsLaunchScreen_Auto">Auto</string>
@@ -1266,7 +1053,6 @@
 
     <!--Settings-->
 
-    <string name="SettingsTheme_Title">Theme</string>
     <string name="SettingsTheme_Dark">Dark</string>
     <string name="SettingsTheme_Light">Light</string>
     <string name="SettingsTheme_System">System</string>
@@ -1289,7 +1075,6 @@
     <string name="Hud_Added_To_Watchlist">Added To Watchlist</string>
     <string name="Hud_Added_To_Wallet">Added To Wallet</string>
     <string name="Hud_Removed_From_Wallet">Removed from Wallet</string>
-    <string name="Hud_Already_In_Wallet">Already added to wallet</string>
     <string name="Hud_Removed_from_Watchlist">Removed from Watchlist</string>
     <string name="Hud_Removed">Removed</string>
     <string name="Hud_UnknownError" translatable="false">%s</string>
@@ -1319,18 +1104,9 @@
 
     <!-- Experimental Feature -->
 
-    <string name="ExperimentalFeatures_Title">Experimental</string>
-    <string name="ExperimentalFeatures_Description">The features below are experimental and should be used with caution. While we have thoroughly tested these features using our own crypto funds, we cannot guarantee they will work as expected in all possible cases.</string>
-
     <!-- Bitcoin Hodling -->
 
-    <string name="BitcoinHodling_Title" translatable="false">TimeLock</string>
-    <string name="BitcoinHodling_LockTime" translatable="false">Activate</string>
-    <string name="BitcoinHodling_Description">This enables you to send Bitcoins that cannot be spent until a specified date. \n\nThe receiver of such transactions should use the Unstoppable wallet app version 0.10 or newer, with the BIP44 address format for Bitcoin. \n\nOnly the Unstoppable wallet can correctly identify such transactions on the Bitcoin network, as well as enable the receiver to spend those Bitcoins after the lock period expires. \n\nIf you’re a HODLer, you may use this feature to force yourself into hodling your Bitcoins by sending such transactions to yourself. \n\nBeing an experimental feature, the maximum amount per transaction is limited to 0.5 BTC.</string>
-
     <!-- Testnet Settings -->
-    <string name="TestnetSettings_EvmTestnet" translatable="false">Testnet</string>
-    <string name="TestnetSettings_Description">This option activates Ethereum\'s Goerli testnet only for GoerliETH token and adds it to the coin manager.\n\nIt only affects GoerliETH token while all other EVM and Ethereum tokens operate over mainnet. In other words, only transactions in GoerliETH go through Goerli testnet, while all other EVM token transfers including ETH go through mainnet.</string>
 
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Manage Wallets</string>
@@ -1345,8 +1121,6 @@
     <string name="ImportWallet_RecoveryPhrase_Description">Import using recovery phrase or private key.</string>
     <string name="ImportWallet_ExchangeWallet">from Exchange Wallet</string>
     <string name="ImportWallet_ExchangeWallet_Description">Connect to a wallet on centralized exchange.</string>
-    <string name="ImportWallet_WatchAddress">Watch Address</string>
-    <string name="ImportWallet_WatchAddress_Description">Observing mode of EVM-Chain and BTC, LTC, DASH addresses</string>
     <string name="ImportWallet_WarningInvalidJson">Invalid Json File</string>
     <string name="ImportWallet_WarningInvalidJsonDescription">This file is not a valid backup of the wallet, or the file has been corrupted and cannot be restored.</string>
     <string name="ImportWallet_SelectAnotherFile">Select Another File</string>
@@ -1368,8 +1142,6 @@
     <string name="ManageAccount_Save">Save</string>
     <string name="ManageAccount_RecoveryPhraseBackup">Manual Backup</string>
     <string name="ManageAccount_LocalBackup">Local Backup</string>
-    <string name="ManageAccount_RecoveryPhraseShow">Show Phrase</string>
-    <string name="ManageAccount_NetworkSettings">Network Settings</string>
     <string name="ManageAccount_Unlink">Unlink Wallet</string>
     <string name="ManageAccount_BackupRequired_Title">Backup Required</string>
     <string name="ManageAccount_BackupRequired_Description">You need to backup %1$s before you may receive %2$s.</string>
@@ -1382,40 +1154,22 @@
     <string name="ManageAccount_SwitchWallet_Title">Switch Wallet</string>
     <string name="ManageAccount_Wallets">Wallets</string>
     <string name="ManageAccount_WatchAddresses">Watch Wallets</string>
-    <string name="ManageAccount_SwitchWallet_Subtitle">Select wallet for quick switch</string>
     <string name="ManageAccount_DeleteWarning">Do you want to stop watching this wallet address?</string>
 
     <string name="Balance_Receive_BackupRequired_Description">You need to backup %1$s</string>
 
     <!--Network Settings-->
-    <string name="NetworkSettings_Title">Network Settings</string>
     <string name="NetworkSettings_SwithesAutomatically">switches automatically</string>
-    <string name="NetworkSettings_SwithesAutomatically_Description">MainNet HTTP network uses the links listed below and switches automatically.</string>
-    <string name="NetworkSettings_TestNetDisclaimer">Please do not select Testnet options unless you understand what that is and how it works.\n\nTestnet is a parallel blockchain for testing purposes with its own currency. If someone sends a regular payment to your Testnet address, it will be lost.</string>
 
     <!-- Show Key -->
-    <string name="ShowKey_Title">Key</string>
-    <string name="ShowKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
-    <string name="ShowKey_ButtonShow">Show</string>
     <string name="ShowKey_Passphrase">Passphrase</string>
-    <string name="ShowKey_ButtonClose">Close</string>
-    <string name="ShowKey_TabMnemonicPhrase">Recovery Phrase</string>
-    <string name="ShowKey_TabPrivateKey">Private Key</string>
-    <string name="ShowKey_TabPublicKeys">Public Keys</string>
-    <string name="ShowKey_PrivateKeyCopyWarning_Title">Warning</string>
-    <string name="ShowKey_PrivateKeyCopyWarning_Subtitle">Risk of Private Key copy</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Text">As a security measure we recommend not to use copy action on private key.</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Proceed">I will risk it</string>
     <string name="ShowKey_PrivateKeyCopyWarning_Cancel">Don\'t copy</string>
-    <string name="ShowKey_PrivateKey_Warning">This key is for all EVM-compatible blockchains.\n\nAs a security measure we recommend not to use copy action on private key.</string>
-    <string name="ShowKey_Bip44" translatable="false">BIP 44</string>
-    <string name="ShowKey_Bip49" translatable="false">BIP 49 - SegWit</string>
-    <string name="ShowKey_Bip84" translatable="false">BIP 84 - Native SegWit(recommended)</string>
 
     <!-- Backup Recovery Phrase -->
     <string name="BackupRecoveryPhrase_Title">Backup Recovery Phrase</string>
     <string name="BackupRecoveryPhrase_Description">Create a backup copy of the recovery phrase and the associated password that will allow you to recover your wallet if your phone is lost, stolen, broken, etc.</string>
-    <string name="BackupRecoveryPhrase_Backup">Backup</string>
     <string name="BackupRecoveryPhrase_ManualBackup">Manual Backup</string>
     <string name="BackupRecoveryPhrase_LocalBackup">Local Backup</string>
     <string name="BackupRecoveryPhrase_Later">Later</string>
@@ -1442,7 +1196,6 @@
 
     <!-- Evm Private Key -->
     <string name="EvmPrivateKey_Title">EVM Private Key</string>
-    <string name="EvmPrivateKey_Warning">This key is for all EVM-compatible blockchains. Do not share it with anyone.</string>
     <string name="EvmPrivateKey_ShowPrivateKey">Tap to show private key</string>
 
     <!-- Bip32 Root Key -->
@@ -1454,9 +1207,6 @@
     <string name="ExtendedKey_Account" translatable="false">Account</string>
     <string name="ExtendedKey_TapToShowPrivateKey">Tap to show private key</string>
     <string name="ExtendedKey_AccountInfo">To do</string>
-
-    <string name="AccountExtendedPrivateKey" translatable="false">Account Extended Private Key</string>
-    <string name="AccountExtendedPublicKey" translatable="false">Account Extended Public Key</string>
 
     <string name="AccountExtendedPrivateKey_Short" translatable="false">Account xPrivKey</string>
     <string name="AccountExtendedPublicKey_Short" translatable="false">Account xPubKey</string>
@@ -1483,56 +1233,27 @@
     <string name="RecoveryPhraseVerify_Description">Select requested words from your wallet recovery phrase</string>
 
     <!-- Backup Key -->
-    <string name="BackupKey_Title">Backup</string>
-    <string name="BackupKey_Description">The recovery phrases that will be shown next is the only way to restore your funds if your phone is ever lost, stolen, broken, etc.\n\nMake sure no one is watching your screen.</string>
-    <string name="BackupKey_ButtonBackup">Backup</string>
 
-    <string name="BackupConfirmKey_Description">Enter the recovery phrases in the correct order to confirm</string>
-    <string name="BackupConfirmKey_EmptyOrInvalidWords">Entered words are empty or invalid</string>
-    <string name="BackupConfirmKey_Error_EmptyWord">Empty word</string>
     <string name="BackupConfirmKey_Error_InvalidWord">Invalid word</string>
-    <string name="BackupConfirmKey_Error_EmptyPassphrase">Empty passphrase</string>
-    <string name="BackupConfirmKey_Error_InvalidPassphrase">Invalid passphrase</string>
 
     <!--Manage Keys Delete Alert-->
 
     <string name="ManageKeys_Delete_Title">Delete Wallet</string>
-    <string name="ManageKeys_Delete_ConfirmationRemove">This action will delete the %s Wallet from the device.</string>
     <string name="ManageKeys_Delete_FromPhone">Delete from Phone</string>
     <string name="ManageKeys_StopWatching">Stop Watching</string>
 
     <!-- Manage Keys Alert -->
 
-    <string name="AddCoin_Description">You need to set up %1$s wallet to be able to send or receive %2$s.\n\nUse the Create button below to set up a new %3$s wallet, or the Restore button to import an existing one.\n\nYou will be able to use this wallet for: %4$s.</string>
-    <string name="AddCoin_CreateKey">Create</string>
-    <string name="AddCoin_RestoreKey">Restore</string>
-
     <!-- Add Token Dialog-->
-    <string name="AddTokenDialog_Title">Choose Blockchain</string>
-    <string name="AddTokenDialog_Subtitle">Adding Token</string>
-    <string name="AddTokenDialog_Erc20Tokens">ERC20 Tokens</string>
-    <string name="AddTokenDialog_Bep20Tokens">BEP20 Tokens</string>
-    <string name="AddTokenDialog_BinanceTokens">BEP2 Tokens</string>
 
     <!-- Enable Token -->
-    <string name="EnalbeToken_Title">Enable Token</string>
-    <string name="EnalbeToken_Description">Enable all %s coins that have any balance</string>
-    <string name="EnalbeToken_Enabling">Enabling</string>
-    <string name="EnalbeToken_EnabledCoins">Enabled %d coins</string>
-    <string name="EnalbeToken_NoCoins">Did not find any new tokens with balance</string>
-    <string name="EnalbeToken_EnableKey">Enable</string>
 
     <!-- Add Token -->
     <string name="AddToken_Title">Add Token</string>
     <string name="AddToken_CoinName">Coin Name</string>
-    <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_CoinCode">Coin Code</string>
     <string name="AddToken_Decimals">Decimals</string>
-    <string name="AddToken_Dots">…</string>
-    <string name="AddToken_CoinTypes">COIN TYPES</string>
-    <string name="AddToken_AlreadyAdded">ALREADY ADDED</string>
     <string name="AddToken_AddressOrSymbol">Contract Address</string>
-    <string name="AddToken_ChooseToken">Choose Token</string>
     <string name="AddToken_Blockchain">Blockchain</string>
 
     <string name="AddToken_CoinAlreadyInListWarning">This token is already in the Coin Manager list</string>
@@ -1543,40 +1264,27 @@
 
     <!-- Address Format Settings List -->
 
-    <string name="AddressFormatSettings_Title">Address Format</string>
     <string name="AddressFormatSettings_Description">Select address format for receiving payments. A correct format should be chosen when restoring an existing wallet.</string>
 
     <!-- Coin Platforms -->
 
     <string name="CoinPlatforms_Native">Native</string>
 
-    <string name="CoinPlatformsSelector_Title">Coin Type</string>
-    <string name="CoinPlatformsSelector_Description">This token exists on multiple blockchains.</string>
-
 
     <!-- Blockchain Settings -->
 
-    <string name="BlockchainSettings_SyncModeChangeAlert_Title">Restore Source</string>
-    <string name="BlockchainSettings_SyncModeChangeAlert_Content">After this change the wallet will have to resync itself with the %s blockchain.</string>
-    <string name="BlockchainSettings_CommunicationModeChangeAlert_Title">Communication</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type0_Description">Common before 2018</string>
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
 
     <!-- Tor -->
 
     <string name="Tor_Title" translatable="false">Tor</string>
-    <string name="Tor_Connection_Title">Connection</string>
     <string name="Tor_Connection_Enable">Enable Tor</string>
     <string name="Tor_Connection_Disable">Disable Tor</string>
     <string name="Tor_Alert_Title">Internet</string>
-    <string name="Tor_Status_Starting">Starting Tor...</string>
-    <string name="Tor_Status_Error">Error starting Tor !</string>
     <string name="TorPage_Connecting">Connecting Tor…</string>
-    <string name="TorPage_Connected">Connected</string>
     <string name="TorPage_Failed">Failed to Connect Tor</string>
-    <string name="TorPage_ConnectionClosed">Disconnected</string>
     <string name="Tor_TorIsActive">Tor is active</string>
-    <string name="Tor_PrerequisitesAlert_Content">Activating TOR will reset Ethereum blockchain connection back to Infura.</string>
 
     <!--Coin Page-->
 
@@ -1584,9 +1292,7 @@
     <string name="Coin_Tab_Overview">Price</string>
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
-    <string name="Coin_Tab_Tweets">Tweets</string>
 
-    <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Day">1D</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
@@ -1598,35 +1304,15 @@
     <string name="CoinPage_TimeDuration_Year5">5Y</string>
     <string name="CoinPage_TimeDuration_All">All</string>
 
-    <string name="CoinPage_Markets">Markets</string>
     <string name="CoinPage_TradingVolume">Trading Volume</string>
-    <string name="CoinPage_MajorHolders">Major Holders</string>
-    <string name="CoinPage_MajorHolders_InfoDescription">The number of tokens held by the top 10 wallets. Quality projects typically have a widely distributed token.</string>
-    <string name="CoinPage_Audits">Audits</string>
-    <string name="CoinPage_Audits_Empty">No audit reports</string>
     <string name="CoinPage_Audits_PoweredBy">Powered by Defiyield.app</string>
     <string name="CoinPage_Audits_Issues">Issues: %d</string>
-    <string name="CoinPage_InvestorData">Investor Data</string>
     <string name="CoinPage_Treasuries" translatable="false">Treasuries</string>
     <string name="CoinPage_Treasuries_FilterTitle">Filters</string>
     <string name="CoinPage_Treasuries_PoweredBy">Powered by Bitcointreasuries.net</string>
     <string name="CoinPage_Reports">Reports</string>
     <string name="CoinPage_FundsInvested">Funds Invested</string>
-    <string name="CoinPage_SecurityParams_Privacy">Privacy</string>
-    <string name="CoinPage_SecurityParams_Low">Low</string>
-    <string name="CoinPage_SecurityParams_Medium">Medium</string>
-    <string name="CoinPage_SecurityParams_High">High</string>
-    <string name="CoinPage_SecurityParams_Issuance">Issuance</string>
-    <string name="CoinPage_SecurityParams_Centralized">Centralized</string>
-    <string name="CoinPage_SecurityParams_Decentralized">Decentralized</string>
-    <string name="CoinPage_SecurityParams_ConfiscationResistance">Confiscation-resistance</string>
-    <string name="CoinPage_SecurityParams_CensorshipResistance">Censorship-resistance</string>
-    <string name="CoinPage_SecurityParams_Audits">Audits</string>
-    <string name="CoinPage_Range24">24h Range</string>
-    <string name="CoinPage_About">About</string>
     <string name="CoinPage_Overview">Overview</string>
-    <string name="CoinPage_Category">Category</string>
-    <string name="CoinPage_Categories">Categories</string>
     <string name="CoinPage_Contracts">Contracts</string>
     <string name="CoinPage_Blockchains">Blockchains</string>
     <string name="CoinPage_Bips">BIPs</string>
@@ -1645,22 +1331,15 @@
     <string name="CoinPage_Twitter_SeeOnTwitter">See on Twitter</string>
     <string name="CoinPage_Telegram" translatable="false">Telegram</string>
     <string name="CoinPage_Github" translatable="false">Github</string>
-    <string name="CoinPage_Youtube" translatable="false">Youtube</string>
     <string name="CoinPage_MarketCap">Market Cap</string>
     <string name="CoinPage_DilutedMarketCap">Diluted MCap</string>
     <string name="CoinPage_inCirculation">In Circulation</string>
     <string name="CoinPage_TotalSupply">Total Supply</string>
-    <string name="CoinPage_IndicatorEMA" translatable="false">EMA</string>
-    <string name="CoinPage_IndicatorMACD" translatable="false">MACD</string>
-    <string name="CoinPage_IndicatorRSI" translatable="false">RSI</string>
-    <string name="CoinPage_IndicatorDominace" translatable="false">BTC Dominance</string>
     <string name="CoinPage_MarketCap_Thousand">K</string>
     <string name="CoinPage_MarketCap_Million">M</string>
     <string name="CoinPage_MarketCap_Billion">B</string>
     <string name="CoinPage_MarketCap_Trillion">T</string>
     <string name="CoinPage_MarketCap_Quadrillion">Q</string>
-    <string name="CoinPage_MarketCap_TvlRation">MCap / TVL Ratio</string>
-    <string name="CoinPage_MarketCap_TvlRation_Description">The ratio of the project token\'s market cap over its TVL.</string>
     <string name="CoinPage_Volume">Vol</string>
     <string name="CoinPage_NoData">No Data</string>
     <string name="CoinPage_NoDataAvailable">No data available</string>
@@ -1670,26 +1349,13 @@
     <string name="CoinPage_Unfavorite">Unfavorite</string>
     <string name="CoinPage_Performance_Week">1 Week</string>
     <string name="CoinPage_Performance_Month">1 Month</string>
-    <string name="CoinPage_ReadMore">Read More</string>
-    <string name="CoinPage_ReadLess">Read Less</string>
     <string name="CoinPage_ShowMore">Show More</string>
     <string name="CoinPage_ShowLess">Show Less</string>
     <string name="CoinPage_LaunchDate">Inception Date</string>
     <string name="CoinPage_Tvl">Total Value Locked</string>
-    <string name="CoinPage_TvlRank">TVL Rank</string>
-    <string name="CoinPage_TvlRank_Description">The ranking among other protocols is based on the TVL value in USD terms.</string>
-    <string name="CoinPage_TvlMCapRatio">M.cap / TVL ratio</string>
-    <string name="CoinPage_TvlMCapRatio_Description">The ratio of the project token\'s market cap over its TVL.</string>
-    <string name="CoinPage_TvlDescription">Capital deposited into the platform in the form of loan collateral or liquidity pool.</string>
-    <string name="CoinPage_Contract">%s Contract</string>
-    <string name="CoinPage_Bep2Symbol">BEP2 Symbol</string>
-    <string name="CoinPage_MajorHolders_TopWallets">Top Wallets</string>
-    <string name="CoinPage_MajorHolders_Description">The chart above shows the \%% of all tokens in circulation held by the top 10 wallets. The lower the \%% the more distributed the coin is.</string>
     <string name="CoinPage_MajorHolders_InTopWallets">in Top 10 Holders</string>
     <string name="CoinPage_MajorHolders_HoldersNumber">Total Holders: %s</string>
     <string name="CoinPage_CoinInvestments_Lead">Lead</string>
-    <string name="CoinPage_NftBannerTitle" translatable="false">Unstoppable NFT</string>
-    <string name="CoinPage_NftBannerDescription">Get access to advanced wallet features by holding Unstoppable NFTs.</string>
     <string name="CoinPage_CoinNotFound">[%s]\nNot found</string>
     <string name="CoinPage_Indicators">Indicators</string>
     <string name="CoinPage_MovingAverages">Moving Averages</string>
@@ -1697,8 +1363,6 @@
     <string name="CoinPage_EmaSettingsDescription">The EMA, SMA, and WMA are moving averages used in technical analysis:\n\nEMA emphasizes recent prices for quicker reactions.\nSMA averages price data for a general trend view.\nWMA balances sensitivity and noise reduction by linearly weighting recent data.</string>
     <string name="CoinPage_RsiSettingsDescription">The Relative Strength Index (RSI) is a momentum oscillator that measures price speed and change, identifying overbought (above 70) or oversold (below 30) market conditions. It can also detect price reversals through divergences.</string>
     <string name="CoinPage_MacdSettingsDescription">The Moving Average Convergence Divergence (MACD) is a momentum indicator that tracks the relationship between two EMAs of a security\'s price. It signals buying or selling opportunities when the MACD line (12-period EMA minus 26-period EMA) crosses the 9-period EMA, known as the signal line.</string>
-    <string name="CoinPage_InsufficientData">Insufficient Data</string>
-    <string name="CoinPage_InsufficientDataError">There are not enough data points to display the EMA 1 indicator. Please adjust the time period to generate a view of the moving average line.Not enough point to display EMA 1.</string>
     <string name="CoinPage_Type">Type</string>
     <string name="CoinPage_Period">Period</string>
     <string name="CoinPage_RsiLength">RSI Length</string>
@@ -1757,14 +1421,6 @@
     <string name="CoinAnalytics_ProjectTVL_Info4">List of all tokens ranked based on current Total-Value-Locked.</string>
     <string name="CoinAnalytics_ProjectTVL_Info5">Market Cap / TVL ratio for the project.</string>
 
-    <string name="CoinAnalytics_ProjectRevenue_Info1">Total revenue generated for the token holders over 30-day period. Typically, fees are collected by token stakers or though a token burn mechanism.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info2">Token\'s rank is based on the revenue generated over a 30-day period for token stakers.</string>
-    <string name="CoinAnalytics_ProjectRevenue_Info3">List of all tokens ranked based on the revenue generated for token stakers over 24h / 7D / 1M intervals.</string>
-
-    <string name="CoinAnalytics_TechIndicators_Info1">Summary: This is a general overview of an asset\'s technicals, considering a variety of technical indicators and timeframes. It provides a consensus viewpoint (Buy, Sell, or Neutral) based on these indicators.</string>
-    <string name="CoinAnalytics_TechIndicators_Info2">Moving Averages (MA): These are commonly used technical indicators that smooth out price data to create a trend-following indicator. They show the average price over a specific time period. There are several types of MAs:\n\nSimple Moving Average (SMA): This calculates the average of a selected range of prices, usually closing prices, by the number of periods in that range.\n\nExponential Moving Average (EMA): This gives more weight to recent prices, thereby responding more quickly to recent price changes.</string>
-    <string name="CoinAnalytics_TechIndicators_Info3">Oscillators: These are technical indicators that fluctuate over time within a band (above and below a center line, or between set levels). They are designed to help identify overbought and oversold conditions in a market. Here are some common oscillators:\n\nRelative Strength Index (RSI): This measures the speed and change of price movements. It is usually used to identify overbought or oversold conditions.\n\nMoving Average Convergence Divergence (MACD): This is used to identify potential buy and sell signals. It triggers technical signals when it crosses above (to buy) or below (to sell) its signal line.</string>
-
     <string name="CoinAnalytics_ProjectNoAnalyticData">This project has no analytical data</string>
     <string name="CoinAnalytics_ThreeDots" translatable="false">•••</string>
     <string name="CoinAnalytics_CexVolume">CEX Volume</string>
@@ -1781,7 +1437,6 @@
     <string name="CoinAnalytics_ActiveAddressesRank_Description">Tokens are ranked by a number of unique addresses transacting with the token.</string>
     <string name="CoinAnalytics_TransactionCount">Transaction Count</string>
     <string name="CoinAnalytics_TransactionCountRank">Tx Count Rank</string>
-    <string name="CoinAnalytics_TransactionCountRank_Description">Tokens are ranked by number of transactions on a blockchain.</string>
     <string name="CoinAnalytics_Holders">Holders</string>
     <string name="CoinAnalytics_ProjectTvl">Project TVL</string>
     <string name="CoinAnalytics_ProjectTvl_FullTitle">Project TVL (Total Value Locked)</string>
@@ -1820,9 +1475,6 @@
     <string name="Coin_Analytics_OverallScore_ProjectTvl">The overall score is based on the total value locked (assets under management) on the project represented by the given token.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">The overall score is based on the average daily transaction count over the last 7 days.</string>
     <string name="Coin_Analytics_OverallScore_Holders">The overall score is based on the total number of addresses holding the respective tokens.</string>
-    <string name="Coin_Analytics_TechnicalIndicators">Technical Indicators</string>
-    <string name="Coin_Analytics_Details">Details</string>
-    <string name="Coin_Analytics_SelectPeriod">Select Period</string>
     <string name="Coin_Analytics_Period_30m">30 minutes</string>
     <string name="Coin_Analytics_Period_1h">1 hour</string>
     <string name="Coin_Analytics_Period_4h">4 hours</string>
@@ -1835,7 +1487,6 @@
     <string name="Coin_Analytics_Indicators_Sell">Sell</string>
     <string name="Coin_Analytics_Indicators_Buy">Buy</string>
     <string name="Coin_Analytics_Indicators_Neutral">Neutral</string>
-    <string name="Coin_Analytics_Indicators_NoData">No Data</string>
     <string name="CoinAnalytics_SmartContractAnalysis">Smart Contract Analysis</string>
     <string name="CoinAnalytics_HighRiskItems">High Risk Items</string>
     <string name="CoinAnalytics_MediumRiskItems">Medium Risk Items</string>
@@ -1859,8 +1510,6 @@
     <string name="TechnicalAdvice_StrongRsi">Meanwhile, the RSI is %1$s, which still indicates that it is %2$s.</string>
     <string name="TechnicalAdvice_StrongAdvice">This could be a very strong signal to enter the market. Keep in mind that there may be several attempts of %sward movement after returning to the channel, so do not forget about risk management.</string>
     <string name="TechnicalAdvice_StableRsi">Meanwhile, the RSI is %s, which also indicates a trend reversal (RSI crossed the boundary at 70\%%).</string>
-    <string name="TechnicalAdvice_StableAdvice">The price is returning to neutral levels, however, there is still potential for upward movement. Keep in mind that RSI = 50 and the middle of the Bollinger Bands are strong resistances and possible trend reversal points. Do not forget about risk management.</string>
-    <string name="TechnicalAdvice_NeutralRsi">RSI = $s also confirms the absence of a strong trend.</string>
     <string name="TechnicalAdvice_NeutralIndicators">the asset was in the overbought/oversold zone, but at the moment the price has returned to the Bollinger Band channel in the neutral zone. The RSI is %s also confirms the absence of a strong trend, so overall the asset price is moving towards averaging and further movement is possible in any direction.</string>
     <string name="TechnicalAdvice_NeutralAdvice">In general, the asset price is moving towards averaging and further movement is possible in any direction.</string>
     <string name="TechnicalAdvice_OtherTitle">Please note:</string>
@@ -1890,8 +1539,6 @@
     <string name="ActivateSubscription_Title">Activate</string>
     <string name="ActivateSubscription_Wallet">Wallet</string>
     <string name="ActivateSubscription_Address">Address</string>
-    <string name="ActivateSubscription_MessageToSign">Message to Sign</string>
-    <string name="ActivateSubscription_SignMessageDescription">You need to sign this message to activate your subscription.</string>
     <string name="ActivateSubscription_NoSubscriptionError">Your wallet address does not have a subscription to premium features, you need to purchase it to activate the subscription.</string>
 
     <string name="SubscriptionInfo_Title">Premium Features</string>
@@ -1904,81 +1551,13 @@
     <string name="SubscriptionInfo_GetPremium">Get Premium</string>
     <string name="SubscriptionInfo_HavePremium">I already have Premium</string>
 
-    <string name="Nfts_Title" translatable="false">NFTs</string>
-    <string name="Nfts_PriceType_Days_7">7D avg.</string>
-    <string name="Nfts_PriceType_Days_30">30D avg.</string>
-    <string name="Nfts_PriceType_LastSale">Last Sale</string>
-    <string name="Nfts_Asset_OnSale">On Sale</string>
-    <string name="Nfts_Asset_OnAuction">On Auction</string>
-    <string name="Nfts_Asset_OnSaleUntil">until %s</string>
-    <string name="Nfts_Empty">You don\'t have an NFT in your wallet</string>
-    <string name="Nfts_PriceMode">Price Mode</string>
-
-    <string name="NftAsset_Overview">Overview</string>
-    <string name="NftAsset_Activity">Activity</string>
-    <string name="NftAsset_OpenSea" translatable="false">OpenSea</string>
-    <string name="NftAsset_Action_Share">Share</string>
-    <string name="NftAsset_Action_Save">Save</string>
-    <string name="NftAsset_OwnedCount">Owned Count</string>
-    <string name="NftAsset_Price_Purchase">Purchase Price</string>
-    <string name="NftAsset_Price_Average7d">7D Average</string>
-    <string name="NftAsset_Price_Average30d">30D Average</string>
-    <string name="NftAsset_Price_Floor">Floor Price</string>
-    <string name="NftAsset_Price_BuyNow">Buy Now</string>
-    <string name="NftAsset_Price_TopBid">Top Bid</string>
-    <string name="NftAsset_Price_MinimumBid">Minimum Bid</string>
-    <string name="NftAsset_Price_BestOffer">Best Offer</string>
-    <string name="NftAsset_Properties">Properties</string>
-    <string name="NftAsset_Description">Description</string>
-    <string name="NftAsset_Details">Details</string>
-    <string name="NftAsset_Links">Links</string>
-    <string name="NftAsset_ContractAddress">Contract Address</string>
-    <string name="NftAsset_TokenId">Token ID</string>
-    <string name="NftAsset_TokenStandard">Token Standard</string>
-    <string name="NftAsset_Blockchain">Blockchain</string>
-    <string name="NftAsset_Links_Website">Website</string>
-    <string name="NftAsset_Links_OpenSea" translatable="false">OpenSea</string>
-    <string name="NftAsset_Links_Discord" translatable="false">Discord</string>
-    <string name="NftAsset_Links_Twitter" translatable="false">Twitter</string>
-    <string name="PoweredBy_OpenSeaAPI">Powered by OpenSea API</string>
-
-    <string name="Nft_TopCollections">Top NFT Collections</string>
-    <string name="Nft_TopCollections_Description">Leading NFT collections by trading volume.</string>
-
     <!-- NFT Collection -->
-    <string name="NftCollection_Overview">Overview</string>
-    <string name="NftCollection_Items">Items</string>
-    <string name="NftCollection_Activity">Activity</string>
-    <string name="NftCollection_Owners">Owners</string>
-    <string name="NftCollection_AveragePrice">All-time Average</string>
-    <string name="NftCollection_ItemsCount">%d Items</string>
-    <string name="NftCollection_TodaysSales">Today\'s Sellers</string>
-    <string name="NftCollection_TodaysSalesCount">%s NFT</string>
-    <string name="NftCollection_AveragePriceDescription">~%s per NFT</string>
-    <string name="NftCollection_Royalty">Royalty</string>
-    <string name="NftCollection_InceptionDate">Inception Date</string>
 
     <!-- NFT Collection Events -->
-    <string name="NftCollection_EventType_SelectorTitle">Select Event Type</string>
-    <string name="NftCollection_EventType_All">All</string>
-    <string name="NftCollection_EventType_List">List</string>
-    <string name="NftCollection_EventType_Sale">Sale</string>
-    <string name="NftCollection_EventType_Cancelled">Cancel</string>
-    <string name="NftCollection_EventType_BidEntered">Bid Entered</string>
-    <string name="NftCollection_EventType_BidWithdrawn">Bid Withdrawn</string>
-    <string name="NftCollection_EventType_Transfer">Transfer</string>
-    <string name="NftCollection_EventType_OfferEntered">Offer Entered</string>
-    <string name="NftCollection_EventType_Approve">Approve</string>
-    <string name="NftCollection_EventType_Custom">Custom</string>
-    <string name="NftCollection_EventType_Payout">Payout</string>
-    <string name="NftCollection_EventType_BulkCancel">Bulk Cancel</string>
-    <string name="NftCollection_EventType_Mint">Mint</string>
-    <string name="NftCollection_EventType_Unknown">Unknown</string>
 
     <!--Rate list-->
     <string name="RateList_TopGainers">Gainers</string>
     <string name="RateList_TopLosers">Losers</string>
-    <string name="RateList_Posts">News</string>
 
     <string name="Market_DaysAgo">%dd. ago</string>
     <string name="Market_HoursAgo">%dh. ago</string>
@@ -1990,23 +1569,17 @@
     <string name="BalanceSyncError_ButtonRetry">Retry</string>
     <string name="BalanceSyncError_ButtonChangeSource">Change Source</string>
     <string name="BalanceSyncError_ButtonReport">Report</string>
-    <string name="BalanceSyncError_ReportButtonExplanation">The error text will be copied to your clipboard should you decide to report it.</string>
 
     <!--Release notes-->
 
     <string name="ReleaseNotes_JoinUnstoppables">JOIN UNSTOPPABLES</string>
-    <string name="ReleaseNotes_FollowUs">Follow Us</string>
-    <string name="CoinPage_Chart_Locked">Locked</string>
-    <string name="ProUsersInfo_Title">Pro Users</string>
     <string name="ProUsersInfo_UnstoppablePass">Unstoppable Pass</string>
-    <string name="ProUsersInfo_SubTitle">Additional Token Info</string>
     <string name="ProUsersInfo_Description">To enable this data you should get bronze level UW NFTs “Coin Info+”\n\nAlso you get access to data below:</string>
     <string name="ProUsersInfo_Features_DexVolume">DEX Volume and Rank</string>
     <string name="ProUsersInfo_Features_DesLiquidity">DEX Liquidity and Rank</string>
     <string name="ProUsersInfo_Features_ActiveAddresses">Active Addresses</string>
     <string name="ProUsersInfo_Features_TxCount">Transaction Count</string>
     <string name="ProUsersInfo_Features_TxVolume">Transaction Volume</string>
-    <string name="ProUsersInfo_Features_Authenticating">Authenticating...</string>
     <string name="Hud_Text_LearnMore">Coming Soon</string>
     <string name="Hud_Text_Activate">Activate</string>
     <string name="ProUsersActivate_Title">Activate the Pass</string>
@@ -2015,7 +1588,6 @@
     <!--Widget-->
 
     <string name="WidgetList_Config_Title">Choose Type</string>
-    <string name="NftAssetActivity_Empty">No item activity yet</string>
     <string name="Widget_EnableAutostartWarning">To make sure that this widget works properly, you should enable Autostart.</string>
 
     <!--Alert-->
@@ -2036,13 +1608,11 @@
     <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Passcode</string>
     <string name="Unlock_EnterPasscode">Enter Passcode</string>
-    <string name="Unlock_Incorrect">Incorrect</string>
     <string name="Unlock_BiometricScanner">Biometrics Scanner</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
     <string name="Unlock_BiometricScannerDisabled_Info">Biometric auth. disabled</string>
     <string name="Unlock_WalletDisabledUntil">Disabled until: %s</string>
     <string name="Unlock_AttemptsLeft">Attempts left: %s</string>
-    <string name="Unlock_Regular">Regular</string>
     <string name="Unlock_Random">Random</string>
 
     <!--Set Pin-->
@@ -2057,7 +1627,6 @@
 
     <!--Edit Pin-->
     <string name="EditPin_Title">Edit Passcode</string>
-    <string name="EditPin_UnlockInfo">Current Passcode</string>
     <string name="EditPin_NewPinInfo">New Passcode</string>
 
     <!--Biometric Auth texts-->
@@ -2098,36 +1667,9 @@
     <string name="Cex_ChooseNetwork_Description">Choose a network and get an address to deposit.</string>
     <string name="Cex_SelectCoin_Search">Name or code</string>
     <string name="CexDeposit_Title">Deposit %s</string>
-    <string name="CexDeposit_CopyAddress">Copy Address</string>
-    <string name="CexDeposit_ShareAddress">Share Address</string>
-    <string name="CexDeposit_Memo" translatable="false">Memo (Tag)</string>
-    <string name="CexDeposit_Network">Network</string>
-    <string name="CexDeposit_AddressDescription">Your address for depositing %s</string>
-    <string name="CexDeposit_DepositWarning">Send only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
-    <string name="CexDeposit_MemoWarning">Memo (tag) is required, or your will lose your coins.\n\nSend only %s to this address. Sending other types of tokens to this address will result in their ultimate loss.</string>
-    <string name="CexDeposit_Important">Important</string>
-    <string name="CexDeposit_MemoAlertText">Both a memo (tag) and the address are needed to ensure that assets are received. Otherwise your funds will be lost.</string>
     <string name="Cex_Error_FailedToConnectApiKey">Failed to connect your API Key</string>
 
     <!--Cex Withdraw Module-->
-    <string name="CexWithdraw_Title">Send %s</string>
-    <string name="CexWithdraw_Network">Network</string>
-    <string name="CexWithdraw_FeeFromAmount">Fee from amount</string>
-    <string name="CexWithdraw_Fee">Fee</string>
-    <string name="CexWithdraw_NetworkDescription">Ensure the network matches the withdrawal address and the deposit platform supports it, or assets may be lost.</string>
-    <string name="CexWithdraw_SecurityVerification">Security Verification</string>
-    <string name="CexWithdraw_EmailVerificationCode">Verification Code</string>
-    <string name="CexWithdraw_GoogleAuthenticationCode">Google Authenticator Code</string>
-    <string name="CexWithdraw_GetCode">Resend</string>
-    <string name="CexWithdraw_GetCodeSeconds">%s sec</string>
-    <string name="CexWithdraw_EmailVerificationInfo">Enter verification code sent to your email.</string>
-    <string name="CexWithdraw_GoogleAuthenticationInfo">Enter code from your Google Authenticator App.</string>
-    <string name="CexWithdraw_Withdraw">Withdraw</string>
-    <string name="CexWithdraw_WithdrawSuccess">Success</string>
-    <string name="CexWithdraw_Error_NotEnoughBalance">Not enough available Balance</string>
-    <string name="CexWithdraw_Error_MinimumAmount">The minimum amount you can withdraw is %s</string>
-    <string name="CexWithdraw_Error_MaximumAmount">The maximum amount you can withdraw is %s</string>
-    <string name="CexWithdraw_Error_WithdrawTitle">Withdraw Failed</string>
 
 
 </resources>
