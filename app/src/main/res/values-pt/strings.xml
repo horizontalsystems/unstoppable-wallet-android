@@ -259,7 +259,6 @@
     <string name="Market_Filter_TimePeriod_1M">1 Meses</string>
     <string name="Market_Filter_TimePeriod_6M">6 Meses</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Ano</string>
-    <string name="TimePeriod_24h">24h</string>
     <!--Coin Markets-->
     <string name="CoinMarket_Title">%s Mercados</string>
     <!--TVL Rank-->
@@ -748,7 +747,6 @@
     <string name="Privacy_BulletedText1">Os dados do usuário sempre permanecem em seu dispositivo.</string>
     <string name="Privacy_BulletedText2">A carteira não coleta nenhum dado sobre os usuários.</string>
     <string name="Privacy_BulletedText3">A carteira não coleta nenhum dado sobre os usuários.</string>
-    <string name="Privacy_BulletedText4">Não há nenhuma conta de usuário ou banco de dados mantendo os dados do usuário em algum lugar.</string>
     <!-- Security Center -->
     <string name="SecurityCenter_Internet">INTERNET</string>
     <!--Evm Network-->

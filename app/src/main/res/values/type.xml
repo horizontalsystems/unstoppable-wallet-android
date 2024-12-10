@@ -9,11 +9,6 @@
         <item name="android:textColor">?TitleColor</item>
     </style>
 
-    <style name="Title2R">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">32sp</item>
-    </style>
-
     <style name="Title3">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textStyle">bold</item>
@@ -27,11 +22,6 @@
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="Headline1">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
-    </style>
-
     <style name="Headline2">
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">16sp</item>
@@ -42,11 +32,6 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="Subhead1">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <style name="Subhead2">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">14sp</item>
@@ -55,16 +40,6 @@
     <style name="Caption">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="CaptionSB">
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="Micro">
-        <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textSize">10sp</item>
     </style>
 
 </resources>

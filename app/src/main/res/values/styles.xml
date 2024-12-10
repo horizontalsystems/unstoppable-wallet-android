@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ToolbarStyle">
-        <item name="colorControlNormal">@color/jacob</item>
-    </style>
-
     <style name="BottomDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowBackground">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
@@ -17,39 +13,9 @@
         <item name="android:windowAnimationStyle">@style/BottomDialogMediumAnimations</item>
     </style>
 
-    <style name="BottomDialogFullScreen" parent="Theme.AppCompat.Dialog">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowBackground">?ColorWindowBackground</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
-        <item name="android:backgroundDimEnabled">false</item>
-        <item name="android:editTextColor">?TitleColor</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowCloseOnTouchOutside">false</item>
-        <item name="android:windowSwipeToDismiss">false</item>
-    </style>
-
-    <style name="AlertDialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:windowBackground">@null</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.7</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowMinWidthMinor">85%</item>
-        <item name="android:windowMinWidthMajor">65%</item>
-        <item name="android:windowSoftInputMode">adjustResize|stateHidden</item>
-    </style>
-
     <style name="BottomDialogMediumAnimations">
         <item name="android:windowEnterAnimation">@anim/slide_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_to_bottom</item>
-    </style>
-
-    <style name="SwitchTheme" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="colorControlActivated">@color/remus</item>
-        <item name="colorControlNormal">@color/grey</item>
-        <item name="colorSwitchThumbNormal">@color/grey</item>
-        <item name="android:colorForeground">@color/grey</item>
     </style>
 
 </resources>
