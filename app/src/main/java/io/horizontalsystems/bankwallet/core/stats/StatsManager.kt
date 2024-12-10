@@ -324,6 +324,7 @@ val MarketModule.Tab.statTab: StatTab
         MarketModule.Tab.Coins -> StatTab.Coins
         MarketModule.Tab.Platform -> StatTab.Platforms
         MarketModule.Tab.Pairs -> StatTab.Pairs
+        MarketModule.Tab.Sectors -> StatTab.Sectors
     }
 
 val MarketSearchSection.statSection: StatSection

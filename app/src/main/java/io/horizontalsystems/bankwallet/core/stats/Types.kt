@@ -547,6 +547,7 @@ enum class StatTab(val key: String) {
     Approve("approve"),
     Coins("coins"),
     Pairs("pairs"),
+    Sectors("sectors"),
     Platforms("platforms"),
 }
 
