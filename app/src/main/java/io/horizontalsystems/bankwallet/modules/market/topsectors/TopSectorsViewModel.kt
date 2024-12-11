@@ -19,6 +19,7 @@ import io.horizontalsystems.bankwallet.modules.market.Value
 import io.horizontalsystems.bankwallet.modules.market.sortedByDescendingNullLast
 import io.horizontalsystems.bankwallet.modules.market.sortedByNullLast
 import io.horizontalsystems.marketkit.models.CoinCategory
+import io.horizontalsystems.marketkit.models.FullCoin
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -82,7 +83,11 @@ class TopSectorsViewModel(
                     topSectorsRepository.get(currencyManager.baseCurrency, forceRefresh)
 
                 val topCategoryWithDiffList = topSectors.map {
-                    TopSectorWithDiff(it, changeValue(it, timePeriod))
+                    TopSectorWithDiff(
+                        it.coinCategory,
+                        changeValue(it.coinCategory, timePeriod),
+                        it.topCoins
+                    )
                 }
                 val sortedTopSectors = topCategoryWithDiffList.sort(sortingField)
                 items = sortedTopSectors.map { getViewItem(it) }
@@ -107,7 +112,11 @@ class TopSectorsViewModel(
             },
             changeValue = item.diff?.let {
                 MarketDataValue.DiffNew(Value.Percent(it))
-            })
+            },
+            coin1 = item.topCoins[0],
+            coin2 = item.topCoins[1],
+            coin3 = item.topCoins[2],
+        )
 
     private fun changeValue(category: CoinCategory, timePeriod: TimeDuration): BigDecimal? {
         return when (timePeriod) {
@@ -178,7 +187,8 @@ class TopSectorsViewModel(
 
 data class TopSectorWithDiff(
     val coinCategory: CoinCategory,
-    val diff: BigDecimal?
+    val diff: BigDecimal?,
+    val topCoins: List<FullCoin>
 )
 
 data class TopSectorsUiState(
@@ -192,5 +202,8 @@ data class TopSectorsUiState(
 data class TopSectorViewItem(
     val coinCategory: CoinCategory,
     val marketCapValue: String?,
-    val changeValue: MarketDataValue?
+    val changeValue: MarketDataValue?,
+    val coin1: FullCoin,
+    val coin2: FullCoin,
+    val coin3: FullCoin,
 )
