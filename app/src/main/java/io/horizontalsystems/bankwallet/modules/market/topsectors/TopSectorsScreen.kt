@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,9 +40,9 @@ import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinImage
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
-import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.MarketDataValueComponent
 import io.horizontalsystems.bankwallet.ui.compose.components.SectionItemBorderedRowUniversalClear
@@ -62,9 +60,10 @@ fun TopSectorsScreen(
     var openPeriodSelector by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
-    val state = rememberSaveable(uiState.sortingField, uiState.timePeriod, saver = LazyListState.Saver) {
-        LazyListState(0, 0)
-    }
+    val state =
+        rememberSaveable(uiState.sortingField, uiState.timePeriod, saver = LazyListState.Saver) {
+            LazyListState(0, 0)
+        }
 
     Column() {
         HSSwipeRefresh(
@@ -181,39 +180,28 @@ fun TopSectorItem(
                 .padding(end = 16.dp)
                 .width(76.dp)
         ) {
-            val leftCoinModifier = Modifier
-                .size(32.dp)
-                .background(ComposeAppTheme.colors.tyler)
-                .clip(CircleShape)
-                .align(Alignment.TopEnd)
-            val middleCoinModifier = Modifier
+            val iconModifier = Modifier
                 .size(32.dp)
                 .clip(CircleShape)
                 .background(ComposeAppTheme.colors.tyler)
-                .align(Alignment.TopCenter)
-            val endCoinModifier = Modifier
-                .size(32.dp)
-                .clip(CircleShape)
-                .background(ComposeAppTheme.colors.tyler)
-                .align(Alignment.TopStart)
-            CoinImageMock(
-                uid = "ethereum",
-                modifier = leftCoinModifier
+
+            CoinImage(
+                coin = viewItem.coin3.coin,
+                modifier = iconModifier.align(Alignment.TopEnd)
             )
-            CoinImageMock(
-                uid = "bitcoin",
-                modifier = middleCoinModifier
+            CoinImage(
+                coin = viewItem.coin2.coin,
+                modifier = iconModifier.align(Alignment.TopCenter)
             )
-            CoinImageMock(
-                uid = "solana",
-                modifier = endCoinModifier
+            CoinImage(
+                coin = viewItem.coin1.coin,
+                modifier = iconModifier.align(Alignment.TopStart)
             )
         }
-        Row(
+        body_leah(
+            text = viewItem.coinCategory.name,
             modifier = Modifier.weight(1f)
-        ) {
-            body_leah(viewItem.coinCategory.name)
-        }
+        )
         Column(
             horizontalAlignment = Alignment.End
         ) {
@@ -226,14 +214,3 @@ fun TopSectorItem(
         }
     }
 }
-
-@Composable
-private fun CoinImageMock(
-    uid: String,
-    modifier: Modifier,
-    colorFilter: ColorFilter? = null
-) = HsImage(
-    url = "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png",
-    modifier = modifier.clip(CircleShape),
-    colorFilter = colorFilter
-)
