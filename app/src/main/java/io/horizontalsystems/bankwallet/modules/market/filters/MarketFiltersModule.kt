@@ -30,6 +30,7 @@ object MarketFiltersModule {
         PriceChange(R.string.Market_Filter_PriceChange),
         PricePeriod(R.string.Market_Filter_PricePeriod),
         TradingSignals(R.string.Market_Filter_TradingSignals),
+        PriceCloseTo(R.string.Market_Filter_PriceCloseTo),
     }
 
     data class BlockchainViewItem(val blockchain: Blockchain, val checked: Boolean)
@@ -162,6 +163,11 @@ enum class TimePeriod(@StringRes val titleResId: Int): WithTranslatableTitle {
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)
+}
+
+enum class PriceCloseTo(val titleResId: Int) {
+    Ath(R.string.Market_Filter_ATH),
+    Atl(R.string.Market_Filter_ATL),
 }
 
 enum class PriceChange(

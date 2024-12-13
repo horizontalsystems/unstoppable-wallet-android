@@ -29,11 +29,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     private var marketCap = rangeEmpty
     private var volume = rangeEmpty
     private var priceChange = FilterViewItemWrapper.getAny<PriceChange>()
+    private var priceCloseTo = FilterViewItemWrapper.getAny<PriceCloseTo>()
     private var outperformedBtcOn = false
     private var outperformedEthOn = false
     private var outperformedBnbOn = false
-    private var priceCloseToAth = false
-    private var priceCloseToAtl = false
     private var listedOnTopExchangesOn = false
     private var solidCexOn = false
     private var solidDexOn = false
@@ -56,6 +55,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     val periodViewItemOptions = TimePeriod.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
     }
+    val priceCloseToOptions = listOf(FilterViewItemWrapper.getAny<PriceCloseTo>()) +
+            PriceCloseTo.entries.map {
+                FilterViewItemWrapper<PriceCloseTo?>(Translator.getString(it.titleResId), it)
+            }
 
     val tradingSignals = listOf(FilterViewItemWrapper.getAny<FilterTradingSignal>()) +
                 FilterTradingSignal.values().map { FilterViewItemWrapper<FilterTradingSignal?>(Translator.getString(it.titleResId), it) }
@@ -77,11 +80,10 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         marketCap = marketCap,
         volume = volume,
         priceChange = priceChange,
+        priceCloseTo = priceCloseTo,
         outperformedBtcOn = outperformedBtcOn,
         outperformedEthOn = outperformedEthOn,
         outperformedBnbOn = outperformedBnbOn,
-        priceCloseToAth = priceCloseToAth,
-        priceCloseToAtl = priceCloseToAtl,
         selectedBlockchainsValue = selectedBlockchainsValue,
         selectedBlockchains = selectedBlockchains,
         blockchainOptions = blockchainOptions,
@@ -113,8 +115,6 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         outperformedBtcOn = false
         outperformedEthOn = false
         outperformedBnbOn = false
-        priceCloseToAth = false
-        priceCloseToAtl = false
         listedOnTopExchangesOn = false
         solidCexOn = false
         solidDexOn = false
@@ -131,6 +131,13 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         service.coinCount = value.item.itemsCount
         service.clearCache()
         showSpinner = true
+        emitState()
+        reloadData()
+    }
+
+    fun updatePriceCloseTo(value: FilterViewItemWrapper<PriceCloseTo?>) {
+        priceCloseTo = value
+
         emitState()
         reloadData()
     }
@@ -179,18 +186,6 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
 
     fun updateOutperformedBnbOn(checked: Boolean) {
         outperformedBnbOn = checked
-        emitState()
-        reloadData()
-    }
-
-    fun updateOutperformedAthOn(checked: Boolean) {
-        priceCloseToAth = checked
-        emitState()
-        reloadData()
-    }
-
-    fun updateOutperformedAtlOn(checked: Boolean) {
-        priceCloseToAtl = checked
         emitState()
         reloadData()
     }
@@ -252,8 +247,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
                 service.filterSolidCex = solidCexOn
                 service.filterSolidDex = solidDexOn
                 service.filterGoodDistribution = goodDistributionOn
-                service.filterPriceCloseToAth = priceCloseToAth
-                service.filterPriceCloseToAtl = priceCloseToAtl
+                service.filterPriceCloseToAth = priceCloseTo.item == PriceCloseTo.Ath
+                service.filterPriceCloseToAtl = priceCloseTo.item == PriceCloseTo.Atl
                 service.filterBlockchains = selectedBlockchains
                 service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
 
@@ -306,11 +301,10 @@ data class MarketFiltersUiState(
     val marketCap: FilterViewItemWrapper<Range?>,
     val volume: FilterViewItemWrapper<Range?>,
     val priceChange: FilterViewItemWrapper<PriceChange?>,
+    val priceCloseTo: FilterViewItemWrapper<PriceCloseTo?>,
     val outperformedBtcOn: Boolean,
     val outperformedEthOn: Boolean,
     val outperformedBnbOn: Boolean,
-    val priceCloseToAth: Boolean,
-    val priceCloseToAtl: Boolean,
     val selectedBlockchainsValue: String?,
     val selectedBlockchains: List<Blockchain>,
     val blockchainOptions: List<BlockchainViewItem>,
