@@ -52,13 +52,13 @@ import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.BadgeText
 import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
+import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
 @Composable
@@ -282,91 +282,46 @@ private fun SettingSections(
         )
     )
 
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf(
+            {
+                HsSettingCell(
+                    R.string.Settings_BotSupport,
+                    R.drawable.ic_ai_assistant_24,
+                    onClick = {
+
+                    }
+                )
+            },
+        )
+    )
+
     VSpacer(24.dp)
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 32.dp)
-            .height(32.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        subhead1_jacob(text = stringResource(id = R.string.Settings_JoinUnstoppables).uppercase())
+    PremiumHeader()
+
+    SectionPremiumUniversalLawrence {
+        HsSettingCell(
+            R.string.Settings_VipSupport,
+            R.drawable.ic_support_yellow_24,
+            onClick = {
+
+            }
+        )
+        Divider(
+            thickness = 1.dp,
+            color = ComposeAppTheme.colors.steel10,
+        )
+        HsSettingCell(
+            R.string.Settings_VipClub,
+            R.drawable.ic_club_yellow_24,
+            onClick = {
+
+            }
+        )
     }
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.Settings_Telegram,
-                R.drawable.ic_telegram_filled_24,
-                ComposeAppTheme.colors.jacob,
-                onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
-
-                    stat(
-                        page = StatPage.Settings,
-                        event = StatEvent.Open(StatPage.ExternalTelegram)
-                    )
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Settings_Twitter,
-                R.drawable.ic_twitter_filled_24,
-                ComposeAppTheme.colors.jacob,
-                onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTwitter))
-                }
-            )
-        })
-    )
-    InfoText(
-        text = stringResource(R.string.Settings_JoinUnstoppables_Description),
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf({
-            HsSettingCell(
-                R.string.Settings_Faq,
-                R.drawable.ic_faq_20,
-                onClick = {
-                    navController.slideFromRight(R.id.faqListFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Faq))
-                }
-            )
-        }, {
-            HsSettingCell(
-                R.string.Guides_Title,
-                R.drawable.ic_academy_20,
-                onClick = {
-                    navController.slideFromRight(R.id.academyFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Academy))
-                }
-            )
-        })
-    )
-
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf {
-            HsSettingCell(
-                R.string.Settings_Donate,
-                R.drawable.ic_heart_filled_24,
-                ComposeAppTheme.colors.jacob,
-                onClick = {
-                    navController.slideFromRight(R.id.donateTokenSelectFragment)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
-                }
-            )
-        }
-    )
 
     VSpacer(32.dp)
 
@@ -413,6 +368,60 @@ private fun SettingSections(
                 },
             )
         })
+    )
+
+    VSpacer(24.dp)
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 32.dp)
+            .height(32.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        subhead1_grey(text = stringResource(id = R.string.Settings_JoinUnstoppables).uppercase())
+    }
+    CellUniversalLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.Settings_Telegram,
+                R.drawable.ic_telegram_24,
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTelegramLink)
+
+                    stat(
+                        page = StatPage.Settings,
+                        event = StatEvent.Open(StatPage.ExternalTelegram)
+                    )
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Settings_Twitter,
+                R.drawable.ic_twitter_24,
+                onClick = {
+                    LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTwitter))
+                }
+            )
+        })
+    )
+
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf {
+            HsSettingCell(
+                R.string.Settings_Donate,
+                R.drawable.ic_heart_24,
+                onClick = {
+                    navController.slideFromRight(R.id.donateTokenSelectFragment)
+
+                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.Donate))
+                }
+            )
+        }
     )
 
     VSpacer(32.dp)
