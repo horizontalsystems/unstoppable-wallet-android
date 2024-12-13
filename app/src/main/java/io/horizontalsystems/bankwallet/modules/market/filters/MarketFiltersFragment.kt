@@ -13,12 +13,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,10 +44,10 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HeaderText
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
@@ -56,6 +55,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.body_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.body_remus
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
@@ -79,7 +79,7 @@ class MarketFiltersFragment : BaseComposeFragment() {
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AdvancedSearchScreen(
     viewModel: MarketFiltersViewModel,
@@ -90,78 +90,85 @@ private fun AdvancedSearchScreen(
     val coroutineScope = rememberCoroutineScope()
 
     var bottomSheetType by remember { mutableStateOf(CoinSet) }
-    val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val modalBottomSheetState = rememberModalBottomSheetState()
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
 
-    ModalBottomSheetLayout(
-        sheetState = modalBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-        sheetContent = {
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Market_Filters),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Reset),
+                        onClick = { viewModel.reset() }
+                    )
+                ),
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                AdvancedSearchContent(
+                    viewModel = viewModel,
+                    onFilterByBlockchainsClick = {
+                        navController.slideFromRight(R.id.blockchainsSelectorFragment)
+                    },
+                    showBottomSheet = { type ->
+                        bottomSheetType = type
+                        coroutineScope.launch {
+                            modalBottomSheetState.show()
+                            isBottomSheetVisible = true
+                        }
+                    }
+                )
+            }
+
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellowWithSpinner(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    title = uiState.buttonTitle,
+                    onClick = {
+                        navController.slideFromRight(
+                            R.id.marketAdvancedSearchResultsFragment
+                        )
+                    },
+                    showSpinner = uiState.showSpinner,
+                    enabled = uiState.buttonEnabled,
+                )
+            }
+        }
+    }
+
+    if (isBottomSheetVisible) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                isBottomSheetVisible = false
+            },
+            sheetState = modalBottomSheetState,
+            containerColor = ComposeAppTheme.colors.transparent
+        ) {
             BottomSheetContent(
                 bottomSheetType = bottomSheetType,
                 viewModel = viewModel,
                 onClose = {
                     coroutineScope.launch {
                         modalBottomSheetState.hide()
+                        isBottomSheetVisible = false
                     }
                 }
             )
-        },
-    ) {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Market_Filters),
-                    navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Reset),
-                            onClick = { viewModel.reset() }
-                        )
-                    ),
-                )
-            }
-        ) { paddingValues ->
-            Column(
-                modifier = Modifier.padding(paddingValues)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    AdvancedSearchContent(
-                        viewModel = viewModel,
-                        onFilterByBlockchainsClick = {
-                            navController.slideFromRight(R.id.blockchainsSelectorFragment)
-                        },
-                        showBottomSheet = { type ->
-                            bottomSheetType = type
-                            coroutineScope.launch {
-                                modalBottomSheetState.show()
-                            }
-                        }
-                    )
-                }
-
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellowWithSpinner(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        title = uiState.buttonTitle,
-                        onClick = {
-                            navController.slideFromRight(
-                                R.id.marketAdvancedSearchResultsFragment
-                            )
-                        },
-                        showSpinner = uiState.showSpinner,
-                        enabled = uiState.buttonEnabled,
-                    )
-                }
-            }
         }
     }
 
@@ -178,6 +185,19 @@ private fun BottomSheetContent(
 ) {
     val uiState = viewModel.uiState
     when (bottomSheetType) {
+        PriceCloseTo -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_PriceCloseTo,
+                headerIcon = R.drawable.ic_usd_24,
+                items = viewModel.priceCloseToOptions,
+                selectedItem = uiState.priceCloseTo,
+                onSelect = {
+                    viewModel.updatePriceCloseTo(it)
+                },
+                onClose = onClose
+            )
+        }
+
         CoinSet -> {
             SingleSelectBottomSheetContent(
                 title = R.string.Market_Filter_ChooseSet,
@@ -266,19 +286,8 @@ fun AdvancedSearchContent(
 ) {
     val uiState = viewModel.uiState
 
-    VSpacer(height = 12.dp)
+    VSpacer(12.dp)
 
-    SectionUniversalLawrence {
-        AdvancedSearchDropdown(
-            title = R.string.Market_Filter_ChooseSet,
-            value = uiState.coinListSet.title,
-            borderTop = false,
-            onDropdownClick = { showBottomSheet(CoinSet) }
-        )
-    }
-    VSpacer(height = 32.dp)
-
-    HeaderText(stringResource(R.string.Market_FilterSection_MarketParameters))
     SectionUniversalLawrence {
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_MarketCap,
@@ -291,11 +300,64 @@ fun AdvancedSearchContent(
             value = uiState.volume.title,
             onDropdownClick = { showBottomSheet(TradingVolume) }
         )
-        AdvancedSearchSwitch(
-            title = R.string.Market_Filter_ListedOnTopExchanges,
-            enabled = uiState.listedOnTopExchangesOn,
-            onChecked = { viewModel.updateListedOnTopExchangesOn(it) }
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_Blockchains,
+            value = uiState.selectedBlockchainsValue,
+            onDropdownClick = onFilterByBlockchainsClick
         )
+    }
+
+    VSpacer(24.dp)
+
+    PremiumHeader()
+
+    SectionPremiumUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_PriceChange,
+            value = uiState.priceChange.title,
+            valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
+            onDropdownClick = { showBottomSheet(PriceChange) }
+        )
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_PricePeriod,
+            value = uiState.period.title,
+            onDropdownClick = { showBottomSheet(PricePeriod) }
+        )
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_TradingSignals,
+            value = uiState.filterTradingSignal.title,
+            onDropdownClick = { showBottomSheet(TradingSignals) }
+        )
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_PriceCloseTo,
+            value = uiState.priceCloseTo.title,
+            onDropdownClick = { showBottomSheet(PriceCloseTo) }
+        )
+    }
+
+    VSpacer(24.dp)
+
+    SectionPremiumUniversalLawrence {
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedBtc,
+            enabled = uiState.outperformedBtcOn,
+            onChecked = { viewModel.updateOutperformedBtcOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedEth,
+            enabled = uiState.outperformedEthOn,
+            onChecked = { viewModel.updateOutperformedEthOn(it) }
+        )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_OutperformedBnb,
+            enabled = uiState.outperformedBnbOn,
+            onChecked = { viewModel.updateOutperformedBnbOn(it) }
+        )
+    }
+
+    VSpacer(24.dp)
+
+    SectionPremiumUniversalLawrence {
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_SolidCex,
             subtitle = R.string.Market_Filter_SolidCex_Description,
@@ -314,68 +376,13 @@ fun AdvancedSearchContent(
             enabled = uiState.goodDistributionOn,
             onChecked = { viewModel.updateGoodDistributionOn(it) }
         )
+        AdvancedSearchSwitch(
+            title = R.string.Market_Filter_ListedOnTopExchanges,
+            enabled = uiState.listedOnTopExchangesOn,
+            onChecked = { viewModel.updateListedOnTopExchangesOn(it) }
+        )
     }
-    VSpacer(height = 32.dp)
 
-    HeaderText(stringResource(R.string.Market_FilterSection_PriceParameters))
-    SectionUniversalLawrence {
-        AdvancedSearchDropdown(
-            title = R.string.Market_Filter_PriceChange,
-            value = uiState.priceChange.title,
-            valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
-            onDropdownClick = { showBottomSheet(PriceChange) }
-        )
-        AdvancedSearchDropdown(
-            title = R.string.Market_Filter_PricePeriod,
-            value = uiState.period.title,
-            onDropdownClick = { showBottomSheet(PricePeriod) }
-        )
-        AdvancedSearchSwitch(
-            title = R.string.Market_Filter_OutperformedBtc,
-            enabled = uiState.outperformedBtcOn,
-            onChecked = { viewModel.updateOutperformedBtcOn(it) }
-        )
-        AdvancedSearchSwitch(
-            title = R.string.Market_Filter_OutperformedEth,
-            enabled = uiState.outperformedEthOn,
-            onChecked = { viewModel.updateOutperformedEthOn(it) }
-        )
-        AdvancedSearchSwitch(
-            title = R.string.Market_Filter_OutperformedBnb,
-            enabled = uiState.outperformedBnbOn,
-            onChecked = { viewModel.updateOutperformedBnbOn(it) }
-        )
-        AdvancedSearchSwitch(
-            title = R.string.Market_Filter_PriceCloseToAth,
-            enabled = uiState.priceCloseToAth,
-            onChecked = { viewModel.updateOutperformedAthOn(it) }
-        )
-        AdvancedSearchSwitch(
-            title = R.string.Market_Filter_PriceCloseToAtl,
-            enabled = uiState.priceCloseToAtl,
-            onChecked = { viewModel.updateOutperformedAtlOn(it) }
-        )
-    }
-    VSpacer(height = 32.dp)
-
-    HeaderText(stringResource(R.string.Market_FilterSection_NetworkParameters))
-    SectionUniversalLawrence {
-        AdvancedSearchDropdown(
-            title = R.string.Market_Filter_Blockchains,
-            value = uiState.selectedBlockchainsValue,
-            onDropdownClick = onFilterByBlockchainsClick
-        )
-    }
-    VSpacer(height = 32.dp)
-
-    HeaderText(stringResource(R.string.Market_FilterSection_Indicators))
-    SectionUniversalLawrence {
-        AdvancedSearchDropdown(
-            title = R.string.Market_Filter_TradingSignals,
-            value = uiState.filterTradingSignal.title,
-            onDropdownClick = { showBottomSheet(TradingSignals) }
-        )
-    }
     VSpacer(32.dp)
 }
 

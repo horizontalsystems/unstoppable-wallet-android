@@ -336,6 +336,10 @@ dependencies {
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
+    //Material 3
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation "androidx.compose.material3:material3:1.3.1"
+
     def coil_version = "2.6.0"
     implementation "io.coil-kt:coil-compose:$coil_version"
     implementation "io.coil-kt:coil-svg:$coil_version"
