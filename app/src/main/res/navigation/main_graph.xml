@@ -112,6 +112,9 @@
         android:id="@+id/languageSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.language.LanguageSettingsFragment" />
     <fragment
+        android:id="@+id/subscriptionFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.settings.subscription.SubscriptionFragment" />
+    <fragment
         android:id="@+id/termsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.settings.terms.TermsFragment"/>
     <fragment

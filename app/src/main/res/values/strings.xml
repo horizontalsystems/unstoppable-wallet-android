@@ -818,6 +818,7 @@
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
+    <string name="Settings_Subscription">Subscription</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>
     <string name="Settings_Contact_ViaEmail">via E-mail</string>
     <string name="Settings_AutoLock">Auto-Lock</string>
@@ -861,6 +862,11 @@
     <string name="SettingsBanner_FreeFor7Days">Free for 7 days</string>
     <string name="SettingsBanner_PremiumBannerHighlightedWord">Full Power</string>
     <string name="SettingsBanner_PremiumBannerDescription">Unleash the Full Power of Unstoppable Wallet</string>
+
+    <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Active</string>
+    <string name="SettingsSubscription_SubscriptionPlan">Subscription Plan</string>
+    <string name="SettingsSubscription_SubscriptionInfo">Next payment date: %s. You can manage your subscription in the Manage Subscription section.</string>
 
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
