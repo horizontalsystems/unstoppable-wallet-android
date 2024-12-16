@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
@@ -86,7 +87,8 @@ class MainFragment : BaseComposeFragment() {
             )
         } ?: run {
             // Back stack entry doesn't exist, restart activity
-            requireActivity().recreate()
+            val intent = Intent(context, MainActivity::class.java)
+            requireActivity().startActivity(intent)
         }
     }
 
