@@ -108,12 +108,16 @@ import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetRepository
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetWorker
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState.AllActivitiesDestroyed
+import io.horizontalsystems.core.BackgroundManagerState.EnterBackground
+import io.horizontalsystems.core.BackgroundManagerState.EnterForeground
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -585,6 +589,16 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
             evmLabelManager.sync()
             contactsRepository.initialize()
+        }
+
+        coroutineScope.launch {
+            backgroundManager.stateFlow.collect { state ->
+                when (state) {
+                    EnterForeground -> UserSubscriptionManager.onResume()
+                    EnterBackground -> UserSubscriptionManager.pause()
+                    AllActivitiesDestroyed -> Unit
+                }
+            }
         }
     }
 }

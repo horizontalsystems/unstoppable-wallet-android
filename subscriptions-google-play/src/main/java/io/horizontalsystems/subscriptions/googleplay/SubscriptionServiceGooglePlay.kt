@@ -2,6 +2,7 @@ package io.horizontalsystems.subscriptions.googleplay
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
@@ -46,30 +47,45 @@ class SubscriptionServiceGooglePlay(
     private var productDetailsResult: ProductDetailsResult? = null
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val acknowledgedPurchases = mutableListOf<Purchase>()
+
+    private var billingServiceDisconnected = false
 
     init {
+        startConnection()
+    }
+
+    private fun startConnection() {
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     coroutineScope.launch {
                         fetchAndHandleUserPurchases()
                     }
-                    // The BillingClient is ready. You can query purchases here.
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
+                billingServiceDisconnected = true
             }
         })
     }
 
-    suspend fun onResume() {
+    override suspend fun onResume() {
         fetchAndHandleUserPurchases()
     }
 
     private suspend fun fetchAndHandleUserPurchases() {
+        Log.e("AAA", "billingClient.isReady: ${billingClient.isReady}")
+        acknowledgedPurchases.clear()
+        if (!billingClient.isReady) {
+            if (billingServiceDisconnected) {
+                startConnection()
+            }
+            return
+        }
+
+        Log.e("AAA", "fetchAndHandleUserPurchases")
         val params = QueryPurchasesParams.newBuilder()
             .setProductType(BillingClient.ProductType.SUBS)
 
@@ -81,7 +97,7 @@ class SubscriptionServiceGooglePlay(
     }
 
     override fun isActionAllowed(paidAction: IPaidAction): Boolean {
-        return false
+        return acknowledgedPurchases.any()
     }
 
     override fun getBasePlans(subscriptionId: String): List<BasePlan> {
@@ -213,6 +229,8 @@ class SubscriptionServiceGooglePlay(
     }
 
     private suspend fun handlePurchase(purchase: Purchase) {
+        Log.e("AAA", "handlePurchase: $purchase")
+        Log.e("AAA", "purchased: ${purchase.purchaseState == Purchase.PurchaseState.PURCHASED}")
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (purchase.isAcknowledged) {
                 addAcknowledgedPurchase(purchase)
@@ -230,6 +248,7 @@ class SubscriptionServiceGooglePlay(
     }
 
     private fun addAcknowledgedPurchase(purchase: Purchase) {
-//        TODO("Not yet implemented")
+        Log.e("AAA", "addAcknowledgedPurchase $purchase")
+        acknowledgedPurchases.add(purchase)
     }
 }
