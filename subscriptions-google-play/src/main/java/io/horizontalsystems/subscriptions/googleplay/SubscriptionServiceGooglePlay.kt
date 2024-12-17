@@ -36,6 +36,7 @@ class SubscriptionServiceGooglePlay(
     context: Context
 ) : SubscriptionService, PurchasesUpdatedListener {
 
+    override var predefinedSubscriptions: List<Subscription> = listOf()
     private var inProgressPurchaseResult: CancellableContinuation<HSPurchase?>? = null
 
     private val billingClient = BillingClient.newBuilder(context)
@@ -47,7 +48,7 @@ class SubscriptionServiceGooglePlay(
     private var productDetailsResult: ProductDetailsResult? = null
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
-    private val acknowledgedPurchases = mutableListOf<Purchase>()
+    private val activeSubscriptions = mutableListOf<Subscription>()
 
     private var billingServiceDisconnected = false
 
@@ -77,7 +78,7 @@ class SubscriptionServiceGooglePlay(
 
     private suspend fun fetchAndHandleUserPurchases() {
         Log.e("AAA", "billingClient.isReady: ${billingClient.isReady}")
-        acknowledgedPurchases.clear()
+        activeSubscriptions.clear()
         if (!billingClient.isReady) {
             if (billingServiceDisconnected) {
                 startConnection()
@@ -96,8 +97,8 @@ class SubscriptionServiceGooglePlay(
         }
     }
 
-    override fun isActionAllowed(paidAction: IPaidAction): Boolean {
-        return acknowledgedPurchases.any()
+    override fun isActionAllowed(paidAction: IPaidAction) = activeSubscriptions.any {
+        it.actions.contains(paidAction)
     }
 
     override fun getBasePlans(subscriptionId: String): List<BasePlan> {
@@ -130,16 +131,13 @@ class SubscriptionServiceGooglePlay(
     }
 
     override suspend fun getSubscriptions(): List<Subscription> {
-        val productList = listOf(
+        val ids = predefinedSubscriptions.map { it.id }
+        val productList = ids.map {
             QueryProductDetailsParams.Product.newBuilder()
-                .setProductId("test.subscription_1")
+                .setProductId(it)
                 .setProductType(BillingClient.ProductType.SUBS)
-                .build(),
-            QueryProductDetailsParams.Product.newBuilder()
-                .setProductId("test.subscription_2")
-                .setProductType(BillingClient.ProductType.SUBS)
-                .build(),
-        )
+                .build()
+        }
         val params = QueryProductDetailsParams.newBuilder()
             .setProductList(productList)
             .build()
@@ -148,13 +146,9 @@ class SubscriptionServiceGooglePlay(
 
         return buildList {
             productDetailsResult?.productDetailsList?.forEach { productDetails ->
-                add(
-                    Subscription(
-                        id = productDetails.productId,
-                        name = productDetails.name,
-                        description = productDetails.description,
-                    )
-                )
+                predefinedSubscriptions.find { it.id == productDetails.productId }?.let {
+                    add(it)
+                }
             }
         }
     }
@@ -249,6 +243,11 @@ class SubscriptionServiceGooglePlay(
 
     private fun addAcknowledgedPurchase(purchase: Purchase) {
         Log.e("AAA", "addAcknowledgedPurchase $purchase")
-        acknowledgedPurchases.add(purchase)
+        activeSubscriptions.addAll(
+            purchase.products.mapNotNull { productId ->
+                predefinedSubscriptions.find { it.id == productId }
+            }
+        )
+        Log.e("AAA", "activeSubscriptions: $activeSubscriptions")
     }
 }
