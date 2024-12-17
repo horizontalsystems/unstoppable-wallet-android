@@ -24,4 +24,12 @@ object UserSubscriptionManager {
     fun getBasePlans(subscriptionId: String): List<BasePlan> {
         return service.getBasePlans(subscriptionId)
     }
+
+    suspend fun onResume() {
+        service.onResume()
+    }
+
+    fun pause() {
+
+    }
 }
