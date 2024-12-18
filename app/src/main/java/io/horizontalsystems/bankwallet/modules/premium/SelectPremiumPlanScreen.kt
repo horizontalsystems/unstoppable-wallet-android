@@ -3,7 +3,6 @@ package io.horizontalsystems.bankwallet.modules.premium
 import androidx.annotation.StringRes
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.TweenSpec
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,11 +41,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,18 +51,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Darkest
 import io.horizontalsystems.bankwallet.ui.compose.Light
 import io.horizontalsystems.bankwallet.ui.compose.Steel20
-import io.horizontalsystems.bankwallet.ui.compose.SteelLight
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
@@ -125,67 +124,66 @@ fun SelectPremiumPlanScreen(
         },
     ) {
         Scaffold(
-            backgroundColor = Darkest,
+            backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 TitleCenteredTopBar(
-                    modifier = Modifier.padding(top = 24.dp),
                     title = stringResource(R.string.Premium_Title),
-                    color = SteelLight,
                     onCloseClick = onCloseClick
                 )
             }
         ) { paddingValues ->
-            Column(
-                modifier = Modifier.padding(paddingValues),
+            Box(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
             ) {
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                        .paint(
-                            painterResource(id = R.drawable.prem_backround),
-                            contentScale = ContentScale.FillBounds
-                        )
-                )
-                {
-                    VSpacer(12.dp)
-                    body_grey(
-                        text = stringResource(R.string.Premium_ChoosePlanForYou),
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                RadialBackground()
+                Column {
+                    Column(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
                     )
-                    VSpacer(24.dp)
-                    PlanTabs(
-                        selectedTabIndex = selectedTabIndex.value,
-                        onTabChange = { index ->
-                            selectedTabIndex.value = index
-                        }
-                    )
-                    VSpacer(32.dp)
-                }
-
-                ButtonsGroupWithDarkShade {
-                    Column(Modifier.padding(horizontal = 24.dp)) {
-                        ButtonPrimaryCustomColor(
-                            modifier = Modifier.fillMaxWidth(),
-                            title = stringResource(R.string.Premium_TryForFree),
-                            brush = yellowGradient,
-                            onClick = {
-                                coroutineScope.launch {
-                                    modalBottomSheetState.show()
-                                }
-                            },
-                        )
+                    {
                         VSpacer(12.dp)
-                        ColoredTextSecondaryButton(
+                        body_grey(
+                            text = stringResource(R.string.Premium_ChoosePlanForYou),
                             modifier = Modifier.fillMaxWidth(),
-                            title = stringResource(R.string.Premium_Restore),
-                            onClick = {
-                                //
-                            },
-                            color = Light
+                            textAlign = TextAlign.Center
                         )
+                        VSpacer(24.dp)
+                        PlanTabs(
+                            selectedTabIndex = selectedTabIndex.value,
+                            onTabChange = { index ->
+                                selectedTabIndex.value = index
+                            }
+                        )
+                        VSpacer(32.dp)
+                    }
+
+                    ButtonsGroupWithShade {
+                        Column(Modifier.padding(horizontal = 24.dp)) {
+                            ButtonPrimaryCustomColor(
+                                modifier = Modifier.fillMaxWidth(),
+                                title = stringResource(R.string.Premium_TryForFree),
+                                brush = yellowGradient,
+                                onClick = {
+                                    coroutineScope.launch {
+                                        modalBottomSheetState.show()
+                                    }
+                                },
+                            )
+                            VSpacer(12.dp)
+                            ColoredTextSecondaryButton(
+                                modifier = Modifier.fillMaxWidth(),
+                                title = stringResource(R.string.Premium_Restore),
+                                onClick = {
+                                    //
+                                },
+                                color = Light
+                            )
+                        }
                     }
                 }
             }
@@ -342,7 +340,7 @@ private fun PlanTabs(
     ) {
         TabRow(
             selectedTabIndex = selectedTabIndex,
-            backgroundColor = Color(0xFF111111), // Dark background
+            backgroundColor = ComposeAppTheme.colors.transparent, // Dark background
             contentColor = Color(0xFFEDD716),
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
@@ -364,7 +362,7 @@ private fun PlanTabs(
                     },
                     modifier = Modifier.background(
                         brush =
-                        if (selectedTabIndex == index) yellowGradient else steelBrush
+                        if (selectedTabIndex == index) yellowGradient else steelBrush,
                     ),
                 ) {
                     Row(
@@ -455,13 +453,15 @@ private fun VipPlanItems() {
         FeatureItem(
             icon = R.drawable.prem_vip_support_24,
             title = R.string.Premium_UpgradeFeature_1,
-            subtitle = R.string.Premium_UpgradeFeature_Description_1
+            subtitle = R.string.Premium_UpgradeFeature_Description_1,
+            tint = ComposeAppTheme.colors.jacob
         )
         Divider(color = ComposeAppTheme.colors.steel20)
         FeatureItem(
             icon = R.drawable.prem_chat_support_24,
             title = R.string.Premium_UpgradeFeature_2,
-            subtitle = R.string.Premium_UpgradeFeature_Description_2
+            subtitle = R.string.Premium_UpgradeFeature_Description_2,
+            tint = ComposeAppTheme.colors.jacob
         )
         Divider(color = ComposeAppTheme.colors.steel20)
         FeatureItem(
@@ -513,6 +513,7 @@ private fun FeatureItem(
     icon: Int,
     title: Int,
     subtitle: Int,
+    tint: Color = ComposeAppTheme.colors.leah
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -521,18 +522,15 @@ private fun FeatureItem(
             .background(ComposeAppTheme.colors.steel10)
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
-        Image(
+        Icon(
             painter = painterResource(icon),
             modifier = Modifier.size(24.dp),
+            tint = tint,
             contentDescription = null
         )
         HSpacer(24.dp)
         Column {
-            Text(
-                text = stringResource(title),
-                style = ComposeAppTheme.typography.subhead1,
-                color = SteelLight
-            )
+            subhead1_leah(stringResource(title))
             caption_grey(stringResource(subtitle))
         }
     }

@@ -63,9 +63,6 @@
         <activity
             android:name=".modules.keystore.KeyStoreActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".modules.premium.PremiumActivity"
-            android:screenOrientation="portrait" />
 
         <activity-alias
             android:name="${applicationId}.MainLauncherAlias"

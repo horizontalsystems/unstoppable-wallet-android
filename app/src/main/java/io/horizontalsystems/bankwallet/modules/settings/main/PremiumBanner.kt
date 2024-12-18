@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.horizontalsystems.bankwallet.R
@@ -79,10 +80,9 @@ fun PremiumBanner(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Color(0xFF0F1014))
+            .background(ComposeAppTheme.colors.dark)
             .height(IntrinsicSize.Max)
             .clickable(onClick = onClick)
     ) {
@@ -204,5 +204,13 @@ private fun AutoSizedText(
                 color = Color.White,
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun PremiumBannerPreview() {
+    ComposeAppTheme {
+        PremiumBanner {}
     }
 }
