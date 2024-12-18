@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.entities.Account
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.entities.CurrencyValue
@@ -14,6 +15,7 @@ import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoVi
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem.Value
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionViewItemFactoryHelper
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionStatus
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hdwalletkit.Curve
@@ -240,20 +242,44 @@ object TonHelper {
             }
 
             is TonTransactionRecord.Action.Type.ContractDeploy -> {
-//                        case let .contractDeploy(interfaces):
-//                            viewItems = [
-//                                .actionTitle(iconName: nil, iconDimmed: false, title: "transactions.contract_deploy".localized, subTitle: interfaces.joined(separator: ", ")),
-//                            ]
+                itemsForAction.add(
+                    TransactionInfoViewItem.Transaction(
+                        leftValue = Translator.getString(R.string.Transactions_ContractDeploy),
+                        rightValue = actionType.interfaces.joinToString(),
+                        icon = null,
+                    )
+                )
+
             }
 
             is TonTransactionRecord.Action.Type.ContractCall -> {
-//                        case let .contractCall(address, value, operation):
-//                            viewItems = [
-//                                .actionTitle(iconName: record.source.blockchainType.iconPlain32, iconDimmed: false, title: "transactions.contract_call".localized, subTitle: operation),
-//                                .to(value: address, valueTitle: nil, contactAddress: nil)
-//                            ]
-//
-//                            viewItems.append(contentsOf: sendSection(source: record.source, transactionValue: value, to: nil, rates: item.rates, balanceHidden: balanceHidden))
+                itemsForAction.add(
+                    TransactionInfoViewItem.Transaction(
+                        leftValue = Translator.getString(R.string.Transactions_ContractCall),
+                        rightValue = actionType.operation,
+                        icon = TransactionViewItem.Icon.Platform(blockchainType).iconRes,
+                    )
+                )
+
+                itemsForAction.add(
+                    TransactionInfoViewItem.Address(
+                        Translator.getString(R.string.TransactionInfo_To),
+                        actionType.address,
+                        false,
+                        blockchainType,
+                        StatSection.AddressTo
+                    )
+                )
+
+                itemsForAction.addAll(
+                    TransactionViewItemFactoryHelper.getSendSectionItems(
+                        value = actionType.value,
+                        toAddress = null,
+                        coinPrice = rates[actionType.value.coinUid],
+                        hideAmount = hideAmount,
+                        blockchainType = blockchainType,
+                    )
+                )
             }
 
             is TonTransactionRecord.Action.Type.Unsupported -> {
