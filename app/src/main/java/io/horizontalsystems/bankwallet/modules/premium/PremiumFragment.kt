@@ -1,46 +1,51 @@
 package io.horizontalsystems.bankwallet.modules.premium
 
-import android.os.Bundle
-import androidx.activity.compose.setContent
+import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import io.horizontalsystems.bankwallet.core.BaseActivity
+import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.subscriptions.core.IPaidAction
+import kotlinx.parcelize.Parcelize
 
-class PremiumActivity : BaseActivity() {
+class PremiumFragment : BaseComposeFragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setContent {
-            ComposeAppTheme {
-                PremiumNavHost(
-                    onClose = { finish() }
-                )
-            }
+    @Composable
+    override fun GetContent(navController: NavController) {
+        ComposeAppTheme {
+            PremiumNavHost(
+                navController = navController,
+                onClose = { navController.popBackStack() }
+            )
         }
-        setStatusBarTransparent()
     }
 
+    @Parcelize
+    data class Input(val action: IPaidAction) : Parcelable
+
+    @Parcelize
+    class Result : Parcelable
 }
 
 @Composable
 fun PremiumNavHost(
+    navController: NavController,
     onClose: () -> Unit
 ) {
-    val navController = rememberNavController()
+    val navHostController = rememberNavController()
     NavHost(
-        navController = navController,
+        navController = navHostController,
         startDestination = "select_premium_plan",
     ) {
         composable("select_premium_plan") {
             SelectPremiumPlanScreen(
-                navController,
+                navHostController,
                 onCloseClick = onClose
             )
         }

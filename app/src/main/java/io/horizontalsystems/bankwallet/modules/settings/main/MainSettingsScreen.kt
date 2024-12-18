@@ -44,7 +44,6 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
 import io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog
 import io.horizontalsystems.bankwallet.modules.manageaccounts.ManageAccountsModule
-import io.horizontalsystems.bankwallet.modules.premium.PremiumActivity
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import io.horizontalsystems.bankwallet.modules.walletconnect.WCManager
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -92,8 +91,7 @@ private fun SettingSections(
 
     PremiumBanner(
         onClick = {
-            val intent = Intent(context, PremiumActivity::class.java)
-            context.startActivity(intent)
+            navController.slideFromRight(R.id.premiumSubscriptionFragment)
         }
     )
 

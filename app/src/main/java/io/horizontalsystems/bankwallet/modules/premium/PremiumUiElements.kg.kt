@@ -3,13 +3,11 @@ package io.horizontalsystems.bankwallet.modules.premium
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -32,12 +30,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Darkest
-import io.horizontalsystems.bankwallet.ui.compose.SteelLight
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults.buttonColors
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 
 @Composable
 fun highlightText(
@@ -120,7 +117,6 @@ fun ButtonPrimaryCustomColor(
 @Composable
 fun TitleCenteredTopBar(
     title: String,
-    color: Color = SteelLight,
     modifier: Modifier = Modifier,
     onCloseClick: () -> Unit
 ) {
@@ -129,12 +125,8 @@ fun TitleCenteredTopBar(
             .height(64.dp)
             .fillMaxWidth(),
     ) {
-        Text(
+        headline1_leah(
             text = title,
-            color = color,
-            style = ComposeAppTheme.typography.headline1,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
             modifier = Modifier.align(Alignment.Center)
         )
         HsIconButton(
@@ -175,34 +167,4 @@ fun ColoredTextSecondaryButton(
             )
         },
     )
-}
-
-@Composable
-fun ButtonsGroupWithDarkShade(
-    buttonsContent: @Composable (() -> Unit)
-) {
-    Column(
-        modifier = Modifier.offset(y = -(24.dp))
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(24.dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        listOf(
-                            ComposeAppTheme.colors.transparent,
-                            Darkest
-                        )
-                    )
-                )
-        )
-        Box(
-            modifier = Modifier
-                .background(Darkest)
-                .padding(bottom = 8.dp)
-        ) {
-            buttonsContent()
-        }
-    }
 }
