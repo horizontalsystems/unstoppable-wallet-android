@@ -157,7 +157,8 @@ object TonHelper {
         action: TonTransactionRecord.Action,
         rates: Map<String, CurrencyValue>,
         blockchainType: BlockchainType,
-        hideAmount: Boolean
+        hideAmount: Boolean,
+        showHistoricalRate: Boolean
     ): List<TransactionInfoViewItem> {
 
         val itemsForAction = mutableListOf<TransactionInfoViewItem>()
@@ -172,6 +173,7 @@ object TonHelper {
                         hideAmount = hideAmount,
                         sentToSelf = actionType.sentToSelf,
                         blockchainType = blockchainType,
+                        showHistoricalRate = showHistoricalRate
                     )
                 )
                 actionType.comment?.let {
@@ -192,6 +194,7 @@ object TonHelper {
                         coinPrice = rates[actionType.value.coinUid],
                         hideAmount = hideAmount,
                         blockchainType = blockchainType,
+                        showHistoricalRate = showHistoricalRate
                     )
                 )
                 actionType.comment?.let {

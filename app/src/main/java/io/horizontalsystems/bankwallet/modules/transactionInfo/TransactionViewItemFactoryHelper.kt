@@ -241,6 +241,7 @@ object TransactionViewItemFactoryHelper {
         hideAmount: Boolean,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
+        showHistoricalRate: Boolean = true
     ): List<TransactionInfoViewItem> {
         val mint = fromAddress == zeroAddress
         val title: String =
@@ -256,7 +257,8 @@ object TransactionViewItemFactoryHelper {
             }
 
             else -> {
-                amount = getAmount(coinPrice, value, true, hideAmount, AmountType.Received)
+                val amountType = if (mint) AmountType.Minted else AmountType.Received
+                amount = getAmount(coinPrice, value, true, hideAmount, amountType)
                 rate = getHistoricalRate(coinPrice, value)
             }
         }
@@ -283,7 +285,9 @@ object TransactionViewItemFactoryHelper {
             }
         }
 
-        rate?.let { items.add(it) }
+        if (showHistoricalRate) {
+            rate?.let { items.add(it) }
+        }
 
         return items
     }
@@ -297,6 +301,7 @@ object TransactionViewItemFactoryHelper {
         sentToSelf: Boolean = false,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata> = mapOf(),
         blockchainType: BlockchainType,
+        showHistoricalRate: Boolean = true
     ): List<TransactionInfoViewItem> {
         val burn = toAddress == zeroAddress
 
@@ -349,7 +354,9 @@ object TransactionViewItemFactoryHelper {
             }
         }
 
-        rate?.let { items.add(it) }
+        if (showHistoricalRate) {
+            rate?.let { items.add(it) }
+        }
 
         return items
     }

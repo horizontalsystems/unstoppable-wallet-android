@@ -61,7 +61,13 @@ class TransactionInfoViewItemFactory(
             is TonTransactionRecord -> {
                 transaction.actions.forEach { action ->
                     itemSections.add(
-                        TonHelper.getViewItemsForAction(action, rates, blockchainType, transactionItem.hideAmount)
+                        TonHelper.getViewItemsForAction(
+                            action,
+                            rates,
+                            blockchainType,
+                            transactionItem.hideAmount,
+                            true
+                        )
                     )
                 }
 
