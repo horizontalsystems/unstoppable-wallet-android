@@ -61,7 +61,7 @@ sealed class TransactionInfoViewItem {
 }
 
 enum class AmountType {
-    YouSent, YouGot, Received, Sent, Approved;
+    YouSent, YouGot, Received, Sent, Approved, Minted;
 }
 
 data class ColoredValue(val value: String, val color: ColorName)

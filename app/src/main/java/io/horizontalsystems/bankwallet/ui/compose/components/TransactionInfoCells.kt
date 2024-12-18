@@ -170,6 +170,7 @@ fun TransactionAmountCell(
         AmountType.Received -> stringResource(R.string.TransactionInfo_Received)
         AmountType.Sent -> stringResource(R.string.TransactionInfo_Sent)
         AmountType.Approved -> stringResource(R.string.TransactionInfo_Approved)
+        AmountType.Minted -> stringResource(R.string.TransactionInfo_Minted)
     }
     RowUniversal(
         modifier = Modifier.padding(horizontal = 16.dp),

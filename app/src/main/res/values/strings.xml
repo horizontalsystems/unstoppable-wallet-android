@@ -738,6 +738,7 @@
     <string name="TransactionInfo_YouGot">You Got</string>
     <string name="TransactionInfo_YouSent">You Sent</string>
     <string name="TransactionInfo_Received">Received</string>
+    <string name="TransactionInfo_Minted">Minted</string>
     <string name="TransactionInfo_Sent">Sent</string>
     <string name="TransactionInfo_Approved">Approved</string>
     <string name="TransactionInfo_SpeedUp">Speed Up</string>

@@ -7,10 +7,12 @@ import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
+import io.horizontalsystems.bankwallet.core.managers.TonHelper
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.bankwallet.core.meta
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
@@ -30,6 +32,8 @@ class TonConnectSendRequestViewModel(
     private val transactionSigner = tonConnectManager.transactionSigner
     private val tonConnectKit = App.tonConnectManager.kit
     private var tonTransactionRecord: TonTransactionRecord? = null
+    private var itemSections: List<List<TransactionInfoViewItem>> = listOf()
+
     private var currency = App.currencyManager.baseCurrency
 
     private var tonWallet: TonWallet.FullAccess? = null
@@ -41,7 +45,8 @@ class TonConnectSendRequestViewModel(
         currency = currency,
         error = error,
         confirmEnabled = sendRequestEntity != null && tonWallet != null,
-        rejectEnabled = sendRequestEntity != null
+        rejectEnabled = sendRequestEntity != null,
+        itemSections = itemSections
     )
 
     init {
@@ -81,7 +86,7 @@ class TonConnectSendRequestViewModel(
             error = TonConnectSendRequestError.Other("Token Ton not found")
             return
         }
-        
+
         val transactionSource = TransactionSource(token.blockchain, account, token.type.meta)
 
         val tonTransactionConverter = tonConnectManager.adapterFactory.tonTransactionConverter(
@@ -90,6 +95,13 @@ class TonConnectSendRequestViewModel(
         )
 
         tonTransactionRecord = tonTransactionConverter?.createTransactionRecord(tonEvent)
+
+        tonTransactionRecord?.let {
+            itemSections = it.actions.map { action ->
+                TonHelper.getViewItemsForAction(action, mapOf(), BlockchainType.Ton, false, showHistoricalRate = false)
+            }
+        }
+
     }
 
     fun confirm() {
@@ -125,4 +137,5 @@ data class TonConnectSendRequestUiState(
     val error: TonConnectSendRequestError?,
     val confirmEnabled: Boolean,
     val rejectEnabled: Boolean,
+    val itemSections: List<List<TransactionInfoViewItem>>,
 )
