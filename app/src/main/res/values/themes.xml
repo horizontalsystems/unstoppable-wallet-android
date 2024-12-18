@@ -43,7 +43,6 @@
         <item name="AddCoinButtonPlaceholder">@color/light</item>
         <item name="SecondaryButtonStartGradient">#ffffffff</item>
         <item name="SecondaryButtonEndGradient">#00ffffff</item>
-        <item name="SplashScreenBackground">@drawable/ic_intro_background_light</item>
 
         <!--  Gradient colors-->
         <item name="ColorGradientWhite">@color/white</item>
