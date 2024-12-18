@@ -1,7 +1,9 @@
 package io.horizontalsystems.bankwallet.ui.helpers
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import io.horizontalsystems.bankwallet.R
@@ -12,26 +14,37 @@ object LinkHelper {
     fun openLinkInAppBrowser(context: Context, link: String) {
         val urlString = getValidUrl(link) ?: return
 
-        val builder = CustomTabsIntent.Builder()
+        try {
+            val builder = CustomTabsIntent.Builder()
 
-        val color = context.getColor(R.color.tyler)
+            val color = context.getColor(R.color.tyler)
 
-        val params = CustomTabColorSchemeParams.Builder()
-            .setNavigationBarColor(color)
-            .setToolbarColor(color)
-            .build()
+            val params = CustomTabColorSchemeParams.Builder()
+                .setNavigationBarColor(color)
+                .setToolbarColor(color)
+                .build()
 
-        builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params)
-        builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, params)
-        builder.setStartAnimations(context, R.anim.slide_from_right, R.anim.slide_to_left)
-        builder.setExitAnimations(
-            context,
-            android.R.anim.slide_in_left,
-            android.R.anim.slide_out_right
-        )
+            builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, params)
+            builder.setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, params)
+            builder.setStartAnimations(context, R.anim.slide_from_right, R.anim.slide_to_left)
+            builder.setExitAnimations(
+                context,
+                android.R.anim.slide_in_left,
+                android.R.anim.slide_out_right
+            )
 
-        val intent = builder.build()
-        intent.launchUrl(context, Uri.parse(urlString))
+            val intent = builder.build()
+            intent.launchUrl(context, Uri.parse(urlString))
+        } catch (e: SecurityException) {
+            // Fallback to standard intent if Custom Tabs fails
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+            } catch (e: Exception) {
+                Log.e("LinkHelper", "Failed to open URL: $urlString", e)
+            }
+        }
     }
 
     private fun getValidUrl(urlString: String): String? {
