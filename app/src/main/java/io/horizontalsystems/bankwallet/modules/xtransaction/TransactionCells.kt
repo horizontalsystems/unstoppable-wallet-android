@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,8 +36,10 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorDialogCompose
 import io.horizontalsystems.bankwallet.ui.compose.components.SelectorItem
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
@@ -44,6 +47,37 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
+
+@Composable
+fun XxxSectionHeaderCell(
+    title: String,
+    value: String,
+    borderTop: Boolean = true,
+    painter: Painter?
+) {
+    CellUniversal(borderTop = borderTop) {
+        painter?.let {
+            Icon(
+                modifier = Modifier.padding(end = 16.dp),
+                painter = painter,
+                tint = ComposeAppTheme.colors.grey,
+                contentDescription = null,
+            )
+        }
+
+        body_leah(text = title)
+
+        subhead1_grey(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 8.dp),
+            text = value,
+            textAlign = TextAlign.End,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
 
 @Composable
 fun XxxTitleAndValueCell(

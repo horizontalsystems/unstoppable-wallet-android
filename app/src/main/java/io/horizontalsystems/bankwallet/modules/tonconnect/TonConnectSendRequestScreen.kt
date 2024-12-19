@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -22,20 +23,35 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxAddress
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxAmount
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSectionHeaderCell
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendReceiveSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.coinIconPainter
+import io.horizontalsystems.bankwallet.modules.xtransaction.xxxCoinAmount
+import io.horizontalsystems.bankwallet.modules.xtransaction.xxxFiatAmount
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -132,7 +148,81 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.ContractCall -> {
-                                Text("TODO")
+                                SectionUniversalLawrence {
+                                    XxxSectionHeaderCell(
+                                        title = stringResource(R.string.Transactions_ContractCall),
+                                        value = actionType.operation,
+                                        painter = TransactionViewItem.Icon.Platform(BlockchainType.Ton).iconRes?.let {
+                                            painterResource(it)
+                                        }
+                                    )
+                                    val contact = transactionInfoHelper.getContact(actionType.address, BlockchainType.Ton)
+                                    XxxAddress(
+                                        title = stringResource(R.string.TransactionInfo_To),
+                                        value = actionType.address,
+                                        showAdd = contact == null,
+                                        blockchainType = BlockchainType.Ton,
+                                        navController = navController,
+                                        onCopy = {
+                                            stat(
+                                                page = StatPage.TonConnect,
+                                                section = StatSection.AddressTo,
+                                                event = StatEvent.Copy(StatEntity.Address)
+                                            )
+                                        },
+                                        onAddToExisting = {
+                                            stat(
+                                                page = StatPage.TonConnect,
+                                                section = StatSection.AddressTo,
+                                                event = StatEvent.Open(StatPage.ContactAddToExisting)
+                                            )
+                                        },
+                                        onAddToNew = {
+                                            stat(
+                                                page = StatPage.TonConnect,
+                                                section = StatSection.AddressTo,
+                                                event = StatEvent.Open(StatPage.ContactNew)
+                                            )
+                                        }
+                                    )
+
+                                    val transactionValue = actionType.value
+                                    val xRate = transactionInfoHelper.getXRate(transactionValue.coinUid)
+
+                                    XxxAmount(
+                                        title = stringResource(R.string.Send_Confirmation_YouSend),
+                                        coinIcon = coinIconPainter(
+                                            url = transactionValue.coinIconUrl,
+                                            alternativeUrl = transactionValue.alternativeCoinIconUrl,
+                                            placeholder = transactionValue.coinIconPlaceholder
+                                        ),
+                                        coinProtocolType = transactionValue.badge
+                                            ?: stringResource(id = R.string.CoinPlatforms_Native),
+                                        coinAmount = xxxCoinAmount(
+                                            value = transactionValue.decimalValue?.abs(),
+                                            coinCode = transactionValue.coinCode,
+                                            sign = "-"
+                                        ),
+                                        coinAmountColor = ComposeAppTheme.colors.lucian,
+                                        fiatAmount = xxxFiatAmount(
+                                            value = xRate?.let {
+                                                transactionValue.decimalValue?.abs()?.multiply(it)
+                                            },
+                                            fiatSymbol = transactionInfoHelper.getCurrencySymbol()
+                                        ),
+                                        onClick = {
+                                            navController.slideFromRight(
+                                                R.id.coinFragment,
+                                                CoinFragment.Input(transactionValue.coinUid)
+                                            )
+
+                                            stat(
+                                                page = StatPage.TonConnect,
+                                                event = StatEvent.OpenCoin(transactionValue.coinUid)
+                                            )
+                                        }
+                                    )
+                                }
                             }
 
                             is TonTransactionRecord.Action.Type.ContractDeploy -> {
