@@ -411,6 +411,7 @@
 
     <string name="Send_Confirmation_Title">Confirm</string>
     <string name="Send_Confirmation_YouSend">You Send</string>
+    <string name="Send_Confirmation_YouReceive">You Receive</string>
     <string name="Send_Confirmation_To">To</string>
     <string name="Send_Confirmation_Own">Own</string>
     <string name="Send_Confirmation_Method">Method</string>
