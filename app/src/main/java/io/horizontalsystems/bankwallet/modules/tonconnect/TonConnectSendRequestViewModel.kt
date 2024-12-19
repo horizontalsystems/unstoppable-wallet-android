@@ -14,7 +14,6 @@ import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.bankwallet.core.meta
 import io.horizontalsystems.bankwallet.entities.Currency
-import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -24,7 +23,6 @@ import io.horizontalsystems.tonkit.core.TonWallet
 import io.horizontalsystems.tonkit.models.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
 
 class TonConnectSendRequestViewModel(
     private val sendRequestEntity: SendRequestEntity?,
@@ -129,20 +127,6 @@ class TonConnectSendRequestViewModel(
             tonConnectKit.reject(sendRequestEntity)
         }
     }
-
-    fun getXRate(coinUid: String): BigDecimal? {
-        return marketKit.coinPrice(coinUid, currencyManager.baseCurrency.code)?.value
-    }
-
-    fun getCurrencySymbol(): String {
-        return currencyManager.baseCurrency.symbol
-    }
-
-    fun getContact(address: String?, blockchainType: BlockchainType): Contact? {
-        return App.contactsRepository.getContactsFiltered(blockchainType, addressQuery = address)
-            .firstOrNull()
-    }
-
 }
 
 sealed class TonConnectSendRequestError : Error() {
