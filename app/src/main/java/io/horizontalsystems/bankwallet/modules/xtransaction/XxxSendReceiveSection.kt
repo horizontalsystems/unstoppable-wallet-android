@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.xtransaction
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -28,11 +27,8 @@ fun XxxSendReceiveSection(
     comment: String?,
     addressTitle: String,
     addressStatSection: StatSection,
+    helper: TransactionInfoHelper,
 ) {
-    val helper = remember {
-        SendReceiveHelper()
-    }
-
     SectionUniversalLawrence {
         val xRate = helper.getXRate(transactionValue.coinUid)
 

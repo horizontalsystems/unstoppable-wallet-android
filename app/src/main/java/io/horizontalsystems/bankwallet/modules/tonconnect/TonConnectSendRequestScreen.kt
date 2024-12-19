@@ -22,15 +22,26 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxAmount
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendReceiveSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.coinIconPainter
+import io.horizontalsystems.bankwallet.modules.xtransaction.xxxCoinAmount
+import io.horizontalsystems.bankwallet.modules.xtransaction.xxxFiatAmount
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -114,6 +125,10 @@ fun TonConnectSendRequestScreen(navController: NavController) {
 
         Crossfade(uiState.tonTransactionRecord) { record ->
             if (record != null) {
+                val transactionInfoHelper = remember {
+                    TransactionInfoHelper()
+                }
+
                 Column {
                     record.actions.forEachIndexed { index, action ->
                         if (index != 0) {
@@ -133,7 +148,46 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Mint -> {
-                                Text("TODO")
+                                val transactionValue = actionType.value
+
+                                SectionUniversalLawrence {
+                                    XxxAmount(
+                                        title = stringResource(R.string.Send_Confirmation_Mint),
+                                        coinIcon = coinIconPainter(
+                                            url = transactionValue.coinIconUrl,
+                                            alternativeUrl = transactionValue.alternativeCoinIconUrl,
+                                            placeholder = transactionValue.coinIconPlaceholder
+                                        ),
+                                        coinProtocolType = transactionValue.badge
+                                            ?: stringResource(id = R.string.CoinPlatforms_Native),
+                                        coinAmount = xxxCoinAmount(
+                                            value = transactionValue.decimalValue?.abs(),
+                                            coinCode = transactionValue.coinCode,
+                                            sign = "+"
+                                        ),
+                                        coinAmountColor = ComposeAppTheme.colors.remus,
+                                        fiatAmount = xxxFiatAmount(
+                                            value = transactionInfoHelper.getXRate(transactionValue.coinUid)
+                                                ?.let {
+                                                    transactionValue.decimalValue?.abs()
+                                                        ?.multiply(it)
+                                                },
+                                            fiatSymbol = transactionInfoHelper.getCurrencySymbol()
+                                        ),
+                                        onClick = {
+                                            navController.slideFromRight(
+                                                R.id.coinFragment,
+                                                CoinFragment.Input(transactionValue.coinUid)
+                                            )
+
+                                            stat(
+                                                page = StatPage.TonConnect,
+                                                event = StatEvent.OpenCoin(transactionValue.coinUid)
+                                            )
+                                        },
+                                        borderTop = false
+                                    )
+                                }
                             }
 
                             is TonTransactionRecord.Action.Type.Receive -> {
@@ -146,7 +200,8 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                                     address = actionType.from,
                                     comment = actionType.comment,
                                     addressTitle = stringResource(R.string.TransactionInfo_From),
-                                    addressStatSection = StatSection.AddressFrom
+                                    addressStatSection = StatSection.AddressFrom,
+                                    helper = transactionInfoHelper
                                 )
                             }
 
@@ -160,7 +215,8 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                                     address = actionType.to,
                                     comment = actionType.comment,
                                     addressTitle = stringResource(R.string.TransactionInfo_To),
-                                    addressStatSection = StatSection.AddressTo
+                                    addressStatSection = StatSection.AddressTo,
+                                    helper = transactionInfoHelper
                                 )
                             }
 
