@@ -5,7 +5,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
 
-class SendReceiveHelper {
+class TransactionInfoHelper {
     private val marketKit = App.marketKit
     private val currencyManager = App.currencyManager
     private val contactsRepository = App.contactsRepository
