@@ -17,7 +17,6 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
-import java.net.UnknownHostException
 
 class BalanceAdapterRepository(
     private val adapterManager: IAdapterManager,
@@ -115,7 +114,7 @@ class BalanceAdapterRepository(
                         return BalanceWarning.TronInactiveAccountWarning
                 }
             }
-        } catch (e: UnknownHostException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return null
