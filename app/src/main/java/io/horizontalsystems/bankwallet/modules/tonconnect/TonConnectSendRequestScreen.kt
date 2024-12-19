@@ -22,29 +22,18 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
-import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
-import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
-import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.entities.CurrencyValue
-import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
-import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
-import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxAmount
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendReceiveSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.coinIconPainter
-import io.horizontalsystems.bankwallet.modules.xtransaction.xxxCoinAmount
-import io.horizontalsystems.bankwallet.modules.xtransaction.xxxFiatAmount
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
@@ -151,46 +140,11 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Mint -> {
-                                val transactionValue = actionType.value
-
-                                SectionUniversalLawrence {
-                                    XxxAmount(
-                                        title = stringResource(R.string.Send_Confirmation_Mint),
-                                        coinIcon = coinIconPainter(
-                                            url = transactionValue.coinIconUrl,
-                                            alternativeUrl = transactionValue.alternativeCoinIconUrl,
-                                            placeholder = transactionValue.coinIconPlaceholder
-                                        ),
-                                        coinProtocolType = transactionValue.badge
-                                            ?: stringResource(id = R.string.CoinPlatforms_Native),
-                                        coinAmount = xxxCoinAmount(
-                                            value = transactionValue.decimalValue?.abs(),
-                                            coinCode = transactionValue.coinCode,
-                                            sign = "+"
-                                        ),
-                                        coinAmountColor = ComposeAppTheme.colors.remus,
-                                        fiatAmount = xxxFiatAmount(
-                                            value = transactionInfoHelper.getXRate(transactionValue.coinUid)
-                                                ?.let {
-                                                    transactionValue.decimalValue?.abs()
-                                                        ?.multiply(it)
-                                                },
-                                            fiatSymbol = transactionInfoHelper.getCurrencySymbol()
-                                        ),
-                                        onClick = {
-                                            navController.slideFromRight(
-                                                R.id.coinFragment,
-                                                CoinFragment.Input(transactionValue.coinUid)
-                                            )
-
-                                            stat(
-                                                page = StatPage.TonConnect,
-                                                event = StatEvent.OpenCoin(transactionValue.coinUid)
-                                            )
-                                        },
-                                        borderTop = false
-                                    )
-                                }
+                                XxxMintSection(
+                                    transactionValue = actionType.value,
+                                    transactionInfoHelper = transactionInfoHelper,
+                                    navController = navController
+                                )
                             }
 
                             is TonTransactionRecord.Action.Type.Receive -> {
@@ -250,23 +204,11 @@ fun TonConnectSendRequestScreen(navController: NavController) {
 
                     VSpacer(12.dp)
 
-                    SectionUniversalLawrence {
-                        val fee = record.fee
-                        val rateCurrencyValue = transactionInfoHelper.getXRate(fee.coinUid)?.let {
-                            CurrencyValue(
-                                currency = transactionInfoHelper.getCurrency(),
-                                value = it
-                            )
-                        }
-                        HSFeeRaw(
-                            coinCode = fee.coinCode,
-                            coinDecimal = fee.decimals,
-                            fee = fee.value,
-                            amountInputType = AmountInputType.COIN,
-                            rate = rateCurrencyValue,
-                            navController = navController
-                        )
-                    }
+                    XxxFeeSection(
+                        transactionInfoHelper = transactionInfoHelper,
+                        fee = record.fee,
+                        navController = navController
+                    )
                 }
             }
         }
