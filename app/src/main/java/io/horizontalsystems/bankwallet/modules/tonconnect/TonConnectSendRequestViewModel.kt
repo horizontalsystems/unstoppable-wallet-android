@@ -6,12 +6,15 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
+import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.TonConnectManager
 import io.horizontalsystems.bankwallet.core.managers.TonHelper
 import io.horizontalsystems.bankwallet.core.managers.TonKitWrapper
 import io.horizontalsystems.bankwallet.core.managers.toTonWalletFullAccess
 import io.horizontalsystems.bankwallet.core.meta
 import io.horizontalsystems.bankwallet.entities.Currency
+import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewItem
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -21,11 +24,14 @@ import io.horizontalsystems.tonkit.core.TonWallet
 import io.horizontalsystems.tonkit.models.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class TonConnectSendRequestViewModel(
     private val sendRequestEntity: SendRequestEntity?,
     private val accountManager: IAccountManager,
     private val tonConnectManager: TonConnectManager,
+    private val marketKit: MarketKitWrapper,
+    private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<TonConnectSendRequestUiState>() {
 
     private var error: TonConnectSendRequestError? = null
@@ -123,6 +129,20 @@ class TonConnectSendRequestViewModel(
             tonConnectKit.reject(sendRequestEntity)
         }
     }
+
+    fun getXRate(coinUid: String): BigDecimal? {
+        return marketKit.coinPrice(coinUid, currencyManager.baseCurrency.code)?.value
+    }
+
+    fun getCurrencySymbol(): String {
+        return currencyManager.baseCurrency.symbol
+    }
+
+    fun getContact(address: String?, blockchainType: BlockchainType): Contact? {
+        return App.contactsRepository.getContactsFiltered(blockchainType, addressQuery = address)
+            .firstOrNull()
+    }
+
 }
 
 sealed class TonConnectSendRequestError : Error() {

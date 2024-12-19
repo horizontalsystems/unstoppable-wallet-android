@@ -1,7 +1,10 @@
 package io.horizontalsystems.bankwallet.modules.tonconnect
 
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -18,22 +22,42 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
+import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxAddress
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxAmount
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContact
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxTitleAndValueCell
+import io.horizontalsystems.bankwallet.modules.xtransaction.xxxCoinAmount
+import io.horizontalsystems.bankwallet.modules.xtransaction.xxxCoinIconResource
+import io.horizontalsystems.bankwallet.modules.xtransaction.xxxFiatAmount
+import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
 fun TonConnectSendRequestScreen(navController: NavController) {
     val logger = remember { AppLogger("ton-connect request") }
-    val mainActivityViewModel = viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
+    val mainActivityViewModel =
+        viewModel<MainActivityViewModel>(viewModelStoreOwner = LocalContext.current as ComponentActivity)
     val viewModel = viewModel<TonConnectSendRequestViewModel>(initializer = {
         val sendRequestEntity = mainActivityViewModel.tcSendRequest.value
         mainActivityViewModel.onTcSendRequestHandled()
@@ -41,7 +65,9 @@ fun TonConnectSendRequestScreen(navController: NavController) {
         TonConnectSendRequestViewModel(
             sendRequestEntity,
             App.accountManager,
-            App.tonConnectManager
+            App.tonConnectManager,
+            App.marketKit,
+            App.currencyManager
         )
     })
 
@@ -64,7 +90,11 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                 onClick = {
                     coroutineScope.launch {
                         buttonEnabled = false
-                        HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
+                        HudHelper.showInProcessMessage(
+                            view,
+                            R.string.Send_Sending,
+                            SnackbarDuration.INDEFINITE
+                        )
 
                         try {
                             logger.info("click confirm button")
@@ -99,9 +129,184 @@ fun TonConnectSendRequestScreen(navController: NavController) {
             TextImportantError(text = error.message ?: error.javaClass.simpleName)
         }
 
+        Crossfade(uiState.tonTransactionRecord) { record ->
+            if (record != null) {
+                Column {
+                    record.actions.forEachIndexed { index, action ->
+                        if (index != 0) {
+                            VSpacer(12.dp)
+                        }
+                        when (val actionType = action.type) {
+                            is TonTransactionRecord.Action.Type.Burn -> {
+                                Text("TODO")
+                            }
+
+                            is TonTransactionRecord.Action.Type.ContractCall -> {
+                                Text("TODO")
+                            }
+
+                            is TonTransactionRecord.Action.Type.ContractDeploy -> {
+                                Text("TODO")
+                            }
+
+                            is TonTransactionRecord.Action.Type.Mint -> {
+                                Text("TODO")
+                            }
+
+                            is TonTransactionRecord.Action.Type.Receive -> {
+                                XxxSendReceiveSection(
+                                    viewModel = viewModel,
+                                    transactionValue = actionType.value,
+                                    amountTitle = stringResource(R.string.Send_Confirmation_YouReceive),
+                                    sign = "+",
+                                    coinAmountColor = ComposeAppTheme.colors.remus,
+                                    navController = navController,
+                                    address = actionType.from,
+                                    comment = actionType.comment,
+                                    addressTitle = stringResource(R.string.TransactionInfo_From),
+                                    addressStatSection = StatSection.AddressFrom
+                                )
+                            }
+
+                            is TonTransactionRecord.Action.Type.Send -> {
+                                XxxSendReceiveSection(
+                                    viewModel = viewModel,
+                                    transactionValue = actionType.value,
+                                    amountTitle = stringResource(R.string.Send_Confirmation_YouSend),
+                                    sign = if (actionType.sentToSelf) "" else "-",
+                                    coinAmountColor = ComposeAppTheme.colors.lucian,
+                                    navController = navController,
+                                    address = actionType.to,
+                                    comment = actionType.comment,
+                                    addressTitle = stringResource(R.string.TransactionInfo_To),
+                                    addressStatSection = StatSection.AddressTo
+                                )
+                            }
+
+                            is TonTransactionRecord.Action.Type.Swap -> {
+//                                Section {
+//                                    Amount(
+//                                        title = stringResource(R.string.TransactionInfo_YouSent),
+//                                        coinValue = BigDecimal.ONE,
+//                                        coinCode = "ETH",
+//                                        coinIcon = painterResource(R.drawable.btc),
+//                                        fiatValue = BigDecimal.ONE,
+//                                        fiatSymbol = "$",
+//                                    )
+//                                    Amount(
+//                                        title = stringResource(R.string.TransactionInfo_YouGot),
+//                                    )
+//                                }
+                                Text("TODO")
+
+                            }
+
+                            is TonTransactionRecord.Action.Type.Unsupported -> {
+                                Text("TODO")
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
         uiState.itemSections.forEach { items ->
             TransactionInfoSection(items, navController, { null })
             VSpacer(12.dp)
+        }
+    }
+}
+
+@Composable
+private fun XxxSendReceiveSection(
+    viewModel: TonConnectSendRequestViewModel,
+    transactionValue: TransactionValue,
+    amountTitle: String,
+    sign: String,
+    coinAmountColor: Color,
+    navController: NavController,
+    address: String,
+    comment: String?,
+    addressTitle: String,
+    addressStatSection: StatSection,
+) {
+    SectionUniversalLawrence {
+        val xRate = viewModel.getXRate(transactionValue.coinUid)
+
+        XxxAmount(
+            title = amountTitle,
+            coinIcon = xxxCoinIconResource(
+                url = transactionValue.coinIconUrl,
+                alternativeUrl = transactionValue.alternativeCoinIconUrl,
+                placeholder = transactionValue.coinIconPlaceholder
+            ),
+            coinProtocolType = transactionValue.badge
+                ?: stringResource(id = R.string.CoinPlatforms_Native),
+            coinAmount = xxxCoinAmount(
+                value = transactionValue.decimalValue?.abs(),
+                coinCode = transactionValue.coinCode,
+                sign = sign
+            ),
+            coinAmountColor = coinAmountColor,
+            fiatAmount = xxxFiatAmount(
+                value = xRate?.let {
+                    transactionValue.decimalValue?.abs()?.multiply(it)
+                },
+                fiatSymbol = viewModel.getCurrencySymbol()
+            ),
+            onClick = {
+                navController.slideFromRight(
+                    R.id.coinFragment,
+                    CoinFragment.Input(transactionValue.coinUid)
+                )
+
+                stat(
+                    page = StatPage.TonConnect,
+                    event = StatEvent.OpenCoin(transactionValue.coinUid)
+                )
+            },
+            borderTop = false
+        )
+
+        val contact = viewModel.getContact(address, BlockchainType.Ton)
+
+        XxxAddress(
+            title = addressTitle,
+            value = address,
+            showAdd = contact == null,
+            blockchainType = BlockchainType.Ton,
+            navController = navController,
+            onCopy = {
+                stat(
+                    page = StatPage.TonConnect,
+                    section = addressStatSection,
+                    event = StatEvent.Copy(StatEntity.Address)
+                )
+            },
+            onAddToExisting = {
+                stat(
+                    page = StatPage.TonConnect,
+                    section = addressStatSection,
+                    event = StatEvent.Open(StatPage.ContactAddToExisting)
+                )
+            },
+            onAddToNew = {
+                stat(
+                    page = StatPage.TonConnect,
+                    section = addressStatSection,
+                    event = StatEvent.Open(StatPage.ContactNew)
+                )
+            }
+        )
+        contact?.let {
+            XxxContact(name = it.name)
+        }
+        comment?.let {
+            XxxTitleAndValueCell(
+                title = stringResource(R.string.TransactionInfo_Memo),
+                value = it
+            )
         }
     }
 }
