@@ -1,6 +1,7 @@
 package io.horizontalsystems.bankwallet.modules.xtransaction
 
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.entities.Currency
 import io.horizontalsystems.bankwallet.modules.contacts.model.Contact
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
@@ -12,6 +13,10 @@ class TransactionInfoHelper {
 
     fun getXRate(coinUid: String): BigDecimal? {
         return marketKit.coinPrice(coinUid, currencyManager.baseCurrency.code)?.value
+    }
+
+    fun getCurrency(): Currency {
+        return currencyManager.baseCurrency
     }
 
     fun getCurrencySymbol(): String {
