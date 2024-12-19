@@ -17,13 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -46,25 +44,6 @@ import io.horizontalsystems.bankwallet.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigDecimal
-
-@Composable
-fun xxxCoinIconResource(
-    url: String?,
-    alternativeUrl: String?,
-    placeholder: Int?,
-): Painter {
-    val fallback = placeholder ?: R.drawable.coin_placeholder
-
-    return rememberAsyncImagePainter(
-        model = url,
-        error = alternativeUrl?.let {
-            rememberAsyncImagePainter(
-                model = it,
-                error = painterResource(fallback)
-            )
-        } ?: painterResource(fallback)
-    )
-}
 
 @Composable
 fun XxxTitleAndValueCell(
