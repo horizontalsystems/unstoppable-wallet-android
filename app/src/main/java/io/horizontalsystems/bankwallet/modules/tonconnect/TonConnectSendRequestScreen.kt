@@ -27,8 +27,11 @@ import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.CurrencyValue
+import io.horizontalsystems.bankwallet.modules.amount.AmountInputType
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
+import io.horizontalsystems.bankwallet.modules.fee.HSFeeRaw
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxAmount
@@ -243,6 +246,26 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
                         }
 
+                    }
+
+                    VSpacer(12.dp)
+
+                    SectionUniversalLawrence {
+                        val fee = record.fee
+                        val rateCurrencyValue = transactionInfoHelper.getXRate(fee.coinUid)?.let {
+                            CurrencyValue(
+                                currency = transactionInfoHelper.getCurrency(),
+                                value = it
+                            )
+                        }
+                        HSFeeRaw(
+                            coinCode = fee.coinCode,
+                            coinDecimal = fee.decimals,
+                            fee = fee.value,
+                            amountInputType = AmountInputType.COIN,
+                            rate = rateCurrencyValue,
+                            navController = navController
+                        )
                     }
                 }
             }
