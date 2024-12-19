@@ -60,7 +60,12 @@ class ManageAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
+        val input = try {
+            navController.requireInput<Input>()
+        } catch (e: NullPointerException) {
+            navController.popBackStack()
+            return
+        }
         ManageAccountScreen(
             navController,
             input.accountId
