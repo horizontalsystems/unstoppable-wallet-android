@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.xtransaction
+package io.horizontalsystems.bankwallet.modules.xtransaction.sections
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -7,29 +7,31 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountColor
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountSign
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
-fun XxxSendCoinSection(
+fun ReceiveCoinSection(
     transactionValue: TransactionValue,
     address: String,
     comment: String?,
-    sentToSelf: Boolean,
     statPage: StatPage,
     navController: NavController,
     transactionInfoHelper: TransactionInfoHelper,
-    blockchainType: BlockchainType
+    blockchainType: BlockchainType,
 ) {
-    XxxTransferCoinSection(
-        amountTitle = stringResource(R.string.Send_Confirmation_YouSend),
+    TransferCoinSection(
+        amountTitle = stringResource(R.string.Send_Confirmation_YouReceive),
         transactionValue = transactionValue,
-        coinAmountColor = AmountColor.Negative,
-        coinAmountSign = if (sentToSelf) AmountSign.None else AmountSign.Minus,
-        addressTitle = stringResource(R.string.TransactionInfo_To),
+        coinAmountColor = AmountColor.Positive,
+        coinAmountSign = AmountSign.Plus,
+        addressTitle = stringResource(R.string.TransactionInfo_From),
         address = address,
         comment = comment,
         statPage = statPage,
-        addressStatSection = StatSection.AddressTo,
+        addressStatSection = StatSection.AddressFrom,
         navController = navController,
         transactionInfoHelper = transactionInfoHelper,
         blockchainType = blockchainType,

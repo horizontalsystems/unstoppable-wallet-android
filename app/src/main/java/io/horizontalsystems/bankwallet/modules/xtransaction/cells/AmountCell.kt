@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.xtransaction
+package io.horizontalsystems.bankwallet.modules.xtransaction.cells
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,10 @@ import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.coinAmountString
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.coinIconPainter
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.fiatAmountString
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -30,7 +34,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 
 @Composable
-fun XxxAmountCell(
+fun AmountCell(
     title: String,
     coinIcon: Painter,
     coinProtocolType: String,
@@ -75,7 +79,7 @@ fun XxxAmountCell(
 }
 
 @Composable
-fun XxxAmountCellTV(
+fun AmountCellTV(
     title: String,
     transactionValue: TransactionValue,
     coinAmountColor: AmountColor,
@@ -85,7 +89,7 @@ fun XxxAmountCellTV(
     statPage: StatPage,
     borderTop: Boolean = true
 ) {
-    XxxAmountCell(
+    AmountCell(
         title = title,
         coinIcon = coinIconPainter(
             url = transactionValue.coinIconUrl,
@@ -94,13 +98,13 @@ fun XxxAmountCellTV(
         ),
         coinProtocolType = transactionValue.badge
             ?: stringResource(id = R.string.CoinPlatforms_Native),
-        coinAmount = xxxCoinAmount(
+        coinAmount = coinAmountString(
             value = transactionValue.decimalValue?.abs(),
             coinCode = transactionValue.coinCode,
             sign = coinAmountSign.sign()
         ),
         coinAmountColor = coinAmountColor.color(),
-        fiatAmount = xxxFiatAmount(
+        fiatAmount = fiatAmountString(
             value = transactionInfoHelper.getXRate(transactionValue.coinUid)
                 ?.let {
                     transactionValue.decimalValue?.abs()
