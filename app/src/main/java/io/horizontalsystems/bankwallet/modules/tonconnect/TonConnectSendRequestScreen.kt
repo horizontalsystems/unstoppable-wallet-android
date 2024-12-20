@@ -57,9 +57,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
         TonConnectSendRequestViewModel(
             sendRequestEntity,
             App.accountManager,
-            App.tonConnectManager,
-            App.marketKit,
-            App.currencyManager
+            App.tonConnectManager
         )
     })
 
@@ -132,85 +130,12 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                         if (index != 0) {
                             VSpacer(12.dp)
                         }
-                        when (val actionType = action.type) {
-                            is TonTransactionRecord.Action.Type.Burn -> {
-                                XxxBurnSection(
-                                    transactionValue = actionType.value,
-                                    transactionInfoHelper = transactionInfoHelper,
-                                    navController = navController
-                                )
-                            }
-
-                            is TonTransactionRecord.Action.Type.ContractCall -> {
-                                XxxContractCallSection(
-                                    navController = navController,
-                                    operation = actionType.operation,
-                                    address = actionType.address,
-                                    transactionValue = actionType.value,
-                                    transactionInfoHelper = transactionInfoHelper
-                                )
-                            }
-
-                            is TonTransactionRecord.Action.Type.ContractDeploy -> {
-                                XxxContractDeploySection(
-                                    interfaces = actionType.interfaces
-                                )
-                            }
-
-                            is TonTransactionRecord.Action.Type.Mint -> {
-                                XxxMintSection(
-                                    transactionValue = actionType.value,
-                                    transactionInfoHelper = transactionInfoHelper,
-                                    navController = navController
-                                )
-                            }
-
-                            is TonTransactionRecord.Action.Type.Receive -> {
-                                XxxReceiveCoinSection(
-                                    transactionValue = actionType.value,
-                                    address = actionType.from,
-                                    comment = actionType.comment,
-                                    statPage = StatPage.TonConnect,
-                                    navController = navController,
-                                    transactionInfoHelper = transactionInfoHelper,
-                                    blockchainType = BlockchainType.Ton
-                                )
-                            }
-
-                            is TonTransactionRecord.Action.Type.Send -> {
-                                XxxSendCoinSection(
-                                    transactionValue = actionType.value,
-                                    address = actionType.to,
-                                    comment = actionType.comment,
-                                    sentToSelf = actionType.sentToSelf,
-                                    statPage = StatPage.TonConnect,
-                                    navController = navController,
-                                    transactionInfoHelper = transactionInfoHelper,
-                                    blockchainType = BlockchainType.Ton
-                                )
-                            }
-
-                            is TonTransactionRecord.Action.Type.Swap -> {
-                                XxxSwapSection(
-                                    transactionInfoHelper = transactionInfoHelper,
-                                    navController = navController,
-                                    transactionValueIn = actionType.valueIn,
-                                    transactionValueOut = actionType.valueOut
-                                )
-                            }
-
-                            is TonTransactionRecord.Action.Type.Unsupported -> {
-                                SectionUniversalLawrence {
-                                    XxxSectionHeaderCell(
-                                        title = stringResource(R.string.Send_Confirmation_Action),
-                                        value = actionType.type,
-                                        painter = null
-                                    )
-                                }
-                            }
-                        }
+                        TonConnectRequestActionSection(
+                            action = action,
+                            transactionInfoHelper = transactionInfoHelper,
+                            navController = navController
+                        )
                     }
-
                     VSpacer(12.dp)
 
                     XxxFeeSection(
@@ -221,10 +146,90 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                 }
             }
         }
+    }
+}
 
-//        uiState.itemSections.forEach { items ->
-//            TransactionInfoSection(items, navController, { null })
-//            VSpacer(12.dp)
-//        }
+@Composable
+fun TonConnectRequestActionSection(
+    action: TonTransactionRecord.Action,
+    transactionInfoHelper: TransactionInfoHelper,
+    navController: NavController,
+) {
+    when (val actionType = action.type) {
+        is TonTransactionRecord.Action.Type.Burn -> {
+            XxxBurnSection(
+                transactionValue = actionType.value,
+                transactionInfoHelper = transactionInfoHelper,
+                navController = navController
+            )
+        }
+
+        is TonTransactionRecord.Action.Type.ContractCall -> {
+            XxxContractCallSection(
+                navController = navController,
+                operation = actionType.operation,
+                address = actionType.address,
+                transactionValue = actionType.value,
+                transactionInfoHelper = transactionInfoHelper
+            )
+        }
+
+        is TonTransactionRecord.Action.Type.ContractDeploy -> {
+            XxxContractDeploySection(
+                interfaces = actionType.interfaces
+            )
+        }
+
+        is TonTransactionRecord.Action.Type.Mint -> {
+            XxxMintSection(
+                transactionValue = actionType.value,
+                transactionInfoHelper = transactionInfoHelper,
+                navController = navController
+            )
+        }
+
+        is TonTransactionRecord.Action.Type.Receive -> {
+            XxxReceiveCoinSection(
+                transactionValue = actionType.value,
+                address = actionType.from,
+                comment = actionType.comment,
+                statPage = StatPage.TonConnect,
+                navController = navController,
+                transactionInfoHelper = transactionInfoHelper,
+                blockchainType = BlockchainType.Ton
+            )
+        }
+
+        is TonTransactionRecord.Action.Type.Send -> {
+            XxxSendCoinSection(
+                transactionValue = actionType.value,
+                address = actionType.to,
+                comment = actionType.comment,
+                sentToSelf = actionType.sentToSelf,
+                statPage = StatPage.TonConnect,
+                navController = navController,
+                transactionInfoHelper = transactionInfoHelper,
+                blockchainType = BlockchainType.Ton
+            )
+        }
+
+        is TonTransactionRecord.Action.Type.Swap -> {
+            XxxSwapSection(
+                transactionInfoHelper = transactionInfoHelper,
+                navController = navController,
+                transactionValueIn = actionType.valueIn,
+                transactionValueOut = actionType.valueOut
+            )
+        }
+
+        is TonTransactionRecord.Action.Type.Unsupported -> {
+            SectionUniversalLawrence {
+                XxxSectionHeaderCell(
+                    title = stringResource(R.string.Send_Confirmation_Action),
+                    value = actionType.type,
+                    painter = null
+                )
+            }
+        }
     }
 }
