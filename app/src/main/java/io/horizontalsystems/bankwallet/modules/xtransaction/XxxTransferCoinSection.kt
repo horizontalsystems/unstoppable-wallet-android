@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
-fun XxxSendReceiveSection(
+fun XxxTransferCoinSection(
     amountTitle: String,
     transactionValue: TransactionValue,
     coinAmountColor: AmountColor,

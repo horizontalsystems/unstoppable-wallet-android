@@ -33,8 +33,8 @@ import io.horizontalsystems.bankwallet.modules.xtransaction.XxxBurnSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractCallSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendReceiveSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSwapSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxTransferCoinSection
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -164,7 +164,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Receive -> {
-                                XxxSendReceiveSection(
+                                XxxTransferCoinSection(
                                     amountTitle = stringResource(R.string.Send_Confirmation_YouReceive),
                                     transactionValue = actionType.value,
                                     coinAmountColor = AmountColor.Positive,
@@ -181,7 +181,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Send -> {
-                                XxxSendReceiveSection(
+                                XxxTransferCoinSection(
                                     amountTitle = stringResource(R.string.Send_Confirmation_YouSend),
                                     transactionValue = actionType.value,
                                     coinAmountColor = AmountColor.Negative,
