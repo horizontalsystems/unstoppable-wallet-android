@@ -26,6 +26,7 @@ import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxBurnSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractCallSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
@@ -130,7 +131,11 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                         }
                         when (val actionType = action.type) {
                             is TonTransactionRecord.Action.Type.Burn -> {
-                                Text("TODO")
+                                XxxBurnSection(
+                                    transactionValue = actionType.value,
+                                    transactionInfoHelper = transactionInfoHelper,
+                                    navController = navController
+                                )
                             }
 
                             is TonTransactionRecord.Action.Type.ContractCall -> {
