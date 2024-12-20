@@ -69,7 +69,10 @@ fun XxxSendReceiveSection(
             }
         )
         contact?.let {
-            XxxContact(name = it.name)
+            XxxTitleAndValueCell(
+                title = stringResource(R.string.TransactionInfo_ContactName),
+                value = it.name
+            )
         }
         comment?.let {
             XxxTitleAndValueCell(

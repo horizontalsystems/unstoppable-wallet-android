@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.xtransaction
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
@@ -76,22 +75,10 @@ fun XxxTitleAndValueCell(
 ) {
     CellUniversal(borderTop = borderTop) {
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
-        Spacer(Modifier.weight(1f))
-        subhead1_leah(text = value, maxLines = 1, overflow = TextOverflow.Ellipsis)
-    }
-}
-
-@Composable
-fun XxxContact(
-    name: String,
-    borderTop: Boolean = true
-) {
-    CellUniversal(borderTop = borderTop) {
-        subhead2_grey(text = stringResource(R.string.TransactionInfo_ContactName))
         HSpacer(16.dp)
         subhead1_leah(
             modifier = Modifier.weight(1f),
-            text = name,
+            text = value,
             textAlign = TextAlign.Right
         )
     }
