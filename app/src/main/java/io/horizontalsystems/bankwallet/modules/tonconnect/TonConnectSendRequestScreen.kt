@@ -4,7 +4,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,12 +31,14 @@ import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractDeploySec
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxReceiveCoinSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSectionHeaderCell
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendCoinSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSwapSection
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
@@ -199,10 +200,15 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Unsupported -> {
-                                Text("TODO")
+                                SectionUniversalLawrence {
+                                    XxxSectionHeaderCell(
+                                        title = stringResource(R.string.Send_Confirmation_Action),
+                                        value = actionType.type,
+                                        painter = null
+                                    )
+                                }
                             }
                         }
-
                     }
 
                     VSpacer(12.dp)
