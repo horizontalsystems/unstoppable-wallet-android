@@ -5,11 +5,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.stats.StatEntity
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionViewItem
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
@@ -37,28 +34,9 @@ fun XxxContractCallSection(
             value = address,
             showAdd = contact == null,
             blockchainType = BlockchainType.Ton,
-            navController = navController,
-            onCopy = {
-                stat(
-                    page = StatPage.TonConnect,
-                    section = StatSection.AddressTo,
-                    event = StatEvent.Copy(StatEntity.Address)
-                )
-            },
-            onAddToExisting = {
-                stat(
-                    page = StatPage.TonConnect,
-                    section = StatSection.AddressTo,
-                    event = StatEvent.Open(StatPage.ContactAddToExisting)
-                )
-            },
-            onAddToNew = {
-                stat(
-                    page = StatPage.TonConnect,
-                    section = StatSection.AddressTo,
-                    event = StatEvent.Open(StatPage.ContactNew)
-                )
-            }
+            statPage = StatPage.TonConnect,
+            statSection = StatSection.AddressTo,
+            navController = navController
         )
 
         XxxAmountCellTV(

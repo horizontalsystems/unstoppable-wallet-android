@@ -22,6 +22,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
+import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
@@ -40,6 +41,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -163,31 +165,35 @@ fun TonConnectSendRequestScreen(navController: NavController) {
 
                             is TonTransactionRecord.Action.Type.Receive -> {
                                 XxxSendReceiveSection(
-                                    transactionValue = actionType.value,
                                     amountTitle = stringResource(R.string.Send_Confirmation_YouReceive),
+                                    transactionValue = actionType.value,
                                     coinAmountColor = AmountColor.Positive,
                                     coinAmountSign = AmountSign.Plus,
-                                    navController = navController,
+                                    addressTitle = stringResource(R.string.TransactionInfo_From),
                                     address = actionType.from,
                                     comment = actionType.comment,
-                                    addressTitle = stringResource(R.string.TransactionInfo_From),
+                                    statPage = StatPage.TonConnect,
                                     addressStatSection = StatSection.AddressFrom,
-                                    helper = transactionInfoHelper
+                                    navController = navController,
+                                    transactionInfoHelper = transactionInfoHelper,
+                                    blockchainType = BlockchainType.Ton
                                 )
                             }
 
                             is TonTransactionRecord.Action.Type.Send -> {
                                 XxxSendReceiveSection(
-                                    transactionValue = actionType.value,
                                     amountTitle = stringResource(R.string.Send_Confirmation_YouSend),
+                                    transactionValue = actionType.value,
                                     coinAmountColor = AmountColor.Negative,
                                     coinAmountSign = if (actionType.sentToSelf) AmountSign.None else AmountSign.Minus,
-                                    navController = navController,
+                                    addressTitle = stringResource(R.string.TransactionInfo_To),
                                     address = actionType.to,
                                     comment = actionType.comment,
-                                    addressTitle = stringResource(R.string.TransactionInfo_To),
+                                    statPage = StatPage.TonConnect,
                                     addressStatSection = StatSection.AddressTo,
-                                    helper = transactionInfoHelper
+                                    navController = navController,
+                                    transactionInfoHelper = transactionInfoHelper,
+                                    blockchainType = BlockchainType.Ton
                                 )
                             }
 
