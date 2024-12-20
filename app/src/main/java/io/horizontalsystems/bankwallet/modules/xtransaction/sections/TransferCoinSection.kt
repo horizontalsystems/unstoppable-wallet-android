@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.xtransaction
+package io.horizontalsystems.bankwallet.modules.xtransaction.sections
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -7,11 +7,17 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AddressCell
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountCellTV
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountColor
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.AmountSign
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.TitleAndValueCell
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
-fun XxxTransferCoinSection(
+fun TransferCoinSection(
     amountTitle: String,
     transactionValue: TransactionValue,
     coinAmountColor: AmountColor,
@@ -26,7 +32,7 @@ fun XxxTransferCoinSection(
     blockchainType: BlockchainType,
 ) {
     SectionUniversalLawrence {
-        XxxAmountCellTV(
+        AmountCellTV(
             title = amountTitle,
             transactionValue = transactionValue,
             coinAmountColor = coinAmountColor,
@@ -39,7 +45,7 @@ fun XxxTransferCoinSection(
 
         val contact = transactionInfoHelper.getContact(address, blockchainType)
 
-        XxxAddressCell(
+        AddressCell(
             title = addressTitle,
             value = address,
             showAddContactButton = contact == null,
@@ -49,13 +55,13 @@ fun XxxTransferCoinSection(
             navController = navController
         )
         contact?.let {
-            XxxTitleAndValueCell(
+            TitleAndValueCell(
                 title = stringResource(R.string.TransactionInfo_ContactName),
                 value = it.name
             )
         }
         comment?.let {
-            XxxTitleAndValueCell(
+            TitleAndValueCell(
                 title = stringResource(R.string.TransactionInfo_Memo),
                 value = it
             )

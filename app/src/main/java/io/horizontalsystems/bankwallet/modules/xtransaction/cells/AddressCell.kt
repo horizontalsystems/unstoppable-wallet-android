@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.xtransaction
+package io.horizontalsystems.bankwallet.modules.xtransaction.cells
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -33,7 +33,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
-fun XxxAddressCell(
+fun AddressCell(
     title: String,
     value: String,
     showAddContactButton: Boolean,

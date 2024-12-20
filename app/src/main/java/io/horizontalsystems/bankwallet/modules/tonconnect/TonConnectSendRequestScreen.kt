@@ -24,16 +24,16 @@ import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
-import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxBurnSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractCallSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractDeploySection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxReceiveCoinSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSectionHeaderCell
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendCoinSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSwapSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.cells.HeaderCell
+import io.horizontalsystems.bankwallet.modules.xtransaction.helpers.TransactionInfoHelper
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.BurnSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.FeeSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.MintSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.ReceiveCoinSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.SendCoinSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.SwapSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.ton.ContractCallSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.sections.ton.ContractDeploySection
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -138,7 +138,7 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                     }
                     VSpacer(12.dp)
 
-                    XxxFeeSection(
+                    FeeSection(
                         transactionInfoHelper = transactionInfoHelper,
                         fee = record.fee,
                         navController = navController
@@ -157,7 +157,7 @@ fun TonConnectRequestActionSection(
 ) {
     when (val actionType = action.type) {
         is TonTransactionRecord.Action.Type.Burn -> {
-            XxxBurnSection(
+            BurnSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
                 navController = navController
@@ -165,23 +165,24 @@ fun TonConnectRequestActionSection(
         }
 
         is TonTransactionRecord.Action.Type.ContractCall -> {
-            XxxContractCallSection(
+            ContractCallSection(
                 navController = navController,
                 operation = actionType.operation,
                 address = actionType.address,
                 transactionValue = actionType.value,
-                transactionInfoHelper = transactionInfoHelper
+                transactionInfoHelper = transactionInfoHelper,
+                blockchainType = BlockchainType.Ton
             )
         }
 
         is TonTransactionRecord.Action.Type.ContractDeploy -> {
-            XxxContractDeploySection(
+            ContractDeploySection(
                 interfaces = actionType.interfaces
             )
         }
 
         is TonTransactionRecord.Action.Type.Mint -> {
-            XxxMintSection(
+            MintSection(
                 transactionValue = actionType.value,
                 transactionInfoHelper = transactionInfoHelper,
                 navController = navController
@@ -189,7 +190,7 @@ fun TonConnectRequestActionSection(
         }
 
         is TonTransactionRecord.Action.Type.Receive -> {
-            XxxReceiveCoinSection(
+            ReceiveCoinSection(
                 transactionValue = actionType.value,
                 address = actionType.from,
                 comment = actionType.comment,
@@ -201,7 +202,7 @@ fun TonConnectRequestActionSection(
         }
 
         is TonTransactionRecord.Action.Type.Send -> {
-            XxxSendCoinSection(
+            SendCoinSection(
                 transactionValue = actionType.value,
                 address = actionType.to,
                 comment = actionType.comment,
@@ -214,7 +215,7 @@ fun TonConnectRequestActionSection(
         }
 
         is TonTransactionRecord.Action.Type.Swap -> {
-            XxxSwapSection(
+            SwapSection(
                 transactionInfoHelper = transactionInfoHelper,
                 navController = navController,
                 transactionValueIn = actionType.valueIn,
@@ -224,7 +225,7 @@ fun TonConnectRequestActionSection(
 
         is TonTransactionRecord.Action.Type.Unsupported -> {
             SectionUniversalLawrence {
-                XxxSectionHeaderCell(
+                HeaderCell(
                     title = stringResource(R.string.Send_Confirmation_Action),
                     value = actionType.type,
                     painter = null

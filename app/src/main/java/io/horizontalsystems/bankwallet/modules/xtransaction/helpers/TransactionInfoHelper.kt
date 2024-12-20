@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.xtransaction
+package io.horizontalsystems.bankwallet.modules.xtransaction.helpers
 
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.entities.Currency
