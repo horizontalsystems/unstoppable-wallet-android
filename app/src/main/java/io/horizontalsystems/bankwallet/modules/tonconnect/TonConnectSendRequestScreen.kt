@@ -23,18 +23,16 @@ import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.stats.StatPage
-import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
-import io.horizontalsystems.bankwallet.modules.xtransaction.AmountColor
-import io.horizontalsystems.bankwallet.modules.xtransaction.AmountSign
 import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxBurnSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractCallSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxReceiveCoinSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendCoinSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSwapSection
-import io.horizontalsystems.bankwallet.modules.xtransaction.XxxTransferCoinSection
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -164,16 +162,11 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Receive -> {
-                                XxxTransferCoinSection(
-                                    amountTitle = stringResource(R.string.Send_Confirmation_YouReceive),
+                                XxxReceiveCoinSection(
                                     transactionValue = actionType.value,
-                                    coinAmountColor = AmountColor.Positive,
-                                    coinAmountSign = AmountSign.Plus,
-                                    addressTitle = stringResource(R.string.TransactionInfo_From),
                                     address = actionType.from,
                                     comment = actionType.comment,
                                     statPage = StatPage.TonConnect,
-                                    addressStatSection = StatSection.AddressFrom,
                                     navController = navController,
                                     transactionInfoHelper = transactionInfoHelper,
                                     blockchainType = BlockchainType.Ton
@@ -181,16 +174,12 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Send -> {
-                                XxxTransferCoinSection(
-                                    amountTitle = stringResource(R.string.Send_Confirmation_YouSend),
+                                XxxSendCoinSection(
                                     transactionValue = actionType.value,
-                                    coinAmountColor = AmountColor.Negative,
-                                    coinAmountSign = if (actionType.sentToSelf) AmountSign.None else AmountSign.Minus,
-                                    addressTitle = stringResource(R.string.TransactionInfo_To),
                                     address = actionType.to,
                                     comment = actionType.comment,
+                                    sentToSelf = actionType.sentToSelf,
                                     statPage = StatPage.TonConnect,
-                                    addressStatSection = StatSection.AddressTo,
                                     navController = navController,
                                     transactionInfoHelper = transactionInfoHelper,
                                     blockchainType = BlockchainType.Ton
