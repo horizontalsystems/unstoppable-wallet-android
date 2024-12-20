@@ -30,6 +30,7 @@ import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractCallSecti
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendReceiveSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSwapSection
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -185,21 +186,12 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.Swap -> {
-//                                Section {
-//                                    Amount(
-//                                        title = stringResource(R.string.TransactionInfo_YouSent),
-//                                        coinValue = BigDecimal.ONE,
-//                                        coinCode = "ETH",
-//                                        coinIcon = painterResource(R.drawable.btc),
-//                                        fiatValue = BigDecimal.ONE,
-//                                        fiatSymbol = "$",
-//                                    )
-//                                    Amount(
-//                                        title = stringResource(R.string.TransactionInfo_YouGot),
-//                                    )
-//                                }
-                                Text("TODO")
-
+                                XxxSwapSection(
+                                    transactionInfoHelper = transactionInfoHelper,
+                                    navController = navController,
+                                    transactionValueIn = actionType.valueIn,
+                                    transactionValueOut = actionType.valueOut
+                                )
                             }
 
                             is TonTransactionRecord.Action.Type.Unsupported -> {
