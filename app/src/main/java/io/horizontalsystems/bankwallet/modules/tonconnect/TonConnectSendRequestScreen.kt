@@ -25,6 +25,8 @@ import io.horizontalsystems.bankwallet.core.adapters.TonTransactionRecord
 import io.horizontalsystems.bankwallet.core.stats.StatSection
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
 import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
+import io.horizontalsystems.bankwallet.modules.xtransaction.AmountColor
+import io.horizontalsystems.bankwallet.modules.xtransaction.AmountSign
 import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxBurnSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractCallSection
@@ -32,7 +34,6 @@ import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSendReceiveSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxSwapSection
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
@@ -164,8 +165,8 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                                 XxxSendReceiveSection(
                                     transactionValue = actionType.value,
                                     amountTitle = stringResource(R.string.Send_Confirmation_YouReceive),
-                                    sign = "+",
-                                    coinAmountColor = ComposeAppTheme.colors.remus,
+                                    coinAmountColor = AmountColor.Positive,
+                                    coinAmountSign = AmountSign.Plus,
                                     navController = navController,
                                     address = actionType.from,
                                     comment = actionType.comment,
@@ -179,8 +180,8 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                                 XxxSendReceiveSection(
                                     transactionValue = actionType.value,
                                     amountTitle = stringResource(R.string.Send_Confirmation_YouSend),
-                                    sign = if (actionType.sentToSelf) "" else "-",
-                                    coinAmountColor = ComposeAppTheme.colors.lucian,
+                                    coinAmountColor = AmountColor.Negative,
+                                    coinAmountSign = if (actionType.sentToSelf) AmountSign.None else AmountSign.Minus,
                                     navController = navController,
                                     address = actionType.to,
                                     comment = actionType.comment,

@@ -10,7 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.stat
+import io.horizontalsystems.bankwallet.entities.TransactionValue
+import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HFillSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -62,5 +71,75 @@ fun XxxAmountCell(
                 subhead2_grey(text = it)
             }
         }
+    }
+}
+
+@Composable
+fun XxxAmountCellTV(
+    title: String,
+    transactionValue: TransactionValue,
+    coinAmountColor: AmountColor,
+    coinAmountSign: AmountSign,
+    transactionInfoHelper: TransactionInfoHelper,
+    navController: NavController,
+    statPage: StatPage,
+    borderTop: Boolean = true
+) {
+    XxxAmountCell(
+        title = title,
+        coinIcon = coinIconPainter(
+            url = transactionValue.coinIconUrl,
+            alternativeUrl = transactionValue.alternativeCoinIconUrl,
+            placeholder = transactionValue.coinIconPlaceholder
+        ),
+        coinProtocolType = transactionValue.badge
+            ?: stringResource(id = R.string.CoinPlatforms_Native),
+        coinAmount = xxxCoinAmount(
+            value = transactionValue.decimalValue?.abs(),
+            coinCode = transactionValue.coinCode,
+            sign = coinAmountSign.sign()
+        ),
+        coinAmountColor = coinAmountColor.color(),
+        fiatAmount = xxxFiatAmount(
+            value = transactionInfoHelper.getXRate(transactionValue.coinUid)
+                ?.let {
+                    transactionValue.decimalValue?.abs()
+                        ?.multiply(it)
+                },
+            fiatSymbol = transactionInfoHelper.getCurrencySymbol()
+        ),
+        onClick = {
+            navController.slideFromRight(
+                R.id.coinFragment,
+                CoinFragment.Input(transactionValue.coinUid)
+            )
+
+            stat(
+                page = statPage,
+                event = StatEvent.OpenCoin(transactionValue.coinUid)
+            )
+        },
+        borderTop = borderTop,
+    )
+}
+
+enum class AmountSign {
+    Plus, Minus, None;
+
+    fun sign() = when (this) {
+        Plus -> "+"
+        Minus -> "-"
+        None -> ""
+    }
+}
+
+enum class AmountColor {
+    Positive, Negative, Neutral;
+
+    @Composable
+    fun color() = when (this) {
+        Positive -> ComposeAppTheme.colors.remus
+        Negative -> ComposeAppTheme.colors.lucian
+        Neutral -> ComposeAppTheme.colors.leah
     }
 }
