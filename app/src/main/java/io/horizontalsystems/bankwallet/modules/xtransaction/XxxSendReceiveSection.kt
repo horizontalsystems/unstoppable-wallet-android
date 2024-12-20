@@ -32,7 +32,7 @@ fun XxxSendReceiveSection(
     SectionUniversalLawrence {
         val xRate = helper.getXRate(transactionValue.coinUid)
 
-        XxxAmount(
+        XxxAmountCell(
             title = amountTitle,
             coinIcon = coinIconPainter(
                 url = transactionValue.coinIconUrl,

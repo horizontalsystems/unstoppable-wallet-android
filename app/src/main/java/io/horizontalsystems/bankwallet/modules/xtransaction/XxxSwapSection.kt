@@ -23,7 +23,7 @@ fun XxxSwapSection(
     SectionUniversalLawrence {
         val xRateIn = transactionInfoHelper.getXRate(transactionValueIn.coinUid)
 
-        XxxAmount(
+        XxxAmountCell(
             title = stringResource(R.string.Send_Confirmation_YouSend),
             coinIcon = coinIconPainter(
                 url = transactionValueIn.coinIconUrl,
@@ -59,7 +59,7 @@ fun XxxSwapSection(
 
         val xRateOut = transactionInfoHelper.getXRate(transactionValueOut.coinUid)
 
-        XxxAmount(
+        XxxAmountCell(
             title = stringResource(R.string.Swap_YouGet),
             coinIcon = coinIconPainter(
                 url = transactionValueOut.coinIconUrl,
