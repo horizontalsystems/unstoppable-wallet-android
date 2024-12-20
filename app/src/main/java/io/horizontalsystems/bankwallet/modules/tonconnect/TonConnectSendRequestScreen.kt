@@ -28,6 +28,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainActivityViewModel
 import io.horizontalsystems.bankwallet.modules.xtransaction.TransactionInfoHelper
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxBurnSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractCallSection
+import io.horizontalsystems.bankwallet.modules.xtransaction.XxxContractDeploySection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxFeeSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxMintSection
 import io.horizontalsystems.bankwallet.modules.xtransaction.XxxReceiveCoinSection
@@ -150,7 +151,9 @@ fun TonConnectSendRequestScreen(navController: NavController) {
                             }
 
                             is TonTransactionRecord.Action.Type.ContractDeploy -> {
-                                Text("TODO")
+                                XxxContractDeploySection(
+                                    interfaces = actionType.interfaces
+                                )
                             }
 
                             is TonTransactionRecord.Action.Type.Mint -> {
