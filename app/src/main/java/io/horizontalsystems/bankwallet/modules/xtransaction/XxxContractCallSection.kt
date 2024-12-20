@@ -66,7 +66,7 @@ fun XxxContractCallSection(
 
         val xRate = transactionInfoHelper.getXRate(transactionValue.coinUid)
 
-        XxxAmount(
+        XxxAmountCell(
             title = stringResource(R.string.Send_Confirmation_YouSend),
             coinIcon = coinIconPainter(
                 url = transactionValue.coinIconUrl,

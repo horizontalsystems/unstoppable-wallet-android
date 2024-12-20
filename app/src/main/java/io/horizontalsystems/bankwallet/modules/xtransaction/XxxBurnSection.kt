@@ -20,7 +20,7 @@ fun XxxBurnSection(
     navController: NavController,
 ) {
     SectionUniversalLawrence {
-        XxxAmount(
+        XxxAmountCell(
             title = stringResource(R.string.Send_Confirmation_Burn),
             coinIcon = coinIconPainter(
                 url = transactionValue.coinIconUrl,
