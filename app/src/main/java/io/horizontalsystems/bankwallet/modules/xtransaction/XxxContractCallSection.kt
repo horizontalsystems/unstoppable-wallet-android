@@ -29,10 +29,10 @@ fun XxxContractCallSection(
             }
         )
         val contact = transactionInfoHelper.getContact(address, BlockchainType.Ton)
-        XxxAddress(
+        XxxAddressCell(
             title = stringResource(R.string.TransactionInfo_To),
             value = address,
-            showAdd = contact == null,
+            showAddContactButton = contact == null,
             blockchainType = BlockchainType.Ton,
             statPage = StatPage.TonConnect,
             statSection = StatSection.AddressTo,

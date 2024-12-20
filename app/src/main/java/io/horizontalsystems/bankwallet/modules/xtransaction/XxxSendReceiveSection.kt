@@ -39,10 +39,10 @@ fun XxxSendReceiveSection(
 
         val contact = transactionInfoHelper.getContact(address, blockchainType)
 
-        XxxAddress(
+        XxxAddressCell(
             title = addressTitle,
             value = address,
-            showAdd = contact == null,
+            showAddContactButton = contact == null,
             blockchainType = blockchainType,
             statPage = statPage,
             statSection = addressStatSection,
