@@ -4,27 +4,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.stats.StatEntity
-import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
-import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Composable
 fun XxxSendReceiveSection(
-    transactionValue: TransactionValue,
     amountTitle: String,
+    transactionValue: TransactionValue,
     coinAmountColor: AmountColor,
     coinAmountSign: AmountSign,
-    navController: NavController,
+    addressTitle: String,
     address: String,
     comment: String?,
-    addressTitle: String,
+    statPage: StatPage,
     addressStatSection: StatSection,
-    helper: TransactionInfoHelper,
+    navController: NavController,
+    transactionInfoHelper: TransactionInfoHelper,
+    blockchainType: BlockchainType,
 ) {
     SectionUniversalLawrence {
         XxxAmountCellTV(
@@ -32,41 +31,22 @@ fun XxxSendReceiveSection(
             transactionValue = transactionValue,
             coinAmountColor = coinAmountColor,
             coinAmountSign = coinAmountSign,
-            transactionInfoHelper = helper,
+            transactionInfoHelper = transactionInfoHelper,
             navController = navController,
-            statPage = StatPage.TonConnect,
+            statPage = statPage,
             borderTop = false
         )
 
-        val contact = helper.getContact(address, BlockchainType.Ton)
+        val contact = transactionInfoHelper.getContact(address, blockchainType)
 
         XxxAddress(
             title = addressTitle,
             value = address,
             showAdd = contact == null,
-            blockchainType = BlockchainType.Ton,
-            navController = navController,
-            onCopy = {
-                stat(
-                    page = StatPage.TonConnect,
-                    section = addressStatSection,
-                    event = StatEvent.Copy(StatEntity.Address)
-                )
-            },
-            onAddToExisting = {
-                stat(
-                    page = StatPage.TonConnect,
-                    section = addressStatSection,
-                    event = StatEvent.Open(StatPage.ContactAddToExisting)
-                )
-            },
-            onAddToNew = {
-                stat(
-                    page = StatPage.TonConnect,
-                    section = addressStatSection,
-                    event = StatEvent.Open(StatPage.ContactNew)
-                )
-            }
+            blockchainType = blockchainType,
+            statPage = statPage,
+            statSection = addressStatSection,
+            navController = navController
         )
         contact?.let {
             XxxTitleAndValueCell(

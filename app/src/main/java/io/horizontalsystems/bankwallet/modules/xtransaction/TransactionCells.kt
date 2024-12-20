@@ -18,6 +18,11 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.slideFromRight
+import io.horizontalsystems.bankwallet.core.stats.StatEntity
+import io.horizontalsystems.bankwallet.core.stats.StatEvent
+import io.horizontalsystems.bankwallet.core.stats.StatPage
+import io.horizontalsystems.bankwallet.core.stats.StatSection
+import io.horizontalsystems.bankwallet.core.stats.stat
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsFragment
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsModule
 import io.horizontalsystems.bankwallet.modules.contacts.Mode
@@ -90,10 +95,9 @@ fun XxxAddress(
     value: String,
     showAdd: Boolean,
     blockchainType: BlockchainType?,
+    statPage: StatPage,
+    statSection: StatSection,
     navController: NavController? = null,
-    onCopy: (() -> Unit)? = null,
-    onAddToExisting: (() -> Unit)? = null,
-    onAddToNew: (() -> Unit)? = null,
     borderTop: Boolean = true
 ) {
     val view = LocalView.current
@@ -123,7 +127,11 @@ fun XxxAddress(
                 TextHelper.copyText(value)
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
 
-                onCopy?.invoke()
+                stat(
+                    page = statPage,
+                    section = statSection,
+                    event = StatEvent.Copy(StatEntity.Address)
+                )
             }
         )
     }
@@ -141,7 +149,11 @@ fun XxxAddress(
                 blockchainType?.let {
                     val args = when (action) {
                         ContactsModule.AddAddressAction.AddToNewContact -> {
-                            onAddToNew?.invoke()
+                            stat(
+                                page = statPage,
+                                section = statSection,
+                                event = StatEvent.Open(StatPage.ContactNew)
+                            )
                             ContactsFragment.Input(
                                 Mode.AddAddressToNewContact(
                                     blockchainType,
@@ -151,7 +163,11 @@ fun XxxAddress(
                         }
 
                         ContactsModule.AddAddressAction.AddToExistingContact -> {
-                            onAddToExisting?.invoke()
+                            stat(
+                                page = statPage,
+                                section = statSection,
+                                event = StatEvent.Open(StatPage.ContactAddToExisting)
+                            )
                             ContactsFragment.Input(
                                 Mode.AddAddressToExistingContact(
                                     blockchainType,
