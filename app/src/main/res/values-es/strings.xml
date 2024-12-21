@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">Asignar cantidad</string>
     <string name="Balance_Receive_AddressType">Tipo de dirección</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
+    <string name="Balance_ProcessingBalance_Title">Procesando</string>
     <string name="Balance_NotRelayedAmount_Title">Transmisión</string>
     <string name="Balance_Receive_Memo">Memo (Etiqueta)</string>
     <string name="Balance_Error_InvalidQrCode">No se puede reconocer</string>
@@ -402,6 +403,9 @@
     <string name="Send_Rbf_Description">Esta opción le permite volver a enviar una transacción bloqueada aumentando la cantidad de la tarifa.</string>
     <string name="Send_RbfEnabled">Activado</string>
     <string name="Send_RbfDisabled">Desabilitado</string>
+    <string name="Send_Utxo_AvailableBalance">Saldo disponible</string>
+    <string name="Send_Utxo_UnselectAll">Deseleccionar todo</string>
+    <string name="Send_Utxo_SelectAll">Seleccionar todo</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_Domain">Dominio</string>
     <string name="Send_Confirmation_YouSend">Usted envía</string>
@@ -501,6 +505,11 @@
     <string name="Tron_ZeroAmountTrxNotAllowed">No se puede transferir 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Cuenta No Activa</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Las nuevas billeteras TRON requieren un depósito de al menos 1 TRX para activarse. Las billeteras inactivas pueden mantener y recibir tokens, pero no corregirán los saldos hasta que se activen.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">Nueva Conexión</string>
+    <string name="TonConnect_Error_InvalidUrl">Dirección URL inválida</string>
+    <string name="TonConnect_Unnamed">Sin nombre</string>
+    <string name="TonConnect_Wallet">Monedero</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">Pedido</string>
     <string name="WalletConnect_SendRequest_Title">Enviar</string>
@@ -706,6 +715,7 @@
     <string name="Transactions_ContractCall">Llamada de Contrato</string>
     <string name="Transactions_ExternalContractCall">Llamada externa</string>
     <string name="Transactions_ContractCreation">Creación de Contrato</string>
+    <string name="Transactions_ContractDeploy">Desplegar contrato</string>
     <string name="Transactions_To">a %s</string>
     <string name="Transactions_From">desde %s</string>
     <string name="Transaction_Unlimited_CoinCode">%s ilimitado</string>
@@ -724,6 +734,7 @@
     <string name="Transactions_Swaps">Permutar</string>
     <string name="Transactions_Approvals">Aprobaciones</string>
     <string name="Transactions_Unknown">Transacción desconocida</string>
+    <string name="Transactions_TonTransaction">Transacción TON</string>
     <string name="Transactions_Unknown_Description">La transacción no se puede analizar</string>
     <string name="Transactions_Multiple">Múltiples</string>
     <string name="Transactions_Filter">Filtro</string>
@@ -794,6 +805,8 @@
     <string name="Info_LockTime_Description_Static">El remitente envió estos fondos con un bloqueo del gasto que expirará en la fecha mostrada.\n\nNo te preocupes, los Bitcoins recibidos ya son tuyos, pero hasta que el período de bloqueo expire, no puedes gastarlos en la red Bitcoin.</string>
     <string name="Info_NotRelayed_Title">Transmitir</string>
     <string name="Info_NotRelayed_Description">La transacción que contiene esta cantidad ha sido transmitida pero aún no ha sido aceptada por la red.</string>
+    <string name="Info_ProcessingBalance_Title">Cantidad en proceso</string>
+    <string name="Info_ProcessingBalance_Description">Las transacciones con esta cantidad aún se están sincronizando. Cuando se confirmen, estos tokens estarán disponibles</string>
     <string name="Info_DoubleSpend_Title">Doble gasto</string>
     <string name="Info_DoubleSpend_Description">¡Riesgo de doble gasto! Hay otra transacción en blockchain que intenta gastar entradas usadas en esta transacción. Solo una transacción será aceptada por la red</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
@@ -840,6 +853,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">¡Junto con tu apoyo, podemos hacer esta aplicación aún mejor!</string>
     <string name="Settings_Donate">Donar</string>
+    <string name="Settings_GetYourTokens">Obtener tokens</string>
     <string name="Settings_DonateToken">Donar %s</string>
     <string name="Settings_DonateWith">Donar con</string>
     <string name="Settings_Donate_GetAddress">Dirección de donación</string>
@@ -1152,7 +1166,6 @@
     <string name="PrivateKeys_EvmPrivateKey">Clave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Otorga un control total sobre criptomonedas basadas en Ethereum, Binance Smart Chain, etc dentro de cada monedero correspondiente.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Otorga total control sobre los activos de la respectiva cartera.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Otorga control total sobre Bitcoin y otras criptomonedas basadas en UTXO, es decir, Litecoin, Bitcoin Cash, Dash, etc. dentro de su respectiva cartera.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca comparta su frase de recuperación con nadie. El equipo imparable nunca pedirá su frase de recuperación.</string>
     <!-- Public Keys -->

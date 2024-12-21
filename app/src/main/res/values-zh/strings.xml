@@ -371,6 +371,7 @@
     <string name="Balance_Receive_SetAmount">设定金额</string>
     <string name="Balance_Receive_AddressType">地址类型</string>
     <string name="Balance_LockedAmount_Title">锁住</string>
+    <string name="Balance_ProcessingBalance_Title">正在处理</string>
     <string name="Balance_NotRelayedAmount_Title">广播</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">无法识别</string>
@@ -402,6 +403,9 @@
     <string name="Send_Rbf_Description">此选项允许您通过增加手续费金额来重新发送卡住的交易。</string>
     <string name="Send_RbfEnabled">已启用</string>
     <string name="Send_RbfDisabled">已禁用</string>
+    <string name="Send_Utxo_AvailableBalance">可用余额</string>
+    <string name="Send_Utxo_UnselectAll">取消全选</string>
+    <string name="Send_Utxo_SelectAll">全选</string>
     <string name="Send_Confirmation_Title">确认</string>
     <string name="Send_Confirmation_Domain">域名</string>
     <string name="Send_Confirmation_YouSend">您发送</string>
@@ -501,6 +505,11 @@
     <string name="Tron_ZeroAmountTrxNotAllowed">无法传输 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">帐户未激活</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">新的TRON钱包需要至少1TRX的存款才能激活。 非活动钱包可以持有并接收代币，但在激活之前不会纠正余额。</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">新连接</string>
+    <string name="TonConnect_Error_InvalidUrl">无效的URL地址</string>
+    <string name="TonConnect_Unnamed">未命名</string>
+    <string name="TonConnect_Wallet">钱包</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Request">请求</string>
     <string name="WalletConnect_SendRequest_Title">发送​​</string>
@@ -706,6 +715,7 @@
     <string name="Transactions_ContractCall">合约调用</string>
     <string name="Transactions_ExternalContractCall">外部呼叫</string>
     <string name="Transactions_ContractCreation">合约创建</string>
+    <string name="Transactions_ContractDeploy">部署合约</string>
     <string name="Transactions_To">接收人%s</string>
     <string name="Transactions_From">发送人%s</string>
     <string name="Transaction_Unlimited_CoinCode">无限%s</string>
@@ -724,6 +734,7 @@
     <string name="Transactions_Swaps">掉期交易</string>
     <string name="Transactions_Approvals">批准</string>
     <string name="Transactions_Unknown">未知交易</string>
+    <string name="Transactions_TonTransaction">TON交易</string>
     <string name="Transactions_Unknown_Description">无法解析交易</string>
     <string name="Transactions_Multiple">多种</string>
     <string name="Transactions_Filter">筛选器</string>
@@ -794,6 +805,8 @@
     <string name="Info_LockTime_Description_Static">汇款人通过将在所显示日期失效的消费锁定汇出这些资金。\n\n无需担心，收到的比特币已经属于您，但在锁定期限结束前，您无法在比特币网络上消费它们。</string>
     <string name="Info_NotRelayed_Title">广播</string>
     <string name="Info_NotRelayed_Description">此金额的交易已广播，但尚未被网络接受。</string>
+    <string name="Info_ProcessingBalance_Title">处理金额</string>
+    <string name="Info_ProcessingBalance_Description">此金额的交易仍在同步中。确认后，这些代币将可用于支付。</string>
     <string name="Info_DoubleSpend_Title">双复支付</string>
     <string name="Info_DoubleSpend_Description">双重支付风险！区块链上还有另一笔交易试图支付这笔交易所使用的投入。 网络只接受一笔交易。</string>
     <string name="Info_DoubleSpend_ThisTx">此交易</string>
@@ -840,6 +853,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
     <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
     <string name="Settings_Donate">捐助</string>
+    <string name="Settings_GetYourTokens">获取代币</string>
     <string name="Settings_DonateToken">捐赠%s</string>
     <string name="Settings_DonateWith">捐赠方式</string>
     <string name="Settings_Donate_GetAddress">捐款地址</string>
@@ -1152,7 +1166,6 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">授予对基于加密货币的EVM的完全控制，即在相应钱包内的以太坊、币安智能链等。</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">授予对相应钱包上的资产的完全控制。</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
     <!-- Public Keys -->
