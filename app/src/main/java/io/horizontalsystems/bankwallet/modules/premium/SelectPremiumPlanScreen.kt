@@ -53,7 +53,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.Light
 import io.horizontalsystems.bankwallet.ui.compose.Steel20
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -163,7 +162,10 @@ fun SelectPremiumPlanScreen(
                     }
 
                     ButtonsGroupWithShade {
-                        Column(Modifier.padding(horizontal = 24.dp)) {
+                        Column(
+                            modifier= Modifier.padding(horizontal = 24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
                             ButtonPrimaryCustomColor(
                                 modifier = Modifier.fillMaxWidth(),
                                 title = stringResource(R.string.Premium_TryForFree),
@@ -176,12 +178,11 @@ fun SelectPremiumPlanScreen(
                             )
                             VSpacer(12.dp)
                             ColoredTextSecondaryButton(
-                                modifier = Modifier.fillMaxWidth(),
                                 title = stringResource(R.string.Premium_Restore),
                                 onClick = {
                                     //
                                 },
-                                color = Light
+                                color = ComposeAppTheme.colors.leah
                             )
                         }
                     }
