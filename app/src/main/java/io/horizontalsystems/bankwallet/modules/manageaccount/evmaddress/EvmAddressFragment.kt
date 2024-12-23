@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -37,8 +36,9 @@ class EvmAddressFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val evmAddress = navController.getInput<Input>()?.evmAddress ?: ""
-        EvmAddressScreen(evmAddress, navController)
+        withInput<Input>(navController) { input ->
+            EvmAddressScreen(input.evmAddress, navController)
+        }
     }
 
     @Parcelize

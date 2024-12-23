@@ -17,7 +17,6 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -43,15 +42,14 @@ class CoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        val coinUid = input?.coinUid ?: ""
-
-        CoinScreen(
-            coinUid,
-            coinViewModel(coinUid),
-            navController,
-            childFragmentManager
-        )
+        withInput<Input>(navController) { input ->
+            CoinScreen(
+                input.coinUid,
+                coinViewModel(input.coinUid),
+                navController,
+                childFragmentManager
+            )
+        }
     }
 
     private fun coinViewModel(coinUid: String): CoinViewModel? = try {

@@ -25,7 +25,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -56,25 +55,20 @@ class MarketPlatformFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
 
-        val platform = navController.getInput<Platform>()
+        withInput<Platform>(navController) { platform ->
+            val factory = MarketPlatformModule.Factory(platform)
 
-        if (platform == null) {
-            navController.popBackStack()
-            return
+            PlatformScreen(
+                factory = factory,
+                onCloseButtonClick = { navController.popBackStack() },
+                onCoinClick = { coinUid ->
+                    val arguments = CoinFragment.Input(coinUid)
+                    navController.slideFromRight(R.id.coinFragment, arguments)
+
+                    stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
+                }
+            )
         }
-
-        val factory = MarketPlatformModule.Factory(platform)
-
-        PlatformScreen(
-            factory = factory,
-            onCloseButtonClick = { navController.popBackStack() },
-            onCoinClick = { coinUid ->
-                val arguments = CoinFragment.Input(coinUid)
-                navController.slideFromRight(R.id.coinFragment, arguments)
-
-                stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
-            }
-        )
     }
 }
 

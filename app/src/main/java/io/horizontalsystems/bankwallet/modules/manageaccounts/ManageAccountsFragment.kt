@@ -19,7 +19,6 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.navigateWithTermsAccepted
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -45,13 +44,9 @@ class ManageAccountsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = try {
-            navController.requireInput<ManageAccountsModule.Mode>()
-        } catch (e: NullPointerException) {
-            navController.popBackStack()
-            return
+        withInput<ManageAccountsModule.Mode>(navController) { input ->
+            ManageAccountsScreen(navController, input)
         }
-        ManageAccountsScreen(navController, input)
     }
 }
 

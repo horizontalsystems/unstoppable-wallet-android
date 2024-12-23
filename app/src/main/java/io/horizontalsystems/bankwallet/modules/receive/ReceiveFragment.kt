@@ -18,7 +18,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePage
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -45,13 +44,10 @@ class ReceiveFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val wallet = navController.getInput<Wallet>()
-        ReceiveScreen(
-            wallet,
-            navController
-        )
+        withInput<Wallet>(navController) { wallet ->
+            ReceiveScreen(wallet, navController)
+        }
     }
-
 }
 
 object ReceiveRoutes {

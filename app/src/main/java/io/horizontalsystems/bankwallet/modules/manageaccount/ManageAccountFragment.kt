@@ -23,7 +23,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.authorizedAction
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
@@ -60,16 +59,9 @@ class ManageAccountFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = try {
-            navController.requireInput<Input>()
-        } catch (e: NullPointerException) {
-            navController.popBackStack()
-            return
+        withInput<Input>(navController) { input ->
+            ManageAccountScreen(navController, input.accountId)
         }
-        ManageAccountScreen(
-            navController,
-            input.accountId
-        )
     }
 
     @Parcelize

@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -32,7 +31,13 @@ class BuySubscriptionChoosePlanFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        BuySubscriptionChoosePlanScreen(navController, requireActivity(), navController.requireInput())
+        withInput<Input>(navController) { input ->
+            BuySubscriptionChoosePlanScreen(
+                navController,
+                requireActivity(),
+                input
+            )
+        }
     }
 
     @Parcelize

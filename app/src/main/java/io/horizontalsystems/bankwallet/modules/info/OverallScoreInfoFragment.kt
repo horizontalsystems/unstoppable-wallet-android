@@ -19,19 +19,16 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.OverallScore
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoTextBody
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_jacob
 import java.math.BigDecimal
@@ -40,22 +37,8 @@ class OverallScoreInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val scoreCategory = navController.getInput<ScoreCategory>()
-        val categoryScores = getScores(scoreCategory)
-        if (scoreCategory == null) {
-            ScreenMessageWithAction(
-                text = stringResource(R.string.Error),
-                icon = R.drawable.ic_error_48
-            ) {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .padding(horizontal = 48.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(R.string.Button_Close),
-                    onClick = { navController.popBackStack() }
-                )
-            }
-        } else {
+        withInput<ScoreCategory>(navController) { scoreCategory ->
+            val categoryScores = getScores(scoreCategory)
             InfoScreen(
                 scoreCategory.title,
                 scoreCategory.description,

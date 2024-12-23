@@ -6,7 +6,6 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceViewModel
@@ -27,70 +26,73 @@ class SendConfirmationFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        val sendEntryPointDestId = input?.sendEntryPointDestId ?: 0
+        withInput<Input>(navController) { input ->
+            when (input.type) {
+                Type.Bitcoin -> {
+                    val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
 
-        when (input?.type) {
-            Type.Bitcoin -> {
-                val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment)
+                    SendBitcoinConfirmationScreen(
+                        navController,
+                        sendBitcoinViewModel,
+                        amountInputModeViewModel,
+                        input.sendEntryPointDestId
+                    )
+                }
 
-                SendBitcoinConfirmationScreen(
-                    navController,
-                    sendBitcoinViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId
-                )
-            }
-            Type.Bep2 -> {
-                val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment)
+                Type.Bep2 -> {
+                    val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment)
 
-                SendBinanceConfirmationScreen(
-                    navController,
-                    sendBinanceViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId
-                )
-            }
-            Type.ZCash -> {
-                val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment)
+                    SendBinanceConfirmationScreen(
+                        navController,
+                        sendBinanceViewModel,
+                        amountInputModeViewModel,
+                        input.sendEntryPointDestId
+                    )
+                }
 
-                SendZCashConfirmationScreen(
-                    navController,
-                    sendZCashViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId
-                )
-            }
-            Type.Tron -> {
-                val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment)
-                SendTronConfirmationScreen(
-                    navController,
-                    sendTronViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId
-                )
-            }
-            Type.Solana -> {
-                val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment)
+                Type.ZCash -> {
+                    val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment)
 
-                SendSolanaConfirmationScreen(
-                    navController,
-                    sendSolanaViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId
-                )
-            }
-            Type.Ton -> {
-                val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment)
+                    SendZCashConfirmationScreen(
+                        navController,
+                        sendZCashViewModel,
+                        amountInputModeViewModel,
+                        input.sendEntryPointDestId
+                    )
+                }
 
-                SendTonConfirmationScreen(
-                    navController,
-                    sendTonViewModel,
-                    amountInputModeViewModel,
-                    sendEntryPointDestId
-                )
+                Type.Tron -> {
+                    val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment)
+                    SendTronConfirmationScreen(
+                        navController,
+                        sendTronViewModel,
+                        amountInputModeViewModel,
+                        input.sendEntryPointDestId
+                    )
+                }
+
+                Type.Solana -> {
+                    val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment)
+
+                    SendSolanaConfirmationScreen(
+                        navController,
+                        sendSolanaViewModel,
+                        amountInputModeViewModel,
+                        input.sendEntryPointDestId
+                    )
+                }
+
+                Type.Ton -> {
+                    val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment)
+
+                    SendTonConfirmationScreen(
+                        navController,
+                        sendTonViewModel,
+                        amountInputModeViewModel,
+                        input.sendEntryPointDestId
+                    )
+                }
             }
-            null -> Unit
         }
     }
 

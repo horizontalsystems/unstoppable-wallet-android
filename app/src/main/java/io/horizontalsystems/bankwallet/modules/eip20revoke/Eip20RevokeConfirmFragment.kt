@@ -16,7 +16,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.confirm.ConfirmTransactionScreen
@@ -42,7 +41,9 @@ import java.math.BigDecimal
 class Eip20RevokeConfirmFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        Eip20RevokeScreen(navController, navController.requireInput())
+        withInput<Input>(navController) { input ->
+            Eip20RevokeScreen(navController, input)
+        }
     }
 
     @Parcelize

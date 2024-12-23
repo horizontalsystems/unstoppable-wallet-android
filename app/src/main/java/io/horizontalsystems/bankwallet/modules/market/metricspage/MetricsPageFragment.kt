@@ -21,7 +21,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.alternativeImageUrl
 import io.horizontalsystems.bankwallet.core.iconPlaceholder
 import io.horizontalsystems.bankwallet.core.imageUrl
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -49,14 +48,15 @@ class MetricsPageFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val metricsType = navController.requireInput<MetricsType>()
-        val factory = MetricsPageModule.Factory(metricsType)
-        val chartViewModel by viewModels<ChartViewModel> { factory }
-        val viewModel by viewModels<MetricsPageViewModel> { factory }
-        MetricsPage(viewModel, chartViewModel, navController) {
-            onCoinClick(it, navController)
+        withInput<MetricsType>(navController) { metricsType ->
+            val factory = MetricsPageModule.Factory(metricsType)
+            val chartViewModel by viewModels<ChartViewModel> { factory }
+            val viewModel by viewModels<MetricsPageViewModel> { factory }
+            MetricsPage(viewModel, chartViewModel, navController) {
+                onCoinClick(it, navController)
 
-            stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
+                stat(page = metricsType.statPage, event = StatEvent.OpenCoin(it))
+            }
         }
     }
 

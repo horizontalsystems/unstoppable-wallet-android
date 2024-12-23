@@ -22,7 +22,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -106,7 +105,6 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ReceiveAddressScreen(
     title: String,

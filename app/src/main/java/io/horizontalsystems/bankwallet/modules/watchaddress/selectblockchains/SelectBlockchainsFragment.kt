@@ -30,7 +30,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.entities.AccountType
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -49,8 +48,7 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-        if (input != null) {
+        withInput<Input>(navController) { input ->
             SelectBlockchainsScreen(
                 input.accountType,
                 input.accountName,
@@ -58,8 +56,6 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
                 input.popOffOnSuccess,
                 input.popOffInclusive
             )
-        } else {
-            navController.popBackStack()
         }
     }
 

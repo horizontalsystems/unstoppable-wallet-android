@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
@@ -20,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.managers.FaqManager
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
@@ -48,15 +46,13 @@ class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        EvmPrivateKeyScreen(
-            navController = navController,
-            evmPrivateKey = navController.getInput<Input>()?.evmPrivateKey ?: ""
-        )
+        withInput<Input>(navController) { input ->
+            EvmPrivateKeyScreen(navController, input.evmPrivateKey)
+        }
     }
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun EvmPrivateKeyScreen(
     navController: NavController,
