@@ -4,46 +4,39 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import io.horizontalsystems.bankwallet.modules.info.ui.BulletedText
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoBody
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.ScreenMessageWithAction
 
 class CoinAnalyticsInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        CoinAnalyticsInfoScreen(
-            navController.getInput()
-        ) { navController.popBackStack() }
+        withInput<AnalyticInfo>(navController) { input ->
+            CoinAnalyticsInfoScreen(input) { navController.popBackStack() }
+        }
     }
-
 }
 
 @Composable
 private fun CoinAnalyticsInfoScreen(
-    analyticsInfo: AnalyticInfo?,
+    analyticsInfo: AnalyticInfo,
     onBackPress: () -> Unit
 ) {
-
     Surface(color = ComposeAppTheme.colors.tyler) {
         Column {
             AppBar(
@@ -57,24 +50,9 @@ private fun CoinAnalyticsInfoScreen(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
-                analyticsInfo?.let { info ->
-                    InfoHeader(info.title)
-                    AnalyticsInfoBody(info)
-                    Spacer(Modifier.height(20.dp))
-                } ?: run {
-                    ScreenMessageWithAction(
-                        text = stringResource(R.string.Error),
-                        icon = R.drawable.ic_error_48
-                    ) {
-                        ButtonPrimaryYellow(
-                            modifier = Modifier
-                                .padding(horizontal = 48.dp)
-                                .fillMaxWidth(),
-                            title = stringResource(R.string.Button_Close),
-                            onClick = onBackPress
-                        )
-                    }
-                }
+                InfoHeader(analyticsInfo.title)
+                AnalyticsInfoBody(analyticsInfo)
+                Spacer(Modifier.height(20.dp))
             }
         }
     }

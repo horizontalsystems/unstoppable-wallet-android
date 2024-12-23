@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -69,7 +68,6 @@ enum class ContactScreenBottomSheetType {
     DeleteConfirmation, DiscardChangesConfirmation
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ContactScreen(
     viewModel: ContactViewModel,

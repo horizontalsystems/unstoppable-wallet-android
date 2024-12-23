@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.balance.cex.asset
 
-import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -29,9 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.providers.CexAsset
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.balance.cex.BalanceCexViewItem
@@ -53,19 +50,10 @@ class CexAssetFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val asset = navController.getInput<CexAsset>()
-        if (asset == null) {
-            Toast.makeText(App.instance, "Asset is Null", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
-            return
+        withInput<CexAsset>(navController) { asset ->
+            val viewModel by viewModels<CexAssetViewModel> { CexAssetViewModel.Factory(asset) }
+            CexAssetScreen(viewModel, navController)
         }
-
-        val viewModel by viewModels<CexAssetViewModel> { CexAssetViewModel.Factory(asset) }
-
-        CexAssetScreen(
-            viewModel,
-            navController
-        )
     }
 }
 

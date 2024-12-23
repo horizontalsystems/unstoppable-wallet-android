@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.modules.manageaccount.privatekeys
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -15,10 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.authorizedAction
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -35,13 +32,9 @@ class PrivateKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account = navController.getInput<Account>()
-        if (account == null) {
-            Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
-            return
+        withInput<Account>(navController) { account ->
+            ManageAccountScreen(navController, account)
         }
-        ManageAccountScreen(navController, account)
     }
 
 }

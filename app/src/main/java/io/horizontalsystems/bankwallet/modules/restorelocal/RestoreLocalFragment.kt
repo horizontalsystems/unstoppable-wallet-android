@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
@@ -42,7 +41,6 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.Caution
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -78,15 +76,16 @@ class RestoreLocalFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        RestoreLocalNavHost(
-            input.jsonFile,
-            input.fileName,
-            input.statPage,
-            navController,
-            input.popOffOnSuccess,
-            input.popOffInclusive
-        ) { activity?.let { MainModule.startAsNewTask(it) } }
+        withInput<Input>(navController) { input ->
+            RestoreLocalNavHost(
+                input.jsonFile,
+                input.fileName,
+                input.statPage,
+                navController,
+                input.popOffOnSuccess,
+                input.popOffInclusive
+            ) { activity?.let { MainModule.startAsNewTask(it) } }
+        }
     }
 
     @Parcelize
@@ -271,7 +270,6 @@ private fun RestoreLocalScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BackupFileItems(
     viewModel: RestoreLocalViewModel,

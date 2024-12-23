@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -78,7 +77,6 @@ class BackupManagerFragment : BaseComposeFragment() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BackupManagerScreen(
     onBackClick: () -> Unit,

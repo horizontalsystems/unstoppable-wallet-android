@@ -9,7 +9,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
@@ -22,19 +21,19 @@ class MarkdownFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
-
-        MarkdownScreen(
-            handleRelativeUrl = input?.handleRelativeUrl ?: false,
-            showAsPopup = input?.showAsPopup ?: false,
-            markdownUrl = input?.markdownUrl ?: "",
-            onCloseClick = { navController.popBackStack() },
-            onUrlClick = { url ->
-                navController.slideFromRight(
-                    R.id.markdownFragment, MarkdownFragment.Input(url)
-                )
-            }
-        )
+        withInput<Input>(navController) { input ->
+            MarkdownScreen(
+                handleRelativeUrl = input.handleRelativeUrl,
+                showAsPopup = input.showAsPopup,
+                markdownUrl = input.markdownUrl,
+                onCloseClick = { navController.popBackStack() },
+                onUrlClick = { url ->
+                    navController.slideFromRight(
+                        R.id.markdownFragment, Input(url)
+                    )
+                }
+            )
+        }
     }
 
     @Parcelize

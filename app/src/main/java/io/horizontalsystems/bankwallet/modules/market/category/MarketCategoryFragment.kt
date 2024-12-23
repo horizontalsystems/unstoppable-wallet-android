@@ -19,7 +19,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -40,21 +39,24 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
 import io.horizontalsystems.bankwallet.ui.compose.components.SortMenu
 import io.horizontalsystems.bankwallet.ui.compose.components.TopCloseButton
+import io.horizontalsystems.marketkit.models.CoinCategory
 
 class MarketCategoryFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val factory = MarketCategoryModule.Factory(navController.requireInput())
-        val chartViewModel = viewModel<ChartViewModel>(factory = factory)
-        val viewModel = viewModel<MarketCategoryViewModel>(factory = factory)
+        withInput<CoinCategory>(navController) { input ->
+            val factory = MarketCategoryModule.Factory(input)
+            val chartViewModel = viewModel<ChartViewModel>(factory = factory)
+            val viewModel = viewModel<MarketCategoryViewModel>(factory = factory)
 
-        CategoryScreen(
-            viewModel,
-            chartViewModel,
-            { navController.popBackStack() },
-            { coinUid -> onCoinClick(coinUid, navController) }
-        )
+            CategoryScreen(
+                viewModel = viewModel,
+                chartViewModel = chartViewModel,
+                onCloseButtonClick = { navController.popBackStack() },
+                onCoinClick = { coinUid -> onCoinClick(coinUid, navController) }
+            )
+        }
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {

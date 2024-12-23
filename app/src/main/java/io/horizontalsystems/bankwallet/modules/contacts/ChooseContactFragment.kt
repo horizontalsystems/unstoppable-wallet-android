@@ -27,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.ui.compose.ColoredTextStyle
@@ -50,10 +49,9 @@ class ChooseContactFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        ChooseContactScreen(
-            navController.getInput(),
-            navController
-        )
+        withInput<BlockchainType>(navController) { blockchainType ->
+            ChooseContactScreen(blockchainType, navController)
+        }
     }
 
     @Parcelize
@@ -62,11 +60,10 @@ class ChooseContactFragment : BaseComposeFragment() {
 
 @Composable
 fun ChooseContactScreen(
-    blockchainType: BlockchainType?,
+    blockchainType: BlockchainType,
     navController: NavController
 ) {
-    val blockchainTypeNonNull = blockchainType ?: return
-    val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainTypeNonNull))
+    val viewModel = viewModel<ChooseContactViewModel>(factory = ChooseContactViewModel.Factory(blockchainType))
 
     val items = viewModel.items
 

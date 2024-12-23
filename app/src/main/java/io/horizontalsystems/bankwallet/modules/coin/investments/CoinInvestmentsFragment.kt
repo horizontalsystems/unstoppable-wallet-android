@@ -26,7 +26,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import io.horizontalsystems.bankwallet.modules.coin.overview.ui.Loading
@@ -49,18 +48,17 @@ class CoinInvestmentsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        CoinInvestmentsScreen(
-            viewModel = viewModel(
-                factory = CoinInvestmentsModule.Factory(input.coinUid)
-            ),
-            onClickNavigation = {
-                navController.popBackStack()
-            },
-            onClickFundUrl = {
-                LinkHelper.openLinkInAppBrowser(requireContext(), it)
-            }
-        )
+        withInput<Input>(navController) { input ->
+            CoinInvestmentsScreen(
+                viewModel = viewModel(factory = CoinInvestmentsModule.Factory(input.coinUid)),
+                onClickNavigation = {
+                    navController.popBackStack()
+                },
+                onClickFundUrl = {
+                    LinkHelper.openLinkInAppBrowser(requireContext(), it)
+                }
+            )
+        }
     }
 
     @Parcelize

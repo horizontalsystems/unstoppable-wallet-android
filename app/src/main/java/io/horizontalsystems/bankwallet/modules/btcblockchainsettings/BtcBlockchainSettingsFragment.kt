@@ -26,7 +26,6 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -41,18 +40,18 @@ import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarnin
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.marketkit.models.Blockchain
 
 class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
-            factory = BtcBlockchainSettingsModule.Factory(navController.requireInput())
-        )
-        BtcBlockchainSettingsScreen(
-            viewModel,
-            navController
-        )
+        withInput<Blockchain>(navController) { input ->
+            val viewModel = viewModel<BtcBlockchainSettingsViewModel>(
+                factory = BtcBlockchainSettingsModule.Factory(input)
+            )
+            BtcBlockchainSettingsScreen(viewModel, navController)
+        }
     }
 
 }

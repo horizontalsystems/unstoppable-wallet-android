@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.shorten
 import io.horizontalsystems.bankwallet.modules.info.ui.InfoHeader
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -43,12 +42,13 @@ class TransactionDoubleSpendInfoFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.requireInput<Input>()
-        InfoScreen(
-            txHash = input.transactionHash,
-            conflictingTxHash = input.conflictingTransactionHash,
-            onBackClick = { navController.popBackStack() }
-        )
+        withInput<Input>(navController) { input ->
+            InfoScreen(
+                txHash = input.transactionHash,
+                conflictingTxHash = input.conflictingTransactionHash,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
     }
 
     @Parcelize
