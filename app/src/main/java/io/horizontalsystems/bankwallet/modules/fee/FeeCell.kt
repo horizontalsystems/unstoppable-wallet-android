@@ -64,7 +64,7 @@ fun FeeCell(
 
         Spacer(Modifier.weight(1f))
 
-        Box(contentAlignment = Alignment.Center) {
+        Box(contentAlignment = Alignment.CenterEnd) {
             if (viewState == ViewState.Loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(16.dp),
