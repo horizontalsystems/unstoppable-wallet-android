@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.navigation.slideFromRight
@@ -49,6 +50,7 @@ fun SendTonScreen(
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
     val fee = uiState.fee
+    val feeInProgress = uiState.feeInProgress
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
@@ -124,7 +126,8 @@ fun SendTonScreen(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
-                navController = navController
+                navController = navController,
+                viewState = if (feeInProgress) ViewState.Loading else null
             )
 
             ButtonPrimaryYellow(
