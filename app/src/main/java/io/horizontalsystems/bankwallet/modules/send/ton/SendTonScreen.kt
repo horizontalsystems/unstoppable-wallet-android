@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
@@ -47,6 +48,7 @@ fun SendTonScreen(
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
     val fee = uiState.fee
+    val feeInProgress = uiState.feeInProgress
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
@@ -122,7 +124,8 @@ fun SendTonScreen(
                 fee = fee,
                 amountInputType = amountInputType,
                 rate = viewModel.feeCoinRate,
-                navController = navController
+                navController = navController,
+                viewState = if (feeInProgress) ViewState.Loading else null
             )
 
             ButtonPrimaryYellow(
