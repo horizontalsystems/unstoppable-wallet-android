@@ -12,8 +12,6 @@ Unstoppable, aşağıdakiler göz önünde bulundurularak oluşturulmuştur:
 
 If the above rhymes well with you then Unstoppable is for you! Biz de sizin benzersiz ihtiyaçlarınıza odaklanmak ve size mümkün olan en iyi şekilde hizmet etmek için buradayız.
 
-Eğer sadece Bitcoin veya Ethereum saklamak için sade bir yol arıyorsanız bu uygulama size göre olmayabilir.
-
 CÜZDAN ÖZELLIKLERI:
 
 - Gözetimsiz Çoklu Cüzdan >> Birden fazla portföy tarzı cüzdanda istediğiniz sayıda kripto parayı gözetimsiz bir şekilde yönetin. Bu cüzdan, tek müşterinin ve tek yetkilinin siz olduğu kendi bankanız gibidir. Telefon çalınsa ve kurcalansa bile varlıkları güvende tutmak ve geri yüklemeyi kolaylaştırmak için tasarlanmıştır.
@@ -34,8 +32,6 @@ CÜZDAN ÖZELLIKLERI:
 
 - Binance Cüzdan >> Orijinal Binance Zinciri (BEP2 dahil) ve Binance Akıllı Zincir için tam destek.
 
-- NFT Cüzdanı >> Non Fungible tokenler (NFT'ler) için tam destek.
-
 - Crypto Academy >> Uygulama, yeni gelenleri kripto para dünyasına ve DeFi ekosistemine, kripto para güvenliği, depolama, gizlilik, işlem yapma ve takas etmenin temel yönlerini kapsayan, sindirmesi kolay bir şekilde dahil etmeyi amaçlayan iki kurs içerir.
 
 - Gizlilik Paraları için Cüzdan >> SPV tarzında büyük gizlilik paralarını (ZCash, DASH) tamamen destekler. One of the very few wallets capable of supporting fully shielded Zcash transactions as well as the ability to privatize Bitcoin transactions.
@@ -46,4 +42,4 @@ CÜZDAN ÖZELLIKLERI:
 
 - Tamamen Açık Kaynak >> Bugüne kadar oluşturulmuş en şeffaf cüzdan uygulaması. Uygulamanın 4 yıllık üretim sürecinin tamamı, herkesin değerlendirebilmesi veya başka projelerde yeniden kullanabilmesi için kodunun %100'ü ile birlikte çevrimiçi olarak açık bir şekilde erişilebilir durumdadır. Üçüncü taraflarca doğrulanmış ve denetlenmiştir.
 
-Durdurulamaz Ol!  😎
+Durdurulamaz Ol!
