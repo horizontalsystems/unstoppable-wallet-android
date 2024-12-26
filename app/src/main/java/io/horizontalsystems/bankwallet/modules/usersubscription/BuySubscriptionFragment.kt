@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.core.setNavigationResultX
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumPlanType
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.SelectSubscriptionScreen
@@ -19,7 +20,9 @@ import kotlinx.parcelize.Parcelize
 class BuySubscriptionFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SubscriptionNavHost(onClose = { navController.popBackStack() })
+        SubscriptionNavHost(
+            navController = navController,
+            onClose = { navController.popBackStack() })
     }
 
     @Parcelize
@@ -31,6 +34,7 @@ class BuySubscriptionFragment : BaseComposeFragment() {
 
 @Composable
 fun SubscriptionNavHost(
+    navController: NavController,
     onClose: () -> Unit
 ) {
     val navHostController = rememberNavController()
@@ -54,12 +58,14 @@ fun SubscriptionNavHost(
                 },
             )
         ) { navBackStackEntry ->
-            val type =
-                navBackStackEntry.arguments?.getString("type")
-                    ?: PremiumPlanType.ProPlan.name
+            val type = navBackStackEntry.arguments?.getString("type")
+                ?: PremiumPlanType.ProPlan.name
             PremiumSubscribedScreen(
                 type = PremiumPlanType.valueOf(type),
-                onCloseClick = onClose
+                onCloseClick = {
+                    navController.setNavigationResultX(BuySubscriptionFragment.Result())
+                    onClose()
+                }
             )
         }
     }
