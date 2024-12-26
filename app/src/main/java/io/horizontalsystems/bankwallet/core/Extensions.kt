@@ -191,10 +191,12 @@ fun NavGraphBuilder.composablePage(
 
 fun NavGraphBuilder.composablePopup(
     route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
 ) {
     composable(
         route,
+        arguments = arguments,
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Up,

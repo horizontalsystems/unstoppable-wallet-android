@@ -91,7 +91,7 @@ private fun SettingSections(
 
     PremiumBanner(
         onClick = {
-            navController.slideFromRight(R.id.premiumSubscriptionFragment)
+            navController.slideFromBottom(R.id.buySubscriptionFragment)
         }
     )
 

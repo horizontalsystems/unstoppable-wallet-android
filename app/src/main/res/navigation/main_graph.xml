@@ -403,10 +403,4 @@
     <fragment
         android:id="@+id/buySubscriptionFragment"
         android:name="io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionFragment"/>
-    <fragment
-        android:id="@+id/premiumSubscriptionFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.premium.PremiumFragment"/>
-    <fragment
-        android:id="@+id/buySubscriptionChoosePlanFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionChoosePlanFragment"/>
 </navigation>

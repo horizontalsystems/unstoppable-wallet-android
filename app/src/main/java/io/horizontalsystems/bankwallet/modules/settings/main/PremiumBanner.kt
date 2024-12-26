@@ -37,7 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.modules.premium.highlightText
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 
