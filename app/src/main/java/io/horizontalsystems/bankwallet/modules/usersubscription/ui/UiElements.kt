@@ -16,24 +16,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -73,10 +66,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.VIPClub
 import io.horizontalsystems.subscriptions.core.VIPSupport
-import kotlinx.coroutines.launch
 
 enum class PremiumPlanType(@StringRes val titleResId: Int) {
     ProPlan(R.string.Premium_PlanPro),
@@ -90,7 +81,7 @@ val yellowGradient = Brush.horizontalGradient(
     )
 )
 
-private val steelBrush = Brush.horizontalGradient(
+val steelBrush = Brush.horizontalGradient(
     colors = listOf(Steel20, Steel20)
 )
 
@@ -227,81 +218,7 @@ fun SubscriptionOption(
 }
 
 @Composable
-fun PlanTabs(
-    items: List<Subscription>,
-    selectedTabIndex: Int,
-    onTabChange: (Int) -> Unit
-) {
-
-    val pagerState = rememberPagerState(initialPage = selectedTabIndex) { 2 }
-    val scrollScope = rememberCoroutineScope()
-
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp)),
-    ) {
-        TabRow(
-            selectedTabIndex = selectedTabIndex,
-            backgroundColor = ComposeAppTheme.colors.transparent, // Dark background
-            contentColor = Color(0xFFEDD716),
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    Modifier
-                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                        .height(0.dp), // No indicator line
-                    color = Color.Transparent
-                )
-            }
-        ) {
-            items.forEachIndexed { index, tab ->
-                Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = {
-                        onTabChange(index)
-                        scrollScope.launch {
-                            pagerState.scrollToPage(index)
-                        }
-                    },
-                    modifier = Modifier.background(
-                        brush =
-                        if (selectedTabIndex == index) yellowGradient else steelBrush,
-                    ),
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .height(44.dp)
-                            .padding(vertical = 8.dp, horizontal = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(if (index == 0) R.drawable.prem_star_yellow_16 else R.drawable.prem_crown_yellow_16),
-                            contentDescription = null,
-                            tint = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = tab.name,
-                            color = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.captionSB
-                        )
-                    }
-                }
-            }
-        }
-
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false
-        ) { page ->
-            PlanItems(items[page].actions)
-        }
-    }
-}
-
-@Composable
-private fun PlanItems(items: List<IPaidAction>) {
+fun PlanItems(items: List<IPaidAction>) {
     Column {
         items.forEachIndexed { index, item ->
             PremiumFeatureItem(
