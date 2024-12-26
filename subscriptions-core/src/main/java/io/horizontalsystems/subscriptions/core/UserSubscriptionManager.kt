@@ -6,15 +6,37 @@ object UserSubscriptionManager {
     private val predefinedSubscriptions = listOf(
         Subscription(
             id = "test.subscription_1",
-            name = "Test Subscription #1",
+            name = "PRO",
             description = "",
-            actions = listOf(EnableWatchlistSignals)
+            actions = listOf(
+                TokenInsights,
+                AdvancedSearch,
+                TradeSignals,
+                FavorableSwaps,
+                TransactionSpeedTools,
+                DuressMode,
+                AddressVerification,
+                Tor,
+                PrivacyMode,
+            )
         ),
         Subscription(
             id = "test.subscription_2",
-            name = "Test Subscription #2",
+            name = "VIP",
             description = "",
-            actions = listOf()
+            actions = listOf(
+                VIPSupport,
+                VIPClub,
+                TokenInsights,
+                AdvancedSearch,
+                TradeSignals,
+                FavorableSwaps,
+                TransactionSpeedTools,
+                DuressMode,
+                AddressVerification,
+                Tor,
+                PrivacyMode,
+            )
         ),
     )
     private lateinit var service: SubscriptionService
@@ -24,7 +46,7 @@ object UserSubscriptionManager {
         UserSubscriptionManager.service = service
     }
 
-    fun isActionAllowed(paidAction: IPaidAction) : Boolean {
+    fun isActionAllowed(paidAction: IPaidAction): Boolean {
         return service.isActionAllowed(paidAction)
     }
 
@@ -32,7 +54,11 @@ object UserSubscriptionManager {
         return service.getSubscriptions()
     }
 
-    suspend fun launchPurchaseFlow(subscriptionId: String, planId: String, activity: Activity): HSPurchase? {
+    suspend fun launchPurchaseFlow(
+        subscriptionId: String,
+        planId: String,
+        activity: Activity
+    ): HSPurchase? {
         return service.launchPurchaseFlow(subscriptionId, planId, activity)
     }
 

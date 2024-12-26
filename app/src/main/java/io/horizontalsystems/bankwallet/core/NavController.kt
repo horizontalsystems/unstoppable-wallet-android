@@ -61,7 +61,7 @@ fun NavController.paidAction(paidAction: IPaidAction, block: () -> Unit) {
     if (UserSubscriptionManager.isActionAllowed(paidAction)) {
         block.invoke()
     } else {
-        slideFromRightForResult<BuySubscriptionFragment.Result>(
+        slideFromBottomForResult<BuySubscriptionFragment.Result>(
             R.id.buySubscriptionFragment,
             BuySubscriptionFragment.Input(paidAction)
         ) {

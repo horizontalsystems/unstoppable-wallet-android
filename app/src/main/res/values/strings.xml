@@ -889,25 +889,32 @@
     <string name="Premium_YouHaveActivatedPlan">You have activated the %s plan.</string>
     <string name="Premium_GoToApp">Go to App</string>
 
-    <string name="Premium_UpgradeFeature_1">Vip Support</string>
-    <string name="Premium_UpgradeFeature_2">Vip Chat Group</string>
-    <string name="Premium_UpgradeFeature_3">Token Insights</string>
-    <string name="Premium_UpgradeFeature_4">Trade Signals</string>
-    <string name="Premium_UpgradeFeature_5">Favorable Swaps</string>
-    <string name="Premium_UpgradeFeature_6">Transaction Speed Tools</string>
-    <string name="Premium_UpgradeFeature_7">Duress Mode</string>
-    <string name="Premium_UpgradeFeature_8">Address Verification</string>
-    <string name="Premium_UpgradeFeature_9">Privacy Mode</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP Support</string>
+    <string name="Premium_UpgradeFeature_VipClub">VIP Club</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Token Insights</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Advanced Search</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Trade Signals</string>
+    <string name="Premium_UpgradeFeature_FavorableSwaps">Favorable Swaps</string>
+    <string name="Premium_UpgradeFeature_TxSpeedTools">Transaction Speed Tools</string>
+    <string name="Premium_UpgradeFeature_DuressMode">Duress Mode</string>
+    <string name="Premium_UpgradeFeature_AddressVerification">Address Verification</string>
+    <string name="Premium_UpgradeFeature_Tor">TOR</string>
+    <string name="Premium_UpgradeFeature_PrivacyMode">Privacy Mode</string>
 
-    <string name="Premium_UpgradeFeature_Description_1">Fast response support.</string>
-    <string name="Premium_UpgradeFeature_Description_2">Private chat with exclusive information.</string>
-    <string name="Premium_UpgradeFeature_Description_3">Full analytics and data about tokens.</string>
-    <string name="Premium_UpgradeFeature_Description_4">Signals for confident trading.</string>
-    <string name="Premium_UpgradeFeature_Description_5">Swaps with no extra fees.</string>
-    <string name="Premium_UpgradeFeature_Description_6">Speed up and cancel transactions.</string>
-    <string name="Premium_UpgradeFeature_Description_7">Hides main wallets in case of coercion.</string>
-    <string name="Premium_UpgradeFeature_Description_8">Additional address check for fraud prevention.</string>
-    <string name="Premium_UpgradeFeature_Description_9">Full disconnection from data collection.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Fast response support.</string>
+    <string name="Premium_UpgradeFeature_VipClub_Description">Private chat with exclusive information.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Full analytics and data about tokens.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Custom filters for token searches.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Signals for confident trading.</string>
+    <string name="Premium_UpgradeFeature_FavorableSwaps_Description">Swaps with no extra fees.</string>
+    <string name="Premium_UpgradeFeature_TxSpeedTools_Description">Speed up and cancel transactions.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Hides main wallets in case of coercion.</string>
+    <string name="Premium_UpgradeFeature_AddressVerification_Description">Additional address check for fraud prevention.</string>
+    <string name="Premium_UpgradeFeature_Tor_Description">Secure connection.</string>
+    <string name="Premium_UpgradeFeature_PrivacyMode_Description">Full disconnection from data collection.</string>
+
+    <string name="Premium_SubscriptionPeriod_Month">month</string>
+    <string name="Premium_SubscriptionPeriod_Year">year</string>
 
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>

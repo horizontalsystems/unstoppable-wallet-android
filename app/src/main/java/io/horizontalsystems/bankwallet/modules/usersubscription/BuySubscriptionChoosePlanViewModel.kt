@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import android.app.Activity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.subscriptions.core.BasePlan
@@ -10,19 +8,11 @@ import io.horizontalsystems.subscriptions.core.HSPurchase
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
-class BuySubscriptionChoosePlanViewModel(private val subscriptionId: String) : ViewModelUiState<BuySubscriptionChoosePlanUiState>() {
+class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoosePlanUiState>() {
     private var basePlans: List<BasePlan> = listOf()
     private var purchaseInProgress = false
     private var purchase: HSPurchase? = null
     private var error: Throwable? = null
-
-    init {
-        viewModelScope.launch {
-            basePlans = UserSubscriptionManager.getBasePlans(subscriptionId)
-
-            emitState()
-        }
-    }
 
     override fun createState() = BuySubscriptionChoosePlanUiState(
         basePlans = basePlans,
@@ -31,7 +21,19 @@ class BuySubscriptionChoosePlanViewModel(private val subscriptionId: String) : V
         purchase = purchase
     )
 
-    fun launchPurchaseFlow(planId: String, activity: Activity) {
+    fun getBasePlans(subscriptionId: String) {
+        viewModelScope.launch {
+            try {
+                basePlans = UserSubscriptionManager.getBasePlans(subscriptionId)
+                emitState()
+            } catch (e: Throwable) {
+                error = e
+                emitState()
+            }
+        }
+    }
+
+    fun launchPurchaseFlow(subscriptionId: String, planId: String, activity: Activity) {
         purchaseInProgress = true
         error = null
         emitState()
@@ -51,12 +53,6 @@ class BuySubscriptionChoosePlanViewModel(private val subscriptionId: String) : V
         }
     }
 
-    class Factory(private val subscriptionId: String) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return BuySubscriptionChoosePlanViewModel(subscriptionId) as T
-        }
-    }
 }
 
 data class BuySubscriptionChoosePlanUiState(

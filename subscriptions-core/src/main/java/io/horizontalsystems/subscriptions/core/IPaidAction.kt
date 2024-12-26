@@ -6,4 +6,34 @@ import kotlinx.parcelize.Parcelize
 interface IPaidAction : Parcelable
 
 @Parcelize
-object EnableWatchlistSignals : IPaidAction
+object TokenInsights : IPaidAction
+
+@Parcelize
+object AdvancedSearch : IPaidAction
+
+@Parcelize
+object TradeSignals : IPaidAction
+
+@Parcelize
+object FavorableSwaps : IPaidAction
+
+@Parcelize
+object TransactionSpeedTools : IPaidAction
+
+@Parcelize
+object DuressMode : IPaidAction
+
+@Parcelize
+object AddressVerification : IPaidAction
+
+@Parcelize
+object Tor : IPaidAction
+
+@Parcelize
+object PrivacyMode : IPaidAction
+
+@Parcelize
+object VIPSupport : IPaidAction
+
+@Parcelize
+object VIPClub : IPaidAction

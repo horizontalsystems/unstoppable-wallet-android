@@ -37,7 +37,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.sectionItemBorder
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_leah
 import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
-import io.horizontalsystems.subscriptions.core.EnableWatchlistSignals
+import io.horizontalsystems.subscriptions.core.TradeSignals
 import kotlinx.parcelize.Parcelize
 
 class MarketSignalsFragment : BaseComposeFragment() {
@@ -130,7 +130,7 @@ fun MarketSignalsScreen(navController: NavController) {
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Market_Signal_TurnOn),
                     onClick = {
-                        navController.paidAction(EnableWatchlistSignals) {
+                        navController.paidAction(TradeSignals) {
                             navController.setNavigationResultX(MarketSignalsFragment.Result(true))
                             navController.popBackStack()
                         }

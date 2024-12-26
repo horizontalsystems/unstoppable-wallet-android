@@ -1,33 +1,25 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription
 
 import android.os.Parcelable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import io.horizontalsystems.bankwallet.R
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.setNavigationResultX
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
-import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefault
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.core.composablePopup
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumPlanType
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.PremiumSubscribedScreen
+import io.horizontalsystems.bankwallet.modules.usersubscription.ui.SelectSubscriptionScreen
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
 
 class BuySubscriptionFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        withInput<Input>(navController) { input ->
-            BuySubscriptionScreen(navController, input)
-        }
+        SubscriptionNavHost(onClose = { navController.popBackStack() })
     }
 
     @Parcelize
@@ -38,46 +30,37 @@ class BuySubscriptionFragment : BaseComposeFragment() {
 }
 
 @Composable
-private fun BuySubscriptionScreen(
-    navController: NavController,
-    input: BuySubscriptionFragment.Input,
+fun SubscriptionNavHost(
+    onClose: () -> Unit
 ) {
-    val viewModel = viewModel<BuySubscriptionViewModel> {
-        BuySubscriptionViewModel(input.action)
-    }
-
-    val uiState = viewModel.uiState
-
-    val subscriptions = uiState.subscriptions
-
-    Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
-        topBar = {
-            AppBar(
-                title = "Subscriptions",
-                navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                },
+    val navHostController = rememberNavController()
+    NavHost(
+        navController = navHostController,
+        startDestination = "select_subscription",
+    ) {
+        composable("select_subscription") {
+            SelectSubscriptionScreen(
+                navHostController,
+                onCloseClick = onClose
             )
         }
-    ) {
-        Column(modifier = Modifier.padding(it)) {
-            subscriptions.forEach { subscription ->
-                ButtonPrimaryDefault(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = subscription.name,
-                    onClick = {
-                        navController.slideFromRightForResult<BuySubscriptionChoosePlanFragment.Result>(
-                            R.id.buySubscriptionChoosePlanFragment,
-                            BuySubscriptionChoosePlanFragment.Input(subscription.id)
-                        ) {
-                            navController.setNavigationResultX(BuySubscriptionFragment.Result())
-                            navController.popBackStack()
-                        }
-                    }
-                )
-                VSpacer(height = 12.dp)
-            }
+        composablePopup(
+            "premium_subscribed_page?type={type}",
+            arguments = listOf(
+                navArgument("type") {
+                    type = NavType.StringType
+                    defaultValue = null
+                    nullable = true
+                },
+            )
+        ) { navBackStackEntry ->
+            val type =
+                navBackStackEntry.arguments?.getString("type")
+                    ?: PremiumPlanType.ProPlan.name
+            PremiumSubscribedScreen(
+                type = PremiumPlanType.valueOf(type),
+                onCloseClick = onClose
+            )
         }
     }
 }
