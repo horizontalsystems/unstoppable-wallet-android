@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
@@ -60,6 +61,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUnivers
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import kotlinx.coroutines.launch
 import io.horizontalsystems.bankwallet.modules.market.filters.PriceChange as FilterPriceChange
 
@@ -119,6 +121,7 @@ private fun AdvancedSearchScreen(
                     .verticalScroll(rememberScrollState())
             ) {
                 AdvancedSearchContent(
+                    navController = navController,
                     viewModel = viewModel,
                     onFilterByBlockchainsClick = {
                         navController.slideFromRight(R.id.blockchainsSelectorFragment)
@@ -280,6 +283,7 @@ private fun BottomSheetContent(
 
 @Composable
 fun AdvancedSearchContent(
+    navController: NavController,
     viewModel: MarketFiltersViewModel,
     onFilterByBlockchainsClick: () -> Unit,
     showBottomSheet: (MarketFiltersModule.FilterDropdown) -> Unit,
@@ -316,7 +320,11 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_PriceChange,
             value = uiState.priceChange.title,
             valueColor = uiState.priceChange.item?.color ?: TextColor.Grey,
-            onDropdownClick = { showBottomSheet(PriceChange) }
+            onDropdownClick = {
+                navController.paidAction(AdvancedSearch) {
+                    showBottomSheet(PriceChange)
+                }
+            }
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PricePeriod,
