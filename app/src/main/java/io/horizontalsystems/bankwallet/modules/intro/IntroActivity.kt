@@ -8,11 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,12 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,6 +34,7 @@ import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
+import io.horizontalsystems.bankwallet.ui.compose.components.SliderIndicator
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 import kotlinx.coroutines.launch
@@ -106,7 +101,10 @@ private fun StaticContent(
         Spacer(Modifier.weight(2f))
         Spacer(Modifier.height(326.dp))
         Spacer(Modifier.weight(1f))
-        SliderIndicator(viewModel.slides, pagerState.currentPage)
+        SliderIndicator(
+            total = pageCount,
+            current = pagerState.currentPage
+        )
         Spacer(Modifier.weight(1f))
         //Text
         Column(
@@ -156,29 +154,6 @@ private fun StaticContent(
             })
         Spacer(Modifier.height(60.dp))
     }
-}
-
-@Composable
-private fun SliderIndicator(slides: List<IntroModule.IntroSliderData>, currentPage: Int) {
-    Row(
-        modifier = Modifier.height(30.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        slides.forEachIndexed { index, _ ->
-            SliderCell(index == currentPage)
-        }
-    }
-}
-
-@Composable
-private fun SliderCell(highlighted: Boolean) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(2.dp))
-            .background(if (highlighted) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20)
-            .size(width = 20.dp, height = 4.dp),
-    )
 }
 
 @Composable
