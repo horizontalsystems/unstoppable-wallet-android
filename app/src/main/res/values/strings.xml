@@ -925,6 +925,10 @@
     <string name="Premium_UpgradeFeature_Tor_BigDescription">Secure connection.</string>
     <string name="Premium_UpgradeFeature_PrivacyMode_BigDescription">Full disconnection from data collection.</string>
 
+    <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
+    <string name="Premium_ApprovedBy">Approved and Audited By:</string>
+    <string name="Premium_WhatUsersSay">What users are saying:</string>
+
     <string name="Premium_SubscriptionPeriod_Month">month</string>
     <string name="Premium_SubscriptionPeriod_Year">year</string>
 

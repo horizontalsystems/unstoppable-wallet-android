@@ -22,9 +22,17 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -43,6 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionChoosePlanViewModel
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
@@ -59,6 +68,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.SecondaryButtonDefaults.buttonColors
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
@@ -66,6 +76,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.subscriptions.core.IPaidAction
+import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.VIPClub
 import io.horizontalsystems.subscriptions.core.VIPSupport
 
@@ -399,4 +410,127 @@ fun ColoredTextSecondaryButton(
             )
         },
     )
+}
+
+@Composable
+fun SubscriptionTabs(
+    subscriptions: List<Subscription>,
+    selectedTabIndex: MutableState<Int>,
+    modifier: Modifier,
+    onTabSelected: (Int) -> Unit = {}
+) {
+    if (subscriptions.isNotEmpty()) {
+        TabRow(
+            selectedTabIndex = selectedTabIndex.value,
+            modifier = modifier,
+            backgroundColor = ComposeAppTheme.colors.transparent, // Dark background
+            contentColor = Color(0xFFEDD716),
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    Modifier
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex.value])
+                        .height(0.dp), // No indicator line
+                    color = Color.Transparent
+                )
+            }
+        ) {
+            subscriptions.forEachIndexed { index, tab ->
+                Tab(
+                    selected = selectedTabIndex.value == index,
+                    onClick = {
+                        selectedTabIndex.value = index
+                        onTabSelected(index)
+                    },
+                    modifier = Modifier.background(
+                        brush =
+                        if (selectedTabIndex.value == index) yellowGradient else steelBrush,
+                    ),
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .height(44.dp)
+                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(if (index == 0) R.drawable.prem_star_yellow_16 else R.drawable.prem_crown_yellow_16),
+                            contentDescription = null,
+                            tint = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = tab.name,
+                            color = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
+                            style = ComposeAppTheme.typography.captionSB
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InfoBottomSheet(
+    icon: Int,
+    title: String,
+    description: String,
+    hideBottomSheet: () -> Unit,
+    bottomSheetState: SheetState
+) {
+    ModalBottomSheet(
+        onDismissRequest = hideBottomSheet,
+        sheetState = bottomSheetState,
+        containerColor = ComposeAppTheme.colors.transparent
+    ) {
+        BottomSheetHeader(
+            iconPainter = painterResource(icon),
+            title = title,
+            titleColor = ComposeAppTheme.colors.jacob,
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+            onCloseClick = hideBottomSheet
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 12.dp, horizontal = 32.dp)
+                    .fillMaxWidth()
+            ) {
+                body_bran(
+                    text = description,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                VSpacer(52.dp)
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SubscriptionBottomSheet(
+    modalBottomSheetState: SheetState,
+    subscriptions: List<Subscription>,
+    selectedTabIndex: MutableState<Int>,
+    navController: NavController,
+    hideBottomSheet: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = hideBottomSheet,
+        sheetState = modalBottomSheetState,
+        containerColor = ComposeAppTheme.colors.transparent
+    ) {
+        if (subscriptions.isNotEmpty()) {
+            SelectSubscriptionBottomSheet(
+                subscriptionId = subscriptions[selectedTabIndex.value].id,
+                type = PremiumPlanType.entries[selectedTabIndex.value],
+                onDismiss = hideBottomSheet,
+                onSubscribeClick = { type ->
+                    hideBottomSheet()
+                    navController.navigate("premium_subscribed_page?type=${type.name}")
+                }
+            )
+        }
+    }
 }
