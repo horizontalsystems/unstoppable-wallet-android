@@ -218,14 +218,18 @@ fun SubscriptionOption(
 }
 
 @Composable
-fun PlanItems(items: List<IPaidAction>) {
+fun PlanItems(
+    items: List<IPaidAction>,
+    onItemClick: (IPaidAction) -> Unit
+) {
     Column {
         items.forEachIndexed { index, item ->
             PremiumFeatureItem(
                 icon = item.iconRes,
                 title = item.titleStringRes,
                 subtitle = item.descriptionStringRes,
-                tint = if (item is VIPClub || item is VIPSupport) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah
+                tint = if (item is VIPClub || item is VIPSupport) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah,
+                click = { onItemClick(item) }
             )
             if (index < items.size - 1) {
                 Divider(color = ComposeAppTheme.colors.steel20)
@@ -246,6 +250,7 @@ fun PremiumFeatureItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { click() }
             .background(ComposeAppTheme.colors.steel10)
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {

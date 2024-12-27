@@ -51,6 +51,22 @@ object BuySubscriptionModel {
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
 
+    val IPaidAction.bigDescriptionStringRes: Int
+        get() = when (this) {
+            TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights_BigDescription
+            AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_BigDescription
+            TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_BigDescription
+            FavorableSwaps -> R.string.Premium_UpgradeFeature_FavorableSwaps_BigDescription
+            TransactionSpeedTools -> R.string.Premium_UpgradeFeature_TxSpeedTools_BigDescription
+            DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_BigDescription
+            AddressVerification -> R.string.Premium_UpgradeFeature_AddressVerification_BigDescription
+            Tor -> R.string.Premium_UpgradeFeature_Tor_BigDescription
+            PrivacyMode -> R.string.Premium_UpgradeFeature_PrivacyMode_BigDescription
+            VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_BigDescription
+            VIPClub -> R.string.Premium_UpgradeFeature_VipClub_BigDescription
+            else -> throw IllegalArgumentException("Unknown IPaidAction")
+        }
+
     val IPaidAction.iconRes: Int
         get() = when (this) {
             TokenInsights -> R.drawable.prem_portfolio_24
