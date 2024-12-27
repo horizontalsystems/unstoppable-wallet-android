@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,11 +48,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.bigDescriptionStringRes
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.iconRes
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.Subscription
 import kotlinx.coroutines.launch
 
@@ -70,11 +77,15 @@ fun SelectSubscriptionScreen(
 
     val coroutineScope = rememberCoroutineScope()
     val selectedTabIndex = remember { mutableStateOf(0) }
-    val modalBottomSheetState =
+    val plansModalBottomSheetState =
         androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
+    val infoModalBottomSheetState =
+        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isPlanSelectBottomSheetVisible by remember { mutableStateOf(false) }
+    var isInfoBottomSheetVisible by remember { mutableStateOf(false) }
     val scrollScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = selectedTabIndex.value) { 2 }
+    var infoBottomSheetAction: IPaidAction? = null
 
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -125,7 +136,16 @@ fun SelectSubscriptionScreen(
                                 state = pagerState,
                                 userScrollEnabled = false
                             ) { page ->
-                                PlanItems(subscriptions[page].actions)
+                                PlanItems(
+                                    items = subscriptions[page].actions,
+                                    onItemClick = { action ->
+                                        infoBottomSheetAction = action
+                                        coroutineScope.launch {
+                                            isInfoBottomSheetVisible = true
+                                            infoModalBottomSheetState.show()
+                                        }
+                                    }
+                                )
                             }
                             VSpacer(32.dp)
                         }
@@ -142,8 +162,8 @@ fun SelectSubscriptionScreen(
                                 brush = yellowGradient,
                                 onClick = {
                                     coroutineScope.launch {
-                                        isBottomSheetVisible = true
-                                        modalBottomSheetState.show()
+                                        isPlanSelectBottomSheetVisible = true
+                                        plansModalBottomSheetState.show()
                                     }
                                 },
                             )
@@ -159,26 +179,78 @@ fun SelectSubscriptionScreen(
                     }
                 }
             }
-            if (isBottomSheetVisible) {
+            if (isPlanSelectBottomSheetVisible) {
                 SubscriptionBottomSheet(
-                    modalBottomSheetState = modalBottomSheetState,
+                    modalBottomSheetState = plansModalBottomSheetState,
                     subscriptions = subscriptions,
                     selectedTabIndex = selectedTabIndex,
                     navController = navController,
                     hideBottomSheet = {
                         coroutineScope.launch {
-                            modalBottomSheetState.hide()
+                            plansModalBottomSheetState.hide()
                         }
-                        isBottomSheetVisible = false
+                        isPlanSelectBottomSheetVisible = false
                     }
                 )
+            }
+            if (isInfoBottomSheetVisible) {
+                infoBottomSheetAction?.let {
+                    InfoBottomSheet(
+                        icon = it.iconRes,
+                        title = stringResource(it.titleStringRes),
+                        description = stringResource(it.bigDescriptionStringRes),
+                        hideBottomSheet = {
+                            coroutineScope.launch {
+                                infoModalBottomSheetState.hide()
+                            }
+                            infoBottomSheetAction = null
+                            isInfoBottomSheetVisible = false
+                        }
+                    )
+                }
             }
         }
     }
 }
 
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InfoBottomSheet(
+    icon: Int,
+    title: String,
+    description: String,
+    hideBottomSheet: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = hideBottomSheet,
+        sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        containerColor = ComposeAppTheme.colors.transparent
+    ) {
+        BottomSheetHeader(
+            iconPainter = painterResource(icon),
+            title = title,
+            titleColor = ComposeAppTheme.colors.jacob,
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+            onCloseClick = hideBottomSheet
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 12.dp, horizontal = 32.dp)
+                    .fillMaxWidth()
+            ) {
+                body_bran(
+                    text = description,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                VSpacer(52.dp)
+            }
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 private fun SubscriptionBottomSheet(
     modalBottomSheetState: SheetState,
     subscriptions: List<Subscription>,
