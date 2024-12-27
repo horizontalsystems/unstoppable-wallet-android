@@ -1,33 +1,22 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription.ui
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.TabRowDefaults
-import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,8 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -55,11 +42,10 @@ import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionV
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.RadialBackground
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
-import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.subscriptions.core.IPaidAction
-import io.horizontalsystems.subscriptions.core.Subscription
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,12 +98,12 @@ fun SelectSubscriptionScreen(
                 VSpacer(24.dp)
                 Column(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(12.dp)),
+                        .padding(horizontal = 16.dp),
                 ) {
                     SubscriptionTabs(
                         subscriptions = subscriptions,
                         selectedTabIndex = selectedTabIndex,
+                        modifier = Modifier.clip(RoundedCornerShape(12.dp, 12.dp, 0.dp, 0.dp)),
                         onTabSelected = {
                             scrollScope.launch {
                                 pagerState.scrollToPage(it)
@@ -134,7 +120,8 @@ fun SelectSubscriptionScreen(
                         if (subscriptions.isNotEmpty()) {
                             HorizontalPager(
                                 state = pagerState,
-                                userScrollEnabled = false
+                                userScrollEnabled = false,
+                                modifier = Modifier.clip(RoundedCornerShape(0.dp, 0.dp, 12.dp, 12.dp))
                             ) { page ->
                                 PlanItems(
                                     items = subscriptions[page].actions,
@@ -147,6 +134,59 @@ fun SelectSubscriptionScreen(
                                     }
                                 )
                             }
+                            VSpacer(32.dp)
+                            headline2_leah(
+                                text = stringResource(R.string.Premium_HighlyRatedSecurity),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 32.dp)
+                            )
+                            VSpacer(24.dp)
+                            Image(
+                                painter = painterResource(id = R.drawable.security_rate_image),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .height(112.dp)
+                                    .fillMaxWidth()
+                            )
+                            subhead2_grey(
+                                text = stringResource(R.string.Premium_ApprovedBy),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 32.dp, vertical = 16.dp),
+                                textAlign = TextAlign.Center
+                            )
+                            Row(
+                                modifier = Modifier.align(Alignment.CenterHorizontally),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.bitcoin_logo),
+                                    contentDescription = null,
+                                    tint = ComposeAppTheme.colors.leah
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.wallet_scrutiny_logo),
+                                    contentDescription = null,
+                                    tint = ComposeAppTheme.colors.leah
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.certik_logo),
+                                    contentDescription = null,
+                                    tint = ComposeAppTheme.colors.leah
+                                )
+                            }
+                            VSpacer(24.dp)
+                            subhead2_grey(
+                                text = stringResource(R.string.Premium_WhatUsersSay),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 32.dp),
+                                textAlign = TextAlign.Center
+                            )
+                            VSpacer(16.dp)
+                            ReviewSliderBlock()
                             VSpacer(32.dp)
                         }
                     }
@@ -199,6 +239,7 @@ fun SelectSubscriptionScreen(
                         icon = it.iconRes,
                         title = stringResource(it.titleStringRes),
                         description = stringResource(it.bigDescriptionStringRes),
+                        bottomSheetState = infoModalBottomSheetState,
                         hideBottomSheet = {
                             coroutineScope.launch {
                                 infoModalBottomSheetState.hide()
@@ -207,127 +248,6 @@ fun SelectSubscriptionScreen(
                             isInfoBottomSheetVisible = false
                         }
                     )
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun InfoBottomSheet(
-    icon: Int,
-    title: String,
-    description: String,
-    hideBottomSheet: () -> Unit
-) {
-    ModalBottomSheet(
-        onDismissRequest = hideBottomSheet,
-        sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = ComposeAppTheme.colors.transparent
-    ) {
-        BottomSheetHeader(
-            iconPainter = painterResource(icon),
-            title = title,
-            titleColor = ComposeAppTheme.colors.jacob,
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-            onCloseClick = hideBottomSheet
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 32.dp)
-                    .fillMaxWidth()
-            ) {
-                body_bran(
-                    text = description,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                VSpacer(52.dp)
-            }
-        }
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SubscriptionBottomSheet(
-    modalBottomSheetState: SheetState,
-    subscriptions: List<Subscription>,
-    selectedTabIndex: MutableState<Int>,
-    navController: NavController,
-    hideBottomSheet: () -> Unit
-) {
-    ModalBottomSheet(
-        onDismissRequest = hideBottomSheet,
-        sheetState = modalBottomSheetState,
-        containerColor = ComposeAppTheme.colors.transparent
-    ) {
-        if (subscriptions.isNotEmpty()) {
-            SelectSubscriptionBottomSheet(
-                subscriptionId = subscriptions[selectedTabIndex.value].id,
-                type = PremiumPlanType.entries[selectedTabIndex.value],
-                onDismiss = hideBottomSheet,
-                onSubscribeClick = { type ->
-                    hideBottomSheet()
-                    navController.navigate("premium_subscribed_page?type=${type.name}")
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun SubscriptionTabs(
-    subscriptions: List<Subscription>,
-    selectedTabIndex: MutableState<Int>,
-    onTabSelected: (Int) -> Unit = {}
-) {
-    if (subscriptions.isNotEmpty()) {
-        TabRow(
-            selectedTabIndex = selectedTabIndex.value,
-            backgroundColor = ComposeAppTheme.colors.transparent, // Dark background
-            contentColor = Color(0xFFEDD716),
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    Modifier
-                        .tabIndicatorOffset(tabPositions[selectedTabIndex.value])
-                        .height(0.dp), // No indicator line
-                    color = Color.Transparent
-                )
-            }
-        ) {
-            subscriptions.forEachIndexed { index, tab ->
-                Tab(
-                    selected = selectedTabIndex.value == index,
-                    onClick = {
-                        selectedTabIndex.value = index
-                        onTabSelected(index)
-                    },
-                    modifier = Modifier.background(
-                        brush =
-                        if (selectedTabIndex.value == index) yellowGradient else steelBrush,
-                    ),
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .height(44.dp)
-                            .padding(vertical = 8.dp, horizontal = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(if (index == 0) R.drawable.prem_star_yellow_16 else R.drawable.prem_crown_yellow_16),
-                            contentDescription = null,
-                            tint = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = tab.name,
-                            color = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
-                            style = ComposeAppTheme.typography.captionSB
-                        )
-                    }
                 }
             }
         }
