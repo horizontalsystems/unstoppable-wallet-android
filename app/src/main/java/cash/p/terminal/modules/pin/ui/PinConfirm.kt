@@ -10,9 +10,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.modules.pin.unlock.PinConfirmViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HsBackButton
 
 @Composable
 fun PinConfirm(
@@ -27,7 +26,7 @@ fun PinConfirm(
     }
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Unlock_Title),

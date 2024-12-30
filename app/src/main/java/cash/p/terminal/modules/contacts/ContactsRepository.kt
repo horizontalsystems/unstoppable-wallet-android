@@ -4,11 +4,11 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import cash.p.terminal.core.App
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.contacts.ContactsModule.ContactValidationException
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

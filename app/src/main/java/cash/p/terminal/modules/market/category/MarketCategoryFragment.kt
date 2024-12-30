@@ -18,28 +18,28 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.chart.ChartViewModel
-import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Chart
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.chartview.chart.ChartViewModel
+import cash.p.terminal.ui_compose.CoinFragmentInput
+import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.topcoins.SelectorDialogState
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
 import cash.p.terminal.ui.compose.components.CoinList
 import cash.p.terminal.ui.compose.components.DescriptionCard
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.SortMenu
 import cash.p.terminal.ui.compose.components.TopCloseButton
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class MarketCategoryFragment : BaseComposeFragment() {
 
@@ -58,7 +58,7 @@ class MarketCategoryFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.Input(coinUid)
+        val arguments = CoinFragmentInput(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
 
@@ -118,7 +118,10 @@ fun CategoryScreen(
                                             }
                                         }
                                         item {
-                                            Chart(chartViewModel = chartViewModel)
+                                            Chart(
+                                                uiState = chartViewModel.uiState,
+                                                getSelectedPointCallback = chartViewModel::getSelectedPoint,
+                                                onSelectChartInterval = chartViewModel::onSelectChartInterval)
                                         }
                                         menu?.let {
                                             stickyHeader {

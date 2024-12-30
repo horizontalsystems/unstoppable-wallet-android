@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.core.slideFromRight
@@ -40,18 +40,17 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class ManageWalletsFragment : BaseComposeFragment() {
 
@@ -166,7 +165,7 @@ private fun ManageWalletsScreen(
 
 @Composable
 private fun CoinCell(
-    viewItem: CoinViewItem<Token>,
+    viewItem: CoinViewItem<cash.p.terminal.wallet.Token>,
     onItemClick: () -> Unit,
     onInfoClick: () -> Unit
 ) {

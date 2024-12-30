@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.entities.AccountType
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupViewItemFactory
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.OtherBackupViewItem
@@ -34,7 +34,7 @@ object RestoreLocalModule {
         val passphraseState: DataState.Error?,
         val showButtonSpinner: Boolean,
         val parseError: Exception?,
-        val showSelectCoins: AccountType?,
+        val showSelectCoins: cash.p.terminal.wallet.AccountType?,
         val manualBackup: Boolean,
         val restored: Boolean,
         var walletBackupViewItems: List<WalletBackupViewItem>,

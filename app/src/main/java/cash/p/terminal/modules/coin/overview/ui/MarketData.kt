@@ -11,11 +11,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.modules.coin.CoinDataItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.Badge
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
 
 @Preview
 @Composable
@@ -26,7 +25,7 @@ fun MarketDataPreview() {
         CoinDataItem(title = "Inception Date", value = "Jul 23, 2012"),
     )
 
-    ComposeAppTheme(darkTheme = false) {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme(darkTheme = false) {
         MarketData(marketData)
     }
 }

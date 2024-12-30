@@ -3,12 +3,11 @@ package cash.p.terminal.modules.market.topplatforms
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
+import io.horizontalsystems.core.CurrencyManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -84,7 +83,7 @@ class TopPlatformsViewModel(
         return topPlatformItems.map { item ->
             TopPlatformViewItem(
                 platform = item.platform,
-                subtitle = Translator.getString(
+                subtitle = cash.p.terminal.strings.helpers.Translator.getString(
                     R.string.MarketTopPlatforms_Protocols,
                     item.protocols
                 ),

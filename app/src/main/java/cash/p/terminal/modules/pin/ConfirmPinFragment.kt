@@ -3,7 +3,7 @@ package cash.p.terminal.modules.pin
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.pin.ui.PinConfirm
 import kotlinx.parcelize.Parcelize

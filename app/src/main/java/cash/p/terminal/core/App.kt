@@ -7,23 +7,11 @@ import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceManager
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.decode.GifDecoder
-import coil.decode.ImageDecoderDecoder
-import coil.decode.SvgDecoder
-import com.walletconnect.android.Core
-import com.walletconnect.android.CoreClient
-import com.walletconnect.android.relay.ConnectionType
-import com.walletconnect.web3.wallet.client.Wallet
-import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.BuildConfig
+import cash.p.terminal.core.di.appModule
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
-import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import cash.p.terminal.core.managers.AccountCleaner
-import cash.p.terminal.core.managers.AccountManager
 import cash.p.terminal.core.managers.AdapterManager
 import cash.p.terminal.core.managers.AppVersionManager
 import cash.p.terminal.core.managers.BackupManager
@@ -32,9 +20,7 @@ import cash.p.terminal.core.managers.BaseTokenManager
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.CexAssetManager
-import cash.p.terminal.core.managers.CoinManager
 import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
@@ -42,21 +28,17 @@ import cash.p.terminal.core.managers.KeyStoreCleaner
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.LocalStorageManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.managers.NetworkManager
 import cash.p.terminal.core.managers.NftAdapterManager
 import cash.p.terminal.core.managers.NftMetadataManager
 import cash.p.terminal.core.managers.NftMetadataSyncer
-import cash.p.terminal.core.managers.NumberFormatter
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.managers.ReleaseNotesManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
-import cash.p.terminal.core.managers.SolanaWalletManager
 import cash.p.terminal.core.managers.SpamManager
-import cash.p.terminal.core.managers.SubscriptionManager
 import cash.p.terminal.core.managers.SystemInfoManager
 import cash.p.terminal.core.managers.TermsManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
@@ -69,23 +51,17 @@ import cash.p.terminal.core.managers.TronAccountManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.core.managers.WalletActivator
-import cash.p.terminal.core.managers.WalletManager
-import cash.p.terminal.core.managers.WalletStorage
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.managers.ZcashBirthdayProvider
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.providers.CexProviderManager
-import cash.p.terminal.core.providers.EvmLabelProvider
 import cash.p.terminal.core.providers.FeeRateProvider
 import cash.p.terminal.core.providers.FeeTokenProvider
 import cash.p.terminal.core.stats.StatsManager
-import cash.p.terminal.core.storage.AccountsStorage
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
-import cash.p.terminal.core.storage.EnabledWalletsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.core.storage.NftStorage
-import cash.p.terminal.core.storage.RestoreSettingsStorage
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import cash.p.terminal.modules.chart.ChartIndicatorManager
@@ -106,10 +82,30 @@ import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.WCWalletRequestHandler
 import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.IAccountCleaner
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.IAccountsStorage
+import cash.p.terminal.wallet.IAdapterManager
+import io.horizontalsystems.core.IAppNumberFormatter
+import cash.p.terminal.wallet.IEnabledWalletStorage
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.IWalletStorage
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.SubscriptionManager
 import cash.p.terminal.widgets.MarketWidgetManager
 import cash.p.terminal.widgets.MarketWidgetRepository
 import cash.p.terminal.widgets.MarketWidgetWorker
-import io.horizontalsystems.core.BackgroundManager
+import coil.ImageLoader
+import coil.ImageLoaderFactory
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
+import coil.decode.SvgDecoder
+import com.walletconnect.android.Core
+import com.walletconnect.android.CoreClient
+import com.walletconnect.android.relay.ConnectionType
+import com.walletconnect.web3.wallet.client.Wallet
+import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.ICoreApp
 import io.horizontalsystems.core.security.EncryptionManager
@@ -120,6 +116,10 @@ import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.get
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.java.KoinJavaComponent.inject
 import java.security.MessageDigest
 import java.util.logging.Level
 import java.util.logging.Logger
@@ -129,70 +129,72 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     companion object : ICoreApp by CoreApp {
 
-        lateinit var preferences: SharedPreferences
+        val preferences: SharedPreferences by inject(SharedPreferences::class.java)
         lateinit var feeRateProvider: FeeRateProvider
         lateinit var localStorage: ILocalStorage
         lateinit var marketStorage: IMarketStorage
         lateinit var torKitManager: ITorManager
-        lateinit var restoreSettingsStorage: IRestoreSettingsStorage
-        lateinit var currencyManager: CurrencyManager
-        lateinit var languageManager: LanguageManager
+        val restoreSettingsStorage: IRestoreSettingsStorage by inject(IRestoreSettingsStorage::class.java)
+        val currencyManager: CurrencyManager by inject(CurrencyManager::class.java)
+        val languageManager: LanguageManager by inject(LanguageManager::class.java)
 
-        lateinit var blockchainSettingsStorage: BlockchainSettingsStorage
-        lateinit var evmSyncSourceStorage: EvmSyncSourceStorage
-        lateinit var btcBlockchainManager: BtcBlockchainManager
+        val blockchainSettingsStorage: BlockchainSettingsStorage by inject(BlockchainSettingsStorage::class.java)
+        val evmSyncSourceStorage: EvmSyncSourceStorage by inject(EvmSyncSourceStorage::class.java)
+        val btcBlockchainManager: BtcBlockchainManager by inject(BtcBlockchainManager::class.java)
         lateinit var wordsManager: WordsManager
         lateinit var networkManager: INetworkManager
-        lateinit var appConfigProvider: AppConfigProvider
-        lateinit var adapterManager: IAdapterManager
+        val appConfigProvider: AppConfigProvider by inject(AppConfigProvider::class.java)
+        val adapterManager: IAdapterManager by inject(AdapterManager::class.java)
+
+        //        val adapterManager: IAdapterManager by inject(IAdapterManager::class.java)
         lateinit var transactionAdapterManager: TransactionAdapterManager
-        lateinit var walletManager: IWalletManager
+        val walletManager: IWalletManager by inject(IWalletManager::class.java)
         lateinit var walletActivator: WalletActivator
-        lateinit var tokenAutoEnableManager: TokenAutoEnableManager
-        lateinit var walletStorage: IWalletStorage
-        lateinit var accountManager: IAccountManager
+        val tokenAutoEnableManager: TokenAutoEnableManager by inject(TokenAutoEnableManager::class.java)
+        val walletStorage: IWalletStorage by inject(IWalletStorage::class.java)
+        val accountManager: IAccountManager by inject(IAccountManager::class.java)
         lateinit var userManager: UserManager
         lateinit var accountFactory: IAccountFactory
         lateinit var backupManager: IBackupManager
         lateinit var proFeatureAuthorizationManager: ProFeaturesAuthorizationManager
-        lateinit var zcashBirthdayProvider: ZcashBirthdayProvider
+        val zcashBirthdayProvider: ZcashBirthdayProvider by inject(ZcashBirthdayProvider::class.java)
 
         lateinit var connectivityManager: ConnectivityManager
-        lateinit var appDatabase: AppDatabase
-        lateinit var accountsStorage: IAccountsStorage
-        lateinit var enabledWalletsStorage: IEnabledWalletStorage
-        lateinit var binanceKitManager: BinanceKitManager
-        lateinit var solanaKitManager: SolanaKitManager
-        lateinit var tronKitManager: TronKitManager
-        lateinit var tonKitManager: TonKitManager
-        lateinit var numberFormatter: IAppNumberFormatter
+        val appDatabase: AppDatabase by inject(AppDatabase::class.java)
+        val accountsStorage: IAccountsStorage by inject(IAccountsStorage::class.java)
+        val enabledWalletsStorage: IEnabledWalletStorage by inject(IEnabledWalletStorage::class.java)
+        val binanceKitManager: BinanceKitManager by inject(BinanceKitManager::class.java)
+        val solanaKitManager: SolanaKitManager by inject(SolanaKitManager::class.java)
+        val tronKitManager: TronKitManager by inject(TronKitManager::class.java)
+        val tonKitManager: TonKitManager by inject(TonKitManager::class.java)
+        val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
         lateinit var feeCoinProvider: FeeTokenProvider
-        lateinit var accountCleaner: IAccountCleaner
+        val accountCleaner: IAccountCleaner by inject(AccountCleaner::class.java)
         lateinit var rateAppManager: IRateAppManager
-        lateinit var coinManager: ICoinManager
+        val coinManager: ICoinManager by inject(ICoinManager::class.java)
         lateinit var wcSessionManager: WCSessionManager
         lateinit var wcManager: WCManager
         lateinit var wcWalletRequestHandler: WCWalletRequestHandler
         lateinit var termsManager: ITermsManager
         lateinit var marketFavoritesManager: MarketFavoritesManager
-        lateinit var marketKit: MarketKitWrapper
+        val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
         lateinit var priceManager: PriceManager
         lateinit var releaseNotesManager: ReleaseNotesManager
-        lateinit var restoreSettingsManager: RestoreSettingsManager
-        lateinit var evmSyncSourceManager: EvmSyncSourceManager
-        lateinit var evmBlockchainManager: EvmBlockchainManager
-        lateinit var solanaRpcSourceManager: SolanaRpcSourceManager
+        val restoreSettingsManager: RestoreSettingsManager by inject(RestoreSettingsManager::class.java)
+        val evmSyncSourceManager: EvmSyncSourceManager by inject(EvmSyncSourceManager::class.java)
+        val evmBlockchainManager: EvmBlockchainManager by inject(EvmBlockchainManager::class.java)
+        val solanaRpcSourceManager: SolanaRpcSourceManager by inject(SolanaRpcSourceManager::class.java)
         lateinit var nftMetadataManager: NftMetadataManager
         lateinit var nftAdapterManager: NftAdapterManager
         lateinit var nftMetadataSyncer: NftMetadataSyncer
-        lateinit var evmLabelManager: EvmLabelManager
+        val evmLabelManager: EvmLabelManager by inject(EvmLabelManager::class.java)
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
         lateinit var balanceHiddenManager: BalanceHiddenManager
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
         lateinit var contactsRepository: ContactsRepository
-        lateinit var subscriptionManager: SubscriptionManager
+        val subscriptionManager: SubscriptionManager by inject(SubscriptionManager::class.java)
         lateinit var cexProviderManager: CexProviderManager
         lateinit var cexAssetManager: CexAssetManager
         lateinit var chartIndicatorManager: ChartIndicatorManager
@@ -206,6 +208,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
+        startKoin {
+            androidContext(this@App)
+            modules(appModule)
+        }
 
         if (!BuildConfig.DEBUG) {
             //Disable logging for lower levels in Release build
@@ -217,7 +223,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         }
 
         instance = this
-        preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+//        preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
         LocalStorageManager(preferences).apply {
             localStorage = this
@@ -227,58 +233,58 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             marketStorage = this
         }
 
-        val appConfig = AppConfigProvider(localStorage)
-        appConfigProvider = appConfig
+//        val appConfig = AppConfigProvider(localStorage)
+//        appConfigProvider = appConfig
 
         torKitManager = TorManager(instance, localStorage)
-        subscriptionManager = SubscriptionManager()
+//        subscriptionManager = SubscriptionManager()
 
-        marketKit = MarketKitWrapper(
+        /*marketKit = MarketKitWrapper(
             context = this,
-            hsApiBaseUrl = appConfig.marketApiBaseUrl,
-            hsApiKey = appConfig.marketApiKey,
+            hsApiBaseUrl = appConfigProvider.marketApiBaseUrl,
+            hsApiKey = appConfigProvider.marketApiKey,
             subscriptionManager = subscriptionManager
-        )
+        )*/
 
         priceManager = PriceManager(localStorage)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
-        backgroundManager = BackgroundManager(this)
+//        backgroundManager = BackgroundManager(this)
+        backgroundManager = get()
 
-        appDatabase = AppDatabase.getInstance(this)
+//        evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
+//        evmSyncSourceManager =
+//            EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
 
-        blockchainSettingsStorage = BlockchainSettingsStorage(appDatabase)
-        evmSyncSourceStorage = EvmSyncSourceStorage(appDatabase)
-        evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
+//        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
 
-        btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
+//        binanceKitManager = BinanceKitManager()
 
-        binanceKitManager = BinanceKitManager()
-
-        accountsStorage = AccountsStorage(appDatabase)
-        restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
+//        accountsStorage = AccountsStorage(appDatabase)
+//        restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
 
         AppLog.logsDao = appDatabase.logsDao()
 
-        accountCleaner = AccountCleaner()
-        accountManager = AccountManager(accountsStorage, accountCleaner)
+//        accountManager = AccountManager(accountsStorage, accountCleaner)
         userManager = UserManager(accountManager)
 
         val proFeaturesStorage = ProFeaturesStorage(appDatabase)
-        proFeatureAuthorizationManager = ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
+        proFeatureAuthorizationManager =
+            ProFeaturesAuthorizationManager(proFeaturesStorage, accountManager, appConfigProvider)
 
-        enabledWalletsStorage = EnabledWalletsStorage(appDatabase)
-        walletStorage = WalletStorage(marketKit, enabledWalletsStorage)
+//        coinManager = CoinManager(marketKit, walletManager)
 
-        walletManager = WalletManager(accountManager, walletStorage)
-        coinManager = CoinManager(marketKit, walletManager)
+//        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
+//        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
+        /*solanaKitManager = SolanaKitManager(
+            appConfigProvider,
+            solanaRpcSourceManager,
+            solanaWalletManager,
+            backgroundManager
+        )*/
 
-        solanaRpcSourceManager = SolanaRpcSourceManager(blockchainSettingsStorage, marketKit)
-        val solanaWalletManager = SolanaWalletManager(walletManager, accountManager, marketKit)
-        solanaKitManager = SolanaKitManager(appConfigProvider, solanaRpcSourceManager, solanaWalletManager, backgroundManager)
-
-        tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
-        tonKitManager = TonKitManager(backgroundManager)
+//        tronKitManager = TronKitManager(appConfigProvider, backgroundManager)
+//        tonKitManager = TonKitManager(backgroundManager)
 
         wordsManager = WordsManager(Mnemonic())
         networkManager = NetworkManager()
@@ -298,20 +304,20 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         encryptionManager = EncryptionManager(keyProvider)
 
         walletActivator = WalletActivator(walletManager, marketKit)
-        tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
+//        tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
-        val evmAccountManagerFactory = EvmAccountManagerFactory(
+        /*val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,
             marketKit,
             tokenAutoEnableManager
-        )
-        evmBlockchainManager = EvmBlockchainManager(
+        )*/
+        /*evmBlockchainManager = EvmBlockchainManager(
             backgroundManager,
             evmSyncSourceManager,
             marketKit,
             evmAccountManagerFactory,
-        )
+        )*/
 
         val tronAccountManager = TronAccountManager(
             accountManager,
@@ -322,28 +328,31 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         )
         tronAccountManager.start()
 
-        val tonAccountManager = TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
+        val tonAccountManager =
+            TonAccountManager(accountManager, walletManager, tonKitManager, tokenAutoEnableManager)
         tonAccountManager.start()
 
         systemInfoManager = SystemInfoManager(appConfigProvider)
 
-        languageManager = LanguageManager()
-        currencyManager = CurrencyManager(localStorage, appConfigProvider)
-        numberFormatter = NumberFormatter(languageManager)
+//        languageManager = LanguageManager()
+//        currencyManager = DefaultCurrencyManager(localStorage, appConfigProvider)
+//        numberFormatter = NumberFormatter(languageManager)
 
         connectivityManager = ConnectivityManager(backgroundManager)
 
-        zcashBirthdayProvider = ZcashBirthdayProvider(this)
-        restoreSettingsManager = RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
+//        zcashBirthdayProvider = ZcashBirthdayProvider(this)
+//        restoreSettingsManager =
+//            RestoreSettingsManager(restoreSettingsStorage, zcashBirthdayProvider)
 
-        evmLabelManager = EvmLabelManager(
-            EvmLabelProvider(),
-            appDatabase.evmAddressLabelDao(),
-            appDatabase.evmMethodLabelDao(),
-            appDatabase.syncerStateDao()
-        )
+        /* evmLabelManager = EvmLabelManager(
+             EvmLabelProvider(),
+             appDatabase.evmAddressLabelDao(),
+             appDatabase.evmMethodLabelDao(),
+             appDatabase.syncerStateDao()
+         )*/
 
-        val adapterFactory = AdapterFactory(
+        val adapterFactory: AdapterFactory = get()
+        /*val adapterFactory = AdapterFactory(
             context = instance,
             btcBlockchainManager = btcBlockchainManager,
             evmBlockchainManager = evmBlockchainManager,
@@ -357,8 +366,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             coinManager = coinManager,
             evmLabelManager = evmLabelManager,
             localStorage = localStorage
-        )
-        adapterManager = AdapterManager(
+        )*/
+        /*adapterManager = AdapterManager(
             walletManager,
             adapterFactory,
             btcBlockchainManager,
@@ -367,7 +376,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaKitManager,
             tronKitManager,
             tonKitManager,
-        )
+        )*/
         transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
@@ -379,7 +388,13 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             backgroundManager = backgroundManager
         )
 
-        statsManager = StatsManager(appDatabase.statsDao(), localStorage, marketKit, appConfigProvider, backgroundManager)
+        statsManager = StatsManager(
+            appDatabase.statsDao(),
+            localStorage,
+            marketKit,
+            appConfigProvider,
+            backgroundManager
+        )
 
         rateAppManager = RateAppManager(walletManager, adapterManager, localStorage)
 
@@ -389,19 +404,21 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         termsManager = TermsManager(localStorage)
 
         marketWidgetManager = MarketWidgetManager()
-        marketFavoritesManager = MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)
+        marketFavoritesManager =
+            MarketFavoritesManager(appDatabase, localStorage, marketWidgetManager)
 
         marketWidgetRepository = MarketWidgetRepository(
-            marketKit,
-            marketFavoritesManager,
-            MarketFavoritesMenuService(localStorage, marketWidgetManager),
-            TopNftCollectionsRepository(marketKit),
-            TopNftCollectionsViewItemFactory(numberFormatter),
-            TopPlatformsRepository(marketKit),
-            currencyManager
+            marketKit = marketKit,
+            favoritesManager = marketFavoritesManager,
+            favoritesMenuService = MarketFavoritesMenuService(localStorage, marketWidgetManager),
+            topNftCollectionsRepository = TopNftCollectionsRepository(marketKit),
+            topNftCollectionsViewItemFactory = TopNftCollectionsViewItemFactory(numberFormatter),
+            topPlatformsRepository = TopPlatformsRepository(marketKit),
+            currencyManager = currencyManager
         )
 
-        releaseNotesManager = ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
+        releaseNotesManager =
+            ReleaseNotesManager(systemInfoManager, localStorage, appConfigProvider)
 
         setAppTheme()
 
@@ -410,7 +427,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         nftAdapterManager = NftAdapterManager(walletManager, evmBlockchainManager)
         nftMetadataSyncer = NftMetadataSyncer(nftAdapterManager, nftMetadataManager, nftStorage)
 
-        initializeWalletConnectV2(appConfig)
+        initializeWalletConnectV2(appConfigProvider)
 
         wcSessionManager = WCSessionManager(accountManager, WCSessionStorage(appDatabase))
 
@@ -421,7 +438,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)
         cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
-        chartIndicatorManager = ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
+        chartIndicatorManager =
+            ChartIndicatorManager(appDatabase.chartIndicatorSettingsDao(), localStorage)
 
         backupProvider = BackupProvider(
             localStorage = localStorage,

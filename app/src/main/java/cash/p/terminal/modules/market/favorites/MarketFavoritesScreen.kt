@@ -21,22 +21,22 @@ import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPeriod
 import cash.p.terminal.core.stats.statSortType
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.coin.CoinFragment
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.topcoins.OptionController
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.AlertGroup
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.ButtonSecondaryYellow
 import cash.p.terminal.ui.compose.components.CoinListOrderable
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -98,7 +98,7 @@ fun MarketFavoritesScreen(
                                 stat(page = StatPage.Markets,  section = StatSection.Watchlist, event = StatEvent.RemoveFromWatchlist(uid))
                             },
                             onCoinClick = { coinUid ->
-                                val arguments = CoinFragment.Input(coinUid)
+                                val arguments = CoinFragmentInput(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
 
                                 stat(page = StatPage.Markets, section = StatSection.Watchlist, event = StatEvent.OpenCoin(coinUid))

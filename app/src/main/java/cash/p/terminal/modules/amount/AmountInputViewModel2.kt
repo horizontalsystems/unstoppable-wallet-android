@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import java.math.BigDecimal
 import java.math.RoundingMode
 

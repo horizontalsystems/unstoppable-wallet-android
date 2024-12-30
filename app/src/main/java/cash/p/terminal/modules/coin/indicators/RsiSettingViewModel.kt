@@ -1,16 +1,11 @@
 package cash.p.terminal.modules.coin.indicators
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
-import kotlinx.coroutines.launch
 
 class RsiSettingViewModel(
     private var indicatorSetting: ChartIndicatorSetting,

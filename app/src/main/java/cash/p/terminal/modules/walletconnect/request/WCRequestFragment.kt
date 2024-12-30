@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.google.gson.Gson
 import cash.p.terminal.R
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.sendevmtransaction.TitleValue
 import cash.p.terminal.modules.sendevmtransaction.ValueType
@@ -25,16 +25,16 @@ import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCEthereumT
 import cash.p.terminal.modules.walletconnect.request.sendtransaction.WCSendEthRequestScreen
 import cash.p.terminal.modules.walletconnect.request.signtransaction.WCSignEthereumTransactionRequestScreen
 import cash.p.terminal.modules.walletconnect.session.ui.BlockchainCell
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.MessageToSign
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 

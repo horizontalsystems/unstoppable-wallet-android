@@ -1,19 +1,13 @@
 package cash.p.terminal.modules.backuplocal.fullbackup
 
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IEnabledWalletStorage
+import cash.p.terminal.wallet.IEnabledWalletStorage
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.BaseTokenManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.EncryptDecryptManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
@@ -22,18 +16,13 @@ import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.BtcRestoreMode
-import cash.p.terminal.entities.EnabledWallet
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.TransactionDataSortMode
 import cash.p.terminal.modules.backuplocal.BackupLocalModule
-import cash.p.terminal.modules.balance.BalanceViewType
+import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
@@ -46,9 +35,14 @@ import cash.p.terminal.modules.settings.appearance.LaunchScreenService
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.modules.theme.ThemeService
 import cash.p.terminal.modules.theme.ThemeType
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.entities.TokenQuery
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.core.toHexString
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.security.MessageDigest
@@ -81,7 +75,7 @@ class BackupProvider(
     private val languageManager: LanguageManager,
     private val walletStorage: IEnabledWalletStorage,
     private val settingsManager: RestoreSettingsManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val accountFactory: IAccountFactory,
     private val walletManager: IWalletManager,
     private val restoreSettingsManager: RestoreSettingsManager,
@@ -125,27 +119,27 @@ class BackupProvider(
     }
 
     @Throws
-    fun accountType(backup: BackupLocalModule.WalletBackup, passphrase: String): AccountType {
+    fun accountType(backup: BackupLocalModule.WalletBackup, passphrase: String): cash.p.terminal.wallet.AccountType {
         val decrypted = decrypted(backup.crypto, passphrase)
         return BackupLocalModule.getAccountTypeFromData(backup.type, decrypted)
     }
 
-    fun restoreCexAccount(accountType: AccountType, accountName: String) {
-        val account = accountFactory.account(accountName, accountType, AccountOrigin.Restored, true, true)
+    fun restoreCexAccount(accountType: cash.p.terminal.wallet.AccountType, accountName: String) {
+        val account = accountFactory.account(accountName, accountType, cash.p.terminal.wallet.AccountOrigin.Restored, true, true)
         accountManager.save(account)
     }
 
     fun restoreSingleWalletBackup(
-        type: AccountType,
+        type: cash.p.terminal.wallet.AccountType,
         accountName: String,
         backup: BackupLocalModule.WalletBackup
     ) {
-        val account = accountFactory.account(accountName, type, AccountOrigin.Restored, backup.manualBackup, true)
+        val account = accountFactory.account(accountName, type, cash.p.terminal.wallet.AccountOrigin.Restored, backup.manualBackup, true)
         accountManager.save(account)
 
         val enabledWalletBackups = backup.enabledWallets ?: listOf()
         val enabledWallets = enabledWalletBackups.map {
-            EnabledWallet(
+            cash.p.terminal.wallet.entities.EnabledWallet(
                 tokenQueryId = it.tokenQueryId,
                 accountId = account.id,
                 coinName = it.coinName,
@@ -170,13 +164,13 @@ class BackupProvider(
     }
 
     private fun restoreWallets(walletBackupItems: List<WalletBackupItem>) {
-        val accounts = mutableListOf<Account>()
-        val enabledWallets = mutableListOf<EnabledWallet>()
+        val accounts = mutableListOf<cash.p.terminal.wallet.Account>()
+        val enabledWallets = mutableListOf<cash.p.terminal.wallet.entities.EnabledWallet>()
 
         walletBackupItems.forEach {
             val account = it.account
             val wallets = it.enabledWallets.map {
-                EnabledWallet(
+                cash.p.terminal.wallet.entities.EnabledWallet(
                     tokenQueryId = it.tokenQueryId,
                     accountId = account.id,
                     coinName = it.coinName,
@@ -347,10 +341,10 @@ class BackupProvider(
 
             val account = if (type.isWatchAccountType) {
                 accountFactory.watchAccount(name, type)
-            } else if (type is AccountType.Cex) {
-                accountFactory.account(name, type, AccountOrigin.Restored, true, true)
+            } else if (type is cash.p.terminal.wallet.AccountType.Cex) {
+                accountFactory.account(name, type, cash.p.terminal.wallet.AccountOrigin.Restored, true, true)
             } else {
-                accountFactory.account(name, type, AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
+                accountFactory.account(name, type, cash.p.terminal.wallet.AccountOrigin.Restored, backup.manualBackup, backup.fileBackup)
             }
 
             walletBackupItems.add(
@@ -378,7 +372,7 @@ class BackupProvider(
     }
 
     private fun fullBackupItems(
-        accounts: List<Account>,
+        accounts: List<cash.p.terminal.wallet.Account>,
         watchlist: List<String>,
         contacts: List<Contact>,
         customRpcsCount: Int?
@@ -415,7 +409,7 @@ class BackupProvider(
     }
 
     @Throws
-    fun createWalletBackup(account: Account, passphrase: String): String {
+    fun createWalletBackup(account: cash.p.terminal.wallet.Account, passphrase: String): String {
         val backup = walletBackup(account, passphrase)
         return gson.toJson(backup)
     }
@@ -554,7 +548,7 @@ class BackupProvider(
     }
 
     @Throws
-    private fun walletBackup(account: Account, passphrase: String): BackupLocalModule.WalletBackup {
+    private fun walletBackup(account: cash.p.terminal.wallet.Account, passphrase: String): BackupLocalModule.WalletBackup {
         val kdfParams = BackupLocalModule.kdfDefault
         val secretText = BackupLocalModule.getDataForEncryption(account.type)
         val id = getId(secretText)
@@ -602,7 +596,7 @@ class BackupProvider(
 }
 
 data class WalletBackupItem(
-    val account: Account,
+    val account: cash.p.terminal.wallet.Account,
     val enabledWallets: List<BackupLocalModule.EnabledWalletBackup>
 )
 
@@ -619,7 +613,7 @@ data class BackupItem(
 )
 
 data class BackupItems(
-    val accounts: List<Account>,
+    val accounts: List<cash.p.terminal.wallet.Account>,
     val watchWallets: Int?,
     val watchlist: Int?,
     val contacts: Int?,
@@ -729,5 +723,5 @@ data class Settings(
 
 sealed class RestoreException(message: String) : Exception(message) {
     object EncryptionKeyException : RestoreException("Couldn't get key from passphrase.")
-    object InvalidPasswordException : RestoreException(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword))
+    object InvalidPasswordException : RestoreException(cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword))
 }

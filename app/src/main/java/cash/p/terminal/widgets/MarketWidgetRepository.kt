@@ -5,10 +5,8 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
@@ -19,6 +17,7 @@ import cash.p.terminal.modules.market.sort
 import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsRepository
 import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsViewItemFactory
 import cash.p.terminal.modules.market.topplatforms.TopPlatformsRepository
+import io.horizontalsystems.core.CurrencyManager
 import kotlinx.coroutines.rx2.await
 
 class MarketWidgetRepository(
@@ -73,7 +72,7 @@ class MarketWidgetRepository(
             MarketWidgetItem(
                 uid = item.platform.uid,
                 title = item.platform.name,
-                subtitle = Translator.getString(
+                subtitle = cash.p.terminal.strings.helpers.Translator.getString(
                     R.string.MarketTopPlatforms_Protocols,
                     item.protocols
                 ),

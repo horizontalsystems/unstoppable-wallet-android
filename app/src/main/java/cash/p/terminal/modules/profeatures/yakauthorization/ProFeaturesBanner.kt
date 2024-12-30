@@ -16,7 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun ProFeaturesBanner(

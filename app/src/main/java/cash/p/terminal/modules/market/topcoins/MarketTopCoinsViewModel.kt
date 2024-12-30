@@ -4,11 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.CurrencyManager
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.ViewState
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
@@ -16,7 +15,8 @@ import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.market.favorites.period
 import cash.p.terminal.modules.market.sort
-import io.horizontalsystems.marketkit.models.MarketInfo
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.models.MarketInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow

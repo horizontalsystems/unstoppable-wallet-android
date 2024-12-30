@@ -8,7 +8,7 @@ import cash.p.terminal.modules.multiswap.providers.PancakeSwapV3Provider
 import cash.p.terminal.modules.multiswap.providers.QuickSwapProvider
 import cash.p.terminal.modules.multiswap.providers.UniswapProvider
 import cash.p.terminal.modules.multiswap.providers.UniswapV3Provider
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

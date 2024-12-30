@@ -11,7 +11,6 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseFragment
 import cash.p.terminal.core.requireInput
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.AmountInputModeModule
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.send.binance.SendBinanceModule
@@ -34,8 +33,8 @@ import cash.p.terminal.modules.send.zcash.SendZCashModule
 import cash.p.terminal.modules.send.zcash.SendZCashScreen
 import cash.p.terminal.modules.send.zcash.SendZCashViewModel
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
-import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.ui_compose.findNavController
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 class SendFragment : BaseFragment() {
@@ -194,7 +193,7 @@ class SendFragment : BaseFragment() {
 
     @Parcelize
     data class Input(
-        val wallet: Wallet,
+        val wallet: cash.p.terminal.wallet.Wallet,
         val title: String,
         val sendEntryPointDestId: Int = 0,
         val predefinedAddress: String? = null,

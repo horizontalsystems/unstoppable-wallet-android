@@ -15,7 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.RowUniversal
 
 @Composable
 fun HsSlider(

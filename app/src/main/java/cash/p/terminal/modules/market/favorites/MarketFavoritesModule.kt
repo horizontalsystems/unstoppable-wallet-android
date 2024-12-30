@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.TimeDuration
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
 
 object MarketFavoritesModule {
 

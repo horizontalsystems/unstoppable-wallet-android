@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.market.topnftcollections
 
-import cash.p.terminal.core.IAppNumberFormatter
+import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.nft.NftCollectionItem

@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.enablecoin.blockchaintokens
 
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.core.entities.Blockchain
 import io.reactivex.subjects.PublishSubject
 
 class BlockchainTokensService {
@@ -9,11 +8,11 @@ class BlockchainTokensService {
     val rejectApproveTokensObservable = PublishSubject.create<Blockchain>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveTokens(blockchain: Blockchain, tokens: List<Token>, enabledTokens: List<Token>, allowEmpty: Boolean = false) {
+    fun approveTokens(blockchain: Blockchain, tokens: List<cash.p.terminal.wallet.Token>, enabledTokens: List<cash.p.terminal.wallet.Token>, allowEmpty: Boolean = false) {
         requestObservable.onNext(Request(blockchain, tokens, enabledTokens, allowEmpty))
     }
 
-    fun select(tokens: List<Token>, blockchain: Blockchain) {
+    fun select(tokens: List<cash.p.terminal.wallet.Token>, blockchain: Blockchain) {
         approveTokensObservable.onNext(BlockchainWithTokens(blockchain, tokens))
     }
 
@@ -21,6 +20,6 @@ class BlockchainTokensService {
         rejectApproveTokensObservable.onNext(blockchain)
     }
 
-    data class BlockchainWithTokens(val blockchain: Blockchain, val tokens: List<Token>)
-    data class Request(val blockchain: Blockchain, val tokens: List<Token>, val enabledTokens: List<Token>, val allowEmpty: Boolean)
+    data class BlockchainWithTokens(val blockchain: Blockchain, val tokens: List<cash.p.terminal.wallet.Token>)
+    data class Request(val blockchain: Blockchain, val tokens: List<cash.p.terminal.wallet.Token>, val enabledTokens: List<cash.p.terminal.wallet.Token>, val allowEmpty: Boolean)
 }

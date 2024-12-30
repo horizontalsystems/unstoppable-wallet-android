@@ -16,15 +16,15 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil.load
 import cash.p.terminal.R
-import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.topplatforms.Platform
 import io.horizontalsystems.ethereumkit.core.toRawHexString
 import io.horizontalsystems.hdwalletkit.Language
 import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.CoinCategory
-import io.horizontalsystems.marketkit.models.CoinInvestment
-import io.horizontalsystems.marketkit.models.CoinTreasury
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.wallet.models.CoinCategory
+import cash.p.terminal.wallet.models.CoinInvestment
+import cash.p.terminal.wallet.models.CoinTreasury
+import cash.p.terminal.wallet.entities.FullCoin
 import kotlinx.coroutines.delay
 import java.util.Locale
 import java.util.Optional
@@ -142,26 +142,6 @@ fun LockTimeInterval?.stringResId(): Int {
         LockTimeInterval.year -> R.string.Send_LockTime_Year
         null -> R.string.Send_LockTime_Off
     }
-}
-
-fun String.shorten(): String {
-    val prefixes = listOf("0x", "bc", "bnb", "ltc", "bitcoincash:", "ecash:")
-
-    var prefix = ""
-    for (p in prefixes) {
-        if (this.startsWith(p)) {
-            prefix = p
-            break
-        }
-    }
-
-    val withoutPrefix = this.removePrefix(prefix)
-
-    val characters = 4
-    return if (withoutPrefix.length > characters * 2)
-        prefix + withoutPrefix.take(characters) + "..." + withoutPrefix.takeLast(characters)
-    else
-        this
 }
 
 //Compose Animated Navigation

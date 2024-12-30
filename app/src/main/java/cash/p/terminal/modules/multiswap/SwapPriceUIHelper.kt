@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.multiswap
 
 import cash.p.terminal.entities.CoinValue
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 import java.math.RoundingMode
 

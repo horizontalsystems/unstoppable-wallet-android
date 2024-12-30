@@ -59,31 +59,31 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.ui.compose.ColoredTextStyle
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellMultilineLawrenceSection
-import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.CellMultilineLawrenceSection
+import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
-import cash.p.terminal.ui.compose.components.body_grey50
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui_compose.components.body_grey50
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ColoredTextStyle
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -158,7 +158,7 @@ fun ZcashConfigureScreen(
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             SlowSyncWarningBottomSheet(
                 text = stringResource(R.string.Restore_ZCash_SlowSyncWarningText),
@@ -175,7 +175,7 @@ fun ZcashConfigureScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
         ) {
             Column(modifier = Modifier.padding(it)) {
@@ -346,7 +346,7 @@ private fun SlowSyncWarningBottomSheet(
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         title = stringResource(R.string.Alert_TitleWarning),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
         onCloseClick = onCloseClick
     ) {
         TextImportantWarning(
@@ -385,7 +385,7 @@ private fun BirthdayHeightInput(
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
             .height(44.dp)
             .padding(horizontal = 16.dp),
@@ -426,7 +426,7 @@ private fun BirthdayHeightInput(
 @Preview
 @Composable
 private fun Preview_ZcashConfigure() {
-    ComposeAppTheme(darkTheme = false) {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme(darkTheme = false) {
         ZcashConfigureScreen({}, {})
     }
 }

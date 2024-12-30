@@ -6,12 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.balance.headerNote
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.BackupItem
 import cash.p.terminal.modules.manageaccount.ManageAccountModule.KeyAction
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.IAccountManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
@@ -110,7 +110,7 @@ class ManageAccountViewModel(
             is AccountType.TonAddress -> listOf()
             is AccountType.BitcoinAddress -> listOf()
             is AccountType.HdExtendedKey -> {
-                if (account.type.hdExtendedKey.isPublic) {
+                if ((account.type as AccountType.HdExtendedKey).hdExtendedKey.isPublic) {
                     listOf(KeyAction.PublicKeys)
                 } else {
                     listOf(KeyAction.PrivateKeys, KeyAction.PublicKeys)

@@ -9,14 +9,14 @@ import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import io.horizontalsystems.core.helpers.LocaleType
+import cash.p.terminal.strings.helpers.LocaleType
 
 class LanguageSettingsViewModel(
     private val languageManager: LanguageManager,
     private val localStorage: ILocalStorage
 ) : ViewModel() {
 
-    val languageItems = LocaleType.values().map {
+    val languageItems = cash.p.terminal.strings.helpers.LocaleType.values().map {
         LanguageViewItem(
             it,
             languageManager.getName(it.tag),
@@ -38,7 +38,7 @@ class LanguageSettingsViewModel(
     var reloadApp by mutableStateOf(false)
         private set
 
-    fun onSelectLocale(localeType: LocaleType) {
+    fun onSelectLocale(localeType: cash.p.terminal.strings.helpers.LocaleType) {
         if (localeType.tag == currentLocaleTag) {
             closeScreen = true
         } else {

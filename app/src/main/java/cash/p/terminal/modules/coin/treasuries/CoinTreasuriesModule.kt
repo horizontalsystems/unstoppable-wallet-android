@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.Coin
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
+import cash.p.terminal.wallet.entities.Coin
 
 object CoinTreasuriesModule {
     @Suppress("UNCHECKED_CAST")

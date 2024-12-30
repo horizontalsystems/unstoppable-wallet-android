@@ -1,10 +1,10 @@
 package cash.p.terminal.modules.nft.collection.overview
 
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.providers.nft.INftProvider
 import cash.p.terminal.entities.nft.NftCollectionMetadata
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

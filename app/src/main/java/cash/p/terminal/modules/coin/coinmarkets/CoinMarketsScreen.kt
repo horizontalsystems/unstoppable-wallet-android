@@ -31,22 +31,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.MarketTickerViewItem
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
-import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
+import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui.helpers.LinkHelper
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.entities.FullCoin
 import kotlinx.coroutines.launch
 
 @Composable

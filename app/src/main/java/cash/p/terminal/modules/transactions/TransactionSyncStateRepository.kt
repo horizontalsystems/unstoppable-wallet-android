@@ -1,10 +1,11 @@
 package cash.p.terminal.modules.transactions
 
-import cash.p.terminal.core.AdapterState
-import cash.p.terminal.core.Clearable
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.entities.LastBlockInfo
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope

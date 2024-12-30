@@ -9,8 +9,8 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statField
 import cash.p.terminal.core.stats.statSortType
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.ImageSource
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.MarketViewItem

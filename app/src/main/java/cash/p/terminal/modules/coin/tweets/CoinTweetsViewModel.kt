@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.twitter.twittertext.Extractor
 import cash.p.terminal.R
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.ui.compose.TranslatableString
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow

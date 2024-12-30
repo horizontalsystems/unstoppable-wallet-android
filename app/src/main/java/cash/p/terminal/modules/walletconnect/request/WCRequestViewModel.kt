@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.JsonParser
 import com.walletconnect.web3.wallet.client.Wallet
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.toHexString
@@ -15,7 +14,7 @@ import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.WCUtils
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 import kotlinx.parcelize.Parcelize
 import org.json.JSONArray
 import kotlin.coroutines.resume
@@ -30,7 +29,7 @@ private const val SEND_TRANSACTION_METHOD = "eth_sendTransaction"
 private const val SIGN_TRANSACTION_METHOD = "eth_signTransaction"
 
 class WCNewRequestViewModel(
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val evmBlockchainManager: EvmBlockchainManager,
 ) : ViewModel() {
 

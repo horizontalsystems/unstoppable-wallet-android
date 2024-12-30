@@ -10,10 +10,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import java.math.BigDecimal
 
 @Composable

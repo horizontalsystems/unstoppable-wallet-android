@@ -40,20 +40,20 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellMultilineClear
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellMultilineClear
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultiple
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -139,7 +139,7 @@ fun ManageWalletsScreen(
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             blockchainTokensViewModel.config?.let { config ->
                 BottomSheetSelectorMultiple(
@@ -154,7 +154,7 @@ fun ManageWalletsScreen(
         },
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.Restore_Title),

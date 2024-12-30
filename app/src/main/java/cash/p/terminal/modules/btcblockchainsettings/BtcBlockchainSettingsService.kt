@@ -5,7 +5,7 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.BtcRestoreMode
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 

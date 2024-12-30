@@ -13,14 +13,13 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.multiswap.QuoteInfoRow
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 data class DataFieldRecipientExtended(
     val address: Address,
@@ -78,7 +77,7 @@ data class DataFieldRecipientExtended(
 @Composable
 fun DataFieldRecipientExtendedPreview() {
     val navController = rememberNavController()
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         DataFieldRecipientExtended(
             Address("0x1234567890abcdef1234567890abcdef12345678"),
             BlockchainType.Bitcoin

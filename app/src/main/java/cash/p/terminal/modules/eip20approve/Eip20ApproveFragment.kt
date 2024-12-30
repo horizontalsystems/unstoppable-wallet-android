@@ -15,26 +15,25 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsCheckbox
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.cell.CellUniversal
-import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
-import cash.p.terminal.ui.compose.components.headline1_leah
-import cash.p.terminal.ui.compose.components.subhead2_leah
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.VSpacer
+import io.horizontalsystems.chartview.cell.CellUniversal
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
+import cash.p.terminal.ui_compose.components.headline1_leah
+import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.wallet.Token
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -101,7 +100,7 @@ fun Eip20ApproveScreen(navController: NavController, input: Eip20ApproveFragment
                 )
             }
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
     ) {
         Column(
             modifier = Modifier

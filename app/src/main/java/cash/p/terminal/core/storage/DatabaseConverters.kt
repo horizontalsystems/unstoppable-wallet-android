@@ -7,7 +7,9 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.CexDepositNetworkRaw
 import cash.p.terminal.core.providers.CexWithdrawNetworkRaw
 import cash.p.terminal.entities.nft.NftUid
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.wallet.entities.SecretList
+import cash.p.terminal.wallet.entities.SecretString
+import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 import java.util.Date
 

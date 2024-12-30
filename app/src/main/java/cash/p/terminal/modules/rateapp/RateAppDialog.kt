@@ -11,11 +11,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun RateApp(
@@ -58,7 +58,7 @@ fun RateApp(
 @Preview
 @Composable
 private fun Preview_RateApp() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         RateApp({}, {})
     }
 }

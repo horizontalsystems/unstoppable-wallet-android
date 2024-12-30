@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.entities.nft.NftUid
-import cash.p.terminal.modules.balance.BalanceXRateRepository
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
 import kotlinx.parcelize.Parcelize
 
 object NftAssetModule {
@@ -24,7 +24,7 @@ object NftAssetModule {
                 App.accountManager,
                 App.nftAdapterManager,
                 App.nftMetadataManager.provider(nftUid.blockchainType),
-                BalanceXRateRepository("nft-asset", App.currencyManager, App.marketKit)
+                DefaultBalanceXRateRepository("nft-asset", App.currencyManager, App.marketKit)
             )
             return NftAssetViewModel(service) as T
         }

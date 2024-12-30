@@ -3,7 +3,7 @@
 //import com.nhaarman.mockito_kotlin.verify
 //import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 //import com.nhaarman.mockito_kotlin.whenever
-//import cash.p.terminal.core.IAdapter
+//import cash.p.terminal.wallet.IAdapter
 //import cash.p.terminal.core.Wallet
 //import cash.p.terminal.core.factories.AdapterFactory
 //import cash.p.terminal.entities.AuthData

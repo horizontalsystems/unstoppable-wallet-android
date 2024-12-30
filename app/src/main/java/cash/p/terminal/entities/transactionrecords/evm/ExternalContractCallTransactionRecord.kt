@@ -2,9 +2,9 @@ package cash.p.terminal.entities.transactionrecords.evm
 
 import cash.p.terminal.core.managers.SpamManager
 import cash.p.terminal.entities.TransactionValue
-import cash.p.terminal.modules.transactions.TransactionSource
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.horizontalsystems.marketkit.models.Token
 
 class ExternalContractCallTransactionRecord(
     transaction: Transaction,

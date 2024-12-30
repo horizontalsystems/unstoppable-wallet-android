@@ -2,11 +2,9 @@ package cash.p.terminal.modules.restoreaccount.restoremnemonic
 
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.WordsManager
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.normalizeNFKD
+import cash.p.terminal.wallet.normalizeNFKD
 import cash.p.terminal.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.UiState
 import cash.p.terminal.modules.restoreaccount.restoremnemonic.RestoreMnemonicModule.WordItem
 import io.horizontalsystems.core.CoreApp
@@ -30,7 +28,7 @@ class RestoreMnemonicViewModel(
     private var invalidWordItems: List<WordItem> = listOf()
     private var invalidWordRanges: List<IntRange> = listOf()
     private var error: String? = null
-    private var accountType: AccountType? = null
+    private var accountType: cash.p.terminal.wallet.AccountType? = null
     private var wordSuggestions: RestoreMnemonicModule.WordSuggestions? = null
     private var language = Language.English
     private var text = ""
@@ -123,20 +121,20 @@ class RestoreMnemonicViewModel(
                 invalidWordRanges = invalidWordItems.map { it.range }
             }
             wordItems.size !in (Mnemonic.EntropyStrength.values().map { it.wordCount }) -> {
-                error = Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
+                error = cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_Error_MnemonicWordCount, wordItems.size)
             }
             passphraseEnabled && passphrase.isBlank() -> {
-                passphraseError = Translator.getString(R.string.Restore_Error_EmptyPassphrase)
+                passphraseError = cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_Error_EmptyPassphrase)
             }
             else -> {
                 try {
                     val words = wordItems.map { it.word.normalizeNFKD() }
                     wordsManager.validateChecksumStrict(words)
 
-                    accountType = AccountType.Mnemonic(words, passphrase.normalizeNFKD())
+                    accountType = cash.p.terminal.wallet.AccountType.Mnemonic(words, passphrase.normalizeNFKD())
                     error = null
                 } catch (checksumException: Exception) {
-                    error = Translator.getString(R.string.Restore_InvalidChecksum)
+                    error = cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_InvalidChecksum)
                 }
             }
         }

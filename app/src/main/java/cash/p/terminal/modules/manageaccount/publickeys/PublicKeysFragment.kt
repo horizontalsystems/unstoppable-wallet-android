@@ -16,25 +16,24 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.Account
+import cash.p.terminal.wallet.Account
 import cash.p.terminal.modules.manageaccount.evmaddress.EvmAddressFragment
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyFragment
 import cash.p.terminal.modules.manageaccount.ui.KeyActionItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HsBackButton
 
 class PublicKeysFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val account = navController.getInput<Account>()
+        val account = navController.getInput<cash.p.terminal.wallet.Account>()
 
         if (account == null) {
             Toast.makeText(App.instance, "Account parameter is missing", Toast.LENGTH_SHORT).show()
@@ -47,11 +46,11 @@ class PublicKeysFragment : BaseComposeFragment() {
 }
 
 @Composable
-fun ManageAccountScreen(navController: NavController, account: Account) {
+fun ManageAccountScreen(navController: NavController, account: cash.p.terminal.wallet.Account) {
     val viewModel = viewModel<PublicKeysViewModel>(factory = PublicKeysModule.Factory(account))
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.PublicKeys_Title),

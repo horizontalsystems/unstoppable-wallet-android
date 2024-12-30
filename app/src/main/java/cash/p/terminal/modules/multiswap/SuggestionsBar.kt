@@ -9,10 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.BoxTyler44
 import cash.p.terminal.ui.compose.components.ButtonSecondary
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun SuggestionsBar(
@@ -40,9 +40,9 @@ fun SuggestionsBar(
                             modifier = modifier,
                             style = ComposeAppTheme.typography.captionSB,
                             color = if (selectEnabled) {
-                                ComposeAppTheme.colors.leah
+                                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
                             } else {
-                                ComposeAppTheme.colors.grey50
+                                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50
                             },
                         )
                     }

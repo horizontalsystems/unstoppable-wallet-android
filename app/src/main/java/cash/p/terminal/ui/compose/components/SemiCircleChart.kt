@@ -12,7 +12,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.subhead1_grey
+import cash.p.terminal.ui_compose.components.title3_jacob
 
 @Composable
 fun SemiCircleChart(
@@ -20,7 +21,7 @@ fun SemiCircleChart(
     percentValues: List<Float>,
     title: String
 ) {
-    val paintColor = ComposeAppTheme.colors.yellowD
+    val paintColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellowD
     var startAngle = 180F
     val colorParts = 255 / percentValues.size
 
@@ -72,7 +73,7 @@ fun SemiCircleChart(
 @Preview
 @Composable
 fun SemiCircleChartPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Column(modifier = Modifier.padding(top = 24.dp)) {
             SemiCircleChart(
                 Modifier.padding(horizontal = 32.dp),

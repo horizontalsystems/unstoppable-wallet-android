@@ -9,9 +9,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.entities.Account
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.*
+import cash.p.terminal.ui_compose.components.HeaderText
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.Account
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import io.horizontalsystems.core.RowUniversal
 
 @Composable
 fun WalletSwitchBottomSheet(

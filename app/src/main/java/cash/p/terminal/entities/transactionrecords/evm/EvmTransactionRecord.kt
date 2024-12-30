@@ -3,9 +3,9 @@ package cash.p.terminal.entities.transactionrecords.evm
 import cash.p.terminal.core.adapters.BaseEvmAdapter
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
-import cash.p.terminal.modules.transactions.TransactionSource
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
-import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 
 open class EvmTransactionRecord(
@@ -60,7 +60,10 @@ open class EvmTransactionRecord(
                     false
             }
 
-        fun combined(incomingEvents: List<TransferEvent>, outgoingEvents: List<TransferEvent>): Pair<List<TransactionValue>, List<TransactionValue>> {
+        fun combined(
+            incomingEvents: List<TransferEvent>,
+            outgoingEvents: List<TransferEvent>
+        ): Pair<List<TransactionValue>, List<TransactionValue>> {
             val values = (incomingEvents + outgoingEvents).map { it.value }
             val resultIncoming: MutableList<TransactionValue> = mutableListOf()
             val resultOutgoing: MutableList<TransactionValue> = mutableListOf()
@@ -71,9 +74,14 @@ open class EvmTransactionRecord(
                 }
 
                 val sameTypeValues = values.filter { sameType(value, it) }
-                val totalValue = sameTypeValues.map { it.decimalValue ?: BigDecimal.ZERO }.reduce { sum, t -> sum + t }
+                val totalValue = sameTypeValues.map { it.decimalValue ?: BigDecimal.ZERO }
+                    .reduce { sum, t -> sum + t }
                 val resultValue = when (value) {
-                    is TransactionValue.CoinValue -> TransactionValue.CoinValue(value.token, totalValue)
+                    is TransactionValue.CoinValue -> TransactionValue.CoinValue(
+                        value.token,
+                        totalValue
+                    )
+
                     is TransactionValue.TokenValue -> TransactionValue.TokenValue(
                         tokenName = value.tokenName,
                         tokenCode = value.tokenCode,

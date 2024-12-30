@@ -13,8 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui.compose.components.ListEmptyView
 
 @Composable
@@ -40,7 +39,7 @@ fun WCSessionError(
 fun PreviewWCSessionsEmpty() {
     val context = LocalContext.current
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         WCSessionError("Error text", NavController(context))
     }
 }

@@ -7,9 +7,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun SendScreen(

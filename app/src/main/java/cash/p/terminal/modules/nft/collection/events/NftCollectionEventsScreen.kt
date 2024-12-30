@@ -23,18 +23,25 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.ContractInfo
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.nft.asset.NftAssetModule
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.OnBottomReached
 import cash.p.terminal.ui.compose.SelectOptional
 import cash.p.terminal.ui.compose.components.*
 import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import io.horizontalsystems.core.RowUniversal
+import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
 import kotlinx.coroutines.launch
 
 @Composable
@@ -81,7 +88,7 @@ private fun ContractBottomSheet(
         iconPainter = painterResource(R.drawable.icon_paper_contract_20),
         title = stringResource(R.string.CoinPage_Contracts),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob)
     ) {
         Spacer(Modifier.height(12.dp))
 
@@ -179,7 +186,7 @@ fun NftEvents(
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             ContractBottomSheet(
                 contractSelect = viewModel.contractSelect,

@@ -3,15 +3,15 @@ package cash.p.terminal.core.managers
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IBinanceKitManager
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 
 class BinanceKitManager : IBinanceKitManager {
     private var kit: BinanceChainKit? = null
     private var useCount = 0
-    private var currentAccount: Account? = null
+    private var currentAccount: cash.p.terminal.wallet.Account? = null
 
     override val binanceKit: BinanceChainKit?
         get() = kit
@@ -19,7 +19,7 @@ class BinanceKitManager : IBinanceKitManager {
     override val statusInfo: Map<String, Any>?
         get() = kit?.statusInfo()
 
-    override fun binanceKit(wallet: Wallet): BinanceChainKit {
+    override fun binanceKit(wallet: cash.p.terminal.wallet.Wallet): BinanceChainKit {
         val account = wallet.account
         val accountType = account.type
 
@@ -30,7 +30,7 @@ class BinanceKitManager : IBinanceKitManager {
         }
 
         if (kit == null) {
-            if (accountType !is AccountType.Mnemonic)
+            if (accountType !is cash.p.terminal.wallet.AccountType.Mnemonic)
                 throw UnsupportedAccountException()
 
             useCount = 0
@@ -43,7 +43,7 @@ class BinanceKitManager : IBinanceKitManager {
         return kit!!
     }
 
-    private fun createKitInstance(accountType: AccountType.Mnemonic, account: Account): BinanceChainKit {
+    private fun createKitInstance(accountType: cash.p.terminal.wallet.AccountType.Mnemonic, account: cash.p.terminal.wallet.Account): BinanceChainKit {
         val networkType = BinanceChainKit.NetworkType.MainNet
 
         val kit = BinanceChainKit.instance(App.instance, accountType.words, accountType.passphrase, account.id, networkType)
@@ -52,7 +52,7 @@ class BinanceKitManager : IBinanceKitManager {
         return kit
     }
 
-    override fun unlink(account: Account) {
+    override fun unlink(account: cash.p.terminal.wallet.Account) {
         if (currentAccount != account) return
 
         useCount -= 1

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.market.overview.TopPairViewItem
 import cash.p.terminal.modules.market.toppairs.TopPairItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun TopPairsBoardView(

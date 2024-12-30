@@ -18,19 +18,19 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.alternativeImageUrl
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.B2
 import cash.p.terminal.ui.compose.components.Badge
-import cash.p.terminal.ui.compose.components.D1
 import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.MultitextM1
-import cash.p.terminal.ui.compose.components.RowUniversal
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
-import cash.p.terminal.ui.compose.components.SectionUniversalItem
-import cash.p.terminal.ui.compose.components.VSpacer
+import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.B2
+import cash.p.terminal.ui_compose.components.D1
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.badge
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

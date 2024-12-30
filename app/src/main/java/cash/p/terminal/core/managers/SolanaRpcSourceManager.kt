@@ -1,8 +1,9 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.MarketKitWrapper
 import io.horizontalsystems.solanakit.models.RpcSource
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

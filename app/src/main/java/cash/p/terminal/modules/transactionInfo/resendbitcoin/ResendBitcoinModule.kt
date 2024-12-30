@@ -7,8 +7,8 @@ import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.factories.FeeRateProviderFactory
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
-import cash.p.terminal.modules.transactions.TransactionSource
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.wallet.transaction.TransactionSource
 
 object ResendBitcoinModule {
 

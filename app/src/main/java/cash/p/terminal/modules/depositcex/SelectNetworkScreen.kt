@@ -13,17 +13,18 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.providers.CexDepositNetwork
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.Badge
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.imageUrl
 
 @Composable
 fun SelectNetworkScreen(
@@ -32,7 +33,7 @@ fun SelectNetworkScreen(
     onNavigateBack: (() -> Unit),
 ) {
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Cex_ChooseNetwork),

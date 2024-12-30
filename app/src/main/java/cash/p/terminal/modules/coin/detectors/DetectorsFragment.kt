@@ -35,22 +35,22 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.modules.coin.detectors.DetectorsModule.DetectorsTab
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.TabItem
-import cash.p.terminal.ui.compose.components.Tabs
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead1_grey
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.TabItem
+import cash.p.terminal.ui_compose.components.Tabs
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead1_grey
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class DetectorsFragment : BaseComposeFragment() {
@@ -84,7 +84,7 @@ private fun DetectorsScreen(
     val uiState = viewModel.uiState
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = uiState.title,
@@ -163,30 +163,30 @@ fun DetectorCell(
     val issue = issueViewItem.issue
     val issues = issue.issues ?: emptyList()
     var iconResource = R.drawable.ic_check_24
-    var iconTint = ComposeAppTheme.colors.leah
+    var iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
 
     issues.firstOrNull()?.let {
         when (it.impact) {
             "Critical" -> {
                 iconResource = R.drawable.ic_warning_24
-                iconTint = ComposeAppTheme.colors.lucian
+                iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
             }
 
             "High" -> {
                 iconResource = R.drawable.ic_warning_24
-                iconTint = ComposeAppTheme.colors.jacob
+                iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
             }
 
             "Low" -> {
                 iconResource = R.drawable.ic_warning_24
-                iconTint = ComposeAppTheme.colors.remus
+                iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus
             }
 
             "Informational",
             "Optimization" -> {
                 if (issues.isNotEmpty()) {
                     iconResource = R.drawable.ic_warning_24
-                    iconTint = ComposeAppTheme.colors.laguna
+                    iconTint = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.laguna
                 }
             }
 

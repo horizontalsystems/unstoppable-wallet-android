@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class ChooseContactViewModel(
     private val repository: ContactsRepository,

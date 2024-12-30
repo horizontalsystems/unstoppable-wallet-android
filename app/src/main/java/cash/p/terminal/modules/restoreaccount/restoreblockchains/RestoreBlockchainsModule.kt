@@ -4,18 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.stats.StatPage
-import cash.p.terminal.entities.AccountType
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewModel
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
-import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui_compose.components.ImageSource
 
 object RestoreBlockchainsModule {
 
     class Factory(
         private val accountName: String,
-        private val accountType: AccountType,
+        private val accountType: cash.p.terminal.wallet.AccountType,
         private val manualBackup: Boolean,
         private val fileBackup: Boolean,
         private val statPage: StatPage

@@ -5,14 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.managers.SubscriptionManager
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.SubscriptionManager
 import cash.p.terminal.core.toHexString
-import cash.p.terminal.entities.Account
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
@@ -20,7 +17,7 @@ import java.net.UnknownHostException
 
 class ActivateSubscriptionViewModel(
     private val marketKit: MarketKitWrapper,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val subscriptionManager: SubscriptionManager
 ) : ViewModelUiState<ActivateSubscription>() {
 
@@ -61,7 +58,8 @@ class ActivateSubscriptionViewModel(
 
                 val addresses = accountsMap.keys.toList()
                 val subscriptions = marketKit.subscriptionsSingle(addresses).await()
-                val address = subscriptions.maxByOrNull { it.deadline }?.address ?: throw NoSubscription()
+                val address =
+                    subscriptions.maxByOrNull { it.deadline }?.address ?: throw NoSubscription()
 
                 subscriptionAccount = SubscriptionAccount(address, accountsMap[address])
 
@@ -78,7 +76,7 @@ class ActivateSubscriptionViewModel(
             } catch (e: Throwable) {
                 fetchingMessage = false
                 fetchingMessageError = if (e is UnknownHostException) {
-                    IllegalStateException(Translator.getString(R.string.Hud_Text_NoInternet))
+                    IllegalStateException(cash.p.terminal.strings.helpers.Translator.getString(R.string.Hud_Text_NoInternet))
                 } else {
                     e
                 }
@@ -105,7 +103,11 @@ class ActivateSubscriptionViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val signature = account.type.sign(subscriptionInfo.messageToSign.toByteArray()) ?: throw IllegalStateException()
+                val signature =
+                    account.type.sign(
+                        message = subscriptionInfo.messageToSign.toByteArray(),
+                        getChain = { App.evmBlockchainManager.getChain(it) }
+                    ) ?: throw IllegalStateException()
                 val token = marketKit.authenticate(signature.toHexString(), address).await()
                 subscriptionManager.authToken = token
                 fetchingTokenSuccess = true
@@ -136,7 +138,7 @@ class ActivateSubscriptionViewModel(
 
 data class SubscriptionAccount(
     val address: String,
-    val account: Account?
+    val account: cash.p.terminal.wallet.Account?
 )
 
 data class SubscriptionInfo(

@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.transactions
 
-import cash.p.terminal.core.Clearable
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.managers.SpamManager
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
@@ -10,7 +10,8 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope

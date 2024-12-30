@@ -6,9 +6,9 @@ import io.horizontalsystems.bitcoinkit.MainNet
 import io.horizontalsystems.dashkit.MainNetDash
 import io.horizontalsystems.ecash.MainNetECash
 import io.horizontalsystems.litecoinkit.MainNetLitecoin
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 
 class AddressHandlerFactory(
     private val udnApiKey: String,

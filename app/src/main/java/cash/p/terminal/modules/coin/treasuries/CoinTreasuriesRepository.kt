@@ -1,9 +1,9 @@
 package cash.p.terminal.modules.coin.treasuries
 
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesModule.TreasuryTypeFilter
-import io.horizontalsystems.marketkit.models.CoinTreasury
-import io.horizontalsystems.marketkit.models.CoinTreasury.TreasuryType
+import cash.p.terminal.wallet.models.CoinTreasury
+import cash.p.terminal.wallet.models.CoinTreasury.TreasuryType
 import io.reactivex.Single
 
 class CoinTreasuriesRepository(

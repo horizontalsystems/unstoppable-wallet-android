@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.entities.Address
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
 
 object AddressInputModule {
 

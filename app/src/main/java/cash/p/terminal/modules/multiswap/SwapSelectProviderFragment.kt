@@ -23,20 +23,19 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HFillSpacer
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HFillSpacer
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
 
 class SwapSelectProviderFragment : BaseComposeFragment() {
     @Composable
@@ -89,7 +88,7 @@ private fun SwapSelectProviderScreenInner(
                 ),
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
     ) {
         LazyColumn(
             modifier = Modifier.padding(it),
@@ -100,9 +99,9 @@ private fun SwapSelectProviderScreenInner(
             }
             itemsIndexed(quotes) { i, viewItem ->
                 val borderColor = if (viewItem.quote == currentQuote) {
-                    ComposeAppTheme.colors.yellow50
+                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
                 } else {
-                    ComposeAppTheme.colors.steel20
+                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
                 }
 
                 RowUniversal(
@@ -151,7 +150,7 @@ private fun SwapSelectProviderScreenInner(
 @Preview
 @Composable
 private fun SwapSelectProviderScreenPreview() {
-    ComposeAppTheme(darkTheme = false) {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme(darkTheme = false) {
         SwapSelectProviderScreenInner(
             onClickClose = {},
             quotes = listOf(

@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.market.topplatforms
 
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.sortedByDescendingNullLast
 import cash.p.terminal.modules.market.sortedByNullLast
-import io.horizontalsystems.marketkit.models.TopPlatform
+import cash.p.terminal.wallet.models.TopPlatform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
@@ -39,8 +39,8 @@ class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
 
     companion object {
         fun getTopPlatformItems(
-                topPlatforms: List<TopPlatform>,
-                timeDuration: TimeDuration
+            topPlatforms: List<TopPlatform>,
+            timeDuration: TimeDuration
         ): List<TopPlatformItem> {
             return topPlatforms.map { platform ->
                 val prevRank = when (timeDuration) {

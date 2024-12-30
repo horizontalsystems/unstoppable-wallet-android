@@ -1,8 +1,8 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.IAdapter
-import cash.p.terminal.core.IBalanceAdapter
-import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.wallet.IBalanceAdapter
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.managers.TronKitWrapper
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.network.Network

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatsManager
 import kotlinx.coroutines.launch
 

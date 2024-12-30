@@ -24,32 +24,32 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statSortType
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.chart.ChartViewModel
-import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Chart
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.chartview.chart.ChartViewModel
+import cash.p.terminal.ui_compose.CoinFragmentInput
+import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.topcoins.OptionController
 import cash.p.terminal.modules.market.topplatforms.Platform
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.CoinList
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.TopCloseButton
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class MarketPlatformFragment : BaseComposeFragment() {
 
@@ -69,7 +69,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
             factory = factory,
             onCloseButtonClick = { navController.popBackStack() },
             onCoinClick = { coinUid ->
-                val arguments = CoinFragment.Input(coinUid)
+                val arguments = CoinFragmentInput(coinUid)
                 navController.slideFromRight(R.id.coinFragment, arguments)
 
                 stat(page = StatPage.TopPlatform, event = StatEvent.OpenCoin(coinUid))
@@ -146,7 +146,10 @@ private fun PlatformScreen(
                                             }
                                         }
                                         item {
-                                            Chart(chartViewModel = chartViewModel)
+                                            Chart(
+                                                uiState = chartViewModel.uiState,
+                                                getSelectedPointCallback = chartViewModel::getSelectedPoint,
+                                                onSelectChartInterval = chartViewModel::onSelectChartInterval)
                                         }
                                         stickyHeader {
                                             HeaderSorting(borderTop = true, borderBottom = true) {
@@ -225,7 +228,7 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
 @Preview
 @Composable
 fun HeaderContentPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         HeaderContent(
             "Solana Ecosystem",
             "Market cap of all protocols on the Solana chain",

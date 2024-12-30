@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.addtoken
 
-import cash.p.terminal.core.customCoinUid
+import cash.p.terminal.wallet.customCoinUid
 import cash.p.terminal.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.Blockchain
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.solanakit.core.TokenProvider
 import io.horizontalsystems.solanakit.models.Address
 import io.horizontalsystems.solanakit.transactions.SolanaFmService
@@ -32,7 +32,7 @@ class AddSolanaTokenBlockchainService(
     override suspend fun token(reference: String): Token {
         val tokenInfo = tokenProvider.getTokenInfo(reference)
         val tokenQuery = tokenQuery(reference)
-        return Token(
+        return cash.p.terminal.wallet.Token(
             coin = Coin(
                 uid = tokenQuery.customCoinUid,
                 name = tokenInfo.name,

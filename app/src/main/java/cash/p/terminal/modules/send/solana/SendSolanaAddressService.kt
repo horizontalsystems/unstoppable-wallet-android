@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.send.solana
 
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.Address
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,7 +40,7 @@ class SendSolanaAddressService(prefilledAddress: String?) {
         try {
             solanaAddress = SolanaAddress(address.hex)
         } catch (e: Exception) {
-            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError = Throwable(cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 

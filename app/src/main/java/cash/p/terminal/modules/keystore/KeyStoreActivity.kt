@@ -34,11 +34,11 @@ import androidx.core.content.ContextCompat
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseActivity
 import cash.p.terminal.modules.main.MainModule
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.BottomSheetsElementsButtons
 import cash.p.terminal.ui.compose.components.BottomSheetsElementsHeader
 import cash.p.terminal.ui.compose.components.BottomSheetsElementsText
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.parcelable
 import io.horizontalsystems.core.putParcelableExtra
 
@@ -146,7 +146,7 @@ private fun KeyStoreScreen(
         showBiometricPrompt.invoke()
     }
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         if (viewModel.showSystemLockWarning) {
             Column(
                 modifier = Modifier
@@ -212,7 +212,7 @@ private fun KeysInvalidatedDialog(onClick: () -> Unit) {
 @Preview
 @Composable
 private fun Preview_KeysInvalidatedDialog() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         KeysInvalidatedDialog {}
     }
 }
@@ -220,7 +220,7 @@ private fun Preview_KeysInvalidatedDialog() {
 @Preview
 @Composable
 private fun Preview_NoSystemWarning() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         NoSystemLockWarning()
     }
 }

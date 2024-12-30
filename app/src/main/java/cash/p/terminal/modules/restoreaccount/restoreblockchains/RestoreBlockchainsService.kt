@@ -1,11 +1,9 @@
 package cash.p.terminal.modules.restoreaccount.restoreblockchains
 
-import cash.p.terminal.core.Clearable
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.IAccountFactory
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.isDefault
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.nativeTokenQueries
@@ -17,14 +15,12 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensService
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.Blockchain
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -36,11 +32,11 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class RestoreBlockchainsService(
     private val accountName: String,
-    private val accountType: AccountType,
+    private val accountType: cash.p.terminal.wallet.AccountType,
     private val manualBackup: Boolean,
     private val fileBackup: Boolean,
     private val accountFactory: IAccountFactory,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
     private val tokenAutoEnableManager: TokenAutoEnableManager,
@@ -50,10 +46,10 @@ class RestoreBlockchainsService(
 ) : Clearable {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    private var tokens = listOf<Token>()
-    private val enabledTokens = CopyOnWriteArrayList<Token>()
+    private var tokens = listOf<cash.p.terminal.wallet.Token>()
+    private val enabledTokens = CopyOnWriteArrayList<cash.p.terminal.wallet.Token>()
 
-    private var restoreSettingsMap = mutableMapOf<Token, RestoreSettings>()
+    private var restoreSettingsMap = mutableMapOf<cash.p.terminal.wallet.Token, RestoreSettings>()
 
     val cancelEnableBlockchainObservable = PublishSubject.create<Blockchain>()
     val canRestore = BehaviorSubject.createDefault(false)
@@ -102,7 +98,7 @@ class RestoreBlockchainsService(
             .sortedBy { it.type.order }
     }
 
-    private fun handleApproveTokens(blockchain: Blockchain, tokens: List<Token>) {
+    private fun handleApproveTokens(blockchain: Blockchain, tokens: List<cash.p.terminal.wallet.Token>) {
         val existingTokens = enabledTokens.filter { it.blockchain == blockchain }
 
         val newTokens = tokens.minus(existingTokens)
@@ -192,7 +188,7 @@ class RestoreBlockchainsService(
         val account = accountFactory.account(
             accountName,
             accountType,
-            AccountOrigin.Restored,
+            cash.p.terminal.wallet.AccountOrigin.Restored,
             manualBackup,
             fileBackup,
         )
@@ -208,7 +204,7 @@ class RestoreBlockchainsService(
 
         if (enabledTokens.isEmpty()) return
 
-        val wallets = enabledTokens.map { Wallet(it, account) }
+        val wallets = enabledTokens.map { cash.p.terminal.wallet.Wallet(it, account) }
         walletManager.save(wallets)
 
         stat(page = statPage, event = StatEvent.ImportWallet(accountType.statAccountType))

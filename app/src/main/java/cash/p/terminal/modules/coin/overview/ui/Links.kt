@@ -13,17 +13,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.coin.CoinLink
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.CellSingleLineClear
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.body_leah
-import io.horizontalsystems.marketkit.models.LinkType
+import io.horizontalsystems.core.CellSingleLineClear
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.wallet.models.LinkType
 
 @Preview
 @Composable
 fun LinksPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         val links = listOf(
             CoinLink(
                 "http://q.com",

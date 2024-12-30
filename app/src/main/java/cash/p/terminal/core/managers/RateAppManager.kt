@@ -7,11 +7,11 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import androidx.core.content.ContextCompat
-import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
-import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.wallet.IWalletManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
@@ -20,9 +20,9 @@ import java.time.Instant
 
 
 class RateAppManager(
-        private val walletManager: IWalletManager,
-        private val adapterManager: IAdapterManager,
-        private val localStorage: ILocalStorage) : IRateAppManager {
+    private val walletManager: IWalletManager,
+    private val adapterManager: IAdapterManager,
+    private val localStorage: ILocalStorage) : IRateAppManager {
 
     private val _showRateFlow = MutableStateFlow(false)
     override val showRateAppFlow = _showRateFlow.filterNotNull()

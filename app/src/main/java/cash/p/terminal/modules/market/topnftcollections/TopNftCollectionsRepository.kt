@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.market.topnftcollections
 
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.sortedByDescendingNullLast

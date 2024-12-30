@@ -24,16 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.requireInput
-import cash.p.terminal.entities.Account
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
@@ -51,7 +50,7 @@ class BackupConfirmKeyFragment : BaseComposeFragment() {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
+fun RecoveryPhraseVerifyScreen(navController: NavController, account: cash.p.terminal.wallet.Account) {
     val viewModel = viewModel<BackupConfirmKeyViewModel>(factory = BackupConfirmKeyModule.Factory(account))
     val uiState = viewModel.uiState
     val contenView = LocalView.current
@@ -75,7 +74,7 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
     }
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.RecoveryPhraseVerify_Title),
@@ -95,9 +94,9 @@ fun RecoveryPhraseVerifyScreen(navController: NavController, account: Account) {
                 }
 
                 val borderColor = if (uiState.currentHiddenWordItemIndex == index) {
-                    ComposeAppTheme.colors.yellow50
+                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
                 } else {
-                    ComposeAppTheme.colors.steel20
+                    cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
                 }
 
                 Row(

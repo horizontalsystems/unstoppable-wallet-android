@@ -3,7 +3,7 @@ package cash.p.terminal.modules.coin.indicators
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 

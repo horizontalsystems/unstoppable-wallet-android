@@ -1,14 +1,14 @@
 package cash.p.terminal.modules.addtoken
 
 import cash.p.terminal.core.INetworkManager
-import cash.p.terminal.core.customCoinUid
+import cash.p.terminal.wallet.customCoinUid
 import cash.p.terminal.modules.addtoken.AddTokenModule.IAddTokenBlockchainService
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 
 class AddBep2TokenBlockchainService(
     private val blockchain: Blockchain,
@@ -30,7 +30,7 @@ class AddBep2TokenBlockchainService(
         val tokenInfo = bep2Tokens.firstOrNull { it.symbol == reference }
             ?: throw AddTokenService.TokenError.NotFound
         val tokenQuery = tokenQuery(reference)
-        return Token(
+        return cash.p.terminal.wallet.Token(
             coin = Coin(
                 uid = tokenQuery.customCoinUid,
                 name = tokenInfo.name,

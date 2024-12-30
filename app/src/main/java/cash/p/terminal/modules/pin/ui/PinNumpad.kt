@@ -27,10 +27,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule.InputState
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.ButtonSecondaryYellow
-import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -137,7 +137,7 @@ private fun NumberKey(
         modifier = Modifier
             .size(72.dp)
             .clip(CircleShape)
-            .border(1.dp, ComposeAppTheme.colors.steel20, CircleShape)
+            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, CircleShape)
             .clickable(
                 enabled = enabled,
                 onClick = {
@@ -150,7 +150,7 @@ private fun NumberKey(
         Text(
             text = number.toString(),
             style = ComposeAppTheme.typography.title2R,
-            color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20,
+            color = if (enabled) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20,
         )
     }
 }
@@ -181,7 +181,7 @@ private fun ImageKey(
             Icon(
                 modifier = Modifier.align(Alignment.Center),
                 painter = painterResource(image),
-                tint = if (enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.steel20,
+                tint = if (enabled) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20,
                 contentDescription = contentDescription,
             )
         }
@@ -191,7 +191,7 @@ private fun ImageKey(
 @Preview
 @Composable
 fun Preview_Pin() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Column(
             modifier = Modifier
                 .background(color = ComposeAppTheme.colors.tyler)
@@ -212,7 +212,7 @@ fun Preview_Pin() {
 @Preview
 @Composable
 fun Preview_PinLocked() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Column(
             modifier = Modifier
                 .background(color = ComposeAppTheme.colors.tyler)

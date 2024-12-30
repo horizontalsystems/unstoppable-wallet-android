@@ -42,18 +42,18 @@ import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
 import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsScreen
 import cash.p.terminal.modules.send.bitcoin.utxoexpert.UtxoExpertModeScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
 import java.math.BigDecimal
 
 
@@ -140,7 +140,7 @@ fun SendBitcoinScreen(
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -255,7 +255,10 @@ fun SendBitcoinScreen(
                     onClick = {
                         fragmentNavController.slideFromRight(
                             R.id.sendConfirmation,
-                            SendConfirmationFragment.Input(SendConfirmationFragment.Type.Bitcoin, sendEntryPointDestId)
+                            SendConfirmationFragment.Input(
+                                SendConfirmationFragment.Type.Bitcoin,
+                                sendEntryPointDestId
+                            )
                         )
                     },
                     enabled = proceedEnabled

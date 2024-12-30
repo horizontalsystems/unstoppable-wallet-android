@@ -3,7 +3,7 @@ package cash.p.terminal.core.managers
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexAssetRaw
 import cash.p.terminal.core.storage.CexAssetsDao
-import cash.p.terminal.entities.Account
+import cash.p.terminal.wallet.MarketKitWrapper
 import java.math.BigDecimal
 
 class CexAssetManager(marketKit: MarketKitWrapper, private val cexAssetsDao: CexAssetsDao) {
@@ -26,24 +26,24 @@ class CexAssetManager(marketKit: MarketKitWrapper, private val cexAssetsDao: Cex
         )
     }
 
-    fun saveAllForAccount(cexAssetRaws: List<CexAssetRaw>, account: Account) {
+    fun saveAllForAccount(cexAssetRaws: List<CexAssetRaw>, account: cash.p.terminal.wallet.Account) {
         cexAssetsDao.delete(account.id)
         cexAssetsDao.insert(cexAssetRaws)
     }
 
-    fun get(account: Account, assetId: String): CexAsset? {
+    fun get(account: cash.p.terminal.wallet.Account, assetId: String): CexAsset? {
         return cexAssetsDao.get(account.id, assetId)
             ?.let { buildCexAsset(it) }
     }
 
-    fun getAllForAccount(account: Account): List<CexAsset> {
+    fun getAllForAccount(account: cash.p.terminal.wallet.Account): List<CexAsset> {
         return cexAssetsDao.getAllForAccount(account.id)
             .map {
                 buildCexAsset(it)
             }
     }
 
-    fun getWithBalance(account: Account): List<CexAsset> {
+    fun getWithBalance(account: cash.p.terminal.wallet.Account): List<CexAsset> {
         return cexAssetsDao.getAllForAccount(account.id)
             .filter { it.freeBalance > BigDecimal.ZERO }
             .map {

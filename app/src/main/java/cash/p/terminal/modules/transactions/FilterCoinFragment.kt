@@ -26,20 +26,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.B2
 import cash.p.terminal.ui.compose.components.Badge
-import cash.p.terminal.ui.compose.components.CellMultilineClear
-import cash.p.terminal.ui.compose.components.D1
-import cash.p.terminal.ui.compose.components.HsBackButton
+import io.horizontalsystems.core.CellMultilineClear
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.B2
+import cash.p.terminal.ui_compose.components.D1
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.badge
+import coil.compose.rememberAsyncImagePainter
 
 class FilterCoinFragment : BaseComposeFragment() {
 

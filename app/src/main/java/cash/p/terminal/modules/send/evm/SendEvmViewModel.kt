@@ -7,18 +7,17 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendEthereumAdapter
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 
 class SendEvmViewModel(
-    val wallet: Wallet,
+    val wallet: cash.p.terminal.wallet.Wallet,
     val sendToken: Token,
     val adapter: ISendEthereumAdapter,
     private val xRateService: XRateService,

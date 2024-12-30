@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.Faq
 import cash.p.terminal.entities.FaqSection
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 

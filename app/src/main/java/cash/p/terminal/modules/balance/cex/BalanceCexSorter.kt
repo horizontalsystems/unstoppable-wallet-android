@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.balance.cex
 
-import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.wallet.BalanceSortType
 import java.math.BigDecimal
 
 class BalanceCexSorter {

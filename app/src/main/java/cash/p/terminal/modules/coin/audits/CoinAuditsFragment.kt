@@ -21,18 +21,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.requireInput
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellFooter
-import cash.p.terminal.ui.compose.components.CellMultilineLawrenceSection
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellFooter
+import io.horizontalsystems.core.CellMultilineLawrenceSection
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsImage
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.parcelize.Parcelize
 
 class CoinAuditsFragment : BaseComposeFragment() {
@@ -111,7 +111,6 @@ private fun CoinAuditsScreen(
 fun CoinAuditHeader(name: String, logoUrl: String) {
     Divider(
         thickness = 1.dp,
-        color = ComposeAppTheme.colors.steel10,
     )
     VSpacer(height = 14.dp)
     Row(

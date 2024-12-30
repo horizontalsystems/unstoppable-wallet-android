@@ -1,13 +1,13 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.EnabledWallet
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.entities.EnabledWallet
+import cash.p.terminal.wallet.entities.TokenQuery
 import io.horizontalsystems.tonkit.models.Event
 import io.horizontalsystems.tonkit.models.Jetton
 import io.horizontalsystems.tonkit.models.TagQuery

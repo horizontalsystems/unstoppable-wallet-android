@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
@@ -15,7 +15,7 @@ import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.sendevmtransaction.SectionViewItem
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

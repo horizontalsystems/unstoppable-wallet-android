@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceState
@@ -22,7 +21,7 @@ import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.request.WCChainData
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -80,7 +79,7 @@ class WCSendEthereumTransactionRequestViewModel(
             buildList {
                 add(
                     ViewItem.Value(
-                        Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
+                        cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_SignMessageRequest_dApp),
                         dAppName,
                         ValueType.Regular
                     )

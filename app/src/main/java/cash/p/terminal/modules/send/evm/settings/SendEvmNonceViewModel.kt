@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.send.evm.settings
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.Warning
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.Warning
 import kotlinx.coroutines.launch
 
 class SendEvmNonceViewModel(

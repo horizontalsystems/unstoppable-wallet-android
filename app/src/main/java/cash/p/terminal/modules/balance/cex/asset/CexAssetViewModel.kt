@@ -6,16 +6,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
-import cash.p.terminal.modules.balance.BalanceViewType
-import cash.p.terminal.modules.balance.BalanceXRateRepository
+import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
 import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
-import io.horizontalsystems.marketkit.models.CoinPrice
+import cash.p.terminal.wallet.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.collect
@@ -23,7 +23,7 @@ import kotlinx.coroutines.rx2.collect
 class CexAssetViewModel(
     private val cexAsset: CexAsset,
     private val balanceHiddenManager: BalanceHiddenManager,
-    private val xRateRepository: BalanceXRateRepository,
+    private val xRateRepository: DefaultBalanceXRateRepository,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val priceManager: PriceManager
 ) : ViewModel() {
@@ -106,7 +106,7 @@ class CexAssetViewModel(
             return CexAssetViewModel(
                 cexAsset,
                 App.balanceHiddenManager,
-                BalanceXRateRepository("cex-asset", App.currencyManager, App.marketKit),
+                DefaultBalanceXRateRepository("cex-asset", App.currencyManager, App.marketKit),
                 BalanceViewItemFactory(),
                 App.priceManager
                 ) as T

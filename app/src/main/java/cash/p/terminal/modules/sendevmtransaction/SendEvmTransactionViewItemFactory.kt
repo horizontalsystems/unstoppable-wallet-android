@@ -1,16 +1,17 @@
 package cash.p.terminal.modules.sendevmtransaction
 
 import cash.p.terminal.R
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.SendEvmData
 import cash.p.terminal.modules.send.evm.SendEvmData.AdditionalInfo
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.badge
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.erc20kit.decorations.ApproveEip20Decoration
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
@@ -18,8 +19,6 @@ import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
 import io.horizontalsystems.ethereumkit.decorations.TransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.nftkit.decorations.OutgoingEip1155Decoration
 import io.horizontalsystems.nftkit.decorations.OutgoingEip721Decoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
@@ -131,7 +130,7 @@ class SendEvmTransactionViewItemFactory(
         val viewItems = buildList {
             add(
                 ViewItem.Subhead(
-                    Translator.getString(R.string.Send_Confirmation_YouSend),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_YouSend),
                     sendInfo?.nftShortMeta?.nftName ?: tokenId.toString(),
                     R.drawable.ic_arrow_up_right_12
                 )
@@ -148,7 +147,7 @@ class SendEvmTransactionViewItemFactory(
 
             add(
                 ViewItem.Address(
-                    Translator.getString(R.string.Send_Confirmation_To),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_To),
                     addressValue,
                     contact == null,
                     blockchainType,
@@ -189,7 +188,7 @@ class SendEvmTransactionViewItemFactory(
             val contact = getContact(addressValue)
             otherViewItems.add(
                 ViewItem.Address(
-                    Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_RecipientAddressTitle),
                     addressValue,
                     contact == null,
                     blockchainType,
@@ -231,7 +230,7 @@ class SendEvmTransactionViewItemFactory(
 
         inViewItems.add(
             0, ViewItem.Subhead(
-                Translator.getString(R.string.Swap_FromAmountTitle),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_FromAmountTitle),
                 coinServiceIn.token.coin.name,
                 R.drawable.ic_arrow_up_right_12
             )
@@ -240,7 +239,7 @@ class SendEvmTransactionViewItemFactory(
 
         outViewItems.add(
             0, ViewItem.Subhead(
-                Translator.getString(R.string.Swap_ToAmountTitle),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_ToAmountTitle),
                 coinServiceOut.token.coin.name,
                 R.drawable.ic_arrow_down_left_12
             )
@@ -269,7 +268,7 @@ class SendEvmTransactionViewItemFactory(
             SectionViewItem(
                 listOf(
                     ViewItem.Subhead(
-                        Translator.getString(R.string.Swap_FromAmountTitle),
+                        cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_FromAmountTitle),
                         coinServiceIn.token.coin.name,
                         R.drawable.ic_arrow_up_right_12
                     ),
@@ -284,7 +283,7 @@ class SendEvmTransactionViewItemFactory(
 
         val outViewItems: MutableList<ViewItem> = mutableListOf(
             ViewItem.Subhead(
-                Translator.getString(R.string.Swap_ToAmountTitle),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_ToAmountTitle),
                 coinServiceOut.token.coin.name,
                 R.drawable.ic_arrow_down_left_12
             )
@@ -312,7 +311,7 @@ class SendEvmTransactionViewItemFactory(
                 coinService.amountData(value),
                 ValueType.Outgoing,
                 coinService.token,
-                Translator.getString(R.string.Send_Confirmation_YouSend),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_YouSend),
                 coinService.token.badge
             )
         )
@@ -320,7 +319,7 @@ class SendEvmTransactionViewItemFactory(
         val contact = getContact(addressValue)
         viewItems.add(
             ViewItem.Address(
-                Translator.getString(R.string.Send_Confirmation_To),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_To),
                 addressValue,
                 contact == null,
                 blockchainType,
@@ -351,7 +350,7 @@ class SendEvmTransactionViewItemFactory(
             if (value.compareTo(BigInteger.ZERO) == 0) {
                 add(
                     ViewItem.Subhead(
-                        Translator.getString(R.string.Approve_YouRevoke),
+                        cash.p.terminal.strings.helpers.Translator.getString(R.string.Approve_YouRevoke),
                         coinService.token.coin.name,
                     )
                 )
@@ -362,7 +361,7 @@ class SendEvmTransactionViewItemFactory(
                         coinService.amountData(value),
                         ValueType.Regular,
                         coinService.token,
-                        Translator.getString(R.string.Approve_YouApprove),
+                        cash.p.terminal.strings.helpers.Translator.getString(R.string.Approve_YouApprove),
                         coinService.token.badge
                     )
                 )
@@ -372,7 +371,7 @@ class SendEvmTransactionViewItemFactory(
             val contact = getContact(addressValue)
             add(
                 ViewItem.Address(
-                    Translator.getString(R.string.Approve_Spender),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.Approve_Spender),
                     addressValue,
                     contact == null,
                     blockchainType,
@@ -405,7 +404,7 @@ class SendEvmTransactionViewItemFactory(
             val contact = getContact(toValue)
             add(
                 ViewItem.Address(
-                    Translator.getString(R.string.Send_Confirmation_To),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
                     contact == null,
                     blockchainType,
@@ -419,7 +418,7 @@ class SendEvmTransactionViewItemFactory(
             }
 
             methodName?.let {
-                add(ViewItem.Value(Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
+                add(ViewItem.Value(cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_Method), it, ValueType.Regular))
             }
 
             add(ViewItem.Input(transactionData.input.toHexString()))
@@ -438,14 +437,14 @@ class SendEvmTransactionViewItemFactory(
                     baseCoinService.amountData(value),
                     ValueType.Outgoing,
                     baseCoinService.token,
-                    Translator.getString(R.string.Send_Confirmation_YouSend),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_YouSend),
                     baseCoinService.token.badge,
                 )
             )
             val contact = getContact(toValue)
             add(
                 ViewItem.Address(
-                    Translator.getString(R.string.Send_Confirmation_To),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Confirmation_To),
                     toValue,
                     contact == null,
                     blockchainType,
@@ -506,7 +505,7 @@ class SendEvmTransactionViewItemFactory(
     private fun getGuaranteedAmount(amountData: SendModule.AmountData, token: Token) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMin)}",
+            "${amountData.primary.getFormatted()} ${cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_AmountMin)}",
             ValueType.Incoming,
             token
         )
@@ -514,7 +513,7 @@ class SendEvmTransactionViewItemFactory(
     private fun getMaxAmount(amountData: SendModule.AmountData, token: Token) =
         ViewItem.Amount(
             amountData.secondary?.getFormatted(),
-            "${amountData.primary.getFormatted()} ${Translator.getString(R.string.Swap_AmountMax)}",
+            "${amountData.primary.getFormatted()} ${cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_AmountMax)}",
             ValueType.Outgoing,
             token
         )

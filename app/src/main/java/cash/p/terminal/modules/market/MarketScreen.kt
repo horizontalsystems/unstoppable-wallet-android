@@ -38,8 +38,8 @@ import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPage
 import cash.p.terminal.core.stats.statTab
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.coin.CoinFragment
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.MarketModule.Tab
 import cash.p.terminal.modules.market.favorites.MarketFavoritesScreen
 import cash.p.terminal.modules.market.posts.MarketPostsScreen
@@ -47,19 +47,19 @@ import cash.p.terminal.modules.market.topcoins.TopCoins
 import cash.p.terminal.modules.market.toppairs.TopPairsScreen
 import cash.p.terminal.modules.market.topplatforms.TopPlatforms
 import cash.p.terminal.modules.metricchart.MetricsType
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.ScrollableTabs
-import cash.p.terminal.ui.compose.components.TabItem
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.caption_bran
-import cash.p.terminal.ui.compose.components.caption_grey
-import cash.p.terminal.ui.compose.components.caption_lucian
-import cash.p.terminal.ui.compose.components.caption_remus
-import cash.p.terminal.ui.compose.components.micro_grey
-import io.horizontalsystems.marketkit.models.MarketGlobal
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.ScrollableTabs
+import cash.p.terminal.ui_compose.components.TabItem
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.caption_bran
+import cash.p.terminal.ui_compose.components.caption_grey
+import cash.p.terminal.ui_compose.components.caption_lucian
+import cash.p.terminal.ui_compose.components.caption_remus
+import cash.p.terminal.ui_compose.components.micro_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.models.MarketGlobal
 import java.math.BigDecimal
 
 @Composable
@@ -323,7 +323,7 @@ private fun openMetricsPage(metricsType: MetricsType, navController: NavControll
 }
 
 private fun onCoinClick(coinUid: String, navController: NavController) {
-    val arguments = CoinFragment.Input(coinUid)
+    val arguments = CoinFragmentInput(coinUid)
 
     navController.slideFromRight(R.id.coinFragment, arguments)
 

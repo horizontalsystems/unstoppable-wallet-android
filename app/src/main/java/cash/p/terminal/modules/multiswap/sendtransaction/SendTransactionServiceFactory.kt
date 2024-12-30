@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.multiswap.sendtransaction
 
 import cash.p.terminal.core.UnsupportedException
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 object SendTransactionServiceFactory {
     fun create(blockchainType: BlockchainType): ISendTransactionService = when (blockchainType) {

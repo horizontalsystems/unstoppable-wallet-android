@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.balance.token
 
-import cash.p.terminal.core.Clearable
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.modules.balance.BalanceAdapterRepository
-import cash.p.terminal.modules.balance.BalanceModule
-import cash.p.terminal.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.marketkit.models.CoinPrice
+import cash.p.terminal.wallet.balance.BalanceItem
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.models.CoinPrice
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,14 +16,14 @@ import kotlinx.coroutines.rx2.asFlow
 
 class TokenBalanceService(
     private val wallet: Wallet,
-    private val xRateRepository: BalanceXRateRepository,
+    private val xRateRepository: DefaultBalanceXRateRepository,
     private val balanceAdapterRepository: BalanceAdapterRepository
 ) : Clearable {
 
-    private val _balanceItemFlow = MutableStateFlow<BalanceModule.BalanceItem?>(null)
+    private val _balanceItemFlow = MutableStateFlow<BalanceItem?>(null)
     val balanceItemFlow = _balanceItemFlow.asStateFlow()
 
-    var balanceItem: BalanceModule.BalanceItem? = null
+    var balanceItem: BalanceItem? = null
         private set(value) {
             field = value
 
@@ -39,7 +39,7 @@ class TokenBalanceService(
 
         val latestRates = xRateRepository.getLatestRates()
 
-        balanceItem = BalanceModule.BalanceItem(
+        balanceItem = BalanceItem(
             wallet = wallet,
             balanceData = balanceAdapterRepository.balanceData(wallet),
             state = balanceAdapterRepository.state(wallet),

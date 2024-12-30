@@ -1,19 +1,18 @@
 package cash.p.terminal.modules.coin.analytics
 
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.InvalidAuthTokenException
-import cash.p.terminal.core.NoAuthTokenException
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.managers.SubscriptionManager
-import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
-import io.horizontalsystems.marketkit.models.Analytics
-import io.horizontalsystems.marketkit.models.AnalyticsPreview
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.SubscriptionManager
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.exceptions.InvalidAuthTokenException
+import cash.p.terminal.wallet.exceptions.NoAuthTokenException
+import cash.p.terminal.wallet.models.Analytics
+import cash.p.terminal.wallet.models.AnalyticsPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.rx2.await
@@ -23,7 +22,7 @@ class CoinAnalyticsService(
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val subscriptionManager: SubscriptionManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
 ) {
 
     private val _stateFlow = MutableStateFlow<DataState<AnalyticData>>(DataState.Loading)

@@ -3,30 +3,28 @@ package cash.p.terminal.modules.receive.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.eligibleTokens
 import cash.p.terminal.core.utils.Utils
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.Wallet
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.FullCoin
 
 class NetworkSelectViewModel(
-    val activeAccount: Account,
+    val activeAccount: cash.p.terminal.wallet.Account,
     val fullCoin: FullCoin,
     private val walletManager: IWalletManager
 ) : ViewModel() {
     val eligibleTokens = fullCoin.eligibleTokens(activeAccount.type)
 
-    suspend fun getOrCreateWallet(token: Token): Wallet {
+    suspend fun getOrCreateWallet(token: Token): cash.p.terminal.wallet.Wallet {
         return walletManager
             .activeWallets
             .find { it.token == token }
             ?: createWallet(token)
     }
 
-    private suspend fun createWallet(token: Token): Wallet {
-        val wallet = Wallet(token, activeAccount)
+    private suspend fun createWallet(token: Token): cash.p.terminal.wallet.Wallet {
+        val wallet = cash.p.terminal.wallet.Wallet(token, activeAccount)
 
         walletManager.save(listOf(wallet))
 
@@ -38,7 +36,7 @@ class NetworkSelectViewModel(
     }
 
     class Factory(
-        private val activeAccount: Account,
+        private val activeAccount: cash.p.terminal.wallet.Account,
         private val fullCoin: FullCoin
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")

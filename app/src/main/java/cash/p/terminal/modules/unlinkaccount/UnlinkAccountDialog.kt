@@ -25,17 +25,15 @@ import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.Account
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryRed
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsCheckbox
-import cash.p.terminal.ui.compose.components.RowUniversal
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 
 class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
@@ -51,7 +49,7 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
 
-                ComposeAppTheme {
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     UnlinkAccountScreen(navController, navController.requireInput())
                 }
             }
@@ -60,7 +58,7 @@ class UnlinkAccountDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-private fun UnlinkAccountScreen(navController: NavController, account: Account) {
+private fun UnlinkAccountScreen(navController: NavController, account: cash.p.terminal.wallet.Account) {
     val viewModel =
         viewModel<UnlinkAccountViewModel>(factory = UnlinkAccountModule.Factory(account))
 

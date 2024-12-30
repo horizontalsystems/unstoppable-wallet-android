@@ -1,10 +1,9 @@
 package cash.p.terminal.core.storage
 
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.entities.nft.*
-import io.horizontalsystems.marketkit.models.NftPrice
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.wallet.models.NftPrice
+import cash.p.terminal.wallet.entities.TokenQuery
 
 class NftStorage(
     private val nftDao: NftDao,
@@ -103,7 +102,7 @@ class NftStorage(
         }
     }
 
-    private fun getAsset(record: NftAssetRecord, tokens: List<Token>): NftAssetShortMetadata {
+    private fun getAsset(record: NftAssetRecord, tokens: List<cash.p.terminal.wallet.Token>): NftAssetShortMetadata {
         return NftAssetShortMetadata(
             nftUid = record.nftUid,
             providerCollectionUid = record.collectionUid,
@@ -117,7 +116,7 @@ class NftStorage(
     private fun tokenQueries(priceRecords: List<NftPriceRecord>): List<TokenQuery> =
         priceRecords.map { it.tokenQueryId }.distinct().mapNotNull { TokenQuery.fromId(it) }
 
-    private fun nftPrice(priceRecord: NftPriceRecord?, tokens: List<Token>): NftPrice? =
+    private fun nftPrice(priceRecord: NftPriceRecord?, tokens: List<cash.p.terminal.wallet.Token>): NftPrice? =
         priceRecord?.let {
             tokens.firstOrNull { it.tokenQuery.id == priceRecord.tokenQueryId }?.let { token ->
                 NftPrice(token, priceRecord.value)

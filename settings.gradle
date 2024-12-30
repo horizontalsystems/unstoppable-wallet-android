@@ -1,6 +1,22 @@
+pluginManagement {
+    buildscript {
+        repositories {
+            gradlePluginPortal()
+            google()
+            mavenCentral()
+        }
+    }
+}
+
 include ':app'
 
-include ':core'
+include ':core:core'
+include ':core:strings'
+include ':core:resources'
+include ':core:ui-compose'
+include ':core:network'
+include ':core:wallet'
+include ':core:navigation'
 include ':components:icons'
 include ':components:chartview'
-include ':components:marketkit'
+include ':feature-stacking'

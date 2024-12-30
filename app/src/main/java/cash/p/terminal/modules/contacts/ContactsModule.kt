@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
@@ -61,9 +61,9 @@ object ContactsModule {
     }
 
     sealed class ContactValidationException(override val message: String?) : Throwable() {
-        object DuplicateContactName : ContactValidationException(Translator.getString(R.string.Contacts_Error_DefinedName))
+        object DuplicateContactName : ContactValidationException(cash.p.terminal.strings.helpers.Translator.getString(R.string.Contacts_Error_DefinedName))
         class DuplicateAddress(val contact: Contact) :
-            ContactValidationException(Translator.getString(R.string.Contacts_Error_DefinedAddress, contact.name))
+            ContactValidationException(cash.p.terminal.strings.helpers.Translator.getString(R.string.Contacts_Error_DefinedAddress, contact.name))
     }
 
 

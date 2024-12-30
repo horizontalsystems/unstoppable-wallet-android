@@ -33,23 +33,23 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.overview.TopPairViewItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
-import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
-import cash.p.terminal.ui.compose.components.VSpacer
+import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -63,7 +63,7 @@ fun TopPairsScreen() {
     }
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
     ) {
         Column(modifier = Modifier.padding(it)) {
             HSSwipeRefresh(

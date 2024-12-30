@@ -1,9 +1,9 @@
 package cash.p.terminal.modules.balance.cex
 
-import cash.p.terminal.core.customCoinPrefix
-import cash.p.terminal.core.managers.MarketKitWrapper
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.wallet.customCoinPrefix
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenQuery
 
 class BinanceCexCoinMapper(marketKit: MarketKitWrapper) {
     private val coins = marketKit.allCoins().map { it.uid to it }.toMap()

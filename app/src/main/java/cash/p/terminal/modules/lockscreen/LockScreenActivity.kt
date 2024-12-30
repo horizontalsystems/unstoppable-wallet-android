@@ -8,7 +8,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import cash.p.terminal.core.BaseActivity
 import cash.p.terminal.modules.pin.ui.PinUnlock
-import cash.p.terminal.ui.compose.ComposeAppTheme
 
 class LockScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,7 +15,7 @@ class LockScreenActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 
         setContent {
-            ComposeAppTheme {
+            cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                 PinUnlock(
                     onSuccess = {
                         finish()

@@ -4,15 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
-import cash.p.terminal.modules.chart.ChartModule
-import cash.p.terminal.modules.chart.ChartViewModel
+import io.horizontalsystems.chartview.chart.ChartModule
+import io.horizontalsystems.chartview.chart.ChartViewModel
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.ui.compose.Select
-import io.horizontalsystems.marketkit.models.Analytics
-import io.horizontalsystems.marketkit.models.CoinCategory
+import cash.p.terminal.wallet.models.Analytics
+import cash.p.terminal.wallet.models.CoinCategory
 
 object MarketCategoryModule {
 

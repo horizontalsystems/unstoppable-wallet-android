@@ -23,18 +23,18 @@ import cash.p.terminal.R
 import cash.p.terminal.core.Caution
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.AddressViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.FormsInput
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_lucian
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_lucian
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -53,13 +53,13 @@ fun AddressScreen(
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             ConfirmationBottomSheet(
                 title = stringResource(R.string.Contacts_DeleteAddress),
                 text = stringResource(R.string.Contacts_DeleteAddress_Warning),
                 iconPainter = painterResource(R.drawable.ic_delete_20),
-                iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian),
                 confirmText = stringResource(R.string.Button_Delete),
                 cautionType = Caution.Type.Error,
                 cancelText = stringResource(R.string.Button_Cancel),
@@ -73,7 +73,7 @@ fun AddressScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = uiState.headerTitle.getString(),

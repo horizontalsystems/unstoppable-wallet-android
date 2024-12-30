@@ -6,12 +6,8 @@ import com.binance.connector.client.exceptions.BinanceConnectorException
 import com.google.gson.Gson
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.providers.BinanceCexProvider
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.CexType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -58,7 +54,7 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
             apiKey = null
             secretKey = null
 
-            errorMessage = Translator.getString(R.string.WalletConnect_Error_DataParsingError)
+            errorMessage = cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_Error_DataParsingError)
         } else {
             apiKey = scannedApiKey
             secretKey = scannedSecretKey
@@ -81,9 +77,9 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
                 BinanceCexProvider.validate(tmpApiKey, tmpSecretKey)
                 createAccount(tmpApiKey, tmpSecretKey)
             } catch (error: BinanceClientException) {
-                errorMessage = Translator.getString(R.string.Cex_Error_FailedToConnectApiKey)
+                errorMessage = cash.p.terminal.strings.helpers.Translator.getString(R.string.Cex_Error_FailedToConnectApiKey)
             } catch (error: BinanceConnectorException) {
-                errorMessage = Translator.getString(R.string.Hud_Text_NoInternet)
+                errorMessage = cash.p.terminal.strings.helpers.Translator.getString(R.string.Hud_Text_NoInternet)
             }
             showSpinner = false
             emitState()
@@ -91,13 +87,13 @@ class EnterCexDataBinanceViewModel : ViewModelUiState<EnterCexDataBinanceViewMod
     }
 
     private fun createAccount(binanceApiKey: String, binanceSecretKey: String) {
-        val cexType = CexType.Binance(binanceApiKey, binanceSecretKey)
+        val cexType = cash.p.terminal.wallet.CexType.Binance(binanceApiKey, binanceSecretKey)
         val name = accountFactory.getNextCexAccountName(cexType)
 
         val account = accountFactory.account(
             name,
-            AccountType.Cex(cexType = cexType),
-            AccountOrigin.Restored,
+            cash.p.terminal.wallet.AccountType.Cex(cexType = cexType),
+            cash.p.terminal.wallet.AccountOrigin.Restored,
             true,
             false,
         )

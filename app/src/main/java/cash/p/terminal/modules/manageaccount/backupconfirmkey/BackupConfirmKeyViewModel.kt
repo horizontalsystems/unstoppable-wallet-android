@@ -1,12 +1,11 @@
 package cash.p.terminal.modules.manageaccount.backupconfirmkey
 
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IRandomProvider
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.IAccountManager
 
 class BackupConfirmKeyViewModel(
     private val account: Account,
@@ -23,7 +22,7 @@ class BackupConfirmKeyViewModel(
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            wordsIndexed = account.type.words.mapIndexed { index, s ->
+            wordsIndexed = (account.type as AccountType.Mnemonic).words.mapIndexed { index, s ->
                 Pair(index, s)
             }
 
@@ -71,7 +70,7 @@ class BackupConfirmKeyViewModel(
         val hiddenWordItem = hiddenWordItems[currentHiddenWordItemIndex]
         if (hiddenWordItem.word != wordOption.word) {
             reset()
-            error = Exception(Translator.getString(R.string.BackupConfirmKey_Error_InvalidWord))
+            error = Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupConfirmKey_Error_InvalidWord))
         } else {
             hiddenWordItems = hiddenWordItems.toMutableList().apply {
                 set(currentHiddenWordItemIndex, hiddenWordItem.copy(isRevealed = true))

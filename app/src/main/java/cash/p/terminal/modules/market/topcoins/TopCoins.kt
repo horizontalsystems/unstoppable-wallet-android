@@ -23,7 +23,7 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statMarketTop
 import cash.p.terminal.core.stats.statPeriod
 import cash.p.terminal.core.stats.statSortType
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
@@ -32,8 +32,8 @@ import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.CoinList
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -17,8 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.modules.market.ImageSource
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.ImageSource
+import cash.p.terminal.ui_compose.components.TabItem
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun <T> CardTabs(
@@ -44,7 +46,11 @@ fun <T> CardTabs(
                 val lastElement = index == tabItems.lastIndex
 
                 val border = if (selected) {
-                    Modifier.border(1.dp, ComposeAppTheme.colors.jacob, RoundedCornerShape(12.dp))
+                    Modifier.border(
+                        1.dp,
+                        ComposeAppTheme.colors.jacob,
+                        RoundedCornerShape(12.dp)
+                    )
                 } else {
                     Modifier
                 }

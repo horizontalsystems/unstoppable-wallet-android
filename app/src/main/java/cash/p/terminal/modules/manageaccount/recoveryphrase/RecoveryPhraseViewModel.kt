@@ -4,8 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
 
 class RecoveryPhraseViewModel(account: Account) : ViewModel() {
     val words: List<String>
@@ -19,12 +19,12 @@ class RecoveryPhraseViewModel(account: Account) : ViewModel() {
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            words = account.type.words
+            words = (account.type as AccountType.Mnemonic).words
             wordsNumbered = words.mapIndexed { index, word ->
                 RecoveryPhraseModule.WordNumbered(word, index + 1)
             }
-            passphrase = account.type.passphrase
-            seed = account.type.seed
+            passphrase = (account.type as AccountType.Mnemonic).passphrase
+            seed = (account.type as AccountType.Mnemonic).seed
         } else {
             words = listOf()
             seed = null

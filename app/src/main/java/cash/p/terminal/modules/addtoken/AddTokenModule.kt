@@ -3,8 +3,8 @@ package cash.p.terminal.modules.addtoken
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenQuery
 
 object AddTokenModule {
     class Factory : ViewModelProvider.Factory {

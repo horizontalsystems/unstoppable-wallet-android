@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.navigateWithTermsAccepted
@@ -39,15 +39,15 @@ import cash.p.terminal.modules.backuplocal.fullbackup.BackupFileValidator
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.headline2_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.headline2_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
@@ -116,13 +116,13 @@ private fun ImportWalletScreen(
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             ConfirmationBottomSheet(
                 title = stringResource(R.string.ImportWallet_WarningInvalidJson),
                 text = stringResource(R.string.ImportWallet_WarningInvalidJsonDescription),
                 iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian),
                 confirmText = stringResource(R.string.ImportWallet_SelectAnotherFile),
                 cautionType = Caution.Type.Warning,
                 cancelText = stringResource(R.string.Button_Cancel),
@@ -137,7 +137,7 @@ private fun ImportWalletScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.ManageAccounts_ImportWallet),

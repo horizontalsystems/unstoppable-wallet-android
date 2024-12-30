@@ -20,34 +20,33 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.viewmodels.NetworkSelectViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.SectionUniversalItem
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.core.RowUniversal
+import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.entities.FullCoin
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 
 @Composable
 fun NetworkSelectScreen(
     navController: NavController,
-    activeAccount: Account,
+    activeAccount: cash.p.terminal.wallet.Account,
     fullCoin: FullCoin,
-    onSelect: (Wallet) -> Unit
+    onSelect: (cash.p.terminal.wallet.Wallet) -> Unit
 ) {
     val viewModel = viewModel<NetworkSelectViewModel>(factory = NetworkSelectViewModel.Factory(activeAccount, fullCoin))
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Balance_Network),

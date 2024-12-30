@@ -2,21 +2,25 @@ package cash.p.terminal.modules.balance
 
 import androidx.compose.runtime.Immutable
 import cash.p.terminal.R
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.diff
 import cash.p.terminal.core.providers.CexAsset
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.swappable
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.balance.BalanceModule.warningText
 import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.balance.BalanceItem
+import cash.p.terminal.wallet.balance.BalanceViewHelper
+import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.balance.DeemedValue
+import cash.p.terminal.wallet.models.CoinPrice
 import java.math.BigDecimal
 
 @Immutable
@@ -70,7 +74,6 @@ data class BalanceViewItem2(
     val isWatchAccount: Boolean
 )
 
-data class DeemedValue<T>(val value: T, val dimmed: Boolean = false, val visible: Boolean = true)
 data class SyncingProgress(val progress: Int?, val dimmed: Boolean = false)
 
 class BalanceViewItemFactory {
@@ -135,7 +138,8 @@ class BalanceViewItemFactory {
         val text = when (state) {
             is AdapterState.Syncing -> {
                 if (state.lastBlockDate != null) {
-                    Translator.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(state.lastBlockDate, "MMM d, yyyy"))
+                    Translator.getString(R.string.Balance_SyncedUntil, DateHelper.formatDate(
+                        state.lastBlockDate!!, "MMM d, yyyy"))
                 } else {
                     null
                 }
@@ -173,7 +177,7 @@ class BalanceViewItemFactory {
     }
 
     fun viewItem(
-        item: BalanceModule.BalanceItem,
+        item: BalanceItem,
         currency: Currency,
         hideBalance: Boolean,
         watchAccount: Boolean,
@@ -271,7 +275,7 @@ class BalanceViewItemFactory {
     }
 
     fun viewItem2(
-        item: BalanceModule.BalanceItem,
+        item: BalanceItem,
         currency: Currency,
         hideBalance: Boolean,
         watchAccount: Boolean,

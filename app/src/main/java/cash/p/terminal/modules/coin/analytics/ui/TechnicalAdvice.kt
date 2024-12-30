@@ -24,11 +24,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.caption_grey
-import cash.p.terminal.ui.compose.components.headline1_bran
-import cash.p.terminal.ui.compose.components.headline2_leah
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.caption_grey
+import cash.p.terminal.ui_compose.components.headline1_bran
+import cash.p.terminal.ui_compose.components.headline2_leah
 
 @Composable
 fun TechnicalAdviceBlock(

@@ -37,15 +37,15 @@ import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.CellMultilineClear
+import io.horizontalsystems.core.CellMultilineClear
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.diffColor
+import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.diffColor
 import cash.p.terminal.ui.compose.components.diffText
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable

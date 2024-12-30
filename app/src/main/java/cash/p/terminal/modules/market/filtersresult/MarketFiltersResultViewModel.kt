@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.market.filtersresult
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.category.MarketItemWrapper

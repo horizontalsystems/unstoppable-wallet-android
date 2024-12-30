@@ -6,8 +6,8 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.multiswap.QuoteInfoRow
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
 import java.math.BigDecimal
 
 data class DataFieldSlippage(val slippage: BigDecimal) : DataField {

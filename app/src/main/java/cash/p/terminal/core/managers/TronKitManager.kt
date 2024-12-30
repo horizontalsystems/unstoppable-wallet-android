@@ -5,8 +5,8 @@ import android.os.Looper
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.tronkit.TronKit
@@ -39,14 +39,14 @@ class TronKitManager(
         }
 
     private var useCount = 0
-    var currentAccount: Account? = null
+    var currentAccount: cash.p.terminal.wallet.Account? = null
         private set
 
     val statusInfo: Map<String, Any>?
         get() = tronKitWrapper?.tronKit?.statusInfo()
 
     @Synchronized
-    fun getTronKitWrapper(account: Account): TronKitWrapper {
+    fun getTronKitWrapper(account: cash.p.terminal.wallet.Account): TronKitWrapper {
         if (this.tronKitWrapper != null && currentAccount != account) {
             stop()
         }
@@ -54,11 +54,11 @@ class TronKitManager(
         if (this.tronKitWrapper == null) {
             val accountType = account.type
             this.tronKitWrapper = when (accountType) {
-                is AccountType.Mnemonic -> {
+                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
 
-                is AccountType.TronAddress -> {
+                is cash.p.terminal.wallet.AccountType.TronAddress -> {
                     createKitInstance(accountType, account)
                 }
 
@@ -74,8 +74,8 @@ class TronKitManager(
     }
 
     private fun createKitInstance(
-        accountType: AccountType.Mnemonic,
-        account: Account
+        accountType: cash.p.terminal.wallet.AccountType.Mnemonic,
+        account: cash.p.terminal.wallet.Account
     ): TronKitWrapper {
         val seed = accountType.seed
         val signer = Signer.getInstance(seed, network)
@@ -92,8 +92,8 @@ class TronKitManager(
     }
 
     private fun createKitInstance(
-        accountType: AccountType.TronAddress,
-        account: Account
+        accountType: cash.p.terminal.wallet.AccountType.TronAddress,
+        account: cash.p.terminal.wallet.Account
     ): TronKitWrapper {
         val address = accountType.address
 
@@ -109,7 +109,7 @@ class TronKitManager(
     }
 
     @Synchronized
-    fun unlink(account: Account) {
+    fun unlink(account: cash.p.terminal.wallet.Account) {
         if (account == currentAccount) {
             useCount -= 1
 

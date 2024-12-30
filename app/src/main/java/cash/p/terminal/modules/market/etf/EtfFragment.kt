@@ -42,45 +42,45 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPeriod
 import cash.p.terminal.core.stats.statSortType
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.coin.overview.ui.GraphicLine
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.chartview.chart.GraphicLine
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.modules.market.ImageSource
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.AlertGroup
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.DescriptionCard
-import cash.p.terminal.ui.compose.components.GraphicBarsWithNegative
-import cash.p.terminal.ui.compose.components.HFillSpacer
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import io.horizontalsystems.chartview.GraphicBarsWithNegative
+import cash.p.terminal.ui_compose.components.HFillSpacer
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinClear
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.cell.CellUniversalFixedHeight
-import cash.p.terminal.ui.compose.components.headline2_leah
-import cash.p.terminal.ui.compose.components.micro_grey
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead1_lucian
-import cash.p.terminal.ui.compose.components.subhead1_remus
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.VSpacer
+import io.horizontalsystems.chartview.cell.CellUniversalFixedHeight
+import cash.p.terminal.ui_compose.components.headline2_leah
+import cash.p.terminal.ui_compose.components.micro_grey
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead1_lucian
+import cash.p.terminal.ui_compose.components.subhead1_remus
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui.compose.hsRememberLazyListState
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.EtfPoint
+import cash.p.terminal.wallet.models.EtfPoint
 import java.math.BigDecimal
 import kotlin.math.abs
 
@@ -336,14 +336,14 @@ fun ChartEtf(loading: Boolean, etfPoints: List<EtfPoint>, currency: Currency) {
                             .padding(horizontal = 8.dp)
                     ) {
                         val color = if (isSelected) {
-                            ComposeAppTheme.colors.grey50
+                            cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50
                         } else {
-                            ComposeAppTheme.colors.remus
+                            cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus
                         }
                         val colorNegative = if (isSelected) {
-                            ComposeAppTheme.colors.grey50
+                            cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50
                         } else {
-                            ComposeAppTheme.colors.lucian
+                            cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
                         }
 
                         GraphicBarsWithNegative(
@@ -393,7 +393,7 @@ private fun GraphicPointer(
     var selectedX by remember {
         mutableStateOf<Float?>(null)
     }
-    val lineColor = ComposeAppTheme.colors.leah
+    val lineColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
     Canvas(
         modifier = modifier
             .pointerInput(Unit) {
@@ -447,7 +447,7 @@ private fun GraphicPointer(
 
 @Composable
 private fun ChartLabelBottom(labelBottom: String) {
-    val colors = ComposeAppTheme.colors
+    val colors = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors
     Row(
         modifier = Modifier
             .height(20.dp)
@@ -473,7 +473,7 @@ private fun ChartLabelBottom(labelBottom: String) {
 private fun ChartLabelTop(
     labelTop: String,
 ) {
-    val colors = ComposeAppTheme.colors
+    val colors = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors
 
     Row(
         modifier = Modifier

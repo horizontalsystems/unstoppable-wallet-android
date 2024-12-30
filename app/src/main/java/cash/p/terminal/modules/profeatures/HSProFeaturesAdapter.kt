@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.profeatures
 
-import io.horizontalsystems.marketkit.providers.RetrofitUtils
+import cash.p.terminal.wallet.providers.RetrofitUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.http.Body

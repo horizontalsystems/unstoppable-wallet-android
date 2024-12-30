@@ -8,27 +8,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.accountTypeDerivation
 import cash.p.terminal.core.bep2TokenUrl
-import cash.p.terminal.core.bitcoinCashCoinType
 import cash.p.terminal.core.eip20TokenUrl
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.isSupported
 import cash.p.terminal.core.jettonUrl
 import cash.p.terminal.core.order
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.shorten
 import cash.p.terminal.core.supports
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.accountTypeDerivation
+import cash.p.terminal.wallet.bitcoinCashCoinType
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -36,7 +32,7 @@ class CoinOverviewViewModel(
     private val service: CoinOverviewService,
     private val factory: CoinViewFactory,
     private val walletManager: IWalletManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val chartIndicatorManager: ChartIndicatorManager
 ) : ViewModel() {
 
@@ -85,9 +81,17 @@ class CoinOverviewViewModel(
         viewModelScope.launch {
             walletManager.activeWalletsUpdatedObservable.asFlow().collect { wallets ->
                 if (wallets.size > activeWallets.size) {
-                    hudMessage = HudMessage(R.string.Hud_Added_To_Wallet, HudMessageType.Success, R.drawable.ic_add_to_wallet_2_24)
+                    hudMessage = HudMessage(
+                        R.string.Hud_Added_To_Wallet,
+                        HudMessageType.Success,
+                        R.drawable.ic_add_to_wallet_2_24
+                    )
                 } else if (wallets.size < activeWallets.size) {
-                    hudMessage = HudMessage(R.string.Hud_Removed_From_Wallet, HudMessageType.Error, R.drawable.ic_empty_wallet_24)
+                    hudMessage = HudMessage(
+                        R.string.Hud_Removed_From_Wallet,
+                        HudMessageType.Error,
+                        R.drawable.ic_empty_wallet_24
+                    )
                 }
 
                 activeWallets = wallets
@@ -130,7 +134,11 @@ class CoinOverviewViewModel(
         service.refresh()
     }
 
-    private fun getTokenVariants(fullCoin: FullCoin, account: Account?, activeWallets: List<Wallet>): TokenVariants? {
+    private fun getTokenVariants(
+        fullCoin: FullCoin,
+        account: cash.p.terminal.wallet.Account?,
+        activeWallets: List<cash.p.terminal.wallet.Wallet>
+    ): TokenVariants? {
         val items = mutableListOf<TokenVariant>()
         var type = TokenVariants.Type.Blockchains
 
@@ -141,14 +149,16 @@ class CoinOverviewViewModel(
         }
 
         fullCoin.tokens
-            .filter { when(val tokenType = it.type){
-                is TokenType.Unsupported -> tokenType.reference.isNotBlank()
-                else -> true
-            } }
+            .filter {
+                when (val tokenType = it.type) {
+                    is TokenType.Unsupported -> tokenType.reference.isNotBlank()
+                    else -> true
+                }
+            }
             .sortedWith(
-            compareBy<Token> { it.type.order }
-                .thenBy { it.blockchainType.order }
-        )
+                compareBy<cash.p.terminal.wallet.Token> { it.type.order }
+                    .thenBy { it.blockchainType.order }
+            )
             .forEach { token ->
                 val canAddToWallet = accountTypeNotWatch != null
                         && token.isSupported
@@ -171,6 +181,7 @@ class CoinOverviewViewModel(
                             )
                         )
                     }
+
                     is TokenType.Eip20 -> {
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.token == token }
@@ -269,7 +280,7 @@ class CoinOverviewViewModel(
                             canAddToWallet && activeWallets.any { it.token == token }
                         items.add(
                             TokenVariant(
-                                value = Translator.getString(R.string.CoinPlatforms_Native),
+                                value = cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPlatforms_Native),
                                 copyValue = null,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = null,

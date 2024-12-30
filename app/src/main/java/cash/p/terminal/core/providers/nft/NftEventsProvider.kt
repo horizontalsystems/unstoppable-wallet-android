@@ -1,14 +1,14 @@
 package cash.p.terminal.core.providers.nft
 
 import cash.p.terminal.core.managers.APIClient
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.entities.nft.NftAssetMetadata
 import cash.p.terminal.entities.nft.NftEventMetadata
 import cash.p.terminal.entities.nft.NftUid
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.NftPrice
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.models.NftPrice
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

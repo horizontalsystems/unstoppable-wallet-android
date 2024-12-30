@@ -1,15 +1,15 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterState
-import cash.p.terminal.core.BalanceData
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
-import cash.p.terminal.modules.transactions.TransactionSource
 import cash.p.terminal.modules.transactions.TransactionStatus
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tonkit.core.TonKit.SendAmount
 import io.horizontalsystems.tonkit.models.Account

@@ -14,10 +14,10 @@ import cash.p.terminal.modules.multiswap.ui.DataFieldAllowance
 import cash.p.terminal.modules.multiswap.ui.DataFieldRecipient
 import cash.p.terminal.modules.multiswap.ui.DataFieldRecipientExtended
 import cash.p.terminal.modules.multiswap.ui.DataFieldSlippage
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.uniswapkit.UniswapKit
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.models.TradeOptions

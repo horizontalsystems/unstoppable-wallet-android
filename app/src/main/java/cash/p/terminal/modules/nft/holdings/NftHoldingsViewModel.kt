@@ -5,12 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.balance.ITotalBalance
 import cash.p.terminal.modules.balance.TotalBalance
 import cash.p.terminal.modules.balance.TotalService
 import cash.p.terminal.modules.market.overview.coinValue
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

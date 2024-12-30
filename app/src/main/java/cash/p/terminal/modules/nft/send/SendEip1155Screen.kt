@@ -40,17 +40,17 @@ import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.AddressViewModel
 import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.AdditionalDataCell2
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.caption_lucian
-import cash.p.terminal.ui.compose.components.headline1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.caption_lucian
+import cash.p.terminal.ui_compose.components.headline1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun SendEip1155Screen(
@@ -61,7 +61,7 @@ fun SendEip1155Screen(
 ) {
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.SendNft_Title),
@@ -164,8 +164,8 @@ private fun ItemCountInput(
     onValueChange: (Int) -> Unit,
 ) {
     val borderColor = when (state) {
-        is DataState.Error -> ComposeAppTheme.colors.red50
-        else -> ComposeAppTheme.colors.steel20
+        is DataState.Error -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
+        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
     }
 
     Row(

@@ -43,26 +43,27 @@ import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.contacts.model.ContactAddress
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel
 import cash.p.terminal.modules.contacts.viewmodel.ContactViewModel.AddressViewItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryRed
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.FormsInput
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_jacob
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.body_lucian
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_jacob
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.body_lucian
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 
 enum class ContactScreenBottomSheetType {
@@ -97,7 +98,7 @@ fun ContactScreen(
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             when (bottomSheetType) {
                 null -> {
@@ -109,7 +110,7 @@ fun ContactScreen(
                         title = stringResource(R.string.Contacts_DeleteContact),
                         text = stringResource(R.string.Contacts_DeleteContact_Warning),
                         iconPainter = painterResource(R.drawable.ic_delete_20),
-                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian),
                         confirmText = stringResource(R.string.Button_Delete),
                         cautionType = Caution.Type.Error,
                         cancelText = stringResource(R.string.Button_Cancel),
@@ -123,7 +124,7 @@ fun ContactScreen(
                         title = stringResource(R.string.Alert_TitleWarning),
                         text = stringResource(R.string.Contacts_DiscardChanges_Warning),
                         iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
                         confirmText = stringResource(R.string.Contacts_DiscardChanges),
                         cautionType = Caution.Type.Error,
                         cancelText = stringResource(R.string.Contacts_KeepEditing),
@@ -156,7 +157,7 @@ fun ContactScreen(
         }
 
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = uiState.headerTitle.getString(),

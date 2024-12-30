@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.multiswap.providers
 
 import cash.p.terminal.R
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 object QuickSwapProvider : BaseUniswapProvider() {
     override val id = "quickswap"

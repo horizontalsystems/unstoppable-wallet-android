@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.INetworkManager
 import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

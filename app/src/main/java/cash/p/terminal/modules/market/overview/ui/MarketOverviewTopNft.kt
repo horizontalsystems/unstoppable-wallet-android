@@ -12,12 +12,12 @@ import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionViewItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
 import cash.p.terminal.ui.compose.components.NftIcon
-import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import io.horizontalsystems.core.entities.BlockchainType
 
 @Composable
 fun TopNftCollectionsBoardView(

@@ -10,15 +10,14 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.LocalizedException
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,7 +25,7 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendTonViewModel(
-    val wallet: Wallet,
+    val wallet: cash.p.terminal.wallet.Wallet,
     val sendToken: Token,
     val feeToken: Token,
     val adapter: ISendTonAdapter,

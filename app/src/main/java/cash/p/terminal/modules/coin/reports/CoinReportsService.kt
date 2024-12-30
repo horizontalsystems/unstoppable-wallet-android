@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.coin.reports
 
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.entities.DataState
-import io.horizontalsystems.marketkit.models.CoinReport
+import cash.p.terminal.wallet.models.CoinReport
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope

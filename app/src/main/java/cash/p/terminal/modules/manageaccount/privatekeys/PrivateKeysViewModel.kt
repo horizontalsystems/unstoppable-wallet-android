@@ -6,14 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.toRawHexString
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.manageaccount.showextendedkey.ShowExtendedKeyModule
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.ethereumkit.core.signer.Signer
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.hdwalletkit.Mnemonic
-import io.horizontalsystems.marketkit.models.BlockchainType
 import java.math.BigInteger
 
 class PrivateKeysViewModel(
@@ -38,7 +38,7 @@ class PrivateKeysViewModel(
         val hdExtendedKey = (account.type as? AccountType.HdExtendedKey)?.hdExtendedKey
 
         val bip32RootKey = if (account.type is AccountType.Mnemonic) {
-            val seed = Mnemonic().toSeed(account.type.words, account.type.passphrase)
+            val seed = Mnemonic().toSeed((account.type as AccountType.Mnemonic).words, (account.type as AccountType.Mnemonic).passphrase)
             HDExtendedKey(seed, HDWallet.Purpose.BIP44)
         } else if (hdExtendedKey?.derivedType == HDExtendedKey.DerivedType.Master) {
             hdExtendedKey

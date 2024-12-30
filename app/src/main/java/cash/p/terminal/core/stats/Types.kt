@@ -3,7 +3,7 @@ package cash.p.terminal.core.stats
 import cash.p.terminal.core.bitcoinCashCoinType
 import cash.p.terminal.core.derivation
 import cash.p.terminal.entities.BtcRestoreMode
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 
 enum class StatPage(val key: String) {
     AboutApp("about_app"),
@@ -116,6 +116,7 @@ enum class StatPage(val key: String) {
     SendConfirmation("send_confirmation"),
     Settings("settings"),
     Swap("swap"),
+    Stacking("stacking"),
     SwapApproveConfirmation("swap_approve_confirmation"),
     SwapConfirmation("swap_confirmation"),
     SwapSettings("swap_settings"),

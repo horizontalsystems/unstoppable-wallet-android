@@ -1,10 +1,10 @@
 package cash.p.terminal.modules.coin.investments
 
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
-import io.horizontalsystems.marketkit.models.CoinInvestment
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.wallet.models.CoinInvestment
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope

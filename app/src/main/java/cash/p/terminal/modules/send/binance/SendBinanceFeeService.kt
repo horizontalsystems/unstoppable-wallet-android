@@ -5,8 +5,8 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendBinanceAdapter
 import cash.p.terminal.core.providers.FeeTokenProvider
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

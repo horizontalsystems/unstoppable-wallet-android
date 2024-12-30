@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.contacts.model
 
 import android.os.Parcelable
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 import kotlinx.parcelize.Parcelize
 import java.util.*
 

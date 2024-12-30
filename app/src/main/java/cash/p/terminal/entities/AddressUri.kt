@@ -3,7 +3,7 @@ package cash.p.terminal.entities
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.core.supported
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 
 class AddressUri(

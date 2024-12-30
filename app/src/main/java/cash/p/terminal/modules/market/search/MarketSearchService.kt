@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.market.search
 
-import cash.p.terminal.core.managers.MarketKitWrapper
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.entities.FullCoin
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

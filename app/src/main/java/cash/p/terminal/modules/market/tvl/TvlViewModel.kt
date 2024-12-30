@@ -4,18 +4,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statType
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.ImageSource
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.tvl.TvlModule.SelectorDialogState
 import cash.p.terminal.modules.market.tvl.TvlModule.TvlDiffType
 import cash.p.terminal.ui.compose.Select
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.core.models.HsTimePeriod
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -39,8 +38,8 @@ class TvlViewModel(
     val chainSelectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
     var header = MarketModule.Header(
-        title = Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
-        description = Translator.getString(R.string.MarketGlobalMetrics_TvlInDefiDescription),
+        title = cash.p.terminal.strings.helpers.Translator.getString(R.string.MarketGlobalMetrics_TvlInDefi),
+        description = cash.p.terminal.strings.helpers.Translator.getString(R.string.MarketGlobalMetrics_TvlInDefiDescription),
         icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/tvl@3x.png")
     )
 

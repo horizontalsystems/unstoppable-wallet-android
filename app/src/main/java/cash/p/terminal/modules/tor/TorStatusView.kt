@@ -22,8 +22,8 @@ import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 
@@ -49,11 +49,11 @@ fun TorStatusView(
         contentAlignment = Alignment.Center
     ) {
         if (viewModel.torViewState.torIsActive) {
-            val startColor = ComposeAppTheme.colors.remus
-            val endColor = ComposeAppTheme.colors.lawrence
+            val startColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus
+            val endColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence
             val color = remember { Animatable(startColor) }
-            val startTextColor = ComposeAppTheme.colors.white
-            val endTextColor = ComposeAppTheme.colors.leah
+            val startTextColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.white
+            val endTextColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
             val textColor = remember { Animatable(startTextColor) }
             LaunchedEffect(Unit) {
                 delay(1000)
@@ -85,7 +85,7 @@ fun TorStatusView(
                     maxLines = 1,
                     modifier = Modifier.weight(1f),
                     style = ComposeAppTheme.typography.subhead2,
-                    color = if (viewModel.torViewState.showRetryButton) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.leah,
+                    color = if (viewModel.torViewState.showRetryButton) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
                 )
                 if (viewModel.torViewState.showRetryButton) {
                     ButtonSecondaryTransparent(

@@ -28,14 +28,13 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.entities.Wallet
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
@@ -60,18 +59,18 @@ class SyncErrorDialog : BaseComposableBottomSheetFragment() {
     }
 
     @Parcelize
-    data class Input(val wallet: Wallet, val errorMessage: String?) : Parcelable
+    data class Input(val wallet: cash.p.terminal.wallet.Wallet, val errorMessage: String?) : Parcelable
 }
 
 @Composable
-private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error: String) {
+private fun SyncErrorScreen(navController: NavController, wallet: cash.p.terminal.wallet.Wallet, error: String) {
     val viewModel = viewModel<SyncErrorViewModel>(factory = SyncErrorModule.Factory(wallet))
 
     val context = LocalContext.current
     val view = LocalView.current
     val clipboardManager = LocalClipboardManager.current
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_red_24),
             title = stringResource(R.string.BalanceSyncError_Title),
@@ -107,9 +106,14 @@ private fun SyncErrorScreen(navController: NavController, wallet: Wallet, error:
                                     blockchainWrapper.blockchain
                                 )
                             }
+
                             SyncErrorModule.BlockchainWrapper.Type.Evm -> {
-                                navController.slideFromBottom(R.id.evmNetworkFragment, blockchainWrapper.blockchain)
+                                navController.slideFromBottom(
+                                    R.id.evmNetworkFragment,
+                                    blockchainWrapper.blockchain
+                                )
                             }
+
                             else -> {}
                         }
                     }

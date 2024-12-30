@@ -1,7 +1,7 @@
 package cash.p.terminal.entities.nft
 
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.NftPrice
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.models.NftPrice
 import java.math.BigDecimal
 import java.util.*
 

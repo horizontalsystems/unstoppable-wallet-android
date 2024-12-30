@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.market.tvl
 
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.entities.DataState
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.core.CurrencyManager
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

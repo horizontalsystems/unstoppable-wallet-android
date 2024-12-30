@@ -1,0 +1,100 @@
+[versions]
+androidGradlePlugin = "8.6.1"
+kotlin = "2.0.21"
+koin-bom = "4.0.0"
+compose-bom = "2024.12.01"
+recyclerview = "1.3.2"
+coil-compose = "2.5.0"
+annotation = "1.9.1"
+lifecycle-viewmodel-compose = "2.8.7"
+roomRxjava2 = "2.6.1"
+uiTooling = "1.7.6"
+androidx-fragment-ktx = "1.8.5"
+navigationRuntimeKtx = "2.8.5"
+navigationFragmentKtx = "2.8.5"
+rxjava = "2.2.21"
+kotlinx-coroutines-android = "1.9.0"
+room = "2.6.1"
+javax-inject = "1"
+appcompat = "1.7.0"
+
+horizontalsystems-ton = "763a5c3"
+horizontalsystems-bitcoin = "ced5801"
+horizontalsystems-ethereum = "0c770e3"
+horizontalsystems-blockchain-fee = "1d3bd49"
+horizontalsystems-binance = "c1509a2"
+horizontalsystems-solana = "ce738d8"
+horizontalsystems-tron = "dc3dca7"
+
+gson = "2.10.1"
+retrofit = "2.11.0"
+okhttp-logging-interceptor = "4.12.0"
+uiTextAndroid = "1.7.6"
+jetbrainsKotlinJvm = "2.0.21"
+ktor = "3.0.2"
+kotlinx-serialization-json = "1.8.0-RC"
+androidx-constraintlayout = "2.2.0"
+android-core-ktx = "1.13.1"
+
+[libraries]
+androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "roomRxjava2" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-core = { module = "io.insert-koin:koin-core" }
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
+
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-material = { module = "androidx.compose.material:material" }
+compose-tooling = { module = "androidx.compose.ui:ui-tooling-preview" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-compose" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment-ktx" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+rxjava = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxjava" }
+kotlinx-coroutines-rx2 = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-rx2", version.ref = "kotlinx-coroutines-android" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+ton-kit = { group = "com.github.horizontalsystems", name = "ton-kit-android", version.ref = "horizontalsystems-ton" }
+bitcoin-kit = { group = "com.github.horizontalsystems", name = "bitcoin-kit-android", version.ref = "horizontalsystems-bitcoin" }
+ethereum-kit = { group = "com.github.horizontalsystems", name = "ethereum-kit-android", version.ref = "horizontalsystems-ethereum" }
+blockchain-fee-kit = { group = "com.github.horizontalsystems", name = "blockchain-fee-rate-kit-android", version.ref = "horizontalsystems-blockchain-fee" }
+binance-kit = { group = "com.github.horizontalsystems", name = "binance-chain-kit-android", version.ref = "horizontalsystems-binance" }
+solana-kit = { group = "com.github.horizontalsystems", name = "solana-kit-android", version.ref = "horizontalsystems-solana" }
+tron-kit = { group = "com.github.horizontalsystems", name = "tron-kit-android", version.ref = "horizontalsystems-tron" }
+
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit-scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
+retrofit-rxjava2 = { group = "com.squareup.retrofit2", name = "adapter-rxjava2", version.ref = "retrofit" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp-logging-interceptor" }
+androidx-ui-text-android = { group = "androidx.compose.ui", name = "ui-text-android", version.ref = "uiTextAndroid" }
+android-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "android-core-ktx" }
+
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-log = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+ktor-kotlinx-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
+
+[plugins]
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-parcelize = { id = "kotlin-parcelize", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+devtools-ksp = { id = "com.google.devtools.ksp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }

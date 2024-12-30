@@ -25,22 +25,21 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.requireInput
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HSpacer
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeaderMultiline
 import cash.p.terminal.ui.helpers.LinkHelper
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.Token
 
 class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
 
@@ -55,7 +54,7 @@ class ConfiguredTokenInfoDialog : BaseComposableBottomSheetFragment() {
             )
             setContent {
                 val navController = findNavController()
-                ConfiguredTokenInfo(navController, navController.requireInput<Token>())
+                ConfiguredTokenInfo(navController, navController.requireInput<cash.p.terminal.wallet.Token>())
             }
         }
     }
@@ -66,7 +65,7 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
     val viewModel = viewModel<ConfiguredTokenInfoViewModel>(factory = ConfiguredTokenInfoViewModel.Factory(token))
     val uiState = viewModel.uiState
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         BottomSheetHeaderMultiline(
             iconPainter = uiState.iconSource.painter(),
             title = uiState.title,
@@ -77,18 +76,36 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
                 is ConfiguredTokenInfoType.Contract -> {
                     ContractInfo(tokenInfoType)
                 }
+
                 ConfiguredTokenInfoType.Bch -> {
                     body_leah(
                         text = stringResource(id = R.string.ManageCoins_BchTypeDescription),
-                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                        modifier = Modifier.padding(
+                            start = 32.dp,
+                            top = 12.dp,
+                            end = 32.dp,
+                            bottom = 24.dp
+                        )
                     )
                 }
+
                 is ConfiguredTokenInfoType.Bips -> {
                     body_leah(
-                        text = stringResource(R.string.ManageCoins_BipsDescription, tokenInfoType.blockchainName, tokenInfoType.blockchainName, tokenInfoType.blockchainName),
-                        modifier = Modifier.padding(start = 32.dp, top = 12.dp, end = 32.dp, bottom = 24.dp)
+                        text = stringResource(
+                            R.string.ManageCoins_BipsDescription,
+                            tokenInfoType.blockchainName,
+                            tokenInfoType.blockchainName,
+                            tokenInfoType.blockchainName
+                        ),
+                        modifier = Modifier.padding(
+                            start = 32.dp,
+                            top = 12.dp,
+                            end = 32.dp,
+                            bottom = 24.dp
+                        )
                     )
                 }
+
                 is ConfiguredTokenInfoType.BirthdayHeight -> {
                     CellUniversalLawrenceSection(showFrame = true) {
                         RowUniversal(
@@ -112,6 +129,7 @@ private fun ConfiguredTokenInfo(navController: NavController, token: Token) {
                         }
                     }
                 }
+
                 null -> Unit
             }
             Spacer(Modifier.height(32.dp))

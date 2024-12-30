@@ -1,5 +1,6 @@
 package cash.p.terminal.ui.compose.components
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -52,8 +53,11 @@ import cash.p.terminal.R
 import cash.p.terminal.core.utils.ModuleField
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
-import cash.p.terminal.ui.compose.ColoredTextStyle
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.theme.ColoredTextStyle
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun FormsInput(
@@ -250,6 +254,7 @@ fun FormsInput(
     }
 }
 
+@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 fun FormsInputPassword(
     modifier: Modifier = Modifier,

@@ -26,8 +26,7 @@ import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -55,7 +54,7 @@ fun SendTronScreen(
     val amountUnique = paymentAddressViewModel.amountUnique
 
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {

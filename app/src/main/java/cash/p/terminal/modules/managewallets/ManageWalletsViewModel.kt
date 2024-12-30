@@ -3,14 +3,14 @@ package cash.p.terminal.modules.managewallets
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.Clearable
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.alternativeImageUrl
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.badge
 import kotlinx.coroutines.launch
 
 class ManageWalletsViewModel(
@@ -18,7 +18,7 @@ class ManageWalletsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<cash.p.terminal.wallet.Token>>>()
 
     init {
         viewModelScope.launch {

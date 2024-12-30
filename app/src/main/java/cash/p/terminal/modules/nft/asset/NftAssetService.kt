@@ -1,17 +1,16 @@
 package cash.p.terminal.modules.nft.asset
 
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.adapters.nft.INftAdapter
 import cash.p.terminal.core.managers.NftAdapterManager
 import cash.p.terminal.core.providers.nft.INftProvider
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.nft.NftAssetMetadata
 import cash.p.terminal.entities.nft.NftCollectionMetadata
 import cash.p.terminal.entities.nft.NftKey
 import cash.p.terminal.entities.nft.NftUid
-import cash.p.terminal.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.NftPrice
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
+import cash.p.terminal.wallet.models.CoinPrice
+import cash.p.terminal.wallet.models.NftPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -25,10 +24,10 @@ import java.util.*
 class NftAssetService(
     private val providerCollectionUid: String,
     val nftUid: NftUid,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val nftAdapterManager: NftAdapterManager,
     private val provider: INftProvider,
-    private val xRateRepository: BalanceXRateRepository
+    private val xRateRepository: DefaultBalanceXRateRepository
 ) {
     private val _serviceDataFlow = MutableStateFlow<Result<Item>?>(null)
     private var adapter: INftAdapter? = null

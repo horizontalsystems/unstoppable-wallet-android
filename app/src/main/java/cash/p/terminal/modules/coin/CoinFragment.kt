@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.coin
 
-import android.os.Parcelable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -16,7 +15,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
@@ -26,24 +24,25 @@ import cash.p.terminal.core.stats.statTab
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsScreen
 import cash.p.terminal.modules.coin.coinmarkets.CoinMarketsScreen
 import cash.p.terminal.modules.coin.overview.ui.CoinOverviewScreen
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.TabItem
-import cash.p.terminal.ui.compose.components.Tabs
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.ui_compose.CoinFragmentInput
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.TabItem
+import cash.p.terminal.ui_compose.components.Tabs
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 
 class CoinFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val input = navController.getInput<Input>()
+        val input = navController.getInput<CoinFragmentInput>()
         val coinUid = input?.coinUid ?: ""
 
         CoinScreen(
@@ -62,9 +61,6 @@ class CoinFragment : BaseComposeFragment() {
     } catch (e: Exception) {
         null
     }
-
-    @Parcelize
-    data class Input(val coinUid: String) : Parcelable
 }
 
 @Composable
@@ -94,7 +90,7 @@ fun CoinTabs(
     val view = LocalView.current
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = viewModel.fullCoin.coin.code,
@@ -200,7 +196,7 @@ fun CoinTabs(
 @Composable
 fun CoinNotFound(coinUid: String, navController: NavController) {
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = coinUid,

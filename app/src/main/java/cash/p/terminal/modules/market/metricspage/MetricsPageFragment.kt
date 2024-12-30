@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
@@ -26,24 +26,24 @@ import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPage
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.chart.ChartViewModel
-import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Chart
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.chartview.chart.ChartViewModel
+import cash.p.terminal.ui_compose.CoinFragmentInput
+import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.metricchart.MetricsType
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.DescriptionCard
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinClear
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.hsRememberLazyListState
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class MetricsPageFragment : BaseComposeFragment() {
 
@@ -61,7 +61,7 @@ class MetricsPageFragment : BaseComposeFragment() {
     }
 
     private fun onCoinClick(coinUid: String, navController: NavController) {
-        val arguments = CoinFragment.Input(coinUid)
+        val arguments = CoinFragmentInput(coinUid)
 
         navController.slideFromRight(R.id.coinFragment, arguments)
     }
@@ -125,7 +125,10 @@ class MetricsPageFragment : BaseComposeFragment() {
                                     }
                                 }
                                 item {
-                                    Chart(chartViewModel = chartViewModel)
+                                    Chart(
+                                        uiState = chartViewModel.uiState,
+                                        getSelectedPointCallback = chartViewModel::getSelectedPoint,
+                                        onSelectChartInterval = chartViewModel::onSelectChartInterval)
                                 }
                                 stickyHeader {
                                     HeaderSorting(borderBottom = true, borderTop = true) {

@@ -2,7 +2,6 @@ package cash.p.terminal.core.managers
 
 import android.util.Log
 import cash.p.terminal.core.providers.EvmLabelProvider
-import cash.p.terminal.core.shorten
 import cash.p.terminal.core.storage.EvmAddressLabelDao
 import cash.p.terminal.core.storage.EvmMethodLabelDao
 import cash.p.terminal.core.storage.SyncerStateDao
@@ -10,6 +9,7 @@ import cash.p.terminal.core.toHexString
 import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.EvmMethodLabel
 import cash.p.terminal.entities.SyncerState
+import cash.p.terminal.strings.helpers.shorten
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.launch

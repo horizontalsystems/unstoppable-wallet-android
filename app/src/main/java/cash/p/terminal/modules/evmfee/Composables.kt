@@ -42,24 +42,24 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.HSCaution
-import cash.p.terminal.core.Warning
+import cash.p.terminal.wallet.Warning
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
 import cash.p.terminal.modules.fee.FeeCell
-import cash.p.terminal.ui.compose.ColoredTextStyle
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.animations.shake
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HeaderText
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantError
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ColoredTextStyle
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable
@@ -165,9 +165,9 @@ fun EvmSettingsInput(
     onClickDecrement: () -> Unit
 ) {
     val borderColor = when {
-        errors.isNotEmpty() -> ComposeAppTheme.colors.red50
-        warnings.isNotEmpty() -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
+        errors.isNotEmpty() -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
+        warnings.isNotEmpty() -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
+        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
     }
 
     EvmSettingsInput(
@@ -196,9 +196,9 @@ fun EvmSettingsInput(
     onClickDecrement: () -> Unit
 ) {
     val borderColor = when (caution?.type) {
-        HSCaution.Type.Error -> ComposeAppTheme.colors.red50
-        HSCaution.Type.Warning -> ComposeAppTheme.colors.yellow50
-        else -> ComposeAppTheme.colors.steel20
+        HSCaution.Type.Error -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
+        HSCaution.Type.Warning -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
+        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
     }
 
     EvmSettingsInput(
@@ -320,7 +320,7 @@ fun ButtonsGroupWithShade(
                 .height(24.dp)
                 .background(
                     brush = Brush.verticalGradient(
-                        listOf(ComposeAppTheme.colors.transparent, ComposeAppTheme.colors.tyler)
+                        listOf(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler)
                     )
                 )
         )

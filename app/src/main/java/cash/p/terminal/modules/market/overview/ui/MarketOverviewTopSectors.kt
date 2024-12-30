@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.ui.compose.components.CategoryCard
-import io.horizontalsystems.marketkit.models.CoinCategory
+import cash.p.terminal.wallet.models.CoinCategory
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

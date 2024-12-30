@@ -16,9 +16,9 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.multiswap.QuoteInfoRow
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_lucian
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_lucian
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 
 data class DataFieldAllowance(val allowance: BigDecimal, val token: Token) : DataField {

@@ -1,13 +1,13 @@
 package cash.p.terminal.core.adapters
 
 import android.content.Context
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BalanceData
+import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
@@ -15,7 +15,7 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal

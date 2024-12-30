@@ -4,8 +4,8 @@ import android.os.Parcelable
 import io.horizontalsystems.bitcoincore.core.purpose
 import io.horizontalsystems.bitcoincore.transactions.scripts.ScriptType
 import io.horizontalsystems.hdwalletkit.HDWallet
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

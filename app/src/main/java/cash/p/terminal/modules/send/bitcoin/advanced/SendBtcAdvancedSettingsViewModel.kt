@@ -1,12 +1,11 @@
 package cash.p.terminal.modules.send.bitcoin.advanced
 
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.BtcBlockchainManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.TransactionDataSortMode
 import cash.p.terminal.modules.send.bitcoin.advanced.SendBtcAdvancedSettingsModule.SortModeViewItem
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class SendBtcAdvancedSettingsViewModel(
     val blockchainType: BlockchainType,
@@ -22,7 +21,7 @@ class SendBtcAdvancedSettingsViewModel(
 
     override fun createState() = SendBtcAdvancedSettingsModule.UiState(
         transactionSortOptions = sortOptions,
-        transactionSortTitle = Translator.getString(sortMode.titleShort),
+        transactionSortTitle = cash.p.terminal.strings.helpers.Translator.getString(sortMode.titleShort),
         utxoExpertModeEnabled = utxoExpertModeEnabled,
         rbfEnabled = rbfEnabled
     )

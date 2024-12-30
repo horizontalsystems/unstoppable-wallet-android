@@ -17,7 +17,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.subhead1_grey
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 data class SelectorItem<T>(
     val title: String,
@@ -65,9 +68,9 @@ fun <T> SelectorDialogCompose(
                 ) {
                     Divider(thickness = 1.dp, color = ComposeAppTheme.colors.steel10)
                     val color = if (item.selected) {
-                        ComposeAppTheme.colors.jacob
+                        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
                     } else {
-                        ComposeAppTheme.colors.leah
+                        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
                     }
                     VSpacer(12.dp)
                     Text(

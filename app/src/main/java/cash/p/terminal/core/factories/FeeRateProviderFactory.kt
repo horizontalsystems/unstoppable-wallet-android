@@ -3,7 +3,7 @@ package cash.p.terminal.core.factories
 import cash.p.terminal.core.App
 import cash.p.terminal.core.IFeeRateProvider
 import cash.p.terminal.core.providers.*
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 object FeeRateProviderFactory {
     fun provider(blockchainType: BlockchainType): IFeeRateProvider? {

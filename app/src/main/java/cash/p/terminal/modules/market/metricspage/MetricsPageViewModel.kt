@@ -2,18 +2,16 @@ package cash.p.terminal.modules.market.metricspage
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.providers.Translator
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPage
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.ImageSource
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.filters.TimePeriod
@@ -22,6 +20,7 @@ import cash.p.terminal.modules.market.priceChangeValue
 import cash.p.terminal.modules.market.sortedByDescendingNullLast
 import cash.p.terminal.modules.market.sortedByNullLast
 import cash.p.terminal.modules.metricchart.MetricsType
+import io.horizontalsystems.core.CurrencyManager
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,8 +44,8 @@ class MetricsPageViewModel(
     private var marketDataJob: Job? = null
 
     private val toggleButtonTitle = when (metricsType) {
-        MetricsType.Volume24h -> Translator.getString(R.string.Market_Volume)
-        MetricsType.TotalMarketCap -> Translator.getString(R.string.Market_MarketCap)
+        MetricsType.Volume24h -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_Volume)
+        MetricsType.TotalMarketCap -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_MarketCap)
         else -> throw Exception("MetricsType not supported")
     }
 
@@ -69,8 +68,8 @@ class MetricsPageViewModel(
     }
 
     private val header = MarketModule.Header(
-        title = Translator.getString(title),
-        description = Translator.getString(description),
+        title = cash.p.terminal.strings.helpers.Translator.getString(title),
+        description = cash.p.terminal.strings.helpers.Translator.getString(description),
         icon = ImageSource.Remote("https://cdn.blocksdecoded.com/header-images/$icon@3x.png")
     )
 

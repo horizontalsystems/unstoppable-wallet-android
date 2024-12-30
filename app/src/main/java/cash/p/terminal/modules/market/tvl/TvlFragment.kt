@@ -27,37 +27,37 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.modules.coin.overview.ui.Chart
+import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.CoinFragmentInput
+import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
-import cash.p.terminal.modules.market.Value
+import io.horizontalsystems.core.entities.Value
 import cash.p.terminal.modules.market.tvl.TvlModule.SelectorDialogState
 import cash.p.terminal.modules.market.tvl.TvlModule.TvlDiffType
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.AlertGroup
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.DescriptionCard
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui.compose.hsRememberLazyListState
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 class TvlFragment : BaseComposeFragment() {
@@ -73,7 +73,7 @@ class TvlFragment : BaseComposeFragment() {
 
     private fun onCoinClick(coinUid: String?, navController: NavController) {
         if (coinUid != null) {
-            val arguments = CoinFragment.Input(coinUid)
+            val arguments = CoinFragmentInput(coinUid)
             navController.slideFromRight(R.id.coinFragment, arguments)
 
             stat(page = StatPage.GlobalMetricsTvlInDefi, event = StatEvent.OpenCoin(coinUid))
@@ -144,7 +144,10 @@ class TvlFragment : BaseComposeFragment() {
                                     }
                                 }
                                 item {
-                                    Chart(chartViewModel = chartViewModel) {
+                                    Chart(
+                                        getSelectedPointCallback = chartViewModel::getSelectedPoint,
+                                        uiState = chartViewModel.uiState) {
+                                        chartViewModel.onSelectChartInterval(it)
                                         tvlViewModel.onSelectChartInterval(it)
                                     }
                                 }

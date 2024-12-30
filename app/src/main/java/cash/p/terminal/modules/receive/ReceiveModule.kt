@@ -3,15 +3,14 @@ package cash.p.terminal.modules.receive
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.UsedAddress
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.wallet.entities.UsedAddress
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.receive.viewmodels.ReceiveAddressViewModel
 import java.math.BigDecimal
 
 object ReceiveModule {
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(private val wallet: cash.p.terminal.wallet.Wallet) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ReceiveAddressViewModel(wallet, App.adapterManager) as T

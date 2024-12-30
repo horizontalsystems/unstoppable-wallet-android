@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.modules.contacts.ContactsRepository
-import cash.p.terminal.modules.transactions.TransactionSource
+import cash.p.terminal.wallet.transaction.TransactionSource
 import kotlinx.coroutines.launch
 
 class TransactionInfoViewModel(

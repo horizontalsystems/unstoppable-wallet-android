@@ -1,22 +1,21 @@
 package cash.p.terminal.modules.coin.ranks
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.IAppNumberFormatter
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.IAppNumberFormatter
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.ViewState
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.RankType
 import cash.p.terminal.modules.coin.ranks.CoinRankModule.RankAnyValue
 import cash.p.terminal.modules.coin.ranks.CoinRankModule.UiState
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.Select
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.RankMultiValue
-import io.horizontalsystems.marketkit.models.RankValue
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.models.RankMultiValue
+import cash.p.terminal.wallet.models.RankValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await
@@ -41,8 +40,8 @@ class CoinRankViewModel(
     private val itemsToShow = 300
 
     private val header = MarketModule.Header(
-        title = Translator.getString(rankType.title),
-        description = Translator.getString(rankType.description),
+        title = cash.p.terminal.strings.helpers.Translator.getString(rankType.title),
+        description = cash.p.terminal.strings.helpers.Translator.getString(rankType.description),
         icon = rankType.headerIcon
     )
 

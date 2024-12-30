@@ -18,16 +18,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_grey
-import cash.p.terminal.ui.compose.components.cell.CellBlockchainChecked
-import cash.p.terminal.ui.compose.components.cell.CellUniversal
-import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_grey
+import io.horizontalsystems.chartview.cell.CellBlockchainChecked
+import io.horizontalsystems.chartview.cell.CellUniversal
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
+import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class BlockchainsSelectorFragment : BaseComposeFragment() {
 
@@ -73,7 +73,7 @@ private fun FilterByBlockchainsScreen(
                 }
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
     ) {
         Column(
             modifier = Modifier

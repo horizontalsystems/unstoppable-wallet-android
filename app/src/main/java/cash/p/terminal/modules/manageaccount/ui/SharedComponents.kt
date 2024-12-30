@@ -32,24 +32,24 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.B2
-import cash.p.terminal.ui.compose.components.ButtonPrimaryRed
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.C2
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.D1
-import cash.p.terminal.ui.compose.components.D2
-import cash.p.terminal.ui.compose.components.D7
-import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.B2
+import cash.p.terminal.ui_compose.components.ButtonPrimaryRed
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.C2
+import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.D1
+import cash.p.terminal.ui_compose.components.D2
+import cash.p.terminal.ui_compose.components.D7
+import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.RowUniversal
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun ActionButton(title: Int, onClick: () -> Unit) {
@@ -76,7 +76,7 @@ fun HidableContent(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
             .clickable(enabled = hideScreenText != null, onClick = {
                 hidden = !hidden
                 onToggleHidden?.invoke()
@@ -120,7 +120,7 @@ fun KeyActionItem(
                     text = title,
                 )
                 Icon(
-                    painter = painterResource(id = cash.p.terminal.R.drawable.ic_arrow_right),
+                    painter = painterResource(id = R.drawable.ic_arrow_right),
                     contentDescription = null,
                     tint = ComposeAppTheme.colors.grey
                 )
@@ -135,7 +135,7 @@ fun KeyActionItem(
 fun ConfirmCopyBottomSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.RecoveryPhrase_CopyWarning_Title),
         onCloseClick = onCancel
     ) {
@@ -209,7 +209,7 @@ fun SeedPhraseList(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
             .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },

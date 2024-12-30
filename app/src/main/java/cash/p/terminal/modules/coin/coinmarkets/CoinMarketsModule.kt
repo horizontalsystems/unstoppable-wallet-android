@@ -7,9 +7,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
+import cash.p.terminal.wallet.entities.FullCoin
 import java.math.BigDecimal
 
 object CoinMarketsModule {
@@ -50,7 +50,7 @@ data class MarketTickerItem(
     val verified: Boolean
 )
 
-enum class VerifiedType: WithTranslatableTitle  {
+enum class VerifiedType: WithTranslatableTitle {
     Verified, All;
 
     override val title: TranslatableString

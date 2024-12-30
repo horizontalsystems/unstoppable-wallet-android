@@ -7,19 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.defaultTokenQuery
 import cash.p.terminal.core.eligibleTokens
 import cash.p.terminal.core.nativeTokenQueries
 import cash.p.terminal.core.order
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.receive.FullCoinsProvider
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.badge
+import cash.p.terminal.wallet.entities.TokenQuery
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -97,7 +96,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
                 suggestedTokens
                     .sortedWith(
-                        compareBy<Token> { it.coin.marketCapRank }
+                        compareBy<cash.p.terminal.wallet.Token> { it.coin.marketCapRank }
                             .thenBy { it.blockchainType.order }
                             .thenBy { it.badge }
                     )
@@ -109,7 +108,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
             // Featured Tokens
             val tokenQueries: List<TokenQuery> = when (activeAccount.type) {
-                is AccountType.HdExtendedKey -> {
+                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
                     BlockchainType.supported.map { it.nativeTokenQueries }.flatten()
                 }
 
@@ -123,7 +122,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 token.blockchainType.supports(activeAccount.type) && resultTokens.none { it.token == token }
             }
                 .sortedWith(
-                    compareBy<Token> { it.blockchainType.order }
+                    compareBy<cash.p.terminal.wallet.Token> { it.blockchainType.order }
                         .thenBy { it.badge }
                 ).map {
                     CoinBalanceItem(it, null, null)

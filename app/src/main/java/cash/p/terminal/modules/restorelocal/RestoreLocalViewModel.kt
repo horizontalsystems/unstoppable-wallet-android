@@ -4,13 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.GsonBuilder
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.providers.Translator
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statAccountType
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.BackupLocalModule.WalletBackup
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
@@ -41,7 +39,7 @@ class RestoreLocalViewModel(
     private var walletBackup: WalletBackup? = null
     private var fullBackup: FullBackup? = null
     private var parseError: Exception? = null
-    private var showSelectCoins: AccountType? = null
+    private var showSelectCoins: cash.p.terminal.wallet.AccountType? = null
     private var manualBackup = false
     private var restored = false
 
@@ -132,7 +130,7 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState = DataState.Error(Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }
@@ -165,7 +163,7 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState = DataState.Error(Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }
@@ -184,7 +182,7 @@ class RestoreLocalViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val type = backupProvider.accountType(backup, passphrase)
-                if (type is AccountType.Cex) {
+                if (type is cash.p.terminal.wallet.AccountType.Cex) {
                     backupProvider.restoreCexAccount(type, accountName)
                     restored = true
                 } else if (backup.enabledWallets.isNullOrEmpty()) {
@@ -198,7 +196,7 @@ class RestoreLocalViewModel(
             } catch (keyException: RestoreException.EncryptionKeyException) {
                 parseError = keyException
             } catch (invalidPassword: RestoreException.InvalidPasswordException) {
-                passphraseState = DataState.Error(Exception(Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
+                passphraseState = DataState.Error(Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.ImportBackupFile_Error_InvalidPassword)))
             } catch (e: Exception) {
                 parseError = e
             }

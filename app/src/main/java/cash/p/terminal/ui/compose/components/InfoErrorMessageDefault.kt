@@ -17,7 +17,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun InfoErrorMessageDefault(painter: Painter, text: String) {
@@ -53,7 +55,7 @@ fun InfoErrorMessageDefault(painter: Painter, text: String) {
 @Preview
 @Composable
 fun InfoErrorMessageDefaultPreview() {
-    ComposeAppTheme(darkTheme = true) {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme(darkTheme = true) {
         InfoErrorMessageDefault(
             painter = painterResource(id = R.drawable.ic_wallet_48),
             text = "You don't have any wallets"

@@ -2,26 +2,24 @@ package cash.p.terminal.modules.settings.appstatus
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.AppLog
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinBaseAdapter
 import cash.p.terminal.core.adapters.TonAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
-import cash.p.terminal.entities.Account
 import cash.p.terminal.modules.settings.appstatus.AppStatusModule.BlockContent
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IWalletManager
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,7 +28,7 @@ import java.util.Date
 class AppStatusViewModel(
     private val systemInfoManager: ISystemInfoManager,
     private val localStorage: ILocalStorage,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val marketKit: MarketKitWrapper,
@@ -368,7 +366,7 @@ class AppStatusViewModel(
         )
     }
 
-    private fun getAccountDetails(account: Account): LinkedHashMap<String, Any> {
+    private fun getAccountDetails(account: cash.p.terminal.wallet.Account): LinkedHashMap<String, Any> {
         val accountDetails = LinkedHashMap<String, Any>()
 
         accountDetails["Origin"] = getAccountOrigin(account)
@@ -377,7 +375,7 @@ class AppStatusViewModel(
         return accountDetails
     }
 
-    private fun getAccountOrigin(account: Account): String {
+    private fun getAccountOrigin(account: cash.p.terminal.wallet.Account): String {
         return if (account.isWatchAccount) "Watched" else account.origin.value
     }
 

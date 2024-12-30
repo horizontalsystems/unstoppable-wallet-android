@@ -3,7 +3,7 @@ package cash.p.terminal.core.storage
 import cash.p.terminal.entities.BlockchainSettingRecord
 import cash.p.terminal.entities.BtcRestoreMode
 import cash.p.terminal.entities.TransactionDataSortMode
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class BlockchainSettingsStorage(appDatabase: AppDatabase) {
 

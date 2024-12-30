@@ -7,10 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.viewState
-import cash.p.terminal.modules.market.ImageSource
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.core.entities.viewState
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
@@ -24,8 +23,8 @@ class TopNftCollectionsViewModel(
 ) : ViewModel() {
 
     val header = MarketModule.Header(
-        Translator.getString(R.string.Nft_TopCollections),
-        Translator.getString(R.string.Nft_TopCollections_Description),
+        cash.p.terminal.strings.helpers.Translator.getString(R.string.Nft_TopCollections),
+        cash.p.terminal.strings.helpers.Translator.getString(R.string.Nft_TopCollections_Description),
         ImageSource.Local(R.drawable.ic_top_nfts)
     )
 

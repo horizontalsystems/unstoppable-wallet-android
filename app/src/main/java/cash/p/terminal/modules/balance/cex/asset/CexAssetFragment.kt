@@ -30,23 +30,23 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
 import cash.p.terminal.modules.balance.cex.WalletIconCex
-import cash.p.terminal.modules.coin.CoinFragment
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.CoinFragmentInput
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 class CexAssetFragment : BaseComposeFragment() {
@@ -77,7 +77,7 @@ fun CexAssetScreen(
     val uiState = viewModel.uiState
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = uiState.title,
@@ -141,14 +141,14 @@ private fun TokenBalanceHeader(
                     }
                 ),
             text = if (balanceViewItem.primaryValue.visible) balanceViewItem.primaryValue.value else "*****",
-            color = if (balanceViewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
+            color = if (balanceViewItem.primaryValue.dimmed) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
             style = ComposeAppTheme.typography.title2R,
             textAlign = TextAlign.Center,
         )
         VSpacer(height = 6.dp)
         Text(
             text = if (balanceViewItem.secondaryValue.visible) balanceViewItem.secondaryValue.value else "*****",
-            color = if (balanceViewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+            color = if (balanceViewItem.secondaryValue.dimmed) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50 else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey,
             style = ComposeAppTheme.typography.body,
             maxLines = 1,
         )
@@ -178,7 +178,7 @@ private fun LockedBalanceCell(balanceViewItem: BalanceCexViewItem) {
             Spacer(Modifier.weight(1f))
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = if (balanceViewItem.coinValueLocked.visible) balanceViewItem.coinValueLocked.value else "*****",
+                text = if (balanceViewItem.coinValueLocked.visible) balanceViewItem.coinValueLocked.value!! else "*****",
                 color = if (balanceViewItem.coinValueLocked.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.leah,
                 style = ComposeAppTheme.typography.subhead2,
                 maxLines = 1,
@@ -218,7 +218,7 @@ private fun ButtonsRow(viewItem: BalanceCexViewItem, navController: NavControlle
                 viewItem.coin?.let { coin ->
                     navController.slideFromRight(
                         R.id.coinFragment,
-                        CoinFragment.Input(coin.uid)
+                        CoinFragmentInput(coin.uid)
                     )
                 }
             },

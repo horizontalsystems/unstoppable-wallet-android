@@ -9,8 +9,8 @@ import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.FullCoin
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 

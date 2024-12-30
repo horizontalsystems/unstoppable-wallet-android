@@ -1,6 +1,6 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.core.IBackupManager
 import io.reactivex.Flowable
 

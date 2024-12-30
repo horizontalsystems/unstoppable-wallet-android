@@ -7,12 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.R
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.managers.PriceManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
@@ -20,16 +19,17 @@ import cash.p.terminal.core.supported
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.core.utils.ToncoinUriParser
-import cash.p.terminal.entities.Account
 import cash.p.terminal.entities.AddressUri
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.BalanceSortType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.balance.BalanceItem
+import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class BalanceViewModel(
-    private val service: BalanceService,
+    private val service: DefaultBalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val totalBalance: TotalBalance,
@@ -124,7 +124,7 @@ class BalanceViewModel(
         sortTypes = sortTypes,
     )
 
-    private suspend fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
+    private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
         this.balanceViewType = balanceViewType
 
         service.balanceItemsFlow.value?.let {
@@ -140,7 +140,7 @@ class BalanceViewModel(
         return account.headerNote(nonRecommendedDismissed)
     }
 
-    private fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
+    private fun refreshViewItems(balanceItems: List<BalanceItem>?) {
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
             if (balanceItems != null) {
@@ -148,12 +148,12 @@ class BalanceViewModel(
                 balanceViewItems = balanceItems.map { balanceItem ->
                     ensureActive()
                     balanceViewItemFactory.viewItem2(
-                        balanceItem,
-                        service.baseCurrency,
-                        balanceHidden,
-                        service.isWatchAccount,
-                        balanceViewType,
-                        service.networkAvailable
+                        item = balanceItem,
+                        currency = service.baseCurrency,
+                        hideBalance = balanceHidden,
+                        watchAccount = service.isWatchAccount,
+                        balanceViewType = balanceViewType,
+                        networkAvailable = service.networkAvailable
                     )
                 }
             } else {
@@ -302,7 +302,7 @@ class BalanceViewModel(
             val chain = addressHandlerFactory.parserChain(null)
             val types = chain.supportedAddressHandlers(text)
             if (types.isEmpty()) {
-                errorMessage = Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                errorMessage = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Error_InvalidQrCode)
                 emitState()
                 return
             }
@@ -340,16 +340,16 @@ class BalanceViewModel(
 
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
-        class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
+        class Dialog(val wallet: cash.p.terminal.wallet.Wallet, val errorMessage: String?) : SyncError()
     }
 }
 
 sealed class ReceiveAllowedState {
     object Allowed : ReceiveAllowedState()
-    data class BackupRequired(val account: Account) : ReceiveAllowedState()
+    data class BackupRequired(val account: cash.p.terminal.wallet.Account) : ReceiveAllowedState()
 }
 
-class BackupRequiredError(val account: Account, val coinTitle: String) : Error("Backup Required")
+class BackupRequiredError(val account: cash.p.terminal.wallet.Account, val coinTitle: String) : Error("Backup Required")
 
 data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem2>,
@@ -387,7 +387,7 @@ enum class HeaderNote {
     NonRecommendedAccount
 }
 
-fun Account.headerNote(nonRecommendedDismissed: Boolean): HeaderNote = when {
+fun cash.p.terminal.wallet.Account.headerNote(nonRecommendedDismissed: Boolean): HeaderNote = when {
     nonStandard -> HeaderNote.NonStandardAccount
     nonRecommended -> if (nonRecommendedDismissed) HeaderNote.None else HeaderNote.NonRecommendedAccount
     else -> HeaderNote.None

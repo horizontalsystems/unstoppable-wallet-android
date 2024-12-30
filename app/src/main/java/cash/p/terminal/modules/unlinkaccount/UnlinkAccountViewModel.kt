@@ -5,13 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.entities.Account
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 
 class UnlinkAccountViewModel(
-    private val account: Account,
-    private val accountManager: IAccountManager
+    private val account: cash.p.terminal.wallet.Account,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager
 ) : ViewModel() {
     val accountName = account.name
 

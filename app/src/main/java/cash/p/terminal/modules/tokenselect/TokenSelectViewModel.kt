@@ -9,24 +9,24 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.swappable
-import cash.p.terminal.modules.balance.BalanceModule
-import cash.p.terminal.modules.balance.BalanceService
-import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.wallet.balance.BalanceItem
+import cash.p.terminal.modules.balance.DefaultBalanceService
+import cash.p.terminal.wallet.BalanceSortType
 import cash.p.terminal.modules.balance.BalanceSorter
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TokenSelectViewModel(
-    private val service: BalanceService,
+    private val service: DefaultBalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceViewTypeManager: BalanceViewTypeManager,
-    private val itemsFilter: ((BalanceModule.BalanceItem) -> Boolean)?,
+    private val itemsFilter: ((BalanceItem) -> Boolean)?,
     private val balanceSorter: BalanceSorter,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val blockchainTypes: List<BlockchainType>?,
@@ -54,10 +54,10 @@ class TokenSelectViewModel(
         }
     }
 
-    private suspend fun refreshViewItems(balanceItems: List<BalanceModule.BalanceItem>?) {
+    private suspend fun refreshViewItems(balanceItems: List<BalanceItem>?) {
         withContext(Dispatchers.IO) {
             if (balanceItems != null) {
-                var itemsFiltered: List<BalanceModule.BalanceItem> = balanceItems
+                var itemsFiltered: List<BalanceItem> = balanceItems
                 blockchainTypes?.let { types ->
                     itemsFiltered = itemsFiltered.filter { item ->
                         types.contains(item.wallet.token.blockchainType)
@@ -127,7 +127,7 @@ class TokenSelectViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TokenSelectViewModel(
-                service = BalanceService.getInstance("wallet"),
+                service = DefaultBalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = null,
@@ -143,7 +143,7 @@ class TokenSelectViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return TokenSelectViewModel(
-                service = BalanceService.getInstance("wallet"),
+                service = DefaultBalanceService.getInstance("wallet"),
                 balanceViewItemFactory = BalanceViewItemFactory(),
                 balanceViewTypeManager = App.balanceViewTypeManager,
                 itemsFilter = {

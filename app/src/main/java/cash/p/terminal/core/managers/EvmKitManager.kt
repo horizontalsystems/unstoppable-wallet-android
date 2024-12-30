@@ -5,8 +5,6 @@ import android.os.Looper
 import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.erc20kit.core.Erc20Kit
@@ -18,7 +16,7 @@ import io.horizontalsystems.ethereumkit.models.FullTransaction
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.nftkit.core.NftKit
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.horizontalsystems.uniswapkit.TokenFactory.UnsupportedChainError
@@ -70,7 +68,7 @@ class EvmKitManager(
         }
 
     private var useCount = 0
-    var currentAccount: Account? = null
+    var currentAccount: cash.p.terminal.wallet.Account? = null
         private set
     private val evmKitUpdatedSubject = PublishSubject.create<Unit>()
 
@@ -81,7 +79,7 @@ class EvmKitManager(
         get() = evmKitWrapper?.evmKit?.statusInfo()
 
     @Synchronized
-    fun getEvmKitWrapper(account: Account, blockchainType: BlockchainType): EvmKitWrapper {
+    fun getEvmKitWrapper(account: cash.p.terminal.wallet.Account, blockchainType: BlockchainType): EvmKitWrapper {
         if (evmKitWrapper != null && currentAccount != account) {
             stopEvmKit()
         }
@@ -99,8 +97,8 @@ class EvmKitManager(
     }
 
     private fun createKitInstance(
-        accountType: AccountType,
-        account: Account,
+        accountType: cash.p.terminal.wallet.AccountType,
+        account: cash.p.terminal.wallet.Account,
         blockchainType: BlockchainType
     ): EvmKitWrapper {
         val syncSource = syncSourceManager.getSyncSource(blockchainType)
@@ -109,16 +107,16 @@ class EvmKitManager(
         var signer: Signer? = null
 
         when (accountType) {
-            is AccountType.Mnemonic -> {
+            is cash.p.terminal.wallet.AccountType.Mnemonic -> {
                 val seed: ByteArray = accountType.seed
                 address = Signer.address(seed, chain)
                 signer = Signer.getInstance(seed, chain)
             }
-            is AccountType.EvmPrivateKey -> {
+            is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> {
                 address = Signer.address(accountType.key)
                 signer = Signer.getInstance(accountType.key, chain)
             }
-            is AccountType.EvmAddress -> {
+            is cash.p.terminal.wallet.AccountType.EvmAddress -> {
                 address = Address(accountType.address)
             }
             else -> throw UnsupportedAccountException()
@@ -170,7 +168,7 @@ class EvmKitManager(
     }
 
     @Synchronized
-    fun unlink(account: Account) {
+    fun unlink(account: cash.p.terminal.wallet.Account) {
         if (account == currentAccount) {
             useCount -= 1
 

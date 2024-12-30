@@ -7,12 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.amount.AmountInputType
 import cash.p.terminal.ui.compose.components.AdditionalDataCell2
-import cash.p.terminal.ui.compose.components.HSCircularProgressIndicator
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
 import java.math.BigDecimal
 
 @Composable

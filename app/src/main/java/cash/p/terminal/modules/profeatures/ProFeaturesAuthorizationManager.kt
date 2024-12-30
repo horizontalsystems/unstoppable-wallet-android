@@ -1,13 +1,13 @@
 package cash.p.terminal.modules.profeatures
 
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.orNull
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.core.storage.SecretString
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesStorage
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.entities.SecretString
 import io.horizontalsystems.ethereumkit.core.Eip1155Provider
 import io.horizontalsystems.ethereumkit.core.signer.EthSigner
 import io.horizontalsystems.ethereumkit.core.signer.Signer
@@ -60,12 +60,12 @@ class ProFeaturesAuthorizationManager(
             return accounts.mapNotNull { account ->
                 when (account.type) {
                     is AccountType.EvmPrivateKey -> {
-                        val address = Signer.address(account.type.key)
+                        val address = Signer.address((account.type as AccountType.EvmPrivateKey).key)
                         AccountData(account.id, address)
                     }
 
                     is AccountType.Mnemonic -> {
-                        val address = Signer.address(account.type.seed, Chain.Ethereum)
+                        val address = Signer.address((account.type as AccountType.Mnemonic).seed, Chain.Ethereum)
                         AccountData(account.id, address)
                     }
 
@@ -103,11 +103,11 @@ class ProFeaturesAuthorizationManager(
         val account = accountManager.account(accountData.id) ?: throw Exception("Account not found")
         val privateKey = when (account.type) {
             is AccountType.EvmPrivateKey -> {
-                account.type.key
+                (account.type as AccountType.EvmPrivateKey).key
             }
 
             is AccountType.Mnemonic -> {
-                Signer.privateKey(account.type.seed, Chain.Ethereum)
+                Signer.privateKey((account.type as AccountType.Mnemonic).seed, Chain.Ethereum)
             }
 
             else -> throw Exception("AccountType not supported")

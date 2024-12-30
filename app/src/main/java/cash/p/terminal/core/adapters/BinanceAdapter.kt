@@ -1,28 +1,27 @@
 package cash.p.terminal.core.adapters
 
 import cash.p.terminal.R
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BalanceData
-import cash.p.terminal.core.IAdapter
-import cash.p.terminal.core.IBalanceAdapter
-import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.wallet.IBalanceAdapter
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.ISendBinanceAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.LocalizedException
 import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.entities.LastBlockInfo
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionFilterType
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
-import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.Flowable
 import io.reactivex.Single
 import java.math.BigDecimal
@@ -31,7 +30,7 @@ class BinanceAdapter(
     private val binanceKit: BinanceChainKit,
     private val symbol: String,
     private val feeToken: Token,
-    private val wallet: Wallet,
+    private val wallet: cash.p.terminal.wallet.Wallet,
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)

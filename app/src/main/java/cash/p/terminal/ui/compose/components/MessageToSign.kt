@@ -11,6 +11,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.components.HeaderText
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.caption_leah
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable

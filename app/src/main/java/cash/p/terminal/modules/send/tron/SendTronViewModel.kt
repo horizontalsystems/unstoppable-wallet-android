@@ -10,18 +10,16 @@ import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.LocalizedException
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.tronkit.transaction.Fee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +29,7 @@ import java.net.UnknownHostException
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 class SendTronViewModel(
-    val wallet: Wallet,
+    val wallet: cash.p.terminal.wallet.Wallet,
     private val sendToken: Token,
     private val feeToken: Token,
     private val adapter: ISendTronAdapter,
@@ -142,7 +140,7 @@ class SendTronViewModel(
             listOf(
                 HSCaution(
                     TranslatableString.PlainString(
-                        Translator.getString(
+                        cash.p.terminal.strings.helpers.Translator.getString(
                             R.string.EthereumTransaction_Error_InsufficientBalanceForFee,
                             feeToken.coin.code
                         )
@@ -153,7 +151,7 @@ class SendTronViewModel(
             listOf(
                 HSCaution(
                     TranslatableString.PlainString(
-                        Translator.getString(
+                        cash.p.terminal.strings.helpers.Translator.getString(
                             R.string.Tron_ZeroAmountTrxNotAllowed,
                             sendToken.coin.code
                         )

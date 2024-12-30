@@ -3,7 +3,6 @@ package cash.p.terminal.modules.configuredtoken
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.bep2TokenUrl
 import cash.p.terminal.core.eip20TokenUrl
@@ -11,14 +10,15 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.jettonUrl
 import cash.p.terminal.core.managers.RestoreSettingsManager
-import cash.p.terminal.modules.market.ImageSource
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.ui_compose.components.ImageSource
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.imageUrl
 
 class ConfiguredTokenInfoViewModel(
     private val token: Token,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
 

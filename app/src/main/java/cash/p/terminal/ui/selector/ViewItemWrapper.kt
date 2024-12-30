@@ -1,7 +1,7 @@
 package cash.p.terminal.ui.selector
 
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 
 class ViewItemWrapper<T>(val title: String, val item: T, val color: Int? = null, val subtitle: String? = null) {
     override fun equals(other: Any?) = when {
@@ -17,7 +17,7 @@ class ViewItemWrapper<T>(val title: String, val item: T, val color: Int? = null,
 
     companion object {
         fun <T>getAny(): ViewItemWrapper<T?> {
-            return ViewItemWrapper(Translator.getString(R.string.Any), null, R.color.grey)
+            return ViewItemWrapper(cash.p.terminal.strings.helpers.Translator.getString(R.string.Any), null, R.color.grey)
         }
     }
 }

@@ -4,7 +4,7 @@ import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.TransactionLockInfo
-import cash.p.terminal.modules.transactions.TransactionSource
+import cash.p.terminal.wallet.transaction.TransactionSource
 import java.util.*
 
 abstract class BitcoinTransactionRecord(

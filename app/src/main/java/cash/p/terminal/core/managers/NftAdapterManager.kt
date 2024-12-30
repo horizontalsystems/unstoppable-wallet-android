@@ -1,11 +1,10 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.adapters.nft.EvmNftAdapter
 import cash.p.terminal.core.adapters.nft.INftAdapter
 import cash.p.terminal.core.supportedNftTypes
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.nft.NftKey
+import cash.p.terminal.wallet.IWalletManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,7 +44,7 @@ class NftAdapterManager(
     }
 
     @Synchronized
-    private fun initAdapters(wallets: List<Wallet>) {
+    private fun initAdapters(wallets: List<cash.p.terminal.wallet.Wallet>) {
         val currentAdapters = adaptersMap.toMutableMap()
         adaptersMap.clear()
 

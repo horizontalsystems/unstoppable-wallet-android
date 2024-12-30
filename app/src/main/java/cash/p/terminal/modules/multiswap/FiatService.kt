@@ -1,10 +1,10 @@
 package cash.p.terminal.modules.multiswap
 
 import cash.p.terminal.core.ServiceState
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.Currency
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.wallet.models.CoinPrice
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

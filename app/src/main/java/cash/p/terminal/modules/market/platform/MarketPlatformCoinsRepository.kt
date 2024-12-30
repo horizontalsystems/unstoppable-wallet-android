@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.market.platform
 
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.CurrencyValue
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.sort
 import cash.p.terminal.modules.market.topplatforms.Platform
+import io.horizontalsystems.core.CurrencyManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext

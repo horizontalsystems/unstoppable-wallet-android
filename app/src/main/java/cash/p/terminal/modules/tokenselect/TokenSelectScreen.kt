@@ -16,11 +16,10 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.ui.BalanceCardInner
 import cash.p.terminal.modules.balance.ui.BalanceCardSubtitleType
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.SearchBar
-import cash.p.terminal.ui.compose.components.SectionUniversalItem
-import cash.p.terminal.ui.compose.components.VSpacer
+import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.VSpacer
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -34,7 +33,7 @@ fun TokenSelectScreen(
     header: @Composable (() -> Unit)? = null
 ) {
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             SearchBar(
                 title = title,

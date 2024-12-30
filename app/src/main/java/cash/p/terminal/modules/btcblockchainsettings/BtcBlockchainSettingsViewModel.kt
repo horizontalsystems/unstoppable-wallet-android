@@ -7,10 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.BtcRestoreMode
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -54,8 +55,8 @@ class BtcBlockchainSettingsViewModel(
         val viewItems = service.restoreModes.map { mode ->
             ViewItem(
                 id = mode.raw,
-                title = Translator.getString(mode.title),
-                subtitle = Translator.getString(mode.description),
+                title = cash.p.terminal.strings.helpers.Translator.getString(mode.title),
+                subtitle = cash.p.terminal.strings.helpers.Translator.getString(mode.description),
                 selected = mode == service.restoreMode,
                 icon = mode.icon
             )

@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.toHexString
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.Token
 import java.math.BigDecimal
 import java.util.Date
 

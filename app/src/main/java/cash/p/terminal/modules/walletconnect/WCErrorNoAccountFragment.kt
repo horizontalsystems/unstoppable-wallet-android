@@ -18,12 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 
 class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -36,7 +35,7 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ComposeAppTheme {
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     WalletConnectErrorNoAccount() {
                         findNavController().popBackStack()
                     }
@@ -50,7 +49,7 @@ class WCErrorNoAccountFragment : BaseComposableBottomSheetFragment() {
 fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.WalletConnect_Title),
         onCloseClick = onCloseClick
     ) {
@@ -72,7 +71,7 @@ fun WalletConnectErrorNoAccount(onCloseClick: () -> Unit) {
 @Preview
 @Composable
 private fun WalletConnectErrorNoAccountPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         WalletConnectErrorNoAccount({})
     }
 }

@@ -1,11 +1,11 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
-import cash.p.terminal.entities.AccountOrigin
 import cash.p.terminal.entities.BtcRestoreMode
 import cash.p.terminal.entities.TransactionDataSortMode
 import io.horizontalsystems.bitcoincore.BitcoinCore.SyncMode
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.MarketKitWrapper
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
@@ -55,8 +55,8 @@ class BtcBlockchainManager(
             }
         }
 
-    fun syncMode(blockchainType: BlockchainType, accountOrigin: AccountOrigin): SyncMode {
-        if (accountOrigin == AccountOrigin.Created && blockchainType in blockchairSyncEnabledBlockchains) {
+    fun syncMode(blockchainType: BlockchainType, accountOrigin: cash.p.terminal.wallet.AccountOrigin): SyncMode {
+        if (accountOrigin == cash.p.terminal.wallet.AccountOrigin.Created && blockchainType in blockchairSyncEnabledBlockchains) {
             return SyncMode.Blockchair()
         }
 

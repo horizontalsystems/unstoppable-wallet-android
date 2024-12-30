@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.send.tron
 
 import cash.p.terminal.core.HSCaution
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import java.math.BigDecimal
 
 data class SendUiState(

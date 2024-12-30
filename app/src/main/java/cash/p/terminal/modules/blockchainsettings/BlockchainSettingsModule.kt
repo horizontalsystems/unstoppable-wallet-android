@@ -6,7 +6,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.order
 import cash.p.terminal.entities.BtcRestoreMode
 import cash.p.terminal.entities.EvmSyncSource
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.solanakit.models.RpcSource
 
 object BlockchainSettingsModule {

@@ -16,11 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.requireInput
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.InfoTextBody
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 import kotlinx.parcelize.Parcelize
 
 class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
@@ -38,7 +37,7 @@ class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
                 val navController = findNavController()
                 val input = navController.requireInput<Input>()
 
-                ComposeAppTheme {
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     FeeSettingsInfoScreen(input.title, input.text) { dismiss() }
                 }
             }
@@ -53,7 +52,7 @@ class FeeSettingsInfoDialog : BaseComposableBottomSheetFragment() {
 fun FeeSettingsInfoScreen(title: String?, text: String?, onCloseClick: () -> Unit) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_info_24),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey),
         title = title ?: "",
         onCloseClick = onCloseClick
     ) {

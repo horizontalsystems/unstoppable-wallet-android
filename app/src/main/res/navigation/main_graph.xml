@@ -127,7 +127,7 @@
         android:id="@+id/metricsPageFragment"
         android:name="cash.p.terminal.modules.market.metricspage.MetricsPageFragment" />
     <fragment
-        android:id="@+id/coinFragment"
+        android:id="@id/coinFragment"
         android:name="cash.p.terminal.modules.coin.CoinFragment" />
     <fragment
         android:id="@+id/indicatorsFragment"
@@ -300,8 +300,11 @@
         android:id="@+id/sendTokenSelectFragment"
         android:name="cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment" />
     <fragment
-        android:id="@+id/multiswap"
+        android:id="@id/multiswap"
         android:name="cash.p.terminal.modules.multiswap.SwapFragment" />
+    <fragment
+        android:id="@+id/stacking"
+        android:name="cash.p.terminal.featureStacking.ui.staking.StackingFragment" />
     <fragment
         android:id="@+id/swapSelectProvider"
         android:name="cash.p.terminal.modules.multiswap.SwapSelectProviderFragment" />

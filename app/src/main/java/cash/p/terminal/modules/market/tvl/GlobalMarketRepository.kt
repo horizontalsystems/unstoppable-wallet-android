@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.market.tvl
 
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.CurrencyValue
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.metricchart.MetricsType
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.DefiMarketInfo
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import cash.p.terminal.wallet.models.DefiMarketInfo
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.Single
 import java.math.BigDecimal
 

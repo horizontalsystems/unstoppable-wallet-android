@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.balance
 
-import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Wallet
 import io.reactivex.Observable
 
 class BalanceActiveWalletRepository(

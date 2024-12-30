@@ -16,12 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.cell.CellBlockchainChecked
-import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
-import io.horizontalsystems.marketkit.models.Blockchain
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HsBackButton
+import io.horizontalsystems.chartview.cell.CellBlockchainChecked
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
+import io.horizontalsystems.core.entities.Blockchain
 
 @Composable
 fun BlockchainSelectorScreen(
@@ -41,7 +40,7 @@ fun BlockchainSelectorScreen(
                 },
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler
     ) {
         Column(
             modifier = Modifier

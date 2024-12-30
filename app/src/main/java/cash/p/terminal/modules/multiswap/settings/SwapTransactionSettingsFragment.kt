@@ -3,7 +3,7 @@ package cash.p.terminal.modules.multiswap.settings
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.modules.multiswap.SwapConfirmViewModel
 
 class SwapTransactionSettingsFragment : BaseComposeFragment() {

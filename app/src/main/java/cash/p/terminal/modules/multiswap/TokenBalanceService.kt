@@ -1,10 +1,10 @@
 package cash.p.terminal.modules.multiswap
 
-import cash.p.terminal.core.AdapterState
-import cash.p.terminal.core.IAdapterManager
-import cash.p.terminal.core.IBalanceAdapter
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.IBalanceAdapter
 import cash.p.terminal.core.ServiceState
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 
 class TokenBalanceService(

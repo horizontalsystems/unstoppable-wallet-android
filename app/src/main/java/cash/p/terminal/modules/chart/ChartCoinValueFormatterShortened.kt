@@ -1,8 +1,9 @@
 package cash.p.terminal.modules.chart
 
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Currency
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.wallet.entities.FullCoin
+import io.horizontalsystems.chartview.chart.ChartModule
 import java.math.BigDecimal
 
 class ChartCoinValueFormatterShortened(private val fullCoin: FullCoin) : ChartModule.ChartNumberFormatter {

@@ -30,17 +30,17 @@ import cash.p.terminal.core.App
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.address.HSAddressInput
-import cash.p.terminal.ui.compose.ColoredTextStyle
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.FormsInputStateWarning
-import cash.p.terminal.ui.compose.components.HeaderText
+import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.body_grey50
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.ui_compose.components.body_grey50
+import cash.p.terminal.ui_compose.theme.ColoredTextStyle
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 
 @Composable
 fun SlippageAmount(
@@ -130,18 +130,18 @@ fun InputWithButtons(
     val borderColor = when (state) {
         is DataState.Error -> {
             if (state.error is FormsInputStateWarning) {
-                ComposeAppTheme.colors.yellow50
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
             } else {
-                ComposeAppTheme.colors.red50
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
             }
         }
-        else -> ComposeAppTheme.colors.steel20
+        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        ComposeAppTheme.colors.jacob
+        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
     } else {
-        ComposeAppTheme.colors.lucian
+        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
     }
 
     Column(modifier = modifier) {

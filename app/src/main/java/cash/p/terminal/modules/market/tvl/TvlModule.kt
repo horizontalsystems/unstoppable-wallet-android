@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
+import cash.p.terminal.wallet.entities.FullCoin
 import java.math.BigDecimal
 
 object TvlModule {

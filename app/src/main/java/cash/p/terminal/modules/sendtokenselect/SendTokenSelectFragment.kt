@@ -7,16 +7,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -37,7 +36,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
             onClickItem = {
                 when {
                     it.sendEnabled -> {
-                        val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
+                        val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                         navController.slideFromRight(
                             R.id.sendXFragment,
                             SendFragment.Input(

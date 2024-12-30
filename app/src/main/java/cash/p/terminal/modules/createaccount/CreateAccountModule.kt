@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.managers.PassphraseValidator
+import cash.p.terminal.wallet.PassphraseValidator
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
-import cash.p.terminal.core.providers.Translator
 
 object CreateAccountModule {
 
@@ -34,10 +33,10 @@ object CreateAccountModule {
         Mnemonic21(21),
         Mnemonic24(24);
 
-        val title = Translator.getString(R.string.CreateWallet_N_Words, wordsCount)
+        val title = cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_N_Words, wordsCount)
 
         val titleLong: String
-            get() = if (this == Mnemonic12) Translator.getString(R.string.CreateWallet_N_WordsRecommended, wordsCount)
+            get() = if (this == Mnemonic12) cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_N_WordsRecommended, wordsCount)
             else title
     }
 }

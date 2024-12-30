@@ -24,18 +24,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.requireInput
-import cash.p.terminal.core.shorten
 import cash.p.terminal.modules.info.ui.InfoHeader
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrence
-import cash.p.terminal.ui.compose.components.MenuItem
+import io.horizontalsystems.core.CellSingleLineLawrence
+import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.parcelize.Parcelize
 
@@ -139,7 +139,7 @@ private fun TransactionHashCell(titleRes: Int, transactionHash: String) {
 @Preview
 @Composable
 private fun Preview_InfoScreen() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         InfoScreen(
             "jh2rnj23rnk2b3k42b2k4jb",
             "nb3k4brk34bk34bk34bk3g"

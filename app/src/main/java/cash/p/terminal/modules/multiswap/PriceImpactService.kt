@@ -2,7 +2,7 @@ package cash.p.terminal.modules.multiswap
 
 import cash.p.terminal.R
 import cash.p.terminal.core.HSCaution
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

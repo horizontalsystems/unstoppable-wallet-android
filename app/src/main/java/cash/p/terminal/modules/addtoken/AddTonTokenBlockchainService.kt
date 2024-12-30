@@ -1,12 +1,12 @@
 package cash.p.terminal.modules.addtoken
 
-import cash.p.terminal.core.customCoinUid
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.customCoinUid
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.core.TonKit
 import io.horizontalsystems.tonkit.models.Network
@@ -27,7 +27,7 @@ class AddTonTokenBlockchainService(private val blockchain: Blockchain) : AddToke
         val jetton = TonKit.getJetton(Network.MainNet, Address.parse(reference))
 
         val tokenQuery = tokenQuery(reference)
-        return Token(
+        return cash.p.terminal.wallet.Token(
             coin = Coin(
                 uid = tokenQuery.customCoinUid,
                 name = jetton.name,

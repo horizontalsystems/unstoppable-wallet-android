@@ -6,7 +6,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.Select
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 
 object TopNftCollectionsModule {

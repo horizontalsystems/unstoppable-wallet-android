@@ -4,9 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsViewModel.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,7 +60,7 @@ class SelectBackupItemsViewModel(
     )
 
     data class WalletBackupViewItem(
-        val account: Account,
+        val account: cash.p.terminal.wallet.Account,
         val name: String,
         val type: String,
         val backupRequired: Boolean,

@@ -6,7 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 

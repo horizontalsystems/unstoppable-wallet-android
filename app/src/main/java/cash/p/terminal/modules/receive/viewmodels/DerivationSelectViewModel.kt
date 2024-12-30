@@ -3,10 +3,10 @@ package cash.p.terminal.modules.receive.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.accountTypeDerivation
 import cash.p.terminal.modules.receive.ui.AddressFormatItem
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.accountTypeDerivation
+import cash.p.terminal.wallet.entities.TokenType
 
 class DerivationSelectViewModel(coinUid: String, walletManager: IWalletManager) : ViewModel() {
     val items = walletManager.activeWallets

@@ -6,13 +6,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.SyncMode
 import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.modules.balance.BalanceSortType
-import cash.p.terminal.modules.balance.BalanceViewType
+import cash.p.terminal.wallet.BalanceSortType
+import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
@@ -310,10 +309,10 @@ class LocalStorageManager(
         }
 
     //used only in db migration
-    override var bitcoinDerivation: AccountType.Derivation?
+    override var bitcoinDerivation: cash.p.terminal.wallet.AccountType.Derivation?
         get() {
             val derivationString = preferences.getString(BITCOIN_DERIVATION, null)
-            return derivationString?.let { AccountType.Derivation.valueOf(it) }
+            return derivationString?.let { cash.p.terminal.wallet.AccountType.Derivation.valueOf(it) }
         }
         set(derivation) {
             preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()

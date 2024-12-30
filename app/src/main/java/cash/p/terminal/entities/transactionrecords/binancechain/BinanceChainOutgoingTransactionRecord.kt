@@ -1,9 +1,9 @@
 package cash.p.terminal.entities.transactionrecords.binancechain
 
 import cash.p.terminal.entities.TransactionValue
-import cash.p.terminal.modules.transactions.TransactionSource
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
-import io.horizontalsystems.marketkit.models.Token
 
 class BinanceChainOutgoingTransactionRecord(
     transaction: TransactionInfo,

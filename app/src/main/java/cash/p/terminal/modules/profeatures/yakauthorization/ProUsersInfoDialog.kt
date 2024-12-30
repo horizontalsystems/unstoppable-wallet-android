@@ -19,16 +19,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HsIconButton
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 
 class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
     override fun onCreateView(
@@ -41,7 +41,7 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ComposeAppTheme {
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     ProUsersInfoScreen(
                         findNavController(),
                         listOf(
@@ -63,7 +63,7 @@ class ProUsersInfoDialog : BaseComposableBottomSheetFragment() {
 private fun ProUsersInfoScreen(navController: NavController, features: List<String>) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.icon_24_lock),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.ProUsersInfo_UnstoppablePass),
         onCloseClick = {
             navController.popBackStack()

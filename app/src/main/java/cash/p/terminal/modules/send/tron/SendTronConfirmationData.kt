@@ -2,7 +2,7 @@ package cash.p.terminal.modules.send.tron
 
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.contacts.model.Contact
-import io.horizontalsystems.marketkit.models.Coin
+import cash.p.terminal.wallet.entities.Coin
 import java.math.BigDecimal
 
 data class SendTronConfirmationData(

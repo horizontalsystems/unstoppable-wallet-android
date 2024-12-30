@@ -68,29 +68,29 @@ import cash.p.terminal.modules.createaccount.MnemonicLanguageCell
 import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.modules.restoreaccount.restoremnemonic.SuggestionsBar
-import cash.p.terminal.ui.compose.ColoredTextStyle
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Keyboard
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.core.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.CustomKeyboardWarningDialog
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui.compose.components.FormsInputPassword
-import cash.p.terminal.ui.compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.HeaderText
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
 import cash.p.terminal.ui.compose.components.SelectorItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.body_grey50
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.caption_lucian
+import cash.p.terminal.ui_compose.components.body_grey50
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.caption_lucian
 import cash.p.terminal.ui.compose.observeKeyboardState
+import cash.p.terminal.ui_compose.theme.ColoredTextStyle
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -126,9 +126,9 @@ fun RestorePhraseNonStandard(
         }
 
     val borderColor = if (uiState.error != null) {
-        ComposeAppTheme.colors.red50
+        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
     } else {
-        ComposeAppTheme.colors.steel20
+        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
     }
 
     val coroutineScope = rememberCoroutineScope()

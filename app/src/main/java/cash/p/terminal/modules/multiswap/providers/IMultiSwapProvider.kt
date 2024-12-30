@@ -3,8 +3,8 @@ package cash.p.terminal.modules.multiswap.providers
 import cash.p.terminal.modules.multiswap.ISwapFinalQuote
 import cash.p.terminal.modules.multiswap.ISwapQuote
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 
 interface IMultiSwapProvider {

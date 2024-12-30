@@ -1,12 +1,12 @@
 package cash.p.terminal.core.factories
 
 import cash.p.terminal.core.IAccountFactory
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.managers.UserManager
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.CexType
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.CexType
+import cash.p.terminal.wallet.IAccountManager
 import java.util.UUID
 
 class AccountFactory(
@@ -60,7 +60,7 @@ class AccountFactory(
 
     override fun getNextCexAccountName(cexType: CexType): String {
         val cexAccountsCount = accountManager.accounts.count {
-            it.type is AccountType.Cex && cexType.sameType(it.type.cexType) }
+            it.type is AccountType.Cex && cexType.sameType((it.type as AccountType.Cex).cexType) }
 
         return "${cexType.name()} Wallet ${cexAccountsCount + 1}"
     }

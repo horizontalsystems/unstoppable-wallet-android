@@ -2,8 +2,8 @@ package cash.p.terminal.entities.transactionrecords.bitcoin
 
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.modules.transactions.TransactionLockInfo
-import cash.p.terminal.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.transaction.TransactionSource
 import java.math.BigDecimal
 
 class BitcoinOutgoingTransactionRecord(

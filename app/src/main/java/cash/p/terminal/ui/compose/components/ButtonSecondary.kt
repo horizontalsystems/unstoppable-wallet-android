@@ -33,10 +33,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.WithTranslatableTitle
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
 import cash.p.terminal.ui.compose.components.SecondaryButtonDefaults.buttonColors
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaults
+import cash.p.terminal.ui_compose.components.HsButtonColors
+import cash.p.terminal.ui_compose.components.captionSB_grey50
+import cash.p.terminal.ui_compose.components.captionSB_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun ButtonSecondaryDefault(
@@ -70,10 +74,10 @@ fun ButtonSecondaryYellow(
         modifier = modifier,
         onClick = onClick,
         buttonColors = ButtonPrimaryDefaults.textButtonColors(
-            backgroundColor = ComposeAppTheme.colors.yellowD,
-            contentColor = ComposeAppTheme.colors.dark,
-            disabledBackgroundColor = ComposeAppTheme.colors.steel20,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellowD,
+            contentColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.dark,
+            disabledBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20,
+            disabledContentColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50,
         ),
         content = {
             Text(
@@ -136,10 +140,10 @@ fun ButtonSecondaryTransparent(
         modifier = modifier,
         onClick = onClick,
         buttonColors = buttonColors(
-            backgroundColor = ComposeAppTheme.colors.transparent,
-            contentColor = ComposeAppTheme.colors.leah,
-            disabledBackgroundColor = ComposeAppTheme.colors.transparent,
-            disabledContentColor = ComposeAppTheme.colors.grey50,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+            contentColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
+            disabledBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+            disabledContentColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50,
         ),
         content = {
             if (iconRight != null) {
@@ -210,7 +214,7 @@ fun <T : WithTranslatableTitle> ButtonSecondaryToggle(
                             modifier = Modifier
                                 .size(3.dp)
                                 .clip(CircleShape)
-                                .background(if (select.selected == it) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.grey)
+                                .background(if (select.selected == it) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey)
                         )
                     }
                 }
@@ -243,7 +247,7 @@ fun ButtonSecondary(
         enabled = enabled,
     ) {
         ProvideTextStyle(
-            value = ComposeAppTheme.typography.captionSB
+            value = cash.p.terminal.ui_compose.theme.ComposeAppTheme.typography.captionSB
         ) {
             Row(
                 Modifier
@@ -283,10 +287,10 @@ object SecondaryButtonDefaults {
 
     @Composable
     fun buttonColors(
-        backgroundColor: Color = ComposeAppTheme.colors.steel20,
-        contentColor: Color = ComposeAppTheme.colors.leah,
-        disabledBackgroundColor: Color = ComposeAppTheme.colors.steel20,
-        disabledContentColor: Color = ComposeAppTheme.colors.grey50,
+        backgroundColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20,
+        contentColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
+        disabledBackgroundColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20,
+        disabledContentColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50,
     ): ButtonColors = HsButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,

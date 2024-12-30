@@ -22,12 +22,11 @@ import cash.p.terminal.R
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.TextImportantWarning
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 import kotlinx.parcelize.Parcelize
 
 class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
@@ -43,9 +42,10 @@ class WCAccountTypeNotSupportedDialog : BaseComposableBottomSheetFragment() {
             setContent {
                 val navController = findNavController()
 
-                ComposeAppTheme {
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     WCAccountTypeNotSupportedScreen(
-                        accountTypeDescription = navController.getInput<Input>()?.accountTypeDescription ?: "",
+                        accountTypeDescription = navController.getInput<Input>()?.accountTypeDescription
+                            ?: "",
                         onCloseClick = {
                             navController.popBackStack()
                         },
@@ -74,7 +74,7 @@ fun WCAccountTypeNotSupportedScreen(
 ) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.WalletConnect_Title),
         onCloseClick = onCloseClick
     ) {
@@ -96,7 +96,7 @@ fun WCAccountTypeNotSupportedScreen(
 @Preview
 @Composable
 private fun WalletConnectErrorWatchAccountPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         WCAccountTypeNotSupportedScreen("Account Type Desc", {}, {})
     }
 }

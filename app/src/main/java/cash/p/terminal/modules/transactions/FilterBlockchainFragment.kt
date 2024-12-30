@@ -28,14 +28,15 @@ import androidx.navigation.navGraphViewModels
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellMultilineClear
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.body_leah
-import io.horizontalsystems.marketkit.models.Blockchain
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellMultilineClear
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.imageUrl
 
 class FilterBlockchainFragment : BaseComposeFragment() {
 

@@ -2,8 +2,8 @@ package cash.p.terminal.modules.theme
 
 import com.google.gson.annotations.SerializedName
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
 
 enum class ThemeType(
     val value: String,

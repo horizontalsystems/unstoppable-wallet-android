@@ -16,12 +16,12 @@ import cash.p.terminal.modules.multiswap.ui.DataFieldAllowance
 import cash.p.terminal.modules.multiswap.ui.DataFieldRecipient
 import cash.p.terminal.modules.multiswap.ui.DataFieldRecipientExtended
 import cash.p.terminal.modules.multiswap.ui.DataFieldSlippage
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.scaleUp
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.oneinchkit.OneInchKit
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.await

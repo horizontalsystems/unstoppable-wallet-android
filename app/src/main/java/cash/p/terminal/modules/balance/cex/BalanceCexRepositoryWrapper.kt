@@ -1,12 +1,11 @@
 package cash.p.terminal.modules.balance.cex
 
 import cash.p.terminal.R
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.managers.CexAssetManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.ICexProvider
-import cash.p.terminal.core.providers.Translator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -55,7 +54,7 @@ class BalanceCexRepositoryWrapper(
                     val adapterState = if (connectivityManager.isConnected) {
                         AdapterState.NotSynced(t)
                     } else {
-                        AdapterState.NotSynced(Exception(Translator.getString(R.string.Hud_Text_NoInternet)))
+                        AdapterState.NotSynced(Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.Hud_Text_NoInternet)))
                     }
                     Pair(assets, adapterState)
                 }

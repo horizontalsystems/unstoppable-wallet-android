@@ -2,7 +2,7 @@ package cash.p.terminal.modules.multiswap.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 
 class SwapSettingsViewModel(settings: Map<String, Any?>) : ViewModelUiState<SwapSettingsUiState>() {
     private var errors = mutableMapOf<String, Throwable>()

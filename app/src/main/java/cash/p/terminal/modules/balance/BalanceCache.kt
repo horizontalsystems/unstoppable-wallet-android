@@ -1,9 +1,8 @@
 package cash.p.terminal.modules.balance
 
-import cash.p.terminal.core.BalanceData
+import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.storage.EnabledWalletsCacheDao
 import cash.p.terminal.entities.EnabledWalletCache
-import cash.p.terminal.entities.Wallet
 
 class BalanceCache(private val dao: EnabledWalletsCacheDao) {
     private var cacheMap: Map<String, BalanceData>
@@ -19,16 +18,16 @@ class BalanceCache(private val dao: EnabledWalletsCacheDao) {
         }.toMap()
     }
 
-    fun setCache(wallet: Wallet, balanceData: BalanceData) {
+    fun setCache(wallet: cash.p.terminal.wallet.Wallet, balanceData: BalanceData) {
         setCache(mapOf(wallet to balanceData))
     }
 
-    fun getCache(wallet: Wallet): BalanceData? {
+    fun getCache(wallet: cash.p.terminal.wallet.Wallet): BalanceData? {
         val key = listOf(wallet.token.tokenQuery.id, wallet.account.id).joinToString()
         return cacheMap[key]
     }
 
-    fun setCache(balancesData: Map<Wallet, BalanceData>) {
+    fun setCache(balancesData: Map<cash.p.terminal.wallet.Wallet, BalanceData>) {
         val list = balancesData.map { (wallet, balanceData) ->
             EnabledWalletCache(
                 wallet.token.tokenQuery.id,

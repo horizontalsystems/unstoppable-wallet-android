@@ -9,7 +9,8 @@ import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftAssetShortMetadata
 import cash.p.terminal.entities.nft.NftKey
 import cash.p.terminal.entities.nft.NftUid
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.MarketKitWrapper
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

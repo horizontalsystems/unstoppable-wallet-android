@@ -20,7 +20,7 @@ fun SendBinanceConfirmationScreen(
     var confirmationData by remember { mutableStateOf(sendViewModel.getConfirmationData()) }
     var refresh by remember { mutableStateOf(false) }
 
-    LifecycleResumeEffect {
+    LifecycleResumeEffect(sendViewModel) {
         if (refresh) {
             confirmationData = sendViewModel.getConfirmationData()
         }

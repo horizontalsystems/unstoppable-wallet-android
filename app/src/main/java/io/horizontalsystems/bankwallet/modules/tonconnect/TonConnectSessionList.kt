@@ -40,10 +40,10 @@ import cash.p.terminal.modules.walletconnect.list.ui.ActionsRow
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.modules.walletconnect.list.ui.getShape
 import cash.p.terminal.modules.walletconnect.list.ui.showDivider
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun TonConnectSessionList(

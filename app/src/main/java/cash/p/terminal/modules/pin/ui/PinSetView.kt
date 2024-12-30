@@ -12,10 +12,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.modules.pin.set.PinSetModule
 import cash.p.terminal.modules.pin.set.PinSetViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.animations.CrossSlide
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun PinSet(
@@ -32,7 +32,7 @@ fun PinSet(
     }
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = title,

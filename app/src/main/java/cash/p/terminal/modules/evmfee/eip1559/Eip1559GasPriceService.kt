@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.evmfee.eip1559
 
-import cash.p.terminal.core.Warning
+import cash.p.terminal.wallet.Warning
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.evmfee.Bound
 import cash.p.terminal.modules.evmfee.FeeSettingsError

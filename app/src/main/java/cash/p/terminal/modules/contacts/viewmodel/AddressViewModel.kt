@@ -2,9 +2,9 @@ package cash.p.terminal.modules.contacts.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.EvmBlockchainManager
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.order
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.DataState
@@ -14,9 +14,9 @@ import cash.p.terminal.modules.address.AddressValidationException
 import cash.p.terminal.modules.address.IAddressHandler
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.ContactAddress
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.strings.helpers.TranslatableString
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive

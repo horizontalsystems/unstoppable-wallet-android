@@ -1,0 +1,140 @@
+package cash.p.terminal.wallet.storage
+
+import androidx.room.*
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.models.BlockchainEntity
+import cash.p.terminal.wallet.models.TokenEntity
+
+@Dao
+interface CoinDao {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(coin: cash.p.terminal.wallet.entities.Coin)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(blockchainEntity: BlockchainEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(tokenEntity: TokenEntity)
+
+    @Query("SELECT * FROM Coin WHERE uid = :uid LIMIT 1")
+    fun getCoin(uid: String): cash.p.terminal.wallet.entities.Coin?
+
+    @Query("SELECT * FROM Coin WHERE uid IN (:uids)")
+    fun getCoins(uids: List<String>): List<cash.p.terminal.wallet.entities.Coin>
+
+    @Query("SELECT * FROM Coin")
+    fun getAllCoins(): List<cash.p.terminal.wallet.entities.Coin>
+
+    @RawQuery
+    fun getFullCoins(query: SupportSQLiteQuery): List<FullCoinWrapper>
+
+    @Query("SELECT * FROM Coin WHERE uid = :uid LIMIT 1")
+    fun getFullCoin(uid: String): FullCoinWrapper?
+
+    @Query("SELECT * FROM Coin WHERE uid IN (:uids)")
+    fun getFullCoins(uids: List<String>): List<FullCoinWrapper>
+
+    @RawQuery
+    fun getToken(query: SupportSQLiteQuery): TokenWrapper?
+
+    @RawQuery
+    fun getTokens(filter: SimpleSQLiteQuery): List<TokenWrapper>
+
+    @Query("SELECT * FROM BlockchainEntity WHERE uid = :uid LIMIT 1")
+    fun getBlockchain(uid: String): BlockchainEntity?
+
+    @Query("SELECT * FROM BlockchainEntity WHERE uid IN (:uids)")
+    fun getBlockchains(uids: List<String>): List<BlockchainEntity>
+
+    @Query("SELECT * FROM BlockchainEntity")
+    fun getAllBlockchains(): List<BlockchainEntity>
+
+    @Query("DELETE FROM Coin")
+    fun deleteAllCoins()
+
+    @Query("DELETE FROM BlockchainEntity")
+    fun deleteAllBlockchains()
+
+    @Query("DELETE FROM TokenEntity")
+    fun deleteAllTokens()
+
+    data class FullCoinWrapper(
+        @Embedded
+        val coin: cash.p.terminal.wallet.entities.Coin,
+
+        @Relation(
+            entity = TokenEntity::class,
+            parentColumn = "uid",
+            entityColumn = "coinUid"
+        )
+        val tokens: List<TokenEntityWrapper>
+    ) {
+
+        val fullCoin: cash.p.terminal.wallet.entities.FullCoin
+        get() = cash.p.terminal.wallet.entities.FullCoin(
+            coin,
+            tokens.map { it.token(coin) }
+        )
+
+    }
+
+    data class TokenEntityWrapper(
+        @Embedded
+        val tokenEntity: TokenEntity,
+
+        @Relation(
+            parentColumn = "blockchainUid",
+            entityColumn = "uid"
+        )
+        val blockchainEntity: BlockchainEntity
+    ) {
+
+        fun token(coin: cash.p.terminal.wallet.entities.Coin): Token {
+            val tokenType = if (tokenEntity.decimals != null) {
+                cash.p.terminal.wallet.entities.TokenType.fromType(
+                    tokenEntity.type,
+                    tokenEntity.reference
+                )
+            } else {
+                cash.p.terminal.wallet.entities.TokenType.Unsupported(
+                    tokenEntity.type,
+                    tokenEntity.reference
+                )
+            }
+
+            return Token(
+                coin,
+                blockchainEntity.blockchain,
+                tokenType,
+                tokenEntity.decimals ?: 0
+            )
+        }
+
+    }
+
+    data class TokenWrapper(
+        @Embedded
+        val tokenEntity: TokenEntity,
+
+        @Relation(
+            parentColumn = "coinUid",
+            entityColumn = "uid"
+        )
+        val coin: cash.p.terminal.wallet.entities.Coin,
+
+        @Relation(
+            parentColumn = "blockchainUid",
+            entityColumn = "uid"
+        )
+        val blockchainEntity: BlockchainEntity,
+    ) {
+
+        val token: Token
+            get() = TokenEntityWrapper(tokenEntity, blockchainEntity).token(coin)
+
+    }
+
+}

@@ -1,17 +1,16 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.entities.EnabledWallet
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.solanakit.models.FullTokenAccount
 
 class SolanaWalletManager(
-        private val walletManager: IWalletManager,
-        private val accountManager: IAccountManager,
-        private val marketKit: MarketKitWrapper
+    private val walletManager: IWalletManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val marketKit: MarketKitWrapper
 ) {
 
     @Synchronized
@@ -26,13 +25,13 @@ class SolanaWalletManager(
         val tokens = marketKit.tokens(newTokenQueries)
 
         val enabledWallets = tokens.map { token ->
-            EnabledWallet(
-                    tokenQueryId = token.tokenQuery.id,
-                    accountId = account.id,
-                    coinName = token.coin.name,
-                    coinCode = token.coin.code,
-                    coinDecimals = token.decimals,
-                    coinImage = token.coin.image
+            cash.p.terminal.wallet.entities.EnabledWallet(
+                tokenQueryId = token.tokenQuery.id,
+                accountId = account.id,
+                coinName = token.coin.name,
+                coinCode = token.coin.code,
+                coinDecimals = token.decimals,
+                coinImage = token.coin.image
             )
         }
 

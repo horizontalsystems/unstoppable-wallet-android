@@ -1,24 +1,24 @@
 package cash.p.terminal.modules.balance.cex
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexProviderManager
 import cash.p.terminal.core.providers.ICexProvider
-import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.wallet.BalanceSortType
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
-import cash.p.terminal.modules.balance.BalanceViewType
+import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.balance.BalanceViewTypeManager
-import cash.p.terminal.modules.balance.BalanceXRateRepository
-import cash.p.terminal.modules.balance.DeemedValue
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
+import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.modules.balance.ITotalBalance
 import cash.p.terminal.modules.balance.SyncingProgress
 import cash.p.terminal.modules.balance.TotalBalance
 import cash.p.terminal.modules.balance.TotalService
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.CoinPrice
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.models.CoinPrice
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +31,7 @@ class BalanceCexViewModel(
     private val balanceViewTypeManager: BalanceViewTypeManager,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val balanceCexRepository: BalanceCexRepositoryWrapper,
-    private val xRateRepository: BalanceXRateRepository,
+    private val xRateRepository: DefaultBalanceXRateRepository,
     private val balanceCexSorter: BalanceCexSorter,
     private val cexProviderManager: CexProviderManager,
 ) : ViewModelUiState<UiState>(), ITotalBalance by totalBalance {

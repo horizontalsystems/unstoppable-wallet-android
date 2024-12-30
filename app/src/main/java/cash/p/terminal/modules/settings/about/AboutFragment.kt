@@ -17,7 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.slideFromBottom
@@ -29,12 +29,12 @@ import cash.p.terminal.modules.settings.appstatus.AppStatusScreen
 import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.settings.privacy.PrivacyScreen
 import cash.p.terminal.modules.settings.terms.TermsScreen
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class AboutFragment : BaseComposeFragment() {
 

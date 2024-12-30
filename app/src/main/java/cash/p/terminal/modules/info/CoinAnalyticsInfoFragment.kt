@@ -15,17 +15,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
 import cash.p.terminal.modules.info.ui.BulletedText
 import cash.p.terminal.modules.info.ui.InfoBody
 import cash.p.terminal.modules.info.ui.InfoHeader
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class CoinAnalyticsInfoFragment : BaseComposeFragment() {
 
@@ -148,7 +148,7 @@ private fun AnalyticsInfoBody(info: AnalyticInfo) {
 @Preview
 @Composable
 private fun Preview_CoinAnalyticsInfoScreen() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         CoinAnalyticsInfoScreen(
             AnalyticInfo.CexVolumeInfo,
         ) {}

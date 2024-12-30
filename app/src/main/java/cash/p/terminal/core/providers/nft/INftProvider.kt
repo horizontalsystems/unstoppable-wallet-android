@@ -2,7 +2,7 @@ package cash.p.terminal.core.providers.nft
 
 import cash.p.terminal.entities.nft.*
 import cash.p.terminal.entities.nft.NftEventMetadata.EventType
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 interface INftProvider {
     val title: String

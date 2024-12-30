@@ -4,24 +4,22 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.badge
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
-import cash.p.terminal.modules.transactionInfo.ColoredValue
+import cash.p.terminal.ui_compose.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.badge
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -163,7 +161,7 @@ class TransactionsViewModel(
         syncing = syncing
     )
 
-    private fun handleUpdatedWallets(wallets: List<Wallet>) {
+    private fun handleUpdatedWallets(wallets: List<cash.p.terminal.wallet.Wallet>) {
         transactionFilterService.setWallets(wallets)
     }
 
@@ -264,13 +262,13 @@ data class TransactionViewItem(
 
         val today = Calendar.getInstance()
         if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
-            return Translator.getString(R.string.Timestamp_Today)
+            return cash.p.terminal.strings.helpers.Translator.getString(R.string.Timestamp_Today)
         }
 
         val yesterday = Calendar.getInstance()
         yesterday.add(Calendar.DAY_OF_MONTH, -1)
         if (calendar[Calendar.YEAR] == yesterday[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == yesterday[Calendar.DAY_OF_YEAR]) {
-            return Translator.getString(R.string.Timestamp_Yesterday)
+            return cash.p.terminal.strings.helpers.Translator.getString(R.string.Timestamp_Yesterday)
         }
 
         return DateHelper.shortDate(date, "MMMM d", "MMMM d, yyyy")

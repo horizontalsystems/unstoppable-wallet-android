@@ -1,0 +1,4 @@
+<resources>
+    <item name="multiswap" type="id"/>
+    <item name="coinFragment" type="id"/>
+</resources>

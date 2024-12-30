@@ -1,14 +1,14 @@
 package cash.p.terminal.modules.market.category
 
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TopMarket
-import io.horizontalsystems.marketkit.models.CoinCategory
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.models.CoinCategory
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

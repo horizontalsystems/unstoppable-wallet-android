@@ -1,13 +1,13 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.wallet.IAccountManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class UserManager(
-    private val accountManager: IAccountManager
+    private val accountManager: cash.p.terminal.wallet.IAccountManager
 ) {
     private var currentUserLevel = Int.MAX_VALUE
 

@@ -19,16 +19,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.nft.asset.NftAssetModule
 import cash.p.terminal.modules.nft.holdings.NftAssetViewItem
 import cash.p.terminal.modules.nft.ui.NftAssetPreview
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.OnBottomReached
-import cash.p.terminal.ui.compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui.compose.components.ListErrorView
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 @Composable
 fun NftCollectionAssetsScreen(navController: NavController, blockchainType: BlockchainType, collectionUid: String) {

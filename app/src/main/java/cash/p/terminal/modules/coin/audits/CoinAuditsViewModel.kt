@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.modules.coin.audits.CoinAuditsModule.AuditViewItem
 import cash.p.terminal.modules.coin.audits.CoinAuditsModule.AuditorViewItem
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

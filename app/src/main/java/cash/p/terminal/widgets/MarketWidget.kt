@@ -48,7 +48,7 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.market.Value
+import io.horizontalsystems.core.entities.Value
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date

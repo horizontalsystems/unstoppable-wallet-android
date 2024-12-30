@@ -29,18 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellMultilineClear
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellMultilineClear
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
@@ -67,7 +66,7 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
     data class Input(
         val popOffOnSuccess: Int,
         val popOffInclusive: Boolean,
-        val accountType: AccountType,
+        val accountType: cash.p.terminal.wallet.AccountType,
         val accountName: String?,
     ) : Parcelable
 
@@ -75,7 +74,7 @@ class SelectBlockchainsFragment : BaseComposeFragment() {
 
 @Composable
 private fun SelectBlockchainsScreen(
-    accountType: AccountType,
+    accountType: cash.p.terminal.wallet.AccountType,
     accountName: String?,
     navController: NavController,
     popUpToInclusiveId: Int,

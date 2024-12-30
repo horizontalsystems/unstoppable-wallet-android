@@ -2,27 +2,25 @@ package cash.p.terminal.modules.receive.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.IAdapterManager
-import cash.p.terminal.core.UsedAddress
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.accountTypeDerivation
-import cash.p.terminal.core.bitcoinCashCoinType
+import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.factories.uriScheme
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.entities.AddressUri
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.entities.Wallet
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.receive.ReceiveModule
 import cash.p.terminal.modules.receive.ReceiveModule.AdditionalData
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.accountTypeDerivation
+import cash.p.terminal.wallet.bitcoinCashCoinType
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class ReceiveAddressViewModel(
-    private val wallet: Wallet,
+    private val wallet: cash.p.terminal.wallet.Wallet,
     private val adapterManager: IAdapterManager
 ) : ViewModelUiState<ReceiveModule.UiState>() {
 
@@ -67,17 +65,17 @@ class ReceiveAddressViewModel(
     private fun setNetworkName() {
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
-                networkName = Translator.getString(R.string.Balance_Format) + ": "
+                networkName = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Format) + ": "
                 networkName += "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
             }
 
             is TokenType.AddressTyped -> {
-                networkName = Translator.getString(R.string.Balance_Format) + ": "
+                networkName = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Format) + ": "
                 networkName += tokenType.type.bitcoinCashCoinType.title
             }
 
             else -> {
-                networkName = Translator.getString(R.string.Balance_Network) + ": "
+                networkName = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Network) + ": "
                 networkName += wallet.token.blockchain.name
             }
         }
@@ -89,7 +87,7 @@ class ReceiveAddressViewModel(
 
     private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? {
         return if (watchAccount) ReceiveModule.AlertText.Normal(
-            Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
         )
         else null
     }

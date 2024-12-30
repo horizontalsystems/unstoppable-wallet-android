@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.send.ton
 
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.Address
 import io.horizontalsystems.tonkit.FriendlyAddress
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +39,7 @@ class SendTonAddressService(prefilledAddress: String?) {
         try {
             tonAddress = FriendlyAddress.parse(address.hex)
         } catch (e: Exception) {
-            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError = Throwable(cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 

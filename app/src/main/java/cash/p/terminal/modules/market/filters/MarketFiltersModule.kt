@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.market.MarketItem
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
-import io.horizontalsystems.marketkit.models.Blockchain
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
+import cash.p.terminal.wallet.models.Analytics.TechnicalAdvice.Advice
+import io.horizontalsystems.core.entities.Blockchain
 import io.reactivex.Single
 
 object MarketFiltersModule {

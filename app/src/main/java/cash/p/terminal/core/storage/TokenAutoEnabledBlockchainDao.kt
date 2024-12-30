@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import cash.p.terminal.entities.TokenAutoEnabledBlockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 @Dao
 interface TokenAutoEnabledBlockchainDao {

@@ -3,10 +3,8 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.UsedAddress
+import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.purpose
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
@@ -16,19 +14,19 @@ import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.litecoinkit.LitecoinKit
 import io.horizontalsystems.litecoinkit.LitecoinKit.NetworkType
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
 import java.math.BigDecimal
 
 class LitecoinAdapter(
-        override val kit: LitecoinKit,
-        syncMode: BitcoinCore.SyncMode,
-        backgroundManager: BackgroundManager,
-        wallet: Wallet,
+    override val kit: LitecoinKit,
+    syncMode: BitcoinCore.SyncMode,
+    backgroundManager: BackgroundManager,
+    wallet: cash.p.terminal.wallet.Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), LitecoinKit.Listener, ISendBitcoinAdapter {
 
     constructor(
-        wallet: Wallet,
+        wallet: cash.p.terminal.wallet.Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         derivation: TokenType.Derivation
@@ -98,14 +96,14 @@ class LitecoinAdapter(
         private const val confirmationsThreshold = 3
 
         private fun createKit(
-            wallet: Wallet,
+            wallet: cash.p.terminal.wallet.Wallet,
             syncMode: BitcoinCore.SyncMode,
             derivation: TokenType.Derivation
         ): LitecoinKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
-                is AccountType.HdExtendedKey -> {
+                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
                     return LitecoinKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
@@ -116,7 +114,7 @@ class LitecoinAdapter(
                         confirmationsThreshold = confirmationsThreshold,
                     )
                 }
-                is AccountType.Mnemonic -> {
+                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
                     return LitecoinKit(
                         context = App.instance,
                         words = accountType.words,
@@ -128,7 +126,7 @@ class LitecoinAdapter(
                         purpose = derivation.purpose
                     )
                 }
-                is AccountType.BitcoinAddress -> {
+                is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
                     return LitecoinKit(
                         context = App.instance,
                         watchAddress =  accountType.address,

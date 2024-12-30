@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.navigateWithTermsAccepted
@@ -34,12 +34,12 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.contacts.screen.ConfirmationBottomSheet
 import cash.p.terminal.modules.importwallet.getFileName
 import cash.p.terminal.modules.restorelocal.RestoreLocalFragment
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.body_jacob
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HsBackButton
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.body_jacob
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -114,13 +114,13 @@ private fun BackupManagerScreen(
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             ConfirmationBottomSheet(
                 title = stringResource(R.string.ImportWallet_WarningInvalidJson),
                 text = stringResource(R.string.ImportWallet_WarningInvalidJsonDescription),
                 iconPainter = painterResource(R.drawable.icon_warning_2_20),
-                iconTint = ColorFilter.tint(ComposeAppTheme.colors.lucian),
+                iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian),
                 confirmText = stringResource(R.string.ImportWallet_SelectAnotherFile),
                 cautionType = Caution.Type.Warning,
                 cancelText = stringResource(R.string.Button_Cancel),
@@ -135,7 +135,7 @@ private fun BackupManagerScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.BackupManager_Title),

@@ -15,10 +15,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.getInputX
-import cash.p.terminal.modules.chart.ChartViewModel
-import cash.p.terminal.modules.coin.overview.ui.Chart
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.VSpacer
+import io.horizontalsystems.chartview.chart.ChartViewModel
+import io.horizontalsystems.chartview.ui.Chart
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
 import kotlinx.parcelize.Parcelize
@@ -43,14 +42,17 @@ class ProChartFragment : BaseComposableBottomSheetFragment() {
                     )
                 )
 
-                ComposeAppTheme {
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     BottomSheetHeader(
                         iconPainter = painterResource(R.drawable.ic_chart_24),
-                        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
                         title = input.title,
                         onCloseClick = { close() }
                     ) {
-                        Chart(chartViewModel = chartViewModel)
+                        Chart(
+                            uiState = chartViewModel.uiState,
+                            getSelectedPointCallback = chartViewModel::getSelectedPoint,
+                            onSelectChartInterval = chartViewModel::onSelectChartInterval)
                         VSpacer(32.dp)
                     }
                 }

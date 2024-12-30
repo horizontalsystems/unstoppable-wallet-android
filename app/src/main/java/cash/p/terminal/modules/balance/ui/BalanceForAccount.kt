@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -34,13 +33,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.utils.ModuleField
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
@@ -52,16 +50,15 @@ import cash.p.terminal.modules.qrscanner.QRScannerActivity
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BalanceForAccount(navController: NavController, accountViewItem: AccountViewItem) {
     val viewModel = viewModel<BalanceViewModel>(factory = BalanceModule.Factory())
@@ -69,11 +66,14 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
     val context = LocalContext.current
     val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.handleScannedData(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.handleScannedData(
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                )
+            }
         }
-    }
 
     viewModel.uiState.errorMessage?.let { message ->
         val view = LocalView.current
@@ -99,13 +99,13 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
     BackupAlert(navController)
     ModalBottomSheetLayout(
         sheetState = invalidUrlBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             ConfirmationBottomSheet(
                 title = stringResource(R.string.WalletConnect_Title),
                 text = stringResource(R.string.WalletConnect_Error_InvalidUrl),
                 iconPainter = painterResource(R.drawable.ic_wallet_connect_24),
-                iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
                 confirmText = stringResource(R.string.Button_TryAgain),
                 cautionType = Caution.Type.Warning,
                 cancelText = stringResource(R.string.Button_Cancel),
@@ -122,7 +122,7 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
         }
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = {
@@ -154,7 +154,9 @@ fun BalanceForAccount(navController: NavController, accountViewItem: AccountView
 
                                             is WCManager.SupportState.NotSupportedDueToNonBackedUpAccount -> {
                                                 val text =
-                                                    Translator.getString(R.string.WalletConnect_Error_NeedBackup)
+                                                    cash.p.terminal.strings.helpers.Translator.getString(
+                                                        R.string.WalletConnect_Error_NeedBackup
+                                                    )
                                                 navController.slideFromBottom(
                                                     R.id.backupRequiredDialog,
                                                     BackupRequiredDialog.Input(state.account, text)

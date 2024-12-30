@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.navigateWithTermsAccepted
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.core.slideFromRight
@@ -29,17 +29,17 @@ import cash.p.terminal.modules.backupalert.BackupAlert
 import cash.p.terminal.modules.manageaccount.ManageAccountFragment
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.ActionViewItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsRadioButton
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.body_jacob
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_lucian
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.body_jacob
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_lucian
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class ManageAccountsFragment : BaseComposeFragment() {
 

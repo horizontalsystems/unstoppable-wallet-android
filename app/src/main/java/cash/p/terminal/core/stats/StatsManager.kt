@@ -3,14 +3,13 @@ package cash.p.terminal.core.stats
 import com.google.gson.Gson
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.core.storage.StatsDao
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.StatRecord
-import cash.p.terminal.modules.balance.BalanceSortType
-import cash.p.terminal.modules.balance.BalanceViewType
+import cash.p.terminal.wallet.BalanceSortType
+import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.coin.CoinModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.main.MainModule
@@ -32,9 +31,8 @@ import cash.p.terminal.modules.transactionInfo.options.SpeedUpCancelType
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
-import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.core.models.HsTimePeriod
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -179,13 +177,13 @@ val ProChartModule.ChartType.statPage
 
 val HsTimePeriod?.statPeriod: StatPeriod
     get() = when (this) {
-        HsTimePeriod.Day1 -> StatPeriod.Day1
-        HsTimePeriod.Week1 -> StatPeriod.Week1
+        HsTimePeriod.Day1, HsTimePeriod.Day -> StatPeriod.Day1
+        HsTimePeriod.Week1, HsTimePeriod.Week -> StatPeriod.Week1
         HsTimePeriod.Week2 -> StatPeriod.Week2
-        HsTimePeriod.Month1 -> StatPeriod.Month1
+        HsTimePeriod.Month1, HsTimePeriod.Month -> StatPeriod.Month1
         HsTimePeriod.Month3 -> StatPeriod.Month3
         HsTimePeriod.Month6 -> StatPeriod.Month6
-        HsTimePeriod.Year1 -> StatPeriod.Year1
+        HsTimePeriod.Year1, HsTimePeriod.Year -> StatPeriod.Year1
         HsTimePeriod.Year2 -> StatPeriod.Year2
         HsTimePeriod.Year5 -> StatPeriod.Year5
         null -> StatPeriod.All
@@ -237,29 +235,29 @@ val CoinAnalyticsModule.RankType.statPage: StatPage
         CoinAnalyticsModule.RankType.HoldersRank -> StatPage.CoinRankHolders
     }
 
-val AccountType.statAccountType: String
+val cash.p.terminal.wallet.AccountType.statAccountType: String
     get() = when (this) {
-        is AccountType.Mnemonic -> {
+        is cash.p.terminal.wallet.AccountType.Mnemonic -> {
             if (passphrase.isEmpty()) "mnemonic_${words.size}" else "mnemonic_with_passphrase_${words.size}"
         }
 
-        is AccountType.BitcoinAddress -> {
+        is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
             "btc_address"
         }
 
-        is AccountType.Cex -> {
+        is cash.p.terminal.wallet.AccountType.Cex -> {
             "cex"
         }
 
-        is AccountType.EvmAddress -> {
+        is cash.p.terminal.wallet.AccountType.EvmAddress -> {
             "evm_address"
         }
 
-        is AccountType.EvmPrivateKey -> {
+        is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> {
             "evm_private_key"
         }
 
-        is AccountType.HdExtendedKey -> {
+        is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
             if (hdExtendedKey.isPublic) {
                 "account_x_pub_key"
             } else {
@@ -271,15 +269,15 @@ val AccountType.statAccountType: String
             }
         }
 
-        is AccountType.SolanaAddress -> {
+        is cash.p.terminal.wallet.AccountType.SolanaAddress -> {
             "sol_address"
         }
 
-        is AccountType.TonAddress -> {
+        is cash.p.terminal.wallet.AccountType.TonAddress -> {
             "ton_address"
         }
 
-        is AccountType.TronAddress -> {
+        is cash.p.terminal.wallet.AccountType.TronAddress -> {
             "tron_address"
         }
     }

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
-import cash.p.terminal.modules.chart.ChartModule
-import cash.p.terminal.modules.chart.ChartViewModel
+import io.horizontalsystems.chartview.chart.ChartModule
+import io.horizontalsystems.chartview.chart.ChartViewModel
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.topplatforms.Platform

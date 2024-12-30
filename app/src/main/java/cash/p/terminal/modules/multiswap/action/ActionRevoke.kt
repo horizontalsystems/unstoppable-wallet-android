@@ -7,7 +7,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.eip20revoke.Eip20RevokeConfirmFragment
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 
 class ActionRevoke(

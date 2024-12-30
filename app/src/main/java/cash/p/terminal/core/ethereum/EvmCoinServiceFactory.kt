@@ -1,12 +1,12 @@
 package cash.p.terminal.core.ethereum
 
 import cash.p.terminal.core.ICoinManager
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.ethereumkit.models.Address
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 
 class EvmCoinServiceFactory(
     private val baseToken: Token,

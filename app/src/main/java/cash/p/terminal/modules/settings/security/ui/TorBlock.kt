@@ -11,11 +11,11 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.settings.security.SecurityCenterCell
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun TorBlock(

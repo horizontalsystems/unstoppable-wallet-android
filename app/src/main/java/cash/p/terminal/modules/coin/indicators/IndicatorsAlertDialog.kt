@@ -16,13 +16,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 
 class IndicatorsAlertDialog : BaseComposableBottomSheetFragment() {
 
@@ -45,10 +44,10 @@ class IndicatorsAlertDialog : BaseComposableBottomSheetFragment() {
 
 @Composable
 private fun IndicatorsAlertScreen(navController: NavController) {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.icon_24_lock),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
+            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey),
             title = stringResource(R.string.CoinPage_Indicators),
             onCloseClick = {
                 navController.popBackStack()
