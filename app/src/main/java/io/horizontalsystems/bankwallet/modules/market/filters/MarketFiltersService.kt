@@ -44,7 +44,7 @@ class MarketFiltersService(
     val blockchains = marketKit.blockchains(blockchainTypes.map { it.uid })
     val currencyCode = baseCurrency.code
 
-    var coinCount = CoinList.Top250.itemsCount
+    var coinCount = CoinList.Top200.itemsCount
     var filterMarketCap: Pair<Long?, Long?>? = null
     var filterVolume: Pair<Long?, Long?>? = null
     var filterPeriod = TimePeriod.TimePeriod_1D

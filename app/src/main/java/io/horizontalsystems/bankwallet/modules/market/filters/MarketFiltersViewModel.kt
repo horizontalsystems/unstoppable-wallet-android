@@ -17,10 +17,7 @@ import java.net.UnknownHostException
 class MarketFiltersViewModel(val service: MarketFiltersService)
     : ViewModelUiState<MarketFiltersUiState>() {
 
-    private var coinListSet = FilterViewItemWrapper(
-        Translator.getString(CoinList.Top250.titleResId),
-        CoinList.Top250,
-    )
+    private var coinListSet: CoinList = CoinList.Top200
     private var period = FilterViewItemWrapper(
         Translator.getString(TimePeriod.TimePeriod_1D.titleResId),
         TimePeriod.TimePeriod_1D,
@@ -47,9 +44,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
 
     private var reloadDataJob: Job? = null
 
-    val coinListsViewItemOptions = CoinList.values().map {
-        FilterViewItemWrapper(Translator.getString(it.titleResId), it)
-    }
+    val coinListsViewItemOptions = CoinList.entries
     val marketCapViewItemOptions = getRanges(service.currencyCode)
     val volumeViewItemOptions = getRanges(service.currencyCode)
     val periodViewItemOptions = TimePeriod.values().map {
@@ -96,12 +91,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     )
 
     fun reset() {
-        updateCoinList(
-            FilterViewItemWrapper(
-                Translator.getString(CoinList.Top250.titleResId),
-                CoinList.Top250,
-            )
-        )
+        updateCoinList(CoinList.Top200)
         marketCap = rangeEmpty
         volume = rangeEmpty
         period = FilterViewItemWrapper(
@@ -123,9 +113,9 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         reloadData()
     }
 
-    fun updateCoinList(value: FilterViewItemWrapper<CoinList>) {
+    fun updateCoinList(value: CoinList) {
         coinListSet = value
-        service.coinCount = value.item.itemsCount
+        service.coinCount = value.itemsCount
         service.clearCache()
         showSpinner = true
         emitState()
@@ -292,7 +282,7 @@ fun getRanges(currencyCode: String): List<FilterViewItemWrapper<Range?>> {
 }
 
 data class MarketFiltersUiState(
-    val coinListSet: FilterViewItemWrapper<CoinList>,
+    val coinListSet: CoinList,
     val period: FilterViewItemWrapper<TimePeriod>,
     val filterTradingSignal: FilterViewItemWrapper<FilterTradingSignal?>,
     val marketCap: FilterViewItemWrapper<Range?>,

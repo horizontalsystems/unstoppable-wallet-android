@@ -234,10 +234,10 @@
     <string name="Market_Filter_Sell">出售</string>
     <string name="Market_Filter_RiskToTrade">有风险</string>
     <string name="Market_Filter_Top_100">前100名</string>
-    <string name="Market_Filter_Top_250">前250名</string>
+    <string name="Market_Filter_Top_200">前200名</string>
+    <string name="Market_Filter_Top_300">前300名</string>
     <string name="Market_Filter_Top_500">前500名</string>
     <string name="Market_Filter_Top_1000">前1000名</string>
-    <string name="Market_Filter_Top_1500">前1500名</string>
     <string name="Market_Filter_ShowResults">显示结果</string>
     <string name="Market_Filter_ShowResults_Counter">显示结果：%d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5百万</string>
