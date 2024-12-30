@@ -43,7 +43,6 @@ android {
 }
 
 dependencies {
-//    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation(project(":core:core"))
     implementation(project(":core:ui-compose"))
     implementation(project(":core:strings"))
