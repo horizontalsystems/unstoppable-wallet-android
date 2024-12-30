@@ -236,10 +236,10 @@
     <string name="Market_Filter_Sell">Продавать</string>
     <string name="Market_Filter_RiskToTrade">Риски</string>
     <string name="Market_Filter_Top_100">Топ 100</string>
-    <string name="Market_Filter_Top_250">Топ 250</string>
+    <string name="Market_Filter_Top_200">Топ 200</string>
+    <string name="Market_Filter_Top_300">Топ 300</string>
     <string name="Market_Filter_Top_500">Топ 500</string>
     <string name="Market_Filter_Top_1000">Топ 1000</string>
-    <string name="Market_Filter_Top_1500">Топ 1500</string>
     <string name="Market_Filter_ShowResults">Показать результаты</string>
     <string name="Market_Filter_ShowResults_Counter">Показать результаты: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5 млн</string>

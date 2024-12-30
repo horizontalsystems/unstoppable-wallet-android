@@ -234,10 +234,10 @@
     <string name="Market_Filter_Sell">매도</string>
     <string name="Market_Filter_RiskToTrade">위험</string>
     <string name="Market_Filter_Top_100">상위 100</string>
-    <string name="Market_Filter_Top_250">상위 250</string>
+    <string name="Market_Filter_Top_200">상위 200</string>
+    <string name="Market_Filter_Top_300">상위 300</string>
     <string name="Market_Filter_Top_500">상위 500</string>
     <string name="Market_Filter_Top_1000">상위 1000</string>
-    <string name="Market_Filter_Top_1500">상위 1500</string>
     <string name="Market_Filter_ShowResults">결과 보기</string>
     <string name="Market_Filter_ShowResults_Counter">결과 표시: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5백만</string>

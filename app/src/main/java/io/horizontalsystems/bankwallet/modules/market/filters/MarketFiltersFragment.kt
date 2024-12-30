@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.market.filters
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -9,11 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +24,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,17 +36,21 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.*
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.CoinSet
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.MarketCap
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PriceChange
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PriceCloseTo
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PricePeriod
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingSignals
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingVolume
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellowWithSpinner
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
@@ -60,11 +60,9 @@ import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
-import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import kotlinx.coroutines.launch
-import io.horizontalsystems.bankwallet.modules.market.filters.PriceChange as FilterPriceChange
 
 class MarketFiltersFragment : BaseComposeFragment() {
 
@@ -201,9 +199,7 @@ private fun BottomSheetContent(
         }
 
         CoinSet -> {
-            SingleSelectBottomSheetContent(
-                title = R.string.Market_Filter_ChooseSet,
-                headerIcon = R.drawable.ic_circle_coin_24,
+            CoinSetBottomSheetContent(
                 items = viewModel.coinListsViewItemOptions,
                 selectedItem = uiState.coinListSet,
                 onSelect = {
@@ -293,10 +289,10 @@ fun AdvancedSearchContent(
 
     SectionUniversalLawrence {
         AdvancedSearchDropdown(
-            title = R.string.Market_Filter_MarketCap,
-            value = uiState.marketCap.title,
+            title = R.string.Market_Filter_ChooseSet,
+            value =  stringResource(uiState.coinListSet.titleResId),
             borderTop = false,
-            onDropdownClick = { showBottomSheet(MarketCap) }
+            onDropdownClick = { showBottomSheet(CoinSet) }
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_Volume,
@@ -497,136 +493,5 @@ private fun FilterMenu(title: String?, valueColor: TextColor, onClick: () -> Uni
             contentDescription = null,
             tint = ComposeAppTheme.colors.grey
         )
-    }
-}
-
-@Composable
-private fun <ItemClass> SingleSelectBottomSheetContent(
-    title: Int,
-    headerIcon: Int,
-    items: List<FilterViewItemWrapper<ItemClass>>,
-    selectedItem: FilterViewItemWrapper<ItemClass>? = null,
-    onSelect: (FilterViewItemWrapper<ItemClass>) -> Unit,
-    onClose: (() -> Unit),
-) {
-    BottomSheetHeader(
-        iconPainter = painterResource(headerIcon),
-        title = stringResource(title),
-        onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-    ) {
-        Spacer(Modifier.height(12.dp))
-        CellUniversalLawrenceSection(
-            items = items,
-            showFrame = true
-        ) { itemWrapper ->
-            RowUniversal(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                onClick = {
-                    onSelect(itemWrapper)
-                    onClose()
-                }
-            ) {
-                if (itemWrapper.title != null && itemWrapper.item is FilterPriceChange) {
-                    when (itemWrapper.item.color) {
-                        TextColor.Lucian -> body_lucian(text = itemWrapper.title)
-                        TextColor.Remus -> body_remus(text = itemWrapper.title)
-                        TextColor.Grey -> body_grey(text = itemWrapper.title)
-                        TextColor.Leah -> body_leah(text = itemWrapper.title)
-                    }
-                } else {
-                    if (itemWrapper.title != null) {
-                        body_leah(text = itemWrapper.title)
-                    } else {
-                        body_grey(text = stringResource(R.string.Any))
-                    }
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                if (itemWrapper == selectedItem) {
-                    Image(
-                        modifier = Modifier.padding(start = 5.dp),
-                        painter = painterResource(id = R.drawable.ic_checkmark_20),
-                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                        contentDescription = null
-                    )
-                }
-            }
-        }
-        Spacer(Modifier.height(44.dp))
-    }
-}
-
-@Composable
-private fun PriceCloseToBottomSheetContent(
-    items: List<PriceCloseTo>,
-    selectedItem: PriceCloseTo? = null,
-    onSelect: (PriceCloseTo?) -> Unit,
-    onClose: (() -> Unit),
-) {
-    BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.ic_usd_24),
-        title = stringResource(R.string.Market_Filter_PriceCloseTo),
-        onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
-    ) {
-        VSpacer(12.dp)
-        CellUniversalLawrenceSection(showFrame = true) {
-            Column {
-                RowUniversal(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    onClick = {
-                        onSelect(null)
-                        onClose()
-                    }
-                ) {
-                    body_grey(
-                        text = stringResource(R.string.Any),
-                        modifier = Modifier.weight(1f)
-                    )
-                    if (selectedItem == null) {
-                        Image(
-                            modifier = Modifier.padding(start = 5.dp),
-                            painter = painterResource(id = R.drawable.ic_checkmark_20),
-                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                            contentDescription = null
-                        )
-                    }
-                }
-                items.forEach { item ->
-                    Divider(
-                        thickness = 1.dp,
-                        color = ComposeAppTheme.colors.steel10,
-                    )
-                    RowUniversal(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        onClick = {
-                            onSelect(item)
-                            onClose()
-                        }
-                    ) {
-                        body_leah(
-                            text = stringResource(item.titleResId) + " " + stringResource(item.descriptionResId),
-                            modifier = Modifier.weight(1f)
-                        )
-                        if (item == selectedItem) {
-                            Image(
-                                modifier = Modifier.padding(start = 5.dp),
-                                painter = painterResource(id = R.drawable.ic_checkmark_20),
-                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-                                contentDescription = null
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        VSpacer(44.dp)
     }
 }

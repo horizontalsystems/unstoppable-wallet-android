@@ -56,12 +56,16 @@ enum class FilterTradingSignal(@StringRes val titleResId: Int) {
     }
 }
 
-enum class CoinList(val itemsCount: Int, @StringRes val titleResId: Int) {
-    Top100(100, R.string.Market_Filter_Top_100),
-    Top250(250, R.string.Market_Filter_Top_250),
-    Top500(500, R.string.Market_Filter_Top_500),
-    Top1000(1000, R.string.Market_Filter_Top_1000),
-    Top1500(1500, R.string.Market_Filter_Top_1500),
+enum class CoinList(
+    val itemsCount: Int,
+    @StringRes val titleResId: Int,
+    @StringRes val descriptionResId: Int
+) {
+    Top100(100, R.string.Market_Filter_Top_100, R.string.Market_Filter_Top_100_Description),
+    Top200(200, R.string.Market_Filter_Top_200, R.string.Market_Filter_Top_200_Description),
+    Top300(300, R.string.Market_Filter_Top_300, R.string.Market_Filter_Top_300_Description),
+    Top500(500, R.string.Market_Filter_Top_500, R.string.Market_Filter_Top_300_Description),
+    Top1000(1000, R.string.Market_Filter_Top_1000, R.string.Market_Filter_Top_1000_Description),
 }
 
 enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>) {
