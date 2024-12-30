@@ -274,6 +274,8 @@
     <string name="Market_Filter_RiskToTrade">Risky</string>
     <string name="Market_Filter_ATH" translatable="false">ATH</string>
     <string name="Market_Filter_ATL" translatable="false">ATL</string>
+    <string name="Market_Filter_ATH_Description">(All Time High)</string>
+    <string name="Market_Filter_ATL_Description">(All Time Low)</string>
 
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_250">Top 250</string>

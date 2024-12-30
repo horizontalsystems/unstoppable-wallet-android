@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -189,9 +190,7 @@ private fun BottomSheetContent(
     val uiState = viewModel.uiState
     when (bottomSheetType) {
         PriceCloseTo -> {
-            SingleSelectBottomSheetContent(
-                title = R.string.Market_Filter_PriceCloseTo,
-                headerIcon = R.drawable.ic_usd_24,
+            PriceCloseToBottomSheetContent(
                 items = viewModel.priceCloseToOptions,
                 selectedItem = uiState.priceCloseTo,
                 onSelect = {
@@ -338,7 +337,7 @@ fun AdvancedSearchContent(
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PriceCloseTo,
-            value = uiState.priceCloseTo.title,
+            value = uiState.priceCloseTo?.titleResId?.let { stringResource(it) },
             onDropdownClick = { showBottomSheet(PriceCloseTo) }
         )
     }
@@ -556,5 +555,78 @@ private fun <ItemClass> SingleSelectBottomSheetContent(
             }
         }
         Spacer(Modifier.height(44.dp))
+    }
+}
+
+@Composable
+private fun PriceCloseToBottomSheetContent(
+    items: List<PriceCloseTo>,
+    selectedItem: PriceCloseTo? = null,
+    onSelect: (PriceCloseTo?) -> Unit,
+    onClose: (() -> Unit),
+) {
+    BottomSheetHeader(
+        iconPainter = painterResource(R.drawable.ic_usd_24),
+        title = stringResource(R.string.Market_Filter_PriceCloseTo),
+        onCloseClick = onClose,
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+    ) {
+        VSpacer(12.dp)
+        CellUniversalLawrenceSection(showFrame = true) {
+            Column {
+                RowUniversal(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    onClick = {
+                        onSelect(null)
+                        onClose()
+                    }
+                ) {
+                    body_grey(
+                        text = stringResource(R.string.Any),
+                        modifier = Modifier.weight(1f)
+                    )
+                    if (selectedItem == null) {
+                        Image(
+                            modifier = Modifier.padding(start = 5.dp),
+                            painter = painterResource(id = R.drawable.ic_checkmark_20),
+                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                            contentDescription = null
+                        )
+                    }
+                }
+                items.forEach { item ->
+                    Divider(
+                        thickness = 1.dp,
+                        color = ComposeAppTheme.colors.steel10,
+                    )
+                    RowUniversal(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        onClick = {
+                            onSelect(item)
+                            onClose()
+                        }
+                    ) {
+                        body_leah(
+                            text = stringResource(item.titleResId) + " " + stringResource(item.descriptionResId),
+                            modifier = Modifier.weight(1f)
+                        )
+                        if (item == selectedItem) {
+                            Image(
+                                modifier = Modifier.padding(start = 5.dp),
+                                painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        VSpacer(44.dp)
     }
 }
