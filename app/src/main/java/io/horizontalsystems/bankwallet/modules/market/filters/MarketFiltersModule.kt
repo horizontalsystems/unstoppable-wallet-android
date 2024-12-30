@@ -165,9 +165,9 @@ enum class TimePeriod(@StringRes val titleResId: Int): WithTranslatableTitle {
         get() = TranslatableString.ResString(titleResId)
 }
 
-enum class PriceCloseTo(val titleResId: Int) {
-    Ath(R.string.Market_Filter_ATH),
-    Atl(R.string.Market_Filter_ATL),
+enum class PriceCloseTo(val titleResId: Int, val descriptionResId: Int) {
+    Ath(R.string.Market_Filter_ATH, R.string.Market_Filter_ATH_Description),
+    Atl(R.string.Market_Filter_ATL, R.string.Market_Filter_ATL_Description),
 }
 
 enum class PriceChange(

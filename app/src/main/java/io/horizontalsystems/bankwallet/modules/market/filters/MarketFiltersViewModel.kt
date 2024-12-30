@@ -29,7 +29,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     private var marketCap = rangeEmpty
     private var volume = rangeEmpty
     private var priceChange = FilterViewItemWrapper.getAny<PriceChange>()
-    private var priceCloseTo = FilterViewItemWrapper.getAny<PriceCloseTo>()
+    private var priceCloseTo:PriceCloseTo? = null
     private var outperformedBtcOn = false
     private var outperformedEthOn = false
     private var outperformedBnbOn = false
@@ -55,10 +55,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     val periodViewItemOptions = TimePeriod.values().map {
         FilterViewItemWrapper(Translator.getString(it.titleResId), it)
     }
-    val priceCloseToOptions = listOf(FilterViewItemWrapper.getAny<PriceCloseTo>()) +
-            PriceCloseTo.entries.map {
-                FilterViewItemWrapper<PriceCloseTo?>(Translator.getString(it.titleResId), it)
-            }
+    val priceCloseToOptions = PriceCloseTo.entries
 
     val tradingSignals = listOf(FilterViewItemWrapper.getAny<FilterTradingSignal>()) +
                 FilterTradingSignal.values().map { FilterViewItemWrapper<FilterTradingSignal?>(Translator.getString(it.titleResId), it) }
@@ -135,7 +132,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         reloadData()
     }
 
-    fun updatePriceCloseTo(value: FilterViewItemWrapper<PriceCloseTo?>) {
+    fun updatePriceCloseTo(value: PriceCloseTo?) {
         priceCloseTo = value
 
         emitState()
@@ -247,8 +244,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
                 service.filterSolidCex = solidCexOn
                 service.filterSolidDex = solidDexOn
                 service.filterGoodDistribution = goodDistributionOn
-                service.filterPriceCloseToAth = priceCloseTo.item == PriceCloseTo.Ath
-                service.filterPriceCloseToAtl = priceCloseTo.item == PriceCloseTo.Atl
+                service.filterPriceCloseToAth = priceCloseTo == PriceCloseTo.Ath
+                service.filterPriceCloseToAtl = priceCloseTo == PriceCloseTo.Atl
                 service.filterBlockchains = selectedBlockchains
                 service.filterTradingSignal = filterTradingSignal.item?.getAdvices() ?: emptyList()
 
@@ -301,7 +298,7 @@ data class MarketFiltersUiState(
     val marketCap: FilterViewItemWrapper<Range?>,
     val volume: FilterViewItemWrapper<Range?>,
     val priceChange: FilterViewItemWrapper<PriceChange?>,
-    val priceCloseTo: FilterViewItemWrapper<PriceCloseTo?>,
+    val priceCloseTo: PriceCloseTo?,
     val outperformedBtcOn: Boolean,
     val outperformedEthOn: Boolean,
     val outperformedBnbOn: Boolean,
