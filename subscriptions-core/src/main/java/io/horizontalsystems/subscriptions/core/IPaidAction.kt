@@ -15,9 +15,6 @@ object AdvancedSearch : IPaidAction
 object TradeSignals : IPaidAction
 
 @Parcelize
-object FavorableSwaps : IPaidAction
-
-@Parcelize
 object TransactionSpeedTools : IPaidAction
 
 @Parcelize

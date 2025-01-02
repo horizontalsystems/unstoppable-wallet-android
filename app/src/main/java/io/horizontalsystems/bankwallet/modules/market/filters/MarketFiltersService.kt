@@ -45,6 +45,7 @@ class MarketFiltersService(
     val currencyCode = baseCurrency.code
 
     var coinCount = CoinList.Top200.itemsCount
+    var sectorId: Int? = null
     var filterMarketCap: Pair<Long?, Long?>? = null
     var filterVolume: Pair<Long?, Long?>? = null
     var filterPeriod = TimePeriod.TimePeriod_1D
@@ -80,11 +81,17 @@ class MarketFiltersService(
         return getTopMarketList().await().size
     }
 
+    suspend fun getSectors(): List<SectorItem> {
+        return marketKit.categoriesSingle().blockingGet().map { coinCategory ->
+            SectorItem(coinCategory.id, coinCategory.name)
+        }
+    }
+
     private fun getTopMarketList(): Single<Map<Int, MarketInfo>> {
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code)
+            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code, sectorId)
                 .doOnSuccess {
                     cache = it
                 }

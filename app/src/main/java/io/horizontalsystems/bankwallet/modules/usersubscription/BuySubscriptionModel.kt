@@ -6,7 +6,6 @@ import io.horizontalsystems.subscriptions.core.AddressVerification
 import io.horizontalsystems.subscriptions.core.AdvancedSearch
 import io.horizontalsystems.subscriptions.core.BasePlan
 import io.horizontalsystems.subscriptions.core.DuressMode
-import io.horizontalsystems.subscriptions.core.FavorableSwaps
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PricingPhase
 import io.horizontalsystems.subscriptions.core.PrivacyMode
@@ -24,7 +23,6 @@ object BuySubscriptionModel {
             TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals
-            FavorableSwaps -> R.string.Premium_UpgradeFeature_FavorableSwaps
             TransactionSpeedTools -> R.string.Premium_UpgradeFeature_TxSpeedTools
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode
             AddressVerification -> R.string.Premium_UpgradeFeature_AddressVerification
@@ -40,7 +38,6 @@ object BuySubscriptionModel {
             TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights_Description
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_Description
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_Description
-            FavorableSwaps -> R.string.Premium_UpgradeFeature_FavorableSwaps_Description
             TransactionSpeedTools -> R.string.Premium_UpgradeFeature_TxSpeedTools_Description
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_Description
             AddressVerification -> R.string.Premium_UpgradeFeature_AddressVerification_Description
@@ -56,7 +53,6 @@ object BuySubscriptionModel {
             TokenInsights -> R.string.Premium_UpgradeFeature_TokenInsights_BigDescription
             AdvancedSearch -> R.string.Premium_UpgradeFeature_AdvancedSearch_BigDescription
             TradeSignals -> R.string.Premium_UpgradeFeature_TradeSignals_BigDescription
-            FavorableSwaps -> R.string.Premium_UpgradeFeature_FavorableSwaps_BigDescription
             TransactionSpeedTools -> R.string.Premium_UpgradeFeature_TxSpeedTools_BigDescription
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_BigDescription
             AddressVerification -> R.string.Premium_UpgradeFeature_AddressVerification_BigDescription
@@ -72,7 +68,6 @@ object BuySubscriptionModel {
             TokenInsights -> R.drawable.prem_portfolio_24
             AdvancedSearch -> R.drawable.prem_search_discovery_24
             TradeSignals -> R.drawable.prem_ring_24
-            FavorableSwaps -> R.drawable.prem_percent_24
             TransactionSpeedTools -> R.drawable.prem_outgoingraw_24
             DuressMode -> R.drawable.prem_duress_24
             AddressVerification -> R.drawable.prem_shield_24

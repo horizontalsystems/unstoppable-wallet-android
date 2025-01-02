@@ -12,10 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 
-class MarketFiltersViewModel(val service: MarketFiltersService)
-    : ViewModelUiState<MarketFiltersUiState>() {
+class MarketFiltersViewModel(val service: MarketFiltersService) :
+    ViewModelUiState<MarketFiltersUiState>() {
 
     private var coinListSet: CoinList = CoinList.Top200
     private var period = FilterViewItemWrapper(
@@ -26,7 +27,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     private var marketCap = rangeEmpty
     private var volume = rangeEmpty
     private var priceChange = FilterViewItemWrapper.getAny<PriceChange>()
-    private var priceCloseTo:PriceCloseTo? = null
+    private var selectedSector = FilterViewItemWrapper.getAny<SectorItem>()
+    private var priceCloseTo: PriceCloseTo? = null
     private var outperformedBtcOn = false
     private var outperformedEthOn = false
     private var outperformedBnbOn = false
@@ -41,8 +43,12 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     private var buttonEnabled = false
     private var buttonTitle = Translator.getString(R.string.Market_Filter_ShowResults)
     private var errorMessage: TranslatableString? = null
+    private var sectors: List<SectorItem> = listOf()
 
     private var reloadDataJob: Job? = null
+
+    val sectorsViewItemOptions: List<FilterViewItemWrapper<SectorItem?>>
+        get() = listOf(FilterViewItemWrapper.getAny<SectorItem>()) + sectors.map { FilterViewItemWrapper(it.title, it) }
 
     val coinListsViewItemOptions = CoinList.entries
     val marketCapViewItemOptions = getRanges(service.currencyCode)
@@ -60,10 +66,17 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         }
 
     init {
-        showSpinner = true
         updateSelectedBlockchains()
-        emitState()
-        reloadData()
+        reloadDataWithSpinner()
+        loadSectors()
+    }
+
+    private fun loadSectors() {
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
+                sectors = service.getSectors()
+            }
+        }
     }
 
     override fun createState() = MarketFiltersUiState(
@@ -72,6 +85,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         marketCap = marketCap,
         volume = volume,
         priceChange = priceChange,
+        sector = selectedSector,
         priceCloseTo = priceCloseTo,
         outperformedBtcOn = outperformedBtcOn,
         outperformedEthOn = outperformedEthOn,
@@ -91,7 +105,6 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
     )
 
     fun reset() {
-        updateCoinList(CoinList.Top200)
         marketCap = rangeEmpty
         volume = rangeEmpty
         period = FilterViewItemWrapper(
@@ -109,13 +122,27 @@ class MarketFiltersViewModel(val service: MarketFiltersService)
         selectedBlockchains = emptyList()
         filterTradingSignal = FilterViewItemWrapper.getAny()
         updateSelectedBlockchains()
-        emitState()
-        reloadData()
+
+        selectedSector = FilterViewItemWrapper.getAny()
+        service.sectorId = null
+        coinListSet = CoinList.Top200
+        service.coinCount = CoinList.Top200.itemsCount
+        reloadDataWithSpinner()
     }
 
     fun updateCoinList(value: CoinList) {
         coinListSet = value
         service.coinCount = value.itemsCount
+        reloadDataWithSpinner()
+    }
+
+    fun setSector(sectorItem: FilterViewItemWrapper<SectorItem?>) {
+        selectedSector = sectorItem
+        service.sectorId = sectorItem.item?.id
+        reloadDataWithSpinner()
+    }
+
+    private fun reloadDataWithSpinner() {
         service.clearCache()
         showSpinner = true
         emitState()
@@ -288,6 +315,7 @@ data class MarketFiltersUiState(
     val marketCap: FilterViewItemWrapper<Range?>,
     val volume: FilterViewItemWrapper<Range?>,
     val priceChange: FilterViewItemWrapper<PriceChange?>,
+    val sector: FilterViewItemWrapper<SectorItem?>,
     val priceCloseTo: PriceCloseTo?,
     val outperformedBtcOn: Boolean,
     val outperformedEthOn: Boolean,
