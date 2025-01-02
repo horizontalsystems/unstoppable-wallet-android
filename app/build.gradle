@@ -319,7 +319,11 @@ dependencies {
     implementation project(':components:chartview')
 
     implementation project(':subscriptions-core')
-    implementation project(':subscriptions-google-play')
+
+    releaseImplementation project(':subscriptions-google-play')
+    debugImplementation project(':subscriptions-dev')
+    appcenterdebugImplementation project(':subscriptions-dev')
+    appcenterreleaseImplementation project(':subscriptions-dev')
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.9.3'
