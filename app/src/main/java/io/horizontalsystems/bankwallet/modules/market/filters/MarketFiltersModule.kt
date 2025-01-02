@@ -66,6 +66,9 @@ enum class CoinList(
     Top300(300, R.string.Market_Filter_Top_300, R.string.Market_Filter_Top_300_Description),
     Top500(500, R.string.Market_Filter_Top_500, R.string.Market_Filter_Top_300_Description),
     Top1000(1000, R.string.Market_Filter_Top_1000, R.string.Market_Filter_Top_1000_Description),
+    Top1500(1500, R.string.Market_Filter_Top_1500, R.string.Market_Filter_Top_1500_Description),
+    Top2000(2000, R.string.Market_Filter_Top_2000, R.string.Market_Filter_Top_2000_Description),
+    Top2500(2500, R.string.Market_Filter_Top_2500, R.string.Market_Filter_Top_2500_Description),
 }
 
 enum class Range(@StringRes val titleResId: Int, val values: Pair<Long?, Long?>) {
