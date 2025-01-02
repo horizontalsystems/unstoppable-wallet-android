@@ -12,7 +12,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 
 class MarketFiltersViewModel(val service: MarketFiltersService) :
@@ -72,9 +71,11 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     }
 
     private fun loadSectors() {
-        viewModelScope.launch(Dispatchers.IO) {
-            withContext(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Default) {
+            try {
                 sectors = service.getSectors()
+            } catch (e: Throwable) {
+                //not handled
             }
         }
     }
