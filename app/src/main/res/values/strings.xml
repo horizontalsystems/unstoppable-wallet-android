@@ -282,11 +282,17 @@
     <string name="Market_Filter_Top_300">Top 300</string>
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Top_2000">Top 2000</string>
+    <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_Top_100_Description" translatable="false">M.Cap > $1B</string>
     <string name="Market_Filter_Top_200_Description" translatable="false">M.Cap > $500M </string>
     <string name="Market_Filter_Top_300_Description" translatable="false">M.Cap > $250M </string>
     <string name="Market_Filter_Top_500_Description" translatable="false">M.Cap > $100M </string>
     <string name="Market_Filter_Top_1000_Description" translatable="false">M.Cap > $25M </string>
+    <string name="Market_Filter_Top_1500_Description" translatable="false">M.Cap > $10M </string>
+    <string name="Market_Filter_Top_2000_Description" translatable="false">M.Cap > $5M </string>
+    <string name="Market_Filter_Top_2500_Description" translatable="false">M.Cap > $1M </string>
     <string name="Market_Filter_ShowResults">Show Results</string>
     <string name="Market_Filter_ShowResults_Counter">Show Results: %d</string>
 
