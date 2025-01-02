@@ -250,6 +250,7 @@
     <string name="Market_Filter_PricePeriod">Price Period</string>
     <string name="Market_Filter_TradingSignals">Trading Signals</string>
     <string name="Market_Filter_PriceChange">Price Change</string>
+    <string name="Market_Filter_Sectors">Sectors</string>
     <string name="Market_PriceChange_24H">24 Hours</string>
     <string name="Market_PriceChange_Utc">Midnight UTC</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -907,7 +908,6 @@
     <string name="Premium_UpgradeFeature_TokenInsights">Token Insights</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Advanced Search</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Trade Signals</string>
-    <string name="Premium_UpgradeFeature_FavorableSwaps">Favorable Swaps</string>
     <string name="Premium_UpgradeFeature_TxSpeedTools">Transaction Speed Tools</string>
     <string name="Premium_UpgradeFeature_DuressMode">Duress Mode</string>
     <string name="Premium_UpgradeFeature_AddressVerification">Address Verification</string>
@@ -919,7 +919,6 @@
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Full analytics and data about tokens.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Custom filters for token searches.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Signals for confident trading.</string>
-    <string name="Premium_UpgradeFeature_FavorableSwaps_Description">Swaps with no extra fees.</string>
     <string name="Premium_UpgradeFeature_TxSpeedTools_Description">Speed up and cancel transactions.</string>
     <string name="Premium_UpgradeFeature_DuressMode_Description">Hides main wallets in case of coercion.</string>
     <string name="Premium_UpgradeFeature_AddressVerification_Description">Additional address check for fraud prevention.</string>
@@ -931,7 +930,6 @@
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Token Insights provides a comprehensive view of a token’s activity and performance metrics. This includes trading volume, liquidity levels, holder behavior, total value locked (TVL), and transaction activity. By offering detailed analytics, the feature enables users to evaluate token potential, monitor market trends, and make data-driven investment decisions. It’s a powerful tool for those who seek to understand token ecosystems and market dynamics in-depth.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Custom filters for token searches.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Signals for confident trading.</string>
-    <string name="Premium_UpgradeFeature_FavorableSwaps_BigDescription">Swaps with no extra fees.</string>
     <string name="Premium_UpgradeFeature_TxSpeedTools_BigDescription">Speed up and cancel transactions.</string>
     <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Hides main wallets in case of coercion.</string>
     <string name="Premium_UpgradeFeature_AddressVerification_BigDescription">Additional address check for fraud prevention.</string>

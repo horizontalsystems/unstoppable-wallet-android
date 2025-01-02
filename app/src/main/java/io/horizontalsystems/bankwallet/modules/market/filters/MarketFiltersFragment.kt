@@ -41,6 +41,7 @@ import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModul
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PriceChange
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PriceCloseTo
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.PricePeriod
+import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.SectorSet
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingSignals
 import io.horizontalsystems.bankwallet.modules.market.filters.MarketFiltersModule.FilterDropdown.TradingVolume
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -273,6 +274,19 @@ private fun BottomSheetContent(
                 onClose = onClose
             )
         }
+
+        SectorSet -> {
+            SingleSelectBottomSheetContent(
+                title = R.string.Market_Filter_Sectors,
+                headerIcon = R.drawable.ic_ring_24,
+                items = viewModel.sectorsViewItemOptions,
+                selectedItem = uiState.sector,
+                onSelect = {
+                    viewModel.setSector(it)
+                },
+                onClose = onClose
+            )
+        }
     }
 }
 
@@ -309,6 +323,20 @@ fun AdvancedSearchContent(
     VSpacer(24.dp)
 
     PremiumHeader()
+
+    SectionPremiumUniversalLawrence {
+        AdvancedSearchDropdown(
+            title = R.string.Market_Filter_Sectors,
+            value = uiState.sector.title,
+            onDropdownClick = {
+                navController.paidAction(AdvancedSearch) {
+                    showBottomSheet(SectorSet)
+                }
+            }
+        )
+    }
+
+    VSpacer(24.dp)
 
     SectionPremiumUniversalLawrence {
         AdvancedSearchDropdown(

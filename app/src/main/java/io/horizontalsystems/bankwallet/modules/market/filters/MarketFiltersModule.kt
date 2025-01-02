@@ -31,6 +31,7 @@ object MarketFiltersModule {
         PricePeriod(R.string.Market_Filter_PricePeriod),
         TradingSignals(R.string.Market_Filter_TradingSignals),
         PriceCloseTo(R.string.Market_Filter_PriceCloseTo),
+        SectorSet(R.string.Market_Filter_Sectors),
     }
 
     data class BlockchainViewItem(val blockchain: Blockchain, val checked: Boolean)
@@ -227,6 +228,8 @@ enum class PriceChange(
 enum class TextColor{
     Remus, Lucian, Grey, Leah
 }
+
+data class SectorItem(val id: Int, val title: String)
 
 class FilterViewItemWrapper<T>(val title: String?, val item: T) {
     override fun equals(other: Any?) = when {
