@@ -754,37 +754,6 @@
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
 
-    <string name="stacking">Stacking</string>
-    <string name="pirate_cash">PirateCash</string>
-    <string name="cosanta">Cosanta</string>
-    <string name="no_active_stacking">There are no active staking transactions.</string>
-    <string name="no_active_stacking_descritpion">PIRATE Staking: Go ahead with 100 tokens and earn 13% annual returns!</string>
-    <string name="no_active_stacking_buy_more_descritpion_1">PIRATE Staking: Go ahead with</string>
-    <string name="tokens">tokens</string>
-    <string name="no_active_stacking_buy_more_descritpion_2">and earn 13% annual returns!</string>
-    <string name="buy_pirate">Buy Pirate</string>
-    <string name="waiting_for_stacking_1">Staking of coins will begin no later than in</string>
-    <string name="waiting_for_stacking_2">8 hours</string>
-    <string name="stacking_calculator">stacking calculator</string>
-    <string name="total_balance">Total balance</string>
-    <string name="total_income">Total income</string>
-    <string name="unpaid">Unpaid</string>
-    <string name="estimated_annual_interest">Estimated Annual Interest</string>
-    <string name="estimated_annual_interest_value" translatable="false">13%</string>
-    <string name="accruals">Accruals</string>
-    <string name="payouts">Payouts</string>
-    <string name="investment_chart">Investment chart</string>
-    <string name="payouts_history">Payouts History</string>
-    <string name="pos_calculator">POS Calculator</string>
-    <string name="pos_calculator_description">Calculation of profitability at individual PirateCash steaking in solo mode.</string>
-    <string name="enter_coin_amount">Enter Coin Amount</string>
-    <string name="period">Period</string>
-    <string name="done">Done</string>
-    <string name="day_period">Day</string>
-    <string name="week_period">Week</string>
-    <string name="month_period">Month</string>
-    <string name="year_period">Year</string>
-
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>
     <string name="SwapSettings_Service">Service</string>
@@ -2118,5 +2087,41 @@
     <string name="CexWithdraw_Error_MaximumAmount">The maximum amount you can withdraw is %s</string>
     <string name="CexWithdraw_Error_WithdrawTitle">Withdraw Failed</string>
 
-
+    <!-- Stacking screen -->
+    <string name="stacking">Stacking</string>
+    <string name="pirate_cash">PirateCash</string>
+    <string name="cosanta">Cosanta</string>
+    <string name="no_active_stacking">There are no active staking transactions.</string>
+    <string name="no_active_stacking_pirate_description">PIRATE Staking: Go ahead with 100 tokens and earn 13% annual returns!</string>
+    <string name="no_active_stacking_cosanta_description">COSANTA Staking: Go ahead with 1 token and earn 13% annual returns!</string>
+    <string name="no_active_stacking_buy_more_descritpion_1">PIRATE Staking: Go ahead with</string>
+    <string name="no_active_stacking_pirate_buy_more_descritpion_1">PIRATE Staking: Go ahead with</string>
+    <string name="no_active_stacking_cosanta_buy_more_descritpion_1">COSANTA Staking: Go ahead with</string>
+    <string name="tokens">tokens</string>
+    <string name="no_active_stacking_buy_more_descritpion_2">and earn 13% annual returns!</string>
+    <string name="buy_pirate">Buy Pirate</string>
+    <string name="buy_cosanta">Buy Cosanta</string>
+    <string name="waiting_for_stacking_1">Staking of coins will begin no later than in</string>
+    <string name="waiting_for_stacking_8h">8 hours</string>
+    <string name="waiting_for_stacking_24h">24 hours</string>
+    <string name="stacking_calculator">stacking calculator</string>
+    <string name="total_balance">Total balance</string>
+    <string name="total_income">Total income</string>
+    <string name="unpaid">Unpaid</string>
+    <string name="estimated_annual_interest">Estimated Annual Interest</string>
+    <string name="estimated_annual_interest_value" translatable="false">13%</string>
+    <string name="accruals">Accruals</string>
+    <string name="payouts">Payouts</string>
+    <string name="investment_chart">Investment chart</string>
+    <string name="payouts_history">Payouts History</string>
+    <string name="pos_calculator">POS Calculator</string>
+    <string name="pos_calculator_pirate_description">Calculation of profitability at individual PirateCash steaking in solo mode.</string>
+    <string name="pos_calculator_cosanta_description">Calculation of profitability at individual Cosanta steaking in solo mode.</string>
+    <string name="enter_coin_amount">Enter Coin Amount</string>
+    <string name="period">Period</string>
+    <string name="done">Done</string>
+    <string name="day_period">Day</string>
+    <string name="week_period">Week</string>
+    <string name="month_period">Month</string>
+    <string name="year_period">Year</string>
 </resources>

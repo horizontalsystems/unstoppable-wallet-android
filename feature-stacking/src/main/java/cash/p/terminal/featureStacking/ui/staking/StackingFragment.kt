@@ -17,13 +17,18 @@ class StackingFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         viewModel.loadData()
         if(calculatorViewModel.uiState.value.calculateResult.isEmpty()) {
-            calculatorViewModel.setCalculatorValue("100")
+            calculatorViewModel.setCalculatorValue("10000")
         }
         StackingScreen(
             uiState = viewModel.uiState.value,
             calculatorUIState = calculatorViewModel.uiState.value,
             onCalculatorValueChanged = calculatorViewModel::setCalculatorValue,
-            onTabChanged = viewModel::setStackingType,
+            onTabChanged = {
+                val value = if(it == StackingType.PCASH) "10000" else "1000"
+                calculatorViewModel.setCalculatorValue(value)
+                calculatorViewModel.setCoin(it)
+                viewModel.setStackingType(it)
+            },
             onBuyClicked = { token ->
                 navController.slideFromRight(R.id.multiswap, token)
             },

@@ -1,4 +1,4 @@
-package cash.p.terminal.featureStacking.ui.pirateCoinScreen
+package cash.p.terminal.featureStacking.ui.stackingCoinScreen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.text.toSpanned
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.data.toAnnotatedString
+import cash.p.terminal.featureStacking.ui.staking.StackingType
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.CardThreeLines
@@ -46,16 +47,15 @@ import io.horizontalsystems.chartview.chart.SelectedItem
 import io.horizontalsystems.chartview.ui.Chart
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.core.models.HsTimePeriod
-import org.koin.androidx.compose.koinViewModel
 import java.math.BigDecimal
 
 @Composable
-internal fun PirateCoinScreen(
+internal fun StackingCoinScreen(
     onBuyClicked: (Token) -> Unit,
     onCalculatorClicked: () -> Unit,
     onChartClicked: (String) -> Unit,
-    viewModel: PirateCoinViewModel = koinViewModel(),
-    chartViewModel: PirateChartViewModel = koinViewModel()
+    viewModel: StackingCoinViewModel,
+    chartViewModel: StackingCoinChartViewModel
 ) {
     LaunchedEffect(viewModel) { viewModel.loadBalance() }
     LaunchedEffect(viewModel.uiState.value.receiveAddress) {
@@ -74,7 +74,7 @@ internal fun PirateCoinScreen(
 
 @Composable
 internal fun PirateCoinScreenContent(
-    uiState: PirateCoinUIState,
+    uiState: StackingCoinUIState,
     onBuyClicked: (Token) -> Unit,
     onCalculatorClicked: () -> Unit,
     onChartClicked: (String) -> Unit,
@@ -90,7 +90,7 @@ internal fun PirateCoinScreenContent(
 
             BigDecimal.ZERO -> {
                 NoCoins(
-                    balance = uiState.balance,
+                    uiState = uiState,
                     onBuyClicked = {
                         uiState.token?.let { onBuyClicked(it) }
                     }
@@ -128,26 +128,34 @@ private fun LoadingScreen() {
 }
 
 @Composable
-private fun NoCoins(balance: BigDecimal, onBuyClicked: () -> Unit) {
+private fun NoCoins(uiState: StackingCoinUIState, onBuyClicked: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 52.dp),
     ) {
-        val waitingForStacking = balance >= BigDecimal(PirateCoinViewModel.MIN_STACKING_AMOUNT)
+        val waitingForStacking = uiState.balance >= uiState.minStackingAmount
         val imageRes = if (waitingForStacking) {
             R.drawable.ic_pirate_waiting_stacking
         } else {
             R.drawable.ic_pirate_no_coins
         }
         val noStackingDescription = if (waitingForStacking) {
-            annotatedWaitingStakingDescription()
-        } else if (balance == BigDecimal.ZERO) {
-            stringResource(id = R.string.no_active_stacking_descritpion).toSpanned()
+            annotatedWaitingStakingDescription(uiState.stackingType == StackingType.PCASH)
+        } else if (uiState.balance == BigDecimal.ZERO) {
+            val stringResId = if (uiState.stackingType == StackingType.PCASH) {
+                R.string.no_active_stacking_pirate_description
+            } else {
+                R.string.no_active_stacking_cosanta_description
+            }
+            stringResource(id = stringResId).toSpanned()
                 .toAnnotatedString()
         } else {
-            annotatedStakingDescription(BigDecimal(PirateCoinViewModel.MIN_STACKING_AMOUNT) - balance)
+            annotatedStakingDescription(
+                stackingType = uiState.stackingType,
+                tokenCount = uiState.minStackingAmount - uiState.balance
+            )
         }
         Spacer(modifier = Modifier.weight(1f))
         Image(
@@ -172,7 +180,13 @@ private fun NoCoins(balance: BigDecimal, onBuyClicked: () -> Unit) {
             modifier = Modifier.padding(top = 4.dp)
         )
         ButtonPrimaryYellowWithIcon(
-            title = stringResource(id = R.string.buy_pirate),
+            title = stringResource(
+                id = if (uiState.stackingType == StackingType.PCASH) {
+                    R.string.buy_pirate
+                } else {
+                    R.string.buy_cosanta
+                }
+            ),
             onClick = onBuyClicked,
             icon = R.drawable.ic_swap_24,
             modifier = Modifier
@@ -185,7 +199,7 @@ private fun NoCoins(balance: BigDecimal, onBuyClicked: () -> Unit) {
 
 @Composable
 private fun PirateCoinScreenWithGraph(
-    uiState: PirateCoinUIState,
+    uiState: StackingCoinUIState,
     onBuyClicked: () -> Unit,
     onCalculatorClicked: () -> Unit,
     onChartClicked: () -> Unit,
@@ -193,18 +207,20 @@ private fun PirateCoinScreenWithGraph(
     getSelectedPointCallback: (SelectedItem) -> ChartModule.ChartHeaderView,
     onSelectChartInterval: (HsTimePeriod?) -> Unit
 ) {
-    LazyColumn(
-        modifier = Modifier
-//            .fillMaxSize()
-//            .verticalScroll(rememberScrollState())
-    ) {
+    LazyColumn {
         item {
             Row(
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 ButtonPrimaryYellowWithIcon(
-                    title = stringResource(id = R.string.buy_pirate),
+                    title = stringResource(
+                        id = if (uiState.stackingType == StackingType.PCASH) {
+                            R.string.buy_pirate
+                        } else {
+                            R.string.buy_cosanta
+                        }
+                    ),
                     onClick = onBuyClicked,
                     icon = R.drawable.ic_swap_24,
                     modifier = Modifier
@@ -294,19 +310,32 @@ private fun PirateCoinScreenWithGraph(
 }
 
 @Composable
-private fun annotatedStakingDescription(tokenCount: BigDecimal) = buildAnnotatedString {
-    append(stringResource(R.string.no_active_stacking_buy_more_descritpion_1))
-    withStyle(style = SpanStyle(color = Color(0xFFFF3D43))) {
-        append(" ${tokenCount.toPlainString()} ${stringResource(R.string.tokens)} ")
+private fun annotatedStakingDescription(stackingType: StackingType, tokenCount: BigDecimal) =
+    buildAnnotatedString {
+        append(
+            stringResource(
+                if (stackingType == StackingType.PCASH) {
+                    R.string.no_active_stacking_pirate_buy_more_descritpion_1
+                } else {
+                    R.string.no_active_stacking_cosanta_buy_more_descritpion_1
+                }
+            )
+        )
+        withStyle(style = SpanStyle(color = Color(0xFFFF3D43))) {
+            append(" ${tokenCount.toPlainString()} ${stringResource(R.string.tokens)} ")
+        }
+        append(stringResource(R.string.no_active_stacking_buy_more_descritpion_2))
     }
-    append(stringResource(R.string.no_active_stacking_buy_more_descritpion_2))
-}
 
 @Composable
-private fun annotatedWaitingStakingDescription() = buildAnnotatedString {
+private fun annotatedWaitingStakingDescription(eightHours: Boolean) = buildAnnotatedString {
     append(stringResource(R.string.waiting_for_stacking_1))
     withStyle(style = SpanStyle(color = Color(0xFFFF3D43))) {
-        append(" ${stringResource(R.string.waiting_for_stacking_2)}")
+        if (eightHours) {
+            append(" ${stringResource(R.string.waiting_for_stacking_8h)}")
+        } else {
+            append(" ${stringResource(R.string.waiting_for_stacking_24h)}")
+        }
     }
 }
 
@@ -324,7 +353,7 @@ private fun annotatedWaitingStakingDescription() = buildAnnotatedString {
 private fun PirateCoinScreenContentPreview() {
     ComposeAppTheme {
         PirateCoinScreenContent(
-            uiState = PirateCoinUIState(
+            uiState = StackingCoinUIState(
                 balance = BigDecimal(100),
                 unpaid = BigDecimal(1)
             ),

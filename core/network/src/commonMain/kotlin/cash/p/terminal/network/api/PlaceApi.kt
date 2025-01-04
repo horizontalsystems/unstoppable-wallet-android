@@ -1,7 +1,6 @@
 package cash.p.terminal.network.api
 
 import cash.p.terminal.network.data.entity.CalculatorDataDto
-import cash.p.terminal.network.data.entity.CalculatorItemDataDto
 import cash.p.terminal.network.data.entity.InvestmentDataDto
 import cash.p.terminal.network.data.entity.InvestmentGraphDataDto
 import cash.p.terminal.network.data.entity.StakeDataDto
@@ -18,21 +17,25 @@ internal class PlaceApi(
         const val PIRATE_BASE_PLACE_URL = "https://pirate.place/api/"
     }
 
-    suspend fun getInvestmentData(address: String): InvestmentDataDto {
+    suspend fun getInvestmentData(coin: String, address: String): InvestmentDataDto {
         return httpClient.get {
-            url(PIRATE_BASE_PLACE_URL + "invest/pirate/$address")
+            url(PIRATE_BASE_PLACE_URL + "invest/$coin/$address")
         }.parseResponse()
     }
 
-    suspend fun getInvestmentChart(address: String, period: String): InvestmentGraphDataDto {
+    suspend fun getInvestmentChart(
+        coin: String,
+        address: String,
+        period: String
+    ): InvestmentGraphDataDto {
         return httpClient.get {
-            url(PIRATE_BASE_PLACE_URL + "invest/pirate/$address/graph/$period")
+            url(PIRATE_BASE_PLACE_URL + "invest/$coin/$address/graph/$period")
         }.parseResponse()
     }
 
-    suspend fun getStakeData(address: String): StakeDataDto {
+    suspend fun getStakeData(coin: String, address: String): StakeDataDto {
         return httpClient.get {
-            url(PIRATE_BASE_PLACE_URL + "invest/pirate/$address/stake")
+            url(PIRATE_BASE_PLACE_URL + "invest/$coin/$address/stake")
         }.parseResponse()
     }
 

@@ -1,4 +1,4 @@
-package cash.p.terminal.featureStacking.ui.pirateCoinScreen
+package cash.p.terminal.featureStacking.ui.cosantaCoinScreen
 
 import cash.p.terminal.featureStacking.ui.stackingCoinScreen.StackingCoinViewModel
 import cash.p.terminal.featureStacking.ui.staking.StackingType
@@ -7,17 +7,17 @@ import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.balance.BalanceService
 
-internal class PirateCoinViewModel(
+internal class CosantaCoinViewModel(
     walletManager: IWalletManager,
     adapterManager: IAdapterManager,
     piratePlaceRepository: PiratePlaceRepository,
     balanceService: BalanceService
-) : StackingCoinViewModel(
+): StackingCoinViewModel(
     walletManager = walletManager,
     adapterManager = adapterManager,
     piratePlaceRepository = piratePlaceRepository,
     balanceService = balanceService
 ) {
-    override val minStackingAmount = 100
-    override val stackingType: StackingType = StackingType.PCASH
+    override val minStackingAmount = 1
+    override val stackingType: StackingType = StackingType.COSANTA
 }

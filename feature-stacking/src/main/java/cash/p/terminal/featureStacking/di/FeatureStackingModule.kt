@@ -2,7 +2,9 @@ package cash.p.terminal.featureStacking.di
 
 import cash.p.terminal.featureStacking.ui.PirateInvestmentChartService
 import cash.p.terminal.featureStacking.ui.calculatorScreen.CalculatorViewModel
-import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateChartViewModel
+import cash.p.terminal.featureStacking.ui.cosantaCoinScreen.CosantaCoinChartViewModel
+import cash.p.terminal.featureStacking.ui.cosantaCoinScreen.CosantaCoinViewModel
+import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateCoinChartViewModel
 import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateCoinViewModel
 import cash.p.terminal.featureStacking.ui.staking.StackingViewModel
 import org.koin.core.module.dsl.factoryOf
@@ -21,7 +23,16 @@ val featureStackingModule = module {
             balanceService = get(named("wallet"))
         )
     }
-    viewModelOf(::PirateChartViewModel)
+    viewModel {
+        CosantaCoinViewModel(
+            walletManager = get(),
+            adapterManager = get(),
+            piratePlaceRepository = get(),
+            balanceService = get(named("wallet"))
+        )
+    }
+    viewModelOf(::PirateCoinChartViewModel)
+    viewModelOf(::CosantaCoinChartViewModel)
     viewModel {
         CalculatorViewModel(
             balanceService = get(named("wallet")),

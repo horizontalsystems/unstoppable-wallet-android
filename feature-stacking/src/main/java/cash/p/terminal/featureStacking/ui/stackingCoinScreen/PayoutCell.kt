@@ -1,4 +1,4 @@
-package cash.p.terminal.featureStacking.ui.pirateCoinScreen
+package cash.p.terminal.featureStacking.ui.stackingCoinScreen
 
 import android.content.res.Configuration
 import androidx.compose.foundation.border

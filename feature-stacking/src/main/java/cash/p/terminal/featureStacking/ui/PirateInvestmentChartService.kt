@@ -19,8 +19,10 @@ class PirateInvestmentChartService(
 ) : AbstractChartService() {
 
     private var receiveAddress: String = ""
+    private var coinCode: String = ""
 
-    fun setReceiveAddress(address: String) {
+    fun setData(coinCode: String, address: String) {
+        this.coinCode = coinCode
         receiveAddress = address
         refresh()
     }
@@ -46,8 +48,9 @@ class PirateInvestmentChartService(
             rxSingle(Dispatchers.IO) {
                 mapToChartPointsWrapper(
                     piratePlaceRepository.getInvestmentChart(
-                        receiveAddress,
-                        chartInterval.value
+                        coin = coinCode,
+                        address = receiveAddress,
+                        period = chartInterval.value
                     )
                 )
             }

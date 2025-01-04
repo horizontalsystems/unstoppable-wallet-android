@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.featureStacking.R
+import cash.p.terminal.featureStacking.ui.staking.StackingType
 import cash.p.terminal.network.domain.enity.PeriodType
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.InputField
@@ -73,8 +74,13 @@ internal fun CalculatorScreen(
                 tint = colorResource(R.color.grey)
             )
         }
+        val descriptionRes = if (uiState.coin == StackingType.PCASH) {
+            R.string.pos_calculator_pirate_description
+        } else {
+            R.string.pos_calculator_cosanta_description
+        }
         Text(
-            text = stringResource(R.string.pos_calculator_description),
+            text = stringResource(descriptionRes),
             style = ComposeAppTheme.typography.body,
             color = ComposeAppTheme.colors.leah,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
@@ -117,7 +123,7 @@ internal fun CalculatorTable(uiState: CalculatorUIState, modifier: Modifier = Mo
     ) {
         CalculatorItemHeader(
             period = stringResource(R.string.period),
-            coin = uiState.coin.uppercase(),
+            coin = uiState.coin.value,
             coinSecondary = uiState.coinSecondary
         )
         uiState.calculateResult.forEach { calculatorItem ->

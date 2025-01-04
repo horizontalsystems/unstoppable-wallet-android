@@ -32,6 +32,10 @@ internal class CalculatorViewModel(
         private const val DELAY = 300L
     }
 
+    fun setCoin(value: StackingType) {
+        _uiState.value = _uiState.value.copy(coin = value)
+    }
+
     fun setCalculatorValue(value: String) {
         balanceService.start()
         _uiState.value = _uiState.value.copy(amount = value)
@@ -49,10 +53,10 @@ internal class CalculatorViewModel(
 
     private suspend fun loadCalculatedData(doubleValue: Double) {
         balanceService.balanceItemsFlow.collectLatest { items ->
-            items?.find { it.wallet.coin.code == StackingType.PCASH.value }
+            items?.find { it.wallet.coin.code.equals(uiState.value.coin.value, true) }
                 ?.let { pcashItem ->
                     val items = piratePlaceRepository.getCalculatorData(
-                        coin = uiState.value.coin,
+                        coin = uiState.value.coin.value.lowercase(),
                         amount = doubleValue
                     ).items.map {
                         val amountBigDecimal = it.amount.toBigDecimal()
@@ -78,7 +82,7 @@ internal class CalculatorViewModel(
                         coinExchange = buildExchangeRateString(
                             amount = doubleValue,
                             coinPrice = pcashItem.coinPrice,
-                            coin = uiState.value.coin
+                            coin = uiState.value.coin.value.lowercase()
                         )
                     )
                 }

@@ -16,7 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.calculatorScreen.CalculatorScreen
 import cash.p.terminal.featureStacking.ui.calculatorScreen.CalculatorUIState
-import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateCoinScreen
+import cash.p.terminal.featureStacking.ui.cosantaCoinScreen.CosantaCoinChartViewModel
+import cash.p.terminal.featureStacking.ui.cosantaCoinScreen.CosantaCoinViewModel
+import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateCoinChartViewModel
+import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateCoinViewModel
+import cash.p.terminal.featureStacking.ui.stackingCoinScreen.StackingCoinChartViewModel
+import cash.p.terminal.featureStacking.ui.stackingCoinScreen.StackingCoinScreen
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.TabItem
@@ -24,6 +29,7 @@ import cash.p.terminal.ui_compose.components.Tabs
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 internal fun StackingScreen(
@@ -69,22 +75,44 @@ internal fun StackingScreen(
             Column(Modifier.padding(it)) {
                 val pagerState = rememberPagerState { uiState.tabs.size }
 
-                Tabs(tabs = uiState.tabs, onClick = onTabChanged)
-                HorizontalPager(pagerState) { page ->
+                Tabs(tabs = uiState.tabs, onClick = { tab ->
+                    onTabChanged(tab)
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(tab.ordinal)
+                    }
+                })
+                HorizontalPager(
+                    state = pagerState,
+                    userScrollEnabled = false
+                ) { page ->
                     when (uiState.tabs[page].item) {
                         StackingType.PCASH -> {
-                            PirateCoinScreen(
+                            StackingCoinScreen(
                                 onBuyClicked = onBuyClicked,
                                 onCalculatorClicked = {
                                     coroutineScope.launch {
                                         modalBottomSheetState.show()
                                     }
                                 },
-                                onChartClicked = onChartClicked
+                                onChartClicked = onChartClicked,
+                                viewModel = koinViewModel<PirateCoinViewModel>(),
+                                chartViewModel = koinViewModel<PirateCoinChartViewModel>()
                             )
                         }
 
-                        StackingType.COSANTA -> {}
+                        StackingType.COSANTA -> {
+                            StackingCoinScreen(
+                                onBuyClicked = onBuyClicked,
+                                onCalculatorClicked = {
+                                    coroutineScope.launch {
+                                        modalBottomSheetState.show()
+                                    }
+                                },
+                                onChartClicked = onChartClicked,
+                                viewModel = koinViewModel<CosantaCoinViewModel>(),
+                                chartViewModel = koinViewModel<CosantaCoinChartViewModel>()
+                            )
+                        }
                     }
                 }
             }
