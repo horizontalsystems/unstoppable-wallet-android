@@ -82,11 +82,11 @@ abstract class MarketDatabase : RoomDatabase() {
         }
 
         private fun loadInitialCoins(db: SupportSQLiteDatabase, context: Context): Int {
-            val inputStream = context.assets.open("initial_coins_list")
-            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
             var insertCount = 0
 
             try {
+                val inputStream = context.assets.open("initial_coins_list")
+                val bufferedReader = BufferedReader(InputStreamReader(inputStream))
                 while (bufferedReader.ready()) {
                     val insertStmt: String = bufferedReader.readLine()
                     db.execSQL(insertStmt)
