@@ -15,7 +15,6 @@ class StackingFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        viewModel.loadData()
         if(calculatorViewModel.uiState.value.calculateResult.isEmpty()) {
             calculatorViewModel.setCalculatorValue("10000")
         }

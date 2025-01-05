@@ -57,7 +57,7 @@ internal fun StackingCoinScreen(
     viewModel: StackingCoinViewModel,
     chartViewModel: StackingCoinChartViewModel
 ) {
-    LaunchedEffect(viewModel) { viewModel.loadBalance() }
+    LaunchedEffect(viewModel) { viewModel.loadData() }
     LaunchedEffect(viewModel.uiState.value.receiveAddress) {
         viewModel.uiState.value.receiveAddress?.let(chartViewModel::setReceiveAddress)
     }

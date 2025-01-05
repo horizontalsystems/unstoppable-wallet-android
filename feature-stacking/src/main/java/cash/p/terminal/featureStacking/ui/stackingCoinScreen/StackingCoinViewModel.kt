@@ -5,17 +5,23 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.featureStacking.BuildConfig
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.entities.PayoutViewItem
 import cash.p.terminal.featureStacking.ui.staking.StackingType
 import cash.p.terminal.network.domain.repository.PiratePlaceRepository
 import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.balance.BalanceViewHelper
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.models.CoinPrice
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.collectLatest
@@ -28,6 +34,8 @@ internal abstract class StackingCoinViewModel(
     private val walletManager: IWalletManager,
     private val adapterManager: IAdapterManager,
     private val piratePlaceRepository: PiratePlaceRepository,
+    private val accountManager: IAccountManager,
+    private val marketKitWrapper: MarketKitWrapper,
     private val balanceService: BalanceService
 ) : ViewModel() {
 
@@ -37,8 +45,38 @@ internal abstract class StackingCoinViewModel(
     private val _uiState = mutableStateOf(StackingCoinUIState())
     val uiState: State<StackingCoinUIState> get() = _uiState
 
+    fun loadData() {
+        createWalletIfNotExist()
+        loadBalance()
+    }
 
-    fun loadBalance() {
+    private fun createWalletIfNotExist() {
+        val contract = getContract()
+        if (!isTokenExists(contract)) {
+            val account = accountManager.activeAccount ?: return
+            val tokenQuery = TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(contract))
+            marketKitWrapper.token(tokenQuery)?.let { token ->
+                val wallet = Wallet(token, account)
+                walletManager.save(listOf(wallet))
+            }
+        }
+    }
+
+    private fun isTokenExists(token: String): Boolean {
+        return walletManager.activeWallets.any {
+            it.token.type is TokenType.Eip20 &&
+                    (it.token.type as TokenType.Eip20).address.equals(token,true)
+        }
+    }
+
+    private fun getContract(): String =
+        if (stackingType == StackingType.PCASH) {
+            BuildConfig.PIRATE_CONTRACT
+        } else {
+            BuildConfig.COSANTA_CONTRACT
+        }
+
+    private fun loadBalance() {
         balanceService.start()
         val wallet = walletManager.activeWallets.find { it.coin.code == stackingType.value }
         val receiveAddress: String = wallet?.let {
