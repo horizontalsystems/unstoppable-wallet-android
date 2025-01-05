@@ -33,7 +33,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.providers.CexAsset
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
 import cash.p.terminal.modules.balance.cex.WalletIconCex
 import cash.p.terminal.ui_compose.CoinFragmentInput

@@ -18,7 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import cash.p.terminal.ui_compose.components.AppBar
 import io.horizontalsystems.core.CellUniversalLawrenceSection

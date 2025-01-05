@@ -37,7 +37,6 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.isCustom
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
@@ -53,6 +52,8 @@ import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.transactions.transactionList
+import cash.p.terminal.navigation.entity.SwapParams
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
@@ -444,7 +445,7 @@ private fun ButtonsRow(
                     icon = R.drawable.ic_swap_24,
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
-                        navController.slideFromRight(R.id.multiswap, viewItem.wallet.token)
+                        navController.slideFromRight(R.id.multiswap, SwapParams.TOKEN_IN to viewItem.wallet.token)
 
                         stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                     },

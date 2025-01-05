@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.calculatorScreen.CalculatorViewModel
+import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.CoinFragmentInput
@@ -29,7 +30,7 @@ class StackingFragment : BaseComposeFragment() {
                 viewModel.setStackingType(it)
             },
             onBuyClicked = { token ->
-                navController.slideFromRight(R.id.multiswap, token)
+                navController.slideFromRight(R.id.multiswap, SwapParams.TOKEN_OUT to token)
             },
             onChartClicked = { coinUid ->
                 navController.slideFromRight(R.id.coinFragment, CoinFragmentInput(coinUid))

@@ -49,10 +49,8 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -61,6 +59,8 @@ import cash.p.terminal.entities.CoinValue
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
+import cash.p.terminal.navigation.entity.SwapParams
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.Keyboard
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.CardsSwapInfo
@@ -90,22 +90,25 @@ import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.badge
+import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapScreen(navController, navController.getInput())
+        val tokeIn: Token? = navController.currentBackStackEntry?.arguments?.parcelable(SwapParams.TOKEN_IN)
+        val tokeOut: Token? = navController.currentBackStackEntry?.arguments?.parcelable(SwapParams.TOKEN_OUT)
+        SwapScreen(navController = navController, tokenIn = tokeIn, tokenOut = tokeOut)
     }
 }
 
 @Composable
-fun SwapScreen(navController: NavController, tokenIn: Token?) {
+fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapViewModel.Factory(tokenIn)
+        factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -114,7 +117,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
         uiState = uiState,
         onClickClose = navController::popBackStack,
         onClickCoinFrom = {
-            navController.slideFromBottomForResult<cash.p.terminal.wallet.Token>(
+            navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
                 SwapSelectCoinFragment.Input(uiState.tokenOut, context.getString(R.string.Swap_YouPay))
             ) {
@@ -122,7 +125,7 @@ fun SwapScreen(navController: NavController, tokenIn: Token?) {
             }
         },
         onClickCoinTo = {
-            navController.slideFromBottomForResult<cash.p.terminal.wallet.Token>(
+            navController.slideFromBottomForResult<Token>(
                 R.id.swapSelectCoinFragment,
                 SwapSelectCoinFragment.Input(uiState.tokenIn, context.getString(R.string.Swap_YouGet))
             ) {

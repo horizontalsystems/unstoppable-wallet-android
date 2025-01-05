@@ -14,20 +14,6 @@ import cash.p.terminal.modules.settings.terms.TermsFragment
 import io.horizontalsystems.core.parcelable
 import java.util.UUID
 
-fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null) {
-    val navOptions = NavOptions.Builder()
-        .setEnterAnim(R.anim.slide_from_right)
-        .setExitAnim(android.R.anim.fade_out)
-        .setPopEnterAnim(android.R.anim.fade_in)
-        .setPopExitAnim(R.anim.slide_to_right)
-        .build()
-
-    val args = input?.let {
-        bundleOf("input" to it)
-    }
-    navigate(resId, args, navOptions)
-}
-
 fun NavController.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_bottom)

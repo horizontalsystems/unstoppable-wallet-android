@@ -55,7 +55,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.entities.nft.NftAssetMetadata
 import cash.p.terminal.entities.nft.NftEventMetadata

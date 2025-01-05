@@ -19,3 +19,14 @@ fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null) {
     }
     navigate(resId, args, navOptions)
 }
+
+fun NavController.slideFromRight(@IdRes resId: Int, vararg pairs: Pair<String, Any?>) {
+    val navOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_from_right)
+        .setExitAnim(android.R.anim.fade_out)
+        .setPopEnterAnim(android.R.anim.fade_in)
+        .setPopExitAnim(R.anim.slide_to_right)
+        .build()
+
+    navigate(resId, bundleOf(*pairs), navOptions)
+}

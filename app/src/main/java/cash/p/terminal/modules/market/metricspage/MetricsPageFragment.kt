@@ -22,7 +22,7 @@ import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.requireInput
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPage

@@ -15,7 +15,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.ensurePinSet
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.settings.security.SecurityCenterCell
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
