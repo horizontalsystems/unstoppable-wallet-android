@@ -11,6 +11,7 @@ import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
 import cash.p.terminal.entities.DataState
+import cash.p.terminal.featureStacking.BuildConfig
 import cash.p.terminal.wallet.normalizeNFKD
 import cash.p.terminal.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
 import io.horizontalsystems.core.entities.BlockchainType
@@ -139,8 +140,8 @@ class CreateAccountViewModel(
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
             TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
             //TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xafcc12e4040615e7afe9fb4330eb3d9120acac05")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0x5f980533b994c93631a639deda7892fc49995839")),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(BuildConfig.PIRATE_CONTRACT)),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(BuildConfig.COSANTA_CONTRACT)),
             //TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xe9e7cea3dedca5984780bafc599bd69add087d56")),
         )
         walletActivator.activateWallets(account, tokenQueries)

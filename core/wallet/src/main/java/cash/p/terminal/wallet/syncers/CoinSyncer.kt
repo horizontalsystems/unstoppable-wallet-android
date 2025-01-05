@@ -3,6 +3,8 @@ package cash.p.terminal.wallet.syncers
 import android.util.Log
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.SyncInfo
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.models.BlockchainEntity
 import cash.p.terminal.wallet.models.BlockchainResponse
 import cash.p.terminal.wallet.models.CoinResponse
@@ -56,8 +58,8 @@ class CoinSyncer(
             })
     }
 
-    private fun coinEntity(response: CoinResponse): cash.p.terminal.wallet.entities.Coin =
-        cash.p.terminal.wallet.entities.Coin(
+    private fun coinEntity(response: CoinResponse): Coin =
+        Coin(
             response.uid,
             response.name,
             response.code.uppercase(),
@@ -90,14 +92,14 @@ class CoinSyncer(
         disposable = null
     }
 
-    private fun handleFetched(coins: List<cash.p.terminal.wallet.entities.Coin>, blockchainEntities: List<BlockchainEntity>, tokenEntities: List<TokenEntity>) {
+    private fun handleFetched(coins: List<Coin>, blockchainEntities: List<BlockchainEntity>, tokenEntities: List<TokenEntity>) {
         storage.update(coins, blockchainEntities, transform(tokenEntities))
         fullCoinsUpdatedObservable.onNext(Unit)
     }
 
     private fun transform(tokenEntities: List<TokenEntity>): List<TokenEntity> {
-        val derivationReferences = cash.p.terminal.wallet.entities.TokenType.Derivation.values().map { it.name }
-        val addressTypes = cash.p.terminal.wallet.entities.TokenType.AddressType.values().map { it.name }
+        val derivationReferences = TokenType.Derivation.values().map { it.name }
+        val addressTypes = TokenType.AddressType.values().map { it.name }
 
         var result = tokenEntities
         result = transform(

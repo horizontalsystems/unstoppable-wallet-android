@@ -11,6 +11,7 @@ import cash.p.terminal.featureStacking.ui.entities.PayoutViewItem
 import cash.p.terminal.featureStacking.ui.staking.StackingType
 import cash.p.terminal.network.domain.repository.PiratePlaceRepository
 import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
@@ -24,6 +25,7 @@ import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -44,29 +46,43 @@ internal abstract class StackingCoinViewModel(
 
     private val _uiState = mutableStateOf(StackingCoinUIState())
     val uiState: State<StackingCoinUIState> get() = _uiState
+    private var wallet: Wallet? = null
 
     fun loadData() {
         createWalletIfNotExist()
-        loadBalance()
+        viewModelScope.launch(Dispatchers.Default) {
+            balanceService.balanceItemsFlow.collect { items ->
+                if (items?.find {
+                        it.state == AdapterState.Synced && it.wallet.token.type is TokenType.Eip20 &&
+                                (it.wallet.token.type as TokenType.Eip20).address.equals(
+                                    getContract(),
+                                    true
+                                )
+                    } != null) {
+                    loadBalance()
+                }
+            }
+        }
+        balanceService.start()
     }
 
     private fun createWalletIfNotExist() {
         val contract = getContract()
-        if (!isTokenExists(contract)) {
+        wallet = getActiveContractWallet(contract)
+        if (wallet == null) {
             val account = accountManager.activeAccount ?: return
             val tokenQuery = TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(contract))
             marketKitWrapper.token(tokenQuery)?.let { token ->
-                val wallet = Wallet(token, account)
-                walletManager.save(listOf(wallet))
+                wallet = Wallet(token, account).also {
+                    walletManager.save(listOf(it))
+                }
             }
         }
     }
 
-    private fun isTokenExists(token: String): Boolean {
-        return walletManager.activeWallets.any {
-            it.token.type is TokenType.Eip20 &&
-                    (it.token.type as TokenType.Eip20).address.equals(token,true)
-        }
+    private fun getActiveContractWallet(token: String) = walletManager.activeWallets.find {
+        it.token.type is TokenType.Eip20 &&
+                (it.token.type as TokenType.Eip20).address.equals(token, true)
     }
 
     private fun getContract(): String =
@@ -77,8 +93,12 @@ internal abstract class StackingCoinViewModel(
         }
 
     private fun loadBalance() {
-        balanceService.start()
-        val wallet = walletManager.activeWallets.find { it.coin.code == stackingType.value }
+        val wallet = walletManager.activeWallets.find {
+            it.token.type is TokenType.Eip20 && (it.token.type as TokenType.Eip20).address.equals(
+                getContract(),
+                true
+            )
+        }
         val receiveAddress: String = wallet?.let {
             adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress ?: ""
         } ?: ""
@@ -104,7 +124,12 @@ internal abstract class StackingCoinViewModel(
                         wallet = wallet,
                         coinPrice = item.coinPrice
                     )
-                    uiState.value.receiveAddress?.let { loadPayouts(address = it, coinPrice = item.coinPrice) }
+                    uiState.value.receiveAddress?.let {
+                        loadPayouts(
+                            address = it,
+                            coinPrice = item.coinPrice
+                        )
+                    }
                 }
             }
         }
@@ -165,7 +190,10 @@ internal abstract class StackingCoinViewModel(
         }
 
     private suspend fun loadPayouts(address: String, coinPrice: CoinPrice?) {
-        val payouts = piratePlaceRepository.getStakeData(coin = stackingType.value, address = address).stakes.map {
+        val payouts = piratePlaceRepository.getStakeData(
+            coin = stackingType.value,
+            address = address
+        ).stakes.map {
             val date = Date(it.createdAt)
             PayoutViewItem(
                 id = it.id,
