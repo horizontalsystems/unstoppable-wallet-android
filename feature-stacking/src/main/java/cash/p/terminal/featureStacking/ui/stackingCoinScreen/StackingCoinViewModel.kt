@@ -52,12 +52,9 @@ internal abstract class StackingCoinViewModel(
     private var wallet: Wallet? = null
 
     fun loadData() {
-        Log.d("StackingCoinPerfTest", "loadData")
         createWalletIfNotExist()
         viewModelScope.launch(customDispatcher) {
-            Log.d("StackingCoinPerfTest", "loadData 1")
             balanceService.balanceItemsFlow.collect { items ->
-                Log.d("StackingCoinPerfTest", "loadData 2")
                 if (items?.find {
                         it.state == AdapterState.Synced && it.wallet.token.type is TokenType.Eip20 &&
                                 (it.wallet.token.type as TokenType.Eip20).address.equals(
@@ -65,21 +62,17 @@ internal abstract class StackingCoinViewModel(
                                     true
                                 )
                     } != null) {
-                    Log.d("StackingCoinPerfTest", "loadData 3")
                     loadBalance()
                     cancel()
                 }
             }
         }
-        Log.d("StackingCoinPerfTest", "loadData 4")
         balanceService.start()
     }
 
     private fun createWalletIfNotExist() {
         val contract = getContract()
-        Log.d("StackingCoinPerfTest", "createWalletIfNotExist")
         wallet = getActiveContractWallet(contract)
-        Log.d("StackingCoinPerfTest", "createWalletIfNotExist 1")
         if (wallet == null) {
             val account = accountManager.activeAccount ?: return
             val tokenQuery = TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(contract))
@@ -89,7 +82,6 @@ internal abstract class StackingCoinViewModel(
                 }
             }
         }
-        Log.d("StackingCoinPerfTest", "createWalletIfNotExist 2")
     }
 
     private fun getActiveContractWallet(token: String) = walletManager.activeWallets.find {
@@ -105,21 +97,18 @@ internal abstract class StackingCoinViewModel(
         }
 
     private fun loadBalance() {
-        Log.d("StackingCoinPerfTest", "loadBalance 1")
         val wallet = walletManager.activeWallets.find {
             it.token.type is TokenType.Eip20 && (it.token.type as TokenType.Eip20).address.equals(
                 getContract(),
                 true
             )
         }
-        Log.d("StackingCoinPerfTest", "loadBalance 2")
         val receiveAddress: String = wallet?.let {
             adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress ?: ""
         } ?: ""
         val balance: BigDecimal = wallet?.let {
             adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.total
         } ?: BigDecimal.ZERO
-        Log.d("StackingCoinPerfTest", "loadBalance 3")
         _uiState.value = uiState.value.copy(
             stackingType = stackingType,
             minStackingAmount = minStackingAmount.toBigDecimal(),
@@ -129,14 +118,11 @@ internal abstract class StackingCoinViewModel(
         )
 
         viewModelScope.launch(customDispatcher +
-            CoroutineExceptionHandler { _, throwable ->
-                Log.e("StackingCoinViewModel", "Error loading balance", throwable)
-            }) {
-            Log.d("StackingCoinPerfTest", "loadBalance 4")
+                CoroutineExceptionHandler { _, throwable ->
+                    Log.e("StackingCoinViewModel", "Error loading balance", throwable)
+                }) {
             balanceService.balanceItemsFlow.collectLatest { items ->
-                Log.d("StackingCoinPerfTest", "loadBalance 5")
                 items?.find { it.wallet.coin.code == stackingType.value }?.let { item ->
-                    Log.d("StackingCoinPerfTest", "loadBalance 6 ${stackingType.value}")
                     loadInvestmentData(
                         balance = item.balanceData.total,
                         wallet = wallet,
@@ -155,28 +141,24 @@ internal abstract class StackingCoinViewModel(
 
     private fun loadInvestmentData(balance: BigDecimal, wallet: Wallet?, coinPrice: CoinPrice?) =
         viewModelScope.launch(customDispatcher +
-            CoroutineExceptionHandler { _, throwable ->
-                Log.e("StackingCoinViewModel", "Error loading investment data", throwable)
-                _uiState.value = uiState.value.copy(
-                    unpaid = BigDecimal.ZERO
-                )
-            }) {
-            Log.d("StackingCoinPerfTest", "loadInvestmentData 0")
+                CoroutineExceptionHandler { _, throwable ->
+                    Log.e("StackingCoinViewModel", "Error loading investment data", throwable)
+                    _uiState.value = uiState.value.copy(
+                        unpaid = BigDecimal.ZERO
+                    )
+                }) {
             var unpaid: BigDecimal = BigDecimal.ZERO
             var totalIncome: BigDecimal = BigDecimal.ZERO
             var secondaryAmount = ""
             if (wallet != null) {
-                Log.d("StackingCoinPerfTest", "loadInvestmentData 1")
                 adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress?.let { receiveAddress ->
                     val investmentData = piratePlaceRepository.getInvestmentData(
                         coin = stackingType.value.lowercase(),
                         address = receiveAddress
                     )
-                    Log.d("StackingCoinPerfTest", "loadInvestmentData 2")
                     unpaid = investmentData.unrealizedValue.toBigDecimal()
                     totalIncome = investmentData.mint.toBigDecimal()
                 }
-                Log.d("StackingCoinPerfTest", "loadInvestmentData 3")
                 secondaryAmount = BalanceViewHelper.currencyValue(
                     balance = balance,
                     coinPrice = coinPrice,
@@ -186,7 +168,6 @@ internal abstract class StackingCoinViewModel(
                     dimmed = false
                 ).value
             }
-            Log.d("StackingCoinPerfTest", "loadInvestmentData 4")
             val totalIncomeSecondary = BalanceViewHelper.currencyValue(
                 balance = totalIncome,
                 coinPrice = coinPrice,
@@ -203,7 +184,6 @@ internal abstract class StackingCoinViewModel(
                 currency = balanceService.baseCurrency,
                 dimmed = false
             ).value
-            Log.d("StackingCoinPerfTest", "loadInvestmentData 5")
             _uiState.value = uiState.value.copy(
                 unpaid = unpaid,
                 secondaryAmount = secondaryAmount,
@@ -211,7 +191,6 @@ internal abstract class StackingCoinViewModel(
                 totalIncomeSecondary = totalIncomeSecondary,
                 unpaidSecondary = unpaidSecondary
             )
-            Log.d("StackingCoinPerfTest", "loadInvestmentData 6")
         }
 
     private suspend fun loadPayouts(address: String, coinPrice: CoinPrice?) {
