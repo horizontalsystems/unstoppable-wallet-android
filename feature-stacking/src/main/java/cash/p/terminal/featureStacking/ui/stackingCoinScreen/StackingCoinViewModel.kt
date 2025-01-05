@@ -149,7 +149,7 @@ internal abstract class StackingCoinViewModel(
             if (wallet != null) {
                 adapterManager.getReceiveAdapterForWallet(wallet)?.receiveAddress?.let { receiveAddress ->
                     val investmentData = piratePlaceRepository.getInvestmentData(
-                        coin = stackingType.value,
+                        coin = stackingType.value.lowercase(),
                         address = receiveAddress
                     )
                     unpaid = investmentData.unrealizedValue.toBigDecimal()
