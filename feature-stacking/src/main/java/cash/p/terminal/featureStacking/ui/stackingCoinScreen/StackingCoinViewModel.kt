@@ -26,11 +26,13 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.Date
+import java.util.concurrent.Executors
 
 internal abstract class StackingCoinViewModel(
     private val walletManager: IWalletManager,
@@ -44,6 +46,7 @@ internal abstract class StackingCoinViewModel(
     abstract val minStackingAmount: Int
     abstract val stackingType: StackingType
 
+    private val customDispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
     private val _uiState = mutableStateOf(StackingCoinUIState())
     val uiState: State<StackingCoinUIState> get() = _uiState
     private var wallet: Wallet? = null
@@ -51,7 +54,7 @@ internal abstract class StackingCoinViewModel(
     fun loadData() {
         Log.d("StackingCoinPerfTest", "loadData")
         createWalletIfNotExist()
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(customDispatcher) {
             Log.d("StackingCoinPerfTest", "loadData 1")
             balanceService.balanceItemsFlow.collect { items ->
                 Log.d("StackingCoinPerfTest", "loadData 2")
@@ -124,7 +127,7 @@ internal abstract class StackingCoinViewModel(
             receiveAddress = receiveAddress
         )
 
-        viewModelScope.launch(
+        viewModelScope.launch(customDispatcher +
             CoroutineExceptionHandler { _, throwable ->
                 Log.e("StackingCoinViewModel", "Error loading balance", throwable)
             }) {
@@ -150,7 +153,7 @@ internal abstract class StackingCoinViewModel(
     }
 
     private fun loadInvestmentData(balance: BigDecimal, wallet: Wallet?, coinPrice: CoinPrice?) =
-        viewModelScope.launch(
+        viewModelScope.launch(customDispatcher +
             CoroutineExceptionHandler { _, throwable ->
                 Log.e("StackingCoinViewModel", "Error loading investment data", throwable)
                 _uiState.value = uiState.value.copy(
