@@ -41,7 +41,7 @@ abstract class AbstractChartService {
 
     val chartPointsWrapperObservable = BehaviorSubject.create<Result<ChartPointsWrapper>>()
 
-    protected val coroutineScope = CoroutineScope(Dispatchers.Default)
+    protected val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var fetchItemsJob: Job? = null
 
     open suspend fun start() {

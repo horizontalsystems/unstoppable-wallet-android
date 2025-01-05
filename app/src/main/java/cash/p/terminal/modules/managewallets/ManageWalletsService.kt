@@ -40,7 +40,7 @@ class ManageWalletsService(
     private var fullCoins = listOf<FullCoin>()
     private var items = listOf<Item>()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private var filter: String = ""
 

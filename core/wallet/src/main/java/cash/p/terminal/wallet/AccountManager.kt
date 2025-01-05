@@ -15,7 +15,7 @@ class AccountManager(
     private val storage: IAccountsStorage,
     private val accountCleaner: IAccountCleaner
 ) : IAccountManager {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var accountsCache = mutableMapOf<String, Account>()
     private val accountsSubject = PublishSubject.create<List<Account>>()
     private val accountsDeletedSubject = PublishSubject.create<Unit>()

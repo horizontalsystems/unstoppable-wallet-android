@@ -18,7 +18,7 @@ class MarketPostService(
     private val marketKit: MarketKitWrapper,
     private val backgroundManager: BackgroundManager,
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var job: Job? = null
 
     private val stateSubject = BehaviorSubject.create<DataState<List<Post>>>()

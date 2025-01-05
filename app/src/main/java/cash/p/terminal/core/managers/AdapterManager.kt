@@ -32,7 +32,7 @@ class AdapterManager(
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 

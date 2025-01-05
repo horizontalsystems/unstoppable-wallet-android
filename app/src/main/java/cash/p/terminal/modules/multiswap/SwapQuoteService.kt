@@ -55,7 +55,7 @@ class SwapQuoteService {
     )
     val stateFlow = _stateFlow.asStateFlow()
 
-    private var coroutineScope = CoroutineScope(Dispatchers.Default)
+    private var coroutineScope = CoroutineScope(Dispatchers.IO)
     private var quotingJob: Job? = null
     private var settings: Map<String, Any?> = mapOf()
 

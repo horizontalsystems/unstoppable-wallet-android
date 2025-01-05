@@ -24,7 +24,7 @@ class MarketOverviewService(
     private val backgroundManager: BackgroundManager,
     private val currencyManager: CurrencyManager
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var topMoversJob: Job? = null
     private var marketOverviewJob: Job? = null
 

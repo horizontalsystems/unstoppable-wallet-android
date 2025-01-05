@@ -25,8 +25,8 @@ import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -67,6 +67,7 @@ internal abstract class StackingCoinViewModel(
                     } != null) {
                     Log.d("StackingCoinPerfTest", "loadData 3")
                     loadBalance()
+                    cancel()
                 }
             }
         }

@@ -44,7 +44,7 @@ class RestoreBlockchainsService(
     private val restoreSettingsService: RestoreSettingsService,
     private val statPage: StatPage
 ) : Clearable {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private var tokens = listOf<cash.p.terminal.wallet.Token>()
     private val enabledTokens = CopyOnWriteArrayList<cash.p.terminal.wallet.Token>()

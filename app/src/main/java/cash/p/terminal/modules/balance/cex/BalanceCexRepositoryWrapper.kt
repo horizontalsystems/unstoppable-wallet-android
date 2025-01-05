@@ -22,7 +22,7 @@ class BalanceCexRepositoryWrapper(
     val itemsFlow = MutableStateFlow<Pair<List<CexAsset>?, AdapterState>>(Pair(null, AdapterState.Syncing(null)))
 
     private var cexProvider: ICexProvider? = null
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var collectCexRepoItemsJob: Job? = null
 
     fun start() {

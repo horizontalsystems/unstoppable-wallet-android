@@ -20,7 +20,7 @@ class TransactionsRateRepository(
     private val marketKit: MarketKitWrapper,
 ) : Clearable {
     private val baseCurrency get() = currencyManager.baseCurrency
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val dataExpiredSubject = PublishSubject.create<Unit>()
     val dataExpiredObservable: Observable<Unit> = dataExpiredSubject

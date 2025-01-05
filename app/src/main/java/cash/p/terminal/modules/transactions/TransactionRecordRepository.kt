@@ -39,7 +39,7 @@ class TransactionRecordRepository(
     private var allLoaded = AtomicBoolean(false)
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var updatesJob: Job? = null
 
     private var transactionWallets: List<TransactionWallet> = listOf()

@@ -41,7 +41,7 @@ class ProFeaturesAuthorizationManager(
         val address: Address
     )
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val contractAddress = Address("0x495f947276749ce646f68ac8c248420045cb7b5e")
 
     private val _sessionKeyFlow = MutableStateFlow<ProFeaturesSessionKey?>(null)

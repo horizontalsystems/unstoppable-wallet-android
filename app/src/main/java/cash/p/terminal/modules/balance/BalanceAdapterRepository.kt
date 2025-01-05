@@ -25,7 +25,7 @@ class BalanceAdapterRepository(
 ) : Clearable {
     private var wallets = listOf<Wallet>()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var balanceStateUpdatedJob: Job? = null
     private var balanceUpdatedJob: Job? = null
 

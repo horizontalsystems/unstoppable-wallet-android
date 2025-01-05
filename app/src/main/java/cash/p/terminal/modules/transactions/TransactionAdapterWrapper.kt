@@ -26,7 +26,7 @@ class TransactionAdapterWrapper(
 
     private val transactionRecords = CopyOnWriteArrayList<TransactionRecord>()
     private var allLoaded = false
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var updatesJob: Job? = null
 
     val address: String?
