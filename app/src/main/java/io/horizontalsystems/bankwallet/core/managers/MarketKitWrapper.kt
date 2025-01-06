@@ -76,9 +76,9 @@ class MarketKitWrapper(
 
     fun marketInfosSingle(top: Int, currencyCode: String, defi: Boolean) = marketKit.marketInfosSingle(top, currencyCode, defi)
 
-    fun categoriesSingle() = marketKit.getCategories()
+    fun categoriesSingle() = marketKit.categoriesSingle()
 
-    fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String, sectorId: Int?) = marketKit.advancedMarketInfosSingle(top, currencyCode, sectorId)
+    fun advancedMarketInfosSingle(top: Int = 250, currencyCode: String) = marketKit.advancedMarketInfosSingle(top, currencyCode)
 
     fun marketInfosSingle(coinUids: List<String>, currencyCode: String): Single<List<MarketInfo>> =
         marketKit.marketInfosSingle(coinUids.removeCustomCoins(), currencyCode)

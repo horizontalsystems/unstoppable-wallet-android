@@ -31,7 +31,6 @@ object MarketFiltersModule {
         PricePeriod(R.string.Market_Filter_PricePeriod),
         TradingSignals(R.string.Market_Filter_TradingSignals),
         PriceCloseTo(R.string.Market_Filter_PriceCloseTo),
-        SectorSet(R.string.Market_Filter_Sectors),
     }
 
     data class BlockchainViewItem(val blockchain: Blockchain, val checked: Boolean)

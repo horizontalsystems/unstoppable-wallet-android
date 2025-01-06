@@ -26,7 +26,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
     private var marketCap = rangeEmpty
     private var volume = rangeEmpty
     private var priceChange = FilterViewItemWrapper.getAny<PriceChange>()
-    private var selectedSector = FilterViewItemWrapper.getAny<SectorItem>()
+    private var selectedSectors: List<FilterViewItemWrapper<SectorItem?>> =
+        listOf(FilterViewItemWrapper.getAny())
     private var priceCloseTo: PriceCloseTo? = null
     private var outperformedBtcOn = false
     private var outperformedEthOn = false
@@ -86,7 +87,7 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         marketCap = marketCap,
         volume = volume,
         priceChange = priceChange,
-        sector = selectedSector,
+        sectors = selectedSectors,
         priceCloseTo = priceCloseTo,
         outperformedBtcOn = outperformedBtcOn,
         outperformedEthOn = outperformedEthOn,
@@ -124,8 +125,8 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         filterTradingSignal = FilterViewItemWrapper.getAny()
         updateSelectedBlockchains()
 
-        selectedSector = FilterViewItemWrapper.getAny()
-        service.sectorId = null
+        selectedSectors = listOf(FilterViewItemWrapper.getAny())
+        service.sectorIds = emptyList()
         coinListSet = CoinList.Top200
         service.coinCount = CoinList.Top200.itemsCount
         reloadDataWithSpinner()
@@ -137,10 +138,16 @@ class MarketFiltersViewModel(val service: MarketFiltersService) :
         reloadDataWithSpinner()
     }
 
-    fun setSector(sectorItem: FilterViewItemWrapper<SectorItem?>) {
-        selectedSector = sectorItem
-        service.sectorId = sectorItem.item?.id
-        reloadDataWithSpinner()
+    fun setSectors(sectorItems: List<FilterViewItemWrapper<SectorItem?>>) {
+        if (sectorItems.isEmpty()) {
+            selectedSectors = listOf(FilterViewItemWrapper.getAny())
+            service.sectorIds = emptyList()
+            reloadData()
+            return
+        }
+        selectedSectors = sectorItems
+        service.sectorIds = sectorItems.mapNotNull { it.item?.id }
+        reloadData()
     }
 
     private fun reloadDataWithSpinner() {
@@ -316,7 +323,7 @@ data class MarketFiltersUiState(
     val marketCap: FilterViewItemWrapper<Range?>,
     val volume: FilterViewItemWrapper<Range?>,
     val priceChange: FilterViewItemWrapper<PriceChange?>,
-    val sector: FilterViewItemWrapper<SectorItem?>,
+    val sectors: List<FilterViewItemWrapper<SectorItem?>>,
     val priceCloseTo: PriceCloseTo?,
     val outperformedBtcOn: Boolean,
     val outperformedEthOn: Boolean,

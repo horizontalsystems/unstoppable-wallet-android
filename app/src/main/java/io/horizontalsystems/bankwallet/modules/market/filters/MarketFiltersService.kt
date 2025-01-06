@@ -45,8 +45,8 @@ class MarketFiltersService(
     val currencyCode = baseCurrency.code
 
     var coinCount = CoinList.Top200.itemsCount
-    var sectorId: Int? = null
     var filterMarketCap: Pair<Long?, Long?>? = null
+    var sectorIds: List<Int> = listOf()
     var filterVolume: Pair<Long?, Long?>? = null
     var filterPeriod = TimePeriod.TimePeriod_1D
     var filterPriceChange: Pair<Long?, Long?>? = null
@@ -91,7 +91,7 @@ class MarketFiltersService(
         val topMarketListAsync = if (cache != null) {
             Single.just(cache)
         } else {
-            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code, sectorId)
+            marketKit.advancedMarketInfosSingle(coinCount, baseCurrency.code)
                 .doOnSuccess {
                     cache = it
                 }
@@ -115,6 +115,7 @@ class MarketFiltersService(
         return filterByRange(filterMarketCap, marketCap.toLong())
                 && filterByRange(filterVolume, totalVolume.toLong())
                 && inBlockchain(marketInfo.fullCoin.tokens)
+                && inSectors(marketInfo.categoryIds, sectorIds)
                 && filterByRange(filterPriceChange, priceChangeValue.toLong())
                 && (!filterPriceCloseToAth || closeToAllTime(marketInfo.athPercentage))
                 && (!filterPriceCloseToAtl || closeToAllTime(marketInfo.atlPercentage))
@@ -163,6 +164,12 @@ class MarketFiltersService(
     private fun inAdvice(tokenAdvice: Advice?): Boolean {
         if (filterTradingSignal.isEmpty()) return true
         return filterTradingSignal.contains(tokenAdvice)
+    }
+
+    private fun inSectors(ids: List<Int>?, selectedSectorIds: List<Int>): Boolean {
+        if (selectedSectorIds.isEmpty()) return true
+        if (ids == null) return false
+        return ids.intersect(selectedSectorIds.toSet()).isNotEmpty()
     }
 
     private fun inBlockchain(tokens: List<Token>): Boolean {
