@@ -143,8 +143,9 @@ fun SelectSubscriptionBottomSheet(
 
             val bottomText = highlightText(
                 text = stringResource(R.string.Premium_EnjoyFirst7DaysFree_Description),
+                textColor = ComposeAppTheme.colors.leah,
                 highlightPart = stringResource(R.string.Premium_EnjoyFirst7DaysFree),
-                color = ComposeAppTheme.colors.remus
+                highlightColor = ComposeAppTheme.colors.remus
             )
             VSpacer(12.dp)
             Text(
@@ -282,34 +283,37 @@ fun PremiumFeatureItem(
 @Composable
 fun highlightText(
     text: String,
+    textColor: Color,
     highlightPart: String,
-    color: Color
+    highlightColor: Color
 ): AnnotatedString {
 
     return buildAnnotatedString {
-        val highlightIndex = text
-            .lowercase()
-            .indexOf(highlightPart.lowercase())
+        withStyle(SpanStyle(color = textColor)) {
+            val highlightIndex = text
+                .lowercase()
+                .indexOf(highlightPart.lowercase())
 
-        if (highlightIndex != -1) {
-            append(text.substring(0, highlightIndex))
+            if (highlightIndex != -1) {
+                append(text.substring(0, highlightIndex))
 
-            withStyle(
-                SpanStyle(color = color)
-            ) {
-                append(
-                    text.substring(
-                        highlightIndex,
-                        highlightIndex + highlightPart.length
+                withStyle(
+                    SpanStyle(color = highlightColor)
+                ) {
+                    append(
+                        text.substring(
+                            highlightIndex,
+                            highlightIndex + highlightPart.length
+                        )
                     )
-                )
-            }
+                }
 
-            append(
-                text.substring(highlightIndex + highlightPart.length)
-            )
-        } else {
-            append(text)
+                append(
+                    text.substring(highlightIndex + highlightPart.length)
+                )
+            } else {
+                append(text)
+            }
         }
     }
 }

@@ -878,8 +878,8 @@
     <!--Premium Banner-->
     <string name="SettingsBanner_GetPremium">Get Premium</string>
     <string name="SettingsBanner_FreeFor7Days">Free for 7 days</string>
-    <string name="SettingsBanner_PremiumBannerHighlightedWord">Full Power</string>
-    <string name="SettingsBanner_PremiumBannerDescription">Unleash the Full Power of Unstoppable Wallet</string>
+    <string name="SettingsBanner_PremiumBannerHighlightedWord">Full Power!</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Unleash the Full Power!</string>
 
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Active</string>

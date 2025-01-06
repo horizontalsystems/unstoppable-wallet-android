@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight.Companion.W500
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,41 +41,55 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.usersubscription.ui.highlightText
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.headline1_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 
 
 @Composable
 fun PremiumBanner(onClick: () -> Unit) {
     val bodyText = highlightText(
         text = stringResource(R.string.SettingsBanner_PremiumBannerDescription),
+        textColor = ComposeAppTheme.colors.leah,
         highlightPart = stringResource(R.string.SettingsBanner_PremiumBannerHighlightedWord),
-        color = ComposeAppTheme.colors.jacob
+        highlightColor = ComposeAppTheme.colors.jacob
     )
 
+    val darkTheme: Boolean = isSystemInDarkTheme()
+
     val radialGradient = Brush.linearGradient(
-        colors = listOf(
-            Color(0xCCEDD716),
-            Color(0x4DFF9B26),
-            Color(0x000F1014),
-            Color(0x000F1014),
-        ),
+        colors = if (darkTheme) {
+            listOf(
+                Color(0xCCEDD716),
+                Color(0x4DFF9B26),
+                Color(0x000F1014),
+                Color(0x000F1014),
+            )
+        } else {
+            listOf(
+                Color(0xCCF5DE15),
+                Color(0x4DFFA726),
+                Color(0x00E1E1E5),
+                Color(0x00E1E1E5),
+            )
+        },
         start = Offset(0f, Float.POSITIVE_INFINITY),
         end = Offset(Float.POSITIVE_INFINITY, 0f)
     )
 
     val topRightRadialGradient = Brush.linearGradient(
-        colors = listOf(
-            Color(0x66003C74),
-            Color(0x000F1014),
-        ),
+        colors = if (darkTheme) {
+            listOf(
+                Color(0x66003C74),
+                Color(0x000F1014),
+            )
+        } else {
+            listOf(
+                Color(0x66AFC7E8),
+                Color(0x00E1E1E5),
+            )
+        },
         start = Offset(Float.POSITIVE_INFINITY, 0f),
-        end = Offset( 0f, Float.POSITIVE_INFINITY)
-    )
-
-    val greenGradient = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFF1FF994),
-            Color(0xFF05C46B),
-        ),
+        end = Offset(0f, Float.POSITIVE_INFINITY)
     )
 
     Box(
@@ -82,7 +97,7 @@ fun PremiumBanner(onClick: () -> Unit) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(ComposeAppTheme.colors.dark)
+            .background(ComposeAppTheme.colors.jeremy)
             .height(IntrinsicSize.Max)
             .clickable(onClick = onClick)
     ) {
@@ -130,10 +145,8 @@ fun PremiumBanner(onClick: () -> Unit) {
                     .padding(start = 16.dp)
                     .padding(end = 8.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.SettingsBanner_GetPremium),
-                    style = ComposeAppTheme.typography.headline1,
-                    color = ComposeAppTheme.colors.white,
+                headline1_leah(
+                    stringResource(R.string.SettingsBanner_GetPremium)
                 )
 
                 VSpacer(12.dp)
@@ -142,11 +155,7 @@ fun PremiumBanner(onClick: () -> Unit) {
 
                 VSpacer(12.dp)
 
-                Text(
-                    text = stringResource(R.string.SettingsBanner_FreeFor7Days),
-                    style = TextStyle(greenGradient),
-                    fontSize = 14.sp
-                )
+                subhead2_remus(stringResource(R.string.SettingsBanner_FreeFor7Days))
             }
 
             Image(
@@ -165,7 +174,7 @@ fun PremiumBanner(onClick: () -> Unit) {
 private fun AutoSizedText(
     bodyText: AnnotatedString,
     maxLines: Int = 2,
-    initialFontSize: Float = 20f,
+    initialFontSize: Float = 16f,
     minFontSize: Float = 8f,
     modifier: Modifier = Modifier
 ) {
@@ -180,6 +189,7 @@ private fun AutoSizedText(
                 .alpha(0f)
                 .fillMaxWidth(),
             fontSize = fontSize.sp,
+            fontWeight = W500,
             maxLines = maxLines,
             onTextLayout = { textLayoutResult ->
                 if (textLayoutResult.didOverflowHeight || textLayoutResult.didOverflowWidth) {
