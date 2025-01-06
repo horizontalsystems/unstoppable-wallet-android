@@ -229,6 +229,9 @@
         android:id="@+id/blockchainsSelectorFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.filters.BlockchainsSelectorFragment"/>
     <fragment
+        android:id="@+id/sectorsSelectorFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.market.filters.SectorsSelectorFragment"/>
+    <fragment
         android:id="@+id/marketCategoryFragment"
         android:name="io.horizontalsystems.bankwallet.modules.market.category.MarketCategoryFragment"/>
     <fragment
