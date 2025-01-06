@@ -84,8 +84,9 @@ fun PremiumSubscribedScreen(
                             R.string.Premium_YouHaveActivatedPlan,
                             stringResource(type.titleResId)
                         ),
+                        textColor = ComposeAppTheme.colors.leah,
                         highlightPart = stringResource(type.titleResId),
-                        color = ComposeAppTheme.colors.jacob
+                        highlightColor = ComposeAppTheme.colors.jacob
                     )
                     VSpacer(12.dp)
                     Text(
