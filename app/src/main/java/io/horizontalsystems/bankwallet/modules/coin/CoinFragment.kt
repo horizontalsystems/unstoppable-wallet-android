@@ -17,7 +17,6 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -34,7 +33,6 @@ import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.TabItem
 import io.horizontalsystems.bankwallet.ui.compose.components.Tabs
 import io.horizontalsystems.core.helpers.HudHelper
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
@@ -150,13 +148,6 @@ fun CoinTabs(
                     pagerState.scrollToPage(tab.ordinal)
 
                     stat(page = StatPage.CoinPage, event = StatEvent.SwitchTab(tab.statTab))
-
-                    if (tab == CoinModule.Tab.Details && viewModel.shouldShowSubscriptionInfo()) {
-                        viewModel.subscriptionInfoShown()
-
-                        delay(1000)
-                        navController.slideFromBottom(R.id.subscriptionInfoFragment)
-                    }
                 }
             })
 

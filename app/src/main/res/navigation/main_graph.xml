@@ -139,12 +139,6 @@
         android:id="@+id/indicatorSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.coin.indicators.IndicatorSettingsFragment" />
     <fragment
-        android:id="@+id/activateSubscription"
-        android:name="io.horizontalsystems.bankwallet.modules.subscription.ActivateSubscriptionFragment" />
-    <fragment
-        android:id="@+id/subscriptionInfoFragment"
-        android:name="io.horizontalsystems.bankwallet.modules.subscription.SubscriptionInfoFragment" />
-    <fragment
         android:id="@+id/coinAnalyticsInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.info.CoinAnalyticsInfoFragment" />
     <fragment
