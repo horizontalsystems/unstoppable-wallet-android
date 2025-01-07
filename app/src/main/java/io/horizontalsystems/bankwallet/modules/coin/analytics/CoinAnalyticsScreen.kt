@@ -379,7 +379,7 @@ private fun handleActionClick(
         }
 
         CoinAnalyticsModule.ActionType.Preview -> {
-            navController.slideFromBottom(R.id.subscriptionInfoFragment)
+            //navController.slideFromBottom(R.id.subscriptionInfoFragment)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
