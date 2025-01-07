@@ -318,6 +318,7 @@ private fun AppIconSection(appIconOptions: Select<AppIcon>, onAppIconSelect: (Ap
         AppIconsRow(rows[1], appIconOptions.selected, onAppIconSelect)
         AppIconsRow(rows[2], appIconOptions.selected, onAppIconSelect)
         AppIconsRow(rows[3], appIconOptions.selected, onAppIconSelect)
+        AppIconsRow(rows[4], appIconOptions.selected, onAppIconSelect)
     }
 }
 
