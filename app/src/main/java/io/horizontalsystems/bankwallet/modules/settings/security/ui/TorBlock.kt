@@ -8,18 +8,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.modules.settings.security.SecurityCenterCell
 import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
+import io.horizontalsystems.subscriptions.core.Tor
 
 @Composable
 fun TorBlock(
     viewModel: SecurityTorSettingsViewModel,
+    navController: NavController,
     showAppRestartAlert: () -> Unit,
 ) {
     if (viewModel.showRestartAlert) {
@@ -27,13 +30,13 @@ fun TorBlock(
         viewModel.restartAppAlertShown()
     }
 
-    CellUniversalLawrenceSection {
+    SectionPremiumUniversalLawrence {
         SecurityCenterCell(
             start = {
                 Icon(
                     modifier = Modifier.size(24.dp),
                     painter = painterResource(R.drawable.ic_tor_connection_24),
-                    tint = ComposeAppTheme.colors.grey,
+                    tint = ComposeAppTheme.colors.jacob,
                     contentDescription = null,
                 )
             },
@@ -48,15 +51,12 @@ fun TorBlock(
                 HsSwitch(
                     checked = viewModel.torCheckEnabled,
                     onCheckedChange = { checked ->
-                        viewModel.setTorEnabledWithChecks(checked)
+                        navController.paidAction(Tor) {
+                            viewModel.setTorEnabledWithChecks(checked)
+                        }
                     }
                 )
             }
         )
     }
-
-    InfoText(
-        text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
-        paddingBottom = 32.dp
-    )
 }
