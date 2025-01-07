@@ -181,16 +181,23 @@ private fun SecurityCenterScreen(
                 paddingBottom = 32.dp
             )
 
-            TorBlock(
-                torViewModel,
-                showAppRestartAlert,
-            )
-
             DuressPasscodeBlock(
                 securitySettingsViewModel,
                 navController
             )
-            InfoText(text = stringResource(R.string.SettingsSecurity_DuressPinDescription))
+            InfoText(
+                text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
+                paddingBottom = 32.dp
+            )
+
+            TorBlock(
+                torViewModel,
+                navController,
+                showAppRestartAlert,
+            )
+            InfoText(
+                text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
+            )
 
             VSpacer(height = 32.dp)
         }
