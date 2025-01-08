@@ -14,6 +14,7 @@ import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.horizontalsystems.marketkit.models.MarketInfo
 import io.horizontalsystems.marketkit.models.NftTopCollection
 import io.horizontalsystems.marketkit.models.TokenQuery
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.HttpException
@@ -24,8 +25,9 @@ class MarketKitWrapper(
     context: Context,
     hsApiBaseUrl: String,
     hsApiKey: String,
-    private val subscriptionManager: SubscriptionManager
 ) {
+    val userSubscriptionManager = UserSubscriptionManager
+
     private val marketKit: MarketKit by lazy {
         MarketKit.getInstance(
             context = context,
@@ -35,10 +37,10 @@ class MarketKitWrapper(
     }
 
     private fun <T> requestWithAuthToken(f: (String) -> Single<T>) =
-        subscriptionManager.authToken?.let { authToken ->
+        userSubscriptionManager.authToken?.let { authToken ->
             f.invoke(authToken).onErrorResumeNext { error ->
                 if (error is HttpException && (error.code() == 401 || error.code() == 403)) {
-                    subscriptionManager.authToken = null
+                    userSubscriptionManager.authToken = null
 
                     Single.error(InvalidAuthTokenException())
                 } else {
