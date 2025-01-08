@@ -19,6 +19,7 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.parcelize.Parcelize
 
 object CoinAnalyticsModule {
@@ -31,7 +32,6 @@ object CoinAnalyticsModule {
                 fullCoin,
                 App.marketKit,
                 App.currencyManager,
-                App.subscriptionManager,
                 App.accountManager,
             )
 

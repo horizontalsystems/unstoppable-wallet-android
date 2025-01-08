@@ -1731,6 +1731,27 @@ fun micro_leah(
 }
 
 @Composable
+fun microSB_claude(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.microSB,
+        color = ComposeAppTheme.colors.claude,
+    )
+}
+
+@Composable
 fun micro_grey(
     text: String,
     modifier: Modifier = Modifier,

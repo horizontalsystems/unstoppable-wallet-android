@@ -163,6 +163,7 @@ private fun AnalyticsBlock(
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
+                    isPreview = false,
                     onInfoClick = block.info?.let { info ->
                         {
                             navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
@@ -214,7 +215,8 @@ private fun AnalyticsBlock(
 private fun FooterCell(
     item: CoinAnalyticsModule.FooterType,
     index: Int,
-    navController: NavController
+    navController: NavController,
+    isPreview: Boolean = false
 ) {
     when (item) {
         is CoinAnalyticsModule.FooterType.FooterItem -> {
@@ -223,7 +225,7 @@ private fun FooterCell(
                 value = item.value,
                 showTopDivider = index != 0,
                 showRightArrow = item.action != null,
-                cellAction = item.action,
+                cellAction = if (isPreview) null else item.action,
                 onActionClick = { action ->
                     handleActionClick(action, navController)
                 }
@@ -295,6 +297,7 @@ private fun AnalyticsPreviewBlock(
             block.title?.let {
                 AnalyticsBlockHeader(
                     title = stringResource(it),
+                    isPreview = true,
                     onInfoClick = block.info?.let { info ->
                         {
                             navController.slideFromRight(R.id.coinAnalyticsInfoFragment, info)
@@ -305,8 +308,16 @@ private fun AnalyticsPreviewBlock(
         },
         bottomRows = {
             block.footerItems.forEachIndexed { index, item ->
-                FooterCell(item, index, navController)
+                FooterCell(
+                    item = item,
+                    index = index,
+                    navController = navController,
+                    isPreview = true
+                    )
             }
+        },
+        onClick = {
+            navController.slideFromBottom(R.id.buySubscriptionFragment)
         }
     ) {
         if (block.showValueDots) {
