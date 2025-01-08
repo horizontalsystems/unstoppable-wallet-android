@@ -266,21 +266,16 @@ fun AnalyticsContainer(
     onClick: (() -> Unit)? = null,
     content: @Composable () -> Unit,
 ) {
-    val clickableModifier = when (onClick) {
-        null -> Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
+    var modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp)
+        .clip(RoundedCornerShape(12.dp))
+        .background(ComposeAppTheme.colors.lawrence)
 
-        else -> Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(ComposeAppTheme.colors.lawrence)
-            .clickable {
-                onClick.invoke()
-            }
+    if (onClick != null) {
+        modifier = modifier.clickable {
+            onClick.invoke()
+        }
     }
 
     VSpacer(12.dp)
@@ -293,7 +288,7 @@ fun AnalyticsContainer(
         RowUniversal(content = it)
     }
     Column(
-        modifier = clickableModifier
+        modifier = modifier
     ) {
         titleRow?.invoke()
         content.invoke()

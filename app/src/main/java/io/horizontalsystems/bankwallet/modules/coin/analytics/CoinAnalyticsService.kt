@@ -41,9 +41,7 @@ class CoinAnalyticsService(
     }
 
     suspend fun start() {
-        if (UserSubscriptionManager.isActionAllowed(TokenInsights)) {
-            fetch()
-        }
+        fetch()
     }
 
     suspend fun refresh() {
