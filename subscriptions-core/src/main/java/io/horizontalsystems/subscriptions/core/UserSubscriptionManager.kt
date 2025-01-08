@@ -3,6 +3,8 @@ package io.horizontalsystems.subscriptions.core
 import android.app.Activity
 
 object UserSubscriptionManager {
+    var authToken: String? = ""
+
     private val predefinedSubscriptions = listOf(
         Subscription(
             id = "test.subscription_1",
