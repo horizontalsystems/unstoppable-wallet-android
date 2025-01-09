@@ -83,6 +83,8 @@ class SendSolanaViewModel(
         addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
+        canBeSendToAddress = addressState.canBeSend,
+        address = addressState.address,
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
