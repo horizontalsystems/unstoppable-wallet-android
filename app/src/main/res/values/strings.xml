@@ -402,6 +402,7 @@
 
     <!--Send-->
 
+    <string name="Send_EnterAddress">Enter Address</string>
     <string name="Send_Title">Send %s</string>
 
     <string name="Send_Hint_Address">Address or Domain</string>

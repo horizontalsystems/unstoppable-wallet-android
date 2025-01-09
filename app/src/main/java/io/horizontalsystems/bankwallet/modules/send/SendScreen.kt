@@ -14,14 +14,14 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 @Composable
 fun SendScreen(
     title: String,
-    onCloseClick: () -> Unit,
+    onBack: () -> Unit,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
             title = title,
             navigationIcon = {
-                HsBackButton(onClick = onCloseClick)
+                HsBackButton(onClick = onBack)
             },
             menuItems = listOf()
         )

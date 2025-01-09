@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinNavHost
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
-import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmScreen
+import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmNavHost
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaScreen
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaViewModel
@@ -128,7 +128,7 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
                         setContent {
-                            SendEvmScreen(
+                            SendEvmNavHost(
                                 title,
                                 findNavController(),
                                 amountInputModeViewModel,

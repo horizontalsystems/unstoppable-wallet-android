@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.evm
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -54,6 +55,8 @@ class SendEvmViewModel(
         addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
+        canBeSendToAddress = addressState.canBeSend,
+        address = addressState.address,
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -61,6 +64,7 @@ class SendEvmViewModel(
     }
 
     fun onEnterAddress(address: Address?) {
+        Log.e("AAA", "onEnterAddress: $address")
         addressService.setAddress(address)
     }
 
