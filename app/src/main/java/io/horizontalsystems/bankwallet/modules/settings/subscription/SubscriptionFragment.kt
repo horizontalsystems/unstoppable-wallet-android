@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -56,7 +57,7 @@ fun SubscriptionScreen(navController: NavController) {
                 RowUniversal(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     onClick = {
-                        //todo add action
+                        navController.slideFromBottom(R.id.buySubscriptionFragment)
                     }
                 ) {
                     body_leah(

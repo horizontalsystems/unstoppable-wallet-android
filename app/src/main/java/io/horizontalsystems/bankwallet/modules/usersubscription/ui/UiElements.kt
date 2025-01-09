@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription.ui
 
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -75,6 +76,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.subscriptions.core.HSPurchase
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.VIPClub
@@ -102,14 +104,25 @@ fun SelectSubscriptionBottomSheet(
     type: PremiumPlanType,
     onDismiss: () -> Unit,
     viewModel: BuySubscriptionChoosePlanViewModel = viewModel(),
-    onSubscribeClick: (PremiumPlanType) -> Unit
+    onPurchase: (PremiumPlanType) -> Unit,
+    onError: (Throwable) -> Unit,
 ) {
+    val uiState = viewModel.uiState
+    val activity = LocalActivity.current
 
     LaunchedEffect(Unit) {
         viewModel.getBasePlans(subscriptionId)
     }
 
-    val uiState = viewModel.uiState
+    uiState.error?.let {
+        onError(it)
+    }
+
+    uiState.purchase?.let {
+        if(it.status == HSPurchase.Status.Purchased) {
+            onPurchase(type)
+        }
+    }
 
     val selectedItemIndex = remember { mutableIntStateOf(0) }
     BottomSheetHeader(
@@ -160,7 +173,13 @@ fun SelectSubscriptionBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.Premium_Get7DaysFree),
                 onClick = {
-                    onSubscribeClick(type)
+                    activity?.let {
+                        viewModel.launchPurchaseFlow(
+                            subscriptionId = subscriptionId,
+                            planId = uiState.basePlans[selectedItemIndex.value].id,
+                            activity = it
+                        )
+                    }
                 }
             )
             VSpacer(12.dp)
@@ -518,7 +537,8 @@ fun SubscriptionBottomSheet(
     subscriptions: List<Subscription>,
     selectedTabIndex: MutableState<Int>,
     navController: NavController,
-    hideBottomSheet: () -> Unit
+    hideBottomSheet: () -> Unit,
+    onError: (Throwable) -> Unit
 ) {
     ModalBottomSheet(
         onDismissRequest = hideBottomSheet,
@@ -530,10 +550,11 @@ fun SubscriptionBottomSheet(
                 subscriptionId = subscriptions[selectedTabIndex.value].id,
                 type = PremiumPlanType.entries[selectedTabIndex.value],
                 onDismiss = hideBottomSheet,
-                onSubscribeClick = { type ->
+                onPurchase = { type ->
                     hideBottomSheet()
                     navController.navigate("premium_subscribed_page?type=${type.name}")
-                }
+                },
+                onError = onError
             )
         }
     }

@@ -42,6 +42,9 @@ class CoinAnalyticsService(
 
     suspend fun start() {
         fetch()
+        UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
+            fetch()
+        }
     }
 
     suspend fun refresh() {

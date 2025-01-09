@@ -326,7 +326,7 @@ dependencies {
     appcenterreleaseImplementation project(':subscriptions-dev')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.9.3'
+    implementation 'androidx.activity:activity-compose:1.10.0-rc01'
     // Compose Material Design
     implementation "androidx.compose.material:material:$compose_version"
     // Animations

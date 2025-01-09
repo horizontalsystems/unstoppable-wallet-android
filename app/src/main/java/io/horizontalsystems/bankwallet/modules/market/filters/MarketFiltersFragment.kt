@@ -290,7 +290,7 @@ fun AdvancedSearchContent(
     SectionUniversalLawrence {
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_ChooseSet,
-            value =  stringResource(uiState.coinListSet.titleResId),
+            value = stringResource(uiState.coinListSet.titleResId),
             borderTop = false,
             onDropdownClick = { showBottomSheet(CoinSet) }
         )
@@ -315,7 +315,9 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_Sectors,
             value = if (uiState.sectors.size == 1 && uiState.sectors[0].item == null) null else uiState.sectors.size.toString(),
             onDropdownClick = {
-                navController.slideFromRight(R.id.sectorsSelectorFragment)
+                navController.paidAction(AdvancedSearch) {
+                    navController.slideFromRight(R.id.sectorsSelectorFragment)
+                }
             }
         )
     }
@@ -336,17 +338,30 @@ fun AdvancedSearchContent(
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PricePeriod,
             value = uiState.period.title,
-            onDropdownClick = { showBottomSheet(PricePeriod) }
+            onDropdownClick = {
+                navController.paidAction(AdvancedSearch) {
+                    showBottomSheet(PricePeriod)
+                }
+            }
+
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_TradingSignals,
             value = uiState.filterTradingSignal.title,
-            onDropdownClick = { showBottomSheet(TradingSignals) }
+            onDropdownClick = {
+                navController.paidAction(AdvancedSearch) {
+                    showBottomSheet(TradingSignals)
+                }
+            }
         )
         AdvancedSearchDropdown(
             title = R.string.Market_Filter_PriceCloseTo,
             value = uiState.priceCloseTo?.titleResId?.let { stringResource(it) },
-            onDropdownClick = { showBottomSheet(PriceCloseTo) }
+            onDropdownClick = {
+                navController.paidAction(AdvancedSearch) {
+                    showBottomSheet(PriceCloseTo)
+                }
+            }
         )
     }
 
@@ -356,17 +371,29 @@ fun AdvancedSearchContent(
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedBtc,
             enabled = uiState.outperformedBtcOn,
-            onChecked = { viewModel.updateOutperformedBtcOn(it) }
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateOutperformedBtcOn(it)
+                }
+            }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedEth,
             enabled = uiState.outperformedEthOn,
-            onChecked = { viewModel.updateOutperformedEthOn(it) }
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateOutperformedEthOn(it)
+                }
+            }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_OutperformedBnb,
             enabled = uiState.outperformedBnbOn,
-            onChecked = { viewModel.updateOutperformedBnbOn(it) }
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateOutperformedBnbOn(it)
+                }
+            }
         )
     }
 
@@ -377,24 +404,40 @@ fun AdvancedSearchContent(
             title = R.string.Market_Filter_SolidCex,
             subtitle = R.string.Market_Filter_SolidCex_Description,
             enabled = uiState.solidCexOn,
-            onChecked = { viewModel.updateSolidCexOn(it) }
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateSolidCexOn(it)
+                }
+            }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_SolidDex,
             subtitle = R.string.Market_Filter_SolidDex_Description,
             enabled = uiState.solidDexOn,
-            onChecked = { viewModel.updateSolidDexOn(it) }
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateSolidDexOn(it)
+                }
+            }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_GoodDistribution,
             subtitle = R.string.Market_Filter_GoodDistribution_Description,
             enabled = uiState.goodDistributionOn,
-            onChecked = { viewModel.updateGoodDistributionOn(it) }
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateGoodDistributionOn(it)
+                }
+            }
         )
         AdvancedSearchSwitch(
             title = R.string.Market_Filter_ListedOnTopExchanges,
             enabled = uiState.listedOnTopExchangesOn,
-            onChecked = { viewModel.updateListedOnTopExchangesOn(it) }
+            onChecked = {
+                navController.paidAction(AdvancedSearch) {
+                    viewModel.updateListedOnTopExchangesOn(it)
+                }
+            }
         )
     }
 
