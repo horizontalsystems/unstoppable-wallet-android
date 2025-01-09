@@ -6,7 +6,7 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class SubscriptionServiceInitializer : Initializer<SubscriptionServiceDev> {
     override fun create(context: Context): SubscriptionServiceDev {
-        val service = SubscriptionServiceDev()
+        val service = SubscriptionServiceDev(context)
         UserSubscriptionManager.registerService(service)
         return service
     }

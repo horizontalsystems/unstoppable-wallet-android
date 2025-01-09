@@ -89,13 +89,16 @@ private fun SettingSections(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    PremiumBanner(
-        onClick = {
-            navController.slideFromBottom(R.id.buySubscriptionFragment)
-        }
-    )
+    if (uiState.showPremiumBanner) {
+        PremiumBanner(
+            onClick = {
+                navController.slideFromBottom(R.id.buySubscriptionFragment)
+            }
+        )
+        VSpacer(20.dp)
+    }
 
-    VSpacer(32.dp)
+    VSpacer(12.dp)
 
     CellUniversalLawrenceSection(
         listOf {
@@ -260,7 +263,6 @@ private fun SettingSections(
                     value = stringResource(R.string.SettingsSubscription_Active),
                     onClick = {
                         navController.slideFromRight(R.id.subscriptionFragment)
-
                     }
                 )
             },

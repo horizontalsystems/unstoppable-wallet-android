@@ -3,6 +3,8 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
 import io.horizontalsystems.bankwallet.widgets.MarketWidgetManager
+import io.horizontalsystems.subscriptions.core.TradeSignals
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 
 class MarketFavoritesMenuService(
     private val localStorage: ILocalStorage,
@@ -25,6 +27,7 @@ class MarketFavoritesMenuService(
 
     var showSignals: Boolean
         get() = localStorage.marketFavoritesShowSignals
+                && UserSubscriptionManager.isActionAllowed(TradeSignals)
         set(value) {
             localStorage.marketFavoritesShowSignals = value
             marketWidgetManager.updateWatchListWidgets()

@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +46,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.headline2_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
+import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.coroutines.launch
 
@@ -220,6 +222,7 @@ fun SelectSubscriptionScreen(
                 }
             }
             if (isPlanSelectBottomSheetVisible) {
+                val view = LocalView.current
                 SubscriptionBottomSheet(
                     modalBottomSheetState = plansModalBottomSheetState,
                     subscriptions = subscriptions,
@@ -230,6 +233,13 @@ fun SelectSubscriptionScreen(
                             plansModalBottomSheetState.hide()
                         }
                         isPlanSelectBottomSheetVisible = false
+                    },
+                    onError = {
+                        coroutineScope.launch {
+                            plansModalBottomSheetState.hide()
+                        }
+                        isPlanSelectBottomSheetVisible = false
+                        HudHelper.showErrorMessage(view, it.message ?: "Error")
                     }
                 )
             }
