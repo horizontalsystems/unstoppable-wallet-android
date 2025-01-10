@@ -64,6 +64,10 @@ object UserSubscriptionManager {
         return service.getSubscriptions()
     }
 
+    fun getActiveSubscriptions(): List<Subscription> {
+        return service.getActiveSubscriptions()
+    }
+
     suspend fun launchPurchaseFlow(
         subscriptionId: String,
         planId: String,

@@ -20,11 +20,11 @@ class SubscriptionServiceDev(context: Context) : SubscriptionService {
     override suspend fun onResume() = Unit
 
     override fun isActionAllowed(paidAction: IPaidAction): Boolean {
-        return prefs.getBoolean(KEY_ACTIONS_ALLOWED, false)
+        return prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null) != null
     }
 
-    private fun setActionsAllowed(allowed: Boolean) {
-        prefs.edit().putBoolean(KEY_ACTIONS_ALLOWED, allowed).commit()
+    private fun setActiveSubscription(subscription: String?) {
+        prefs.edit().putString(KEY_ACTIVE_SUBSCRIPTION, subscription).commit()
     }
 
     override fun getBasePlans(subscriptionId: String): List<BasePlan> =
@@ -76,24 +76,29 @@ class SubscriptionServiceDev(context: Context) : SubscriptionService {
 
     override suspend fun getSubscriptions(): List<Subscription> = predefinedSubscriptions
 
+    override fun getActiveSubscriptions(): List<Subscription> {
+        val activeSubscription = prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null)
+        return predefinedSubscriptions.filter { it.id == activeSubscription }
+    }
+
     override suspend fun launchPurchaseFlow(
         subscriptionId: String,
         planId: String,
         activity: Activity,
     ): HSPurchase? {
         //toggle actionsAllowed value
-        val actionsAllowed = prefs.getBoolean(KEY_ACTIONS_ALLOWED, false)
-        setActionsAllowed(!actionsAllowed)
-
-        if (actionsAllowed) {
-            return null
-        } else {
+        val activeSubscription = prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null)
+        if(activeSubscription == null) {
+            setActiveSubscription(subscriptionId)
             return HSPurchase(HSPurchase.Status.Purchased)
+        } else {
+            setActiveSubscription(null)
+            return null
         }
     }
 
     companion object {
         private const val PREFS_NAME = "subscription_service_dev_prefs"
-        private const val KEY_ACTIONS_ALLOWED = "actions_allowed"
+        private const val KEY_ACTIVE_SUBSCRIPTION = "active_subscription"
     }
 }

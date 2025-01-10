@@ -40,6 +40,8 @@ class SubscriptionFragment : BaseComposeFragment() {
 fun SubscriptionScreen(navController: NavController) {
     val viewModel = viewModel<SubscriptionViewModel>(factory = SubscriptionModule.Factory())
 
+    val uiState = viewModel.uiState
+
     Column(
         modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
     ) {
@@ -65,11 +67,13 @@ fun SubscriptionScreen(navController: NavController) {
                         maxLines = 1,
                         modifier = Modifier.weight(1f)
                     )
-                    subhead1_jacob(
-                        text = "PRO",
-                        maxLines = 1,
-                        modifier = Modifier.padding(horizontal = 8.dp)
-                    )
+                    uiState.subscriptionName?.let {
+                        subhead1_jacob(
+                            text = it,
+                            maxLines = 1,
+                            modifier = Modifier.padding(horizontal = 8.dp)
+                        )
+                    }
                     Image(
                         modifier = Modifier.size(20.dp),
                         painter = painterResource(id = R.drawable.ic_arrow_right),

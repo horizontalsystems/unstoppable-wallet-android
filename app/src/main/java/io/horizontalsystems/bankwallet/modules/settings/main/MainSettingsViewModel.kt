@@ -73,6 +73,7 @@ class MainSettingsViewModel(
     private var wcSessionsCount = walletConnectSessionCount
     private var wcPendingRequestCount = 0
     private var showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
+    private var hasSubscription = UserSubscriptionManager.getActiveSubscriptions().isNotEmpty()
 
     init {
         viewModelScope.launch {
@@ -112,6 +113,7 @@ class MainSettingsViewModel(
         viewModelScope.launch {
             UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
                 showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
+                hasSubscription = UserSubscriptionManager.getActiveSubscriptions().isNotEmpty()
                 emitState()
             }
         }
@@ -131,7 +133,8 @@ class MainSettingsViewModel(
             securityCenterShowAlert = !isPinSet,
             aboutAppShowAlert = !termsManager.allTermsAccepted,
             wcCounterType = wcCounterType,
-            showPremiumBanner = showPremiumBanner
+            showPremiumBanner = showPremiumBanner,
+            hasSubscription = hasSubscription,
         )
     }
 
@@ -159,5 +162,6 @@ data class MainSettingUiState(
     val securityCenterShowAlert: Boolean,
     val aboutAppShowAlert: Boolean,
     val wcCounterType: CounterType?,
-    val showPremiumBanner: Boolean
+    val showPremiumBanner: Boolean,
+    val hasSubscription: Boolean,
 )
