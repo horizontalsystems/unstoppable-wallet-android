@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.security.tor
+package io.horizontalsystems.bankwallet.modules.settings.privacy.tor
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
