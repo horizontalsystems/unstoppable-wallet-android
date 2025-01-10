@@ -9,7 +9,7 @@ import io.horizontalsystems.bankwallet.core.tor.Tor
 import io.horizontalsystems.bankwallet.core.tor.torcore.TorConstants
 import io.horizontalsystems.bankwallet.core.tor.torcore.TorOperator
 import io.horizontalsystems.bankwallet.core.tor.torutils.TorConnectionManager
-import io.horizontalsystems.bankwallet.modules.settings.security.tor.TorStatus
+import io.horizontalsystems.bankwallet.modules.settings.privacy.tor.TorStatus
 import io.reactivex.Single
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

@@ -23,13 +23,9 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.modules.main.MainModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import io.horizontalsystems.bankwallet.modules.settings.security.passcode.SecuritySettingsViewModel
-import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsModule
-import io.horizontalsystems.bankwallet.modules.settings.security.tor.SecurityTorSettingsViewModel
 import io.horizontalsystems.bankwallet.modules.settings.security.ui.PasscodeBlock
-import io.horizontalsystems.bankwallet.modules.settings.security.ui.TorBlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
@@ -39,14 +35,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import kotlin.system.exitProcess
 
 class SecuritySettingsFragment : BaseComposeFragment() {
-
-    private val torViewModel by viewModels<SecurityTorSettingsViewModel> {
-        SecurityTorSettingsModule.Factory()
-    }
 
     private val securitySettingsViewModel by viewModels<SecuritySettingsViewModel> {
         SecurityPasscodeSettingsModule.Factory()
@@ -56,73 +46,19 @@ class SecuritySettingsFragment : BaseComposeFragment() {
     override fun GetContent(navController: NavController) {
         SecurityCenterScreen(
             securitySettingsViewModel = securitySettingsViewModel,
-            torViewModel = torViewModel,
             navController = navController,
-            showAppRestartAlert = { showAppRestartAlert() },
-            restartApp = { restartApp() },
         )
     }
 
-    private fun showAppRestartAlert() {
-        val warningTitle = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Tor_Connection_Enable)
-        } else {
-            getString(R.string.Tor_Connection_Disable)
-        }
-
-        val actionButton = if (torViewModel.torCheckEnabled) {
-            getString(R.string.Button_Enable)
-        } else {
-            getString(R.string.Button_Disable)
-        }
-
-        ConfirmationDialog.show(
-            icon = R.drawable.ic_tor_connection_24,
-            title = getString(R.string.Tor_Alert_Title),
-            warningTitle = warningTitle,
-            warningText = getString(R.string.SettingsSecurity_AppRestartWarning),
-            actionButtonTitle = actionButton,
-            transparentButtonTitle = getString(R.string.Alert_Cancel),
-            fragmentManager = childFragmentManager,
-            listener = object : ConfirmationDialog.Listener {
-                override fun onActionButtonClick() {
-                    torViewModel.setTorEnabled()
-                }
-
-                override fun onTransparentButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-
-                override fun onCancelButtonClick() {
-                    torViewModel.resetSwitch()
-                }
-            }
-        )
-    }
-
-    private fun restartApp() {
-        activity?.let {
-            MainModule.startAsNewTask(it)
-            exitProcess(0)
-        }
-    }
 }
 
 @Composable
 private fun SecurityCenterScreen(
     securitySettingsViewModel: SecuritySettingsViewModel,
-    torViewModel: SecurityTorSettingsViewModel,
     navController: NavController,
-    showAppRestartAlert: () -> Unit,
-    restartApp: () -> Unit,
 ) {
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         securitySettingsViewModel.update()
-    }
-
-    if (torViewModel.restartApp) {
-        restartApp()
-        torViewModel.appRestarted()
     }
 
     val uiState = securitySettingsViewModel.uiState
@@ -188,15 +124,6 @@ private fun SecurityCenterScreen(
             InfoText(
                 text = stringResource(R.string.SettingsSecurity_DuressPinDescription),
                 paddingBottom = 32.dp
-            )
-
-            TorBlock(
-                torViewModel,
-                navController,
-                showAppRestartAlert,
-            )
-            InfoText(
-                text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
             )
 
             VSpacer(height = 32.dp)
