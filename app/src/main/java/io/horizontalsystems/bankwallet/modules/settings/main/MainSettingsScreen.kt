@@ -260,7 +260,7 @@ private fun SettingSections(
                 HsSettingCell(
                     R.string.Settings_Subscription,
                     R.drawable.ic_star_24,
-                    value = stringResource(R.string.SettingsSubscription_Active),
+                    value = if (uiState.hasSubscription) stringResource(R.string.SettingsSubscription_Active) else null,
                     onClick = {
                         navController.slideFromRight(R.id.subscriptionFragment)
                     }

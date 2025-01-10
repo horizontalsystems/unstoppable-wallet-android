@@ -153,6 +153,10 @@ class SubscriptionServiceGooglePlay(
         }
     }
 
+    override fun getActiveSubscriptions(): List<Subscription> {
+        return activeSubscriptions
+    }
+
     override suspend fun launchPurchaseFlow(subscriptionId: String, planId: String, activity: Activity): HSPurchase? {
         val productDetails = productDetailsResult?.productDetailsList?.find {
             it.productId == subscriptionId
