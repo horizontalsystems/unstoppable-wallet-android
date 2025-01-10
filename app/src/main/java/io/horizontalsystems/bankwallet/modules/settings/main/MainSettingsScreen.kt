@@ -233,6 +233,17 @@ private fun SettingSections(
             },
             {
                 HsSettingCell(
+                    R.string.Settings_Privacy,
+                    R.drawable.ic_eye_20,
+                    onClick = {
+                        navController.slideFromRight(R.id.privacySettingsFragment)
+
+                        stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.Privacy))
+                    }
+                )
+            },
+            {
+                HsSettingCell(
                     R.string.Contacts,
                     R.drawable.ic_user_20,
                     onClick = {

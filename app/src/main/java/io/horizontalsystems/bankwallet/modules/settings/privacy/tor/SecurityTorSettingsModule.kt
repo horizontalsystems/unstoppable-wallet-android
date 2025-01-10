@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.security.tor
+package io.horizontalsystems.bankwallet.modules.settings.privacy.tor
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
