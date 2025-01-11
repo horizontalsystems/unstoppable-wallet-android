@@ -88,6 +88,7 @@
     <!--Languages-->
     <!--Rate App-->
     <!--Restore-->
+    <string name="RateApp_Title_Rate_This_App">⭐️⭐️⭐️⭐️⭐️</string>
     <string name="Restore_Advanced_Title">إعدادات متقدمة</string>
     <string name="Restore_Error_EmptyPassphrase">لا يمكن أن تكون كلمة المرور فارغة</string>
     <string name="Restore_Key">المفتاح</string>

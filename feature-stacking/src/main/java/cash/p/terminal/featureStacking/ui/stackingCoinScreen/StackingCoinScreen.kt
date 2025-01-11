@@ -270,7 +270,11 @@ private fun PirateCoinScreenWithGraph(
                 )
                 CardThreeLines(
                     title = stringResource(id = R.string.estimated_annual_interest),
-                    subtitle = stringResource(R.string.estimated_annual_interest_value),
+                    subtitle = stringResource(id = if (uiState.stackingType == StackingType.PCASH) {
+                        R.string.estimated_annual_interest_value_pirate
+                    } else {
+                        R.string.estimated_annual_interest_value_cosanta
+                    }),
                     description = "",
                     modifier = Modifier.weight(1f)
                 )
@@ -315,28 +319,28 @@ private fun annotatedStakingDescription(stackingType: StackingType, tokenCount: 
         append(
             stringResource(
                 if (stackingType == StackingType.PCASH) {
-                    R.string.no_active_stacking_pirate_buy_more_descritpion_1
+                    R.string.no_active_stacking_pirate_buy_more_descritpion
                 } else {
-                    R.string.no_active_stacking_cosanta_buy_more_descritpion_1
+                    R.string.no_active_stacking_cosanta_buy_more_descrition
                 }
             )
         )
         withStyle(style = SpanStyle(color = Color(0xFFFF3D43))) {
-            append(" ${tokenCount.toPlainString()} ${stringResource(R.string.tokens)} ")
+            append(tokenCount.toPlainString())
         }
-        append(stringResource(R.string.no_active_stacking_buy_more_descritpion_2))
     }
 
 @Composable
 private fun annotatedWaitingStakingDescription(eightHours: Boolean) = buildAnnotatedString {
-    append(stringResource(R.string.waiting_for_stacking_1))
+    val hours = if (eightHours) 8 else 24
+    val text = stringResource(R.string.waiting_for_stacking, hours)
+    val splitIndex = text.indexOf(hours.toString())
+
+    append(text.substring(0, splitIndex))
     withStyle(style = SpanStyle(color = Color(0xFFFF3D43))) {
-        if (eightHours) {
-            append(" ${stringResource(R.string.waiting_for_stacking_8h)}")
-        } else {
-            append(" ${stringResource(R.string.waiting_for_stacking_24h)}")
-        }
+        append(hours.toString())
     }
+    append(text.substring(splitIndex + hours.toString().length))
 }
 
 @Preview(

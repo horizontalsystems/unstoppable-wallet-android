@@ -1952,7 +1952,7 @@
 
     <!--Release notes-->
 
-    <string name="ReleaseNotes_JoinUnstoppables">JOIN P.CASHS</string>
+    <string name="ReleaseNotes_JoinUnstoppables" translatable="false">JOIN P.CASH</string>
     <string name="ReleaseNotes_FollowUs">Follow Us</string>
     <string name="CoinPage_Chart_Locked">Locked</string>
     <string name="ProUsersInfo_Title">Pro Users</string>
@@ -2089,34 +2089,31 @@
 
     <!-- Stacking screen -->
     <string name="stacking">Stacking</string>
-    <string name="pirate_cash">PirateCash</string>
-    <string name="cosanta">Cosanta</string>
+    <string name="pirate_cash" translatable="false">PirateCash</string>
+    <string name="cosanta" translatable="false">Cosanta</string>
     <string name="no_active_stacking">There are no active staking transactions.</string>
     <string name="no_active_stacking_pirate_description">PIRATE Staking: Go ahead with 100 tokens and earn 13% annual returns!</string>
-    <string name="no_active_stacking_cosanta_description">COSANTA Staking: Go ahead with 1 token and earn 13% annual returns!</string>
-    <string name="no_active_stacking_buy_more_descritpion_1">PIRATE Staking: Go ahead with</string>
-    <string name="no_active_stacking_pirate_buy_more_descritpion_1">PIRATE Staking: Go ahead with</string>
-    <string name="no_active_stacking_cosanta_buy_more_descritpion_1">COSANTA Staking: Go ahead with</string>
+    <string name="no_active_stacking_cosanta_description">COSANTA Staking: Go ahead with 1 token and start earning in 24 hours.</string>
+    <string name="no_active_stacking_pirate_buy_more_descritpion">To activate staking you need %1$s token(s) more and you will receive 13%% per annum!</string>
+    <string name="no_active_stacking_cosanta_buy_more_descrition">Deposit %1$s token(s) and start earning in 24 hours.</string>
     <string name="tokens">tokens</string>
-    <string name="no_active_stacking_buy_more_descritpion_2">and earn 13% annual returns!</string>
     <string name="buy_pirate">Buy PirateCash</string>
     <string name="buy_cosanta">Buy Cosanta</string>
-    <string name="waiting_for_stacking_1">Staking of coins will begin no later than in</string>
-    <string name="waiting_for_stacking_8h">8 hours</string>
-    <string name="waiting_for_stacking_24h">24 hours</string>
+    <string name="waiting_for_stacking">Staking of coins will begin no later than in %1$d hours</string>
     <string name="stacking_calculator">stacking calculator</string>
     <string name="total_balance">Total balance</string>
     <string name="total_income">Total income</string>
     <string name="unpaid">Unpaid</string>
     <string name="estimated_annual_interest">Estimated Annual Interest</string>
-    <string name="estimated_annual_interest_value" translatable="false">13%</string>
+    <string name="estimated_annual_interest_value_pirate" translatable="false">13%</string>
+    <string name="estimated_annual_interest_value_cosanta" translatable="false">31%</string>
     <string name="accruals">Accruals</string>
     <string name="payouts">Payouts</string>
     <string name="investment_chart">Investment chart</string>
     <string name="payouts_history">Payouts History</string>
     <string name="pos_calculator">POS Calculator</string>
-    <string name="pos_calculator_pirate_description">Calculation of profitability at individual PirateCash steaking in solo mode.</string>
-    <string name="pos_calculator_cosanta_description">Calculation of profitability at individual Cosanta steaking in solo mode.</string>
+    <string name="pos_calculator_pirate_description">Calculation of profitability mining PirateCash staking in the pool.</string>
+    <string name="pos_calculator_cosanta_description">Calculation of profitability mining Cosanta in the pool.</string>
     <string name="enter_coin_amount">Enter Coin Amount</string>
     <string name="period">Period</string>
     <string name="done">Done</string>
