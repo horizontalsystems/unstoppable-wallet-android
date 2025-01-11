@@ -20,7 +20,7 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 109
+        versionCode 110
         versionName "0.41.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
