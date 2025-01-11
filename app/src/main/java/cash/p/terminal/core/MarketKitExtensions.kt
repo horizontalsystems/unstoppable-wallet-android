@@ -345,15 +345,11 @@ val TokenType.bitcoinCashCoinType: TokenType.AddressType?
 val Coin.imageUrl: String
     get() {
         var pirate: String = "piratecash"
-        var pirateOld: String = "piratecash-old"
         var cosa: String = "cosanta"
-        var cosantaOld: String = "cosanta-old"
         var wdash: String = "wdash"
         val coinURL = when (uid) {
             pirate -> "https://pirate.cash/logo.png"
             cosa -> "https://cosanta.net/logo.png"
-            pirateOld -> "https://pirate.cash/old_pirate.png"
-            cosantaOld -> "https://pirate.cash/old_cosanta.png"
             wdash -> "https://wdash.org/logo.png"
             else -> "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
         }
