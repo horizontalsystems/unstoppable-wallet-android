@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.multiswap.settings.ui.InputButton
 import io.reactivex.Observable
@@ -61,7 +61,7 @@ class SwapSlippageViewModel(
         val caution = when {
             error != null -> Caution(error, Caution.Type.Error)
             service.unusualSlippage -> Caution(
-                Translator.getString(R.string.SwapSettings_Warning_UnusualSlippage),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Warning_UnusualSlippage),
                 Caution.Type.Warning
             )
             else -> null

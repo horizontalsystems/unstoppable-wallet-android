@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.entities.CurrencyValue
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.CurrencyValue
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.math.BigDecimal

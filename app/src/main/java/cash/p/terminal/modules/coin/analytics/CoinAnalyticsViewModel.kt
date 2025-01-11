@@ -3,15 +3,14 @@ package cash.p.terminal.modules.coin.analytics
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.IAppNumberFormatter
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.IAppNumberFormatter
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.brandColor
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.order
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ActionType
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticChart
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticInfo
@@ -32,18 +31,19 @@ import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import cash.p.terminal.modules.coin.audits.CoinAuditsModule
 import cash.p.terminal.modules.coin.detectors.IssueItemParcelable
 import cash.p.terminal.modules.coin.detectors.IssueParcelable
-import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.metricchart.ProChartModule
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.TranslatableString.ResString
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString.ResString
 import cash.p.terminal.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.ChartViewType
-import io.horizontalsystems.marketkit.models.Analytics
-import io.horizontalsystems.marketkit.models.AnalyticsPreview
-import io.horizontalsystems.marketkit.models.BlockchainIssues
-import io.horizontalsystems.marketkit.models.ChartPoint
-import io.horizontalsystems.marketkit.models.Coin
+import cash.p.terminal.wallet.models.Analytics
+import cash.p.terminal.wallet.models.AnalyticsPreview
+import cash.p.terminal.wallet.models.BlockchainIssues
+import cash.p.terminal.wallet.models.ChartPoint
+import cash.p.terminal.wallet.entities.Coin
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -442,7 +442,7 @@ class CoinAnalyticsViewModel(
                             TranslatableString.PlainString(blockchainTitle)
                         ),
                         value = Value(
-                            Translator.getString(
+                            cash.p.terminal.strings.helpers.Translator.getString(
                                 R.string.CoinAnalytics_CountItems,
                                 blockchainIssues.issues.size
                             )
@@ -474,7 +474,7 @@ class CoinAnalyticsViewModel(
                     info = null,
                     analyticChart = null,
                     footerItems = detectorFooterItems,
-                    sectionDescription = Translator.getString(R.string.CoinAnalytics_PoweredByDeFi)
+                    sectionDescription = cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinAnalytics_PoweredByDeFi)
                 )
             )
         }
@@ -635,7 +635,7 @@ class CoinAnalyticsViewModel(
     }
 
     private fun getValuePeriod(isMovement: Boolean): String {
-        return Translator.getString(if (isMovement) R.string.Coin_Analytics_Current else R.string.Coin_Analytics_Last30d)
+        return cash.p.terminal.strings.helpers.Translator.getString(if (isMovement) R.string.Coin_Analytics_Current else R.string.Coin_Analytics_Last30d)
     }
 
     private fun getRank(rank: Int) = "#$rank"

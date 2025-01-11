@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.market.topcoins
 
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.Currency
-import io.horizontalsystems.marketkit.models.TopMovers
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.wallet.models.TopMovers
 import io.reactivex.Single
 
 class MarketTopMoversRepository(

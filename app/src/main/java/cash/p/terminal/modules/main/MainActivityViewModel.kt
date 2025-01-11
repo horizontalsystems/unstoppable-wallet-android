@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import com.walletconnect.web3.wallet.client.Wallet
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.UserManager
 import cash.p.terminal.modules.walletconnect.WCDelegate
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
     private val userManager: UserManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val pinComponent: IPinComponent,
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,

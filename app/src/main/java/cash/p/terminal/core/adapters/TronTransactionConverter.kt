@@ -13,11 +13,11 @@ import cash.p.terminal.entities.transactionrecords.tron.TronExternalContractCall
 import cash.p.terminal.entities.transactionrecords.tron.TronIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
-import cash.p.terminal.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.tronkit.TronKit
 import io.horizontalsystems.tronkit.decoration.NativeTransactionDecoration
 import io.horizontalsystems.tronkit.decoration.TokenInfo

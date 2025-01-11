@@ -2,12 +2,12 @@ package cash.p.terminal.core.adapters
 
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.entities.TransactionValue
-import cash.p.terminal.modules.transactions.TransactionSource
 import cash.p.terminal.modules.transactions.TransactionStatus
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.models.AccountAddress
 import io.horizontalsystems.tonkit.models.Action

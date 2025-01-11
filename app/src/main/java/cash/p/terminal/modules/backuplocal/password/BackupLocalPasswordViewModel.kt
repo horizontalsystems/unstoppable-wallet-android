@@ -2,17 +2,15 @@ package cash.p.terminal.modules.backuplocal.password
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.PasswordError
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.PassphraseValidator
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.backuplocal.fullbackup.BackupProvider
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.PassphraseValidator
+import cash.p.terminal.wallet.entities.PasswordError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,7 +26,7 @@ sealed class BackupType {
 class BackupLocalPasswordViewModel(
     private val type: BackupType,
     private val passphraseValidator: PassphraseValidator,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val backupProvider: BackupProvider,
 ) : ViewModelUiState<BackupLocalPasswordModule.UiState>() {
 
@@ -86,7 +84,7 @@ class BackupLocalPasswordViewModel(
         } else {
             passphraseState = DataState.Error(
                 Exception(
-                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
                 )
             )
         }
@@ -189,7 +187,7 @@ class BackupLocalPasswordViewModel(
             passphraseValidator.validatePassword(passphrase)
         } catch (e: PasswordError) {
             passphraseState = DataState.Error(
-                Exception(Translator.getString(R.string.LocalBackup_PasswordInvalid))
+                Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.LocalBackup_PasswordInvalid))
             )
             emitState()
             return
@@ -197,7 +195,7 @@ class BackupLocalPasswordViewModel(
 
         if (passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
-                Exception(Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation))
+                Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation))
             )
         }
 

@@ -4,8 +4,8 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.ui.compose.TranslatableString
+import io.horizontalsystems.core.entities.CurrencyValue
+import cash.p.terminal.strings.helpers.TranslatableString
 import java.math.BigDecimal
 
 object SendModule {

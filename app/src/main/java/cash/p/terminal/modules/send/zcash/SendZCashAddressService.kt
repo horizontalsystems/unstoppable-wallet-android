@@ -3,7 +3,7 @@ package cash.p.terminal.modules.send.zcash
 import cash.p.terminal.R
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.Address
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,8 +47,8 @@ class SendZCashAddressService(private val adapter: ISendZcashAdapter, prefilledA
 
     private fun getError(error: Throwable): Throwable {
         val message = when (error) {
-            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> Translator.getString(R.string.Send_Error_SendToSelf)
-            is ZcashAdapter.ZcashError.InvalidAddress -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+            is ZcashAdapter.ZcashError.SendToSelfNotAllowed -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Error_SendToSelf)
+            is ZcashAdapter.ZcashError.InvalidAddress -> cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
             else -> error.message ?: error.javaClass.simpleName
         }
 

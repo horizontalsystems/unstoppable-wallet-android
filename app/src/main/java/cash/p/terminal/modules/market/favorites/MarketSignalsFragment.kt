@@ -19,23 +19,23 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.SectionItemPosition
-import cash.p.terminal.ui.compose.components.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.entities.SectionItemPosition
+import io.horizontalsystems.core.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.SignalBadge
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.sectionItemBorder
-import cash.p.terminal.ui.compose.components.subhead2_leah
-import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.sectionItemBorder
+import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.models.Analytics.TechnicalAdvice.Advice
 
 class MarketSignalsFragment : BaseComposeFragment() {
     @Composable
@@ -62,7 +62,7 @@ fun MarketSignalsScreen(navController: NavController) {
                 ),
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler
     ) {
         Column(modifier = Modifier.padding(it)) {
             LazyColumn(

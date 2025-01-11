@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.coin.coinmarkets
 
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.ui.compose.Select
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.MarketTicker
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.models.MarketTicker
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

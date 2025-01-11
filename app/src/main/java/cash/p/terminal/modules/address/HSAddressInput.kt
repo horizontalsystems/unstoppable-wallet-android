@@ -11,7 +11,7 @@ import cash.p.terminal.entities.Address
 import cash.p.terminal.ui.compose.components.FormsInputAddress
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.wallet.entities.TokenQuery
 
 @Composable
 fun HSAddressInput(

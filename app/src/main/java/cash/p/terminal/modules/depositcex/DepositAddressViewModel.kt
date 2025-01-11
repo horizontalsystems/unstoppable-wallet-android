@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.core.providers.CexDepositNetwork
 import cash.p.terminal.core.providers.CexProviderManager
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.receive.ReceiveModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -96,7 +95,7 @@ class DepositAddressViewModel(
 
     private fun getAlertText(hasMemo: Boolean): ReceiveModule.AlertText? {
         return if (hasMemo) ReceiveModule.AlertText.Critical(
-            Translator.getString(R.string.Balance_Receive_AddressMemoAlert)
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Receive_AddressMemoAlert)
         )
         else null
     }

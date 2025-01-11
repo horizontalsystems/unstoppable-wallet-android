@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.shorten
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -30,31 +29,31 @@ import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HFillSpacer
-import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.NftIcon
-import cash.p.terminal.ui.compose.components.RowUniversal
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.caption_grey
-import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
-import cash.p.terminal.ui.compose.components.headline2_leah
-import cash.p.terminal.ui.compose.components.subhead1_grey
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.components.HFillSpacer
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.caption_grey
+import cash.p.terminal.ui_compose.components.headline2_leah
+import cash.p.terminal.ui_compose.components.subhead1_grey
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.entities.Blockchain
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
 
 @Composable
 fun SendEvmTransactionView(
@@ -152,7 +151,7 @@ private fun SectionView(viewItems: List<ViewItem>, navController: NavController,
                 )
             }
             is ViewItem.ContactItem -> TransactionInfoContactCell(item.contact.name)
-            is ViewItem.Input -> TitleValueHex("Input", item.value.shorten(), item.value)
+            is ViewItem.Input -> TitleValueHex("CoinFragmentInput", item.value.shorten(), item.value)
             is ViewItem.TokenItem -> Token(item)
         }
     }
@@ -383,19 +382,19 @@ private fun TitleValueHex(
 @Composable
 private fun setColorByType(type: ValueType) =
     when (type) {
-        ValueType.Regular -> ComposeAppTheme.colors.bran
-        ValueType.Disabled -> ComposeAppTheme.colors.grey
-        ValueType.Outgoing -> ComposeAppTheme.colors.leah
-        ValueType.Incoming -> ComposeAppTheme.colors.remus
-        ValueType.Warning -> ComposeAppTheme.colors.jacob
-        ValueType.Forbidden -> ComposeAppTheme.colors.lucian
+        ValueType.Regular -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.bran
+        ValueType.Disabled -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey
+        ValueType.Outgoing -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
+        ValueType.Incoming -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.remus
+        ValueType.Warning -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
+        ValueType.Forbidden -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
     }
 
 @Preview
 @Composable
 private fun Preview_Subhead() {
     val item = ViewItem.Subhead("Title", "Value", R.drawable.ic_arrow_down_left_24)
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Subhead(item)
     }
 }
@@ -404,7 +403,7 @@ private fun Preview_Subhead() {
 @Composable
 private fun Preview_TitleValue() {
     val item = ViewItem.Value("Title", "Value", ValueType.Incoming)
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         TitleValue(item)
     }
 }
@@ -412,7 +411,7 @@ private fun Preview_TitleValue() {
 @Preview
 @Composable
 private fun Preview_AmountMulti() {
-    val token = Token(
+    val token = cash.p.terminal.wallet.Token(
         coin = Coin("uid", "KuCoin", "KCS"),
         blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
         type = TokenType.Eip20("eef"),
@@ -426,7 +425,7 @@ private fun Preview_AmountMulti() {
         ValueType.Incoming,
         token
     )
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         AmountMulti(item)
     }
 }
@@ -434,7 +433,7 @@ private fun Preview_AmountMulti() {
 @Preview
 @Composable
 private fun Preview_Amount() {
-    val token = Token(
+    val token = cash.p.terminal.wallet.Token(
         coin = Coin("uid", "KuCoin", "KCS"),
         blockchain = Blockchain(BlockchainType.Ethereum, "Ethereum", null),
         type = TokenType.Eip20("eef"),
@@ -446,7 +445,7 @@ private fun Preview_Amount() {
         ValueType.Outgoing,
         token
     )
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Amount(item)
     }
 }
@@ -454,7 +453,7 @@ private fun Preview_Amount() {
 @Preview
 @Composable
 private fun Preview_TitleValueHex() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         TitleValueHex("Title", "ValueShort", "ValueLong")
     }
 }

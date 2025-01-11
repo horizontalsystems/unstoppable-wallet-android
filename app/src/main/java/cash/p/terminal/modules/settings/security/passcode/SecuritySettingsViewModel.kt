@@ -2,7 +2,7 @@ package cash.p.terminal.modules.settings.security.passcode
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager

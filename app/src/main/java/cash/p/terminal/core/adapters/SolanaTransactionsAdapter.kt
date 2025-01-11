@@ -1,14 +1,14 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.SolanaKitWrapper
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Flowable
 import io.reactivex.Single

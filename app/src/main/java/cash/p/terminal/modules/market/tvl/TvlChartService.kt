@@ -1,15 +1,15 @@
 package cash.p.terminal.modules.market.tvl
 
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.chart.AbstractChartService
-import cash.p.terminal.modules.chart.ChartPointsWrapper
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.chartview.chart.AbstractChartService
+import io.horizontalsystems.chartview.chart.ChartPointsWrapper
+import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.chartview.ChartViewType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.Single
 
 class TvlChartService(

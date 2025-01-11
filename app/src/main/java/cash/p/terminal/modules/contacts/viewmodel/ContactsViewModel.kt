@@ -2,12 +2,12 @@ package cash.p.terminal.modules.contacts.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.shorten
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.Mode
 import cash.p.terminal.modules.contacts.model.Contact
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.strings.helpers.TranslatableString
+import io.horizontalsystems.core.ViewModelUiState
 import kotlinx.coroutines.launch
 
 class ContactsViewModel(

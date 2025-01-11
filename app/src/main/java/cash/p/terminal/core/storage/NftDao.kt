@@ -6,7 +6,7 @@ import cash.p.terminal.entities.nft.NftCollectionRecord
 import cash.p.terminal.entities.nft.NftMetadataSyncRecord
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.nft.*
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 @Dao
 interface NftDao {

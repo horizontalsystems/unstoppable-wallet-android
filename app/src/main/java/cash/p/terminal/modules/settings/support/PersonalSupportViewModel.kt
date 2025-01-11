@@ -2,8 +2,8 @@ package cash.p.terminal.modules.settings.support
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.MarketKitWrapper
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.MarketKitWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await

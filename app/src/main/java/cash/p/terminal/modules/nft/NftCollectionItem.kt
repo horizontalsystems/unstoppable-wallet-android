@@ -2,9 +2,9 @@ package cash.p.terminal.modules.nft
 
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.market.overview.coinValue
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.NftTopCollection
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.models.HsTimePeriod
+import cash.p.terminal.wallet.models.NftTopCollection
 import java.math.BigDecimal
 
 data class NftCollectionItem(

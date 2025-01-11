@@ -2,7 +2,7 @@ package cash.p.terminal.modules.multiswap
 
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.ui.DataField
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 
 interface ISwapFinalQuote {

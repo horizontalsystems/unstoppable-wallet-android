@@ -1,14 +1,15 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.IWalletManager
 import io.horizontalsystems.core.IKeyStoreCleaner
 
 class KeyStoreCleaner(
-        private val localStorage: ILocalStorage,
-        private val accountManager: IAccountManager,
-        private val walletManager: IWalletManager)
+    private val localStorage: ILocalStorage,
+    private val accountManager: IAccountManager,
+    private val walletManager: IWalletManager
+)
     : IKeyStoreCleaner {
 
     override var encryptedSampleText: String?

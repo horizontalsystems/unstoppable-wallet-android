@@ -4,8 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -23,11 +22,11 @@ class MarketPostsViewModel(private val service: MarketPostService) : ViewModel()
 
         return when {
             // interval from post in minutes
-            minutesAgo < 60 -> Translator.getString(R.string.Market_MinutesAgo, minutesAgo)
-            hoursAgo < 24 -> Translator.getString(R.string.Market_HoursAgo, hoursAgo)
+            minutesAgo < 60 -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_MinutesAgo, minutesAgo)
+            hoursAgo < 24 -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_HoursAgo, hoursAgo)
             else -> {
                 val daysAgo = hoursAgo / 24
-                Translator.getString(R.string.Market_DaysAgo, daysAgo)
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.Market_DaysAgo, daysAgo)
             }
         }
     }

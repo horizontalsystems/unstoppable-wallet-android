@@ -2,15 +2,15 @@ package cash.p.terminal.core.managers
 
 import android.os.Handler
 import android.os.HandlerThread
-import cash.p.terminal.core.IAdapter
-import cash.p.terminal.core.IAdapterManager
-import cash.p.terminal.core.IBalanceAdapter
-import cash.p.terminal.core.IReceiveAdapter
-import cash.p.terminal.core.IWalletManager
+import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.IBalanceAdapter
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.factories.AdapterFactory
-import cash.p.terminal.entities.Wallet
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
@@ -32,7 +32,7 @@ class AdapterManager(
 ) : IAdapterManager, HandlerThread("A") {
 
     private val handler: Handler
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val adaptersReadySubject = PublishSubject.create<Map<Wallet, IAdapter>>()
     private val adaptersMap = ConcurrentHashMap<Wallet, IAdapter>()
 

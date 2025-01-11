@@ -3,7 +3,7 @@ package cash.p.terminal.modules.multiswap
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.settings.ISwapSetting
 import cash.p.terminal.modules.multiswap.ui.DataField
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.uniswapkit.models.TradeData
 import io.horizontalsystems.uniswapkit.v3.TradeDataV3
 import java.math.BigDecimal

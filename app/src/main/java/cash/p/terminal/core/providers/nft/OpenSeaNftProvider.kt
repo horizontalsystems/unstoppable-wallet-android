@@ -1,7 +1,7 @@
 package cash.p.terminal.core.providers.nft
 
 import cash.p.terminal.R
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.entities.nft.NftAddressMetadata
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
@@ -13,11 +13,11 @@ import cash.p.terminal.entities.nft.NftContractMetadata
 import cash.p.terminal.entities.nft.NftEventMetadata
 import cash.p.terminal.entities.nft.NftEventMetadata.EventType
 import cash.p.terminal.entities.nft.NftUid
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.NftPrice
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.models.NftPrice
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.Date

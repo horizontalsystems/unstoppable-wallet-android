@@ -21,15 +21,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.Badge
-import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui.compose.components.RowUniversal
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -44,7 +44,7 @@ fun SelectCoinScreen(
     val uiState = viewModel.uiState
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             SearchBar(
                 title = stringResource(R.string.Cex_ChooseCoin),

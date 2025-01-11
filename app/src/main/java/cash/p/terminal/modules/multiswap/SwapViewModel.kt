@@ -5,15 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.CurrencyManager
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.CurrencyManager
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -27,7 +27,8 @@ class SwapViewModel(
     private val fiatServiceOut: FiatService,
     private val timerService: TimerService,
     private val networkAvailabilityService: NetworkAvailabilityService,
-    tokenIn: Token?
+    tokenIn: Token?,
+    tokenOut: Token?
 ) : ViewModelUiState<SwapUiState>() {
 
     private val quoteLifetime = 20
@@ -95,6 +96,9 @@ class SwapViewModel(
         networkAvailabilityService.start(viewModelScope)
         tokenIn?.let {
             quoteService.setTokenIn(it)
+        }
+        tokenOut?.let {
+            quoteService.setTokenOut(it)
         }
     }
 
@@ -211,7 +215,7 @@ class SwapViewModel(
     fun getCurrentQuote() = quoteState.quote
     fun getSettings() = quoteService.getSwapSettings()
 
-    class Factory(private val tokenIn: Token?) : ViewModelProvider.Factory {
+    class Factory(private val tokenIn: Token?, private val tokenOut: Token?) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val swapQuoteService = SwapQuoteService()
@@ -227,7 +231,8 @@ class SwapViewModel(
                 FiatService(App.marketKit),
                 TimerService(),
                 NetworkAvailabilityService(App.connectivityManager),
-                tokenIn
+                tokenIn,
+                tokenOut
             ) as T
         }
     }

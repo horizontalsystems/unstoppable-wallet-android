@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.multiswap.settings.ui.RecipientAddress
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 data class SwapSettingRecipient(
     val settings: Map<String, Any?>,

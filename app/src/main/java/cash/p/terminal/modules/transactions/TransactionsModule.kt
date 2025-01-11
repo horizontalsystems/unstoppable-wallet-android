@@ -3,10 +3,9 @@ package cash.p.terminal.modules.transactions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Account
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.hodler.LockTimeInterval
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.transaction.TransactionSource
 import java.math.BigDecimal
 import java.util.Date
 
@@ -63,10 +62,4 @@ data class TransactionWallet(
 data class FilterToken(
     val token: Token,
     val source: TransactionSource,
-)
-
-data class TransactionSource(
-    val blockchain: Blockchain,
-    val account: Account,
-    val meta: String?
 )

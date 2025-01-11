@@ -3,11 +3,12 @@ package cash.p.terminal.core.managers
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.ethereumkit.models.Chain
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 
 class EvmBlockchainManager(
     private val backgroundManager: BackgroundManager,

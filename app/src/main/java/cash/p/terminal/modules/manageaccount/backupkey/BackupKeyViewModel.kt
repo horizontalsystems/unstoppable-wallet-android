@@ -4,9 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.manageaccount.recoveryphrase.RecoveryPhraseModule
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
 
 class BackupKeyViewModel(val account: Account) : ViewModel() {
 
@@ -18,10 +18,10 @@ class BackupKeyViewModel(val account: Account) : ViewModel() {
 
     init {
         if (account.type is AccountType.Mnemonic) {
-            wordsNumbered = account.type.words.mapIndexed { index, word ->
+            wordsNumbered = (account.type as AccountType.Mnemonic).words.mapIndexed { index, word ->
                 RecoveryPhraseModule.WordNumbered(word, index + 1)
             }
-            passphrase = account.type.passphrase
+            passphrase = (account.type as AccountType.Mnemonic).passphrase
         }
     }
 }

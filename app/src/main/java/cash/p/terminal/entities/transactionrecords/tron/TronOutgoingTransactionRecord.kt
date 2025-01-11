@@ -1,8 +1,8 @@
 package cash.p.terminal.entities.transactionrecords.tron
 
 import cash.p.terminal.entities.TransactionValue
-import cash.p.terminal.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.tronkit.models.Transaction
 
 class TronOutgoingTransactionRecord(

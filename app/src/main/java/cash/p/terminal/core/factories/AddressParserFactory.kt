@@ -1,7 +1,7 @@
 package cash.p.terminal.core.factories
 
 import cash.p.terminal.core.managers.EvmBlockchainManager
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 val BlockchainType.uriScheme: String?
     get() {

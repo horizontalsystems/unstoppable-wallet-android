@@ -1,20 +1,20 @@
 package cash.p.terminal.modules.market.platform
 
 import android.util.Log
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.chart.AbstractChartService
-import cash.p.terminal.modules.chart.ChartPointsWrapper
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.chartview.chart.AbstractChartService
+import io.horizontalsystems.chartview.chart.ChartPointsWrapper
 import cash.p.terminal.modules.market.topplatforms.Platform
+import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.HsPeriodType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.core.models.HsPeriodType
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import retrofit2.HttpException

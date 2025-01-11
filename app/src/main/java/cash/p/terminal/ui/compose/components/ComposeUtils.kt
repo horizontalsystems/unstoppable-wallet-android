@@ -7,7 +7,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -19,21 +18,10 @@ import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imagePlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.modules.market.Value
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.Value
+import cash.p.terminal.wallet.entities.Coin
 import java.math.BigDecimal
-
-@Composable
-fun diffColor(value: BigDecimal?) : Color {
-    val diff = value ?: BigDecimal.ZERO
-    return when {
-        diff.signum() == 0 -> ComposeAppTheme.colors.grey
-        diff.signum() >= 0 -> ComposeAppTheme.colors.remus
-        else -> ComposeAppTheme.colors.lucian
-    }
-}
 
 @Composable
 fun formatValueAsDiff(value: Value): String =

@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.multiswap.providers
 
 import cash.p.terminal.R
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.uniswapkit.models.DexType
 
 object UniswapV3Provider : BaseUniswapV3Provider(DexType.Uniswap) {

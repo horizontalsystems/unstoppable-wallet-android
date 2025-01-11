@@ -3,7 +3,7 @@ package cash.p.terminal.modules.walletconnect.pairing
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.walletconnect.android.Core
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.modules.walletconnect.WCDelegate
 
 class WCPairingsViewModel : ViewModelUiState<WCPairingsUiState>() {

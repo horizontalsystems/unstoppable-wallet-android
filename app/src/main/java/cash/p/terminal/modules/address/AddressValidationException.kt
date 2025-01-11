@@ -2,7 +2,7 @@ package cash.p.terminal.modules.address
 
 import android.os.Parcelable
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -19,7 +19,7 @@ sealed class AddressValidationException : Exception(), Parcelable {
         }
 
     override fun getLocalizedMessage() = when (val blockchainName = blockchain) {
-        null -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
-        else -> Translator.getString(R.string.SwapSettings_Error_InvalidBlockchainAddress, blockchainName)
+        null -> cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+        else -> cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidBlockchainAddress, blockchainName)
     }
 }

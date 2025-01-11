@@ -1,7 +1,8 @@
 package cash.p.terminal.modules.chart
 
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Currency
+import io.horizontalsystems.chartview.chart.ChartModule
+import io.horizontalsystems.core.entities.Currency
 import java.math.BigDecimal
 
 class ChartNumberFormatterShortened : ChartModule.ChartNumberFormatter {

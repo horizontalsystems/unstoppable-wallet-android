@@ -6,9 +6,9 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.providers.nft.NftEventsProvider
 import cash.p.terminal.entities.nft.NftEventMetadata
 import cash.p.terminal.entities.nft.NftUid
-import cash.p.terminal.modules.balance.BalanceXRateRepository
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
 import cash.p.terminal.modules.coin.ContractInfo
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class NftCollectionEventsModule {
 
@@ -22,7 +22,7 @@ class NftCollectionEventsModule {
                 eventListType,
                 defaultEventType,
                 NftEventsProvider(App.marketKit),
-                BalanceXRateRepository("nft-collection-events", App.currencyManager, App.marketKit)
+                DefaultBalanceXRateRepository("nft-collection-events", App.currencyManager, App.marketKit)
             )
             return NftCollectionEventsViewModel(service) as T
         }

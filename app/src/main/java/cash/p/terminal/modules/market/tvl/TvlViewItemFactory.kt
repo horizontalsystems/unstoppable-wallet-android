@@ -4,7 +4,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 
 class TvlViewItemFactory {
     private val cache: MutableMap<Int, TvlModule.CoinTvlViewItem> = hashMapOf()

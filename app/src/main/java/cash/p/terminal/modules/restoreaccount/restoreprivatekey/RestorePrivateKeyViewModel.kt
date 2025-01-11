@@ -7,8 +7,7 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
 import cash.p.terminal.core.hexToByteArray
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.AccountType
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.EmptyText
 import cash.p.terminal.modules.restoreaccount.restoreprivatekey.RestorePrivateKeyModule.RestoreError.NoValidKey
@@ -41,20 +40,20 @@ class RestorePrivateKeyViewModel(
         text = input
     }
 
-    fun resolveAccountType(): AccountType? {
+    fun resolveAccountType(): cash.p.terminal.wallet.AccountType? {
         inputState = null
         return try {
             accountType(text)
         } catch (e: Exception) {
             inputState = DataState.Error(
-                Exception(Translator.getString(R.string.Restore_PrivateKey_InvalidKey))
+                Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.Restore_PrivateKey_InvalidKey))
             )
             null
         }
     }
 
     @Throws(Exception::class)
-    private fun accountType(text: String): AccountType {
+    private fun accountType(text: String): cash.p.terminal.wallet.AccountType {
         val textCleaned = text.trim()
 
         if (textCleaned.isEmpty()) {
@@ -63,7 +62,7 @@ class RestorePrivateKeyViewModel(
 
         if (isValidEthereumPrivateKey(textCleaned)) {
             val privateKey = Signer.privateKey(textCleaned)
-            return AccountType.EvmPrivateKey(privateKey)
+            return cash.p.terminal.wallet.AccountType.EvmPrivateKey(privateKey)
         }
 
         try {
@@ -74,7 +73,7 @@ class RestorePrivateKeyViewModel(
             when (extendedKey.derivedType) {
                 HDExtendedKey.DerivedType.Master,
                 HDExtendedKey.DerivedType.Account -> {
-                    return AccountType.HdExtendedKey(extendedKey.serializePrivate())
+                    return cash.p.terminal.wallet.AccountType.HdExtendedKey(extendedKey.serializePrivate())
                 }
 
                 else -> throw NotSupportedDerivedType

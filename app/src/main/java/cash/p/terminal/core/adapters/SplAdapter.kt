@@ -1,10 +1,9 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterState
-import cash.p.terminal.core.BalanceData
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ISendSolanaAdapter
 import cash.p.terminal.core.managers.SolanaKitWrapper
-import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.solanakit.SolanaKit
 import io.horizontalsystems.solanakit.models.Address
 import io.horizontalsystems.solanakit.models.FullTransaction
@@ -14,9 +13,9 @@ import kotlinx.coroutines.rx2.asFlowable
 import java.math.BigDecimal
 
 class SplAdapter(
-        solanaKitWrapper: SolanaKitWrapper,
-        wallet: Wallet,
-        private val mintAddressString: String
+    solanaKitWrapper: SolanaKitWrapper,
+    wallet: cash.p.terminal.wallet.Wallet,
+    private val mintAddressString: String
 ) : BaseSolanaAdapter(solanaKitWrapper, wallet.decimal), ISendSolanaAdapter {
 
     private val mintAddress = Address(mintAddressString)

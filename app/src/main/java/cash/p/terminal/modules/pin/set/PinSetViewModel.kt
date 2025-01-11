@@ -2,8 +2,7 @@ package cash.p.terminal.modules.pin.set
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.providers.Translator
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.pin.set.PinSetModule.PinSetViewState
 import cash.p.terminal.modules.pin.set.PinSetModule.SetStage.Confirm
@@ -70,7 +69,7 @@ class PinSetViewModel(
                 } else {
                     enteredPin = ""
 
-                    error = Translator.getString(R.string.PinSet_ErrorPinInUse)
+                    error = cash.p.terminal.strings.helpers.Translator.getString(R.string.PinSet_ErrorPinInUse)
                     emitState()
                 }
             }
@@ -101,7 +100,7 @@ class PinSetViewModel(
 
         stage = Enter
         reverseSlideAnimation = true
-        error = Translator.getString(errorMessage)
+        error = cash.p.terminal.strings.helpers.Translator.getString(errorMessage)
         viewModelScope.launch {
             delay(500)
             emitState()

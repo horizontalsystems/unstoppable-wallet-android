@@ -5,8 +5,8 @@ import android.os.Looper
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.solanakit.Signer
@@ -34,7 +34,7 @@ class SolanaKitManager(
     var solanaKitWrapper: SolanaKitWrapper? = null
 
     private var useCount = 0
-    var currentAccount: Account? = null
+    var currentAccount: cash.p.terminal.wallet.Account? = null
         private set
     private val solanaKitStoppedSubject = PublishSubject.create<Unit>()
 
@@ -51,7 +51,7 @@ class SolanaKitManager(
     }
 
     @Synchronized
-    fun getSolanaKitWrapper(account: Account): SolanaKitWrapper {
+    fun getSolanaKitWrapper(account: cash.p.terminal.wallet.Account): SolanaKitWrapper {
         if (this.solanaKitWrapper != null && currentAccount != account) {
             stopKit()
         }
@@ -59,10 +59,10 @@ class SolanaKitManager(
         if (this.solanaKitWrapper == null) {
             val accountType = account.type
             this.solanaKitWrapper = when (accountType) {
-                is AccountType.Mnemonic -> {
+                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
-                is AccountType.SolanaAddress -> {
+                is cash.p.terminal.wallet.AccountType.SolanaAddress -> {
                     createKitInstance(accountType, account)
                 }
                 else -> throw UnsupportedAccountException()
@@ -78,8 +78,8 @@ class SolanaKitManager(
     }
 
     private fun createKitInstance(
-        accountType: AccountType.Mnemonic,
-        account: Account
+        accountType: cash.p.terminal.wallet.AccountType.Mnemonic,
+        account: cash.p.terminal.wallet.Account
     ): SolanaKitWrapper {
         val seed = accountType.seed
         val address = Signer.address(seed)
@@ -97,8 +97,8 @@ class SolanaKitManager(
     }
 
     private fun createKitInstance(
-            accountType: AccountType.SolanaAddress,
-            account: Account
+        accountType: cash.p.terminal.wallet.AccountType.SolanaAddress,
+        account: cash.p.terminal.wallet.Account
     ): SolanaKitWrapper {
         val address = accountType.address
 
@@ -114,7 +114,7 @@ class SolanaKitManager(
     }
 
     @Synchronized
-    fun unlink(account: Account) {
+    fun unlink(account: cash.p.terminal.wallet.Account) {
         if (account == currentAccount) {
             useCount -= 1
 

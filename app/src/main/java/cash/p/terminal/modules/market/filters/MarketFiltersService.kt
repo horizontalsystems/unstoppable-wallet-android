@@ -1,14 +1,13 @@
 package cash.p.terminal.modules.market.filters
 
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.Currency
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.priceChangeValue
-import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.MarketInfo
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.models.Analytics.TechnicalAdvice.Advice
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.models.MarketInfo
 import io.reactivex.Single
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
@@ -158,7 +157,7 @@ class MarketFiltersService(
         return filterTradingSignal.contains(tokenAdvice)
     }
 
-    private fun inBlockchain(tokens: List<Token>): Boolean {
+    private fun inBlockchain(tokens: List<cash.p.terminal.wallet.Token>): Boolean {
         if (filterBlockchains.isEmpty()) return true
 
         tokens.forEach { token ->

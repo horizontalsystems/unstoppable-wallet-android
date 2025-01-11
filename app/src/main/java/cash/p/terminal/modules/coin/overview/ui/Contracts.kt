@@ -18,18 +18,36 @@ import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.coin.ContractInfo
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.*
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.CellSingleLineClear
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import io.horizontalsystems.core.RowUniversal
+import io.horizontalsystems.core.imageUrl
 
 @Preview
 @Composable
 fun ContractsPreview() {
     ComposeAppTheme(darkTheme = true) {
         val contracts = listOf(
-            ContractInfo("0xda123as34290098asd0098asdasd9098asd90123asd", BlockchainType.Ethereum.imageUrl,"https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd"),
-            ContractInfo("0x34290098asd8asdasd98asd8asdasd9098asd098as9", BlockchainType.BinanceChain.imageUrl,"https://bscscan.com/token/0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
-            ContractInfo("BNB", BlockchainType.BinanceSmartChain.imageUrl,"https://explorer.binance.org/asset/BNB"),
+            ContractInfo(
+                "0xda123as34290098asd0098asdasd9098asd90123asd",
+                BlockchainType.Ethereum.imageUrl,
+                "https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd"
+            ),
+            ContractInfo(
+                "0x34290098asd8asdasd98asd8asdasd9098asd098as9",
+                BlockchainType.BinanceChain.imageUrl,
+                "https://bscscan.com/token/0x34290098asd8asdasd98asd8asdasd9098asd098as9"
+            ),
+            ContractInfo(
+                "BNB",
+                BlockchainType.BinanceSmartChain.imageUrl,
+                "https://explorer.binance.org/asset/BNB"
+            ),
         )
         Contracts(contracts = contracts, {}, {})
     }

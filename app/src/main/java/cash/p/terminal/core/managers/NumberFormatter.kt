@@ -1,9 +1,8 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.R
-import cash.p.terminal.core.IAppNumberFormatter
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.modules.market.Value
+import io.horizontalsystems.core.IAppNumberFormatter
+import io.horizontalsystems.core.entities.Value
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.math.RoundingMode
@@ -12,13 +11,19 @@ import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
 class NumberFormatter(
-        private val languageManager: LanguageManager
-        ) : IAppNumberFormatter {
+    private val languageManager: LanguageManager
+) : IAppNumberFormatter {
 
     private var formatters = ConcurrentHashMap<String, NumberFormat>()
     private val numberRounding = NumberRounding()
 
-    override fun format(value: Number, minimumFractionDigits: Int, maximumFractionDigits: Int, prefix: String, suffix: String): String {
+    override fun format(
+        value: Number,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int,
+        prefix: String,
+        suffix: String
+    ): String {
         val bigDecimalValue = when (value) {
             is Double -> value.toBigDecimal()
             is Float -> value.toBigDecimal()
@@ -26,7 +31,11 @@ class NumberFormatter(
             else -> throw UnsupportedOperationException()
         }
 
-        val formatter = getFormatter(languageManager.currentLocale, minimumFractionDigits, maximumFractionDigits)
+        val formatter = getFormatter(
+            languageManager.currentLocale,
+            minimumFractionDigits,
+            maximumFractionDigits
+        )
 
         val mostLowValue = BigDecimal(BigInteger.ONE, maximumFractionDigits)
 
@@ -66,7 +75,11 @@ class NumberFormatter(
         return formatRounded(rounded = rounded, prefix = symbol, suffix = null)
     }
 
-    private fun formatRounded(rounded: BigDecimalRounded, prefix: String?, suffix: String?): String {
+    private fun formatRounded(
+        rounded: BigDecimalRounded,
+        prefix: String?,
+        suffix: String?
+    ): String {
         val formatter = getFormatter(languageManager.currentLocale, 0, Int.MAX_VALUE)
         var formattedNumber = formatter.format(rounded.value)
 
@@ -86,7 +99,11 @@ class NumberFormatter(
             LargeNumberName.Quadrillion -> R.string.CoinPage_MarketCap_Quadrillion
             else -> null
         }?.let {
-            formattedNumber = Translator.getString(R.string.LargeNumberFormat, formattedNumber, Translator.getString(it))
+            formattedNumber = cash.p.terminal.strings.helpers.Translator.getString(
+                R.string.LargeNumberFormat,
+                formattedNumber,
+                cash.p.terminal.strings.helpers.Translator.getString(it)
+            )
         }
 
         suffix?.let {
@@ -96,7 +113,11 @@ class NumberFormatter(
         return formattedNumber
     }
 
-    private fun getFormatter(locale: Locale, minimumFractionDigits: Int, maximumFractionDigits: Int): NumberFormat {
+    private fun getFormatter(
+        locale: Locale,
+        minimumFractionDigits: Int,
+        maximumFractionDigits: Int
+    ): NumberFormat {
         val formatterId = "${locale.language}-$minimumFractionDigits-$maximumFractionDigits"
 
         if (formatters[formatterId] == null) {
@@ -115,9 +136,14 @@ class NumberFormatter(
         when (value) {
             is Value.Currency -> {
                 val currencyValue = value.currencyValue
-                val formatted = formatFiatShort(currencyValue.value.abs(), currencyValue.currency.symbol, currencyValue.currency.decimal)
+                val formatted = formatFiatShort(
+                    currencyValue.value.abs(),
+                    currencyValue.currency.symbol,
+                    currencyValue.currency.decimal
+                )
                 sign(value.currencyValue.value) + formatted
             }
+
             is Value.Percent -> {
                 format(value.percent.abs(), 0, 2, sign(value.percent), "%")
             }

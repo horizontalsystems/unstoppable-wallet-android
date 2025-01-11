@@ -3,12 +3,12 @@ package cash.p.terminal.modules.pin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
+import cash.p.terminal.wallet.IAccountManager
 import io.horizontalsystems.core.ISystemInfoManager
 
 class SetDuressPinIntroViewModel(
     systemInfoManager: ISystemInfoManager,
-    accountManager: IAccountManager,
+    accountManager: cash.p.terminal.wallet.IAccountManager,
 ) : ViewModel() {
     val biometricAuthSupported = systemInfoManager.biometricAuthSupported
     val shouldShowSelectAccounts = accountManager.accounts.isNotEmpty()

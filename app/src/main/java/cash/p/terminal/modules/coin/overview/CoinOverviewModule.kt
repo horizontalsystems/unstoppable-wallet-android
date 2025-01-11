@@ -3,16 +3,16 @@ package cash.p.terminal.modules.coin.overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterSignificant
-import cash.p.terminal.modules.chart.ChartModule
-import cash.p.terminal.modules.chart.ChartViewModel
+import io.horizontalsystems.chartview.chart.ChartCurrencyValueFormatterSignificant
+import io.horizontalsystems.chartview.chart.ChartModule
+import io.horizontalsystems.chartview.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinDataItem
 import cash.p.terminal.modules.coin.CoinLink
 import cash.p.terminal.modules.coin.CoinViewFactory
 import cash.p.terminal.modules.coin.RoiViewItem
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.MarketInfoOverview
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.models.MarketInfoOverview
 
 object CoinOverviewModule {
 

@@ -8,11 +8,12 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.core.title
-import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.ui.extensions.BottomSheetSelectorMultipleDialog
 import cash.p.terminal.ui.extensions.BottomSheetSelectorViewItem
+import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -43,7 +44,7 @@ class BlockchainTokensViewModel(
         val config = BottomSheetSelectorMultipleDialog.Config(
             icon = ImageSource.Remote(blockchain.type.imageUrl, R.drawable.ic_platform_placeholder_32),
             title = blockchain.name,
-            description = Translator.getString(R.string.AddressFormatSettings_Description),
+            description = cash.p.terminal.strings.helpers.Translator.getString(R.string.AddressFormatSettings_Description),
             selectedIndexes = selectedTokenIndexes,
             allowEmpty = request.allowEmpty,
             viewItems = request.tokens.map { token ->

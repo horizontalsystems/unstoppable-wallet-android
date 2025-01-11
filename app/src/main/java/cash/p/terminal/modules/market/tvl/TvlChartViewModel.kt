@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.market.tvl
 
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
-import cash.p.terminal.modules.chart.ChartViewModel
+import io.horizontalsystems.chartview.chart.ChartViewModel
 
 class TvlChartViewModel(
     private val tvlChartService: TvlChartService,

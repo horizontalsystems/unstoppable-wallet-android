@@ -2,12 +2,11 @@ package cash.p.terminal.modules.market.platform
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.iconUrl
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.market.ImageSource
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.MarketViewItem
@@ -38,8 +37,8 @@ class MarketPlatformViewModel(
     private var isRefreshing = false
 
     val header = MarketModule.Header(
-        Translator.getString(R.string.MarketPlatformCoins_PlatformEcosystem, platform.name),
-        Translator.getString(
+        cash.p.terminal.strings.helpers.Translator.getString(R.string.MarketPlatformCoins_PlatformEcosystem, platform.name),
+        cash.p.terminal.strings.helpers.Translator.getString(
             R.string.MarketPlatformCoins_PlatformEcosystemDescription,
             platform.name
         ),

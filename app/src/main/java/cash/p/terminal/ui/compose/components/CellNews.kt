@@ -9,7 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.captionSB_grey
+import cash.p.terminal.ui_compose.components.headline2_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -28,7 +31,7 @@ fun CellNews(
             .padding(horizontal = 16.dp),
         elevation = 0.dp,
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = ComposeAppTheme.colors.lawrence,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence,
         onClick = { onClick.invoke() }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

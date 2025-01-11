@@ -8,19 +8,19 @@ import cash.p.terminal.entities.transactionrecords.solana.SolanaIncomingTransact
 import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaTransactionRecord
 import cash.p.terminal.entities.transactionrecords.solana.SolanaUnknownTransactionRecord
-import cash.p.terminal.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.solanakit.models.FullTransaction
 import java.math.BigDecimal
 
 class SolanaTransactionConverter(
-        private val coinManager: ICoinManager,
-        private val source: TransactionSource,
-        private val baseToken: Token,
-        solanaKitWrapper: SolanaKitWrapper
+    private val coinManager: ICoinManager,
+    private val source: TransactionSource,
+    private val baseToken: Token,
+    solanaKitWrapper: SolanaKitWrapper
 ) {
     private val userAddress = solanaKitWrapper.solanaKit.receiveAddress
 

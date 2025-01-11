@@ -3,12 +3,12 @@ package cash.p.terminal.modules.nft.collection.events
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.core.providers.nft.NftEventsProvider
 import cash.p.terminal.core.providers.nft.PaginationData
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.nft.NftEventMetadata
-import cash.p.terminal.modules.balance.BalanceXRateRepository
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
 import cash.p.terminal.modules.coin.ContractInfo
 import cash.p.terminal.modules.market.overview.coinValue
-import io.horizontalsystems.marketkit.models.CoinPrice
+import cash.p.terminal.wallet.models.CoinPrice
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.rx2.asFlow
@@ -18,7 +18,7 @@ class NftCollectionEventsService(
     private val eventListType: NftEventListType,
     eventType: NftEventMetadata.EventType,
     private val nftEventsProvider: NftEventsProvider,
-    private val xRateRepository: BalanceXRateRepository
+    private val xRateRepository: DefaultBalanceXRateRepository
 ) {
     var items: Result<List<Item>>? = null
     val itemsUpdatedFlow = MutableSharedFlow<Unit>()

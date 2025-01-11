@@ -8,7 +8,7 @@ import cash.p.terminal.entities.EvmSyncSource
 import cash.p.terminal.entities.EvmSyncSourceRecord
 import io.horizontalsystems.ethereumkit.models.RpcSource
 import io.horizontalsystems.ethereumkit.models.TransactionSource
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.channels.BufferOverflow

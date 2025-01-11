@@ -1,10 +1,10 @@
 package cash.p.terminal.modules.market.posts
 
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.entities.DataState
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
-import io.horizontalsystems.marketkit.models.Post
+import cash.p.terminal.wallet.models.Post
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +18,7 @@ class MarketPostService(
     private val marketKit: MarketKitWrapper,
     private val backgroundManager: BackgroundManager,
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var job: Job? = null
 
     private val stateSubject = BehaviorSubject.create<DataState<List<Post>>>()

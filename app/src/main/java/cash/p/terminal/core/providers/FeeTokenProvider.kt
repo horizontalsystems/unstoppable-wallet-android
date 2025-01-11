@@ -1,10 +1,10 @@
 package cash.p.terminal.core.providers
 
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.core.protocolType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.protocolType
 
 class FeeTokenProvider(
     private val marketKit: MarketKitWrapper

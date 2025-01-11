@@ -10,11 +10,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.cell.CellUniversal
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.HSpacer
+import io.horizontalsystems.chartview.cell.CellUniversal
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
 
 @Composable
 fun QuoteInfoRow(
@@ -34,7 +33,7 @@ fun QuoteInfoRow(
 @Preview
 @Composable
 fun QuoteInfoRowPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         QuoteInfoRow(
             title = {
                 subhead2_grey(text = stringResource(R.string.Swap_Recipient))

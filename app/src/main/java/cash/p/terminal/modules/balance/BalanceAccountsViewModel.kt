@@ -5,10 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.ActiveAccountState
+import cash.p.terminal.wallet.IAccountManager
 import cash.z.ecc.android.sdk.ext.collectWith
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.managers.ActiveAccountState
-import cash.p.terminal.entities.AccountType
 
 class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
 
@@ -28,10 +28,10 @@ class BalanceAccountsViewModel(accountManager: IAccountManager) : ViewModel() {
                 balanceScreenState = if (activeAccountState.account != null) {
                     BalanceScreenState.HasAccount(
                         AccountViewItem(
-                            activeAccountState.account.isWatchAccount,
-                            activeAccountState.account.name,
-                            activeAccountState.account.id,
-                            activeAccountState.account.type
+                            activeAccountState.account!!.isWatchAccount,
+                            activeAccountState.account!!.name,
+                            activeAccountState.account!!.id,
+                            activeAccountState.account!!.type
                         )
                     )
                 } else {

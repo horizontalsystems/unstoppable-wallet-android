@@ -3,14 +3,14 @@ package cash.p.terminal.modules.coin.investments
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.IAppNumberFormatter
+import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.core.logoUrl
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsModule.ViewItem
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.CoinInvestment
+import cash.p.terminal.wallet.models.CoinInvestment
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch

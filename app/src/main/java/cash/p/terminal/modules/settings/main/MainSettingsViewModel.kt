@@ -2,17 +2,15 @@ package cash.p.terminal.modules.settings.main
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ITermsManager
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.CurrencyManager
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
+import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import kotlinx.coroutines.launch
@@ -26,7 +24,7 @@ class MainSettingsViewModel(
     private val pinComponent: IPinComponent,
     private val wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val appConfigProvider: AppConfigProvider,
     private val languageManager: LanguageManager,
     private val currencyManager: CurrencyManager,
@@ -35,7 +33,7 @@ class MainSettingsViewModel(
     val appVersion: String
         get() {
             var appVersion = systemInfoManager.appVersion
-            if (Translator.getString(R.string.is_release) == "false") {
+            if (cash.p.terminal.strings.helpers.Translator.getString(R.string.is_release) == "false") {
                 appVersion += " (${appConfigProvider.appBuild})"
             }
 

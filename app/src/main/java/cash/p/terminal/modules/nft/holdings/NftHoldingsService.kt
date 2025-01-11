@@ -4,13 +4,12 @@ import cash.p.terminal.core.adapters.nft.INftAdapter
 import cash.p.terminal.core.managers.NftAdapterManager
 import cash.p.terminal.core.managers.NftMetadataManager
 import cash.p.terminal.core.managers.NftMetadataSyncer
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.nft.*
-import cash.p.terminal.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.NftPrice
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.models.CoinPrice
+import cash.p.terminal.wallet.models.NftPrice
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,11 +18,11 @@ import kotlinx.coroutines.rx2.collect
 import java.util.concurrent.Executors
 
 class NftHoldingsService(
-    private val account: Account,
+    private val account: cash.p.terminal.wallet.Account,
     private val nftAdapterManager: NftAdapterManager,
     private val nftMetadataManager: NftMetadataManager,
     private val nftMetadataSyncer: NftMetadataSyncer,
-    private val xRateRepository: BalanceXRateRepository
+    private val xRateRepository: DefaultBalanceXRateRepository
 ) {
     var priceType: PriceType = PriceType.LastSale
         private set

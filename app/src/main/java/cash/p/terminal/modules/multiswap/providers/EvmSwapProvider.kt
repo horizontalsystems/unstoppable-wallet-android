@@ -6,11 +6,11 @@ import cash.p.terminal.entities.transactionrecords.evm.ApproveTransactionRecord
 import cash.p.terminal.modules.multiswap.action.ActionApprove
 import cash.p.terminal.modules.multiswap.action.ActionRevoke
 import cash.p.terminal.modules.multiswap.action.ISwapProviderAction
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.rx2.await
 import java.math.BigDecimal
 

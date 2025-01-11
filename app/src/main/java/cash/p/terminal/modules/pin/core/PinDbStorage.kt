@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import cash.p.terminal.core.storage.SecretString
+import cash.p.terminal.wallet.entities.SecretString
 
 class PinDbStorage(private val pinDao: PinDao) {
 

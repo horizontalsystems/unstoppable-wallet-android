@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.market.favorites
 
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.Currency
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.market.MarketItem
 import cash.p.terminal.modules.market.filters.TimePeriod
 import kotlinx.coroutines.rx2.await

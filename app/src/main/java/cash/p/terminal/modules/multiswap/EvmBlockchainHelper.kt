@@ -2,7 +2,7 @@ package cash.p.terminal.modules.multiswap
 
 import cash.p.terminal.core.App
 import io.horizontalsystems.ethereumkit.models.RpcSource
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class EvmBlockchainHelper(private val blockchainType: BlockchainType) {
     val chain by lazy { App.evmBlockchainManager.getChain(blockchainType) }

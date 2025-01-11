@@ -3,7 +3,7 @@ package cash.p.terminal.modules.restoreaccount.restoremnemonic
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.AccountType
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.hdwalletkit.Language
 
 object RestoreMnemonicModule {
@@ -24,7 +24,7 @@ object RestoreMnemonicModule {
         val passphraseError: String?,
         val invalidWordRanges: List<IntRange>,
         val error: String?,
-        val accountType: AccountType?,
+        val accountType: cash.p.terminal.wallet.AccountType?,
         val wordSuggestions: WordSuggestions?,
         val language: Language,
     )

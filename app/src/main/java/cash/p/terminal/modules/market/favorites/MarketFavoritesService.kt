@@ -1,6 +1,5 @@
 package cash.p.terminal.modules.market.favorites
 
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.market.MarketItem
@@ -9,9 +8,10 @@ import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.category.MarketItemWrapper
 import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.modules.market.sort
+import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
-import io.horizontalsystems.marketkit.models.Analytics
+import cash.p.terminal.wallet.models.Analytics
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CancellationException

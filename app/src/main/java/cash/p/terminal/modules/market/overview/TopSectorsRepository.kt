@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.market.overview
 
 import cash.p.terminal.core.App
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.market.search.MarketSearchModule
 import cash.p.terminal.modules.market.search.MarketSearchModule.DiscoveryItem.Category
-import cash.p.terminal.entities.Currency
-import io.horizontalsystems.marketkit.models.CoinCategory
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.wallet.models.CoinCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -43,8 +43,8 @@ class TopSectorsRepository(
     companion object {
 
         fun getCategoryMarketData(
-                coinCategory: CoinCategory,
-                baseCurrency: Currency
+            coinCategory: CoinCategory,
+            baseCurrency: Currency
         ): MarketSearchModule.CategoryMarketData? {
             val marketCap = coinCategory.marketCap?.let { marketCap ->
                 App.numberFormatter.formatFiatShort(marketCap, baseCurrency.symbol, 2)

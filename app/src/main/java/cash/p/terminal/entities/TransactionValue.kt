@@ -2,12 +2,12 @@ package cash.p.terminal.entities
 
 import cash.p.terminal.R
 import cash.p.terminal.core.alternativeImageUrl
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.entities.nft.NftUid
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.badge
+import cash.p.terminal.wallet.entities.Coin
 import java.math.BigDecimal
 import java.math.BigInteger
 

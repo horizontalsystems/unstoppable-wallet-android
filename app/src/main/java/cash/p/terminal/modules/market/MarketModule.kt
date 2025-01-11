@@ -1,25 +1,22 @@
 package cash.p.terminal.modules.market
 
 import android.os.Parcelable
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.market.filters.TimePeriod
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.MarketGlobal
-import io.horizontalsystems.marketkit.models.MarketInfo
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
+import cash.p.terminal.ui_compose.components.ImageSource
+import io.horizontalsystems.core.entities.Value
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.models.MarketGlobal
+import cash.p.terminal.wallet.models.MarketInfo
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -151,40 +148,6 @@ enum class TopMarket(val value: Int, val titleResId: Int) : WithTranslatableTitl
 
     override val title: TranslatableString
         get() = TranslatableString.ResString(titleResId)
-}
-
-sealed class ImageSource {
-    class Local(@DrawableRes val resId: Int) : ImageSource()
-    class Remote(
-        val url: String,
-        @DrawableRes
-        val placeholder: Int = R.drawable.ic_placeholder,
-        val alternativeUrl: String? = null
-    ) : ImageSource()
-
-    @Composable
-    fun painter(): Painter = when (this) {
-        is Local -> painterResource(resId)
-        is Remote -> rememberAsyncImagePainter(
-            model = url,
-            error = alternativeUrl?.let {
-                rememberAsyncImagePainter(
-                    model = alternativeUrl,
-                    error = painterResource(placeholder)
-                )
-            } ?: painterResource(placeholder)
-        )
-    }
-}
-
-sealed class Value {
-    class Percent(val percent: BigDecimal) : Value()
-    class Currency(val currencyValue: CurrencyValue) : Value()
-
-    fun raw() = when (this) {
-        is Currency -> currencyValue.value
-        is Percent -> percent
-    }
 }
 
 sealed class MarketDataValue {

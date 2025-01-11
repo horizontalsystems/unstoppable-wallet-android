@@ -8,9 +8,8 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.uris
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.EvmSyncSource
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -47,7 +46,7 @@ class EvmNetworkViewModel(
             val url = if (evmSyncSource.rpcSource.uris.size == 1)
                 evmSyncSource.rpcSource.uris.first().toString()
             else
-                Translator.getString(R.string.NetworkSettings_SwithesAutomatically)
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.NetworkSettings_SwithesAutomatically)
 
             val currentSyncSourceId = currentSyncSource.id
 

@@ -3,8 +3,8 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +39,7 @@ class TransactionRecordRepository(
     private var allLoaded = AtomicBoolean(false)
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var updatesJob: Job? = null
 
     private var transactionWallets: List<TransactionWallet> = listOf()

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.twitter.twittertext.Extractor
 import cash.p.terminal.core.App
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.entities.FullCoin
 
 object CoinTweetsModule {
     class Factory(private val fullCoin: FullCoin) : ViewModelProvider.Factory {

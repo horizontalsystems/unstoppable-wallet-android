@@ -1,36 +1,34 @@
 package cash.p.terminal.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.balance.BackupRequiredError
-import cash.p.terminal.modules.balance.BalanceModule
+import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewModel
-import cash.p.terminal.modules.balance.BalanceViewType
+import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.badge
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class TokenBalanceViewModel(
-    private val wallet: Wallet,
+    private val wallet: cash.p.terminal.wallet.Wallet,
     private val balanceService: TokenBalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val transactionsService: TokenTransactionsService,
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
-    private val accountManager: IAccountManager
+    private val accountManager: cash.p.terminal.wallet.IAccountManager
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
@@ -84,13 +82,13 @@ class TokenBalanceViewModel(
         emitState()
     }
 
-    private fun updateBalanceViewItem(balanceItem: BalanceModule.BalanceItem) {
+    private fun updateBalanceViewItem(balanceItem: BalanceItem) {
         val balanceViewItem = balanceViewItemFactory.viewItem(
-            balanceItem,
-            balanceService.baseCurrency,
-            balanceHiddenManager.balanceHidden,
-            wallet.account.isWatchAccount,
-            BalanceViewType.CoinThenFiat
+            item = balanceItem,
+            currency = balanceService.baseCurrency,
+            hideBalance = balanceHiddenManager.balanceHidden,
+            watchAccount = wallet.account.isWatchAccount,
+            balanceViewType = BalanceViewType.CoinThenFiat
         )
 
         this.balanceViewItem = balanceViewItem.copy(
@@ -101,7 +99,7 @@ class TokenBalanceViewModel(
     }
 
     @Throws(BackupRequiredError::class, IllegalStateException::class)
-    fun getWalletForReceive(): Wallet {
+    fun getWalletForReceive(): cash.p.terminal.wallet.Wallet {
         val account = accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
         when {
             account.hasAnyBackup -> return wallet

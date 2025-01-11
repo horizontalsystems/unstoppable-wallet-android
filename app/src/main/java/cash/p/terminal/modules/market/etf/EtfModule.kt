@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.TimeDuration
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
-import io.horizontalsystems.marketkit.models.Etf
-import io.horizontalsystems.marketkit.models.EtfPoint
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
+import cash.p.terminal.wallet.models.Etf
+import cash.p.terminal.wallet.models.EtfPoint
 
 object EtfModule {
 

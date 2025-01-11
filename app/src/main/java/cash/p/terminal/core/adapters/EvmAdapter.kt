@@ -1,8 +1,8 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BalanceData
+import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.managers.EvmKitWrapper
 import io.horizontalsystems.ethereumkit.core.EthereumKit

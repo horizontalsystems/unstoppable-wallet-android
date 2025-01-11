@@ -1,24 +1,22 @@
 package cash.p.terminal.modules.addtoken
 
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.ICoinManager
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.core.order
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.Wallet
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.Blockchain
+import cash.p.terminal.wallet.entities.TokenType
 
 class AddTokenService(
     private val coinManager: ICoinManager,
     private val walletManager: IWalletManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     marketKit: MarketKitWrapper,
 ) {
 
@@ -81,7 +79,7 @@ class AddTokenService(
 
     fun addToken(token: TokenInfo) {
         val account = accountManager.activeAccount ?: return
-        val wallet = Wallet(token.token, account)
+        val wallet = cash.p.terminal.wallet.Wallet(token.token, account)
         walletManager.save(listOf(wallet))
 
         stat(page = StatPage.AddToken, event = StatEvent.AddToken(token.token))

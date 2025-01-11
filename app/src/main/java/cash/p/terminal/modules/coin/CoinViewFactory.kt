@@ -2,27 +2,19 @@ package cash.p.terminal.modules.coin
 
 import androidx.annotation.DrawableRes
 import cash.p.terminal.R
-import cash.p.terminal.core.IAppNumberFormatter
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.shorten
-import cash.p.terminal.entities.Currency
+import io.horizontalsystems.core.IAppNumberFormatter
+import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.coin.overview.CoinOverviewItem
 import cash.p.terminal.modules.coin.overview.CoinOverviewViewItem
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.chartview.ChartData
+import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.LinkType
-import io.horizontalsystems.marketkit.models.MarketInfoOverview
-import io.horizontalsystems.marketkit.models.TokenHolders
+import io.horizontalsystems.core.models.HsTimePeriod
+import cash.p.terminal.wallet.models.LinkType
+import cash.p.terminal.wallet.models.MarketInfoOverview
+import cash.p.terminal.wallet.models.TokenHolders
 import java.math.BigDecimal
 import java.net.URI
-
-data class ChartInfoData(
-    val chartData: ChartData,
-    val maxValue: String?,
-    val minValue: String?
-)
 
 data class MarketTickerViewItem(
     val market: String,
@@ -45,6 +37,7 @@ sealed class RoiViewItem {
         val values: List<BigDecimal?>,
     ) : RoiViewItem()
 }
+
 open class ContractInfo(
     val rawValue: String,
     val imgUrl: String,
@@ -111,9 +104,10 @@ class CoinViewFactory(
         )
     }
 
-    fun getTop10Share(number: BigDecimal) : String = numberFormatter.format(number, 0, 2, suffix = "%",)
+    fun getTop10Share(number: BigDecimal): String =
+        numberFormatter.format(number, 0, 2, suffix = "%")
 
-    fun getHoldersCount(number: BigDecimal) : String = numberFormatter.formatNumberShort(number, 2)
+    fun getHoldersCount(number: BigDecimal): String = numberFormatter.formatNumberShort(number, 2)
 
     fun getCoinMajorHolders(tokenHolders: TokenHolders): List<MajorHolderItem> {
         val list = mutableListOf<MajorHolderItem>()
@@ -147,46 +141,79 @@ class CoinViewFactory(
         overview.marketCap?.let {
             val marketCapString = formatFiatShortened(it, currency.symbol)
             val marketCapRankString = overview.marketCapRank?.let { "#$it" }
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_MarketCap),
-                marketCapString,
-                rankLabel = marketCapRankString))
+            items.add(
+                CoinDataItem(
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_MarketCap),
+                    marketCapString,
+                    rankLabel = marketCapRankString
+                )
+            )
         }
         overview.totalSupply?.let {
-            val totalSupplyString = numberFormatter.formatCoinShort(it,
+            val totalSupplyString = numberFormatter.formatCoinShort(
+                it,
                 item.coinCode,
-                8)
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TotalSupply),
-                totalSupplyString))
+                8
+            )
+            items.add(
+                CoinDataItem(
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_TotalSupply),
+                    totalSupplyString
+                )
+            )
         }
         overview.circulatingSupply?.let {
-            val supplyString = numberFormatter.formatCoinShort(it,
+            val supplyString = numberFormatter.formatCoinShort(
+                it,
                 item.coinCode,
-                8)
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_inCirculation),
-                supplyString))
+                8
+            )
+            items.add(
+                CoinDataItem(
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_inCirculation),
+                    supplyString
+                )
+            )
         }
 
         overview.volume24h?.let {
             val volumeString = formatFiatShortened(it, currency.symbol)
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_TradingVolume),
-                volumeString))
+            items.add(
+                CoinDataItem(
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_TradingVolume),
+                    volumeString
+                )
+            )
         }
 
         overview.tvl?.let {
             val tvlString = formatFiatShortened(it, currency.symbol)
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_Tvl), tvlString))
+            items.add(
+                CoinDataItem(
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Tvl),
+                    tvlString
+                )
+            )
         }
 
         overview.dilutedMarketCap?.let {
             val dilutedMarketCapString = formatFiatShortened(it, currency.symbol)
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_DilutedMarketCap),
-                dilutedMarketCapString))
+            items.add(
+                CoinDataItem(
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_DilutedMarketCap),
+                    dilutedMarketCapString
+                )
+            )
         }
 
         overview.genesisDate?.let {
             val genesisDateString = DateHelper.formatDate(it, "MMM d, yyyy")
-            items.add(CoinDataItem(Translator.getString(R.string.CoinPage_LaunchDate),
-                genesisDateString))
+            items.add(
+                CoinDataItem(
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_LaunchDate),
+                    genesisDateString
+                )
+            )
         }
 
         return items
@@ -237,19 +264,21 @@ class CoinViewFactory(
 
     private fun getTitle(linkType: LinkType, link: String? = null): String {
         return when (linkType) {
-            LinkType.Guide -> Translator.getString(R.string.CoinPage_Guide)
+            LinkType.Guide -> cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Guide)
             LinkType.Website -> {
                 link?.let { URI(it).host.replaceFirst("www.", "") }
-                    ?: Translator.getString(R.string.CoinPage_Website)
+                    ?: cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Website)
             }
-            LinkType.Whitepaper -> Translator.getString(R.string.CoinPage_Whitepaper)
+
+            LinkType.Whitepaper -> cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Whitepaper)
             LinkType.Twitter -> {
                 link?.split("/")?.lastOrNull()?.replaceFirst("@", "")?.let { "@$it" }
-                    ?: Translator.getString(R.string.CoinPage_Twitter)
+                    ?: cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Twitter)
             }
-            LinkType.Telegram -> Translator.getString(R.string.CoinPage_Telegram)
-            LinkType.Reddit -> Translator.getString(R.string.CoinPage_Reddit)
-            LinkType.Github -> Translator.getString(R.string.CoinPage_Github)
+
+            LinkType.Telegram -> cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Telegram)
+            LinkType.Reddit -> cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Reddit)
+            LinkType.Github -> cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_Github)
 //            LinkType.YOUTUBE -> Translator.getString(R.string.CoinPage_Youtube)
         }
     }

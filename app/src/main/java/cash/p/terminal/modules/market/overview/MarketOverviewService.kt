@@ -1,14 +1,14 @@
 package cash.p.terminal.modules.market.overview
 
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.market.topcoins.MarketTopMoversRepository
+import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
-import io.horizontalsystems.marketkit.models.MarketOverview
-import io.horizontalsystems.marketkit.models.TopMovers
+import cash.p.terminal.wallet.models.MarketOverview
+import cash.p.terminal.wallet.models.TopMovers
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ class MarketOverviewService(
     private val backgroundManager: BackgroundManager,
     private val currencyManager: CurrencyManager
 ) {
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var topMoversJob: Job? = null
     private var marketOverviewJob: Job? = null
 

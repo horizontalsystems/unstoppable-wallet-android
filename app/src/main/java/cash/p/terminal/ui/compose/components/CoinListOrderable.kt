@@ -34,7 +34,7 @@ import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -104,7 +104,7 @@ fun CoinListOrderable(
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .background(if (item.favorited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                            .background(if (item.favorited) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob)
                             .align(Alignment.CenterEnd)
                             .width(100.dp)
                             .clickable {

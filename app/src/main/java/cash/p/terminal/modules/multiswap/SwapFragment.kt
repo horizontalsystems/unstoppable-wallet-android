@@ -49,63 +49,66 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.badge
-import cash.p.terminal.core.getInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.slideFromBottomForResult
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
-import cash.p.terminal.ui.compose.ColoredTextStyle
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.navigation.entity.SwapParams
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.Keyboard
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.CardsSwapInfo
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HFillSpacer
 import cash.p.terminal.ui.compose.components.HSRow
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.MenuItemTimeoutIndicator
 import cash.p.terminal.ui.compose.components.TextImportantError
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_grey
-import cash.p.terminal.ui.compose.components.headline1_grey
-import cash.p.terminal.ui.compose.components.headline1_leah
-import cash.p.terminal.ui.compose.components.micro_grey
-import cash.p.terminal.ui.compose.components.subhead1_jacob
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
 import cash.p.terminal.ui.compose.observeKeyboardState
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.HFillSpacer
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.MenuItemTimeoutIndicator
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.components.headline1_grey
+import cash.p.terminal.ui_compose.components.headline1_leah
+import cash.p.terminal.ui_compose.components.micro_grey
+import cash.p.terminal.ui_compose.components.subhead1_jacob
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ColoredTextStyle
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.badge
+import io.horizontalsystems.core.parcelable
 import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SwapFragment : BaseComposeFragment() {
     @Composable
     override fun GetContent(navController: NavController) {
-        SwapScreen(navController, navController.getInput())
+        val tokeIn: Token? = navController.currentBackStackEntry?.arguments?.parcelable(SwapParams.TOKEN_IN)
+        val tokeOut: Token? = navController.currentBackStackEntry?.arguments?.parcelable(SwapParams.TOKEN_OUT)
+        SwapScreen(navController = navController, tokenIn = tokeIn, tokenOut = tokeOut)
     }
 }
 
 @Composable
-fun SwapScreen(navController: NavController, tokenIn: Token?) {
+fun SwapScreen(navController: NavController, tokenIn: Token?, tokenOut: Token?) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        factory = SwapViewModel.Factory(tokenIn)
+        factory = SwapViewModel.Factory(tokenIn, tokenOut)
     )
     val uiState = viewModel.uiState
     val context = LocalContext.current
@@ -207,7 +210,7 @@ private fun SwapScreenInner(
                 }
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
     ) {
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
@@ -735,7 +738,8 @@ private fun FiatAmountInput(
             },
             enabled = enabled,
             textStyle = ColoredTextStyle(
-                color = ComposeAppTheme.colors.grey, textStyle = ComposeAppTheme.typography.body
+                color = ComposeAppTheme.colors.grey,
+                textStyle = ComposeAppTheme.typography.body
             ),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -836,7 +840,8 @@ private fun AmountInput(
             }
         },
         textStyle = ColoredTextStyle(
-            color = ComposeAppTheme.colors.leah, textStyle = ComposeAppTheme.typography.headline1
+            color = ComposeAppTheme.colors.leah,
+            textStyle = ComposeAppTheme.typography.headline1
         ),
         singleLine = true,
         keyboardOptions = KeyboardOptions(
@@ -855,10 +860,10 @@ private fun AmountInput(
 @Composable
 fun getPriceImpactColor(priceImpactLevel: PriceImpactLevel?): Color {
     return when (priceImpactLevel) {
-        PriceImpactLevel.Normal -> ComposeAppTheme.colors.jacob
+        PriceImpactLevel.Normal -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
         PriceImpactLevel.Warning,
-        PriceImpactLevel.Forbidden -> ComposeAppTheme.colors.lucian
+        PriceImpactLevel.Forbidden -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
 
-        else -> ComposeAppTheme.colors.grey
+        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey
     }
 }

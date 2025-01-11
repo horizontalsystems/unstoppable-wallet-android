@@ -4,9 +4,8 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.isCustom
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatSection
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
@@ -24,8 +23,10 @@ import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.TransactionViewItem
+import cash.p.terminal.ui_compose.ColorName
+import cash.p.terminal.ui_compose.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
@@ -38,7 +39,7 @@ object TransactionViewItemFactoryHelper {
     private val evmLabelManager = App.evmLabelManager
 
     fun getMemoItem(memo: String) =
-        TransactionInfoViewItem.Value(Translator.getString(R.string.TransactionInfo_Memo), memo)
+        TransactionInfoViewItem.Value(cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Memo), memo)
 
     private fun getFeeAmountString(
         rate: CurrencyValue?,
@@ -66,7 +67,7 @@ object TransactionViewItemFactoryHelper {
         return lockState?.let {
             val leftIcon = if (it.locked) R.drawable.ic_lock_20 else R.drawable.ic_unlock_20
             val date = DateHelper.getFullDate(it.date)
-            val title = Translator.getString(
+            val title = cash.p.terminal.strings.helpers.Translator.getString(
                 if (it.locked) R.string.TransactionInfo_LockedUntil else R.string.TransactionInfo_UnlockedAt,
                 date
             )
@@ -81,7 +82,7 @@ object TransactionViewItemFactoryHelper {
         val feeAmountString = getFeeAmountString(rate, transactionValue)
 
         return TransactionInfoViewItem.Value(
-            Translator.getString(R.string.TransactionInfo_Fee),
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Fee),
             feeAmountString
         )
     }
@@ -93,11 +94,11 @@ object TransactionViewItemFactoryHelper {
     ): TransactionInfoViewItem {
         val feeAmountString = getFeeAmountString(rate, transactionValue)
         val feeTitle: String = when (status) {
-            TransactionStatus.Pending -> Translator.getString(R.string.TransactionInfo_FeeEstimated)
+            TransactionStatus.Pending -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_FeeEstimated)
             is TransactionStatus.Processing,
             TransactionStatus.Failed,
             TransactionStatus.Completed,
-                -> Translator.getString(R.string.TransactionInfo_Fee)
+                -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Fee)
         }
 
         return TransactionInfoViewItem.Value(feeTitle, feeAmountString)
@@ -181,7 +182,7 @@ object TransactionViewItemFactoryHelper {
                     numberFormatter.formatCoinFull(decimalValue.abs(), value.coinCode, 8)
                 if (amount is SwapTransactionRecord.Amount.Extremum && incoming != null) {
                     val suffix =
-                        if (incoming) Translator.getString(R.string.Swap_AmountMin) else Translator.getString(
+                        if (incoming) cash.p.terminal.strings.helpers.Translator.getString(R.string.Swap_AmountMin) else cash.p.terminal.strings.helpers.Translator.getString(
                             R.string.Swap_AmountMax
                         )
                     "$sign$valueWithCoinCode $suffix"
@@ -222,14 +223,14 @@ object TransactionViewItemFactoryHelper {
             "---"
         } else {
             val rateFormatted = numberFormatter.formatFiatFull(rate.value, rate.currency.symbol)
-            Translator.getString(
+            cash.p.terminal.strings.helpers.Translator.getString(
                 R.string.Balance_RatePerCoin,
                 rateFormatted,
                 transactionValue.coinCode
             )
         }
         return TransactionInfoViewItem.Value(
-            Translator.getString(R.string.TransactionInfo_HistoricalRate),
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_HistoricalRate),
             rateValue
         )
     }
@@ -244,7 +245,7 @@ object TransactionViewItemFactoryHelper {
     ): List<TransactionInfoViewItem> {
         val mint = fromAddress == zeroAddress
         val title: String =
-            if (mint) Translator.getString(R.string.Transactions_Mint) else Translator.getString(R.string.Transactions_Receive)
+            if (mint) cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_Mint) else cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_Receive)
 
         val amount: TransactionInfoViewItem
         val rate: TransactionInfoViewItem?
@@ -269,7 +270,7 @@ object TransactionViewItemFactoryHelper {
             val contact = getContact(fromAddress, blockchainType)
             items.add(
                 TransactionInfoViewItem.Address(
-                    Translator.getString(R.string.TransactionInfo_From),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_From),
                     fromAddress,
                     contact == null,
                     blockchainType,
@@ -301,7 +302,7 @@ object TransactionViewItemFactoryHelper {
         val burn = toAddress == zeroAddress
 
         val title: String =
-            if (burn) Translator.getString(R.string.Transactions_Burn) else Translator.getString(R.string.Transactions_Send)
+            if (burn) cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_Burn) else cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_Send)
 
         val amount: TransactionInfoViewItem
         val rate: TransactionInfoViewItem?
@@ -336,7 +337,7 @@ object TransactionViewItemFactoryHelper {
             val contact = getContact(toAddress, blockchainType)
             items.add(
                 TransactionInfoViewItem.Address(
-                    Translator.getString(R.string.TransactionInfo_To),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_To),
                     toAddress,
                     contact == null,
                     blockchainType,
@@ -396,7 +397,7 @@ object TransactionViewItemFactoryHelper {
     ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             TransactionInfoViewItem.Value(
-                Translator.getString(R.string.TransactionInfo_Service),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Service),
                 evmLabelManager.mapped(exchangeAddress)
             )
         )
@@ -415,7 +416,7 @@ object TransactionViewItemFactoryHelper {
         }
 
         val priceValueOne = if (decimalValueOut.compareTo(BigDecimal.ZERO) == 0) {
-            Translator.getString(R.string.NotAvailable)
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.NotAvailable)
         } else {
             val price = decimalValueIn.divide(
                 decimalValueOut,
@@ -432,7 +433,7 @@ object TransactionViewItemFactoryHelper {
         }
 
         val priceValueTwo = if (decimalValueIn.compareTo(BigDecimal.ZERO) == 0) {
-            Translator.getString(R.string.NotAvailable)
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.NotAvailable)
         } else {
             val price = decimalValueOut.divide(
                 decimalValueIn,
@@ -450,7 +451,7 @@ object TransactionViewItemFactoryHelper {
 
         items.add(
             TransactionInfoViewItem.PriceWithToggle(
-                Translator.getString(R.string.TransactionInfo_Price),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Price),
                 priceValueOne,
                 priceValueTwo,
             )
@@ -462,7 +463,7 @@ object TransactionViewItemFactoryHelper {
     fun getContractCreationItems(transaction: ContractCreationTransactionRecord): List<TransactionInfoViewItem> =
         listOf(
             TransactionInfoViewItem.Transaction(
-                Translator.getString(R.string.Transactions_ContractCreation),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_ContractCreation),
                 "",
                 TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
             )
@@ -503,7 +504,7 @@ object TransactionViewItemFactoryHelper {
 
         val fiatAmountString = when {
             hideAmount -> "*****"
-            value.isMaxValue -> Translator.getString(R.string.Transaction_Unlimited)
+            value.isMaxValue -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Transaction_Unlimited)
             else -> fiatAmountFormatted
         }
 
@@ -523,7 +524,7 @@ object TransactionViewItemFactoryHelper {
                 AmountType.Approved
             ),
             TransactionInfoViewItem.Address(
-                Translator.getString(R.string.TransactionInfo_Spender),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Spender),
                 spenderAddress,
                 contact == null,
                 blockchainType,
@@ -544,7 +545,7 @@ object TransactionViewItemFactoryHelper {
         blockchainType: BlockchainType,
     ) = listOf(
         TransactionInfoViewItem.Transaction(
-            method ?: Translator.getString(R.string.Transactions_ContractCall),
+            method ?: cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_ContractCall),
             evmLabelManager.mapped(contractAddress),
             TransactionViewItem.Icon.Platform(blockchainType).iconRes
         )
@@ -585,7 +586,7 @@ object TransactionViewItemFactoryHelper {
     ): List<TransactionInfoViewItem> {
         val items: MutableList<TransactionInfoViewItem> = mutableListOf(
             TransactionInfoViewItem.Value(
-                Translator.getString(R.string.TransactionInfo_Date),
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_Date),
                 DateHelper.getFullDate(Date(transaction.timestamp * 1000))
             ),
             TransactionInfoViewItem.Status(status)
@@ -606,7 +607,7 @@ object TransactionViewItemFactoryHelper {
 
                         recipientItems.add(
                             TransactionInfoViewItem.Address(
-                                Translator.getString(R.string.TransactionInfo_RecipientHash),
+                                cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_RecipientHash),
                                 recipient,
                                 contact == null,
                                 blockchainType,
@@ -656,7 +657,7 @@ object TransactionViewItemFactoryHelper {
     fun getExplorerSectionItems(explorerData: TransactionInfoModule.ExplorerData): List<TransactionInfoViewItem> =
         listOf(
             TransactionInfoViewItem.Explorer(
-                Translator.getString(
+                cash.p.terminal.strings.helpers.Translator.getString(
                     R.string.TransactionInfo_ButtonViewOnExplorerName,
                     explorerData.title
                 ),

@@ -1,12 +1,11 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IAdapter
-import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.factories.AdapterFactory
-import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.transaction.TransactionSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -39,7 +38,7 @@ class TransactionAdapterManager(
 
     fun getAdapter(source: TransactionSource): ITransactionsAdapter? = adaptersMap[source]
 
-    private fun initAdapters(adaptersMap: Map<Wallet, IAdapter>) {
+    private fun initAdapters(adaptersMap: Map<cash.p.terminal.wallet.Wallet, IAdapter>) {
         val currentAdapters = this.adaptersMap.toMutableMap()
         this.adaptersMap.clear()
 

@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.entities.CurrencyValue
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.captionSB_leah
+import io.horizontalsystems.core.entities.CurrencyValue
+import cash.p.terminal.ui_compose.components.captionSB_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun NftAssetPreview(

@@ -7,9 +7,9 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 
@@ -17,7 +17,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-        val wallet = navController.getInput<Wallet>()
+        val wallet = navController.getInput<cash.p.terminal.wallet.Wallet>()
         if (wallet == null) {
             Toast.makeText(App.instance, "Wallet is Null", Toast.LENGTH_SHORT).show()
             navController.popBackStack(R.id.tokenBalanceFragment, true)

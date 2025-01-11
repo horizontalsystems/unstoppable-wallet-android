@@ -30,8 +30,8 @@ fun HSSwipeRefresh(
             refreshing = refreshing,
             state = pullRefreshState,
             modifier = Modifier.align(Alignment.TopCenter),
-            backgroundColor = ComposeAppTheme.colors.claude,
-            contentColor = ComposeAppTheme.colors.leah,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.claude,
+            contentColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
             scale = true
         )
     }

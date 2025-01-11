@@ -15,24 +15,24 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.coin.CoinFragment
+import io.horizontalsystems.core.entities.ViewState
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.filters.MarketFiltersViewModel
 import cash.p.terminal.modules.market.topcoins.OptionController
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.AlertGroup
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CoinList
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListErrorView
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class MarketFiltersResultsFragment : BaseComposeFragment() {
 
@@ -113,7 +113,7 @@ private fun SearchResultsScreen(
                                 )
                             },
                             onCoinClick = { coinUid ->
-                                val arguments = CoinFragment.Input(coinUid)
+                                val arguments = CoinFragmentInput(coinUid)
                                 navController.slideFromRight(R.id.coinFragment, arguments)
 
                                 stat(

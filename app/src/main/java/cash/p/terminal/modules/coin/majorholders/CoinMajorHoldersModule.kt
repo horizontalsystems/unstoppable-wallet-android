@@ -3,12 +3,12 @@ package cash.p.terminal.modules.coin.majorholders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.CoinViewFactory
 import cash.p.terminal.modules.coin.MajorHolderItem
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.StackBarSlice
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 
 object CoinMajorHoldersModule {
     class Factory(private val coinUid: String, private val blockchain: Blockchain) : ViewModelProvider.Factory {

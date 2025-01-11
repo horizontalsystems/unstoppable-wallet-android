@@ -22,16 +22,16 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.Account
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaultWithIcon
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithIcon
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaultWithIcon
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
 import kotlinx.parcelize.Parcelize
 
 class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
@@ -55,15 +55,15 @@ class BackupRequiredDialog : BaseComposableBottomSheetFragment() {
     }
 
     @Parcelize
-    data class Input(val account: Account, val text: String) : Parcelable
+    data class Input(val account: cash.p.terminal.wallet.Account, val text: String) : Parcelable
 }
 
 @Composable
-fun BackupRequiredScreen(navController: NavController, account: Account, text: String) {
-    ComposeAppTheme {
+fun BackupRequiredScreen(navController: NavController, account: cash.p.terminal.wallet.Account, text: String) {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),
-            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
+            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.ManageAccount_BackupRequired_Title),
             onCloseClick = {
                 navController.popBackStack()
@@ -88,7 +88,10 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                         account
                     )
 
-                    stat(page = StatPage.BackupRequired, event = StatEvent.Open(StatPage.ManualBackup))
+                    stat(
+                        page = StatPage.BackupRequired,
+                        event = StatEvent.Open(StatPage.ManualBackup)
+                    )
                 }
             )
             VSpacer(12.dp)
@@ -102,7 +105,10 @@ fun BackupRequiredScreen(navController: NavController, account: Account, text: S
                 onClick = {
                     navController.slideFromBottom(R.id.backupLocalFragment, account)
 
-                    stat(page = StatPage.BackupRequired, event = StatEvent.Open(StatPage.FileBackup))
+                    stat(
+                        page = StatPage.BackupRequired,
+                        event = StatEvent.Open(StatPage.FileBackup)
+                    )
                 }
             )
             VSpacer(12.dp)

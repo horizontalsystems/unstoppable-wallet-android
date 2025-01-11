@@ -36,29 +36,29 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.modules.market.filters.MarketFiltersModule.FilterDropdown.*
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithSpinner
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.HsBackButton
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithSpinner
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.HeaderText
+import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_grey
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.body_lucian
-import cash.p.terminal.ui.compose.components.body_remus
-import cash.p.terminal.ui.compose.components.cell.CellUniversal
-import cash.p.terminal.ui.compose.components.cell.SectionUniversalLawrence
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.MenuItem
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.body_lucian
+import cash.p.terminal.ui_compose.components.body_remus
+import io.horizontalsystems.chartview.cell.CellUniversal
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import cash.p.terminal.modules.market.filters.PriceChange as FilterPriceChange
@@ -94,7 +94,7 @@ private fun AdvancedSearchScreen(
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
         sheetContent = {
             BottomSheetContent(
                 bottomSheetType = bottomSheetType,
@@ -108,7 +108,7 @@ private fun AdvancedSearchScreen(
         },
     ) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.Market_Filters),
@@ -499,7 +499,7 @@ private fun <ItemClass> SingleSelectBottomSheetContent(
         iconPainter = painterResource(headerIcon),
         title = stringResource(title),
         onCloseClick = onClose,
-        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob)
     ) {
         Spacer(Modifier.height(12.dp))
         CellUniversalLawrenceSection(

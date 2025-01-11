@@ -6,9 +6,9 @@ import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
-import cash.p.terminal.modules.transactions.TransactionSource
 import cash.p.terminal.modules.transactions.TransactionStatus
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.transaction.TransactionSource
 
 abstract class TransactionRecord(
     val uid: String,

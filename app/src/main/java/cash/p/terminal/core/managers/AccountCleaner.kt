@@ -1,6 +1,5 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IAccountCleaner
 import cash.p.terminal.core.adapters.BinanceAdapter
 import cash.p.terminal.core.adapters.BitcoinAdapter
 import cash.p.terminal.core.adapters.BitcoinCashAdapter
@@ -11,6 +10,7 @@ import cash.p.terminal.core.adapters.EvmAdapter
 import cash.p.terminal.core.adapters.SolanaAdapter
 import cash.p.terminal.core.adapters.TronAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
+import cash.p.terminal.wallet.IAccountCleaner
 
 class AccountCleaner : IAccountCleaner {
 

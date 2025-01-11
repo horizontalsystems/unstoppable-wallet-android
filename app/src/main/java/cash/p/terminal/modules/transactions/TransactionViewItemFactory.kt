@@ -5,9 +5,6 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.shorten
-import cash.p.terminal.entities.CurrencyValue
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
@@ -36,9 +33,12 @@ import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionR
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
-import cash.p.terminal.modules.transactionInfo.ColorName
-import cash.p.terminal.modules.transactionInfo.ColoredValue
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.strings.helpers.Translator
+import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.ui_compose.ColorName
+import cash.p.terminal.ui_compose.ColoredValue
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.tronkit.models.Contract
 import java.math.BigDecimal
 import java.util.Date
@@ -82,14 +82,23 @@ class TransactionViewItemFactory(
     ): TransactionViewItem.Icon =
         when (value) {
             is TransactionValue.NftValue -> {
-                TransactionViewItem.Icon.Regular(nftMetadata[value.nftUid]?.previewImageUrl, null, R.drawable.icon_24_nft_placeholder, rectangle = true)
+                TransactionViewItem.Icon.Regular(
+                    nftMetadata[value.nftUid]?.previewImageUrl,
+                    null,
+                    R.drawable.icon_24_nft_placeholder,
+                    rectangle = true
+                )
             }
 
             is TransactionValue.CoinValue,
             is TransactionValue.RawValue,
             is TransactionValue.JettonValue,
             is TransactionValue.TokenValue -> {
-                TransactionViewItem.Icon.Regular(value.coinIconUrl, value.alternativeCoinIconUrl, value.coinIconPlaceholder)
+                TransactionViewItem.Icon.Regular(
+                    value.coinIconUrl,
+                    value.alternativeCoinIconUrl,
+                    value.coinIconPlaceholder
+                )
             }
         }
 
@@ -157,8 +166,18 @@ class TransactionViewItemFactory(
         }
 
         return TransactionViewItem.Icon.Double(
-            back = TransactionViewItem.Icon.Regular(backUrl, backAlternativeUrl, backPlaceHolder, backRectangle),
-            front = TransactionViewItem.Icon.Regular(frontUrl, frontAlternativeUrl, frontPlaceHolder, frontRectangle)
+            back = TransactionViewItem.Icon.Regular(
+                backUrl,
+                backAlternativeUrl,
+                backPlaceHolder,
+                backRectangle
+            ),
+            front = TransactionViewItem.Icon.Regular(
+                frontUrl,
+                frontAlternativeUrl,
+                frontPlaceHolder,
+                frontRectangle
+            )
         )
     }
 
@@ -243,7 +262,10 @@ class TransactionViewItemFactory(
             )
 
             is ContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(record.incomingEvents, record.outgoingEvents)
+                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                    record.incomingEvents,
+                    record.outgoingEvents
+                )
                 createViewItemFromContractCallTransactionRecord(
                     uid = record.uid,
                     incomingValues = incomingValues,
@@ -261,7 +283,10 @@ class TransactionViewItemFactory(
             }
 
             is ExternalContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(record.incomingEvents, record.outgoingEvents)
+                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                    record.incomingEvents,
+                    record.outgoingEvents
+                )
                 createViewItemFromExternalContractCallTransactionRecord(
                     uid = record.uid,
                     incomingValues = incomingValues,
@@ -277,7 +302,12 @@ class TransactionViewItemFactory(
                 )
             }
 
-            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(record, progress, icon)
+            is ContractCreationTransactionRecord -> createViewItemFromContractCreationTransactionRecord(
+                record,
+                progress,
+                icon
+            )
+
             is EvmIncomingTransactionRecord -> {
                 createViewItemFromEvmIncomingTransactionRecord(
                     uid = record.uid,
@@ -308,8 +338,18 @@ class TransactionViewItemFactory(
                 )
             }
 
-            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(record, progress, icon)
-            is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(record, progress, icon)
+            is SwapTransactionRecord -> createViewItemFromSwapTransactionRecord(
+                record,
+                progress,
+                icon
+            )
+
+            is UnknownSwapTransactionRecord -> createViewItemFromUnknownSwapTransactionRecord(
+                record,
+                progress,
+                icon
+            )
+
             is EvmTransactionRecord -> {
                 createViewItemFromEvmTransactionRecord(
                     uid = record.uid,
@@ -359,7 +399,10 @@ class TransactionViewItemFactory(
             }
 
             is TronContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(record.incomingEvents, record.outgoingEvents)
+                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                    record.incomingEvents,
+                    record.outgoingEvents
+                )
                 createViewItemFromContractCallTransactionRecord(
                     uid = record.uid,
                     incomingValues = incomingValues,
@@ -377,7 +420,10 @@ class TransactionViewItemFactory(
             }
 
             is TronExternalContractCallTransactionRecord -> {
-                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(record.incomingEvents, record.outgoingEvents)
+                val (incomingValues, outgoingValues) = EvmTransactionRecord.combined(
+                    record.incomingEvents,
+                    record.outgoingEvents
+                )
                 createViewItemFromExternalContractCallTransactionRecord(
                     uid = record.uid,
                     incomingValues = incomingValues,
@@ -402,7 +448,7 @@ class TransactionViewItemFactory(
                     timestamp = record.timestamp,
                     currencyValue = transactionItem.currencyValue,
                     progress = progress,
-                    spam =  record.spam,
+                    spam = record.spam,
                     icon = icon
                 )
             }
@@ -467,7 +513,10 @@ class TransactionViewItemFactory(
             when (val actionType = action.type) {
                 is TonTransactionRecord.Action.Type.Send -> {
                     title = Translator.getString(R.string.Transactions_Send)
-                    subtitle = Translator.getString(R.string.Transactions_To, mapped(actionType.to, record.blockchainType))
+                    subtitle = Translator.getString(
+                        R.string.Transactions_To,
+                        mapped(actionType.to, record.blockchainType)
+                    )
 
                     primaryValue = getColoredValue(actionType.value, ColorName.Lucian)
 
@@ -475,6 +524,7 @@ class TransactionViewItemFactory(
 
                     iconX = singleValueIconType(actionType.value)
                 }
+
                 is TonTransactionRecord.Action.Type.Receive -> {
                     title = Translator.getString(R.string.Transactions_Receive)
                     subtitle = Translator.getString(
@@ -485,6 +535,7 @@ class TransactionViewItemFactory(
                     primaryValue = getColoredValue(actionType.value, ColorName.Remus)
                     iconX = singleValueIconType(actionType.value)
                 }
+
                 is TonTransactionRecord.Action.Type.Unsupported -> {
                     title = Translator.getString(R.string.Transactions_TonTransaction)
                     subtitle = actionType.type
@@ -494,30 +545,35 @@ class TransactionViewItemFactory(
 
                     iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                 }
+
                 is TonTransactionRecord.Action.Type.Burn -> {
                     iconX = singleValueIconType(actionType.value)
                     title = Translator.getString(R.string.Transactions_Burn)
                     subtitle = actionType.value.fullName
                     primaryValue = getColoredValue(actionType.value, ColorName.Lucian)
                 }
+
                 is TonTransactionRecord.Action.Type.ContractCall -> {
                     iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                     title = Translator.getString(R.string.Transactions_ContractCall)
                     subtitle = actionType.address.shorten()
                     primaryValue = getColoredValue(actionType.value, ColorName.Lucian)
                 }
+
                 is TonTransactionRecord.Action.Type.ContractDeploy -> {
                     iconX = TransactionViewItem.Icon.Platform(record.blockchainType)
                     title = Translator.getString(R.string.Transactions_ContractDeploy)
                     subtitle = actionType.interfaces.joinToString()
                     primaryValue = null
                 }
+
                 is TonTransactionRecord.Action.Type.Mint -> {
                     iconX = singleValueIconType(actionType.value)
                     title = Translator.getString(R.string.Transactions_Mint)
                     subtitle = actionType.value.fullName
                     primaryValue = getColoredValue(actionType.value, ColorName.Remus)
                 }
+
                 is TonTransactionRecord.Action.Type.Swap -> {
                     iconX = doubleValueIconType(actionType.valueOut, actionType.valueIn)
                     title = Translator.getString(R.string.Transactions_Swap)
@@ -555,7 +611,12 @@ class TransactionViewItemFactory(
     ): TransactionViewItem {
         val incomingValues = record.incomingTransfers.map { it.value }
         val outgoingValues = record.outgoingTransfers.map { it.value }
-        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(incomingValues, outgoingValues, currencyValue, mutableMapOf())
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(
+            incomingValues,
+            outgoingValues,
+            currencyValue,
+            mutableMapOf()
+        )
 
         return TransactionViewItem(
             uid = record.uid,
@@ -567,7 +628,12 @@ class TransactionViewItemFactory(
             showAmount = showAmount,
             date = Date(record.timestamp * 1000),
             spam = record.spam,
-            icon = icon ?: iconType(record.blockchainType, incomingValues, outgoingValues, mutableMapOf())
+            icon = icon ?: iconType(
+                record.blockchainType,
+                incomingValues,
+                outgoingValues,
+                mutableMapOf()
+            )
         )
     }
 
@@ -589,7 +655,12 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = record.to?.let { to -> Translator.getString(R.string.Transactions_To, mapped(to, record.blockchainType)) } ?: "",
+            subtitle = record.to?.let { to ->
+                Translator.getString(
+                    R.string.Transactions_To,
+                    mapped(to, record.blockchainType)
+                )
+            } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             showAmount = showAmount,
@@ -614,7 +685,12 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = record.from?.let { from -> Translator.getString(R.string.Transactions_From, mapped(from, record.blockchainType)) } ?: "",
+            subtitle = record.from?.let { from ->
+                Translator.getString(
+                    R.string.Transactions_From,
+                    mapped(from, record.blockchainType)
+                )
+            } ?: "",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             showAmount = showAmount,
@@ -625,7 +701,8 @@ class TransactionViewItemFactory(
     }
 
     private fun getContact(address: String, blockchainType: BlockchainType): Contact? {
-        return contactsRepository.getContactsFiltered(blockchainType, addressQuery = address).firstOrNull()
+        return contactsRepository.getContactsFiltered(blockchainType, addressQuery = address)
+            .firstOrNull()
     }
 
     private fun mapped(address: String, blockchainType: BlockchainType): String {
@@ -758,8 +835,16 @@ class TransactionViewItemFactory(
 
     private fun getColoredValue(value: Any, color: ColorName): ColoredValue =
         when (value) {
-            is TransactionValue -> ColoredValue(getCoinString(value), if (value.zeroValue) ColorName.Leah else color)
-            is CurrencyValue -> ColoredValue(getCurrencyString(value), if (value.value.compareTo(BigDecimal.ZERO) == 0) ColorName.Grey else color)
+            is TransactionValue -> ColoredValue(
+                getCoinString(value),
+                if (value.zeroValue) ColorName.Leah else color
+            )
+
+            is CurrencyValue -> ColoredValue(
+                getCurrencyString(value),
+                if (value.value.compareTo(BigDecimal.ZERO) == 0) ColorName.Grey else color
+            )
+
             else -> ColoredValue(value.toString(), color)
         }
 
@@ -828,7 +913,12 @@ class TransactionViewItemFactory(
         icon: TransactionViewItem.Icon?,
         nftMetadata: Map<NftUid, NftAssetBriefMetadata>
     ): TransactionViewItem {
-        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(incomingValues, outgoingValues, currencyValue, nftMetadata)
+        val (primaryValue: ColoredValue?, secondaryValue: ColoredValue?) = getValues(
+            incomingValues,
+            outgoingValues,
+            currencyValue,
+            nftMetadata
+        )
         val title = method ?: Translator.getString(R.string.Transactions_ContractCall)
 
         return TransactionViewItem(
@@ -1009,7 +1099,10 @@ class TransactionViewItemFactory(
             uid = record.uid,
             progress = progress,
             title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(R.string.Transactions_To, mapped(record.to, record.blockchainType)),
+            subtitle = Translator.getString(
+                R.string.Transactions_To,
+                mapped(record.to, record.blockchainType)
+            ),
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
             showAmount = showAmount,
@@ -1064,7 +1157,10 @@ class TransactionViewItemFactory(
 
         if (value.isMaxValue) {
             primaryValueText = "∞"
-            secondaryValueText = if (value.coinCode.isEmpty()) "" else Translator.getString(R.string.Transaction_Unlimited_CoinCode, value.coinCode)
+            secondaryValueText = if (value.coinCode.isEmpty()) "" else Translator.getString(
+                R.string.Transaction_Unlimited_CoinCode,
+                value.coinCode
+            )
         } else {
             primaryValueText = getCoinString(value, hideSign = true)
             secondaryValueText = currencyValue?.let { getCurrencyString(it) }
@@ -1094,7 +1190,9 @@ class TransactionViewItemFactory(
     ): ColoredValue? =
         when (value) {
             is TransactionValue.NftValue -> {
-                val text = nftMetadata[value.nftUid]?.name ?: value.tokenName?.let { "$it #${value.nftUid.tokenId}" } ?: "#${value.nftUid.tokenId}"
+                val text = nftMetadata[value.nftUid]?.name
+                    ?: value.tokenName?.let { "$it #${value.nftUid.tokenId}" }
+                    ?: "#${value.nftUid.tokenId}"
                 getColoredValue(text, ColorName.Grey)
             }
 
@@ -1120,14 +1218,16 @@ class TransactionViewItemFactory(
             (incomingValues.size == 1 && outgoingValues.isEmpty()) -> {
                 val transactionValue = incomingValues.first()
                 primaryValue = getColoredValue(transactionValue, ColorName.Remus)
-                secondaryValue = singleValueSecondaryValue(transactionValue, currencyValue, nftMetadata)
+                secondaryValue =
+                    singleValueSecondaryValue(transactionValue, currencyValue, nftMetadata)
             }
 
             // outgoing
             (incomingValues.isEmpty() && outgoingValues.size == 1) -> {
                 val transactionValue = outgoingValues.first()
                 primaryValue = getColoredValue(transactionValue, ColorName.Lucian)
-                secondaryValue = singleValueSecondaryValue(transactionValue, currencyValue, nftMetadata)
+                secondaryValue =
+                    singleValueSecondaryValue(transactionValue, currencyValue, nftMetadata)
             }
 
             // swap
@@ -1140,26 +1240,44 @@ class TransactionViewItemFactory(
 
             // outgoing multiple
             (incomingValues.isEmpty() && outgoingValues.isNotEmpty()) -> {
-                primaryValue = getColoredValue(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
-                secondaryValue = getColoredValue(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
+                primaryValue = getColoredValue(outgoingValues.map { it.coinCode }.toSet().toList()
+                    .joinToString(", "),
+                    ColorName.Lucian
+                )
+                secondaryValue = getColoredValue(
+                    Translator.getString(R.string.Transactions_Multiple),
+                    ColorName.Grey
+                )
             }
 
             // incoming multiple
             (incomingValues.isNotEmpty() && outgoingValues.isEmpty()) -> {
-                primaryValue = getColoredValue(incomingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Remus)
-                secondaryValue = getColoredValue(Translator.getString(R.string.Transactions_Multiple), ColorName.Grey)
+                primaryValue = getColoredValue(incomingValues.map { it.coinCode }.toSet().toList()
+                    .joinToString(", "),
+                    ColorName.Remus
+                )
+                secondaryValue = getColoredValue(
+                    Translator.getString(R.string.Transactions_Multiple),
+                    ColorName.Grey
+                )
             }
 
             else -> {
                 primaryValue = if (incomingValues.size == 1) {
                     getColoredValue(incomingValues.first(), ColorName.Remus)
                 } else {
-                    getColoredValue(incomingValues.joinToString(", ") { it.coinCode }, ColorName.Remus)
+                    getColoredValue(
+                        incomingValues.joinToString(", ") { it.coinCode },
+                        ColorName.Remus
+                    )
                 }
                 secondaryValue = if (outgoingValues.size == 1) {
                     getColoredValue(outgoingValues.first(), ColorName.Remus)
                 } else {
-                    getColoredValue(outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "), ColorName.Lucian)
+                    getColoredValue(
+                        outgoingValues.map { it.coinCode }.toSet().toList().joinToString(", "),
+                        ColorName.Lucian
+                    )
                 }
             }
         }
@@ -1167,10 +1285,17 @@ class TransactionViewItemFactory(
     }
 
     private fun getCurrencyString(currencyValue: CurrencyValue): String {
-        return App.numberFormatter.formatFiatShort(currencyValue.value.abs(), currencyValue.currency.symbol, 2)
+        return App.numberFormatter.formatFiatShort(
+            currencyValue.value.abs(),
+            currencyValue.currency.symbol,
+            2
+        )
     }
 
-    private fun getCoinString(transactionValue: TransactionValue, hideSign: Boolean = false): String {
+    private fun getCoinString(
+        transactionValue: TransactionValue,
+        hideSign: Boolean = false
+    ): String {
         return transactionValue.decimalValue?.let { decimalValue ->
             val sign = when {
                 hideSign -> ""

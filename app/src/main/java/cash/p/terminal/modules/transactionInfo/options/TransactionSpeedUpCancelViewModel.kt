@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.managers.EvmKitWrapper
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceState
@@ -16,7 +15,7 @@ import cash.p.terminal.modules.sendevmtransaction.SectionViewItem
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import io.horizontalsystems.ethereumkit.core.hexStringToByteArray
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,13 +30,13 @@ class TransactionSpeedUpCancelViewModel(
 ) : ViewModelUiState<TransactionSpeedUpCancelUiState>() {
 
     val title: String = when (optionType) {
-        SpeedUpCancelType.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Title)
-        SpeedUpCancelType.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Title)
+        SpeedUpCancelType.SpeedUp -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Title)
+        SpeedUpCancelType.Cancel -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_Cancel_Title)
     }
 
     val buttonTitle: String = when (optionType) {
-        SpeedUpCancelType.SpeedUp -> Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Button)
-        SpeedUpCancelType.Cancel -> Translator.getString(R.string.TransactionInfoOptions_Cancel_Button)
+        SpeedUpCancelType.SpeedUp -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_SpeedUp_Button)
+        SpeedUpCancelType.Cancel -> cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfoOptions_Cancel_Button)
     }
 
     private var sendTransactionState: SendTransactionServiceState = sendTransactionService.stateFlow.value

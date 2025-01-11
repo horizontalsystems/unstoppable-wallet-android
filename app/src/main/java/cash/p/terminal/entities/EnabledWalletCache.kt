@@ -2,7 +2,7 @@ package cash.p.terminal.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import cash.p.terminal.core.storage.AccountRecord
+import cash.p.terminal.wallet.entities.AccountRecord
 import java.math.BigDecimal
 
 @Entity(

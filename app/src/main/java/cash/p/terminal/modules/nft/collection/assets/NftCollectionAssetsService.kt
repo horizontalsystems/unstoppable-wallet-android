@@ -3,13 +3,13 @@ package cash.p.terminal.modules.nft.collection.assets
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.core.providers.nft.INftProvider
 import cash.p.terminal.core.providers.nft.PaginationData
-import cash.p.terminal.entities.CurrencyValue
+import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.nft.NftAssetMetadata
-import cash.p.terminal.modules.balance.BalanceXRateRepository
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
 import cash.p.terminal.modules.market.overview.coinValue
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.CoinPrice
-import io.horizontalsystems.marketkit.models.NftPrice
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.models.CoinPrice
+import cash.p.terminal.wallet.models.NftPrice
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -21,7 +21,7 @@ class NftCollectionAssetsService(
     private val blockchainType: BlockchainType,
     private val collectionUid: String,
     private val provider: INftProvider,
-    private val xRateRepository: BalanceXRateRepository
+    private val xRateRepository: DefaultBalanceXRateRepository
 ) {
     private val _items = MutableStateFlow<Result<List<Item>>?>(null)
     val items = _items.filterNotNull()

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.ITermsManager
 import cash.p.terminal.core.providers.AppConfigProvider
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.ISystemInfoManager
 import kotlinx.coroutines.launch
 
@@ -23,7 +23,7 @@ class AboutViewModel(
     val appVersion: String
         get() {
             var appVersion = systemInfoManager.appVersion
-            if (Translator.getString(R.string.is_release) == "false") {
+            if (cash.p.terminal.strings.helpers.Translator.getString(R.string.is_release) == "false") {
                 appVersion += " (${appConfigProvider.appBuild})"
             }
 

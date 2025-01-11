@@ -3,8 +3,8 @@ package cash.p.terminal.entities.nft
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import cash.p.terminal.core.storage.AccountRecord
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.wallet.entities.AccountRecord
+import io.horizontalsystems.core.entities.BlockchainType
 
 @Entity(
     primaryKeys = ["blockchainType", "accountId", "nftUid"],

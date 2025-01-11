@@ -1,6 +1,6 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
@@ -12,8 +12,8 @@ import cash.p.terminal.modules.transactions.FilterTransactionType.Approve
 import cash.p.terminal.modules.transactions.FilterTransactionType.Incoming
 import cash.p.terminal.modules.transactions.FilterTransactionType.Outgoing
 import cash.p.terminal.modules.transactions.FilterTransactionType.Swap
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.models.Tag
 import io.horizontalsystems.tonkit.models.TagQuery

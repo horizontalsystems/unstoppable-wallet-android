@@ -1,6 +1,6 @@
 package cash.p.terminal.entities.nft
 
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 sealed class NftUid(val contractAddress: String, val tokenId: String, val blockchainType: BlockchainType) {
     class Evm(blockchainType: BlockchainType, contractAddress: String, tokenId: String) : NftUid(contractAddress, tokenId, blockchainType)

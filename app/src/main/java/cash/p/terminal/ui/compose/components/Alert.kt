@@ -14,9 +14,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.WithTranslatableTitle
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
+import cash.p.terminal.ui_compose.components.subhead1_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun <T : WithTranslatableTitle> AlertGroup(
@@ -38,7 +39,7 @@ fun <T : WithTranslatableTitle> AlertGroup(
                 ) {
                     Text(
                         option.title.getString(),
-                        color = if (option == select.selected) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah,
+                        color = if (option == select.selected) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
                         style = ComposeAppTheme.typography.body,
                     )
                 }

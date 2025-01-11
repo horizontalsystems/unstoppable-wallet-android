@@ -13,11 +13,11 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.coin.RoiViewItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.caption_grey
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.caption_grey
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.models.HsTimePeriod
 import java.math.BigDecimal
 
 @Composable

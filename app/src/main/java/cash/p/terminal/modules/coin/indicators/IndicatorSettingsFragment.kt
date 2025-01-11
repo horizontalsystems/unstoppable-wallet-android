@@ -6,7 +6,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.getInput
 import cash.p.terminal.modules.chart.ChartIndicatorSetting
 import io.horizontalsystems.core.helpers.HudHelper

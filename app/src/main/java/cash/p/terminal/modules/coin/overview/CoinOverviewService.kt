@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.coin.overview
 
-import cash.p.terminal.core.managers.CurrencyManager
 import cash.p.terminal.core.managers.LanguageManager
-import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.providers.AppConfigProvider
 import cash.p.terminal.entities.DataState
-import io.horizontalsystems.marketkit.models.FullCoin
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.entities.FullCoin
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope

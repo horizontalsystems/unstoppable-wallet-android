@@ -2,8 +2,8 @@ package cash.p.terminal.modules.walletconnect
 
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.managers.ActiveAccountState
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.ActiveAccountState
 import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
 class WCSessionManager(
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val storage: WCSessionStorage,
 ) {
 
@@ -40,7 +40,7 @@ class WCSessionManager(
 
         coroutineScope.launch {
             accountManager.activeAccountStateFlow.collect { activeAccountState ->
-                if (activeAccountState is ActiveAccountState.ActiveAccount) {
+                if (activeAccountState is cash.p.terminal.wallet.ActiveAccountState.ActiveAccount) {
                     syncSessions()
                 }
             }

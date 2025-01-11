@@ -1,20 +1,20 @@
 package cash.p.terminal.modules.coin.overview
 
 import android.util.Log
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statPeriod
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.chart.AbstractChartService
+import io.horizontalsystems.chartview.chart.AbstractChartService
 import cash.p.terminal.modules.chart.ChartIndicatorManager
-import cash.p.terminal.modules.chart.ChartPointsWrapper
+import io.horizontalsystems.chartview.chart.ChartPointsWrapper
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.models.HsPeriodType
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.HsPeriodType
-import io.horizontalsystems.marketkit.models.HsTimePeriod
 import io.reactivex.Single
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 import retrofit2.HttpException
 import java.io.IOException
-import io.horizontalsystems.marketkit.models.ChartPoint as MarketKitChartPoint
+import cash.p.terminal.wallet.models.ChartPoint as MarketKitChartPoint
 
 class CoinOverviewChartService(
     private val marketKit: MarketKitWrapper,

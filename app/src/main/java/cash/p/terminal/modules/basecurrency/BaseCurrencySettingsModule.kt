@@ -3,7 +3,7 @@ package cash.p.terminal.modules.basecurrency
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Currency
+import io.horizontalsystems.core.entities.Currency
 
 object BaseCurrencySettingsModule {
     class Factory : ViewModelProvider.Factory {

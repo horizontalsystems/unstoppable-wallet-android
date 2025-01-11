@@ -17,20 +17,19 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.headline2_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.headline2_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class DonateTokenSelectFragment : BaseComposeFragment() {
 
@@ -41,7 +40,7 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
             title = stringResource(R.string.Settings_DonateWith),
             onClickItem = {
                 val donateAddress: String? = App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
-                val sendTitle = Translator.getString(R.string.Settings_DonateToken, it.wallet.token.fullCoin.coin.code)
+                val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(R.string.Settings_DonateToken, it.wallet.token.fullCoin.coin.code)
                 navController.slideFromRight(
                     R.id.sendXFragment,
                     SendFragment.Input(
@@ -110,7 +109,7 @@ private fun GetAddressCell(
 @Preview
 @Composable
 private fun DonateHeaderPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         DonateHeader(navController = rememberNavController())
     }
 }

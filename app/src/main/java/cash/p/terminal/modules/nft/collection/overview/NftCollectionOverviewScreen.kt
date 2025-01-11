@@ -25,23 +25,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.About
 import cash.p.terminal.modules.coin.overview.ui.Contracts
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.nft.ui.CellLink
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.CellFooter
-import cash.p.terminal.ui.compose.components.CellSingleLineClear
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
+import io.horizontalsystems.core.CellFooter
+import io.horizontalsystems.core.CellSingleLineClear
+import io.horizontalsystems.core.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.ListErrorView
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.caption_grey
-import cash.p.terminal.ui.compose.components.diffColor
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.caption_grey
+import cash.p.terminal.ui_compose.components.diffColor
 import cash.p.terminal.ui.compose.components.diffText
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun NftCollectionOverviewScreen(
@@ -204,7 +204,7 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
                     .weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 elevation = 0.dp,
-                backgroundColor = ComposeAppTheme.colors.lawrence
+                backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp)
@@ -232,7 +232,7 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
                     .weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 elevation = 0.dp,
-                backgroundColor = ComposeAppTheme.colors.lawrence
+                backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp)
@@ -262,7 +262,7 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
                     .weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 elevation = 0.dp,
-                backgroundColor = ComposeAppTheme.colors.lawrence
+                backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp)
@@ -291,7 +291,7 @@ private fun Stats(collection: NftCollectionOverviewViewItem) {
                     .weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 elevation = 0.dp,
-                backgroundColor = ComposeAppTheme.colors.lawrence
+                backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lawrence
             ) {
                 Column(
                     modifier = Modifier.padding(12.dp)

@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.balance
 
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.wallet.balance.BalanceViewType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

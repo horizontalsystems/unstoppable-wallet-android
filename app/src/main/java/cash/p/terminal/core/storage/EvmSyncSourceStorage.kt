@@ -1,7 +1,7 @@
 package cash.p.terminal.core.storage
 
 import cash.p.terminal.entities.EvmSyncSourceRecord
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class EvmSyncSourceStorage(appDatabase: AppDatabase) {
 

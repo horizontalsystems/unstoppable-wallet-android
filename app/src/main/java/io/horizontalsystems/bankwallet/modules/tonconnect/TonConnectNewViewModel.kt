@@ -4,10 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.tonapps.wallet.data.tonconnect.entities.DAppManifestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.toTonWalletFullAccess
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -17,7 +15,7 @@ class TonConnectNewViewModel(
     private val tonConnectKit = App.tonConnectManager.kit
 
     private var manifest: DAppManifestEntity? = null
-    private var accounts: List<Account> = listOf()
+    private var accounts: List<cash.p.terminal.wallet.Account> = listOf()
     private var account = App.accountManager.activeAccount
     private var finish = false
     private var error: Throwable? = null
@@ -44,7 +42,7 @@ class TonConnectNewViewModel(
         }
 
         accounts = App.accountManager.accounts.filter {
-            it.type is AccountType.Mnemonic
+            it.type is cash.p.terminal.wallet.AccountType.Mnemonic
         }
 
         if (accounts.isEmpty()) {
@@ -53,7 +51,7 @@ class TonConnectNewViewModel(
         }
     }
 
-    fun onSelectAccount(account: Account) {
+    fun onSelectAccount(account: cash.p.terminal.wallet.Account) {
         this.account = account
         emitState()
     }
@@ -96,8 +94,8 @@ class NoTonAccountError : TonConnectError()
 
 data class TonConnectNewUiState(
     val manifest: DAppManifestEntity?,
-    val accounts: List<Account>,
-    val account: Account?,
+    val accounts: List<cash.p.terminal.wallet.Account>,
+    val account: cash.p.terminal.wallet.Account?,
     val finish: Boolean,
     val error: Throwable?,
     val toast: String?

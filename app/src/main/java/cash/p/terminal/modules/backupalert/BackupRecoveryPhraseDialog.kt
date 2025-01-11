@@ -29,18 +29,18 @@ import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.Account
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimary
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaultWithIcon
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellowWithIcon
-import cash.p.terminal.ui.compose.components.HSpacer
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.ui_compose.components.ButtonPrimary
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaultWithIcon
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
+import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.extensions.BaseComposableBottomSheetFragment
 import cash.p.terminal.ui.extensions.BottomSheetHeader
-import io.horizontalsystems.core.findNavController
+import cash.p.terminal.ui_compose.findNavController
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class BackupRecoveryPhraseDialog : BaseComposableBottomSheetFragment() {
 
@@ -62,7 +62,7 @@ class BackupRecoveryPhraseDialog : BaseComposableBottomSheetFragment() {
 }
 
 @Composable
-fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
+fun BackupRecoveryPhraseScreen(navController: NavController, account: cash.p.terminal.wallet.Account) {
     ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = painterResource(R.drawable.ic_attention_24),
@@ -89,7 +89,10 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 onClick = {
                     navController.slideFromBottom(R.id.backupKeyFragment, account)
 
-                    stat(page = StatPage.BackupPromptAfterCreate, event = StatEvent.Open(StatPage.ManualBackup))
+                    stat(
+                        page = StatPage.BackupPromptAfterCreate,
+                        event = StatEvent.Open(StatPage.ManualBackup)
+                    )
                 }
             )
             VSpacer(12.dp)
@@ -103,7 +106,10 @@ fun BackupRecoveryPhraseScreen(navController: NavController, account: Account) {
                 onClick = {
                     navController.slideFromBottom(R.id.backupLocalFragment, account)
 
-                    stat(page = StatPage.BackupPromptAfterCreate, event = StatEvent.Open(StatPage.FileBackup))
+                    stat(
+                        page = StatPage.BackupPromptAfterCreate,
+                        event = StatEvent.Open(StatPage.FileBackup)
+                    )
                 }
             )
             VSpacer(12.dp)

@@ -4,28 +4,27 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
-import cash.p.terminal.core.IAccountManager
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IRateAppManager
 import cash.p.terminal.core.ITermsManager
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.ActiveAccountState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ReleaseNotesManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LaunchPage
-import cash.p.terminal.modules.coin.CoinFragment
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.modules.nft.collection.NftCollectionFragment
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.list.WCListFragment
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.ActiveAccountState
+import cash.p.terminal.wallet.IAccountManager
 import io.horizontalsystems.core.IPinComponent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -280,14 +279,15 @@ class MainViewModel(
         var tab = currentMainTab
         var deeplinkPage: DeeplinkPage? = null
         val deeplinkString = deepLink.toString()
-        val deeplinkScheme: String = Translator.getString(R.string.DeeplinkScheme)
+        val deeplinkScheme: String =
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.DeeplinkScheme)
         when {
             deeplinkString.startsWith("$deeplinkScheme:") -> {
                 val uid = deepLink.getQueryParameter("uid")
                 when {
                     deeplinkString.contains("coin-page") -> {
                         uid?.let {
-                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragment.Input(it))
+                            deeplinkPage = DeeplinkPage(R.id.coinFragment, CoinFragmentInput(it))
 
                             stat(page = StatPage.Widget, event = StatEvent.OpenCoin(it))
                         }
@@ -296,9 +296,15 @@ class MainViewModel(
                     deeplinkString.contains("nft-collection") -> {
                         val blockchainTypeUid = deepLink.getQueryParameter("blockchainTypeUid")
                         if (uid != null && blockchainTypeUid != null) {
-                            deeplinkPage = DeeplinkPage(R.id.nftCollectionFragment, NftCollectionFragment.Input(uid, blockchainTypeUid))
+                            deeplinkPage = DeeplinkPage(
+                                R.id.nftCollectionFragment,
+                                NftCollectionFragment.Input(uid, blockchainTypeUid)
+                            )
 
-                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopNftCollections))
+                            stat(
+                                page = StatPage.Widget,
+                                event = StatEvent.Open(StatPage.TopNftCollections)
+                            )
                         }
                     }
 
@@ -308,7 +314,10 @@ class MainViewModel(
                             val platform = Platform(uid, title)
                             deeplinkPage = DeeplinkPage(R.id.marketPlatformFragment, platform)
 
-                            stat(page = StatPage.Widget, event = StatEvent.Open(StatPage.TopPlatform))
+                            stat(
+                                page = StatPage.Widget,
+                                event = StatEvent.Open(StatPage.TopPlatform)
+                            )
                         }
                     }
                 }
@@ -319,7 +328,8 @@ class MainViewModel(
             deeplinkString.startsWith("wc:") -> {
                 wcSupportState = wcManager.getWalletConnectSupportState()
                 if (wcSupportState == WCManager.SupportState.Supported) {
-                    deeplinkPage = DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
+                    deeplinkPage =
+                        DeeplinkPage(R.id.wcListFragment, WCListFragment.Input(deeplinkString))
                     tab = MainNavigation.Settings
                 }
             }

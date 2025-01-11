@@ -31,13 +31,11 @@ import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.slideFromBottomForResult
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.ViewState
-import cash.p.terminal.modules.chart.ChartViewModel
 import cash.p.terminal.modules.coin.CoinLink
 import cash.p.terminal.modules.coin.overview.CoinOverviewModule
 import cash.p.terminal.modules.coin.overview.CoinOverviewViewModel
@@ -48,21 +46,24 @@ import cash.p.terminal.modules.managewallets.ManageWalletsModule
 import cash.p.terminal.modules.managewallets.ManageWalletsViewModel
 import cash.p.terminal.modules.markdown.MarkdownFragment
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import cash.p.terminal.ui.compose.components.CellFooter
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
-import cash.p.terminal.ui.compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.ListErrorView
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.models.LinkType
+import io.horizontalsystems.chartview.chart.ChartViewModel
+import io.horizontalsystems.chartview.ui.Chart
+import io.horizontalsystems.core.CellFooter
+import io.horizontalsystems.core.CellUniversalLawrenceSection
+import io.horizontalsystems.core.RowUniversal
+import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.LinkType
 
 @Composable
 fun CoinOverviewScreen(
@@ -130,6 +131,7 @@ fun CoinOverviewScreen(
                     ViewState.Loading -> {
                         Loading()
                     }
+
                     ViewState.Success -> {
                         overview?.let { overview ->
                             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
@@ -141,7 +143,11 @@ fun CoinOverviewScreen(
                                     fullCoin.iconPlaceholder
                                 )
 
-                                Chart(chartViewModel = chartViewModel)
+                                Chart(
+                                    uiState = chartViewModel.uiState,
+                                    getSelectedPointCallback = chartViewModel::getSelectedPoint,
+                                    onSelectChartInterval = chartViewModel::onSelectChartInterval
+                                )
 
                                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -162,7 +168,10 @@ fun CoinOverviewScreen(
                                                     onClick = {
                                                         viewModel.disableChartIndicators()
 
-                                                        stat(page = StatPage.CoinOverview, event = StatEvent.ToggleIndicators(false))
+                                                        stat(
+                                                            page = StatPage.CoinOverview,
+                                                            event = StatEvent.ToggleIndicators(false)
+                                                        )
                                                     }
                                                 )
                                             } else {
@@ -171,7 +180,10 @@ fun CoinOverviewScreen(
                                                     onClick = {
                                                         viewModel.enableChartIndicators()
 
-                                                        stat(page = StatPage.CoinOverview, event = StatEvent.ToggleIndicators(true))
+                                                        stat(
+                                                            page = StatPage.CoinOverview,
+                                                            event = StatEvent.ToggleIndicators(true)
+                                                        )
                                                     }
                                                 )
                                             }
@@ -181,7 +193,10 @@ fun CoinOverviewScreen(
                                             ) {
                                                 navController.slideFromRight(R.id.indicatorsFragment)
 
-                                                stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.Indicators))
+                                                stat(
+                                                    page = StatPage.CoinOverview,
+                                                    event = StatEvent.Open(StatPage.Indicators)
+                                                )
                                             }
                                         }
                                     }
@@ -204,23 +219,38 @@ fun CoinOverviewScreen(
                                         onClickAddToWallet = {
                                             manageWalletsViewModel.enable(it)
 
-                                            stat(page = StatPage.CoinOverview, event = StatEvent.AddToWallet)
+                                            stat(
+                                                page = StatPage.CoinOverview,
+                                                event = StatEvent.AddToWallet
+                                            )
                                         },
                                         onClickRemoveWallet = {
                                             manageWalletsViewModel.disable(it)
 
-                                            stat(page = StatPage.CoinOverview, event = StatEvent.RemoveFromWallet)
+                                            stat(
+                                                page = StatPage.CoinOverview,
+                                                event = StatEvent.RemoveFromWallet
+                                            )
                                         },
                                         onClickCopy = {
                                             TextHelper.copyText(it)
-                                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Copied)
+                                            HudHelper.showSuccessMessage(
+                                                view,
+                                                R.string.Hud_Text_Copied
+                                            )
 
-                                            stat(page = StatPage.CoinOverview, event = StatEvent.Copy(StatEntity.ContractAddress))
+                                            stat(
+                                                page = StatPage.CoinOverview,
+                                                event = StatEvent.Copy(StatEntity.ContractAddress)
+                                            )
                                         },
                                         onClickExplorer = {
                                             LinkHelper.openLinkInAppBrowser(context, it)
 
-                                            stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalBlockExplorer))
+                                            stat(
+                                                page = StatPage.CoinOverview,
+                                                event = StatEvent.Open(StatPage.ExternalBlockExplorer)
+                                            )
                                         },
                                     )
                                 }
@@ -241,12 +271,14 @@ fun CoinOverviewScreen(
                         }
 
                     }
+
                     is ViewState.Error -> {
                         ListErrorView(stringResource(id = R.string.BalanceSyncError_Title)) {
                             viewModel.retry()
                             chartViewModel.refresh()
                         }
                     }
+
                     null -> {}
                 }
             }
@@ -264,17 +296,41 @@ private fun onClick(coinLink: CoinLink, context: Context, navController: NavCont
                 MarkdownFragment.Input(absoluteUrl, true)
             )
         }
+
         else -> LinkHelper.openLinkInAppBrowser(context, absoluteUrl)
     }
 
-    when(coinLink.linkType) {
+    when (coinLink.linkType) {
         LinkType.Guide -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.Guide))
-        LinkType.Website -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalCoinWebsite))
-        LinkType.Whitepaper -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalCoinWhitePaper))
-        LinkType.Twitter -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalTwitter))
-        LinkType.Telegram -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalTelegram))
-        LinkType.Reddit -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalReddit))
-        LinkType.Github -> stat(page = StatPage.CoinOverview, event = StatEvent.Open(StatPage.ExternalGithub))
+        LinkType.Website -> stat(
+            page = StatPage.CoinOverview,
+            event = StatEvent.Open(StatPage.ExternalCoinWebsite)
+        )
+
+        LinkType.Whitepaper -> stat(
+            page = StatPage.CoinOverview,
+            event = StatEvent.Open(StatPage.ExternalCoinWhitePaper)
+        )
+
+        LinkType.Twitter -> stat(
+            page = StatPage.CoinOverview,
+            event = StatEvent.Open(StatPage.ExternalTwitter)
+        )
+
+        LinkType.Telegram -> stat(
+            page = StatPage.CoinOverview,
+            event = StatEvent.Open(StatPage.ExternalTelegram)
+        )
+
+        LinkType.Reddit -> stat(
+            page = StatPage.CoinOverview,
+            event = StatEvent.Open(StatPage.ExternalReddit)
+        )
+
+        LinkType.Github -> stat(
+            page = StatPage.CoinOverview,
+            event = StatEvent.Open(StatPage.ExternalGithub)
+        )
     }
 }
 
@@ -287,7 +343,7 @@ private fun getAbsoluteUrl(coinLink: CoinLink) = when (coinLink.linkType) {
 @Preview
 @Composable
 fun LoadingPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Loading()
     }
 }

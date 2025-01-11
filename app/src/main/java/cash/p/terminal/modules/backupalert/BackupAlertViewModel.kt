@@ -6,12 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Account
+import cash.p.terminal.wallet.Account
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class BackupAlertViewModel : ViewModel() {
-    var account by mutableStateOf<Account?>(null)
+    var account by mutableStateOf<cash.p.terminal.wallet.Account?>(null)
         private set
 
     private var job: Job? = null

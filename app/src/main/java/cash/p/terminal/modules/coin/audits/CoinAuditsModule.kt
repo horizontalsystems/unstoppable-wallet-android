@@ -3,7 +3,7 @@ package cash.p.terminal.modules.coin.audits
 import android.os.Parcelable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import kotlinx.parcelize.Parcelize
 import javax.annotation.concurrent.Immutable
 

@@ -24,11 +24,11 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.pin.PinModule
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule.InputState
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.animations.shake
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_jacob
-import cash.p.terminal.ui.compose.components.subhead2_lucian
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_jacob
+import cash.p.terminal.ui_compose.components.subhead2_lucian
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun PinTopBlock(
@@ -114,7 +114,7 @@ fun PinTopBlock(
 
 @Composable
 private fun IndicatorCircle(active: Boolean) {
-    val color = if (active) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.steel20
+    val color = if (active) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
     Box(
         modifier = Modifier
             .size(12.dp)
@@ -126,7 +126,7 @@ private fun IndicatorCircle(active: Boolean) {
 @Preview
 @Composable
 fun Preview_PinTopBlockEnabled() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Column(
             modifier = Modifier
                 .background(color = ComposeAppTheme.colors.tyler)
@@ -143,7 +143,7 @@ fun Preview_PinTopBlockEnabled() {
 @Preview
 @Composable
 fun Preview_PinTopBlockLocked() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Column(
             modifier = Modifier
                 .background(color = ComposeAppTheme.colors.tyler)

@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.contacts
 
 import android.os.Parcelable
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.parcelize.Parcelize
 
 sealed class Mode : Parcelable {

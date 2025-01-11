@@ -40,27 +40,27 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statSection
-import cash.p.terminal.modules.coin.CoinFragment
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.HeaderStick
+import cash.p.terminal.ui_compose.components.HeaderStick
 import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.SearchBar
-import cash.p.terminal.ui.compose.components.SectionItemBorderedRowUniversalClear
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.marketkit.models.Coin
+import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.entities.Coin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Optional
@@ -120,7 +120,7 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                 viewModel.onCoinOpened(coin)
                 navController.slideFromRight(
                     R.id.coinFragment,
-                    CoinFragment.Input(coin.uid)
+                    CoinFragmentInput(coin.uid)
                 )
 
                 stat(page = StatPage.MarketSearch, section = section.statSection, event = StatEvent.OpenCoin(coin.uid))
@@ -182,7 +182,7 @@ fun MarketSearchResults(
                         Box(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .background(if (item.favourited) ComposeAppTheme.colors.lucian else ComposeAppTheme.colors.jacob)
+                                .background(if (item.favourited) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob)
                                 .align(Alignment.CenterEnd)
                                 .width(100.dp)
                                 .clickable {
@@ -292,7 +292,7 @@ private fun MarketCoin(
 @Composable
 fun MarketCoinPreview() {
     val coin = Coin("ether", "Ethereum", "ETH")
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         MarketCoin(
             coin.code,
             coin.name,

@@ -32,19 +32,19 @@ import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.BoxItem
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.OverallScore
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.ChartBars
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.RowUniversal
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.strings.helpers.TranslatableString
+import io.horizontalsystems.chartview.ChartBars
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsIconButton
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.StackBarSlice
 import cash.p.terminal.ui.compose.components.StackedBarChart
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.headline1_bran
-import cash.p.terminal.ui.compose.components.subhead1_grey
-import cash.p.terminal.ui.compose.components.subhead1_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.headline1_bran
+import cash.p.terminal.ui_compose.components.subhead1_grey
+import cash.p.terminal.ui_compose.components.subhead1_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import io.horizontalsystems.chartview.ChartMinimal
 
 @Composable
@@ -322,7 +322,7 @@ private fun Preview_HoldersBlockLocked() {
         StackBarSlice(value = 37.75f, color = Color(0x80808085)),
         StackBarSlice(value = 11.9f, color = Color(0x40808085)),
     )
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
                 AnalyticsBlockHeader(
@@ -367,7 +367,7 @@ private fun Preview_HoldersBlockLocked() {
 @Preview
 @Composable
 private fun Preview_AnalyticsBarChartDisabled() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
                 AnalyticsBlockHeader(
@@ -399,7 +399,7 @@ private fun Preview_AnalyticsBarChartDisabled() {
 @Preview
 @Composable
 private fun Preview_AnalyticsLineChartDisabled() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
                 AnalyticsBlockHeader(
@@ -437,7 +437,7 @@ private fun Preview_HoldersBlock() {
         StackBarSlice(value = 8f, color = Color(0xFF8247E5)),
         StackBarSlice(value = 1f, color = Color(0xFFD74F49))
     )
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
                 AnalyticsBlockHeader(
@@ -476,7 +476,7 @@ private fun Preview_HoldersBlock() {
 @Preview
 @Composable
 private fun Preview_AnalyticsRatingScale() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         AnalyticsContainer(
             titleRow = {
                 AnalyticsBlockHeader(

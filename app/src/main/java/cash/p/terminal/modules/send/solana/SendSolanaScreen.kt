@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
@@ -26,8 +26,7 @@ import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -54,7 +53,7 @@ fun SendSolanaScreen(
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -66,32 +65,32 @@ fun SendSolanaScreen(
             onCloseClick = { navController.popBackStack() }
         ) {
             AvailableBalance(
-                    coinCode = wallet.coin.code,
-                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                    availableBalance = availableBalance,
-                    amountInputType = amountInputType,
-                    rate = viewModel.coinRate
+                coinCode = wallet.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                availableBalance = availableBalance,
+                amountInputType = amountInputType,
+                rate = viewModel.coinRate
             )
 
             Spacer(modifier = Modifier.height(12.dp))
             HSAmountInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    focusRequester = focusRequester,
-                    availableBalance = availableBalance,
-                    caution = amountCaution,
-                    coinCode = wallet.coin.code,
-                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                    onClickHint = {
-                        amountInputModeViewModel.onToggleInputType()
-                    },
-                    onValueChange = {
-                        viewModel.onEnterAmount(it)
-                    },
-                    inputType = amountInputType,
-                    rate = viewModel.coinRate,
-                    amountUnique = amountUnique
+                modifier = Modifier.padding(horizontal = 16.dp),
+                focusRequester = focusRequester,
+                availableBalance = availableBalance,
+                caution = amountCaution,
+                coinCode = wallet.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                onClickHint = {
+                    amountInputModeViewModel.onToggleInputType()
+                },
+                onValueChange = {
+                    viewModel.onEnterAmount(it)
+                },
+                inputType = amountInputType,
+                rate = viewModel.coinRate,
+                amountUnique = amountUnique
             )
 
             if (uiState.showAddressInput) {

@@ -6,10 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import cash.p.terminal.core.BaseComposeFragment
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.getInput
-import cash.p.terminal.entities.Account
+import cash.p.terminal.wallet.Account
 import cash.p.terminal.modules.backuplocal.fullbackup.SelectBackupItemsScreen
 import cash.p.terminal.modules.backuplocal.password.BackupType
 import cash.p.terminal.modules.backuplocal.password.LocalBackupPasswordScreen

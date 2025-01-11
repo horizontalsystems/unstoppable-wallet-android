@@ -2,11 +2,10 @@ package cash.p.terminal.modules.send.tron
 
 import cash.p.terminal.R
 import cash.p.terminal.core.ISendTronAdapter
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.Address
 import cash.p.terminal.ui.compose.components.FormsInputStateWarning
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -52,13 +51,13 @@ class SendTronAddressService(
             isInactiveAddress = !adapter.isAddressActive(validAddress)
 
             if (token.type == TokenType.Native && adapter.isOwnAddress(validAddress)) {
-                addressError = Throwable(Translator.getString(R.string.Tron_SelfSendTrxNotAllowed))
+                addressError = Throwable(cash.p.terminal.strings.helpers.Translator.getString(R.string.Tron_SelfSendTrxNotAllowed))
             }
 
             tronAddress = validAddress
         } catch (e: Exception) {
             isInactiveAddress = false
-            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError = Throwable(cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 

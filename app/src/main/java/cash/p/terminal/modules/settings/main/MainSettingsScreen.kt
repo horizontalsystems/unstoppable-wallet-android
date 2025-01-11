@@ -34,9 +34,9 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.managers.RateAppManager
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
@@ -46,19 +46,19 @@ import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
+import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.BadgeText
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.InfoText
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.caption_grey
-import cash.p.terminal.ui.compose.components.subhead1_grey
-import cash.p.terminal.ui.compose.components.subhead1_jacob
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.caption_grey
+import cash.p.terminal.ui_compose.components.subhead1_grey
+import cash.p.terminal.ui_compose.components.subhead1_jacob
 import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun SettingsScreen(
@@ -506,14 +506,14 @@ private fun SettingsFooter(appVersion: String, companyWebPage: String) {
 }
 
 private fun shareAppLink(appLink: String, context: Context) {
-    val shareMessage = Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
+    val shareMessage = cash.p.terminal.strings.helpers.Translator.getString(R.string.SettingsShare_Text) + "\n" + appLink + "\n"
     val shareIntent = Intent(Intent.ACTION_SEND)
     shareIntent.type = "text/plain"
     shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
     context.startActivity(
         Intent.createChooser(
             shareIntent,
-            Translator.getString(R.string.SettingsShare_Title)
+            cash.p.terminal.strings.helpers.Translator.getString(R.string.SettingsShare_Title)
         )
     )
 }
@@ -521,7 +521,7 @@ private fun shareAppLink(appLink: String, context: Context) {
 @Preview
 @Composable
 private fun previewSettingsScreen() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Column {
             CellSingleLineLawrenceSection(
                 listOf({

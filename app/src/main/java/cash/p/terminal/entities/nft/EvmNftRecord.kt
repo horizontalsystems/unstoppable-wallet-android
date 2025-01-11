@@ -1,6 +1,6 @@
 package cash.p.terminal.entities.nft
 
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.nftkit.models.NftType
 
 class EvmNftRecord(

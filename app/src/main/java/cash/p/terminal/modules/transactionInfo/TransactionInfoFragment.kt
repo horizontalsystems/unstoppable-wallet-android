@@ -15,21 +15,20 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.BaseComposeFragment
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.modules.coin.CoinFragment
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.DescriptionCell
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.PriceWithToggleCell
 import cash.p.terminal.ui.compose.components.SectionTitleCell
 import cash.p.terminal.ui.compose.components.TitleAndValueCell
@@ -47,6 +46,7 @@ import cash.p.terminal.ui.compose.components.TransactionInfoStatusCell
 import cash.p.terminal.ui.compose.components.TransactionInfoTransactionHashCell
 import cash.p.terminal.ui.compose.components.TransactionNftAmountCell
 import cash.p.terminal.ui.compose.components.WarningMessageCell
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class TransactionInfoFragment : BaseComposeFragment() {
 
@@ -154,7 +154,7 @@ fun TransactionInfoSection(
                                 coinIconPlaceholder = viewItem.coinIconPlaceholder,
                                 onClick = viewItem.coinUid?.let {
                                     {
-                                        navController.slideFromRight(R.id.coinFragment, CoinFragment.Input(it))
+                                        navController.slideFromRight(R.id.coinFragment, CoinFragmentInput(it))
 
                                         stat(page = StatPage.TransactionInfo, event = StatEvent.OpenCoin(it))
                                     }

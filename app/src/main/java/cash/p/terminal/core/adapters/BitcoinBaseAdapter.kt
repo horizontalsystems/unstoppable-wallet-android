@@ -1,22 +1,22 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BalanceData
-import cash.p.terminal.core.IAdapter
-import cash.p.terminal.core.IBalanceAdapter
-import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.wallet.IBalanceAdapter
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedFilterException
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionDataSortMode
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.TransactionLockInfo
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -35,7 +35,6 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hodler.HodlerOutputData
 import io.horizontalsystems.hodler.HodlerPlugin
-import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -53,7 +52,7 @@ abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
     open val syncMode: BitcoinCore.SyncMode,
     private val backgroundManager: BackgroundManager,
-    val wallet: Wallet,
+    val wallet: cash.p.terminal.wallet.Wallet,
     private val confirmationsThreshold: Int,
     protected val decimal: Int = 8
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {

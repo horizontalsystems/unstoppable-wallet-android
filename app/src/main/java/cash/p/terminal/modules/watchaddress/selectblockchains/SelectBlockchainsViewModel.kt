@@ -1,51 +1,51 @@
 package cash.p.terminal.modules.watchaddress.selectblockchains
 
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.alternativeImageUrl
-import cash.p.terminal.core.badge
 import cash.p.terminal.core.description
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statAccountType
-import cash.p.terminal.entities.AccountType
-import cash.p.terminal.modules.market.ImageSource
 import cash.p.terminal.modules.restoreaccount.restoreblockchains.CoinViewItem
 import cash.p.terminal.modules.watchaddress.WatchAddressService
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.ui_compose.components.ImageSource
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.badge
+import io.horizontalsystems.core.imageUrl
 
 class SelectBlockchainsViewModel(
-    private val accountType: AccountType,
+    private val accountType: cash.p.terminal.wallet.AccountType,
     private val accountName: String?,
     private val service: WatchAddressService
 ) : ViewModelUiState<SelectBlockchainsUiState>() {
 
     private var title: Int = R.string.Watch_Select_Blockchains
-    private var coinViewItems = listOf<CoinViewItem<Token>>()
-    private var selectedCoins = setOf<Token>()
+    private var coinViewItems = listOf<CoinViewItem<cash.p.terminal.wallet.Token>>()
+    private var selectedCoins = setOf<cash.p.terminal.wallet.Token>()
     private var accountCreated = false
 
     init {
         val tokens = service.tokens(accountType)
 
         when (accountType) {
-            is AccountType.SolanaAddress,
-            is AccountType.TronAddress,
-            is AccountType.BitcoinAddress,
-            is AccountType.TonAddress,
-            is AccountType.Cex,
-            is AccountType.Mnemonic,
-            is AccountType.EvmPrivateKey -> Unit // N/A
-            is AccountType.EvmAddress -> {
+            is cash.p.terminal.wallet.AccountType.SolanaAddress,
+            is cash.p.terminal.wallet.AccountType.TronAddress,
+            is cash.p.terminal.wallet.AccountType.BitcoinAddress,
+            is cash.p.terminal.wallet.AccountType.TonAddress,
+            is cash.p.terminal.wallet.AccountType.Cex,
+            is cash.p.terminal.wallet.AccountType.Mnemonic,
+            is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> Unit // N/A
+            is cash.p.terminal.wallet.AccountType.EvmAddress -> {
                 title = R.string.Watch_Select_Blockchains
                 coinViewItems = tokens.map {
                     coinViewItemForBlockchain(it)
                 }
             }
 
-            is AccountType.HdExtendedKey -> {
+            is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
                 title = R.string.Watch_Select_Coins
                 coinViewItems = tokens.map {
                     coinViewItemForToken(it, label = it.badge)

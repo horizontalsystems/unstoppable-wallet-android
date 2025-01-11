@@ -1,6 +1,6 @@
 package cash.p.terminal.entities.nft
 
-import io.horizontalsystems.marketkit.models.NftPrice
+import cash.p.terminal.wallet.models.NftPrice
 import java.util.*
 
 data class NftAssetMetadata(

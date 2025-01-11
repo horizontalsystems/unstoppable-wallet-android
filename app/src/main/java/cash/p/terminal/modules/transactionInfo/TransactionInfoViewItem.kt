@@ -1,11 +1,10 @@
 package cash.p.terminal.modules.transactionInfo
 
-import androidx.compose.runtime.Composable
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.TransactionStatus
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.ui_compose.ColoredValue
+import io.horizontalsystems.core.entities.BlockchainType
 import java.util.Date
 
 sealed class TransactionInfoViewItem {
@@ -62,18 +61,4 @@ sealed class TransactionInfoViewItem {
 
 enum class AmountType {
     YouSent, YouGot, Received, Sent, Approved;
-}
-
-data class ColoredValue(val value: String, val color: ColorName)
-
-enum class ColorName {
-    Remus, Lucian, Grey, Leah;
-
-    @Composable
-    fun compose() = when (this) {
-        Remus -> ComposeAppTheme.colors.remus
-        Lucian -> ComposeAppTheme.colors.lucian
-        Leah -> ComposeAppTheme.colors.leah
-        Grey -> ComposeAppTheme.colors.grey
-    }
 }

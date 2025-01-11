@@ -20,9 +20,8 @@ import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.CellNews
 import cash.p.terminal.ui.compose.components.ListErrorView
@@ -87,7 +86,7 @@ fun PreviewMarketPostView() {
         "1h ago",
         "https://www.binance.org/news"
     )
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         CellNews(
             source = postItem.source,
             title = postItem.title,

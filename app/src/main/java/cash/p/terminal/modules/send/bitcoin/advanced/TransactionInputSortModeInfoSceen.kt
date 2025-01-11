@@ -13,16 +13,16 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.modules.info.ui.InfoBody
 import cash.p.terminal.modules.info.ui.InfoHeader
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun BtcTransactionInputSortInfoScreen(
     onCloseClick: () -> Unit
 ) {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Surface(color = ComposeAppTheme.colors.tyler) {
             Column {
                 AppBar(

@@ -2,11 +2,11 @@ package cash.p.terminal.modules.transactions
 
 import androidx.lifecycle.viewmodel.CreationExtras
 import cash.p.terminal.core.App
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.EvmBlockchainManager
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class SelectContactViewModel(
     private val contactsRepository: ContactsRepository,

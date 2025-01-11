@@ -4,8 +4,9 @@ import cash.p.terminal.BuildConfig
 import cash.p.terminal.R
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.order
-import cash.p.terminal.entities.Currency
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.strings.helpers.Translator
+import io.horizontalsystems.core.entities.BlockchainType
 
 class AppConfigProvider(localStorage: ILocalStorage) {
 

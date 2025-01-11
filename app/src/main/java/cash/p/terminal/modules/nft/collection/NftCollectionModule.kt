@@ -8,7 +8,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.modules.nft.collection.overview.NftCollectionOverviewService
 import cash.p.terminal.modules.nft.collection.overview.NftCollectionOverviewViewModel
 import cash.p.terminal.modules.xrate.XRateService
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 object NftCollectionModule {
 

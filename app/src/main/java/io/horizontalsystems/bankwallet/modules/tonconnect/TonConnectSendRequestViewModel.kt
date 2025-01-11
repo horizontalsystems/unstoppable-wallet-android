@@ -1,20 +1,19 @@
 package cash.p.terminal.modules.tonconnect
 
 import androidx.lifecycle.viewModelScope
-import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.ViewModelUiState
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.TonConnectManager
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toTonWalletFullAccess
-import cash.p.terminal.core.meta
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.modules.transactions.TransactionSource
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.meta
+import cash.p.terminal.wallet.transaction.TransactionSource
+import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import io.horizontalsystems.tonkit.core.TonWallet
 import io.horizontalsystems.tonkit.models.Event
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class TonConnectSendRequestViewModel(
     private val sendRequestEntity: SendRequestEntity?,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val tonConnectManager: TonConnectManager,
 ) : ViewModelUiState<TonConnectSendRequestUiState>() {
 
@@ -81,7 +80,7 @@ class TonConnectSendRequestViewModel(
             error = TonConnectSendRequestError.Other("Token Ton not found")
             return
         }
-        
+
         val transactionSource = TransactionSource(token.blockchain, account, token.type.meta)
 
         val tonTransactionConverter = tonConnectManager.adapterFactory.tonTransactionConverter(

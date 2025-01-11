@@ -1,8 +1,8 @@
 package cash.p.terminal.modules.coin
 
-import cash.p.terminal.core.Clearable
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.managers.MarketFavoritesManager
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.wallet.entities.FullCoin
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.BehaviorSubject

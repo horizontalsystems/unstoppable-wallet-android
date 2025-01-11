@@ -34,13 +34,13 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.CellSingleLineLawrenceSection
-import cash.p.terminal.ui.compose.components.MenuItem
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui_compose.components.AppBar
+import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.body_leah
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -63,7 +63,7 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
         setContent {
             var selectedType by remember { mutableStateOf<MarketWidgetType?>(null) }
 
-            ComposeAppTheme {
+            cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                 Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
                     AppBar(
                         title = stringResource(R.string.WidgetList_Config_Title),

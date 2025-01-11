@@ -5,12 +5,9 @@ import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.R
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.modules.walletconnect.WCDelegate
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager.RequestDataError.NoSuitableAccount
@@ -34,7 +31,7 @@ import kotlin.coroutines.suspendCoroutine
 class WCSessionViewModel(
     private val sessionManager: WCSessionManager,
     private val connectivityManager: ConnectivityManager,
-    private val account: Account?,
+    private val account: cash.p.terminal.wallet.Account?,
     private val topic: String?,
     private val evmBlockchainManager: EvmBlockchainManager
 ) : ViewModelUiState<WCSessionUiState>() {
@@ -337,9 +334,15 @@ class WCSessionViewModel(
             if (Web3Wallet.getSessionProposals().isNotEmpty()) {
                 val blockchains = getSupportedBlockchains(accountNonNull)
                 val namespaces = getSupportedNamespaces(blockchains.map { it.getAccount() })
-                val sessionProposal: Wallet.Model.SessionProposal = requireNotNull(
-                    Web3Wallet.getSessionProposals()
-                        .find { it.proposerPublicKey == proposalPublicKey })
+                val sessionProposal: Wallet.Model.SessionProposal = try {
+                    requireNotNull(
+                        Web3Wallet.getSessionProposals()
+                            .find { it.proposerPublicKey == proposalPublicKey })
+                } catch (e: Exception) {
+                    continuation.resumeWithException(e)
+                    WCDelegate.sessionProposalEvent = null
+                    return@suspendCoroutine
+                }
                 val sessionNamespaces = Web3Wallet.generateApprovedNamespaces(
                     sessionProposal = sessionProposal,
                     supportedNamespaces = namespaces
@@ -462,31 +465,31 @@ class WCSessionViewModel(
         when {
             connection == false
                     && (state == WaitingForApproveSession || state is Ready) -> {
-                return Translator.getString(R.string.WalletConnect_Reconnect_Hint)
+                return cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_Reconnect_Hint)
             }
 
             connection == null -> return null
             state is Invalid -> return getErrorMessage(state.error)
-            state == WaitingForApproveSession -> Translator.getString(R.string.WalletConnect_Approve_Hint)
+            state == WaitingForApproveSession -> cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_Approve_Hint)
         }
         return null
     }
 
     private fun getErrorMessage(error: Throwable): String? {
         return when (error) {
-            is UnsupportedChainId -> Translator.getString(R.string.WalletConnect_Error_UnsupportedChainId)
-            is NoSuitableAccount -> Translator.getString(R.string.WalletConnect_Error_NoSuitableAccount)
-            is NoSuitableEvmKit -> Translator.getString(R.string.WalletConnect_Error_NoSuitableEvmKit)
-            is RequestNotFoundError -> Translator.getString(R.string.WalletConnect_Error_RequestNotFoundError)
-            is ValidationError.UnsupportedChains -> Translator.getString(
+            is UnsupportedChainId -> cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_Error_UnsupportedChainId)
+            is NoSuitableAccount -> cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_Error_NoSuitableAccount)
+            is NoSuitableEvmKit -> cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_Error_NoSuitableEvmKit)
+            is RequestNotFoundError -> cash.p.terminal.strings.helpers.Translator.getString(R.string.WalletConnect_Error_RequestNotFoundError)
+            is ValidationError.UnsupportedChains -> cash.p.terminal.strings.helpers.Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedChains,
                 error.chains.joinToString { it })
 
-            is ValidationError.UnsupportedMethods -> Translator.getString(
+            is ValidationError.UnsupportedMethods -> cash.p.terminal.strings.helpers.Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedMethods,
                 error.methods.joinToString { it })
 
-            is ValidationError.UnsupportedEvents -> Translator.getString(
+            is ValidationError.UnsupportedEvents -> cash.p.terminal.strings.helpers.Translator.getString(
                 R.string.WalletConnect_Error_UnsupportedEvents,
                 error.events.joinToString { it })
 
@@ -494,18 +497,18 @@ class WCSessionViewModel(
         }
     }
 
-    private fun getEvmAddress(account: Account, chain: Chain) =
+    private fun getEvmAddress(account: cash.p.terminal.wallet.Account, chain: Chain) =
         when (val accountType = account.type) {
-            is AccountType.Mnemonic -> {
+            is cash.p.terminal.wallet.AccountType.Mnemonic -> {
                 val seed: ByteArray = accountType.seed
                 Signer.address(seed, chain)
             }
 
-            is AccountType.EvmPrivateKey -> {
+            is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> {
                 Signer.address(accountType.key)
             }
 
-            is AccountType.EvmAddress -> {
+            is cash.p.terminal.wallet.AccountType.EvmAddress -> {
                 Address(accountType.address)
             }
 
@@ -521,7 +524,7 @@ class WCSessionViewModel(
         )
     )
 
-    private fun getSupportedBlockchains(account: Account) = supportedChains.map {
+    private fun getSupportedBlockchains(account: cash.p.terminal.wallet.Account) = supportedChains.map {
         val address = getEvmAddress(account, it).eip55
         WCBlockchain(it.id, it.name, address)
     }

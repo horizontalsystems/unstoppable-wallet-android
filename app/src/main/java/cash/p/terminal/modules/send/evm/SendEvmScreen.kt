@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.Wallet
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.address.AddressParserModule
 import cash.p.terminal.modules.address.AddressParserViewModel
 import cash.p.terminal.modules.address.HSAddressInput
@@ -27,8 +27,7 @@ import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -37,7 +36,7 @@ fun SendEvmScreen(
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
     prefilledData: PrefilledData?,
-    wallet: Wallet,
+    wallet: cash.p.terminal.wallet.Wallet,
     predefinedAddress: String?,
 ) {
     val viewModel = viewModel<SendEvmViewModel>(factory = SendEvmModule.Factory(wallet, predefinedAddress))
@@ -55,7 +54,7 @@ fun SendEvmScreen(
     val amountUnique = paymentAddressViewModel.amountUnique
     val view = LocalView.current
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {

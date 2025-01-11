@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.coin.detectors
 
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.modules.coin.detectors.DetectorsModule.IssueViewItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -3,8 +3,8 @@ package cash.p.terminal.modules.nft.collection.assets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.modules.balance.BalanceXRateRepository
-import io.horizontalsystems.marketkit.models.BlockchainType
+import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
+import io.horizontalsystems.core.entities.BlockchainType
 
 object NftCollectionAssetsModule {
 
@@ -18,7 +18,7 @@ object NftCollectionAssetsModule {
                 blockchainType,
                 collectionUid,
                 App.nftMetadataManager.provider(blockchainType),
-                BalanceXRateRepository("nft-collection-assets", App.currencyManager, App.marketKit)
+                DefaultBalanceXRateRepository("nft-collection-assets", App.currencyManager, App.marketKit)
             )
             return NftCollectionAssetsViewModel(service) as T
         }

@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.Account
+import cash.p.terminal.wallet.Account
 import cash.p.terminal.modules.walletconnect.WCManager
 import kotlinx.parcelize.Parcelize
 
@@ -85,7 +85,7 @@ object MainModule {
         val showRateAppDialog: Boolean,
         val contentHidden: Boolean,
         val showWhatsNew: Boolean,
-        val activeWallet: Account?,
+        val activeWallet: cash.p.terminal.wallet.Account?,
         val torEnabled: Boolean,
         val wcSupportState: WCManager.SupportState?
     )

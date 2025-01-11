@@ -5,15 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.managers.ActiveAccountState
-import cash.p.terminal.entities.Account
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.ActiveAccountState
+import cash.p.terminal.wallet.Account
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule.AccountViewItem
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
 class ManageAccountsViewModel(
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val mode: ManageAccountsModule.Mode
 ) : ViewModel() {
 
@@ -31,7 +31,7 @@ class ManageAccountsViewModel(
         viewModelScope.launch {
             accountManager.activeAccountStateFlow
                 .collect { activeAccountState ->
-                    if (activeAccountState is ActiveAccountState.ActiveAccount) {
+                    if (activeAccountState is cash.p.terminal.wallet.ActiveAccountState.ActiveAccount) {
                         updateViewItems(activeAccountState.account, accountManager.accounts)
                     }
                 }
@@ -40,14 +40,14 @@ class ManageAccountsViewModel(
         updateViewItems(accountManager.activeAccount, accountManager.accounts)
     }
 
-    private fun updateViewItems(activeAccount: Account?, accounts: List<Account>) {
+    private fun updateViewItems(activeAccount: cash.p.terminal.wallet.Account?, accounts: List<cash.p.terminal.wallet.Account>) {
         viewItems = accounts
             .sortedBy { it.name.lowercase() }
             .map { getViewItem(it, activeAccount) }
             .partition { !it.isWatchAccount }
     }
 
-    private fun getViewItem(account: Account, activeAccount: Account?) =
+    private fun getViewItem(account: cash.p.terminal.wallet.Account, activeAccount: cash.p.terminal.wallet.Account?) =
         AccountViewItem(
             accountId = account.id,
             title = account.name,

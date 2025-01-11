@@ -1,14 +1,14 @@
 package cash.p.terminal.modules.contacts.viewmodel
 
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.order
 import cash.p.terminal.modules.contacts.ContactsModule.ContactValidationException
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.contacts.model.ContactAddress
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.Blockchain
+import cash.p.terminal.strings.helpers.TranslatableString
+import io.horizontalsystems.core.entities.Blockchain
 import java.util.UUID
 
 class ContactViewModel(

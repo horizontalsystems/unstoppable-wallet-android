@@ -9,7 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.headline2_jacob
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun InfoH3(text: String) {

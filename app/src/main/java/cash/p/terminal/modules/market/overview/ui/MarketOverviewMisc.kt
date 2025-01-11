@@ -9,8 +9,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.body_leah
+import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.body_leah
 
 @Composable
 fun SeeAllButton(onClick: () -> Unit) {

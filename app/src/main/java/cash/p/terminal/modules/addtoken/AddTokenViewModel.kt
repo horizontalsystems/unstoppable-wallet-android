@@ -6,10 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.providers.Translator
-import io.horizontalsystems.marketkit.models.Blockchain
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -69,7 +68,7 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
                 tokenInfo?.let {
                     if (it.inCoinList) {
                         caution = Caution(
-                            Translator.getString(R.string.AddToken_CoinAlreadyInListWarning),
+                            cash.p.terminal.strings.helpers.Translator.getString(R.string.AddToken_CoinAlreadyInListWarning),
                             Caution.Type.Warning
                         )
                     } else {
@@ -99,9 +98,9 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
     private fun getErrorText(error: Throwable): String = when (error) {
         is AddTokenService.TokenError.NotFound -> {
             if (selectedBlockchain.type == BlockchainType.BinanceChain)
-                Translator.getString(R.string.AddEvmToken_Bep2NotFound)
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.AddEvmToken_Bep2NotFound)
             else
-                Translator.getString(
+                cash.p.terminal.strings.helpers.Translator.getString(
                     R.string.AddEvmToken_ContractAddressNotFoundInBlockchain,
                     selectedBlockchain.name
                 )
@@ -109,12 +108,12 @@ class AddTokenViewModel(private val addTokenService: AddTokenService) :
 
         is AddTokenService.TokenError.InvalidReference -> {
             if (selectedBlockchain.type == BlockchainType.BinanceChain)
-                Translator.getString(R.string.AddToken_InvalidBep2Symbol)
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.AddToken_InvalidBep2Symbol)
             else
-                Translator.getString(R.string.AddToken_InvalidContractAddress)
+                cash.p.terminal.strings.helpers.Translator.getString(R.string.AddToken_InvalidContractAddress)
         }
 
-        else -> Translator.getString(R.string.Error)
+        else -> cash.p.terminal.strings.helpers.Translator.getString(R.string.Error)
     }
 }
 

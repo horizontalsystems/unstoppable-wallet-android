@@ -15,8 +15,8 @@ import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionsViewIte
 import cash.p.terminal.modules.market.topplatforms.TopPlatformViewItem
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.extensions.MetricData
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.TopPair
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.models.TopPair
 import java.math.BigDecimal
 
 object MarketOverviewModule {

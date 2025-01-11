@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.modules.market.MarketModule.Tab
-import io.horizontalsystems.marketkit.models.MarketGlobal
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.models.MarketGlobal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.await

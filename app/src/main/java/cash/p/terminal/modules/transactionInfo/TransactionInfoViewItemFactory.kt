@@ -3,7 +3,6 @@ package cash.p.terminal.modules.transactionInfo
 import cash.p.terminal.R
 import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.core.managers.TonHelper
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
@@ -32,7 +31,7 @@ import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Transacti
 import cash.p.terminal.modules.transactionInfo.TransactionViewItemFactoryHelper.getSwapEventSectionItems
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.TransactionViewItem
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 class TransactionInfoViewItemFactory(
     private val resendEnabled: Boolean,
@@ -50,7 +49,7 @@ class TransactionInfoViewItemFactory(
         var sentToSelf = false
 
         if (transactionItem.record.spam) {
-            itemSections.add(listOf(TransactionInfoViewItem.WarningMessage(Translator.getString(R.string.TransactionInfo_SpamWarning))))
+            itemSections.add(listOf(TransactionInfoViewItem.WarningMessage(cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_SpamWarning))))
         }
 
         when (transaction) {
@@ -318,7 +317,7 @@ class TransactionInfoViewItemFactory(
                     listOf(
                         Transaction(
                             transaction.transaction.contract?.label
-                                ?: Translator.getString(R.string.Transactions_ContractCall),
+                                ?: cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_ContractCall),
                             "",
                             TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
                         )
@@ -473,7 +472,7 @@ class TransactionInfoViewItemFactory(
                     )
                 )
             )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+            itemSections.add(listOf(TransactionInfoViewItem.Description(cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
         } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
             itemSections.add(
                 listOf(
@@ -483,7 +482,7 @@ class TransactionInfoViewItemFactory(
                     )
                 )
             )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+            itemSections.add(listOf(TransactionInfoViewItem.Description(cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
         }
         itemSections.add(TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData))
 

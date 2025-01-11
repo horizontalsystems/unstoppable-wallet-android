@@ -5,7 +5,7 @@ import cash.p.terminal.entities.nft.NftRecord
 import cash.p.terminal.entities.nft.NftUid
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.nftkit.core.NftKit
 import io.horizontalsystems.nftkit.models.NftBalance
 import kotlinx.coroutines.flow.Flow

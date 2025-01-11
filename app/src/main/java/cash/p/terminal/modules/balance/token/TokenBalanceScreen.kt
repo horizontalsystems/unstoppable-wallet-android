@@ -36,17 +36,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.isCustom
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewModel
-import cash.p.terminal.modules.balance.DeemedValue
-import cash.p.terminal.modules.coin.CoinFragment
+import cash.p.terminal.wallet.balance.DeemedValue
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.send.SendFragment
@@ -54,22 +52,24 @@ import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.transactions.transactionList
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.navigation.entity.SwapParams
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui.compose.components.RowUniversal
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_grey
-import cash.p.terminal.ui.compose.components.subhead2_grey
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsBackButton
+import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -96,7 +96,11 @@ fun TokenBalanceScreen(
         if (transactionItems.isNullOrEmpty()) {
             Column(Modifier.padding(paddingValues)) {
                 uiState.balanceViewItem?.let {
-                    TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
+                    TokenBalanceHeader(
+                        balanceViewItem = it,
+                        navController = navController,
+                        viewModel = viewModel
+                    )
                 }
                 if (transactionItems == null) {
                     ListEmptyView(
@@ -115,14 +119,25 @@ fun TokenBalanceScreen(
             LazyColumn(Modifier.padding(paddingValues), state = listState) {
                 item {
                     uiState.balanceViewItem?.let {
-                        TokenBalanceHeader(balanceViewItem = it, navController = navController, viewModel = viewModel)
+                        TokenBalanceHeader(
+                            balanceViewItem = it,
+                            navController = navController,
+                            viewModel = viewModel
+                        )
                     }
                 }
 
                 transactionList(
                     transactionsMap = transactionItems,
                     willShow = { viewModel.willShow(it) },
-                    onClick = { onTransactionClick(it, viewModel, transactionsViewModel, navController) },
+                    onClick = {
+                        onTransactionClick(
+                            it,
+                            viewModel,
+                            transactionsViewModel,
+                            navController
+                        )
+                    },
                     onBottomReached = { viewModel.onBottomReached() }
                 )
             }
@@ -187,7 +202,8 @@ private fun TokenBalanceHeader(
         VSpacer(height = 6.dp)
         if (balanceViewItem.syncingTextValue != null) {
             body_grey(
-                text = balanceViewItem.syncingTextValue + (balanceViewItem.syncedUntilTextValue?.let { " - $it" } ?: ""),
+                text = balanceViewItem.syncingTextValue + (balanceViewItem.syncedUntilTextValue?.let { " - $it" }
+                    ?: ""),
                 maxLines = 1,
             )
         } else {
@@ -256,7 +272,10 @@ private fun LockedBalanceCell(
         HsIconButton(
             modifier = Modifier.size(20.dp),
             onClick = {
-                navController.slideFromBottom(R.id.feeSettingsInfoDialog, FeeSettingsInfoDialog.Input(infoTitle, infoText))
+                navController.slideFromBottom(
+                    R.id.feeSettingsInfoDialog,
+                    FeeSettingsInfoDialog.Input(infoTitle, infoText)
+                )
             }
         ) {
             Icon(
@@ -325,7 +344,12 @@ private fun WalletIcon(
     }
 }
 
-private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanceViewModel, navController: NavController, view: View) {
+private fun onSyncErrorClicked(
+    viewItem: BalanceViewItem,
+    viewModel: TokenBalanceViewModel,
+    navController: NavController,
+    view: View
+) {
     when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
         is BalanceViewModel.SyncError.Dialog -> {
             val wallet = syncErrorDetails.wallet
@@ -345,7 +369,11 @@ private fun onSyncErrorClicked(viewItem: BalanceViewItem, viewModel: TokenBalanc
 
 
 @Composable
-private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, viewModel: TokenBalanceViewModel) {
+private fun ButtonsRow(
+    viewItem: BalanceViewItem,
+    navController: NavController,
+    viewModel: TokenBalanceViewModel
+) {
     val onClickReceive = {
         try {
             val wallet = viewModel.getWalletForReceive()
@@ -353,7 +381,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
 
             stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         } catch (e: BackupRequiredError) {
-            val text = Translator.getString(
+            val text = cash.p.terminal.strings.helpers.Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
                 e.account.name,
                 e.coinTitle
@@ -381,13 +409,19 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.Balance_Send),
                 onClick = {
-                    val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
+                    val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(
+                        R.string.Send_Title,
+                        viewItem.wallet.token.fullCoin.coin.code
+                    )
                     navController.slideFromRight(
                         R.id.sendXFragment,
                         SendFragment.Input(viewItem.wallet, sendTitle)
                     )
 
-                    stat(page = StatPage.TokenPage, event = StatEvent.OpenSend(viewItem.wallet.token))
+                    stat(
+                        page = StatPage.TokenPage,
+                        event = StatEvent.OpenSend(viewItem.wallet.token)
+                    )
                 },
                 enabled = viewItem.sendEnabled
             )
@@ -396,7 +430,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                 ButtonPrimaryDefault(
                     modifier = Modifier.weight(1f),
                     title = stringResource(R.string.Balance_Receive),
-                    onClick =  onClickReceive,
+                    onClick = onClickReceive,
                 )
             } else {
                 ButtonPrimaryCircle(
@@ -411,7 +445,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     icon = R.drawable.ic_swap_24,
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
-                        navController.slideFromRight(R.id.multiswap, viewItem.wallet.token)
+                        navController.slideFromRight(R.id.multiswap, SwapParams.TOKEN_IN to viewItem.wallet.token)
 
                         stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                     },
@@ -426,7 +460,7 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
             enabled = !viewItem.wallet.token.isCustom,
             onClick = {
                 val coinUid = viewItem.wallet.coin.uid
-                val arguments = CoinFragment.Input(coinUid)
+                val arguments = CoinFragmentInput(coinUid)
 
                 navController.slideFromRight(R.id.coinFragment, arguments)
 

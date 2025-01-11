@@ -9,9 +9,8 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.core.feePriceScale
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.evmfee.FeeSummaryViewItem
 import cash.p.terminal.modules.evmfee.FeeViewItem
 import cash.p.terminal.modules.evmfee.GasPriceInfo
@@ -65,7 +64,7 @@ class LegacyFeeSettingsViewModel(
     }
 
     private fun syncFeeViewItems(transactionStatus: DataState<Transaction>) {
-        val notAvailable = Translator.getString(R.string.NotAvailable)
+        val notAvailable = cash.p.terminal.strings.helpers.Translator.getString(R.string.NotAvailable)
         when (transactionStatus) {
             DataState.Loading -> {
                 feeSummaryViewItem = FeeSummaryViewItem(null, notAvailable, ViewState.Loading)

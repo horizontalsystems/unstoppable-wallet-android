@@ -2,20 +2,18 @@ package cash.p.terminal.modules.watchaddress
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.ViewModelUiState
-import cash.p.terminal.core.providers.Translator
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statAccountType
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.BitcoinAddress
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.tokenType
 import cash.p.terminal.modules.address.AddressParserChain
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -32,7 +30,7 @@ class WatchAddressViewModel(
     private var type = Type.Unsupported
     private var address: Address? = null
     private var xPubKey: String? = null
-    private var accountType: AccountType? = null
+    private var accountType: cash.p.terminal.wallet.AccountType? = null
     private var accountNameEdited = false
     private var inputState: DataState<String>? = null
     private var parseAddressJob: Job? = null
@@ -202,19 +200,19 @@ class WatchAddressViewModel(
     }
 
     private fun getAccountType() = when (type) {
-        Type.EvmAddress -> address?.let { AccountType.EvmAddress(it.hex) }
-        Type.SolanaAddress -> address?.let { AccountType.SolanaAddress(it.hex) }
-        Type.TronAddress -> address?.let { AccountType.TronAddress(it.hex) }
-        Type.XPubKey -> xPubKey?.let { AccountType.HdExtendedKey(it) }
+        Type.EvmAddress -> address?.let { cash.p.terminal.wallet.AccountType.EvmAddress(it.hex) }
+        Type.SolanaAddress -> address?.let { cash.p.terminal.wallet.AccountType.SolanaAddress(it.hex) }
+        Type.TronAddress -> address?.let { cash.p.terminal.wallet.AccountType.TronAddress(it.hex) }
+        Type.XPubKey -> xPubKey?.let { cash.p.terminal.wallet.AccountType.HdExtendedKey(it) }
         Type.BitcoinAddress -> address?.let {
             if (it is BitcoinAddress) {
-                AccountType.BitcoinAddress(address = it.hex, blockchainType = it.blockchainType!!, tokenType = it.tokenType)
+                cash.p.terminal.wallet.AccountType.BitcoinAddress(address = it.hex, blockchainType = it.blockchainType!!, tokenType = it.tokenType)
             } else {
                 throw IllegalStateException("Unsupported address type")
             }
         }
         Type.TonAddress -> address?.let {
-            AccountType.TonAddress(it.hex)
+            cash.p.terminal.wallet.AccountType.TonAddress(it.hex)
         }
 
         Type.Unsupported -> throw IllegalStateException("Unsupported address type")
@@ -234,7 +232,7 @@ class WatchAddressViewModel(
 data class WatchAddressUiState(
     val accountCreated: Boolean,
     val submitButtonType: SubmitButtonType,
-    val accountType: AccountType?,
+    val accountType: cash.p.terminal.wallet.AccountType?,
     val accountName: String?,
     val inputState: DataState<String>?
 )
@@ -244,4 +242,4 @@ sealed class SubmitButtonType {
     data class Next(val enabled: Boolean) : SubmitButtonType()
 }
 
-object UnsupportedAddress : Exception(Translator.getString(R.string.Watch_Error_InvalidAddressFormat))
+object UnsupportedAddress : Exception(cash.p.terminal.strings.helpers.Translator.getString(R.string.Watch_Error_InvalidAddressFormat))

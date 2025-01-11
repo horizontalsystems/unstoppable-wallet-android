@@ -8,14 +8,14 @@ import androidx.lifecycle.viewModelScope
 import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.entities.nft.NftAssetMetadata
 import cash.p.terminal.entities.nft.NftAssetMetadata.SaleType
 import cash.p.terminal.entities.nft.NftAssetMetadata.Trait
 import cash.p.terminal.entities.nft.NftCollectionMetadata
 import cash.p.terminal.entities.nft.NftUid
-import cash.p.terminal.entities.viewState
-import cash.p.terminal.ui.compose.TranslatableString
+import io.horizontalsystems.core.entities.viewState
+import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException

@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.transactions
 
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 
 data class TransactionsUiState(
     val transactions: Map<String, List<TransactionViewItem>>?,

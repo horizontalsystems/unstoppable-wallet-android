@@ -1,11 +1,14 @@
 package cash.p.terminal.core.storage
 
-import cash.p.terminal.core.IAccountsStorage
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.ActiveAccount
-import cash.p.terminal.entities.CexType
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.CexType
+import cash.p.terminal.wallet.IAccountsStorage
+import cash.p.terminal.wallet.entities.AccountRecord
+import cash.p.terminal.wallet.entities.SecretList
+import cash.p.terminal.wallet.entities.SecretString
 import io.reactivex.Flowable
 
 class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
@@ -121,40 +124,40 @@ class AccountsStorage(appDatabase: AppDatabase) : IAccountsStorage {
 
         when (account.type) {
             is AccountType.Mnemonic -> {
-                words = SecretList(account.type.words)
-                passphrase = SecretString(account.type.passphrase)
+                words = SecretList((account.type as AccountType.Mnemonic).words)
+                passphrase = SecretString((account.type as AccountType.Mnemonic).passphrase)
                 accountType = MNEMONIC
             }
             is AccountType.EvmPrivateKey -> {
-                key = SecretString(account.type.key.toString())
+                key = SecretString((account.type as AccountType.EvmPrivateKey).key.toString())
                 accountType = PRIVATE_KEY
             }
             is AccountType.EvmAddress -> {
-                key = SecretString(account.type.address)
+                key = SecretString((account.type as AccountType.EvmAddress).address)
                 accountType = ADDRESS
             }
             is AccountType.SolanaAddress -> {
-                key = SecretString(account.type.address)
+                key = SecretString((account.type as AccountType.SolanaAddress).address)
                 accountType = SOLANA_ADDRESS
             }
             is AccountType.TronAddress -> {
-                key = SecretString(account.type.address)
+                key = SecretString((account.type as AccountType.TronAddress).address)
                 accountType = TRON_ADDRESS
             }
             is AccountType.TonAddress -> {
-                key = SecretString(account.type.address)
+                key = SecretString((account.type as AccountType.TonAddress).address)
                 accountType = TON_ADDRESS
             }
             is AccountType.BitcoinAddress -> {
-                key = SecretString(account.type.serialized)
+                key = SecretString((account.type as AccountType.BitcoinAddress).serialized)
                 accountType = BITCOIN_ADDRESS
             }
             is AccountType.HdExtendedKey -> {
-                key = SecretString(account.type.keySerialized)
+                key = SecretString((account.type as AccountType.HdExtendedKey).keySerialized)
                 accountType = HD_EXTENDED_LEY
             }
             is AccountType.Cex -> {
-                key = SecretString(account.type.cexType.serialized())
+                key = SecretString((account.type as AccountType.Cex).cexType.serialized())
                 accountType = CEX
             }
         }

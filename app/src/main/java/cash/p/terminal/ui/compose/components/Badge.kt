@@ -16,7 +16,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.diffColor
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import java.math.BigDecimal
 
 @Composable
@@ -25,7 +26,7 @@ fun Badge(modifier: Modifier = Modifier, text: String) {
         modifier = modifier,
         text = text,
         background = ComposeAppTheme.colors.jeremy,
-        textColor = ComposeAppTheme.colors.bran,
+        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.bran,
     )
 }
 
@@ -61,8 +62,8 @@ fun BadgeWithDiff(
 fun BadgeText(
     modifier: Modifier = Modifier,
     text: String,
-    background: Color = ComposeAppTheme.colors.lucian,
-    textColor: Color = ComposeAppTheme.colors.white,
+    background: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
+    textColor: Color = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.white,
 ) {
     BadgeBase(
         modifier = modifier,
@@ -106,7 +107,7 @@ private fun sign(value: BigDecimal): String {
 @Preview
 @Composable
 fun BadgePreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
@@ -119,14 +120,14 @@ fun BadgePreview() {
 @Preview
 @Composable
 fun BadgeCirclePreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
             BadgeText(
                 background = ComposeAppTheme.colors.issykBlue,
-                textColor = ComposeAppTheme.colors.tyler,
+                textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
                 text = "1"
             )
         }
@@ -136,14 +137,14 @@ fun BadgeCirclePreview() {
 @Preview
 @Composable
 fun BadgeCircleSignal_Preview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
             BadgeText(
                 background = ComposeAppTheme.colors.red20,
-                textColor = ComposeAppTheme.colors.lucian,
+                textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
                 text = "Sell"
             )
         }
@@ -153,7 +154,7 @@ fun BadgeCircleSignal_Preview() {
 @Preview
 @Composable
 fun BadgeWithDiffPreview() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Box(
             modifier = Modifier.padding(16.dp),
             contentAlignment = Alignment.Center

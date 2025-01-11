@@ -1,7 +1,6 @@
 package cash.p.terminal.modules.backuplocal.fullbackup
 
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
 
 class BackupViewItemFactory {
 
@@ -19,21 +18,21 @@ class BackupViewItemFactory {
 
         val otherBackupViewItems = buildList {
             backupItems.watchWallets?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = Translator.getString(R.string.BackupManager_WatchWallets), value = "$it"))
+                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_WatchWallets), value = "$it"))
             }
             backupItems.watchlist?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = Translator.getString(R.string.BackupManager_Watchlist), value = "$it"))
+                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_Watchlist), value = "$it"))
             }
             backupItems.contacts?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = Translator.getString(R.string.Contacts), value = "$it"))
+                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = cash.p.terminal.strings.helpers.Translator.getString(R.string.Contacts), value = "$it"))
             }
             backupItems.customRpc?.let {
-                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = Translator.getString(R.string.BackupManager_CustomRpc), value = "$it"))
+                add(SelectBackupItemsViewModel.OtherBackupViewItem(title = cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_CustomRpc), value = "$it"))
             }
             add(
                 SelectBackupItemsViewModel.OtherBackupViewItem(
-                    title = Translator.getString(R.string.BackupManager_AppSettingsTitle),
-                    subtitle = Translator.getString(R.string.BackupManager_AppSettingsDescription)
+                    title = cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_AppSettingsTitle),
+                    subtitle = cash.p.terminal.strings.helpers.Translator.getString(R.string.BackupManager_AppSettingsDescription)
                 )
             )
         }

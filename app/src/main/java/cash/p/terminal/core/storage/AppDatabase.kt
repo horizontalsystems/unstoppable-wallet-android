@@ -37,7 +37,6 @@ import cash.p.terminal.core.storage.migrations.Migration_58_59
 import cash.p.terminal.core.storage.migrations.Migration_59_60
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
-import cash.p.terminal.entities.EnabledWallet
 import cash.p.terminal.entities.EnabledWalletCache
 import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.EvmMethodLabel
@@ -59,9 +58,10 @@ import cash.p.terminal.modules.profeatures.storage.ProFeaturesDao
 import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
+import cash.p.terminal.wallet.entities.AccountRecord
 
 @Database(version = 60, exportSchema = false, entities = [
-    EnabledWallet::class,
+    cash.p.terminal.wallet.entities.EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
     BlockchainSettingRecord::class,

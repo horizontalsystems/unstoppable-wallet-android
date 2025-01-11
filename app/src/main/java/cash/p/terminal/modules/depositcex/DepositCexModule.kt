@@ -1,7 +1,7 @@
 package cash.p.terminal.modules.depositcex
 
 import cash.p.terminal.core.providers.CexAsset
-import cash.p.terminal.modules.market.ImageSource
+import cash.p.terminal.ui_compose.components.ImageSource
 
 object DepositCexModule {
 

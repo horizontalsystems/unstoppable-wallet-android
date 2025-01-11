@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.chart.ChartCurrencyValueFormatterShortened
-import cash.p.terminal.modules.chart.ChartModule
+import io.horizontalsystems.chartview.chart.ChartModule
 import cash.p.terminal.modules.chart.ChartNumberFormatterShortened
 
 object ProChartModule {

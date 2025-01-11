@@ -1,11 +1,11 @@
 package cash.p.terminal.modules.coin.treasuries
 
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.entities.Currency
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.coin.treasuries.CoinTreasuriesModule.TreasuryTypeFilter
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.CoinTreasury
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.entities.Coin
+import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.wallet.models.CoinTreasury
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope

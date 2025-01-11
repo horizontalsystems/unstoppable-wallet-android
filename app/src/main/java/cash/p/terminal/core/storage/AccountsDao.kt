@@ -2,6 +2,7 @@ package cash.p.terminal.core.storage
 
 import androidx.room.*
 import cash.p.terminal.entities.ActiveAccount
+import cash.p.terminal.wallet.entities.AccountRecord
 import io.reactivex.Flowable
 
 @Dao

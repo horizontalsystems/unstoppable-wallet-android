@@ -5,11 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.entities.CoinValue
-import cash.p.terminal.entities.Currency
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.market.MarketField
 import cash.p.terminal.modules.market.MarketModule.ListType
 import cash.p.terminal.modules.market.SortingField
@@ -31,13 +29,14 @@ import cash.p.terminal.modules.nft.NftCollectionItem
 import cash.p.terminal.modules.nft.nftCollectionItem
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.extensions.MetricData
+import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.models.ChartPoint
-import io.horizontalsystems.marketkit.models.GlobalMarketPoint
-import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.marketkit.models.MarketOverview
-import io.horizontalsystems.marketkit.models.NftPrice
-import io.horizontalsystems.marketkit.models.TopMovers
+import cash.p.terminal.wallet.models.GlobalMarketPoint
+import io.horizontalsystems.core.models.HsTimePeriod
+import cash.p.terminal.wallet.models.MarketOverview
+import cash.p.terminal.wallet.models.NftPrice
+import cash.p.terminal.wallet.models.TopMovers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -178,7 +177,7 @@ class MarketOverviewViewModel(
             items = items.map { item ->
                 TopPlatformViewItem(
                     platform = item.platform,
-                    subtitle = Translator.getString(
+                    subtitle = cash.p.terminal.strings.helpers.Translator.getString(
                         R.string.MarketTopPlatforms_Protocols,
                         item.protocols
                     ),

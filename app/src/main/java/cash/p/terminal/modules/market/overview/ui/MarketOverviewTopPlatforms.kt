@@ -15,7 +15,7 @@ import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.modules.market.topplatforms.Platform
 import cash.p.terminal.modules.market.topplatforms.TopPlatformItem
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun TopPlatformsBoardView(

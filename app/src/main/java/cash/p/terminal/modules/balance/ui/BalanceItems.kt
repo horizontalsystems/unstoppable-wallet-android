@@ -47,14 +47,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.managers.FaqManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.AccountViewItem
-import cash.p.terminal.modules.balance.BalanceSortType
+import cash.p.terminal.wallet.BalanceSortType
 import cash.p.terminal.modules.balance.BalanceUiState
 import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewModel
@@ -65,22 +63,23 @@ import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.rateapp.RateAppModule
 import cash.p.terminal.modules.rateapp.RateAppViewModel
 import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.ButtonPrimaryCircle
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.ButtonSecondaryCircle
+import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
 import cash.p.terminal.ui.compose.components.DoubleText
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
-import cash.p.terminal.ui.compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
 import cash.p.terminal.ui.compose.components.SelectorItem
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.subhead2_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 @Composable
@@ -95,10 +94,10 @@ fun NoteWarning(
         text = text,
         title = stringResource(id = R.string.AccountRecovery_Note),
         icon = R.drawable.ic_attention_20,
-        borderColor = ComposeAppTheme.colors.jacob,
-        backgroundColor = ComposeAppTheme.colors.yellow20,
-        textColor = ComposeAppTheme.colors.jacob,
-        iconColor = ComposeAppTheme.colors.jacob,
+        borderColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow20,
+        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
+        iconColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
         onClose = onClose
     )
 }
@@ -114,10 +113,10 @@ fun NoteError(
         text = text,
         title = stringResource(id = R.string.AccountRecovery_Note),
         icon = R.drawable.ic_attention_20,
-        borderColor = ComposeAppTheme.colors.lucian,
-        backgroundColor = ComposeAppTheme.colors.red20,
-        textColor = ComposeAppTheme.colors.lucian,
-        iconColor = ComposeAppTheme.colors.lucian
+        borderColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red20,
+        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
+        iconColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
     )
 }
 
@@ -265,7 +264,8 @@ fun BalanceItems(
                 item {
                     Row(
                         modifier = Modifier.padding(horizontal = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         ButtonPrimaryYellow(
                             modifier = Modifier.weight(1f),
@@ -276,7 +276,6 @@ fun BalanceItems(
                                 stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.SendTokenList))
                             }
                         )
-                        HSpacer(8.dp)
                         ButtonPrimaryDefault(
                             modifier = Modifier.weight(1f),
                             title = stringResource(R.string.Balance_Receive),
@@ -290,7 +289,7 @@ fun BalanceItems(
 
                                     is ReceiveAllowedState.BackupRequired -> {
                                         val account = receiveAllowedState.account
-                                        val text = Translator.getString(
+                                        val text = cash.p.terminal.strings.helpers.Translator.getString(
                                             R.string.Balance_Receive_BackupRequired_Description,
                                             account.name
                                         )
@@ -307,17 +306,25 @@ fun BalanceItems(
                             }
                         )
                         if (viewModel.isSwapEnabled) {
-                            HSpacer(8.dp)
                             ButtonPrimaryCircle(
                                 icon = R.drawable.ic_swap_24,
                                 contentDescription = stringResource(R.string.Swap),
                                 onClick = {
                                     navController.slideFromRight(R.id.multiswap)
 
-                                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Stacking))
                                 }
                             )
                         }
+                        ButtonPrimaryCircle(
+                            icon = R.drawable.ic_coins_stacking,
+                            contentDescription = stringResource(R.string.stacking),
+                            onClick = {
+                                navController.slideFromRight(R.id.stacking)
+
+                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                            }
+                        )
                     }
                     VSpacer(12.dp)
                 }

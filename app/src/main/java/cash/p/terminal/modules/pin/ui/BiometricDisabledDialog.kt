@@ -15,11 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.body_grey
-import cash.p.terminal.ui.compose.components.body_lucian
-import cash.p.terminal.ui.compose.components.headline2_jacob
-import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui_compose.components.body_grey
+import cash.p.terminal.ui_compose.components.body_lucian
+import cash.p.terminal.ui_compose.components.headline2_jacob
+import cash.p.terminal.ui_compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun BiometricDisabledDialog(onClick: () -> Unit) {
@@ -72,7 +72,7 @@ fun BiometricDisabledDialog(onClick: () -> Unit) {
 @Preview
 @Composable
 fun Preview_BiometricDisabledDialog() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         BiometricDisabledDialog({})
     }
 }

@@ -3,13 +3,13 @@ package cash.p.terminal.modules.coin.ranks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.ui.compose.Select
-import io.horizontalsystems.marketkit.models.RankMultiValue
-import io.horizontalsystems.marketkit.models.RankValue
+import cash.p.terminal.wallet.models.RankMultiValue
+import cash.p.terminal.wallet.models.RankValue
 
 object CoinRankModule {
     class Factory(private val rankType: CoinAnalyticsModule.RankType) : ViewModelProvider.Factory {

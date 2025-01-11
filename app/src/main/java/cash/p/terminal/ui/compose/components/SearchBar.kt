@@ -31,7 +31,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.ui.compose.ComposeAppTheme
+import cash.p.terminal.ui_compose.components.AppBarMenuButton
+import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.MenuItem
+import cash.p.terminal.ui_compose.components.body_grey50
+import cash.p.terminal.ui_compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @ExperimentalAnimationApi
 @Composable
@@ -60,7 +65,7 @@ fun SearchBar(
                 overflow = TextOverflow.Ellipsis
             )
         },
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         elevation = 0.dp,
         navigationIcon = {
             HsIconButton(onClick = {
@@ -104,8 +109,8 @@ fun SearchBar(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         backgroundColor = Color.Transparent,
-                        cursorColor = ComposeAppTheme.colors.jacob,
-                        textColor = ComposeAppTheme.colors.leah
+                        cursorColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
+                        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
                     ),
                     maxLines = 1,
                     singleLine = true,
@@ -150,7 +155,7 @@ fun SearchBar(
                 menuItems.forEach { menuItem ->
                     if (menuItem.icon != null) {
                         AppBarMenuButton(
-                            icon = menuItem.icon,
+                            icon = menuItem.icon!!,
                             onClick = menuItem.onClick,
                             description = menuItem.title.getString(),
                             enabled = menuItem.enabled,
@@ -166,7 +171,7 @@ fun SearchBar(
                                 ),
                             text = menuItem.title.getString(),
                             style = ComposeAppTheme.typography.headline2,
-                            color = if (menuItem.enabled) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.yellow50
+                            color = if (menuItem.enabled) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
                         )
                     }
                 }

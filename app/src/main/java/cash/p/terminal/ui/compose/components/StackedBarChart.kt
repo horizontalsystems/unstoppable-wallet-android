@@ -9,7 +9,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui.compose.ComposeAppTheme
 
 @Composable
 fun StackedBarChart(
@@ -50,7 +49,7 @@ private fun StackedBarChart_Preview() {
         StackBarSlice(value = 8f, color = Color(0xFF8247E5)),
         StackBarSlice(value = 1f, color = Color(0xFFD74F49))
     )
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         StackedBarChart(
             slices,
             Modifier.padding(horizontal = 16.dp, vertical = 12.dp)

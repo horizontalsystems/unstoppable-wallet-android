@@ -5,7 +5,7 @@ import cash.p.terminal.core.HSCaution
 import cash.p.terminal.modules.send.SendErrorInsufficientBalance
 import cash.p.terminal.modules.send.SendErrorMaximumSendAmount
 import cash.p.terminal.modules.send.SendErrorMinimumSendAmount
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import java.math.BigDecimal
 
 class AmountValidator {

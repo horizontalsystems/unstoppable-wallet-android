@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <provider
+            android:name="cash.p.terminal.strings.helpers.LibraryInitializer"
+            android:authorities="${applicationId}.library-initializer"
+            android:exported="false" />
+    </application>
+</manifest>

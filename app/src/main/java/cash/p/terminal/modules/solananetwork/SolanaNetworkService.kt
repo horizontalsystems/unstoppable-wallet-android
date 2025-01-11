@@ -1,6 +1,6 @@
 package cash.p.terminal.modules.solananetwork
 
-import cash.p.terminal.core.Clearable
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.managers.SolanaRpcSourceManager
 import io.horizontalsystems.solanakit.models.RpcSource
 import io.reactivex.Observable

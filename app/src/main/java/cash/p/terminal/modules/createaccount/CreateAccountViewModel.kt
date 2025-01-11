@@ -6,26 +6,22 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.IAccountFactory
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.managers.PassphraseValidator
+import cash.p.terminal.wallet.PassphraseValidator
 import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.entities.normalizeNFKD
+import cash.p.terminal.featureStacking.BuildConfig
+import cash.p.terminal.wallet.normalizeNFKD
 import cash.p.terminal.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 
 class CreateAccountViewModel(
     private val accountFactory: IAccountFactory,
     private val wordsManager: WordsManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val walletActivator: WalletActivator,
     private val passphraseValidator: PassphraseValidator,
     private val predefinedBlockchainSettingsProvider: PredefinedBlockchainSettingsProvider,
@@ -53,7 +49,7 @@ class CreateAccountViewModel(
     var passphraseState by mutableStateOf<DataState.Error?>(null)
         private set
 
-    var success by mutableStateOf<AccountType?>(null)
+    var success by mutableStateOf<cash.p.terminal.wallet.AccountType?>(null)
         private set
 
     fun createAccount() {
@@ -65,7 +61,7 @@ class CreateAccountViewModel(
         val account = accountFactory.account(
             accountName,
             accountType,
-            AccountOrigin.Created,
+            cash.p.terminal.wallet.AccountOrigin.Created,
             false,
             false,
         )
@@ -87,7 +83,7 @@ class CreateAccountViewModel(
         } else {
             passphraseState = DataState.Error(
                 Exception(
-                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
                 )
             )
         }
@@ -122,7 +118,7 @@ class CreateAccountViewModel(
         if (passphrase.isBlank()) {
             passphraseState = DataState.Error(
                 Exception(
-                    Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
                 )
             )
             return true
@@ -130,7 +126,7 @@ class CreateAccountViewModel(
         if (passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
                 Exception(
-                    Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)
                 )
             )
             return true
@@ -138,25 +134,25 @@ class CreateAccountViewModel(
         return false
     }
 
-    private fun activateDefaultWallets(account: Account) {
+    private fun activateDefaultWallets(account: cash.p.terminal.wallet.Account) {
         val tokenQueries = listOfNotNull(
             TokenQuery(BlockchainType.Bitcoin, TokenType.Derived(TokenType.Derivation.Bip84)),
             TokenQuery(BlockchainType.Ethereum, TokenType.Native),
             TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Native),
             //TokenQuery(BlockchainType.Ethereum, TokenType.Eip20("0xdac17f958d2ee523a2206206994597c13d831ec7")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xafcc12e4040615e7afe9fb4330eb3d9120acac05")),
-            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0x5f980533b994c93631a639deda7892fc49995839")),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(BuildConfig.PIRATE_CONTRACT)),
+            TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20(BuildConfig.COSANTA_CONTRACT)),
             //TokenQuery(BlockchainType.BinanceSmartChain, TokenType.Eip20("0xe9e7cea3dedca5984780bafc599bd69add087d56")),
         )
         walletActivator.activateWallets(account, tokenQueries)
     }
 
-    private fun mnemonicAccountType(wordCount: Int): AccountType {
+    private fun mnemonicAccountType(wordCount: Int): cash.p.terminal.wallet.AccountType {
         // A new account can be created only using an English wordlist and limited chars in the passphrase.
         // Despite it, we add text normalizing.
         // It is to avoid potential issues if we allow non-English wordlists on account creation.
         val words = wordsManager.generateWords(wordCount).map { it.normalizeNFKD() }
-        return AccountType.Mnemonic(words, passphrase.normalizeNFKD())
+        return cash.p.terminal.wallet.AccountType.Mnemonic(words, passphrase.normalizeNFKD())
     }
 
 }

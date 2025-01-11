@@ -40,26 +40,26 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.balance.AccountViewItem
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.ui.BalanceSortingSelector
 import cash.p.terminal.modules.balance.ui.BalanceTitleRow
 import cash.p.terminal.modules.balance.ui.TotalBalanceRow
 import cash.p.terminal.modules.balance.ui.wallets
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import cash.p.terminal.ui.compose.components.AppBar
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefault
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.CellMultilineClear
+import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.core.CellMultilineClear
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HeaderSorting
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.diffColor
+import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HeaderSorting
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.diffColor
 import cash.p.terminal.ui.compose.components.diffText
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -74,7 +74,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
     val activeScreen = uiState.isActiveScreen
     if (activeScreen) {
         Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
+            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = {
@@ -334,7 +334,7 @@ fun WalletIconCex(
                     .then(clickableModifier),
                 painter = painterResource(id = R.drawable.ic_attention_24),
                 contentDescription = "coin icon",
-                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian)
+                colorFilter = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian)
             )
         } else {
             CoinImage(

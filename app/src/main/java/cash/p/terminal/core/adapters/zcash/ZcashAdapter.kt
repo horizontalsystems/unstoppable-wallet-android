@@ -20,28 +20,25 @@ import cash.z.ecc.android.sdk.model.ZcashNetwork
 import cash.z.ecc.android.sdk.tool.DerivationTool
 import cash.z.ecc.android.sdk.type.AddressType
 import co.electriccoin.lightwallet.client.model.LightWalletEndpoint
-import cash.p.terminal.core.AdapterState
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.BalanceData
-import cash.p.terminal.core.IAdapter
-import cash.p.terminal.core.IBalanceAdapter
+import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.wallet.IBalanceAdapter
 import cash.p.terminal.core.ILocalStorage
-import cash.p.terminal.core.IReceiveAdapter
+import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.managers.RestoreSettings
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.AccountType
 import cash.p.terminal.entities.LastBlockInfo
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
-import io.horizontalsystems.marketkit.models.Token
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -54,7 +51,7 @@ import kotlin.math.max
 
 class ZcashAdapter(
     context: Context,
-    private val wallet: Wallet,
+    private val wallet: cash.p.terminal.wallet.Wallet,
     restoreSettings: RestoreSettings,
     private val localStorage: ILocalStorage,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
@@ -74,7 +71,7 @@ class ZcashAdapter(
     private val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
-    private val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
+    private val accountType = (wallet.account.type as? cash.p.terminal.wallet.AccountType.Mnemonic) ?: throw UnsupportedAccountException()
     private val seed = accountType.seed
 
     private val zcashAccount = Account.DEFAULT
@@ -87,20 +84,20 @@ class ZcashAdapter(
         val walletInitMode = if (existingWallet) {
             WalletInitMode.ExistingWallet
         } else when (wallet.account.origin) {
-            AccountOrigin.Created -> WalletInitMode.NewWallet
-            AccountOrigin.Restored -> WalletInitMode.RestoreWallet
+            cash.p.terminal.wallet.AccountOrigin.Created -> WalletInitMode.NewWallet
+            cash.p.terminal.wallet.AccountOrigin.Restored -> WalletInitMode.RestoreWallet
         }
 
         val birthday = when (wallet.account.origin) {
-            AccountOrigin.Created -> runBlocking {
+            cash.p.terminal.wallet.AccountOrigin.Created -> runBlocking {
                 BlockHeight.ofLatestCheckpoint(context, network)
             }
-            AccountOrigin.Restored -> restoreSettings.birthdayHeight
+            cash.p.terminal.wallet.AccountOrigin.Restored -> restoreSettings.birthdayHeight
                 ?.let { height ->
                     max(network.saplingActivationHeight.value, height)
                 }
                 ?.let {
-                    BlockHeight.new(network, it)
+                    BlockHeight.new(it)
                 }
         }
 
@@ -262,6 +259,7 @@ class ZcashAdapter(
             is AddressType.Invalid -> throw ZcashError.InvalidAddress
             is AddressType.Transparent -> ZCashAddressType.Transparent
             is AddressType.Shielded -> ZCashAddressType.Shielded
+            is AddressType.Tex -> ZCashAddressType.Shielded
             AddressType.Unified -> ZCashAddressType.Unified
         }
     }

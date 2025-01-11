@@ -1,12 +1,7 @@
 package cash.p.terminal.modules.balance
 
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
 //import cash.p.terminal.entities.Coin
 //import cash.p.terminal.entities.CoinType
-import cash.p.terminal.entities.Wallet
-import org.junit.Assert
-import org.junit.Test
 
 class BalanceSorterTest {
 

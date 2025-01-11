@@ -1,13 +1,13 @@
 package cash.p.terminal.modules.balance
 
-import cash.p.terminal.core.AdapterState
-import cash.p.terminal.core.BalanceData
-import cash.p.terminal.core.Clearable
-import cash.p.terminal.core.IAdapterManager
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.Clearable
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.core.adapters.BaseTronAdapter
-import cash.p.terminal.entities.Wallet
-import cash.p.terminal.modules.balance.BalanceModule.BalanceWarning
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.balance.BalanceWarning
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +25,7 @@ class BalanceAdapterRepository(
 ) : Clearable {
     private var wallets = listOf<Wallet>()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var balanceStateUpdatedJob: Job? = null
     private var balanceUpdatedJob: Job? = null
 

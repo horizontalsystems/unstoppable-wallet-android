@@ -1,11 +1,10 @@
 package cash.p.terminal.core.adapters
 
-import cash.p.terminal.core.AdapterState
-import cash.p.terminal.core.BalanceData
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.managers.TonKitWrapper
 import cash.p.terminal.core.managers.toAdapterState
-import cash.p.terminal.entities.Wallet
 import io.horizontalsystems.tonkit.Address
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.reactivex.BackpressureStrategy
@@ -20,7 +19,7 @@ import java.math.BigDecimal
 class JettonAdapter(
     tonKitWrapper: TonKitWrapper,
     addressStr: String,
-    wallet: Wallet,
+    wallet: cash.p.terminal.wallet.Wallet,
 ) : BaseTonAdapter(tonKitWrapper, wallet.decimal), ISendTonAdapter {
 
     private val address = Address.parse(addressStr)

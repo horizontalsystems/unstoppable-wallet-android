@@ -5,8 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.CexAssetManager
@@ -17,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class SelectCexAssetViewModel(
     private val cexAssetManager: CexAssetManager,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val withBalance: Boolean
 ) : ViewModelUiState<SelectCexAssetUiState>() {
     private var allItems: List<DepositCexModule.CexCoinViewItem> = listOf()

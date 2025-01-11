@@ -3,8 +3,8 @@ package cash.p.terminal.modules.market.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import io.horizontalsystems.marketkit.models.CoinCategory
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.wallet.models.CoinCategory
+import cash.p.terminal.wallet.entities.FullCoin
 import java.math.BigDecimal
 import javax.annotation.concurrent.Immutable
 

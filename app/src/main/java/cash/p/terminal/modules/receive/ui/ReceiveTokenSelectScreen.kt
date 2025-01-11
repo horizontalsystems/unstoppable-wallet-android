@@ -21,28 +21,25 @@ import cash.p.terminal.R
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.viewmodels.CoinForReceiveType
 import cash.p.terminal.modules.receive.viewmodels.ReceiveTokenSelectViewModel
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.components.HsImage
-import cash.p.terminal.ui.compose.components.RowUniversal
+import io.horizontalsystems.core.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
-import cash.p.terminal.ui.compose.components.SectionUniversalItem
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ReceiveTokenSelectScreen(
-    activeAccount: Account,
+    activeAccount: cash.p.terminal.wallet.Account,
     onMultipleAddressesClick: (String) -> Unit,
     onMultipleDerivationsClick: (String) -> Unit,
     onMultipleBlockchainsClick: (String) -> Unit,
-    onCoinClick: (Wallet) -> Unit,
+    onCoinClick: (cash.p.terminal.wallet.Wallet) -> Unit,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<ReceiveTokenSelectViewModel>(
@@ -52,7 +49,7 @@ fun ReceiveTokenSelectScreen(
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
         topBar = {
             SearchBar(
                 title = stringResource(R.string.Balance_Receive),

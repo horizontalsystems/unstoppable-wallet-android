@@ -3,7 +3,7 @@ package cash.p.terminal.modules.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.utils.AddressUriParser
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
 import java.math.BigDecimal
 
 object AddressParserModule {

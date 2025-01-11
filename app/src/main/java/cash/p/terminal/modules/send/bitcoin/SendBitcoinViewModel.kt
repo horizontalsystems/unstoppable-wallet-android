@@ -12,16 +12,15 @@ import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.LocalizedException
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.adapters.BitcoinFeeInfo
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +31,7 @@ import java.net.UnknownHostException
 
 class SendBitcoinViewModel(
     val adapter: ISendBitcoinAdapter,
-    val wallet: Wallet,
+    val wallet: cash.p.terminal.wallet.Wallet,
     private val feeRateService: SendBitcoinFeeRateService,
     private val feeService: SendBitcoinFeeService,
     private val amountService: SendBitcoinAmountService,

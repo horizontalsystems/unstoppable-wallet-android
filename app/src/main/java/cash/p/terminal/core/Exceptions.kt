@@ -2,8 +2,7 @@ package cash.p.terminal.core
 
 import androidx.compose.runtime.Composable
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
-import cash.p.terminal.ui.compose.TranslatableString
+import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
@@ -36,12 +35,9 @@ class FailedTransaction(errorMessage: String?) : RuntimeException(errorMessage) 
 }
 class NoDataException() : Exception() {
     override fun getLocalizedMessage(): String {
-        return Translator.getString(R.string.CoinPage_NoData)
+        return cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPage_NoData)
     }
 }
-
-class NoAuthTokenException(override val message: String = "Auth Token is not set or empty") : Exception()
-class InvalidAuthTokenException(override val message: String = "Auth Token is expired or invalid") : Exception()
 
 sealed class EvmError(message: String? = null) : Throwable(message) {
     object InsufficientBalanceWithFee : EvmError()
@@ -52,14 +48,10 @@ sealed class EvmError(message: String? = null) : Throwable(message) {
     class RpcError(message: String?) : EvmError(message)
 }
 
-sealed class PasswordError : Throwable() {
-    object PasswordInvalid : PasswordError()
-}
-
 sealed class EvmAddressError : Throwable() {
     object InvalidAddress : EvmAddressError() {
         override fun getLocalizedMessage(): String {
-            return Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+            return cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
         }
     }
 }

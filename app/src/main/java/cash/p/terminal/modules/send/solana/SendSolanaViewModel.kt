@@ -11,10 +11,9 @@ import cash.p.terminal.core.EvmError
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ISendSolanaAdapter
 import cash.p.terminal.core.LocalizedException
-import cash.p.terminal.core.ViewModelUiState
+import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.entities.Address
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.send.SendConfirmationData
@@ -22,9 +21,9 @@ import cash.p.terminal.modules.send.SendErrorInsufficientBalance
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
-import cash.p.terminal.ui.compose.TranslatableString
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,7 +32,7 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendSolanaViewModel(
-    val wallet: Wallet,
+    val wallet: cash.p.terminal.wallet.Wallet,
     val sendToken: Token,
     val feeToken: Token,
     val solBalance: BigDecimal,

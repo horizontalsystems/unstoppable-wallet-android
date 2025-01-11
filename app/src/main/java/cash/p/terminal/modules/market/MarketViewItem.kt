@@ -5,8 +5,8 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.core.imageUrl
-import io.horizontalsystems.marketkit.models.Analytics.TechnicalAdvice.Advice
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.wallet.models.Analytics.TechnicalAdvice.Advice
+import cash.p.terminal.wallet.entities.FullCoin
 
 @Immutable
 data class MarketViewItem(

@@ -7,16 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.IWalletManager
 import cash.p.terminal.core.eligibleTokens
 import cash.p.terminal.core.isDefault
 import cash.p.terminal.core.utils.Utils
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.Wallet
 import cash.p.terminal.modules.receive.FullCoinsProvider
-import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenType
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.launch
 
 class ReceiveTokenSelectViewModel(

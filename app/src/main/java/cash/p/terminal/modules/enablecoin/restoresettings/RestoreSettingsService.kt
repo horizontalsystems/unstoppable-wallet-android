@@ -1,15 +1,13 @@
 package cash.p.terminal.modules.enablecoin.restoresettings
 
-import cash.p.terminal.core.Clearable
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.ZcashBirthdayProvider
 import cash.p.terminal.core.restoreSettingTypes
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.subjects.PublishSubject
 
 class RestoreSettingsService(
@@ -18,13 +16,13 @@ class RestoreSettingsService(
     ) : Clearable {
 
     val approveSettingsObservable = PublishSubject.create<TokenWithSettings>()
-    val rejectApproveSettingsObservable = PublishSubject.create<Token>()
+    val rejectApproveSettingsObservable = PublishSubject.create<cash.p.terminal.wallet.Token>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveSettings(token: Token, account: Account? = null) {
+    fun approveSettings(token: Token, account: cash.p.terminal.wallet.Account? = null) {
         val blockchainType = token.blockchainType
 
-        if (account != null && account.origin == AccountOrigin.Created) {
+        if (account != null && account.origin == cash.p.terminal.wallet.AccountOrigin.Created) {
             val settings = RestoreSettings()
             blockchainType.restoreSettingTypes.forEach { settingType ->
                 manager.getSettingValueForCreatedAccount(settingType, blockchainType)?.let {
@@ -47,7 +45,7 @@ class RestoreSettingsService(
         approveSettingsObservable.onNext(TokenWithSettings(token, RestoreSettings()))
     }
 
-    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
+    fun save(settings: RestoreSettings, account: cash.p.terminal.wallet.Account, blockchainType: BlockchainType) {
         manager.save(settings, account, blockchainType)
     }
 

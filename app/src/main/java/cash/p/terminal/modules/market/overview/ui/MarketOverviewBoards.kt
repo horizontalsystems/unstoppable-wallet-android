@@ -18,21 +18,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.slideFromRight
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statSection
-import cash.p.terminal.modules.coin.CoinFragment
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.market.TopMarket
 import cash.p.terminal.modules.market.overview.MarketOverviewModule
-import cash.p.terminal.ui.compose.ComposeAppTheme
 import cash.p.terminal.ui.compose.Select
-import cash.p.terminal.ui.compose.WithTranslatableTitle
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
 import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
 import cash.p.terminal.ui.compose.components.MarketCoinClear
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun BoardsView(
@@ -45,7 +45,7 @@ fun BoardsView(
         {
             navController.slideFromRight(
                 R.id.coinFragment,
-                CoinFragment.Input(it.coinUid)
+                CoinFragmentInput(it.coinUid)
             )
         }
     }

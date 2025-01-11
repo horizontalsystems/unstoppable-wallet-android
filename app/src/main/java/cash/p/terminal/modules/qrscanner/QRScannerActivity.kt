@@ -53,17 +53,17 @@ import com.journeyapps.barcodescanner.ScanOptions
 import cash.p.terminal.R
 import cash.p.terminal.core.BaseActivity
 import cash.p.terminal.core.utils.ModuleField
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.Dark
-import cash.p.terminal.ui.compose.SteelLight
-import cash.p.terminal.ui.compose.components.ButtonPrimary
-import cash.p.terminal.ui.compose.components.ButtonPrimaryDefaults
-import cash.p.terminal.ui.compose.components.ButtonPrimaryTransparent
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import cash.p.terminal.ui.compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.Dark
+import cash.p.terminal.ui_compose.theme.SteelLight
+import cash.p.terminal.ui_compose.components.ButtonPrimary
+import cash.p.terminal.ui_compose.components.ButtonPrimaryDefaults
+import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class QRScannerActivity : BaseActivity() {
 
@@ -140,7 +140,7 @@ private fun QRScannerScreen(
         )
     }
 
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Box(
             Modifier
                 .fillMaxSize()
@@ -212,7 +212,7 @@ private fun ScannerView(onScan: (String) -> Unit) {
         }
     }
     AndroidView(factory = { barcodeView })
-    LifecycleResumeEffect {
+    LifecycleResumeEffect(barcodeView) {
         barcodeView.resume()
 
         onPauseOrDispose {
@@ -281,7 +281,7 @@ private fun PermissionNeededDialog(
     onOkClick: () -> Unit,
     onCancelClick: () -> Unit,
 ) {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         Dialog(onDismissRequest = onCancelClick) {
             Column(
                 modifier = Modifier
@@ -315,7 +315,7 @@ private fun PermissionNeededDialog(
 @Preview
 @Composable
 private fun Preview_PermissionNeededDialog() {
-    ComposeAppTheme {
+    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
         PermissionNeededDialog({}, {})
     }
 }

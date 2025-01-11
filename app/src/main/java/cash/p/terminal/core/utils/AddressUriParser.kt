@@ -6,8 +6,8 @@ import cash.p.terminal.core.factories.removeScheme
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.supported
 import cash.p.terminal.entities.AddressUri
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenType
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.entities.TokenType
 import java.net.URI
 
 

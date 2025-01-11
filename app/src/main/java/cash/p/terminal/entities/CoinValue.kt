@@ -1,8 +1,8 @@
 package cash.p.terminal.entities
 
 import cash.p.terminal.core.App
-import io.horizontalsystems.marketkit.models.Coin
-import io.horizontalsystems.marketkit.models.Token
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.Coin
 import java.math.BigDecimal
 import java.math.BigInteger
 

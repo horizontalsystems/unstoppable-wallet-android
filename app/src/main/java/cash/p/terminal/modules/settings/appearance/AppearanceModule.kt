@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.theme.ThemeService
-import cash.p.terminal.ui.compose.TranslatableString
-import cash.p.terminal.ui.compose.WithTranslatableTitle
+import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.WithTranslatableTitle
 
 object AppearanceModule {
 
@@ -50,7 +50,8 @@ enum class AppIcon(val icon: Int, val titleText: String) : WithTranslatableTitle
     }
 }
 
-enum class PriceChangeInterval(val raw: String, override val title: TranslatableString): WithTranslatableTitle {
+enum class PriceChangeInterval(val raw: String, override val title: TranslatableString):
+    WithTranslatableTitle {
     @SerializedName("hour_24")
     LAST_24H("hour_24", TranslatableString.ResString(R.string.Market_PriceChange_24H)),
     @SerializedName("midnight_utc")

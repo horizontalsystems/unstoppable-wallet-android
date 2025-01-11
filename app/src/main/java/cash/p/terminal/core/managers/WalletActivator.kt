@@ -1,10 +1,11 @@
 package cash.p.terminal.core.managers
 
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.Wallet
-import io.horizontalsystems.marketkit.models.Token
-import io.horizontalsystems.marketkit.models.TokenQuery
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.entities.TokenQuery
 
 class WalletActivator(
     private val walletManager: IWalletManager,

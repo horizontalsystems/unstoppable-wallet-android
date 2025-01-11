@@ -19,10 +19,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.core.slideFromRight
-import cash.p.terminal.entities.ViewState
+import cash.p.terminal.navigation.slideFromRight
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.AnalyticsViewItem
 import cash.p.terminal.modules.coin.analytics.ui.AnalyticsBlockHeader
 import cash.p.terminal.modules.coin.analytics.ui.AnalyticsChart
@@ -42,13 +41,13 @@ import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.StackBarSlice
 import cash.p.terminal.ui.compose.components.StackedBarChart
-import cash.p.terminal.ui.compose.components.VSpacer
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead1_jacob
-import cash.p.terminal.ui.compose.components.subhead1_lucian
-import cash.p.terminal.ui.compose.components.subhead1_remus
-import cash.p.terminal.ui.compose.components.subhead2_grey
-import io.horizontalsystems.marketkit.models.FullCoin
+import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead1_jacob
+import cash.p.terminal.ui_compose.components.subhead1_lucian
+import cash.p.terminal.ui_compose.components.subhead1_remus
+import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.wallet.entities.FullCoin
 
 @Composable
 fun CoinAnalyticsScreen(
@@ -192,7 +191,7 @@ private fun AnalyticsBlock(
                         ProChartFragment.show(
                             fragmentManager,
                             coinUid,
-                            Translator.getString(chartType.titleRes),
+                            cash.p.terminal.strings.helpers.Translator.getString(chartType.titleRes),
                             chartType,
                         )
                     }

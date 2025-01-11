@@ -3,7 +3,7 @@ package cash.p.terminal.modules.btcblockchainsettings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 
 object BtcBlockchainSettingsModule {
 

@@ -1,10 +1,10 @@
 package cash.p.terminal.modules.transactions
 
 import android.util.Log
-import cash.p.terminal.core.Clearable
-import cash.p.terminal.core.managers.CurrencyManager
-import cash.p.terminal.core.managers.MarketKitWrapper
-import cash.p.terminal.entities.CurrencyValue
+import cash.p.terminal.wallet.Clearable
+import io.horizontalsystems.core.CurrencyManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import io.horizontalsystems.core.entities.CurrencyValue
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
@@ -20,13 +20,15 @@ class TransactionsRateRepository(
     private val marketKit: MarketKitWrapper,
 ) : Clearable {
     private val baseCurrency get() = currencyManager.baseCurrency
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val dataExpiredSubject = PublishSubject.create<Unit>()
     val dataExpiredObservable: Observable<Unit> = dataExpiredSubject
 
-    private val historicalRateSubject = PublishSubject.create<Pair<HistoricalRateKey, CurrencyValue>>()
-    val historicalRateObservable: Observable<Pair<HistoricalRateKey, CurrencyValue>> = historicalRateSubject
+    private val historicalRateSubject =
+        PublishSubject.create<Pair<HistoricalRateKey, CurrencyValue>>()
+    val historicalRateObservable: Observable<Pair<HistoricalRateKey, CurrencyValue>> =
+        historicalRateSubject
 
     private val requestedXRates = mutableMapOf<HistoricalRateKey, Unit>()
 
@@ -61,7 +63,10 @@ class TransactionsRateRepository(
                     historicalRateSubject.onNext(Pair(key, CurrencyValue(baseCurrency, rate)))
                 }
             } catch (e: Throwable) {
-                Log.w("XRate", "Could not fetch xrate for ${key.coinUid}:${key.timestamp}, ${e.javaClass.simpleName}:${e.message}")
+                Log.w(
+                    "XRate",
+                    "Could not fetch xrate for ${key.coinUid}:${key.timestamp}, ${e.javaClass.simpleName}:${e.message}"
+                )
             } finally {
                 requestedXRates.remove(key)
             }

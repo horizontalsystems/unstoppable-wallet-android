@@ -1,7 +1,7 @@
 package cash.p.terminal.entities.nft
 
 import androidx.room.Entity
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 
 @Entity(primaryKeys = ["blockchainType", "accountId"])
 data class NftMetadataSyncRecord(

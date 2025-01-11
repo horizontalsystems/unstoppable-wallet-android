@@ -3,11 +3,11 @@ package cash.p.terminal.modules.evmfee
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.ServiceState
-import cash.p.terminal.core.Warning
+import cash.p.terminal.wallet.Warning
 import cash.p.terminal.core.ethereum.EvmCoinService
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.entities.FeePriceScale
-import cash.p.terminal.entities.ViewState
+import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559FeeSettingsViewModel
 import cash.p.terminal.modules.evmfee.eip1559.Eip1559GasPriceService
 import cash.p.terminal.modules.evmfee.legacy.LegacyFeeSettingsViewModel
@@ -16,7 +16,7 @@ import cash.p.terminal.modules.fee.FeeItem
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.GasPrice
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import java.math.BigInteger

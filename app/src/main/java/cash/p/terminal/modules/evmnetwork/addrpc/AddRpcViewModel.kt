@@ -7,14 +7,12 @@ import androidx.lifecycle.ViewModel
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
 import cash.p.terminal.core.managers.EvmSyncSourceManager
-import cash.p.terminal.core.providers.Translator
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import io.horizontalsystems.marketkit.models.Blockchain
+import io.horizontalsystems.core.entities.Blockchain
 import java.net.MalformedURLException
 import java.net.URI
-import java.net.URISyntaxException
 
 class AddRpcViewModel(
     private val blockchain: Blockchain,
@@ -52,7 +50,7 @@ class AddRpcViewModel(
                 throw MalformedURLException()
             }
         } catch (e: Throwable) {
-            urlCaution = Caution(Translator.getString(R.string.AddEvmSyncSource_Error_InvalidUrl), Caution.Type.Error)
+            urlCaution = Caution(cash.p.terminal.strings.helpers.Translator.getString(R.string.AddEvmSyncSource_Error_InvalidUrl), Caution.Type.Error)
             syncState()
             return
         }
@@ -60,7 +58,7 @@ class AddRpcViewModel(
         val existingSources = evmSyncSourceManager.allSyncSources(blockchain.type)
 
         if (existingSources.any { it.uri == sourceUri}) {
-            urlCaution = Caution(Translator.getString(R.string.AddEvmSyncSource_Warning_UrlExists), Caution.Type.Warning)
+            urlCaution = Caution(cash.p.terminal.strings.helpers.Translator.getString(R.string.AddEvmSyncSource_Warning_UrlExists), Caution.Type.Warning)
             syncState()
             return
         }

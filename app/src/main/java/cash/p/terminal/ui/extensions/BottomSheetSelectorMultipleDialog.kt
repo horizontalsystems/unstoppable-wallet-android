@@ -22,16 +22,15 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentManager
 import cash.p.terminal.R
-import cash.p.terminal.modules.market.ImageSource
-import cash.p.terminal.ui.compose.ComposeAppTheme
-import cash.p.terminal.ui.compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.components.ImageSource
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.HsImage
 import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.RowUniversal
-import cash.p.terminal.ui.compose.components.SectionUniversalItem
+import io.horizontalsystems.core.RowUniversal
+import io.horizontalsystems.core.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.body_leah
-import cash.p.terminal.ui.compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.components.body_leah
+import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui.helpers.TextHelper
 import io.horizontalsystems.core.helpers.HudHelper
 import java.util.UUID
@@ -63,7 +62,7 @@ class BottomSheetSelectorMultipleDialog(
                 ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner)
             )
             setContent {
-                ComposeAppTheme {
+                cash.p.terminal.ui_compose.theme.ComposeAppTheme {
                     BottomSheetHeader(
                         iconPainter = icon.painter(),
                         title = title,
@@ -90,7 +89,7 @@ class BottomSheetSelectorMultipleDialog(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
+                .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel10, RoundedCornerShape(12.dp))
         ) {
             items.forEachIndexed { index, item ->
                 val onClick = if (item.copyableString != null) {

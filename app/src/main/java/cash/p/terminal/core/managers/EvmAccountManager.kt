@@ -1,11 +1,11 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.AppLogger
-import cash.p.terminal.core.IAccountManager
-import cash.p.terminal.core.IWalletManager
-import cash.p.terminal.entities.Account
-import cash.p.terminal.entities.AccountOrigin
-import cash.p.terminal.entities.EnabledWallet
+import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.erc20kit.core.DataProvider
 import io.horizontalsystems.erc20kit.events.TransferEventInstance
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -13,9 +13,6 @@ import io.horizontalsystems.ethereumkit.decorations.IncomingDecoration
 import io.horizontalsystems.ethereumkit.decorations.UnknownTransactionDecoration
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.FullTransaction
-import io.horizontalsystems.marketkit.models.BlockchainType
-import io.horizontalsystems.marketkit.models.TokenQuery
-import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.oneinchkit.decorations.OneInchDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchSwapDecoration
 import io.horizontalsystems.oneinchkit.decorations.OneInchUnknownDecoration
@@ -38,7 +35,7 @@ import java.util.concurrent.Executors
 
 class EvmAccountManager(
     private val blockchainType: BlockchainType,
-    private val accountManager: IAccountManager,
+    private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val walletManager: IWalletManager,
     private val marketKit: MarketKitWrapper,
     private val evmKitManager: EvmKitManager,
@@ -88,10 +85,10 @@ class EvmAccountManager(
         }
     }
 
-    private fun handle(fullTransactions: List<FullTransaction>, account: Account, evmKitWrapper: EvmKitWrapper, initial: Boolean) {
+    private fun handle(fullTransactions: List<FullTransaction>, account: cash.p.terminal.wallet.Account, evmKitWrapper: EvmKitWrapper, initial: Boolean) {
         val shouldAutoEnableTokens = tokenAutoEnableManager.isAutoEnabled(account, blockchainType)
 
-        if (initial && account.origin == AccountOrigin.Restored && !account.isWatchAccount && !shouldAutoEnableTokens) {
+        if (initial && account.origin == cash.p.terminal.wallet.AccountOrigin.Restored && !account.isWatchAccount && !shouldAutoEnableTokens) {
             return
         }
 
@@ -167,7 +164,7 @@ class EvmAccountManager(
     private fun handle(
         foundTokens: List<FoundToken>,
         suspiciousTokenTypes: List<TokenType>,
-        account: Account,
+        account: cash.p.terminal.wallet.Account,
         evmKit: EthereumKit
     ) {
         if (foundTokens.isEmpty() && suspiciousTokenTypes.isEmpty()) return
@@ -238,7 +235,7 @@ class EvmAccountManager(
         }
     }
 
-    private suspend fun handle(tokenInfos: List<TokenInfo>, account: Account, evmKit: EthereumKit) = withContext(Dispatchers.IO) {
+    private suspend fun handle(tokenInfos: List<TokenInfo>, account: cash.p.terminal.wallet.Account, evmKit: EthereumKit) = withContext(Dispatchers.IO) {
 //        Log.e("AAA", "handle tokens ${tokenInfos.size} \n ${tokenInfos.joinToString(separator = " ") { it.type.id }}")
 
         val existingWallets = walletManager.activeWallets
@@ -281,7 +278,7 @@ class EvmAccountManager(
         }
 
         val enabledWallets = requests.awaitAll().filterNotNull().map { tokenInfo ->
-            EnabledWallet(
+            cash.p.terminal.wallet.entities.EnabledWallet(
                 tokenQueryId = TokenQuery(blockchainType, tokenInfo.type).id,
                 accountId = account.id,
                 coinName = tokenInfo.coinName,

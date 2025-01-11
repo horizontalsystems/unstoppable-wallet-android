@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.Caution
-import cash.p.terminal.core.providers.Translator
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.modules.multiswap.settings.SwapSettingsModule.getState
 import cash.p.terminal.modules.multiswap.settings.ui.InputButton
@@ -45,11 +45,11 @@ class SwapDeadlineViewModel(
 
             return listOf(
                 InputButton(
-                    Translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_DeadlineMinute, lowerMinutes),
                     lowerMinutes
                 ),
                 InputButton(
-                    Translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes),
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_DeadlineMinute, upperMinutes),
                     upperMinutes
                 )
             )
