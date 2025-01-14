@@ -18,7 +18,6 @@
         android:allowBackup="false"
         android:icon="@mipmap/launcher_main"
         android:label="@string/App_Name"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme.DayNight"
         tools:ignore="GoogleAppIndexingWarning">
