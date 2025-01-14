@@ -6,6 +6,10 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.ui.Modifier
 import io.horizontalsystems.bankwallet.core.BaseActivity
 import io.horizontalsystems.bankwallet.modules.pin.ui.PinUnlock
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -17,11 +21,17 @@ class LockScreenActivity : BaseActivity() {
 
         setContent {
             ComposeAppTheme {
-                PinUnlock(
-                    onSuccess = {
-                        finish()
-                    }
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .systemBarsPadding()
+                ) {
+                    PinUnlock(
+                        onSuccess = {
+                            finish()
+                        }
+                    )
+                }
             }
         }
 

@@ -5,6 +5,10 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.navGraphViewModels
@@ -73,14 +77,20 @@ class SendFragment : BaseFragment() {
                             factory
                         }
                         setContent {
-                            SendBitcoinNavHost(
-                                title,
-                                findNavController(),
-                                sendBitcoinViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendBitcoinNavHost(
+                                    title,
+                                    findNavController(),
+                                    sendBitcoinViewModel,
+                                    amountInputModeViewModel,
+                                    sendEntryPointDestId,
+                                    prefilledData,
+                                )
+                            }
                         }
                     }
 
@@ -90,14 +100,20 @@ class SendFragment : BaseFragment() {
                             factory
                         }
                         setContent {
-                            SendBinanceScreen(
-                                title,
-                                findNavController(),
-                                sendBinanceViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendBinanceScreen(
+                                    title,
+                                    findNavController(),
+                                    sendBinanceViewModel,
+                                    amountInputModeViewModel,
+                                    sendEntryPointDestId,
+                                    prefilledData,
+                                )
+                            }
                         }
                     }
 
@@ -107,14 +123,20 @@ class SendFragment : BaseFragment() {
                             factory
                         }
                         setContent {
-                            SendZCashScreen(
-                                title,
-                                findNavController(),
-                                sendZCashViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendZCashScreen(
+                                    title,
+                                    findNavController(),
+                                    sendZCashViewModel,
+                                    amountInputModeViewModel,
+                                    sendEntryPointDestId,
+                                    prefilledData,
+                                )
+                            }
                         }
                     }
 
@@ -128,14 +150,20 @@ class SendFragment : BaseFragment() {
                     BlockchainType.Fantom,
                     BlockchainType.ArbitrumOne -> {
                         setContent {
-                            SendEvmScreen(
-                                title,
-                                findNavController(),
-                                amountInputModeViewModel,
-                                prefilledData,
-                                wallet,
-                                predefinedAddress
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendEvmScreen(
+                                    title,
+                                    findNavController(),
+                                    amountInputModeViewModel,
+                                    prefilledData,
+                                    wallet,
+                                    predefinedAddress
+                                )
+                            }
                         }
                     }
 
@@ -143,14 +171,20 @@ class SendFragment : BaseFragment() {
                         val factory = SendSolanaModule.Factory(wallet, predefinedAddress)
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                         setContent {
-                            SendSolanaScreen(
-                                title,
-                                findNavController(),
-                                sendSolanaViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendSolanaScreen(
+                                    title,
+                                    findNavController(),
+                                    sendSolanaViewModel,
+                                    amountInputModeViewModel,
+                                    sendEntryPointDestId,
+                                    prefilledData,
+                                )
+                            }
                         }
                     }
 
@@ -158,14 +192,20 @@ class SendFragment : BaseFragment() {
                         val factory = SendTonModule.Factory(wallet, predefinedAddress)
                         val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment) { factory }
                         setContent {
-                            SendTonScreen(
-                                title,
-                                findNavController(),
-                                sendTonViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendTonScreen(
+                                    title,
+                                    findNavController(),
+                                    sendTonViewModel,
+                                    amountInputModeViewModel,
+                                    sendEntryPointDestId,
+                                    prefilledData,
+                                )
+                            }
                         }
                     }
 
@@ -173,14 +213,20 @@ class SendFragment : BaseFragment() {
                         val factory = SendTronModule.Factory(wallet, predefinedAddress)
                         val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
                         setContent {
-                            SendTronScreen(
-                                title,
-                                findNavController(),
-                                sendTronViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .systemBarsPadding()
+                            ) {
+                                SendTronScreen(
+                                    title,
+                                    findNavController(),
+                                    sendTronViewModel,
+                                    amountInputModeViewModel,
+                                    sendEntryPointDestId,
+                                    prefilledData,
+                                )
+                            }
                         }
                     }
 
