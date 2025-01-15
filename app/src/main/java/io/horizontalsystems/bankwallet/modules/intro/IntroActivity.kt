@@ -55,7 +55,6 @@ class IntroActivity : BaseActivity() {
         setContent {
             IntroScreen(viewModel, nightMode) { finish() }
         }
-        setStatusBarTransparent()
     }
 
     companion object {
