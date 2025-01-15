@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.pin.unlock.PinUnlockViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PinUnlock(
     onSuccess: () -> Unit,
@@ -70,6 +74,7 @@ fun PinUnlock(
         topBar = {
             Row(
                 modifier = Modifier
+                    .windowInsetsPadding(TopAppBarDefaults.windowInsets)
                     .fillMaxWidth()
                     .height(64.dp),
                 verticalAlignment = Alignment.CenterVertically,

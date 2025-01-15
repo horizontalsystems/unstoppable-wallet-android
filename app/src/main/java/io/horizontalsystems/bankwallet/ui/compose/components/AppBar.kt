@@ -3,14 +3,18 @@ package io.horizontalsystems.bankwallet.ui.compose.components
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -98,16 +102,20 @@ fun AppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBar(
     title: @Composable () -> Unit,
     navigationIcon: @Composable (() -> Unit)? = null,
     menuItems: List<IMenuItem> = listOf(),
     showSpinner: Boolean = false,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     backgroundColor: Color = ComposeAppTheme.colors.tyler
 ) {
     TopAppBar(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier
+            .windowInsetsPadding(windowInsets)
+            .height(64.dp),
         title = title,
         backgroundColor = backgroundColor,
         navigationIcon = navigationIcon?.let {

@@ -8,8 +8,6 @@
     <style name="Theme.AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorAccent">@color/yellow_l</item>
         <item name="android:windowBackground">@color/light</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:actionMenuTextAppearance">@style/Headline2</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_l</item>
@@ -54,6 +52,5 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Theme.AppTheme.DayNight</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>
