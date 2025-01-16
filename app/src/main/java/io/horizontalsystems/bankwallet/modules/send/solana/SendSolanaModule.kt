@@ -3,9 +3,11 @@ package io.horizontalsystems.bankwallet.modules.send.solana
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.adapters.SolanaAdapter
 import io.horizontalsystems.bankwallet.core.isNative
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -14,6 +16,7 @@ import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
+import java.math.BigDecimal
 import java.math.RoundingMode
 
 object SendSolanaModule {
@@ -63,5 +66,15 @@ object SendSolanaModule {
             }
         }
     }
+
+    data class SendUiState(
+        val availableBalance: BigDecimal,
+        val amountCaution: HSCaution?,
+        val addressError: Throwable?,
+        val canBeSend: Boolean,
+        val showAddressInput: Boolean,
+        val canBeSendToAddress: Boolean,
+        val address: Address?,
+    )
 
 }
