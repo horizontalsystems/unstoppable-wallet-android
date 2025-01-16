@@ -38,5 +38,15 @@ class AmountInputModeViewModel(
         inputType = inputType.reversed()
         localStorage.amountInputType = inputType
     }
+
+    fun onCoinInput() {
+        inputType = AmountInputType.COIN
+        localStorage.amountInputType = inputType
+    }
+
+    fun onFiatInput() {
+        inputType = AmountInputType.CURRENCY
+        localStorage.amountInputType = inputType
+    }
 }
 

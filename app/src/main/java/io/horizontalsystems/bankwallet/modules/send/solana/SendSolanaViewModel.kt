@@ -20,7 +20,7 @@ import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendErrorInsufficientBalance
 import io.horizontalsystems.bankwallet.modules.send.SendResult
-import io.horizontalsystems.bankwallet.modules.send.SendUiState
+import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule.SendUiState
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.marketkit.models.Token
