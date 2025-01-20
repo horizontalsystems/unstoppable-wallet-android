@@ -14,6 +14,9 @@
         android:id="@+id/sendEvmConfirmationFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment"/>
     <fragment
+        android:id="@+id/sendEvmProcessingFragment"
+        android:name="io.horizontalsystems.bankwallet.modules.send.evm.processing.SendEvmProcessingFragment"/>
+    <fragment
         android:id="@+id/sendEvmSettingsFragment"
         android:name="io.horizontalsystems.bankwallet.modules.send.evm.settings.SendEvmSettingsFragment" />
     <fragment
