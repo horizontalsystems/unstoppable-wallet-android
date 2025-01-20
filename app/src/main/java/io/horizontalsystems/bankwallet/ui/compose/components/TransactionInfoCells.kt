@@ -426,7 +426,7 @@ fun TransactionInfoSpeedUpCell(
             tint = ComposeAppTheme.colors.jacob
         )
         Spacer(Modifier.width(16.dp))
-        body_jacob(text = stringResource(R.string.TransactionInfo_SpeedUp))
+        body_leah(text = stringResource(R.string.TransactionInfo_SpeedUp))
     }
 }
 
@@ -453,7 +453,7 @@ fun TransactionInfoCancelCell(
             tint = ComposeAppTheme.colors.redL
         )
         Spacer(Modifier.width(16.dp))
-        body_lucian(text = stringResource(R.string.TransactionInfoOptions_Cancel_Button))
+        body_leah(text = stringResource(R.string.TransactionInfoOptions_Cancel_Button))
     }
 }
 

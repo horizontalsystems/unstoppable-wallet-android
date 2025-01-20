@@ -436,6 +436,8 @@
     <string name="Send_Confirmation_HintMemo" translatable="false">Memo</string>
     <string name="Send_Confirmation_Send_Button">Send</string>
     <string name="Send_Confirmation_Action">Action</string>
+    <string name="Send_Processing">Processing!</string>
+    <string name="Send_Processing_Description">Transaction sent successfully. Check its status for details.</string>
 
     <string name="Send_Success">\u2713 Sent</string>
 
