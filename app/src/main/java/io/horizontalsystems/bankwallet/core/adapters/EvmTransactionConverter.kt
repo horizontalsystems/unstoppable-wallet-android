@@ -59,6 +59,7 @@ class EvmTransactionConverter(
 
     fun transactionRecord(fullTransaction: FullTransaction): EvmTransactionRecord {
         val transaction = fullTransaction.transaction
+        val isSpam = spamManager.isSpam(transaction.hash)
 
         val transactionRecord = when (val decoration = fullTransaction.decoration) {
             is ContractCreationDecoration -> {
@@ -66,7 +67,7 @@ class EvmTransactionConverter(
             }
 
             is IncomingDecoration -> {
-                EvmIncomingTransactionRecord(transaction, baseToken, source, spamManager, decoration.from.eip55, baseCoinValue(decoration.value, false))
+                EvmIncomingTransactionRecord(transaction, baseToken, source, decoration.from.eip55, baseCoinValue(decoration.value, false), isSpam)
             }
 
             is OutgoingDecoration -> {
@@ -186,14 +187,15 @@ class EvmTransactionConverter(
                     }
                     transaction.from != address && transaction.to != address -> {
                         ExternalContractCallTransactionRecord(
-                            transaction, baseToken, source, spamManager,
+                            transaction, baseToken, source,
                             getInternalEvents(internalTransactions) +
                                     getIncomingEip20Events(incomingEip20Transfers) +
                                     getIncomingEip721Events(incomingEip721Transfers) +
                                     getIncomingEip1155Events(incomingEip1155Transfers),
                             getOutgoingEip20Events(outgoingEip20Transfers) +
                                     getOutgoingEip721Events(outgoingEip721Transfers) +
-                                    getOutgoingEip1155Events(outgoingEip1155Transfers)
+                                    getOutgoingEip1155Events(outgoingEip1155Transfers),
+                            isSpam
                         )
                     }
                     else -> null

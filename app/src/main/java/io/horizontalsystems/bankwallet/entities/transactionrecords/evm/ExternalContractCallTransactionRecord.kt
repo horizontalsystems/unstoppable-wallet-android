@@ -1,6 +1,5 @@
 package io.horizontalsystems.bankwallet.entities.transactionrecords.evm
 
-import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.modules.transactions.TransactionSource
 import io.horizontalsystems.ethereumkit.models.Transaction
@@ -10,15 +9,15 @@ class ExternalContractCallTransactionRecord(
     transaction: Transaction,
     baseToken: Token,
     source: TransactionSource,
-    spamManager: SpamManager,
     val incomingEvents: List<TransferEvent>,
-    val outgoingEvents: List<TransferEvent>
+    val outgoingEvents: List<TransferEvent>,
+    isSpam: Boolean
 ) : EvmTransactionRecord(
     transaction = transaction,
     baseToken = baseToken,
     source = source,
     foreignTransaction = true,
-    spam = spamManager.isSpam(incomingEvents, outgoingEvents)
+    spam = isSpam
 ) {
 
     override val mainValue: TransactionValue?
