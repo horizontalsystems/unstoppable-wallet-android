@@ -13,6 +13,7 @@ import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.modules.send.SendFragment
 import cash.p.terminal.modules.tokenselect.TokenSelectScreen
 import cash.p.terminal.modules.tokenselect.TokenSelectViewModel
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenType
@@ -36,7 +37,7 @@ class SendTokenSelectFragment : BaseComposeFragment() {
             onClickItem = {
                 when {
                     it.sendEnabled -> {
-                        val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
+                        val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                         navController.slideFromRight(
                             R.id.sendXFragment,
                             SendFragment.Input(

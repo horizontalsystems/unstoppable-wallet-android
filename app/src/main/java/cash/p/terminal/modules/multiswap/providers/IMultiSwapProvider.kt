@@ -4,7 +4,6 @@ import cash.p.terminal.modules.multiswap.ISwapFinalQuote
 import cash.p.terminal.modules.multiswap.ISwapQuote
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.wallet.Token
-import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 
 interface IMultiSwapProvider {
@@ -14,12 +13,12 @@ interface IMultiSwapProvider {
     val icon: Int
     val priority: Int
 
-    fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
-        return tokenFrom.blockchainType == tokenTo.blockchainType &&
-            supports(tokenFrom.blockchainType)
+    suspend fun supports(tokenFrom: Token, tokenTo: Token): Boolean {
+        return (tokenFrom.blockchainType == tokenTo.blockchainType) &&
+            supports(tokenFrom)
     }
 
-    fun supports(blockchainType: BlockchainType): Boolean
+    suspend fun supports(token: Token): Boolean
     suspend fun fetchQuote(
         tokenIn: Token,
         tokenOut: Token,

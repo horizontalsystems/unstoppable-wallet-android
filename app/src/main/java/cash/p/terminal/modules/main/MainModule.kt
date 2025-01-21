@@ -85,7 +85,7 @@ object MainModule {
         val showRateAppDialog: Boolean,
         val contentHidden: Boolean,
         val showWhatsNew: Boolean,
-        val activeWallet: cash.p.terminal.wallet.Account?,
+        val activeWallet: Account?,
         val torEnabled: Boolean,
         val wcSupportState: WCManager.SupportState?
     )

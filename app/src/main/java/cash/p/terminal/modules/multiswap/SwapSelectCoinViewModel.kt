@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.multiswap
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -143,7 +144,9 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                         ?.let { wallet ->
                             adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
                         }
-
+                if(it.blockchainType == BlockchainType.BinanceChain) {
+                    Log.d("CoinTest", "${it.coin.code} ${it.coin.name} ${it.blockchainType}")
+                }
                 CoinBalanceItem(it, balance, getFiatValue(it, balance))
             }
             .sortedWith(compareByDescending { it.balance })

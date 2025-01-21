@@ -1,7 +1,7 @@
 package cash.p.terminal.featureStacking.ui
 
-import cash.p.terminal.network.domain.enity.InvestmentGraphData
-import cash.p.terminal.network.domain.repository.PiratePlaceRepository
+import cash.p.terminal.network.pirate.domain.enity.InvestmentGraphData
+import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.chart.AbstractChartService
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper

@@ -21,6 +21,7 @@ import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.Dispatchers
@@ -31,13 +32,13 @@ import java.net.UnknownHostException
 
 class SendBitcoinViewModel(
     val adapter: ISendBitcoinAdapter,
-    val wallet: cash.p.terminal.wallet.Wallet,
+    val wallet: Wallet,
     private val feeRateService: SendBitcoinFeeRateService,
     private val feeService: SendBitcoinFeeService,
     private val amountService: SendBitcoinAmountService,
     private val addressService: SendBitcoinAddressService,
     private val pluginService: SendBitcoinPluginService,
-    private val xRateService: XRateService,
+    xRateService: XRateService,
     private val btcBlockchainManager: BtcBlockchainManager,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,

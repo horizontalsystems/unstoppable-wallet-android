@@ -22,7 +22,7 @@ class SwapViewModel(
     private val quoteService: SwapQuoteService,
     private val balanceService: TokenBalanceService,
     private val priceImpactService: PriceImpactService,
-    private val currencyManager: CurrencyManager,
+    currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
     private val timerService: TimerService,

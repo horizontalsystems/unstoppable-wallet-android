@@ -10,7 +10,7 @@ import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.multiswap.FiatService
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
-import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import cash.p.terminal.modules.multiswap.sendtransaction.services.SendTransactionServiceEvm
 import cash.p.terminal.modules.send.SendModule
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.CurrencyManager
@@ -101,7 +101,7 @@ class Eip20RevokeConfirmViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(token.blockchainType)
+            val sendTransactionService = SendTransactionServiceEvm(token)
 
             return Eip20RevokeConfirmViewModel(
                 token,

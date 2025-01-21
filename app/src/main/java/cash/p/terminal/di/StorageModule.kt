@@ -8,6 +8,7 @@ import cash.p.terminal.core.factories.AdapterFactory
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import cash.p.terminal.core.managers.AccountCleaner
 import cash.p.terminal.core.managers.AdapterManager
+import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.CoinManager
@@ -31,11 +32,14 @@ import cash.p.terminal.core.providers.EvmLabelProvider
 import cash.p.terminal.core.storage.AccountsStorage
 import cash.p.terminal.core.storage.AppDatabase
 import cash.p.terminal.core.storage.BlockchainSettingsStorage
+import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.core.storage.EnabledWalletsStorage
 import cash.p.terminal.core.storage.EvmSyncSourceStorage
 import cash.p.terminal.core.storage.RestoreSettingsStorage
 import cash.p.terminal.modules.balance.DefaultBalanceService
 import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
+import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import io.horizontalsystems.core.CurrencyManager
 import cash.p.terminal.wallet.IAccountCleaner
 import cash.p.terminal.wallet.IAccountsStorage
@@ -68,16 +72,19 @@ val storageModule = module {
     single { PreferenceManager.getDefaultSharedPreferences(get()) }
     singleOf(::AppConfigProvider)
     singleOf(::BlockchainSettingsStorage)
+    factoryOf(::ChangeNowTransactionsStorage)
     singleOf(::BackgroundManager)
     singleOf(::EvmSyncSourceManager)
     singleOf(::TokenAutoEnableManager)
     singleOf(::EvmSyncSourceStorage)
     singleOf(::EvmBlockchainManager)
     singleOf(::BtcBlockchainManager)
+    singleOf(::BalanceHiddenManager)
     singleOf(::SolanaKitManager)
     singleOf(::TonKitManager)
     singleOf(::TronKitManager)
     singleOf(::RestoreSettingsManager)
+    singleOf(::ContactsRepository)
     singleOf(::ZcashBirthdayProvider)
     singleOf(::EvmLabelManager)
     singleOf(::EvmLabelProvider)
@@ -85,6 +92,8 @@ val storageModule = module {
     factoryOf(::EvmAccountManagerFactory)
     singleOf(::AdapterFactory)
     factoryOf(::SolanaWalletManager)
+    factoryOf(::TransactionViewItemFactory)
+
     factory<BalanceXRateRepository>(named("wallet")) {
         DefaultBalanceXRateRepository(
             tag = "wallet",
@@ -95,13 +104,6 @@ val storageModule = module {
     factory<BalanceService>(named("wallet")) {
         DefaultBalanceService.getInstance("wallet")
     }
-    /*factory<BalanceXRateRepository>(named("wallet")) {
-        DefaultBalanceXRateRepository(
-            tag = "wallet",
-            currencyManager = get(),
-            marketKit = get()
-        )
-    }*/
     factory { get<AppDatabase>().evmAddressLabelDao() }
     factory { get<AppDatabase>().evmMethodLabelDao() }
     factory { get<AppDatabase>().syncerStateDao() }

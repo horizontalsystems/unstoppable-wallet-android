@@ -1,15 +1,15 @@
 package cash.p.terminal.modules.walletconnect
 
-import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.IAccountManager
 
 class WCManager(
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val accountManager: IAccountManager,
 ) {
     sealed class SupportState {
         object Supported : SupportState()
         object NotSupportedDueToNoActiveAccount : SupportState()
-        class NotSupportedDueToNonBackedUpAccount(val account: cash.p.terminal.wallet.Account) : SupportState()
+        class NotSupportedDueToNonBackedUpAccount(val account: Account) : SupportState()
         class NotSupported(val accountTypeDescription: String) : SupportState()
     }
 
@@ -20,6 +20,7 @@ class WCManager(
             !tmpAccount.isBackedUp && !tmpAccount.isFileBackedUp -> SupportState.NotSupportedDueToNonBackedUpAccount(
                 tmpAccount
             )
+
             tmpAccount.type.supportsWalletConnect -> SupportState.Supported
             else -> SupportState.NotSupported(tmpAccount.type.description)
         }

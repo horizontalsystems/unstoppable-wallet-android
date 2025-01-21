@@ -56,7 +56,7 @@ object SendEvmModule {
     }
 
 
-    class Factory(private val wallet: cash.p.terminal.wallet.Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet, private val predefinedAddress: String?) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")

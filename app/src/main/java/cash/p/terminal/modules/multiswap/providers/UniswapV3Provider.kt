@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.multiswap.providers
 
 import cash.p.terminal.R
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.uniswapkit.models.DexType
 
@@ -11,7 +12,7 @@ object UniswapV3Provider : BaseUniswapV3Provider(DexType.Uniswap) {
     override val icon = R.drawable.uniswap_v3
     override val priority = 0
 
-    override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
+    override suspend fun supports(token: Token) = when (token) {
         BlockchainType.Ethereum,
         BlockchainType.ArbitrumOne,
 //            BlockchainType.Optimism,

@@ -6,6 +6,8 @@ import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.purpose
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
@@ -22,11 +24,11 @@ class BitcoinAdapter(
     override val kit: BitcoinKit,
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
-    wallet: cash.p.terminal.wallet.Wallet,
+    wallet: Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), BitcoinKit.Listener, ISendBitcoinAdapter {
 
     constructor(
-        wallet: cash.p.terminal.wallet.Wallet,
+        wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         derivation: TokenType.Derivation
@@ -100,14 +102,14 @@ class BitcoinAdapter(
         private const val confirmationsThreshold = 3
 
         private fun createKit(
-            wallet: cash.p.terminal.wallet.Wallet,
+            wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
             derivation: TokenType.Derivation
         ): BitcoinKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
-                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+                is AccountType.HdExtendedKey -> {
                     return BitcoinKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
@@ -118,7 +120,7 @@ class BitcoinAdapter(
                         confirmationsThreshold = confirmationsThreshold
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     return BitcoinKit(
                         context = App.instance,
                         words = accountType.words,
@@ -130,7 +132,7 @@ class BitcoinAdapter(
                         purpose = derivation.purpose
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
+                is AccountType.BitcoinAddress -> {
                     return BitcoinKit(
                         context = App.instance,
                         watchAddress =  accountType.address,

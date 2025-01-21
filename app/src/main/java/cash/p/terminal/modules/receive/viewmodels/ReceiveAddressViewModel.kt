@@ -10,6 +10,7 @@ import cash.p.terminal.entities.AddressUri
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.receive.ReceiveModule
 import cash.p.terminal.modules.receive.ReceiveModule.AdditionalData
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
@@ -65,17 +66,17 @@ class ReceiveAddressViewModel(
     private fun setNetworkName() {
         when (val tokenType = wallet.token.type) {
             is TokenType.Derived -> {
-                networkName = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Format) + ": "
+                networkName = Translator.getString(R.string.Balance_Format) + ": "
                 networkName += "${tokenType.derivation.accountTypeDerivation.addressType} (${tokenType.derivation.accountTypeDerivation.rawName})"
             }
 
             is TokenType.AddressTyped -> {
-                networkName = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Format) + ": "
+                networkName = Translator.getString(R.string.Balance_Format) + ": "
                 networkName += tokenType.type.bitcoinCashCoinType.title
             }
 
             else -> {
-                networkName = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Network) + ": "
+                networkName = Translator.getString(R.string.Balance_Network) + ": "
                 networkName += wallet.token.blockchain.name
             }
         }
@@ -87,7 +88,7 @@ class ReceiveAddressViewModel(
 
     private fun getAlertText(watchAccount: Boolean): ReceiveModule.AlertText? {
         return if (watchAccount) ReceiveModule.AlertText.Normal(
-            cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
+            Translator.getString(R.string.Balance_Receive_WatchAddressAlert)
         )
         else null
     }

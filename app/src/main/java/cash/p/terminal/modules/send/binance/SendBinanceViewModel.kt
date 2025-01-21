@@ -19,6 +19,7 @@ import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,12 +27,12 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendBinanceViewModel(
-    val wallet: cash.p.terminal.wallet.Wallet,
+    val wallet: Wallet,
     private val adapter: ISendBinanceAdapter,
     private val amountService: SendAmountService,
     private val addressService: SendBinanceAddressService,
     private val feeService: SendBinanceFeeService,
-    private val xRateService: XRateService,
+    xRateService: XRateService,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
 ) : ViewModelUiState<SendBinanceUiState>() {

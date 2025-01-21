@@ -18,6 +18,7 @@ import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainInco
 import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.binancechainkit.core.api.BinanceError
 import io.horizontalsystems.binancechainkit.models.TransactionFilterType
@@ -30,7 +31,7 @@ class BinanceAdapter(
     private val binanceKit: BinanceChainKit,
     private val symbol: String,
     private val feeToken: Token,
-    private val wallet: cash.p.terminal.wallet.Wallet,
+    private val wallet: Wallet,
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBinanceAdapter {
 
     private val asset = binanceKit.register(symbol)

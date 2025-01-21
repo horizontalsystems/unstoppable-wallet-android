@@ -43,18 +43,18 @@ object SendSolanaModule {
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendSolanaViewModel(
-                        wallet,
-                        wallet.token,
-                        solToken,
-                        solBalance,
-                        adapter,
-                        xRateService,
-                        amountService,
-                        addressService,
-                        coinMaxAllowedDecimals,
-                        App.contactsRepository,
-                        predefinedAddress == null,
-                        App.connectivityManager,
+                        wallet = wallet,
+                        sendToken = wallet.token,
+                        feeToken = solToken,
+                        solBalance = solBalance,
+                        adapter = adapter,
+                        xRateService = xRateService,
+                        amountService = amountService,
+                        addressService = addressService,
+                        coinMaxAllowedDecimals = coinMaxAllowedDecimals,
+                        contactsRepo = App.contactsRepository,
+                        showAddressInput = predefinedAddress == null,
+                        connectivityManager = App.connectivityManager,
                     ) as T
                 }
 

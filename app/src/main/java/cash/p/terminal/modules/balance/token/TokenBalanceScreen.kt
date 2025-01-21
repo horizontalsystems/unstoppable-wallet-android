@@ -54,6 +54,7 @@ import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.transactions.transactionList
 import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
@@ -381,7 +382,7 @@ private fun ButtonsRow(
 
             stat(page = StatPage.TokenPage, event = StatEvent.OpenReceive(wallet.token))
         } catch (e: BackupRequiredError) {
-            val text = cash.p.terminal.strings.helpers.Translator.getString(
+            val text = Translator.getString(
                 R.string.ManageAccount_BackupRequired_Description,
                 e.account.name,
                 e.coinTitle
@@ -409,7 +410,7 @@ private fun ButtonsRow(
                 modifier = Modifier.weight(1f),
                 title = stringResource(R.string.Balance_Send),
                 onClick = {
-                    val sendTitle = cash.p.terminal.strings.helpers.Translator.getString(
+                    val sendTitle = Translator.getString(
                         R.string.Send_Title,
                         viewItem.wallet.token.fullCoin.coin.code
                     )
