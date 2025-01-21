@@ -439,6 +439,19 @@
     <string name="Send_Processing">Processing!</string>
     <string name="Send_Processing_Description">Transaction sent successfully. Check its status for details.</string>
 
+    <string name="Send_Address_Recent">Recent</string>
+    <string name="Send_Address_Error_Incorrect">Incorrect</string>
+    <string name="Send_Address_Error_Correct">Correct</string>
+    <string name="Send_Address_Error_Detected">Detected</string>
+    <string name="Send_Address_Error_Clear">Clear</string>
+    <string name="Send_Address_AddressCheck">Address Check</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing Address Detected!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Blacklisted Address Detected!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">The address you entered may be fraudulent. Scammers often alter the first and last characters. Verify the full address carefully before proceeding to avoid loss.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">The address you entered is flagged as blacklisted. Transactions to this address could lead to loss or other risks. Please verify the recipient\'s details before proceeding.</string>
+
     <string name="Send_Success">\u2713 Sent</string>
 
     <string name="ScanQr_CameraPermission_Title">Camera permission</string>
