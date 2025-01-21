@@ -85,6 +85,7 @@ import io.horizontalsystems.bankwallet.core.storage.EnabledWalletsStorage
 import io.horizontalsystems.bankwallet.core.storage.EvmSyncSourceStorage
 import io.horizontalsystems.bankwallet.core.storage.NftStorage
 import io.horizontalsystems.bankwallet.core.storage.RestoreSettingsStorage
+import io.horizontalsystems.bankwallet.core.storage.SpamAddressStorage
 import io.horizontalsystems.bankwallet.modules.backuplocal.fullbackup.BackupProvider
 import io.horizontalsystems.bankwallet.modules.balance.BalanceViewTypeManager
 import io.horizontalsystems.bankwallet.modules.chart.ChartIndicatorManager
@@ -298,6 +299,8 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         walletActivator = WalletActivator(walletManager, marketKit)
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
+        spamManager = SpamManager(localStorage, coinManager, SpamAddressStorage(appDatabase.spamAddressDao()), marketKit, appConfigProvider )
+
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,
@@ -309,6 +312,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             evmSyncSourceManager,
             marketKit,
             evmAccountManagerFactory,
+            spamManager
         )
 
         val tronAccountManager = TronAccountManager(
@@ -446,8 +450,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             solanaRpcSourceManager = solanaRpcSourceManager,
             contactsRepository = contactsRepository
         )
-
-        spamManager = SpamManager(localStorage)
 
         tonConnectManager = TonConnectManager(
             context = this,
