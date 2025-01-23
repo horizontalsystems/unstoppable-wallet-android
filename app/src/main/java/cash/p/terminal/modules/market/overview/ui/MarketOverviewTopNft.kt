@@ -14,9 +14,9 @@ import cash.p.terminal.modules.market.overview.MarketOverviewModule
 import cash.p.terminal.modules.market.topnftcollections.TopNftCollectionViewItem
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
-import cash.p.terminal.ui.compose.components.NftIcon
+import cash.p.terminal.ui_compose.components.NftIcon
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import io.horizontalsystems.core.entities.BlockchainType
 
 @Composable

@@ -33,7 +33,7 @@ import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.B2
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.D1
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui.compose.components.FormsInputPassword
@@ -41,7 +41,7 @@ import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui_compose.components.MenuItem
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
 import cash.p.terminal.ui.compose.components.SelectorItem
 import cash.p.terminal.ui_compose.components.body_leah

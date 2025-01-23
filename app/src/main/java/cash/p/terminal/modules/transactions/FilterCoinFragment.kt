@@ -29,9 +29,9 @@ import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.ui.compose.components.Badge
-import io.horizontalsystems.core.CellMultilineClear
+import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.B2

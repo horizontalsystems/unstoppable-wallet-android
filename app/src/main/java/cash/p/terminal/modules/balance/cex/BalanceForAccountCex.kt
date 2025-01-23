@@ -51,7 +51,7 @@ import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.core.CellMultilineClear
+import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HeaderSorting

@@ -8,6 +8,7 @@ import cash.p.terminal.core.factories.AdapterFactory
 import cash.p.terminal.core.factories.EvmAccountManagerFactory
 import cash.p.terminal.core.managers.AccountCleaner
 import cash.p.terminal.core.managers.AdapterManager
+import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.CoinManager
@@ -44,6 +45,7 @@ import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.wallet.IEnabledWalletStorage
 import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.balance.BalanceXRateRepository
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import io.horizontalsystems.core.BackgroundManager
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -81,6 +83,7 @@ val storageModule = module {
     singleOf(::ZcashBirthdayProvider)
     singleOf(::EvmLabelManager)
     singleOf(::EvmLabelProvider)
+    singleOf(::BalanceHiddenManager) bind IBalanceHiddenManager::class
 
     factoryOf(::EvmAccountManagerFactory)
     singleOf(::AdapterFactory)

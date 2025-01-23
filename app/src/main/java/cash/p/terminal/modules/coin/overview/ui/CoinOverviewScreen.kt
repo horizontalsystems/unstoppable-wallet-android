@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.slideFromBottomForResult
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity
@@ -59,9 +59,9 @@ import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.models.LinkType
 import io.horizontalsystems.chartview.chart.ChartViewModel
 import io.horizontalsystems.chartview.ui.Chart
-import io.horizontalsystems.core.CellFooter
-import io.horizontalsystems.core.CellUniversalLawrenceSection
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.CellFooter
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.RowUniversal
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
 

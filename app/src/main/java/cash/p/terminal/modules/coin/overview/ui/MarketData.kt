@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.modules.coin.CoinDataItem
 import cash.p.terminal.ui.compose.components.Badge
-import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui_compose.components.subhead1_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 

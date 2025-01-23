@@ -40,10 +40,10 @@ import cash.p.terminal.modules.contacts.viewmodel.ContactsViewModel
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.components.MenuItem
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose

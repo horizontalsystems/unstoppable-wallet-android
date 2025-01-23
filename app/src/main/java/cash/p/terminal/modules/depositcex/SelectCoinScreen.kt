@@ -23,9 +23,9 @@ import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui.compose.components.Badge
 import cash.p.terminal.ui_compose.components.HSpacer
-import cash.p.terminal.ui.compose.components.HsImage
+import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.SearchBar
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey

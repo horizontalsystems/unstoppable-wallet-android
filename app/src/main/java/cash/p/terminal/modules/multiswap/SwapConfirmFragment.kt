@@ -20,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatPage
@@ -33,7 +33,7 @@ import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HsImageCircle
+import cash.p.terminal.ui_compose.components.HsImageCircle
 import io.horizontalsystems.chartview.cell.CellUniversal
 import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import cash.p.terminal.ui_compose.BaseComposeFragment

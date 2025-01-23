@@ -29,8 +29,8 @@ import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.entities.SectionItemPosition
 import cash.p.terminal.ui_compose.sectionItemBorder
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.RowUniversal
-import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.SectionUniversalItem
 
 @Composable
 internal fun PayoutCell(item: PayoutViewItem, position: SectionItemPosition) {

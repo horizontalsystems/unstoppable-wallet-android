@@ -67,11 +67,11 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.core.CellMultilineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellMultilineLawrenceSection
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
-import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui.compose.components.TextPreprocessor
 import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
 import cash.p.terminal.ui_compose.components.body_grey50

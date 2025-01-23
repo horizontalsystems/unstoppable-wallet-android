@@ -29,9 +29,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
-import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.modules.market.MarketViewItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

@@ -41,9 +41,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -53,10 +53,10 @@ import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.market.search.MarketSearchModule.CoinItem
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
 import cash.p.terminal.ui_compose.components.HeaderStick
-import cash.p.terminal.ui.compose.components.HsImage
+import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.SearchBar
-import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

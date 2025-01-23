@@ -42,7 +42,7 @@ import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewMod
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
-import io.horizontalsystems.core.CellMultilineClear
+import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.HsIconButton

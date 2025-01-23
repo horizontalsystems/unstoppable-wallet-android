@@ -24,10 +24,10 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.requireInput
 import cash.p.terminal.ui_compose.components.AppBar
-import io.horizontalsystems.core.CellFooter
-import io.horizontalsystems.core.CellMultilineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellFooter
+import cash.p.terminal.ui_compose.components.CellMultilineLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.HsImage
+import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey

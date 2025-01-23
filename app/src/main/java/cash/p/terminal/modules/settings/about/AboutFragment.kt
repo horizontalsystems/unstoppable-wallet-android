@@ -30,7 +30,7 @@ import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.settings.privacy.PrivacyScreen
 import cash.p.terminal.modules.settings.terms.TermsScreen
 import cash.p.terminal.ui_compose.components.AppBar
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.helpers.LinkHelper

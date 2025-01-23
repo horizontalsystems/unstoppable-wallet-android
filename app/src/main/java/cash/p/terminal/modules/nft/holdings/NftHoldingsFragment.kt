@@ -41,13 +41,13 @@ import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
-import io.horizontalsystems.core.CellBorderedRowUniversal
-import io.horizontalsystems.core.CellSingleLineClear
+import cash.p.terminal.ui_compose.components.CellBorderedRowUniversal
+import cash.p.terminal.ui_compose.components.CellSingleLineClear
 import cash.p.terminal.ui.compose.components.DoubleText
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView
-import cash.p.terminal.ui.compose.components.NftIcon
+import cash.p.terminal.ui_compose.components.NftIcon
 import cash.p.terminal.ui.compose.components.SnackbarError
 import cash.p.terminal.ui_compose.components.headline2_leah
 import cash.p.terminal.ui_compose.components.subhead1_grey

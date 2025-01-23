@@ -20,7 +20,7 @@ import androidx.fragment.app.FragmentManager
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui_compose.components.TextImportantWarning
 
 class ConfirmationDialog(
     private val listener: Listener,

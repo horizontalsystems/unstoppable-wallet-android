@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.market.category
 
 import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.entities.DataState

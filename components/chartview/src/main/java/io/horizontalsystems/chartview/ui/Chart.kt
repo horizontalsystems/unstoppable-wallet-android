@@ -76,7 +76,7 @@ import io.horizontalsystems.chartview.chart.GraphicLineWithGradient
 import io.horizontalsystems.chartview.chart.SelectedItem
 import io.horizontalsystems.chartview.entity.ChartInfoData
 import io.horizontalsystems.core.IAppNumberFormatter
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.models.HsTimePeriod

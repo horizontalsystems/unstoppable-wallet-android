@@ -71,11 +71,11 @@ import cash.p.terminal.modules.nft.ui.CellLink
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
-import io.horizontalsystems.core.CellFooter
-import io.horizontalsystems.core.CellMultilineLawrenceSection
-import io.horizontalsystems.core.CellSingleLine
-import io.horizontalsystems.core.CellSingleLineClear
-import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellFooter
+import cash.p.terminal.ui_compose.components.CellMultilineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellSingleLine
+import cash.p.terminal.ui_compose.components.CellSingleLineClear
+import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose

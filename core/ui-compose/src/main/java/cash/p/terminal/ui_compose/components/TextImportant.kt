@@ -1,4 +1,4 @@
-package cash.p.terminal.ui.compose.components
+package cash.p.terminal.ui_compose.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -18,7 +18,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
@@ -33,10 +32,10 @@ fun TextImportantWarning(
         text = text,
         title = title,
         icon = icon,
-        borderColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow20,
-        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob,
-        iconColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
+        borderColor = ComposeAppTheme.colors.jacob,
+        backgroundColor = ComposeAppTheme.colors.yellow20,
+        textColor = ComposeAppTheme.colors.jacob,
+        iconColor = ComposeAppTheme.colors.jacob
     )
 }
 
@@ -52,10 +51,10 @@ fun TextImportantError(
         text = text,
         title = title,
         icon = icon,
-        borderColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red20,
-        textColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian,
-        iconColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
+        borderColor = ComposeAppTheme.colors.lucian,
+        backgroundColor = ComposeAppTheme.colors.red20,
+        textColor = ComposeAppTheme.colors.lucian,
+        iconColor = ComposeAppTheme.colors.lucian
     )
 }
 

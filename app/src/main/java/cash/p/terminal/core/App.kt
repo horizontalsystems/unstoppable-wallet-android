@@ -93,6 +93,7 @@ import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.IWalletStorage
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.SubscriptionManager
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.widgets.MarketWidgetManager
 import cash.p.terminal.widgets.MarketWidgetRepository
 import cash.p.terminal.widgets.MarketWidgetWorker
@@ -190,7 +191,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val evmLabelManager: EvmLabelManager by inject(EvmLabelManager::class.java)
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
-        lateinit var balanceHiddenManager: BalanceHiddenManager
+        val balanceHiddenManager: BalanceHiddenManager by inject(IBalanceHiddenManager::class.java)
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
         lateinit var contactsRepository: ContactsRepository
@@ -433,7 +434,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
-        balanceHiddenManager = BalanceHiddenManager(localStorage, backgroundManager)
 
         contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)

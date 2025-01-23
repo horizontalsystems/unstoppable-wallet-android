@@ -10,7 +10,6 @@ import cash.z.ecc.android.sdk.ext.collectWith
 import cash.p.terminal.R
 import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.core.eip20TokenUrl
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.wallet.MarketKitWrapper
 import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.core.entities.ViewState

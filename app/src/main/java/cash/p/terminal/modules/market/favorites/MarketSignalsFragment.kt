@@ -26,11 +26,11 @@ import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.entities.SectionItemPosition
-import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.SectionUniversalItem
 import cash.p.terminal.ui.compose.components.SignalBadge
-import cash.p.terminal.ui.compose.components.TextImportantWarning
+import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.sectionItemBorder
 import cash.p.terminal.ui_compose.components.subhead2_leah

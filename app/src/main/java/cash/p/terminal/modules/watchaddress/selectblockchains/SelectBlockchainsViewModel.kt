@@ -1,9 +1,9 @@
 package cash.p.terminal.modules.watchaddress.selectblockchains
 
 import cash.p.terminal.R
-import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.description
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat

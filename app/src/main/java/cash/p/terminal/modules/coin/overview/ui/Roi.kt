@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.modules.coin.RoiViewItem
-import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.subhead1_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

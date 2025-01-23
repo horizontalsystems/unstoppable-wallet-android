@@ -34,12 +34,12 @@ import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui_compose.components.MenuItem
-import io.horizontalsystems.core.RowUniversal
-import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui.compose.components.SnackbarError
 import cash.p.terminal.ui.compose.components.StackedBarChart
 import cash.p.terminal.ui_compose.components.VSpacer

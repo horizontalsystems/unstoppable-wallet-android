@@ -6,6 +6,8 @@ import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.entities.FeePriceScale
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
@@ -27,23 +29,23 @@ import cash.p.terminal.wallet.models.TopPlatform
 import io.horizontalsystems.nftkit.models.NftType
 import java.math.BigDecimal
 
-val cash.p.terminal.wallet.Token.isCustom: Boolean
+val Token.isCustom: Boolean
     get() = coin.uid == tokenQuery.customCoinUid
 
 val Coin.isCustom: Boolean
     get() = uid.startsWith(TokenQuery.customCoinPrefix)
 
-val cash.p.terminal.wallet.Token.isSupported: Boolean
+val Token.isSupported: Boolean
     get() = tokenQuery.isSupported
 
-val cash.p.terminal.wallet.Token.iconPlaceholder: Int
+val Token.iconPlaceholder: Int
     get() = when (type) {
         is TokenType.Eip20 -> blockchainType.tokenIconPlaceholder
         is TokenType.Bep2 -> R.drawable.bep2
         else -> R.drawable.coin_placeholder
     }
 
-val cash.p.terminal.wallet.Token.swappable: Boolean
+val Token.swappable: Boolean
     get() = when (blockchainType) {
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
@@ -58,7 +60,7 @@ val cash.p.terminal.wallet.Token.swappable: Boolean
         else -> false
     }
 
-val cash.p.terminal.wallet.Token.protocolInfo: String
+val Token.protocolInfo: String
     get() = when (type) {
         TokenType.Native -> {
             val parts = mutableListOf(blockchain.name)
@@ -79,7 +81,7 @@ val cash.p.terminal.wallet.Token.protocolInfo: String
         else -> ""
     }
 
-val cash.p.terminal.wallet.Token.typeInfo: String
+val Token.typeInfo: String
     get() = when (val type = type) {
         is TokenType.Derived,
         is TokenType.AddressTyped,
@@ -92,7 +94,7 @@ val cash.p.terminal.wallet.Token.typeInfo: String
         is TokenType.Unsupported -> ""
     }
 
-val cash.p.terminal.wallet.Token.copyableTypeInfo: String?
+val Token.copyableTypeInfo: String?
     get() = when (val type = type) {
         is TokenType.Eip20 -> type.address
         is TokenType.Bep2 -> type.symbol
@@ -261,10 +263,10 @@ val BlockchainType.feePriceScale: FeePriceScale
         else -> FeePriceScale.Gwei
     }
 
-fun BlockchainType.supports(accountType: cash.p.terminal.wallet.AccountType): Boolean {
+fun BlockchainType.supports(accountType: AccountType): Boolean {
     return when (accountType) {
-        is cash.p.terminal.wallet.AccountType.Mnemonic -> true
-        is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+        is AccountType.Mnemonic -> true
+        is AccountType.HdExtendedKey -> {
             val coinTypes = accountType.hdExtendedKey.coinTypes
             when (this) {
                 BlockchainType.Bitcoin -> coinTypes.contains(ExtendedKeyCoinType.Bitcoin)
@@ -279,11 +281,11 @@ fun BlockchainType.supports(accountType: cash.p.terminal.wallet.AccountType): Bo
             }
         }
 
-        is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
+        is AccountType.BitcoinAddress -> {
             this === accountType.blockchainType
         }
 
-        is cash.p.terminal.wallet.AccountType.EvmAddress ->
+        is AccountType.EvmAddress ->
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
                     || this == BlockchainType.Polygon
@@ -294,7 +296,7 @@ fun BlockchainType.supports(accountType: cash.p.terminal.wallet.AccountType): Bo
                     || this == BlockchainType.Gnosis
                     || this == BlockchainType.Fantom
 
-        is cash.p.terminal.wallet.AccountType.EvmPrivateKey -> {
+        is AccountType.EvmPrivateKey -> {
             this == BlockchainType.Ethereum
                     || this == BlockchainType.BinanceSmartChain
                     || this == BlockchainType.Polygon
@@ -306,16 +308,16 @@ fun BlockchainType.supports(accountType: cash.p.terminal.wallet.AccountType): Bo
                     || this == BlockchainType.Fantom
         }
 
-        is cash.p.terminal.wallet.AccountType.SolanaAddress ->
+        is AccountType.SolanaAddress ->
             this == BlockchainType.Solana
 
-        is cash.p.terminal.wallet.AccountType.TronAddress ->
+        is AccountType.TronAddress ->
             this == BlockchainType.Tron
 
-        is cash.p.terminal.wallet.AccountType.TonAddress ->
+        is AccountType.TonAddress ->
             this == BlockchainType.Ton
 
-        is cash.p.terminal.wallet.AccountType.Cex -> false
+        is AccountType.Cex -> false
     }
 }
 
@@ -341,26 +343,6 @@ val TokenType.bitcoinCashCoinType: TokenType.AddressType?
         is TokenType.AddressTyped -> this.type
         else -> null
     }
-
-val Coin.imageUrl: String
-    get() {
-        var pirate: String = "piratecash"
-        var cosa: String = "cosanta"
-        var wdash: String = "wdash"
-        val coinURL = when (uid) {
-            pirate -> "https://pirate.cash/logo.png"
-            cosa -> "https://cosanta.net/logo.png"
-            wdash -> "https://wdash.org/logo.png"
-            else -> "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
-        }
-        return coinURL
-    }
-
-val Coin.alternativeImageUrl: String?
-    get() = image
-
-val Coin.imagePlaceholder: Int
-    get() = R.drawable.coin_placeholder
 
 val TopPlatform.imageUrl
     get() = "https://cdn.blocksdecoded.com/blockchain-icons/32px/${blockchain.uid}@3x.png"
@@ -395,13 +377,13 @@ val FullCoin.iconPlaceholder: Int
         }
     }
 
-fun cash.p.terminal.wallet.Token.supports(accountType: cash.p.terminal.wallet.AccountType): Boolean {
+fun Token.supports(accountType: AccountType): Boolean {
     return when (accountType) {
-        is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
+        is AccountType.BitcoinAddress -> {
             tokenQuery.tokenType == accountType.tokenType
         }
 
-        is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+        is AccountType.HdExtendedKey -> {
             when (blockchainType) {
                 BlockchainType.Bitcoin,
                 BlockchainType.Litecoin -> {
@@ -433,7 +415,7 @@ fun cash.p.terminal.wallet.Token.supports(accountType: cash.p.terminal.wallet.Ac
     }
 }
 
-fun FullCoin.eligibleTokens(accountType: cash.p.terminal.wallet.AccountType): List<cash.p.terminal.wallet.Token> {
+fun FullCoin.eligibleTokens(accountType: AccountType): List<Token> {
     return supportedTokens
         .filter { it.supports(accountType) && it.blockchainType.supports(accountType) }
 }
@@ -515,7 +497,7 @@ val TokenType.description: String
 
 val TokenType.isDefault
     get() = when (this) {
-        is TokenType.Derived -> derivation.accountTypeDerivation == cash.p.terminal.wallet.AccountType.Derivation.default
+        is TokenType.Derived -> derivation.accountTypeDerivation == AccountType.Derivation.default
         is TokenType.AddressTyped -> type.bitcoinCashCoinType == BitcoinCashCoinType.default
         else -> false
     }

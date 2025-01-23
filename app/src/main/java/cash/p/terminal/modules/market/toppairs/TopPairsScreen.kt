@@ -42,11 +42,11 @@ import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HeaderSorting
-import cash.p.terminal.ui.compose.components.HsImage
+import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
-import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

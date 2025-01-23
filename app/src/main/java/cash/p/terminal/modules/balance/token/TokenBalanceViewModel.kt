@@ -13,6 +13,7 @@ import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiSt
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
+import cash.p.terminal.wallet.IAccountManager
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.wallet.badge
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +29,7 @@ class TokenBalanceViewModel(
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager
+    private val accountManager: IAccountManager
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()

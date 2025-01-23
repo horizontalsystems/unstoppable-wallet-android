@@ -16,16 +16,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.modules.coin.ContractInfo
 import cash.p.terminal.ui_compose.components.ButtonSecondaryCircle
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.entities.BlockchainType
-import io.horizontalsystems.core.CellSingleLineClear
-import io.horizontalsystems.core.CellUniversalLawrenceSection
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.CellSingleLineClear
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.RowUniversal
 import io.horizontalsystems.core.imageUrl
 
 @Preview

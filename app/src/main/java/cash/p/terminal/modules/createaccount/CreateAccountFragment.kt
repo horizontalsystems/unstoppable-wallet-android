@@ -35,7 +35,7 @@ import cash.p.terminal.core.stats.statAccountType
 import cash.p.terminal.modules.manageaccounts.ManageAccountsModule
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
-import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.FormsInput
 import cash.p.terminal.ui_compose.components.HeaderText
 import cash.p.terminal.ui_compose.components.HsBackButton

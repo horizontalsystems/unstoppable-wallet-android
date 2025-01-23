@@ -2,9 +2,9 @@ package cash.p.terminal.widgets
 
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconUrl
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.managers.MarketFavoritesManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.modules.market.MarketItem
