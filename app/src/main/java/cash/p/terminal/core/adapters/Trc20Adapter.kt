@@ -4,6 +4,7 @@ import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ISendTronAdapter
 import cash.p.terminal.core.managers.TronKitWrapper
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.tronkit.TronKit.SyncState
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.transaction.Fee
@@ -17,7 +18,7 @@ import java.math.BigDecimal
 class Trc20Adapter(
     tronKitWrapper: TronKitWrapper,
     contractAddress: String,
-    wallet: cash.p.terminal.wallet.Wallet
+    wallet: Wallet
 ) : BaseTronAdapter(tronKitWrapper, wallet.decimal), ISendTronAdapter {
 
     private val contractAddress: Address = Address.fromBase58(contractAddress)

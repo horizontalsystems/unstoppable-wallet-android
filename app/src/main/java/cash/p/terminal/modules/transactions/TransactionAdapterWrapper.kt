@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.ITransactionsAdapter
+import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import io.reactivex.Observable
@@ -83,11 +84,11 @@ class TransactionAdapterWrapper(
             val numberOfRecordsToRequest = limit - transactionRecords.size
             transactionsAdapter
                 .getTransactionsAsync(
-                    transactionRecords.lastOrNull(),
-                    transactionWallet.token,
-                    numberOfRecordsToRequest,
-                    transactionType,
-                    address
+                    from = transactionRecords.lastOrNull(),
+                    token = transactionWallet.token,
+                    limit = numberOfRecordsToRequest,
+                    transactionType = transactionType,
+                    address = address
                 )
                 .map {
                     allLoaded = it.size < numberOfRecordsToRequest

@@ -8,6 +8,7 @@ import cash.p.terminal.modules.multiswap.providers.PancakeSwapV3Provider
 import cash.p.terminal.modules.multiswap.providers.QuickSwapProvider
 import cash.p.terminal.modules.multiswap.providers.UniswapProvider
 import cash.p.terminal.modules.multiswap.providers.UniswapV3Provider
+import cash.p.terminal.modules.multiswap.providers.changenow.ChangeNowProvider
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +21,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 
 class SwapQuoteService {
+    private val changeNowProvider: ChangeNowProvider by inject(ChangeNowProvider::class.java)
+
     private val allProviders = listOf(
         OneInchProvider,
         PancakeSwapProvider,
@@ -30,6 +34,7 @@ class SwapQuoteService {
         QuickSwapProvider,
         UniswapProvider,
         UniswapV3Provider,
+        changeNowProvider
     )
 
     private var amountIn: BigDecimal? = null
@@ -88,16 +93,16 @@ class SwapQuoteService {
         val amountIn = amountIn
 
         if (tokenIn != null && tokenOut != null) {
-            val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
+            quotingJob = coroutineScope.launch {
+                val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
 
-            if (supportedProviders.isEmpty()) {
-                error = NoSupportedSwapProvider()
-                emitState()
-            } else if (amountIn != null && amountIn > BigDecimal.ZERO) {
-                quoting = true
-                emitState()
+                if (supportedProviders.isEmpty()) {
+                    error = NoSupportedSwapProvider()
+                    emitState()
+                } else if (amountIn != null && amountIn > BigDecimal.ZERO) {
+                    quoting = true
+                    emitState()
 
-                quotingJob = coroutineScope.launch {
                     quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn)
 
                     if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
@@ -105,8 +110,11 @@ class SwapQuoteService {
                     }
 
                     if (quotes.isEmpty()) {
-                        error = SwapRouteNotFound()
+                        if (error == null) {
+                            error = SwapRouteNotFound()
+                        }
                     } else {
+                        error = null
                         quote = preferredProvider
                             ?.let { provider -> quotes.find { it.provider == provider } }
                             ?: quotes.firstOrNull()
@@ -133,6 +141,9 @@ class SwapQuoteService {
                             val quote = provider.fetchQuote(tokenIn, tokenOut, amountIn, settings)
                             SwapProviderQuote(provider = provider, swapQuote = quote)
                         }
+                    } catch (e: SwapDepositTooSmall) {
+                        error = e
+                        null
                     } catch (e: Throwable) {
                         Log.d("AAA", "fetchQuoteError: ${provider.id}", e)
                         null

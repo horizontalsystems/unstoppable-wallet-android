@@ -16,25 +16,25 @@ object SwapSettingsModule {
 
     sealed class SwapSettingsError : Exception() {
         object ZeroSlippage : SwapSettingsError() {
-            override fun getLocalizedMessage() = cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_SlippageZero)
+            override fun getLocalizedMessage() = Translator.getString(R.string.SwapSettings_Error_SlippageZero)
         }
 
         object ZeroDeadline : SwapSettingsError() {
-            override fun getLocalizedMessage() = cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_DeadlineZero)
+            override fun getLocalizedMessage() = Translator.getString(R.string.SwapSettings_Error_DeadlineZero)
         }
 
         class InvalidSlippage(val invalidSlippageType: InvalidSlippageType) : SwapSettingsError() {
             override fun getLocalizedMessage(): String {
                 return when (invalidSlippageType) {
-                    is InvalidSlippageType.Lower -> cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_SlippageTooLow)
-                    is InvalidSlippageType.Higher -> cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_SlippageTooHigh, invalidSlippageType.max)
+                    is InvalidSlippageType.Lower -> Translator.getString(R.string.SwapSettings_Error_SlippageTooLow)
+                    is InvalidSlippageType.Higher -> Translator.getString(R.string.SwapSettings_Error_SlippageTooHigh, invalidSlippageType.max)
                 }
             }
         }
 
         object InvalidAddress : SwapSettingsError() {
             override fun getLocalizedMessage(): String {
-                return cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+                return Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
             }
         }
     }

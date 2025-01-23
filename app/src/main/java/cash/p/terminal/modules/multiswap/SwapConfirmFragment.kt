@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.multiswap
 
 import android.os.Parcelable
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -24,14 +25,12 @@ import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
 import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.setNavigationResultX
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.entities.CoinValue
-import io.horizontalsystems.core.entities.Currency
-import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.confirm.ConfirmTransactionScreen
 import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui_compose.components.HsImageCircle
 import io.horizontalsystems.chartview.cell.CellUniversal
@@ -49,7 +48,11 @@ import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.badge
+import io.horizontalsystems.chartview.cell.CellUniversal
+import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration
+import io.horizontalsystems.core.entities.Currency
+import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,7 +85,13 @@ fun SwapConfirmScreen(navController: NavController) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapConfirmViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        initializer = SwapConfirmViewModel.init(currentQuote, settings)
+        initializer = try {
+            SwapConfirmViewModel.init(currentQuote, settings)
+        } catch (e: Exception) {
+            Toast.makeText(App.instance, R.string.unsupported_token, Toast.LENGTH_SHORT).show()
+            navController.popBackStack()
+            return
+        }
     )
 
     val uiState = viewModel.uiState
@@ -103,6 +112,15 @@ fun SwapConfirmScreen(navController: NavController) {
                 )
                 VSpacer(height = 12.dp)
                 subhead1_leah(text = stringResource(id = R.string.SwapConfirm_FetchingFinalQuote))
+            } else if (uiState.criticalError != null) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = uiState.criticalError,
+                    onClick = {
+                        viewModel.refresh()
+                    },
+                )
+                VSpacer(height = 12.dp)
             } else if (!uiState.validQuote) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.fillMaxWidth(),
@@ -132,10 +150,15 @@ fun SwapConfirmScreen(navController: NavController) {
                     onClick = {
                         coroutineScope.launch {
                             buttonEnabled = false
-                            HudHelper.showInProcessMessage(view, R.string.Swap_Swapping, SnackbarDuration.INDEFINITE)
+                            HudHelper.showInProcessMessage(
+                                view,
+                                R.string.Swap_Swapping,
+                                SnackbarDuration.INDEFINITE
+                            )
 
                             val result = try {
                                 viewModel.swap()
+                                viewModel.onTransactionCompleted()
 
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)
@@ -178,7 +201,13 @@ fun SwapConfirmScreen(navController: NavController) {
         uiState.amountOut?.let { amountOut ->
             VSpacer(height = 16.dp)
             SectionUniversalLawrence {
-                PriceField(uiState.tokenIn, uiState.tokenOut, uiState.amountIn, amountOut, StatPage.SwapConfirmation)
+                PriceField(
+                    uiState.tokenIn,
+                    uiState.tokenOut,
+                    uiState.amountIn,
+                    amountOut,
+                    StatPage.SwapConfirmation
+                )
                 PriceImpactField(uiState.priceImpact, uiState.priceImpactLevel, navController)
                 uiState.amountOutMin?.let { amountOutMin ->
                     val subvalue = uiState.fiatAmountOutMin?.let { fiatAmountOutMin ->
@@ -224,7 +253,12 @@ fun SwapConfirmScreen(navController: NavController) {
 }
 
 @Composable
-private fun SwapInfoRow(borderTop: Boolean, title: String, value: String, subvalue: String? = null) {
+private fun SwapInfoRow(
+    borderTop: Boolean,
+    title: String,
+    value: String,
+    subvalue: String? = null
+) {
     CellUniversal(borderTop = borderTop) {
         subhead2_grey(text = title)
         HFillSpacer(minWidth = 16.dp)

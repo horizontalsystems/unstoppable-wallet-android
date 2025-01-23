@@ -3,6 +3,7 @@ package cash.p.terminal.core
 import androidx.compose.runtime.Composable
 import cash.p.terminal.R
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.ethereumkit.api.jsonrpc.JsonRpc
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 
@@ -51,7 +52,7 @@ sealed class EvmError(message: String? = null) : Throwable(message) {
 sealed class EvmAddressError : Throwable() {
     object InvalidAddress : EvmAddressError() {
         override fun getLocalizedMessage(): String {
-            return cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+            return Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
         }
     }
 }

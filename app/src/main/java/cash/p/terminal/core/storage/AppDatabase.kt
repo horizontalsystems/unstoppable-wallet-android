@@ -36,8 +36,10 @@ import cash.p.terminal.core.storage.migrations.Migration_57_58
 import cash.p.terminal.core.storage.migrations.Migration_58_59
 import cash.p.terminal.core.storage.migrations.Migration_59_60
 import cash.p.terminal.core.storage.migrations.Migration_61_60
+import cash.p.terminal.core.storage.migrations.Migration_60_61
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
+import cash.p.terminal.entities.ChangeNowTransaction
 import cash.p.terminal.entities.EnabledWalletCache
 import cash.p.terminal.entities.EvmAddressLabel
 import cash.p.terminal.entities.EvmMethodLabel
@@ -60,32 +62,36 @@ import cash.p.terminal.modules.profeatures.storage.ProFeaturesSessionKey
 import cash.p.terminal.modules.walletconnect.storage.WCSessionDao
 import cash.p.terminal.modules.walletconnect.storage.WalletConnectV2Session
 import cash.p.terminal.wallet.entities.AccountRecord
+import cash.p.terminal.wallet.entities.EnabledWallet
 
-@Database(version = 60, exportSchema = false, entities = [
-    cash.p.terminal.wallet.entities.EnabledWallet::class,
-    EnabledWalletCache::class,
-    AccountRecord::class,
-    BlockchainSettingRecord::class,
-    EvmSyncSourceRecord::class,
-    LogEntry::class,
-    FavoriteCoin::class,
-    WalletConnectV2Session::class,
-    RestoreSettingRecord::class,
-    ActiveAccount::class,
-    NftCollectionRecord::class,
-    NftAssetRecord::class,
-    NftMetadataSyncRecord::class,
-    NftAssetBriefMetadataRecord::class,
-    ProFeaturesSessionKey::class,
-    EvmAddressLabel::class,
-    EvmMethodLabel::class,
-    SyncerState::class,
-    TokenAutoEnabledBlockchain::class,
-    CexAssetRaw::class,
-    ChartIndicatorSetting::class,
-    Pin::class,
-    StatRecord::class
-])
+@Database(
+    version = 61, exportSchema = false, entities = [
+        EnabledWallet::class,
+        EnabledWalletCache::class,
+        AccountRecord::class,
+        BlockchainSettingRecord::class,
+        EvmSyncSourceRecord::class,
+        LogEntry::class,
+        FavoriteCoin::class,
+        WalletConnectV2Session::class,
+        RestoreSettingRecord::class,
+        ActiveAccount::class,
+        NftCollectionRecord::class,
+        NftAssetRecord::class,
+        NftMetadataSyncRecord::class,
+        NftAssetBriefMetadataRecord::class,
+        ProFeaturesSessionKey::class,
+        EvmAddressLabel::class,
+        EvmMethodLabel::class,
+        SyncerState::class,
+        TokenAutoEnabledBlockchain::class,
+        CexAssetRaw::class,
+        ChartIndicatorSetting::class,
+        Pin::class,
+        StatRecord::class,
+        ChangeNowTransaction::class
+    ]
+)
 
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -109,6 +115,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun tokenAutoEnabledBlockchainDao(): TokenAutoEnabledBlockchainDao
     abstract fun pinDao(): PinDao
     abstract fun statsDao(): StatsDao
+    abstract fun changeNowTransactionsDao(): ChangeNowTransactionsDao
 
     companion object {
 
@@ -155,6 +162,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_57_58,
                             Migration_58_59,
                             Migration_59_60,
+                            Migration_60_61,
                             Migration_61_60
                     )
                     .build()

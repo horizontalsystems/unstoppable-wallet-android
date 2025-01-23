@@ -9,7 +9,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
-import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import cash.p.terminal.modules.multiswap.sendtransaction.services.SendTransactionServiceEvm
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceState
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
@@ -41,10 +41,9 @@ class WCSendEthereumTransactionRequestViewModel(
     )
 
     private var sendTransactionState: SendTransactionServiceState
-
     init {
         sendTransactionService = SendTransactionServiceEvm(
-            blockchainType = blockchainType,
+            token = App.evmBlockchainManager.getBaseToken(blockchainType)!!,
             initialGasPrice = transaction.getGasPriceObj(),
             initialNonce = transaction.nonce
         )

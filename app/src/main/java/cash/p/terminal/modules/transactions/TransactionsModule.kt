@@ -3,6 +3,8 @@ package cash.p.terminal.modules.transactions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.getKoinInstance
+import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.hodler.LockTimeInterval
 import cash.p.terminal.wallet.transaction.TransactionSource
@@ -21,19 +23,14 @@ object TransactionsModule {
                 NftMetadataService(App.nftMetadataManager),
                 App.spamManager
             )
-            val transactionViewItemFactory = TransactionViewItemFactory(
-                App.evmLabelManager,
-                App.contactsRepository,
-                App.balanceHiddenManager
-            )
 
             return TransactionsViewModel(
-                transactionsService,
-                transactionViewItemFactory,
-                App.balanceHiddenManager,
-                App.transactionAdapterManager,
-                App.walletManager,
-                TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.spamManager),
+                service = transactionsService,
+                transactionViewItem2Factory = getKoinInstance(),
+                balanceHiddenManager = App.balanceHiddenManager,
+                transactionAdapterManager = App.transactionAdapterManager,
+                walletManager = App.walletManager,
+                transactionFilterService = TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.spamManager),
             ) as T
         }
     }

@@ -50,6 +50,7 @@ class TransactionInfoService(
     private val currencyManager: CurrencyManager,
     private val nftMetadataService: NftMetadataService,
     balanceHidden: Boolean,
+    transactionStatusUrl: Pair<String, String>?
 ) {
 
     val transactionHash: String get() = transactionRecord.transactionHash
@@ -59,12 +60,13 @@ class TransactionInfoService(
     val transactionInfoItemFlow = _transactionInfoItemFlow.filterNotNull()
 
     var transactionInfoItem = TransactionInfoItem(
-        transactionRecord,
-        adapter.lastBlockInfo,
-        TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
-        mapOf(),
-        mapOf(),
-        balanceHidden
+        record = transactionRecord,
+        lastBlockInfo = adapter.lastBlockInfo,
+        explorerData = TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
+        rates = mapOf(),
+        nftMetadata = mapOf(),
+        hideAmount = balanceHidden,
+        transactionStatusUrl = transactionStatusUrl
     )
         private set(value) {
             field = value

@@ -12,7 +12,7 @@ import cash.p.terminal.modules.eip20approve.AllowanceMode.OnlyRequired
 import cash.p.terminal.modules.eip20approve.AllowanceMode.Unlimited
 import cash.p.terminal.modules.multiswap.FiatService
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
-import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import cash.p.terminal.modules.multiswap.sendtransaction.services.SendTransactionServiceEvm
 import cash.p.terminal.modules.send.SendModule
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.CurrencyManager
@@ -119,7 +119,7 @@ class Eip20ApproveViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(token.blockchainType)
+            val sendTransactionService = SendTransactionServiceEvm(token)
 
             return Eip20ApproveViewModel(
                 token,

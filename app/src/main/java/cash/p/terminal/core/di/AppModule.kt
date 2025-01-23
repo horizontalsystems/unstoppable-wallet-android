@@ -1,6 +1,7 @@
 package cash.p.terminal.core.di
 
 import cash.p.terminal.di.storageModule
+import cash.p.terminal.di.swapProvidersModule
 import cash.p.terminal.featureStacking.di.featureStackingModule
 import cash.p.terminal.network.di.networkModule
 import cash.p.terminal.wallet.di.walletFeatureModule
@@ -11,6 +12,7 @@ val appModule = module {
         storageModule,
         walletFeatureModule,
         featureStackingModule,
-        networkModule
+        networkModule,
+        swapProvidersModule
     )
 }

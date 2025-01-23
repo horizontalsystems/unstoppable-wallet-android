@@ -2,7 +2,7 @@ package cash.p.terminal.featureStacking.ui.cosantaCoinScreen
 
 import cash.p.terminal.featureStacking.ui.stackingCoinScreen.StackingCoinViewModel
 import cash.p.terminal.featureStacking.ui.staking.StackingType
-import cash.p.terminal.network.domain.repository.PiratePlaceRepository
+import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager

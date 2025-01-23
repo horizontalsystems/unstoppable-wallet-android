@@ -3,8 +3,11 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.TonTransactionRecord
+import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
+import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
+import cash.p.terminal.entities.ChangeNowTransaction
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
@@ -33,10 +36,14 @@ import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionR
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
+import cash.p.terminal.network.changenow.api.ChangeNowHelper
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui_compose.ColorName
 import cash.p.terminal.ui_compose.ColoredValue
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.useCases.WalletUseCase
+import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.CurrencyValue
 import io.horizontalsystems.tronkit.models.Contract
@@ -47,6 +54,9 @@ class TransactionViewItemFactory(
     private val evmLabelManager: EvmLabelManager,
     private val contactsRepository: ContactsRepository,
     private val balanceHiddenManager: BalanceHiddenManager,
+    private val changeNowTransactionsStorage: ChangeNowTransactionsStorage,
+    private val walletUseCase: WalletUseCase,
+    private val numberFormatter: IAppNumberFormatter
 ) {
 
     private var showAmount = !balanceHiddenManager.balanceHidden
@@ -181,6 +191,22 @@ class TransactionViewItemFactory(
         )
     }
 
+    private fun getIconForToken(
+        coinUid: String,
+        blockchainType: String
+    ): TransactionViewItem.Icon.Regular =
+        walletUseCase.getWallet(coinUid, blockchainType)?.let { wallet ->
+            return TransactionViewItem.Icon.Regular(
+                url = wallet.token.coin.imageUrl,
+                alternativeUrl = null,
+                placeholder = null
+            )
+        } ?: TransactionViewItem.Icon.Regular(
+            url = null,
+            alternativeUrl = null,
+            placeholder = R.drawable.coin_placeholder
+        )
+
     private fun iconType(
         blockchainType: BlockchainType,
         incomingValues: List<TransactionValue>,
@@ -231,29 +257,48 @@ class TransactionViewItemFactory(
                 )
             }
 
-            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                icon
-            )
+            is BinanceChainIncomingTransactionRecord ->
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.value.token,
+                    isIncoming = true
+                ) ?: createViewItemFromBinanceChainIncomingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    icon
+                )
 
-            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                icon
-            )
+            is BinanceChainOutgoingTransactionRecord ->
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.value.token,
+                    isIncoming = false
+                ) ?: createViewItemFromBinanceChainOutgoingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    icon
+                )
 
-            is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                lastBlockTimestamp,
-                icon
-            )
+            is BitcoinIncomingTransactionRecord ->
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.token,
+                    isIncoming = true
+                ) ?: createViewItemFromBitcoinIncomingTransactionRecord(
+                    record,
+                    transactionItem.currencyValue,
+                    progress,
+                    lastBlockTimestamp,
+                    icon
+                )
 
-            is BitcoinOutgoingTransactionRecord -> createViewItemFromBitcoinOutgoingTransactionRecord(
+            is BitcoinOutgoingTransactionRecord -> tryConvertToChangeNowViewItemSwap(
+                transactionItem = transactionItem,
+                token = record.token,
+                isIncoming = false
+            ) ?: createViewItemFromBitcoinOutgoingTransactionRecord(
                 record,
                 transactionItem.currencyValue,
                 progress,
@@ -309,7 +354,11 @@ class TransactionViewItemFactory(
             )
 
             is EvmIncomingTransactionRecord -> {
-                createViewItemFromEvmIncomingTransactionRecord(
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = true
+                ) ?: createViewItemFromEvmIncomingTransactionRecord(
                     uid = record.uid,
                     value = record.value,
                     from = record.from,
@@ -323,7 +372,11 @@ class TransactionViewItemFactory(
             }
 
             is EvmOutgoingTransactionRecord -> {
-                createViewItemFromEvmOutgoingTransactionRecord(
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = (record.mainValue as? TransactionValue.CoinValue)?.token,
+                    isIncoming = false
+                ) ?: createViewItemFromEvmOutgoingTransactionRecord(
                     uid = record.uid,
                     value = record.value,
                     to = record.to,
@@ -361,21 +414,31 @@ class TransactionViewItemFactory(
                 )
             }
 
-            is SolanaIncomingTransactionRecord -> createViewItemFromSolanaIncomingTransactionRecord(
-                record = record,
-                currencyValue = transactionItem.currencyValue,
-                progress = progress,
-                icon = icon,
-                nftMetadata = transactionItem.nftMetadata
-            )
+            is SolanaIncomingTransactionRecord ->
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = true
+                ) ?: createViewItemFromSolanaIncomingTransactionRecord(
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon,
+                    nftMetadata = transactionItem.nftMetadata
+                )
 
-            is SolanaOutgoingTransactionRecord -> createViewItemFromSolanaOutgoingTransactionRecord(
-                record = record,
-                currencyValue = transactionItem.currencyValue,
-                progress = progress,
-                icon = icon,
-                nftMetadata = transactionItem.nftMetadata
-            )
+            is SolanaOutgoingTransactionRecord ->
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = false
+                ) ?: createViewItemFromSolanaOutgoingTransactionRecord(
+                    record = record,
+                    currencyValue = transactionItem.currencyValue,
+                    progress = progress,
+                    icon = icon,
+                    nftMetadata = transactionItem.nftMetadata
+                )
 
             is SolanaUnknownTransactionRecord -> createViewItemFromSolanaUnknownTransactionRecord(
                 record = record,
@@ -440,7 +503,11 @@ class TransactionViewItemFactory(
             }
 
             is TronIncomingTransactionRecord -> {
-                createViewItemFromEvmIncomingTransactionRecord(
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = true
+                ) ?: createViewItemFromEvmIncomingTransactionRecord(
                     uid = record.uid,
                     value = record.value,
                     from = record.from,
@@ -454,7 +521,11 @@ class TransactionViewItemFactory(
             }
 
             is TronOutgoingTransactionRecord -> {
-                createViewItemFromEvmOutgoingTransactionRecord(
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = false
+                ) ?: createViewItemFromEvmOutgoingTransactionRecord(
                     uid = record.uid,
                     value = record.value,
                     to = record.to,
@@ -1113,6 +1184,107 @@ class TransactionViewItemFactory(
         )
     }
 
+    private fun tryConvertToChangeNowViewItemSwap(
+        transactionItem: TransactionItem,
+        token: Token?,
+        isIncoming: Boolean
+    ) = if (token == null) {
+        null
+    } else if (isIncoming) {
+        changeNowTransactionsStorage.getByTokenOut(
+            token = token,
+            timestamp = transactionItem.record.timestamp * 1000
+        )
+    } else {
+        changeNowTransactionsStorage.getByTokenIn(
+            token = token,
+            timestamp = transactionItem.record.timestamp * 1000
+        )
+    }?.let {
+        createViewItemFromChangeNowRecord(
+            transaction = it,
+            transactionItem = transactionItem,
+            direct = !isIncoming
+        )
+    }
+
+    private fun createViewItemFromChangeNowRecord(
+        transaction: ChangeNowTransaction,
+        transactionItem: TransactionItem,
+        direct: Boolean
+    ): TransactionViewItem {
+        val iconIn = getIconForToken(
+            coinUid = transaction.coinUidIn,
+            blockchainType = transaction.blockchainTypeIn
+        )
+        val iconOut = getIconForToken(
+            coinUid = transaction.coinUidOut,
+            blockchainType = transaction.blockchainTypeOut
+        )
+
+        val transactionIcon = TransactionViewItem.Icon.Double(
+            back = if (direct) iconIn else iconOut,
+            front = if (direct) iconOut else iconIn
+        )
+
+        val valueInFormatted = getFormattedAmount(
+            coinUid = transaction.coinUidIn,
+            blockchainType = transaction.blockchainTypeIn,
+            amount = transaction.amountIn,
+            negative = true
+        )
+
+        val valueOutFormatted = getFormattedAmount(
+            coinUid = transaction.coinUidOut,
+            blockchainType = transaction.blockchainTypeOut,
+            amount = transaction.amountOut,
+            negative = false
+        )
+
+        val primaryValue = if (direct) {
+            ColoredValue(valueInFormatted, ColorName.Lucian)
+        } else {
+            ColoredValue(valueOutFormatted, ColorName.Lucian)
+        }
+        val secondaryValue = if (direct) {
+            ColoredValue(valueOutFormatted, ColorName.Remus)
+        } else {
+            ColoredValue(valueInFormatted, ColorName.Remus)
+        }
+
+        return TransactionViewItem(
+            uid = transactionItem.record.uid,
+            progress = 0f,
+            title = Translator.getString(R.string.Transactions_Swap),
+            subtitle = "ChangeNow",
+            primaryValue = primaryValue,
+            secondaryValue = secondaryValue,
+            showAmount = showAmount,
+            date = Date(transactionItem.record.timestamp * 1000),
+            spam = false,
+            icon = transactionIcon,
+            transactionStatusUrl = ChangeNowHelper.CHANGE_NOW_URL to ChangeNowHelper.getViewTransactionUrl(transaction.transactionId)
+        )
+    }
+
+    private fun getFormattedAmount(
+        coinUid: String,
+        blockchainType: String,
+        amount: BigDecimal,
+        negative: Boolean
+    ): String {
+        val sign = if (negative) "-" else "+"
+        val coinCode =
+            walletUseCase.getWallet(coinUid, blockchainType)?.coin?.code ?: coinUid.uppercase()
+
+        val numberFormatted = numberFormatter.formatCoinShort(
+            amount,
+            coinCode,
+            8
+        )
+        return "$sign $numberFormatted"
+    }
+
     private fun createViewItemFromBinanceChainIncomingTransactionRecord(
         record: BinanceChainIncomingTransactionRecord,
         currencyValue: CurrencyValue?,
@@ -1240,8 +1412,9 @@ class TransactionViewItemFactory(
 
             // outgoing multiple
             (incomingValues.isEmpty() && outgoingValues.isNotEmpty()) -> {
-                primaryValue = getColoredValue(outgoingValues.map { it.coinCode }.toSet().toList()
-                    .joinToString(", "),
+                primaryValue = getColoredValue(
+                    outgoingValues.map { it.coinCode }.toSet().toList()
+                        .joinToString(", "),
                     ColorName.Lucian
                 )
                 secondaryValue = getColoredValue(
@@ -1252,8 +1425,9 @@ class TransactionViewItemFactory(
 
             // incoming multiple
             (incomingValues.isNotEmpty() && outgoingValues.isEmpty()) -> {
-                primaryValue = getColoredValue(incomingValues.map { it.coinCode }.toSet().toList()
-                    .joinToString(", "),
+                primaryValue = getColoredValue(
+                    incomingValues.map { it.coinCode }.toSet().toList()
+                        .joinToString(", "),
                     ColorName.Remus
                 )
                 secondaryValue = getColoredValue(

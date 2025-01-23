@@ -140,7 +140,7 @@ fun SendBitcoinScreen(
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {

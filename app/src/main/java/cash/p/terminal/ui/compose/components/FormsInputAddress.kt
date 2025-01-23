@@ -66,18 +66,18 @@ fun FormsInputAddress(
     val borderColor = when (state) {
         is DataState.Error -> {
             if (state.error is FormsInputStateWarning) {
-                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.yellow50
+                ComposeAppTheme.colors.yellow50
             } else {
-                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.red50
+                ComposeAppTheme.colors.red50
             }
         }
-        else -> cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20
+        else -> ComposeAppTheme.colors.steel20
     }
 
     val cautionColor = if (state?.errorOrNull is FormsInputStateWarning) {
-        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob
+        ComposeAppTheme.colors.jacob
     } else {
-        cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian
+        ComposeAppTheme.colors.lucian
     }
 
     Column(modifier) {

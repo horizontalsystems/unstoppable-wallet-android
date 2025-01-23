@@ -210,7 +210,7 @@ private fun SwapScreenInner(
                 }
             )
         },
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        backgroundColor = ComposeAppTheme.colors.tyler,
     ) {
         val focusManager = LocalFocusManager.current
         val keyboardState by observeKeyboardState()
@@ -283,6 +283,7 @@ private fun SwapScreenInner(
                             SwapError.InsufficientBalanceFrom -> stringResource(id = R.string.Swap_ErrorInsufficientBalance)
                             is NoSupportedSwapProvider -> stringResource(id = R.string.Swap_ErrorNoProviders)
                             is SwapRouteNotFound -> stringResource(id = R.string.Swap_ErrorNoQuote)
+                            is SwapDepositTooSmall -> stringResource(id = R.string.swap_out_of_min_amount, error.minValue.toPlainString())
                             is PriceImpactTooHigh -> stringResource(id = R.string.Swap_ErrorHighPriceImpact)
                             is UnknownHostException -> stringResource(id = R.string.Hud_Text_NoInternet)
                             is TokenNotEnabled -> stringResource(id = R.string.Swap_ErrorTokenNotEnabled)

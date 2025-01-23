@@ -7,7 +7,7 @@ import io.horizontalsystems.tronkit.models.Transaction
 
 class TronIncomingTransactionRecord(
     transaction: Transaction,
-    baseToken: Token,
+    val baseToken: Token,
     source: TransactionSource,
     val from: String,
     val value: TransactionValue,

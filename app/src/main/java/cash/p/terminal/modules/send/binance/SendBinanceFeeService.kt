@@ -15,7 +15,7 @@ import java.math.BigDecimal
 class SendBinanceFeeService(
     private val adapter: ISendBinanceAdapter,
     private val token: Token,
-    private val feeTokenProvider: FeeTokenProvider
+    feeTokenProvider: FeeTokenProvider
 ) {
     private val feeTokenData = feeTokenProvider.feeTokenData(token)
     val feeToken = feeTokenData?.first ?: token

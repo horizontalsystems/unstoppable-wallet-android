@@ -39,14 +39,14 @@ class TronKitManager(
         }
 
     private var useCount = 0
-    var currentAccount: cash.p.terminal.wallet.Account? = null
+    var currentAccount: Account? = null
         private set
 
     val statusInfo: Map<String, Any>?
         get() = tronKitWrapper?.tronKit?.statusInfo()
 
     @Synchronized
-    fun getTronKitWrapper(account: cash.p.terminal.wallet.Account): TronKitWrapper {
+    fun getTronKitWrapper(account: Account): TronKitWrapper {
         if (this.tronKitWrapper != null && currentAccount != account) {
             stop()
         }
@@ -54,11 +54,11 @@ class TronKitManager(
         if (this.tronKitWrapper == null) {
             val accountType = account.type
             this.tronKitWrapper = when (accountType) {
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
 
-                is cash.p.terminal.wallet.AccountType.TronAddress -> {
+                is AccountType.TronAddress -> {
                     createKitInstance(accountType, account)
                 }
 
@@ -74,8 +74,8 @@ class TronKitManager(
     }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.Mnemonic,
-        account: cash.p.terminal.wallet.Account
+        accountType: AccountType.Mnemonic,
+        account: Account
     ): TronKitWrapper {
         val seed = accountType.seed
         val signer = Signer.getInstance(seed, network)
@@ -92,8 +92,8 @@ class TronKitManager(
     }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.TronAddress,
-        account: cash.p.terminal.wallet.Account
+        accountType: AccountType.TronAddress,
+        account: Account
     ): TronKitWrapper {
         val address = accountType.address
 
@@ -109,7 +109,7 @@ class TronKitManager(
     }
 
     @Synchronized
-    fun unlink(account: cash.p.terminal.wallet.Account) {
+    fun unlink(account: Account) {
         if (account == currentAccount) {
             useCount -= 1
 

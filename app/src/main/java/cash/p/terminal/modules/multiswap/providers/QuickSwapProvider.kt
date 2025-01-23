@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.multiswap.providers
 
 import cash.p.terminal.R
+import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
 
 object QuickSwapProvider : BaseUniswapProvider() {
@@ -10,7 +11,7 @@ object QuickSwapProvider : BaseUniswapProvider() {
     override val icon = R.drawable.quickswap
     override val priority = 0
 
-    override fun supports(blockchainType: BlockchainType): Boolean {
-        return blockchainType == BlockchainType.Polygon
+    override suspend fun supports(token: Token): Boolean {
+        return token.blockchainType == BlockchainType.Polygon
     }
 }

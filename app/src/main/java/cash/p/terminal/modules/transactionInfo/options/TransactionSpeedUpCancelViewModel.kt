@@ -9,7 +9,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
-import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import cash.p.terminal.modules.multiswap.sendtransaction.services.SendTransactionServiceEvm
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceState
 import cash.p.terminal.modules.sendevmtransaction.SectionViewItem
 import cash.p.terminal.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
@@ -109,8 +109,8 @@ class TransactionSpeedUpCancelViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(blockchainType)
             val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)!!
+            val sendTransactionService = SendTransactionServiceEvm(feeToken)
             val coinServiceFactory = EvmCoinServiceFactory(
                 feeToken,
                 App.marketKit,
