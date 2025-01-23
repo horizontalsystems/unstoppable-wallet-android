@@ -19,7 +19,7 @@ sealed class AddressValidationException : Exception(), Parcelable {
         }
 
     override fun getLocalizedMessage() = when (val blockchainName = blockchain) {
-        null -> cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
-        else -> cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidBlockchainAddress, blockchainName)
+        null -> Translator.getString(R.string.SwapSettings_Error_InvalidAddress)
+        else -> Translator.getString(R.string.SwapSettings_Error_InvalidBlockchainAddress, blockchainName)
     }
 }

@@ -11,8 +11,8 @@ import cash.p.terminal.modules.xrate.XRateService
 
 class AmountInputModeViewModel(
     private val localStorage: ILocalStorage,
-    private val xRateService: XRateService,
-    private val coinUid: String
+    xRateService: XRateService,
+    coinUid: String
 ) : ViewModel() {
 
     private var hasXRate = xRateService.getRate(coinUid) != null

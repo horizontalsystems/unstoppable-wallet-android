@@ -40,7 +40,7 @@ class SendEvmAddressService(filledAddress: String? = null) {
         try {
             evmAddress = EvmAddress(address.hex)
         } catch (e: Exception) {
-            addressError = Throwable(cash.p.terminal.strings.helpers.Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
+            addressError = Throwable(Translator.getString(R.string.SwapSettings_Error_InvalidAddress))
         }
     }
 

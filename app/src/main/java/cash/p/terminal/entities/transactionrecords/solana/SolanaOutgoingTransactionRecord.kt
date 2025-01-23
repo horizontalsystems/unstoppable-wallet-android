@@ -7,7 +7,7 @@ import io.horizontalsystems.solanakit.models.Transaction
 
 class SolanaOutgoingTransactionRecord(
     transaction: Transaction,
-    baseToken: Token,
+    val baseToken: Token,
     source: TransactionSource,
     val to: String?,
     val value: TransactionValue,

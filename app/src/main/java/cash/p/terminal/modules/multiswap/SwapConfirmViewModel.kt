@@ -1,23 +1,30 @@
 package cash.p.terminal.modules.multiswap
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.CautionViewItem
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import io.horizontalsystems.core.entities.Currency
+import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
+import cash.p.terminal.modules.multiswap.providers.changenow.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
+import cash.p.terminal.network.changenow.data.entity.BackendChangeNowResponseError
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.CurrencyManager
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.Currency
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,13 +34,14 @@ class SwapConfirmViewModel(
     private val swapProvider: IMultiSwapProvider,
     swapQuote: ISwapQuote,
     private val swapSettings: Map<String, Any?>,
-    private val currencyManager: CurrencyManager,
+    currencyManager: CurrencyManager,
     private val fiatServiceIn: FiatService,
     private val fiatServiceOut: FiatService,
     private val fiatServiceOutMin: FiatService,
-    val sendTransactionService: ISendTransactionService,
+    val sendTransactionService: ISendTransactionService<*>,
     private val timerService: TimerService,
-    private val priceImpactService: PriceImpactService
+    private val priceImpactService: PriceImpactService,
+    private val changeNowTransactionsStorage: ChangeNowTransactionsStorage
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -53,6 +61,7 @@ class SwapConfirmViewModel(
     private var amountOut: BigDecimal? = null
     private var amountOutMin: BigDecimal? = null
     private var quoteFields: List<DataField> = listOf()
+    private var criticalError: String? = null
 
     init {
         fiatServiceIn.setCurrency(currency)
@@ -173,6 +182,7 @@ class SwapConfirmViewModel(
             priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,
             transactionFields = sendTransactionState.fields,
+            criticalError = criticalError
         )
     }
 
@@ -190,13 +200,21 @@ class SwapConfirmViewModel(
     }
 
     private fun fetchFinalQuote() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                val finalQuote = swapProvider.fetchFinalQuote(tokenIn, tokenOut, amountIn, swapSettings, sendTransactionSettings)
+                val finalQuote = swapProvider.fetchFinalQuote(
+                    tokenIn,
+                    tokenOut,
+                    amountIn,
+                    swapSettings,
+                    sendTransactionSettings
+                )
 
                 amountOut = finalQuote.amountOut
                 amountOutMin = finalQuote.amountOutMin
                 quoteFields = finalQuote.fields
+                loading = false
+                criticalError = null
                 emitState()
 
                 fiatServiceOut.setAmount(amountOut)
@@ -204,8 +222,28 @@ class SwapConfirmViewModel(
                 sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
 
                 priceImpactService.setPriceImpact(finalQuote.priceImpact, swapProvider.title)
+            } catch (e: BackendChangeNowResponseError) {
+                e.printStackTrace()
+                loading = false
+                criticalError = when (e.error) {
+                    BackendChangeNowResponseError.NOT_VALID_REFUND_ADDRESS -> {
+                        Translator.getString(R.string.unsupported_refund_address)
+                    }
+
+                    BackendChangeNowResponseError.NOT_VALID_ADDRESS -> {
+                        Translator.getString(R.string.unsupported_address)
+                    }
+
+                    else -> {
+                        Translator.getString(R.string.unexpected_error)
+                    }
+                }
+                emitState()
             } catch (t: Throwable) {
-//                Log.e("AAA", "fetchFinalQuote error", t)
+                Log.e("AAA", "fetchFinalQuote error", t)
+                loading = false
+                criticalError = Translator.getString(R.string.unexpected_error)
+                emitState()
             }
         }
     }
@@ -216,21 +254,32 @@ class SwapConfirmViewModel(
         sendTransactionService.sendTransaction()
     }
 
+    fun onTransactionCompleted() {
+        if (swapProvider is ChangeNowProvider) {
+            swapProvider.onTransactionCompleted()
+        }
+    }
+
     companion object {
-        fun init(quote: SwapProviderQuote, settings: Map<String, Any?>): CreationExtras.() -> SwapConfirmViewModel = {
-            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn.blockchainType)
+        fun init(
+            quote: SwapProviderQuote,
+            settings: Map<String, Any?>
+        ): CreationExtras.() -> SwapConfirmViewModel = {
+            val sendTransactionService = SendTransactionServiceFactory.create(quote.tokenIn)
 
             SwapConfirmViewModel(
-                quote.provider,
-                quote.swapQuote,
-                settings,
-                App.currencyManager,
-                FiatService(App.marketKit),
-                FiatService(App.marketKit),
-                FiatService(App.marketKit),
-                sendTransactionService,
-                TimerService(),
-                PriceImpactService()
+                swapProvider = quote.provider,
+                swapQuote = quote.swapQuote,
+                swapSettings = settings,
+                currencyManager = App.currencyManager,
+                fiatServiceIn = FiatService(App.marketKit),
+                fiatServiceOut = FiatService(App.marketKit),
+                fiatServiceOutMin = FiatService(App.marketKit),
+                sendTransactionService = sendTransactionService,
+                timerService = TimerService(),
+                priceImpactService = PriceImpactService(),
+                changeNowTransactionsStorage = getKoinInstance()
+
             )
         }
     }
@@ -257,4 +306,5 @@ data class SwapConfirmUiState(
     val priceImpactLevel: PriceImpactLevel?,
     val quoteFields: List<DataField>,
     val transactionFields: List<DataField>,
+    val criticalError: String? = null
 )

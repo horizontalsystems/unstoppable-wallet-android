@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.transactions
 
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
@@ -114,10 +115,10 @@ class TransactionRecordRepository(
                 if (adapter == null) {
                     adapterManager.getAdapter(transactionWallet.source)?.let {
                         adapter = TransactionAdapterWrapper(
-                            it,
-                            transactionWallet,
-                            selectedFilterTransactionType,
-                            contact
+                            transactionsAdapter = it,
+                            transactionWallet = transactionWallet,
+                            transactionType = selectedFilterTransactionType,
+                            contact = contact
                         )
                     }
                 }

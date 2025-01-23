@@ -8,7 +8,7 @@ import io.horizontalsystems.ethereumkit.models.Transaction
 
 class EvmIncomingTransactionRecord(
     transaction: Transaction,
-    baseToken: Token,
+    val baseToken: Token,
     source: TransactionSource,
     spamManager: SpamManager,
     val from: String,

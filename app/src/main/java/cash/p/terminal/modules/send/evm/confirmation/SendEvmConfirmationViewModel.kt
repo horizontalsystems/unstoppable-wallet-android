@@ -8,7 +8,7 @@ import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.ethereum.EvmCoinServiceFactory
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
-import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceEvm
+import cash.p.terminal.modules.multiswap.sendtransaction.services.SendTransactionServiceEvm
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.SendEvmData
@@ -21,10 +21,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SendEvmConfirmationViewModel(
-    private val sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
+    sendEvmTransactionViewItemFactory: SendEvmTransactionViewItemFactory,
     val sendTransactionService: SendTransactionServiceEvm,
-    private val transactionData: TransactionData,
-    private val additionalInfo: SendEvmData.AdditionalInfo?
+    transactionData: TransactionData,
+    additionalInfo: SendEvmData.AdditionalInfo?
 ) : ViewModelUiState<SendEvmConfirmationUiState>() {
     private var sendTransactionState = sendTransactionService.stateFlow.value
 
@@ -66,7 +66,8 @@ class SendEvmConfirmationViewModel(
     ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val sendTransactionService = SendTransactionServiceEvm(blockchainType)
+            val token = App.evmBlockchainManager.getBaseToken(blockchainType)!!
+            val sendTransactionService = SendTransactionServiceEvm(token)
             val feeToken = App.evmBlockchainManager.getBaseToken(blockchainType)!!
             val coinServiceFactory = EvmCoinServiceFactory(
                 feeToken,

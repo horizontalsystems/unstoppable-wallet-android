@@ -17,6 +17,7 @@ import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinTransactionRec
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.TransactionLockInfo
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
@@ -52,7 +53,7 @@ abstract class BitcoinBaseAdapter(
     open val kit: AbstractKit,
     open val syncMode: BitcoinCore.SyncMode,
     private val backgroundManager: BackgroundManager,
-    val wallet: cash.p.terminal.wallet.Wallet,
+    val wallet: Wallet,
     private val confirmationsThreshold: Int,
     protected val decimal: Int = 8
 ) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {

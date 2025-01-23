@@ -7,7 +7,7 @@ import cash.p.terminal.wallet.transaction.TransactionSource
 import java.math.BigDecimal
 
 class BitcoinOutgoingTransactionRecord(
-    token: Token,
+    val token: Token,
     uid: String,
     transactionHash: String,
     transactionIndex: Int,

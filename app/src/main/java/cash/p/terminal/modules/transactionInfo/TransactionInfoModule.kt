@@ -23,12 +23,13 @@ object TransactionInfoModule {
             val transactionSource = transactionItem.record.source
             val adapter: ITransactionsAdapter = App.transactionAdapterManager.getAdapter(transactionSource)!!
             val service = TransactionInfoService(
-                transactionItem.record,
-                adapter,
-                App.marketKit,
-                App.currencyManager,
-                NftMetadataService(App.nftMetadataManager),
-                App.balanceHiddenManager.balanceHidden,
+                transactionRecord = transactionItem.record,
+                adapter = adapter,
+                marketKit = App.marketKit,
+                currencyManager = App.currencyManager,
+                nftMetadataService = NftMetadataService(App.nftMetadataManager),
+                balanceHidden = App.balanceHiddenManager.balanceHidden,
+                transactionStatusUrl = transactionItem.transactionStatusUrl
             )
             val factory = TransactionInfoViewItemFactory(
                 transactionSource.blockchain.type.resendable,
@@ -59,6 +60,7 @@ data class TransactionInfoItem(
     val rates: Map<String, CurrencyValue>,
     val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
     val hideAmount: Boolean,
+    val transactionStatusUrl: Pair<String, String>? = null
 )
 
 val BlockchainType.resendable: Boolean

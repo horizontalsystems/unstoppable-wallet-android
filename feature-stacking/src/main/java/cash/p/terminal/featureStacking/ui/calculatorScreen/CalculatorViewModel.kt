@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.featureStacking.ui.staking.StackingType
-import cash.p.terminal.network.domain.repository.PiratePlaceRepository
+import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.balance.BalanceViewHelper
 import cash.p.terminal.wallet.models.CoinPrice

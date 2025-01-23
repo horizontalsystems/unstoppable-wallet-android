@@ -7,7 +7,7 @@ import io.horizontalsystems.ethereumkit.models.Transaction
 
 class EvmOutgoingTransactionRecord(
     transaction: Transaction,
-    baseToken: Token,
+    val baseToken: Token,
     source: TransactionSource,
     val to: String,
     val value: TransactionValue,

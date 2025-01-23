@@ -37,7 +37,10 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
+import cash.p.terminal.wallet.AccountOrigin
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -51,15 +54,13 @@ import kotlin.math.max
 
 class ZcashAdapter(
     context: Context,
-    private val wallet: cash.p.terminal.wallet.Wallet,
+    private val wallet: Wallet,
     restoreSettings: RestoreSettings,
     private val localStorage: ILocalStorage,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
-
     private var accountBirthday = 0L
     private val existingWallet = localStorage.zcashAccountIds.contains(wallet.account.id)
     private val confirmationsThreshold = 10
-    private val decimalCount = 8
     private val network: ZcashNetwork = ZcashNetwork.Mainnet
     private val feeChangeHeight: Long = 1_077_550
     private val lightWalletEndpoint = LightWalletEndpoint(host = "zec.rocks", port = 443, isSecure = true)
@@ -71,7 +72,7 @@ class ZcashAdapter(
     private val lastBlockUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     private val balanceUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
 
-    private val accountType = (wallet.account.type as? cash.p.terminal.wallet.AccountType.Mnemonic) ?: throw UnsupportedAccountException()
+    private val accountType = (wallet.account.type as? AccountType.Mnemonic) ?: throw UnsupportedAccountException()
     private val seed = accountType.seed
 
     private val zcashAccount = Account.DEFAULT
@@ -80,19 +81,37 @@ class ZcashAdapter(
 
     override val isMainNet: Boolean = true
 
+
+    companion object {
+        private const val ALIAS_PREFIX = "zcash_"
+
+        private fun getValidAliasFromAccountId(accountId: String): String {
+            return ALIAS_PREFIX + accountId.replace("-", "_")
+        }
+
+        private val DECIMAL_COUNT = 8
+        val FEE = ZcashSdk.MINERS_FEE.convertZatoshiToZec(DECIMAL_COUNT)
+
+        fun clear(accountId: String) {
+            runBlocking {
+                Synchronizer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
+            }
+        }
+    }
+
     init {
         val walletInitMode = if (existingWallet) {
             WalletInitMode.ExistingWallet
         } else when (wallet.account.origin) {
-            cash.p.terminal.wallet.AccountOrigin.Created -> WalletInitMode.NewWallet
-            cash.p.terminal.wallet.AccountOrigin.Restored -> WalletInitMode.RestoreWallet
+            AccountOrigin.Created -> WalletInitMode.NewWallet
+            AccountOrigin.Restored -> WalletInitMode.RestoreWallet
         }
 
         val birthday = when (wallet.account.origin) {
-            cash.p.terminal.wallet.AccountOrigin.Created -> runBlocking {
+            AccountOrigin.Created -> runBlocking {
                 BlockHeight.ofLatestCheckpoint(context, network)
             }
-            cash.p.terminal.wallet.AccountOrigin.Restored -> restoreSettings.birthdayHeight
+            AccountOrigin.Restored -> restoreSettings.birthdayHeight
                 ?.let { height ->
                     max(network.saplingActivationHeight.value, height)
                 }
@@ -167,8 +186,8 @@ class ZcashAdapter(
     private val balance: BigDecimal
         get() {
             val walletBalance = synchronizer.saplingBalances.value ?: return BigDecimal.ZERO
-            return walletBalance.available.convertZatoshiToZec(decimalCount) +
-                    walletBalance.pending.convertZatoshiToZec(decimalCount)
+            return walletBalance.available.convertZatoshiToZec(DECIMAL_COUNT) +
+                    walletBalance.pending.convertZatoshiToZec(DECIMAL_COUNT)
         }
 
     private val balancePending: BigDecimal
@@ -246,12 +265,12 @@ class ZcashAdapter(
                 BigDecimal.ZERO
             } else {
                 available.minus(defaultFee)
-                    .convertZatoshiToZec(decimalCount)
+                    .convertZatoshiToZec(DECIMAL_COUNT)
             }
         }
 
     override val fee: BigDecimal
-        get() = ZcashSdk.MINERS_FEE.convertZatoshiToZec(decimalCount)
+        get() = FEE
 
     override suspend fun validate(address: String): ZCashAddressType {
         if (address == receiveAddress) throw ZcashError.SendToSelfNotAllowed
@@ -331,12 +350,12 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = transaction.feePaid?.let { it.convertZatoshiToZec(decimalCount) },
+                fee = transaction.feePaid?.let { it.convertZatoshiToZec(DECIMAL_COUNT) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
-                amount = transaction.value.convertZatoshiToZec(decimalCount),
+                amount = transaction.value.convertZatoshiToZec(DECIMAL_COUNT),
                 from = null,
                 memo = transaction.memo,
                 source = wallet.transactionSource
@@ -350,12 +369,12 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = transaction.feePaid?.let { it.convertZatoshiToZec(decimalCount) },
+                fee = transaction.feePaid?.let { it.convertZatoshiToZec(DECIMAL_COUNT) },
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
                 showRawTransaction = false,
-                amount = transaction.value.convertZatoshiToZec(decimalCount).negate(),
+                amount = transaction.value.convertZatoshiToZec(DECIMAL_COUNT).negate(),
                 to = transaction.toAddress,
                 sentToSelf = false,
                 memo = transaction.memo,
@@ -372,20 +391,6 @@ class ZcashAdapter(
     sealed class ZcashError : Exception() {
         object InvalidAddress : ZcashError()
         object SendToSelfNotAllowed : ZcashError()
-    }
-
-    companion object {
-        private const val ALIAS_PREFIX = "zcash_"
-
-        private fun getValidAliasFromAccountId(accountId: String): String {
-            return ALIAS_PREFIX + accountId.replace("-", "_")
-        }
-
-        fun clear(accountId: String) {
-            runBlocking {
-                Synchronizer.erase(App.instance, ZcashNetwork.Mainnet, getValidAliasFromAccountId(accountId))
-            }
-        }
     }
 }
 

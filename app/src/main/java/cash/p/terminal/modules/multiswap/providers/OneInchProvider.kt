@@ -40,7 +40,7 @@ object OneInchProvider : EvmSwapProvider() {
     // TODO take evmCoinAddress from oneInchKit
     private val evmCoinAddress = Address("0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
 
-    override fun supports(blockchainType: BlockchainType) = when (blockchainType) {
+    override suspend fun supports(token: Token) = when (token.blockchainType) {
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Polygon,

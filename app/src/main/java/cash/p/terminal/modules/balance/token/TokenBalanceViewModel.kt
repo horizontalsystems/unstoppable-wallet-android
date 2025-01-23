@@ -115,7 +115,9 @@ class TokenBalanceViewModel(
         transactionsService.fetchRateIfNeeded(viewItem.uid)
     }
 
-    fun getTransactionItem(viewItem: TransactionViewItem) = transactionsService.getTransactionItem(viewItem.uid)
+    fun getTransactionItem(viewItem: TransactionViewItem) = transactionsService.getTransactionItem(viewItem.uid)?.copy(
+        transactionStatusUrl = viewItem.transactionStatusUrl
+    )
 
     fun toggleBalanceVisibility() {
         balanceHiddenManager.toggleBalanceHidden()

@@ -4,15 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendZcashAdapter
-import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.xrate.XRateService
+import cash.p.terminal.wallet.Wallet
 
 object SendZCashModule {
 
     class Factory(
-        private val wallet: cash.p.terminal.wallet.Wallet,
+        private val wallet: Wallet,
         private val predefinedAddress: String?,
     ) : ViewModelProvider.Factory {
         val adapter =
@@ -30,14 +30,14 @@ object SendZCashModule {
             val memoService = SendZCashMemoService()
 
             return SendZCashViewModel(
-                adapter,
-                wallet,
-                xRateService,
-                amountService,
-                addressService,
-                memoService,
-                App.contactsRepository,
-                predefinedAddress == null
+                adapter = adapter,
+                wallet = wallet,
+                xRateService = xRateService,
+                amountService = amountService,
+                addressService = addressService,
+                memoService = memoService,
+                contactsRepo = App.contactsRepository,
+                showAddressInput = predefinedAddress == null
             ) as T
         }
     }

@@ -6,6 +6,8 @@ import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.core.purpose
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
@@ -17,16 +19,17 @@ import io.horizontalsystems.litecoinkit.LitecoinKit.NetworkType
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenType
 import java.math.BigDecimal
+import kotlin.math.pow
 
 class LitecoinAdapter(
     override val kit: LitecoinKit,
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
-    wallet: cash.p.terminal.wallet.Wallet,
+    wallet: Wallet,
 ) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), LitecoinKit.Listener, ISendBitcoinAdapter {
 
     constructor(
-        wallet: cash.p.terminal.wallet.Wallet,
+        wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
         derivation: TokenType.Derivation
@@ -40,7 +43,7 @@ class LitecoinAdapter(
     // BitcoinBaseAdapter
     //
 
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(10.0.pow(decimal.toDouble()))
 
     //
     // LitecoinKit Listener
@@ -96,14 +99,14 @@ class LitecoinAdapter(
         private const val confirmationsThreshold = 3
 
         private fun createKit(
-            wallet: cash.p.terminal.wallet.Wallet,
+            wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
             derivation: TokenType.Derivation
         ): LitecoinKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
-                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+                is AccountType.HdExtendedKey -> {
                     return LitecoinKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
@@ -114,7 +117,7 @@ class LitecoinAdapter(
                         confirmationsThreshold = confirmationsThreshold,
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     return LitecoinKit(
                         context = App.instance,
                         words = accountType.words,
@@ -126,7 +129,7 @@ class LitecoinAdapter(
                         purpose = derivation.purpose
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
+                is AccountType.BitcoinAddress -> {
                     return LitecoinKit(
                         context = App.instance,
                         watchAddress =  accountType.address,
