@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,10 +27,11 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
-import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
 import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_grey
@@ -76,10 +78,22 @@ fun SectorsSelectorScreen(
     Scaffold(
         topBar = {
             AppBar(
-                title = stringResource(R.string.Market_Filter_Blockchains),
+                title = stringResource(R.string.Market_Filter_Sectors),
                 navigationIcon = {
-                    HsBackButton(onClick = { navController.popBackStack() })
-                }
+                    Icon(
+                        modifier = Modifier.padding(start = 24.dp),
+                        painter = painterResource(id = R.drawable.prem_portfolio_24),
+                        contentDescription = null,
+                        tint = ComposeAppTheme.colors.jacob
+                    )
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = navController::popBackStack
+                    )
+                ),
             )
         },
         backgroundColor = ComposeAppTheme.colors.tyler,
@@ -117,6 +131,8 @@ fun SectorsSelectorScreen(
                                 } else {
                                     selectedItems + itemWrapper
                                 }
+
+                            viewModel.setSectors(selectedItems)
                         }
                     ) {
                         if (itemWrapper.title != null) {
@@ -149,9 +165,12 @@ fun SectorsSelectorScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
-                    title = stringResource(R.string.Button_Apply),
+                    title = if (selectedItems.size == 1 && selectedItems[0].item == null) {
+                        stringResource(R.string.Button_Done)
+                    } else {
+                        stringResource(R.string.Market_Filters_Select, selectedItems.size)
+                    },
                     onClick = {
-                        viewModel.setSectors(selectedItems)
                         navController.popBackStack()
                     },
                 )
