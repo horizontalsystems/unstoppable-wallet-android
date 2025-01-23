@@ -166,12 +166,9 @@ private fun formatFiatShortened(value: BigDecimal, symbol: String): String {
 }
 
 private fun getDiff(it: BigDecimal): String {
-    val sign = if (it >= BigDecimal.ZERO) "+" else "-"
-    return App.numberFormatter.format(it.abs(), 0, 2, sign, "%")
+    return App.numberFormatter.format(it.abs(), 0, 2, "", "%")
 }
 
-
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MetricsBoard(
     navController: NavController,
@@ -189,7 +186,7 @@ fun MetricsBoard(
         MarketTotalCard(
             title = stringResource(R.string.MarketGlobalMetrics_TotalMarketCap),
             value = marketGlobal?.marketCap,
-            change = marketGlobal?.marketCapChange,
+            changePercentage = marketGlobal?.marketCapChange,
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.TotalMarketCap, navController)
@@ -201,7 +198,7 @@ fun MetricsBoard(
         MarketTotalCard(
             title = stringResource(R.string.MarketGlobalMetrics_Volume),
             value = marketGlobal?.volume,
-            change = marketGlobal?.volumeChange,
+            changePercentage = marketGlobal?.volumeChange,
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.Volume24h, navController)
@@ -213,7 +210,7 @@ fun MetricsBoard(
         MarketTotalCard(
             title = stringResource(R.string.MarketGlobalMetrics_TvlInDefi),
             value = marketGlobal?.tvl,
-            change = marketGlobal?.tvlChange,
+            changePercentage = marketGlobal?.tvlChange,
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.TvlInDefi, navController)
@@ -225,7 +222,7 @@ fun MetricsBoard(
         MarketTotalCard(
             title = stringResource(R.string.MarketGlobalMetrics_EtfInflow),
             value = marketGlobal?.etfTotalInflow,
-            change = marketGlobal?.etfDailyInflow,
+            changeFiat = marketGlobal?.etfDailyInflow,
             currency = currency,
             onClick = {
                 openMetricsPage(MetricsType.Etf, navController)
@@ -248,12 +245,25 @@ private fun VDivider() {
 private fun RowScope.MarketTotalCard(
     title: String,
     value: BigDecimal?,
-    change: BigDecimal?,
+    changePercentage: BigDecimal? = null,
+    changeFiat: BigDecimal? = null,
     currency: Currency,
     onClick: () -> Unit,
 ) {
-    val changeStr = change?.let { getDiff(it) }
-    val changePositive = change?.let { it > BigDecimal.ZERO }
+    val changeStr: String?
+    val changePositive: Boolean?
+
+    if (changePercentage != null) {
+        changeStr = getDiff(changePercentage)
+        changePositive = changePercentage > BigDecimal.ZERO
+    } else if (changeFiat != null) {
+        changeStr = formatFiatShortened(changeFiat, currency.symbol)
+        changePositive = changeFiat > BigDecimal.ZERO
+    } else {
+        changeStr = null
+        changePositive = null
+    }
+
     Column(
         modifier = Modifier
             .weight(1f)
@@ -272,21 +282,22 @@ private fun RowScope.MarketTotalCard(
             maxLines = 1
         )
         VSpacer(4.dp)
-        if (changePositive == null) {
+
+        if (changeStr == null || changePositive == null) {
             caption_grey(
-                text = changeStr ?: "---",
+                text = "---",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
         } else if (changePositive) {
             caption_remus(
-                text = changeStr ?: "---",
+                text = "+$changeStr",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
         } else {
             caption_lucian(
-                text = changeStr ?: "---",
+                text = "-$changeStr",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
