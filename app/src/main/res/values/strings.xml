@@ -347,6 +347,8 @@
     <string name="Market_Sorting_HighestCap">Highest Cap</string>
     <string name="Market_Sorting_LowestCap">Lowest Cap</string>
 
+    <string name="Market_Filters_Select">Select %d</string>
+
     <!--Coin Markets-->
 
     <!--TVL Rank-->
