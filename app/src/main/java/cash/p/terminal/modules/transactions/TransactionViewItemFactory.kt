@@ -42,6 +42,7 @@ import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui_compose.ColorName
 import cash.p.terminal.ui_compose.ColoredValue
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.wallet.useCases.WalletUseCase
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.BlockchainType

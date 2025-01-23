@@ -1,5 +1,6 @@
 package cash.p.terminal.core
 
+import cash.p.terminal.strings.helpers.shorten
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

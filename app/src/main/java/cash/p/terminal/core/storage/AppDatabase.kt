@@ -35,7 +35,6 @@ import cash.p.terminal.core.storage.migrations.Migration_56_57
 import cash.p.terminal.core.storage.migrations.Migration_57_58
 import cash.p.terminal.core.storage.migrations.Migration_58_59
 import cash.p.terminal.core.storage.migrations.Migration_59_60
-import cash.p.terminal.core.storage.migrations.Migration_61_60
 import cash.p.terminal.core.storage.migrations.Migration_60_61
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
@@ -162,8 +161,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_57_58,
                             Migration_58_59,
                             Migration_59_60,
-                            Migration_60_61,
-                            Migration_61_60
+                            Migration_60_61
                     )
                     .build()
         }
