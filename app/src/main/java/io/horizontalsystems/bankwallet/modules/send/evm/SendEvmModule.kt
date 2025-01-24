@@ -85,7 +85,6 @@ object SendEvmModule {
                         coinMaxAllowedDecimals,
                         predefinedAddress == null,
                         App.connectivityManager,
-                        App.currencyManager.baseCurrency,
                     ) as T
                 }
                 else -> throw IllegalArgumentException()
