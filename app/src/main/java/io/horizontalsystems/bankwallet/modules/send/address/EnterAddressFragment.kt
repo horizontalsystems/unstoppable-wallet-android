@@ -89,6 +89,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                 wallet = wallet,
                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
                 title = input.title,
+                predefinedAddress = input.predefinedAddress,
                 prefilledAddressData = prefilledData,
             )
         )

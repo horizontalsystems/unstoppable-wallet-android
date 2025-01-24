@@ -384,7 +384,10 @@ private fun ButtonsRow(viewItem: BalanceViewItem, navController: NavController, 
                     val sendTitle = Translator.getString(R.string.Send_Title, viewItem.wallet.token.fullCoin.coin.code)
                     navController.slideFromRight(
                         R.id.enterAddressFragment,
-                        EnterAddressFragment.Input(viewItem.wallet, sendTitle)
+                        EnterAddressFragment.Input(
+                            wallet = viewItem.wallet,
+                            title = sendTitle
+                        )
                     )
 
                     stat(page = StatPage.TokenPage, event = StatEvent.OpenSend(viewItem.wallet.token))

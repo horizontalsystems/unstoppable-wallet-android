@@ -42,8 +42,8 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                             R.id.enterAddressFragment,
                             EnterAddressFragment.Input(
                                 wallet = it.wallet,
-                                sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 title = sendTitle,
+                                sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 prefilledAddressData = prefilledData,
                             )
                         )
