@@ -160,6 +160,12 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         "stasis-eurs" to 0.01,
     )
 
+    val chainalysisBaseUrl by lazy {
+        Translator.getString(R.string.chainalysisBaseUrl)
+    }
 
+    val chainalysisApiKey by lazy {
+        Translator.getString(R.string.chainalysisApiKey)
+    }
 
 }

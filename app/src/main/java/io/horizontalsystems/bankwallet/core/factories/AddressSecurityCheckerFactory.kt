@@ -2,13 +2,16 @@ package io.horizontalsystems.bankwallet.core.factories
 
 import io.horizontalsystems.bankwallet.core.address.AddressSecurityCheckerChain
 import io.horizontalsystems.bankwallet.core.address.AddressSecurityCheckerChain.IAddressSecurityCheckerItem
+import io.horizontalsystems.bankwallet.core.address.ChainalysisAddressValidator
 import io.horizontalsystems.bankwallet.core.address.SpamAddressDetector
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
+import io.horizontalsystems.bankwallet.core.providers.AppConfigProvider
 import io.horizontalsystems.bankwallet.core.supported
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 class AddressSecurityCheckerFactory(
-    private val spamManager: SpamManager
+    private val spamManager: SpamManager,
+    private val appConfigProvider: AppConfigProvider
 ) {
 
     private fun securityCheckerChainHandlers(blockchainType: BlockchainType): List<IAddressSecurityCheckerItem> =
@@ -23,10 +26,11 @@ class AddressSecurityCheckerFactory(
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
                 val evmAddressSecurityCheckerItem = SpamAddressDetector(spamManager)
-//            val chainalysisAddressValidator = ChainalysisAddressValidator(networkManager: App.shared.networkManager)
+                val chainalysisAddressValidator =
+                    ChainalysisAddressValidator(appConfigProvider.chainalysisBaseUrl, appConfigProvider.chainalysisApiKey)
                 val handlers = mutableListOf<IAddressSecurityCheckerItem>()
                 handlers.add(evmAddressSecurityCheckerItem)
-//            handlers.add(chainalysisAddressValidator)
+                handlers.add(chainalysisAddressValidator)
                 handlers
             }
 
