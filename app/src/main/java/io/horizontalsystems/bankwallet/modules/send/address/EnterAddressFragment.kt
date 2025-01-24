@@ -112,7 +112,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                     value = uiState.value,
                     hint = stringResource(id = R.string.Send_Hint_Address),
-                    state = null,
+                    state = uiState.inputState,
                     textPreprocessor = paymentAddressViewModel,
                     navController = navController,
                     chooseContactEnable = false,
