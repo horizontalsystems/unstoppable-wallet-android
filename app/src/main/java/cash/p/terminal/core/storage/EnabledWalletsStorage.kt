@@ -21,6 +21,11 @@ class EnabledWalletsStorage(private val appDatabase: AppDatabase) : IEnabledWall
     }
 
     override fun delete(enabledWallets: List<EnabledWallet>) {
-        appDatabase.walletsDao().deleteWallets(enabledWallets)
+        val tokenQueryIds = enabledWallets.map { it.tokenQueryId.lowercase() }
+        val accountIds = enabledWallets.map { it.accountId.lowercase() }
+        appDatabase.walletsDao().deleteWallets(
+            tokenQueryIds = tokenQueryIds,
+            accountIds = accountIds
+        )
     }
 }

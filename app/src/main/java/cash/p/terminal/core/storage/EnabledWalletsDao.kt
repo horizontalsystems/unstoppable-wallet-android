@@ -23,7 +23,6 @@ interface EnabledWalletsDao {
         enabledWallets.forEach { insert(it) }
     }
 
-    @Delete
-    fun deleteWallets(enabledWallets: List<EnabledWallet>)
-
+    @Query("DELETE FROM EnabledWallet WHERE LOWER(tokenQueryId) IN (:tokenQueryIds) AND LOWER(accountId) IN (:accountIds)")
+    fun deleteWallets(tokenQueryIds: List<String>, accountIds: List<String>)
 }
