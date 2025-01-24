@@ -1,10 +1,39 @@
 package io.horizontalsystems.bankwallet.modules.send.address
 
-import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.title
+import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
+import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
+import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.entities.DataState
+import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEns
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEvm
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerPure
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerSolana
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerTon
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerTron
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerUdn
+import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
+import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
+import io.horizontalsystems.bankwallet.modules.address.EnsResolverHolder
+import io.horizontalsystems.marketkit.models.BlockchainType
+import io.horizontalsystems.marketkit.models.TokenQuery
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.launch
 
-class EnterAddressViewModel : ViewModelUiState<EnterAddressUiState>() {
+class EnterAddressViewModel(
+    private val blockchainType: BlockchainType,
+    private val addressUriParser: AddressUriParser,
+    private val addressParserChain: AddressParserChain
+) : ViewModelUiState<EnterAddressUiState>() {
     private var address: Address? = null
     private var addressError: Throwable? = null
     private var canBeSendToAddress: Boolean = false
@@ -22,26 +51,137 @@ class EnterAddressViewModel : ViewModelUiState<EnterAddressUiState>() {
         SContact("Metamask_DEV", "0x9696f59E4d72E237BE84fFD425DCaD154Bf96976")
     )
 
+    private var value = ""
+    private var inputState: DataState<Address>? = null
+    private var parseAddressJob: Job? = null
+
     override fun createState() = EnterAddressUiState(
         address = address,
         addressError = addressError,
         canBeSendToAddress = canBeSendToAddress,
         recentAddress = recentAddress,
-        contacts = contacts
+        contacts = contacts,
+        value = value,
     )
 
     init {
 
     }
 
-    fun onEnterAddress(address: Address?) {
-        this.address = address
-        this.canBeSendToAddress = address != null
+    fun onEnterAddress(value: String) {
+        parseAddressJob?.cancel()
 
+        if (value.isBlank()) {
+            this.value = value
+            inputState = null
+            address = null
+            emitState()
+        } else {
+            inputState = DataState.Loading
+            emitState()
+
+            parseForUri(value.trim())
+        }
+    }
+
+    private fun parseForUri(text: String) {
+        if (blockchainType == BlockchainType.Ton && text.contains("//")) {
+            ToncoinUriParser.getAddress(text)?.let { address ->
+                parseAddress(address)
+                return
+            }
+        }
+        when (val result = addressUriParser.parse(text)) {
+            is AddressUriResult.Uri -> {
+                parseAddress(result.addressUri.address)
+            }
+
+            AddressUriResult.InvalidBlockchainType -> {
+                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Blockchain Type"), blockchainType.title))
+                emitState()
+            }
+
+            AddressUriResult.InvalidTokenType -> {
+                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Token Type"), blockchainType.title))
+                emitState()
+            }
+
+            AddressUriResult.NoUri, AddressUriResult.WrongUri -> {
+                parseAddress(text)
+            }
+        }
+    }
+
+    private fun parseAddress(addressText: String) {
+        value = addressText
         emitState()
 
-        Log.e("AAA", "onEnterAddress: $address")
-//        TODO("Not yet implemented")
+        parseAddressJob = viewModelScope.launch(Dispatchers.IO) {
+            val handler = addressParserChain.supportedHandler(addressText)
+
+            if (handler == null) {
+                inputState = DataState.Error(AddressValidationException.Unsupported())
+            } else {
+                try {
+                    val parsedAddress = handler.parseAddress(addressText)
+                    address = parsedAddress
+                    inputState = DataState.Success(parsedAddress)
+                } catch (t: Throwable) {
+                    inputState = DataState.Error(t)
+                }
+            }
+
+            ensureActive()
+            emitState()
+        }
+    }
+
+    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            val blockchainType = wallet.token.blockchainType
+            val coinCode = wallet.coin.code
+            val tokenQuery = TokenQuery(blockchainType, wallet.token.type)
+            val ensHandler = AddressHandlerEns(blockchainType, EnsResolverHolder.resolver)
+            val udnHandler = AddressHandlerUdn(tokenQuery, coinCode, App.appConfigProvider.udnApiKey)
+            val addressParserChain = AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
+
+            when (blockchainType) {
+                BlockchainType.Bitcoin,
+                BlockchainType.BitcoinCash,
+                BlockchainType.ECash,
+                BlockchainType.Litecoin,
+                BlockchainType.Dash,
+                BlockchainType.Zcash,
+                BlockchainType.BinanceChain -> {
+                    addressParserChain.addHandler(AddressHandlerPure(blockchainType))
+                }
+                BlockchainType.Ethereum,
+                BlockchainType.BinanceSmartChain,
+                BlockchainType.Polygon,
+                BlockchainType.Avalanche,
+                BlockchainType.Optimism,
+                BlockchainType.Base,
+                BlockchainType.Gnosis,
+                BlockchainType.Fantom,
+                BlockchainType.ArbitrumOne -> {
+                    addressParserChain.addHandler(AddressHandlerEvm(blockchainType))
+                }
+                BlockchainType.Solana -> {
+                    addressParserChain.addHandler(AddressHandlerSolana())
+                }
+                BlockchainType.Tron -> {
+                    addressParserChain.addHandler(AddressHandlerTron())
+                }
+                BlockchainType.Ton -> {
+                    addressParserChain.addHandler(AddressHandlerTon())
+                }
+                is BlockchainType.Unsupported -> Unit
+            }
+            val addressUriParser = AddressUriParser(wallet.token.blockchainType, wallet.token.type)
+
+            return EnterAddressViewModel(wallet.token.blockchainType, addressUriParser, addressParserChain) as T
+        }
     }
 }
 
@@ -51,4 +191,5 @@ data class EnterAddressUiState(
     val canBeSendToAddress: Boolean,
     val recentAddress: String?,
     val contacts: List<SContact>,
+    val value: String,
 )
