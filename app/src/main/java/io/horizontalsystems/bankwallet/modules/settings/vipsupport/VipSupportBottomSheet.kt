@@ -27,6 +27,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.FormsInput
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,7 +62,7 @@ fun VipSupportBottomSheet(
                 onCloseClick = close,
                 iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob)
             ) {
-                if (uiState.showRequestForm) {
+                if (uiState.vipSupportLink == null) {
                     InfoText(
                         text = stringResource(R.string.Settings_PersonalSupport_EnterTelegramAccountDescription),
                     )
@@ -97,10 +98,7 @@ fun VipSupportBottomSheet(
                             .padding(start = 16.dp, end = 16.dp),
                         title = stringResource(R.string.Settings_PersonalSupport_OpenTelegram),
                         onClick = {
-                            context.packageManager.getLaunchIntentForPackage("org.telegram.messenger")
-                                ?.let {
-                                    context.startActivity(it)
-                                }
+                            LinkHelper.openLinkInAppBrowser(context, uiState.vipSupportLink)
                         },
                     )
                     VSpacer(16.dp)
