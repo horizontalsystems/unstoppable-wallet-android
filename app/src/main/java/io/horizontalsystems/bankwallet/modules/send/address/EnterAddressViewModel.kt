@@ -56,12 +56,12 @@ class EnterAddressViewModel(
     private var parseAddressJob: Job? = null
 
     override fun createState() = EnterAddressUiState(
-        address = address,
         addressError = addressError,
         canBeSendToAddress = canBeSendToAddress,
         recentAddress = recentAddress,
         contacts = contacts,
         value = value,
+        inputState = inputState
     )
 
     init {
@@ -73,8 +73,8 @@ class EnterAddressViewModel(
 
         if (value.isBlank()) {
             this.value = value
-            inputState = null
             address = null
+            inputState = null
             emitState()
         } else {
             inputState = DataState.Loading
@@ -186,10 +186,10 @@ class EnterAddressViewModel(
 }
 
 data class EnterAddressUiState(
-    val address: Address?,
     val addressError: Throwable?,
     val canBeSendToAddress: Boolean,
     val recentAddress: String?,
     val contacts: List<SContact>,
     val value: String,
+    val inputState: DataState<Address>?,
 )
