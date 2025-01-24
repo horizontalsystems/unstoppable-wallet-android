@@ -7,23 +7,23 @@ import cash.p.terminal.wallet.entities.EnabledWallet
 interface EnabledWalletsDao {
 
     @Query("SELECT * FROM EnabledWallet ORDER BY `walletOrder` ASC")
-    fun enabledCoins(): List<cash.p.terminal.wallet.entities.EnabledWallet>
+    fun enabledCoins(): List<EnabledWallet>
 
     @Query("SELECT * FROM EnabledWallet WHERE accountId = :accountId ORDER BY `walletOrder` ASC")
-    fun enabledCoins(accountId: String): List<cash.p.terminal.wallet.entities.EnabledWallet>
+    fun enabledCoins(accountId: String): List<EnabledWallet>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(enabledWallet: cash.p.terminal.wallet.entities.EnabledWallet)
+    fun insert(enabledWallet: EnabledWallet)
 
     @Query("DELETE FROM EnabledWallet")
     fun deleteAll()
 
     @Transaction
-    fun insertWallets(enabledWallets: List<cash.p.terminal.wallet.entities.EnabledWallet>) {
+    fun insertWallets(enabledWallets: List<EnabledWallet>) {
         enabledWallets.forEach { insert(it) }
     }
 
-    @Delete
-    fun deleteWallets(enabledWallets: List<cash.p.terminal.wallet.entities.EnabledWallet>)
+    @Query("DELETE FROM EnabledWallet WHERE LOWER(tokenQueryId) IN (:tokenQueryIds) AND LOWER(accountId) IN (:accountIds)")
+    fun deleteWallets(tokenQueryIds: List<String>, accountIds: List<String>)
 
 }

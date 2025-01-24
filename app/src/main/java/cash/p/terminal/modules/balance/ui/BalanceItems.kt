@@ -434,6 +434,7 @@ fun BalanceItems(
                         },
                         onDisable = {
                             onDisable.invoke(item)
+                            revealedCardId = null
                         }
                     )
                 }
