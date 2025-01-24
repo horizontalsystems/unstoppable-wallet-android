@@ -121,7 +121,7 @@ interface ILocalStorage {
     val balanceTabButtonsEnabledFlow: StateFlow<Boolean>
     var nonRecommendedAccountAlertDismissedAccounts: Set<String>
     var personalSupportEnabled: Boolean
-    var vipSupportEnabled: Boolean
+    var vipSupportLink: String?
     var hideSuspiciousTransactions: Boolean
     var pinRandomized: Boolean
     var utxoExpertModeEnabled: Boolean

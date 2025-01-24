@@ -20,14 +20,14 @@ class VipSupportViewModel(
     private var showError = false
     private var showSpinner = false
     private var buttonEnabled = false
-    private var showRequestForm = !localStorage.vipSupportEnabled
+    private var telegramGroupLink: String? = localStorage.vipSupportLink
 
     override fun createState() = VipSupportModule.UiState(
         contactName = contactName,
         showError = showError,
         showSpinner = showSpinner,
         buttonEnabled = buttonEnabled,
-        showRequestForm = showRequestForm
+        vipSupportLink = telegramGroupLink
     )
 
     fun onUsernameChange(username: String) {
@@ -49,9 +49,16 @@ class VipSupportViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val request = marketKitWrapper.requestVipSupport(contactName).await()
-                if (request.code() != 200) throw Exception("Error")
-                localStorage.vipSupportEnabled = true
-                showRequestForm = false
+                val groupLink = request["group_link"]
+                if (groupLink == null) {
+                    throw Exception("Error")
+                } else {
+                    localStorage.vipSupportLink = groupLink
+                    telegramGroupLink = groupLink
+                    showSpinner = false
+                    buttonEnabled = true
+                    emitState()
+                }
             } catch (e: Throwable) {
                 showSpinner = false
                 buttonEnabled = true
@@ -59,14 +66,12 @@ class VipSupportViewModel(
                 emitState()
                 return@launch
             }
-            showSpinner = false
-            buttonEnabled = true
-            emitState()
         }
     }
 
     fun showRequestForm() {
-        showRequestForm = true
+        telegramGroupLink = null
+        localStorage.vipSupportLink = null
         emitState()
     }
 
@@ -85,6 +90,6 @@ object VipSupportModule {
         val showError: Boolean = false,
         val showSpinner: Boolean = false,
         val buttonEnabled: Boolean = false,
-        val showRequestForm: Boolean = false,
+        val vipSupportLink: String? = null,
     )
 }
