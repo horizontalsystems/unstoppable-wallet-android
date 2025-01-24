@@ -113,7 +113,7 @@ fun SendEvmScreen(
                 AppBar(
                     title = title,
                     navigationIcon = {
-                        HsBackButton(onClick = { navController.popBackStack() })
+                        HsBackButton(onClick = onBack)
                     },
                     menuItems = listOf(
                         MenuItem(
