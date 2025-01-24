@@ -19,8 +19,10 @@ import com.walletconnect.android.relay.ConnectionType
 import com.walletconnect.web3.wallet.client.Wallet
 import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.BuildConfig
+import io.horizontalsystems.bankwallet.core.address.AddressSecurityCheckerChain
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
+import io.horizontalsystems.bankwallet.core.factories.AddressSecurityCheckerFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
@@ -117,6 +119,7 @@ import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
 import io.horizontalsystems.hdwalletkit.Mnemonic
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import io.reactivex.plugins.RxJavaPlugins
 import kotlinx.coroutines.CoroutineScope
@@ -201,6 +204,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
+        lateinit var addressSecurityCheckerChain: AddressSecurityCheckerChain
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -300,6 +304,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
         spamManager = SpamManager(localStorage, coinManager, SpamAddressStorage(appDatabase.spamAddressDao()), marketKit, appConfigProvider )
+        addressSecurityCheckerChain = AddressSecurityCheckerFactory(spamManager, appConfigProvider).securityCheckerChain(BlockchainType.Ethereum)
 
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
