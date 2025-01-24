@@ -45,10 +45,10 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                 navController.slideFromRight(
                     R.id.enterAddressFragment,
                     EnterAddressFragment.Input(
-                        it.wallet,
-                        sendTitle,
-                        R.id.sendTokenSelectFragment,
-                        donateAddress,
+                        wallet = it.wallet,
+                        title = sendTitle,
+                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                        predefinedAddress = donateAddress,
                     )
                 )
 
