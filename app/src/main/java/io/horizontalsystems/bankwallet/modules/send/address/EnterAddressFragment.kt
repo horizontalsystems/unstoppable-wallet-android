@@ -35,17 +35,16 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
-import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
+import io.horizontalsystems.bankwallet.ui.compose.components.FormsInputAddress
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantError
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
@@ -75,7 +74,7 @@ class EnterAddressFragment : BaseComposeFragment() {
 
 @Composable
 fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment.Input) {
-    val viewModel = viewModel<EnterAddressViewModel>()
+    val viewModel = viewModel<EnterAddressViewModel>(factory = EnterAddressViewModel.Factory(input.wallet))
     val prefilledData = input.prefilledAddressData
     val wallet = input.wallet
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
@@ -109,20 +108,22 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                     .weight(1f)
                     .verticalScroll(rememberScrollState()),
             ) {
-                HSAddressInput(
+                FormsInputAddress(
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
-                    tokenQuery = wallet.token.tokenQuery,
-                    coinCode = wallet.coin.code,
-                    error = addressError,
+                    value = uiState.value,
+                    hint = stringResource(id = R.string.Send_Hint_Address),
+                    state = null,
                     textPreprocessor = paymentAddressViewModel,
-                    navController = navController
+                    navController = navController,
+                    chooseContactEnable = false,
+                    blockchainType = null,
                 ) {
                     viewModel.onEnterAddress(it)
                 }
-                if (uiState.address == null) {
+
+                if (uiState.value.isBlank()) {
                     AddressSuggestions(uiState.recentAddress, uiState.contacts) {
-                        viewModel.onEnterAddress(Address(it))
+                        viewModel.onEnterAddress(it)
                     }
                 } else {
                     AddressCheck(false, addressErrorMessage)
