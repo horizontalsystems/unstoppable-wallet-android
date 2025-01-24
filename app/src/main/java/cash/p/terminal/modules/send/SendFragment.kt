@@ -73,12 +73,12 @@ class SendFragment : BaseFragment() {
                         }
                         setContent {
                             SendBitcoinNavHost(
-                                title,
-                                findNavController(),
-                                sendBitcoinViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
+                                title = title,
+                                fragmentNavController = findNavController(),
+                                viewModel = sendBitcoinViewModel,
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                sendEntryPointDestId = sendEntryPointDestId,
+                                prefilledData = prefilledData,
                             )
                         }
                     }
@@ -90,12 +90,12 @@ class SendFragment : BaseFragment() {
                         }
                         setContent {
                             SendBinanceScreen(
-                                title,
-                                findNavController(),
-                                sendBinanceViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                prefilledData,
+                                title = title,
+                                navController = findNavController(),
+                                viewModel = sendBinanceViewModel,
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                sendEntryPointDestId = sendEntryPointDestId,
+                                prefilledData = prefilledData,
                             )
                         }
                     }
@@ -128,12 +128,12 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ArbitrumOne -> {
                         setContent {
                             SendEvmScreen(
-                                title,
-                                findNavController(),
-                                amountInputModeViewModel,
-                                prefilledData,
-                                wallet,
-                                predefinedAddress
+                                title = title,
+                                navController = findNavController(),
+                                amountInputModeViewModel = amountInputModeViewModel,
+                                prefilledData = prefilledData,
+                                wallet = wallet,
+                                predefinedAddress = predefinedAddress
                             )
                         }
                     }

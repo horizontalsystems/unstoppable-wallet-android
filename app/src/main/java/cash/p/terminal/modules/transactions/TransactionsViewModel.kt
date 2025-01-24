@@ -197,7 +197,9 @@ class TransactionsViewModel(
         service.clear()
     }
 
-    fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)
+    fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)?.copy(
+        transactionStatusUrl = viewItem.transactionStatusUrl
+    )
 
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
         transactionFilterService.updateFilterHideSuspiciousTx(checked)
@@ -209,7 +211,8 @@ data class TransactionItem(
     val record: TransactionRecord,
     val currencyValue: CurrencyValue?,
     val lastBlockInfo: LastBlockInfo?,
-    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>
+    val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
+    val transactionStatusUrl: Pair<String, String>? = null
 ) {
     val createdAt = System.currentTimeMillis()
 }
@@ -228,7 +231,8 @@ data class TransactionViewItem(
     val doubleSpend: Boolean = false,
     val spam: Boolean = false,
     val locked: Boolean? = null,
-    val icon: Icon
+    val icon: Icon,
+    val transactionStatusUrl: Pair<String, String>? = null
 ) {
 
     sealed class Icon {

@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.featureStacking.R
-import cash.p.terminal.network.domain.enity.PayoutType
+import cash.p.terminal.network.pirate.domain.enity.PayoutType
 import cash.p.terminal.featureStacking.ui.entities.PayoutViewItem
 import cash.p.terminal.ui_compose.components.HeaderStick
 import cash.p.terminal.ui_compose.entities.SectionItemPosition

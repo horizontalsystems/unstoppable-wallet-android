@@ -9,7 +9,7 @@ import cash.p.terminal.featureStacking.BuildConfig
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.entities.PayoutViewItem
 import cash.p.terminal.featureStacking.ui.staking.StackingType
-import cash.p.terminal.network.domain.repository.PiratePlaceRepository
+import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.IAccountManager

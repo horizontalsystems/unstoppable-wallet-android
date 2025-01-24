@@ -1,6 +1,6 @@
 package cash.p.terminal.featureStacking.ui.entities
 
-import cash.p.terminal.network.domain.enity.PayoutType
+import cash.p.terminal.network.pirate.domain.enity.PayoutType
 import java.math.BigDecimal
 
 internal data class PayoutViewItem(

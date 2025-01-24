@@ -130,7 +130,12 @@ class AdapterFactory(
                             BlockchainType.Litecoin,
                             wallet.account.origin
                         )
-                        LitecoinAdapter(wallet, syncMode, backgroundManager, tokenType.derivation)
+                        LitecoinAdapter(
+                            wallet = wallet,
+                            syncMode = syncMode,
+                            backgroundManager = backgroundManager,
+                            derivation = tokenType.derivation
+                        )
                     }
 
                     else -> null

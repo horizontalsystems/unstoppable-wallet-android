@@ -49,23 +49,41 @@ class TransactionInfoViewItemFactory(
         var sentToSelf = false
 
         if (transactionItem.record.spam) {
-            itemSections.add(listOf(TransactionInfoViewItem.WarningMessage(cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_SpamWarning))))
+            itemSections.add(
+                listOf(
+                    TransactionInfoViewItem.WarningMessage(
+                        cash.p.terminal.strings.helpers.Translator.getString(
+                            R.string.TransactionInfo_SpamWarning
+                        )
+                    )
+                )
+            )
         }
 
         when (transaction) {
             is ContractCreationTransactionRecord -> {
-                itemSections.add(TransactionViewItemFactoryHelper.getContractCreationItems(transaction))
+                itemSections.add(
+                    TransactionViewItemFactoryHelper.getContractCreationItems(
+                        transaction
+                    )
+                )
             }
 
             is TonTransactionRecord -> {
                 transaction.actions.forEach { action ->
                     itemSections.add(
-                        TonHelper.getViewItemsForAction(action, rates, blockchainType, transactionItem.hideAmount)
+                        TonHelper.getViewItemsForAction(
+                            action,
+                            rates,
+                            blockchainType,
+                            transactionItem.hideAmount
+                        )
                     )
                 }
 
 //            feeViewItem = record.fee.map { .fee(title: "tx_info.fee".localized, value: feeString(transactionValue: $0, rate: _rate($0))) }
             }
+
             is EvmIncomingTransactionRecord ->
                 itemSections.add(
                     TransactionViewItemFactoryHelper.getReceiveSectionItems(
@@ -462,7 +480,14 @@ class TransactionInfoViewItemFactory(
             itemSections.add(miscItemsSection)
         }
 
-        itemSections.add(TransactionViewItemFactoryHelper.getStatusSectionItems(transaction, status, rates, blockchainType))
+        itemSections.add(
+            TransactionViewItemFactoryHelper.getStatusSectionItems(
+                transaction,
+                status,
+                rates,
+                blockchainType
+            )
+        )
         if (transaction is EvmTransactionRecord && !transaction.foreignTransaction && status == TransactionStatus.Pending && resendEnabled) {
             itemSections.add(
                 listOf(
@@ -472,7 +497,15 @@ class TransactionInfoViewItemFactory(
                     )
                 )
             )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+            itemSections.add(
+                listOf(
+                    TransactionInfoViewItem.Description(
+                        cash.p.terminal.strings.helpers.Translator.getString(
+                            R.string.TransactionInfo_SpeedUpDescription
+                        )
+                    )
+                )
+            )
         } else if (transaction is BitcoinOutgoingTransactionRecord && transaction.replaceable && resendEnabled) {
             itemSections.add(
                 listOf(
@@ -482,9 +515,27 @@ class TransactionInfoViewItemFactory(
                     )
                 )
             )
-            itemSections.add(listOf(TransactionInfoViewItem.Description(cash.p.terminal.strings.helpers.Translator.getString(R.string.TransactionInfo_SpeedUpDescription))))
+            itemSections.add(
+                listOf(
+                    TransactionInfoViewItem.Description(
+                        cash.p.terminal.strings.helpers.Translator.getString(
+                            R.string.TransactionInfo_SpeedUpDescription
+                        )
+                    )
+                )
+            )
         }
         itemSections.add(TransactionViewItemFactoryHelper.getExplorerSectionItems(transactionItem.explorerData))
+        transactionItem.transactionStatusUrl?.let {
+            itemSections.add(
+                TransactionViewItemFactoryHelper.getExplorerSectionItems(
+                    TransactionInfoModule.ExplorerData(
+                        title = it.first,
+                        url = it.second
+                    )
+                )
+            )
+        }
 
         return itemSections
     }

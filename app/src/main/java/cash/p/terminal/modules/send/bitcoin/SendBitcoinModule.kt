@@ -12,7 +12,7 @@ import cash.p.terminal.modules.xrate.XRateService
 object SendBitcoinModule {
     @Suppress("UNCHECKED_CAST")
     class Factory(
-        private val wallet: cash.p.terminal.wallet.Wallet,
+        private val wallet: Wallet,
         private val predefinedAddress: String?,
     ) : ViewModelProvider.Factory {
         val adapter =
@@ -26,18 +26,18 @@ object SendBitcoinModule {
             val addressService = SendBitcoinAddressService(adapter, predefinedAddress)
             val pluginService = SendBitcoinPluginService(wallet.token.blockchainType)
             return SendBitcoinViewModel(
-                adapter,
-                wallet,
-                feeRateService,
-                feeService,
-                amountService,
-                addressService,
-                pluginService,
-                XRateService(App.marketKit, App.currencyManager.baseCurrency),
-                App.btcBlockchainManager,
-                App.contactsRepository,
-                predefinedAddress == null,
-                App.localStorage
+                adapter = adapter,
+                wallet = wallet,
+                feeRateService = feeRateService,
+                feeService = feeService,
+                amountService = amountService,
+                addressService = addressService,
+                pluginService = pluginService,
+                xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency),
+                btcBlockchainManager = App.btcBlockchainManager,
+                contactsRepo = App.contactsRepository,
+                showAddressInput = predefinedAddress == null,
+                localStorage = App.localStorage
             ) as T
         }
     }

@@ -19,6 +19,7 @@ import cash.p.terminal.modules.send.SendConfirmationData
 import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.wallet.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,8 +28,8 @@ import java.net.UnknownHostException
 
 class SendZCashViewModel(
     private val adapter: ISendZcashAdapter,
-    val wallet: cash.p.terminal.wallet.Wallet,
-    private val xRateService: XRateService,
+    val wallet: Wallet,
+    xRateService: XRateService,
     private val amountService: SendAmountService,
     private val addressService: SendZCashAddressService,
     private val memoService: SendZCashMemoService,

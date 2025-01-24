@@ -6,6 +6,9 @@ import cash.p.terminal.core.nativeTokenQueries
 import cash.p.terminal.core.sortedByFilter
 import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.ethereumkit.core.AddressValidator
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.FullCoin
@@ -13,14 +16,14 @@ import cash.p.terminal.wallet.entities.TokenType
 
 class FullCoinsProvider(
     private val marketKit: MarketKitWrapper,
-    val activeAccount: cash.p.terminal.wallet.Account
+    val activeAccount: Account
 ) {
-    private var activeWallets = listOf<cash.p.terminal.wallet.Wallet>()
-    private var predefinedTokens = listOf<cash.p.terminal.wallet.Token>()
+    private var activeWallets = listOf<Wallet>()
+    private var predefinedTokens = listOf<Token>()
 
     private var query: String? = null
 
-    fun setActiveWallets(wallets: List<cash.p.terminal.wallet.Wallet>) {
+    fun setActiveWallets(wallets: List<Wallet>) {
         activeWallets = wallets
 
         updatePredefinedTokens()

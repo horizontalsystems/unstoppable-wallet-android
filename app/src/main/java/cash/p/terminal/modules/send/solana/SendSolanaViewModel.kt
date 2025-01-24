@@ -37,7 +37,7 @@ class SendSolanaViewModel(
     val feeToken: Token,
     val solBalance: BigDecimal,
     val adapter: ISendSolanaAdapter,
-    private val xRateService: XRateService,
+    xRateService: XRateService,
     private val amountService: SendAmountService,
     private val addressService: SendSolanaAddressService,
     val coinMaxAllowedDecimals: Int,

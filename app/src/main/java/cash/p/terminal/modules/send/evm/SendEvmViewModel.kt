@@ -14,13 +14,14 @@ import cash.p.terminal.modules.amount.SendAmountService
 import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import java.math.BigDecimal
 
 class SendEvmViewModel(
-    val wallet: cash.p.terminal.wallet.Wallet,
-    val sendToken: Token,
+    val wallet: Wallet,
+    sendToken: Token,
     val adapter: ISendEthereumAdapter,
-    private val xRateService: XRateService,
+    xRateService: XRateService,
     private val amountService: SendAmountService,
     private val addressService: SendEvmAddressService,
     val coinMaxAllowedDecimals: Int,

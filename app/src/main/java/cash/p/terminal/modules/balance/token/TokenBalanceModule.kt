@@ -3,6 +3,8 @@ package cash.p.terminal.modules.balance.token
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.getKoinInstance
+import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.modules.balance.BalanceAdapterRepository
 import cash.p.terminal.modules.balance.BalanceCache
 import cash.p.terminal.modules.balance.BalanceViewItem
@@ -14,10 +16,11 @@ import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.modules.transactions.TransactionsRateRepository
+import cash.p.terminal.wallet.Wallet
 
 class TokenBalanceModule {
 
-    class Factory(private val wallet: cash.p.terminal.wallet.Wallet) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val balanceService = TokenBalanceService(
@@ -37,14 +40,14 @@ class TokenBalanceModule {
             )
 
             return TokenBalanceViewModel(
-                wallet,
-                balanceService,
-                BalanceViewItemFactory(),
-                tokenTransactionsService,
-                TransactionViewItemFactory(App.evmLabelManager, App.contactsRepository, App.balanceHiddenManager),
-                App.balanceHiddenManager,
-                App.connectivityManager,
-                App.accountManager,
+                wallet = wallet,
+                balanceService = balanceService,
+                balanceViewItemFactory = BalanceViewItemFactory(),
+                transactionsService = tokenTransactionsService,
+                transactionViewItem2Factory = getKoinInstance(),
+                balanceHiddenManager = App.balanceHiddenManager,
+                connectivityManager = App.connectivityManager,
+                accountManager = App.accountManager,
             ) as T
         }
     }

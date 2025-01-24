@@ -12,7 +12,7 @@ import cash.p.terminal.modules.xrate.XRateService
 object SendBinanceModule {
 
     class Factory(
-        private val wallet: cash.p.terminal.wallet.Wallet,
+        private val wallet: Wallet,
         private val predefinedAddress: String?,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBinanceAdapter) ?: throw IllegalStateException("SendBinanceAdapter is null")
@@ -26,14 +26,14 @@ object SendBinanceModule {
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
             return SendBinanceViewModel(
-                wallet,
-                adapter,
-                amountService,
-                addressService,
-                feeService,
-                xRateService,
-                App.contactsRepository,
-                predefinedAddress == null,
+                wallet = wallet,
+                adapter = adapter,
+                amountService = amountService,
+                addressService = addressService,
+                feeService = feeService,
+                xRateService = xRateService,
+                contactsRepo = App.contactsRepository,
+                showAddressInput = predefinedAddress == null,
             ) as T
         }
 

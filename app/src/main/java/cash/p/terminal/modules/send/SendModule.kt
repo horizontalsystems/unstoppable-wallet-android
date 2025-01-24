@@ -59,8 +59,8 @@ object SendModule {
 
 
 sealed class SendResult {
-    object Sending : SendResult()
-    object Sent : SendResult()
+    data object Sending : SendResult()
+    data object Sent : SendResult()
     class Failed(val caution: HSCaution) : SendResult()
 }
 

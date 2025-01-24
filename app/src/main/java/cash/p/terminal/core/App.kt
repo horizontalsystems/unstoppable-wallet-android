@@ -190,10 +190,10 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val evmLabelManager: EvmLabelManager by inject(EvmLabelManager::class.java)
         lateinit var baseTokenManager: BaseTokenManager
         lateinit var balanceViewTypeManager: BalanceViewTypeManager
-        lateinit var balanceHiddenManager: BalanceHiddenManager
+        val balanceHiddenManager: BalanceHiddenManager by inject(BalanceHiddenManager::class.java)
         lateinit var marketWidgetManager: MarketWidgetManager
         lateinit var marketWidgetRepository: MarketWidgetRepository
-        lateinit var contactsRepository: ContactsRepository
+        val contactsRepository: ContactsRepository by inject(ContactsRepository::class.java)
         val subscriptionManager: SubscriptionManager by inject(SubscriptionManager::class.java)
         lateinit var cexProviderManager: CexProviderManager
         lateinit var cexAssetManager: CexAssetManager
@@ -433,9 +433,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         baseTokenManager = BaseTokenManager(coinManager, localStorage)
         balanceViewTypeManager = BalanceViewTypeManager(localStorage)
-        balanceHiddenManager = BalanceHiddenManager(localStorage, backgroundManager)
 
-        contactsRepository = ContactsRepository(marketKit)
         cexProviderManager = CexProviderManager(accountManager)
         cexAssetManager = CexAssetManager(marketKit, appDatabase.cexAssetsDao())
         chartIndicatorManager =

@@ -36,7 +36,7 @@ fun SendEvmScreen(
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
     prefilledData: PrefilledData?,
-    wallet: cash.p.terminal.wallet.Wallet,
+    wallet: Wallet,
     predefinedAddress: String?,
 ) {
     val viewModel = viewModel<SendEvmViewModel>(factory = SendEvmModule.Factory(wallet, predefinedAddress))

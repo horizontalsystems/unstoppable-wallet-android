@@ -38,6 +38,7 @@ class SendBitcoinFeeRateService(private val feeRateProvider: IFeeRateProvider) {
             minimumFeeRate = feeRates.minimum
             feeRate = recommendedFeeRate
         } catch (e: Throwable) {
+            e.printStackTrace()
         }
 
         validateFeeRate()

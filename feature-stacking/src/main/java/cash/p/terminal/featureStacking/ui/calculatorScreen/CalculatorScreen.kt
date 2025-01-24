@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.staking.StackingType
-import cash.p.terminal.network.domain.enity.PeriodType
+import cash.p.terminal.network.pirate.domain.enity.PeriodType
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.InputField
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

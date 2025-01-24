@@ -718,6 +718,7 @@
     <string name="Swap_ErrorNoProviders">No Providers</string>
     <string name="Swap_ErrorNoQuote">No Quote</string>
     <string name="Swap_ErrorInsufficientBalance">Insufficient balance</string>
+    <string name="swap_out_of_min_amount">Out of min amount %s</string>
     <string name="Swap_ErrorBalanceNotAvailable">Balance n/a</string>
     <string name="Swap_ErrorNoLiquidity">Can\'t swap these tokens</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">This service doesn\'t allow wrapping/unwrapping. Use 1inch instead.</string>
@@ -733,6 +734,9 @@
     <string name="Swap_Unlocking">Unlocking...</string>
     <string name="Swap_Revoke">Revoke</string>
     <string name="Swap_Revoking">Revoking...</string>
+    <string name="swap_create_wallets">Create wallets</string>
+    <string name="swap_creating_wallets">Creating wallets..</string>
+    <string name="swap_create_wallet_description">You don\'t have all chosen wallets, need to create first</string>
     <string name="Swap_Approve">Approve</string>
     <string name="Swap_Approving">Approving</string>
     <string name="Swap_Swapping">Swapping</string>
@@ -753,6 +757,10 @@
     <string name="Swap_Confirm_Title">Confirm</string>
     <string name="SwapConfirm_QuoteExpired">Quote expired</string>
     <string name="SwapConfirm_FetchingFinalQuote">Fetching final quote</string>
+    <string name="unsupported_refund_address">Unsupported refund address</string>
+    <string name="unsupported_address">Unsupported address</string>
+    <string name="unexpected_error">Unexpected error</string>
+    <string name="unsupported_token">Unsupported token</string>
 
     <!-- Swap Settings -->
     <string name="SwapSettings_Title">Swap Settings</string>

@@ -12,6 +12,8 @@ import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Value
 import cash.p.terminal.modules.transactionInfo.TransactionViewItemFactoryHelper
 import cash.p.terminal.modules.transactionInfo.TransactionViewItemFactoryHelper.getSwapEventSectionItems
 import cash.p.terminal.modules.transactions.TransactionStatus
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.hdwalletkit.Curve
@@ -48,14 +50,14 @@ class TonKitManager(
         }
 
     private var useCount = 0
-    var currentAccount: cash.p.terminal.wallet.Account? = null
+    var currentAccount: Account? = null
         private set
 
     val statusInfo: Map<String, Any>?
         get() = tonKitWrapper?.tonKit?.statusInfo()
 
     @Synchronized
-    fun getTonKitWrapper(account: cash.p.terminal.wallet.Account): TonKitWrapper {
+    fun getTonKitWrapper(account: Account): TonKitWrapper {
         if (this.tonKitWrapper != null && currentAccount != account) {
             stop()
         }
@@ -63,11 +65,11 @@ class TonKitManager(
         if (this.tonKitWrapper == null) {
             val accountType = account.type
             this.tonKitWrapper = when (accountType) {
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
 
-                is cash.p.terminal.wallet.AccountType.TonAddress -> {
+                is AccountType.TonAddress -> {
                     createKitInstance(accountType, account)
                 }
 
@@ -84,13 +86,13 @@ class TonKitManager(
         return this.tonKitWrapper!!
     }
 
-    fun getNonActiveTonKitWrapper(account: cash.p.terminal.wallet.Account) =
+    fun getNonActiveTonKitWrapper(account: Account) =
         when (val accountType = account.type) {
-            is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+            is AccountType.Mnemonic -> {
                 createKitInstance(accountType, account)
             }
 
-            is cash.p.terminal.wallet.AccountType.TonAddress -> {
+            is AccountType.TonAddress -> {
                 createKitInstance(accountType, account)
             }
 
@@ -98,8 +100,8 @@ class TonKitManager(
         }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.Mnemonic,
-        account: cash.p.terminal.wallet.Account,
+        accountType: AccountType.Mnemonic,
+        account: Account,
     ): TonKitWrapper {
         val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
 
@@ -107,8 +109,8 @@ class TonKitManager(
     }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.TonAddress,
-        account: cash.p.terminal.wallet.Account,
+        accountType: AccountType.TonAddress,
+        account: Account,
     ): TonKitWrapper {
         val kit = TonKit.getInstance(accountType.toTonWallet(), Network.MainNet, App.instance, account.id)
 
@@ -116,7 +118,7 @@ class TonKitManager(
     }
 
     @Synchronized
-    fun unlink(account: cash.p.terminal.wallet.Account) {
+    fun unlink(account: Account) {
         if (account == currentAccount) {
             useCount -= 1
 
@@ -286,14 +288,14 @@ fun SyncState.toAdapterState(): AdapterState = when (this) {
     is SyncState.Syncing -> AdapterState.Syncing()
 }
 
-fun cash.p.terminal.wallet.AccountType.toTonWalletFullAccess(): TonWallet.FullAccess {
+fun AccountType.toTonWalletFullAccess(): TonWallet.FullAccess {
     val toTonWallet = toTonWallet()
 
     return toTonWallet as? TonWallet.FullAccess ?: throw IllegalArgumentException("Watch Only")
 }
 
-fun cash.p.terminal.wallet.AccountType.toTonWallet() = when (this) {
-    is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+fun AccountType.toTonWallet() = when (this) {
+    is AccountType.Mnemonic -> {
         val hdWallet = HDWallet(seed, 607, HDWallet.Purpose.BIP44, Curve.Ed25519)
         val privateKey = hdWallet.privateKey(0)
         var privateKeyBytes = privateKey.privKeyBytes
@@ -303,7 +305,7 @@ fun cash.p.terminal.wallet.AccountType.toTonWallet() = when (this) {
         TonWallet.Seed(privateKeyBytes)
 
     }
-    is cash.p.terminal.wallet.AccountType.TonAddress -> {
+    is AccountType.TonAddress -> {
         TonWallet.WatchOnly(address)
     }
     else -> throw IllegalArgumentException("Account type ${this.javaClass.simpleName} can not be converted to TonKit.WalletType")

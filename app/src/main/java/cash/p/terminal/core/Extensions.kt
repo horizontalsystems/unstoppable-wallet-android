@@ -14,18 +14,21 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import coil.load
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.topplatforms.Platform
-import io.horizontalsystems.ethereumkit.core.toRawHexString
-import io.horizontalsystems.hdwalletkit.Language
-import io.horizontalsystems.hodler.LockTimeInterval
+import cash.p.terminal.ui_compose.components.ImageSource
+import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.models.CoinCategory
 import cash.p.terminal.wallet.models.CoinInvestment
 import cash.p.terminal.wallet.models.CoinTreasury
-import cash.p.terminal.wallet.entities.FullCoin
+import coil.load
+import io.horizontalsystems.ethereumkit.core.toRawHexString
+import io.horizontalsystems.hdwalletkit.Language
+import io.horizontalsystems.hodler.LockTimeInterval
 import kotlinx.coroutines.delay
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import java.math.BigDecimal
 import java.util.Locale
 import java.util.Optional
 
@@ -42,7 +45,7 @@ val String.coinIconUrl: String
     get() = "https://cdn.blocksdecoded.com/coin-icons/32px/$this@3x.png"
 
 val String.fiatIconUrl: String
-    get()= "https://cdn.blocksdecoded.com/fiat-icons/$this@3x.png"
+    get() = "https://cdn.blocksdecoded.com/fiat-icons/$this@3x.png"
 
 val CoinCategory.imageUrl: String
     get() = "https://cdn.blocksdecoded.com/category-icons/$uid@3x.png"
@@ -215,4 +218,17 @@ fun Context.findActivity(): Activity? = when (this) {
     is Activity -> this
     is ContextWrapper -> baseContext.findActivity()
     else -> null
+}
+
+fun String?.extractBigDecimal(): BigDecimal? =
+    if (this == null) {
+        null
+    } else {
+        "\\d+\\.\\d+".toRegex().find(this)?.value?.toBigDecimal()
+    }
+
+inline fun <reified T> getKoinInstance(): T {
+    return object : KoinComponent {
+        val value: T by inject()
+    }.value
 }
