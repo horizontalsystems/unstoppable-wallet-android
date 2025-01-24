@@ -23,7 +23,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.send.SendFragment
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -43,8 +43,8 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                 val donateAddress: String? = App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
                 val sendTitle = Translator.getString(R.string.Settings_DonateToken, it.wallet.token.fullCoin.coin.code)
                 navController.slideFromRight(
-                    R.id.sendXFragment,
-                    SendFragment.Input(
+                    R.id.enterAddressFragment,
+                    EnterAddressFragment.Input(
                         it.wallet,
                         sendTitle,
                         R.id.sendTokenSelectFragment,

@@ -11,7 +11,7 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.getInput
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.modules.send.SendFragment
+import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.core.helpers.HudHelper
@@ -39,8 +39,8 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                     it.sendEnabled -> {
                         val sendTitle = Translator.getString(R.string.Send_Title, it.wallet.token.fullCoin.coin.code)
                         navController.slideFromRight(
-                            R.id.sendXFragment,
-                            SendFragment.Input(
+                            R.id.enterAddressFragment,
+                            EnterAddressFragment.Input(
                                 wallet = it.wallet,
                                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                 title = sendTitle,

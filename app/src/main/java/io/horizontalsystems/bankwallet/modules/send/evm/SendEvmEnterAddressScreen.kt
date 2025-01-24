@@ -130,7 +130,7 @@ fun SendEvmEnterAddressScreen(
 }
 
 @Composable
-private fun AddressCheck(
+fun AddressCheck(
     locked: Boolean,
     addressErrorMessage: ErrorMessage?
 ) {
@@ -261,7 +261,7 @@ fun CheckLocked() {
 }
 
 @Composable
-private fun AddressSuggestions(
+fun AddressSuggestions(
     recent: String?,
     contacts: List<SContact>
 ) {
