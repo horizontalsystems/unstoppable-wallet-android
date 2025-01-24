@@ -12,16 +12,25 @@ import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.Wallet
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBase58
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBech32
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBinanceChain
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBitcoinCash
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEns
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEvm
-import io.horizontalsystems.bankwallet.modules.address.AddressHandlerPure
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerSolana
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerTon
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerTron
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerUdn
+import io.horizontalsystems.bankwallet.modules.address.AddressHandlerZcash
 import io.horizontalsystems.bankwallet.modules.address.AddressParserChain
 import io.horizontalsystems.bankwallet.modules.address.AddressValidationException
 import io.horizontalsystems.bankwallet.modules.address.EnsResolverHolder
+import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
+import io.horizontalsystems.bitcoinkit.MainNet
+import io.horizontalsystems.dashkit.MainNetDash
+import io.horizontalsystems.ecash.MainNetECash
+import io.horizontalsystems.litecoinkit.MainNetLitecoin
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.TokenQuery
 import kotlinx.coroutines.Dispatchers
@@ -147,14 +156,41 @@ class EnterAddressViewModel(
             val addressParserChain = AddressParserChain(domainHandlers = listOf(ensHandler, udnHandler))
 
             when (blockchainType) {
-                BlockchainType.Bitcoin,
-                BlockchainType.BitcoinCash,
-                BlockchainType.ECash,
-                BlockchainType.Litecoin,
-                BlockchainType.Dash,
-                BlockchainType.Zcash,
+                BlockchainType.Bitcoin -> {
+                    val network = MainNet()
+                    addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                    addressParserChain.addHandler(AddressHandlerBech32(network, blockchainType))
+                }
+
+                BlockchainType.BitcoinCash -> {
+                    val network = MainNetBitcoinCash()
+                    addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                    addressParserChain.addHandler(AddressHandlerBitcoinCash(network, blockchainType))
+                }
+
+                BlockchainType.ECash -> {
+                    val network = MainNetECash()
+                    addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                    addressParserChain.addHandler(AddressHandlerBitcoinCash(network, blockchainType))
+                }
+
+                BlockchainType.Litecoin -> {
+                    val network = MainNetLitecoin()
+                    addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                    addressParserChain.addHandler(AddressHandlerBech32(network, blockchainType))
+                }
+
+                BlockchainType.Dash -> {
+                    val network = MainNetDash()
+                    addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
+                }
+
                 BlockchainType.BinanceChain -> {
-                    addressParserChain.addHandler(AddressHandlerPure(blockchainType))
+                    addressParserChain.addHandler(AddressHandlerBinanceChain())
+                }
+
+                BlockchainType.Zcash -> {
+                    addressParserChain.addHandler(AddressHandlerZcash())
                 }
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
