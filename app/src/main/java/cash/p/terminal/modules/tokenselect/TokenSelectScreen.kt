@@ -18,7 +18,7 @@ import cash.p.terminal.modules.balance.ui.BalanceCardInner
 import cash.p.terminal.modules.balance.ui.BalanceCardSubtitleType
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.SearchBar
-import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.SectionUniversalItem
 import cash.p.terminal.ui_compose.components.VSpacer
 
 @OptIn(ExperimentalAnimationApi::class)

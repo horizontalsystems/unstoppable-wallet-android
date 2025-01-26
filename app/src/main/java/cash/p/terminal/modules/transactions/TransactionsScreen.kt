@@ -55,13 +55,13 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui_compose.components.HeaderStick
-import cash.p.terminal.ui.compose.components.HsImage
+import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.components.MenuItem
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.ScrollableTabs
 import cash.p.terminal.ui_compose.entities.SectionItemPosition
-import io.horizontalsystems.core.SectionUniversalItem
+import cash.p.terminal.ui_compose.components.SectionUniversalItem
 import cash.p.terminal.ui_compose.components.TabItem
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.sectionItemBorder

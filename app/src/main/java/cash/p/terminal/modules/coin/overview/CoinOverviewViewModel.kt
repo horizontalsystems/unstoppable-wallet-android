@@ -10,7 +10,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.bep2TokenUrl
 import cash.p.terminal.core.eip20TokenUrl
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.isSupported
 import cash.p.terminal.core.jettonUrl
 import cash.p.terminal.core.order

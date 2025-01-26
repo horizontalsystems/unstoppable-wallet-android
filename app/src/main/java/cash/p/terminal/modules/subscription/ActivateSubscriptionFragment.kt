@@ -26,12 +26,12 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.MessageToSign
 import cash.p.terminal.ui.compose.components.ScreenMessageWithAction
-import cash.p.terminal.ui.compose.components.TitleAndValueCell
+import cash.p.terminal.ui_compose.components.TitleAndValueCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui_compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper

@@ -48,6 +48,7 @@ import io.horizontalsystems.core.IAppNumberFormatter
 import cash.p.terminal.wallet.IEnabledWalletStorage
 import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.balance.BalanceXRateRepository
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import io.horizontalsystems.core.BackgroundManager
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
@@ -88,6 +89,7 @@ val storageModule = module {
     singleOf(::ZcashBirthdayProvider)
     singleOf(::EvmLabelManager)
     singleOf(::EvmLabelProvider)
+    singleOf(::BalanceHiddenManager) bind IBalanceHiddenManager::class
 
     factoryOf(::EvmAccountManagerFactory)
     singleOf(::AdapterFactory)

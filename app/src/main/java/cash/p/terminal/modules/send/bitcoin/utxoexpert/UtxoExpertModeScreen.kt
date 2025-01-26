@@ -25,10 +25,10 @@ import cash.p.terminal.R
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui.compose.components.ButtonSecondaryTransparent
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.HsCheckbox
-import io.horizontalsystems.core.RowUniversal
-import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton

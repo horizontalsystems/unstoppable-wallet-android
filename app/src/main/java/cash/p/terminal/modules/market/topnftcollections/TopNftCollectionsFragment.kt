@@ -40,8 +40,8 @@ import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinFirstRow
 import cash.p.terminal.ui.compose.components.MarketCoinSecondRow
-import cash.p.terminal.ui.compose.components.NftIcon
-import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.NftIcon
+import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import cash.p.terminal.ui.compose.components.SortMenu
 import cash.p.terminal.ui.compose.components.TopCloseButton
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme

@@ -31,10 +31,10 @@ import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.evm.settings.SendEvmNonceViewModel
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.NftIcon
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.NftIcon
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoContactCell
 import io.horizontalsystems.chartview.cell.SectionUniversalLawrence

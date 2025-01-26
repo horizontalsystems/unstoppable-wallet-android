@@ -2,9 +2,9 @@ package cash.p.terminal.modules.market
 
 import androidx.compose.runtime.Immutable
 import cash.p.terminal.core.App
-import cash.p.terminal.core.alternativeImageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.wallet.models.Analytics.TechnicalAdvice.Advice
 import cash.p.terminal.wallet.entities.FullCoin
 

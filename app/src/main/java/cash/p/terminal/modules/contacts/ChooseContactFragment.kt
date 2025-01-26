@@ -29,7 +29,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.getInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.strings.helpers.shorten
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar

@@ -3,7 +3,7 @@ package cash.p.terminal.modules.coin.ranks
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.ViewModelUiState
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.wallet.MarketKitWrapper
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.entities.ViewState

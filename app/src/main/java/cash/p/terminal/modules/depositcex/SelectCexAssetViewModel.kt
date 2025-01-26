@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.ViewModelUiState
-import cash.p.terminal.core.alternativeImageUrl
-import cash.p.terminal.core.imageUrl
+import cash.p.terminal.wallet.alternativeImageUrl
+import cash.p.terminal.wallet.imageUrl
 import cash.p.terminal.core.managers.CexAssetManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

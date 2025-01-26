@@ -1,4 +1,4 @@
-package io.horizontalsystems.core
+package cash.p.terminal.ui_compose.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -30,9 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.core.R
-import cash.p.terminal.ui_compose.components.body_leah
-import cash.p.terminal.ui_compose.components.caption_grey
+import cash.p.terminal.ui_compose.R
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
@@ -379,6 +377,7 @@ fun RowUniversal(
     verticalPadding: Dp = 12.dp,
     verticalAlignment: Alignment.Vertical = Alignment.CenterVertically,
     onClick: (() -> Unit)? = null,
+    minHeight : Dp = 24.dp,
     content: @Composable RowScope.() -> Unit,
 ) {
     val clickableModifier = when (onClick) {
@@ -391,7 +390,7 @@ fun RowUniversal(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 24.dp)
+            .defaultMinSize(minHeight = minHeight)
             .then(clickableModifier)
             .then(modifier)
             .padding(vertical = verticalPadding),
@@ -409,10 +408,11 @@ fun CellUniversalLawrenceSection(
 
 @Composable
 fun CellUniversalLawrenceSection(
-    composableItems: List<@Composable () -> Unit>
+    composableItems: List<@Composable () -> Unit>,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)

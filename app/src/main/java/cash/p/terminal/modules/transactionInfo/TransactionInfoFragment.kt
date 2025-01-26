@@ -26,12 +26,12 @@ import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
-import io.horizontalsystems.core.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui.compose.components.DescriptionCell
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.components.PriceWithToggleCell
 import cash.p.terminal.ui.compose.components.SectionTitleCell
-import cash.p.terminal.ui.compose.components.TitleAndValueCell
+import cash.p.terminal.ui_compose.components.TitleAndValueCell
 import cash.p.terminal.ui.compose.components.TransactionAmountCell
 import cash.p.terminal.ui.compose.components.TransactionInfoAddressCell
 import cash.p.terminal.ui.compose.components.TransactionInfoBtcLockCell

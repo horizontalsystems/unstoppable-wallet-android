@@ -22,9 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
-import cash.p.terminal.core.alternativeImageUrl
 import cash.p.terminal.core.iconPlaceholder
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.entities.CoinValue
@@ -33,12 +31,12 @@ import cash.p.terminal.modules.evmfee.Cautions
 import cash.p.terminal.modules.multiswap.ui.DataFieldFee
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.CoinImage
-import cash.p.terminal.ui.compose.components.HsImageCircle
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSpacer
+import cash.p.terminal.ui_compose.components.HsImageCircle
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.caption_grey
 import cash.p.terminal.ui_compose.components.subhead1_leah
@@ -46,7 +44,9 @@ import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.wallet.badge
+import cash.p.terminal.wallet.imageUrl
 import io.horizontalsystems.chartview.cell.CellUniversal
 import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration

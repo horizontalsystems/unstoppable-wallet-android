@@ -6,7 +6,6 @@ import cash.p.terminal.R
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.brandColor
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.order
 import io.horizontalsystems.core.entities.Currency
 import cash.p.terminal.entities.DataState

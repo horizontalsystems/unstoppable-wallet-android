@@ -1,6 +1,7 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.BackgroundManagerState
 import kotlinx.coroutines.CoroutineScope
@@ -13,17 +14,17 @@ import kotlinx.coroutines.launch
 class BalanceHiddenManager(
     private val localStorage: ILocalStorage,
     backgroundManager: BackgroundManager,
-) {
-    val balanceHidden: Boolean
+) : IBalanceHiddenManager {
+    override val balanceHidden: Boolean
         get() = localStorage.balanceHidden
 
-    val balanceAutoHidden: Boolean
+    override val balanceAutoHidden: Boolean
         get() = localStorage.balanceAutoHideEnabled
 
     private var balanceAutoHide = balanceAutoHidden
 
     private val _balanceHiddenFlow = MutableStateFlow(localStorage.balanceHidden)
-    val balanceHiddenFlow = _balanceHiddenFlow.asStateFlow()
+    override val balanceHiddenFlow = _balanceHiddenFlow.asStateFlow()
     private val scope = CoroutineScope(Dispatchers.Default)
 
     init {
@@ -40,11 +41,11 @@ class BalanceHiddenManager(
         }
     }
 
-    fun toggleBalanceHidden() {
+    override fun toggleBalanceHidden() {
         setBalanceHidden(!localStorage.balanceHidden)
     }
 
-    fun setBalanceAutoHidden(enabled: Boolean) {
+    override fun setBalanceAutoHidden(enabled: Boolean) {
         balanceAutoHide = enabled
         localStorage.balanceAutoHideEnabled = enabled
 

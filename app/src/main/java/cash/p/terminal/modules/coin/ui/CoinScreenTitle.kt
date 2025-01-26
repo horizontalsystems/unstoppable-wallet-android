@@ -9,8 +9,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cash.p.terminal.ui.compose.components.HsImage
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.HsImage
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.body_grey
 import cash.p.terminal.ui_compose.components.subhead1_grey
 

@@ -31,9 +31,9 @@ import cash.p.terminal.modules.coin.overview.ui.Contracts
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.nft.ui.CellLink
 import cash.p.terminal.ui.compose.HSSwipeRefresh
-import io.horizontalsystems.core.CellFooter
-import io.horizontalsystems.core.CellSingleLineClear
-import io.horizontalsystems.core.CellSingleLineLawrenceSection
+import cash.p.terminal.ui_compose.components.CellFooter
+import cash.p.terminal.ui_compose.components.CellSingleLineClear
+import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.caption_grey

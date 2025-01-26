@@ -6,8 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import cash.p.terminal.core.imageUrl
-import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.entities.BtcRestoreMode
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem

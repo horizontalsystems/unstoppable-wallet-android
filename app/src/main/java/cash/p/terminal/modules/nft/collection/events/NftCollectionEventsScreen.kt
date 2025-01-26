@@ -39,9 +39,9 @@ import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.entities.BlockchainType
-import io.horizontalsystems.core.CellUniversalLawrenceSection
-import io.horizontalsystems.core.RowUniversal
-import io.horizontalsystems.core.SectionItemBorderedRowUniversalClear
+import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
+import cash.p.terminal.ui_compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.SectionItemBorderedRowUniversalClear
 import kotlinx.coroutines.launch
 
 @Composable

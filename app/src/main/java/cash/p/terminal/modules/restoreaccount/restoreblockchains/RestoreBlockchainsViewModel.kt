@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.description
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.ui_compose.components.ImageSource
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.imageUrl

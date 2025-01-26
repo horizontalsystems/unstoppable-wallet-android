@@ -21,7 +21,9 @@ import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.balance.BalanceViewHelper
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.models.CoinPrice
+import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -40,16 +42,31 @@ internal abstract class StackingCoinViewModel(
     private val piratePlaceRepository: PiratePlaceRepository,
     private val accountManager: IAccountManager,
     private val marketKitWrapper: MarketKitWrapper,
-    private val balanceService: BalanceService
+    private val balanceService: BalanceService,
+    private val balanceHiddenManager: IBalanceHiddenManager
 ) : ViewModel() {
 
     abstract val minStackingAmount: Int
     abstract val stackingType: StackingType
 
     private val customDispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
-    private val _uiState = mutableStateOf(StackingCoinUIState())
+    private val _uiState = mutableStateOf(StackingCoinUIState(
+        balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
+    ))
     val uiState: State<StackingCoinUIState> get() = _uiState
     private var wallet: Wallet? = null
+
+    init {
+        viewModelScope.launch {
+            balanceHiddenManager.balanceHiddenFlow.collectLatest {
+                _uiState.value = uiState.value.copy(balanceHidden = it)
+            }
+        }
+    }
+
+    fun toggleBalanceVisibility() {
+        balanceHiddenManager.toggleBalanceHidden()
+    }
 
     fun loadData() {
         createWalletIfNotExist()
@@ -113,6 +130,13 @@ internal abstract class StackingCoinViewModel(
             stackingType = stackingType,
             minStackingAmount = minStackingAmount.toBigDecimal(),
             balance = balance,
+            balanceStr = BalanceViewHelper.coinValue(
+                balance = balance,
+                visible = true,
+                fullFormat = true,
+                coinDecimals = wallet?.decimal ?: 8,
+                dimmed = false
+            ).value,
             token = wallet?.token,
             receiveAddress = receiveAddress
         )
@@ -144,7 +168,8 @@ internal abstract class StackingCoinViewModel(
                 CoroutineExceptionHandler { _, throwable ->
                     Log.e("StackingCoinViewModel", "Error loading investment data", throwable)
                     _uiState.value = uiState.value.copy(
-                        unpaid = BigDecimal.ZERO
+                        unpaidStr = "",
+                        loading = false
                     )
                 }) {
             var unpaid: BigDecimal = BigDecimal.ZERO
@@ -185,11 +210,24 @@ internal abstract class StackingCoinViewModel(
                 dimmed = false
             ).value
             _uiState.value = uiState.value.copy(
-                unpaid = unpaid,
+                unpaidStr = BalanceViewHelper.coinValue(
+                    balance = unpaid,
+                    visible = true,
+                    fullFormat = true,
+                    coinDecimals = wallet?.decimal ?: 8,
+                    dimmed = false
+                ).value,
                 secondaryAmount = secondaryAmount,
-                totalIncome = totalIncome,
+                totalIncomeStr = BalanceViewHelper.coinValue(
+                    balance = totalIncome,
+                    visible = true,
+                    fullFormat = true,
+                    coinDecimals = wallet?.decimal ?: 8,
+                    dimmed = false
+                ).value,
                 totalIncomeSecondary = totalIncomeSecondary,
-                unpaidSecondary = unpaidSecondary
+                unpaidSecondary = unpaidSecondary,
+                loading = false
             )
         }
 

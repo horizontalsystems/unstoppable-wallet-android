@@ -60,6 +60,8 @@ import cash.p.terminal.ui_compose.components.HFillSpacer
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.HsImage
+import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_jacob
 import cash.p.terminal.ui_compose.components.body_leah
@@ -75,7 +77,7 @@ import cash.p.terminal.ui_compose.components.subhead2_lucian
 import cash.p.terminal.ui_compose.components.subhead2_remus
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.entities.BlockchainType
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import io.horizontalsystems.core.helpers.DateHelper
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -214,20 +216,6 @@ fun TransactionAmountCell(
                 SubHead2ColoredValue(value = it)
             }
         }
-    }
-}
-
-@Composable
-fun TitleAndValueCell(
-    title: String,
-    value: String,
-) {
-    RowUniversal(
-        modifier = Modifier.padding(horizontal = 16.dp),
-    ) {
-        subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
-        Spacer(Modifier.weight(1f))
-        subhead1_leah(text = value, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 

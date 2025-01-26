@@ -37,7 +37,7 @@ import cash.p.terminal.strings.helpers.TranslatableString
 import io.horizontalsystems.chartview.ChartBars
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsIconButton
-import io.horizontalsystems.core.RowUniversal
+import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui.compose.components.StackBarSlice
 import cash.p.terminal.ui.compose.components.StackedBarChart
 import cash.p.terminal.ui_compose.components.VSpacer
