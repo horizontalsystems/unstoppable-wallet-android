@@ -1151,7 +1151,7 @@
     <string name="SettingsSecurity_SortingBip69Short">Deterministic</string>
     <string name="SettingsSecurity_SortingBip69">Deterministic BIP69</string>
     <string name="SettingsSecurity_SortingBip69Description">Lexicographical Indexing</string>
-    <string name="SettingsSecurity_SyncModeBlockchair">Blockchair API</string>
+    <string name="SettingsSecurity_SyncModeBlockchair" translatable="false">Blockchair API</string>
     <string name="SettingsSecurity_SyncModeBlockchairDescription">Very Fast</string>
     <string name="SettingsSecurity_SyncModeHybrid" translatable="false">Hybrid</string>
     <string name="SettingsSecurity_SyncModeHybridDescription">Fast</string>
@@ -1494,7 +1494,7 @@
     <string name="AddToken_Symbol">Symbol</string>
     <string name="AddToken_CoinCode">Coin Code</string>
     <string name="AddToken_Decimals">Decimals</string>
-    <string name="AddToken_Dots">…</string>
+    <string name="AddToken_Dots" translatable="false">…</string>
     <string name="AddToken_CoinTypes">COIN TYPES</string>
     <string name="AddToken_AlreadyAdded">ALREADY ADDED</string>
     <string name="AddToken_AddressOrSymbol">Contract Address</string>

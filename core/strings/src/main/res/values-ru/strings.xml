@@ -194,6 +194,7 @@
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Category_TopCoins_Description">Топ токенов по рыночной капитализации</string>
     <string name="Market_Signals">Сигналы</string>
+    <string name="Market_Volume">Объём торгов</string>
     <string name="Market_MarketCap">Рын. капитализация</string>
     <string name="Market_Signal_Description">Приведенные ниже сигналы основаны на технических индикаторах цены Bollinger Bands и RSI за последние примерно 30 дней. Эти сигналы являются алгоритмическими и могут часто изменяться.</string>
     <string name="Market_Signal_StrongBuy_Description">Высокая уверенность в повышении цены.</string>
@@ -404,6 +405,7 @@
     <string name="Send_Confirmation_Receiver">Получатель</string>
     <string name="Send_Confirmation_EstimateTime">Продолжительность</string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
+    <string name="Send_Confirmation_Action">Действие</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="ScanQr_CameraPermission_Title">Разрешение камеры</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
@@ -587,6 +589,7 @@
     <string name="Swap_ErrorNoProviders">Нет провайдеров</string>
     <string name="Swap_ErrorNoQuote">Нет предложений</string>
     <string name="Swap_ErrorInsufficientBalance">Недостаточный баланс</string>
+    <string name="swap_out_of_min_amount">Меньше мин. суммы %s</string>
     <string name="Swap_ErrorBalanceNotAvailable">Баланс N/А</string>
     <string name="Swap_ErrorNoLiquidity">Невозможно обменять эти токены</string>
     <string name="Swap_ErrorWrapUnwrapNotAllowed">Эта служба не позволяет wrapping/unwrapping. Вместо этого используйте 1inch.</string>
@@ -602,6 +605,9 @@
     <string name="Swap_Unlocking">Разблокировка...</string>
     <string name="Swap_Revoke">Отозвать</string>
     <string name="Swap_Revoking">Отзыв...</string>
+    <string name="swap_create_wallets">Создать кошелёк</string>
+    <string name="swap_creating_wallets">Создание кошельков..</string>
+    <string name="swap_create_wallet_description">Не все выбранные кошельки доступны, сначала создайте их.</string>
     <string name="Swap_Approve">Разрешить</string>
     <string name="Swap_Approving">Разрешение</string>
     <string name="Swap_Swapping">Обмен</string>
@@ -623,6 +629,10 @@
     <string name="SwapConfirm_QuoteExpired">Котировка истекла</string>
     <string name="SwapConfirm_FetchingFinalQuote">Получение котировки</string>
     <!-- Swap Settings -->
+    <string name="unsupported_refund_address">Адрес для возврата не поддерживается.</string>
+    <string name="unsupported_address">Адрес не поддерживается</string>
+    <string name="unexpected_error">Непредвиденная ошибка</string>
+    <string name="unsupported_token">Токен не поддерживается</string>
     <string name="SwapSettings_Title">Настройки обмена</string>
     <string name="SwapSettings_Service">Сервис</string>
     <string name="SwapSettings_SlippageTitle">Допустимость отклонений</string>
@@ -815,6 +825,7 @@
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
+    <string name="Settings_JoinUnstoppables_Description">Учитесь и осваивайте крипто через эксклюзивные видео. Узнайте нас ближе в неформальной обстановке. Будьте первыми, кто увидит, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Вы уже запросили приватный чат, найдите его в Telegram</string>
@@ -861,6 +872,7 @@
     <string name="SettingsAboutApp_Site">Веб-сайт</string>
     <string name="SettingsAboutApp_WhatsNew">Что нового</string>
     <!-- Blockchain Settings  -->
+    <string name="SettingsAboutApp_AppVersion">Версия приложения</string>
     <string name="BlockchainSettings_Title">Настройки блокчейна</string>
     <!-- Backup Manager -->
     <string name="BackupManager_Title">Резерв.копирование</string>
@@ -882,6 +894,10 @@
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
     <!-- Privacy  -->
     <!-- Security Center -->
+    <string name="Privacy_Information">P.CASH не собирает личные данные, которые раскрывают вашу приватную информацию, такие как балансы монет или адреса. Мы собираем только статистику использования интерфейса, чтобы лучше понимать нашу аудиторию и тенденции использования приложения. Это можно отключить, если вы пожелаете.</string>
+    <string name="Privacy_BulletedText1">Кошелек не собирает никакие персональные данные.</string>
+    <string name="Privacy_BulletedText2">Нет пользовательских аккаунтов или баз данных, хранящих данные пользователей.</string>
+    <string name="Privacy_BulletedText3">Если вы разрешите, кошелек будет делиться информацией об использовании приложения с командой P.CASH. Это необходимо, чтобы понять, какие функции используются (или нет) нашими пользователями. Будучи приложением, ориентированным на конфиденциальность, нам важно оценивать свои усилия, и без этих данных мы не сможем узнать, востребованы ли созданные нами функции.</string>
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Добавить новый</string>
@@ -1717,6 +1733,7 @@
     <string name="stacking_calculator">калькулятор стейкинга</string>
     <string name="total_balance">Общий баланс</string>
     <string name="total_income">Общий доход</string>
+    <string name="unpaid">Невыплачено</string>
     <string name="estimated_annual_interest">Предполагаемый годовой процент</string>
     <string name="accruals">Начисления</string>
     <string name="investment_chart">График инвестиций</string>
@@ -1729,6 +1746,7 @@
     <string name="Send_Utxo_SelectAll">Выбрать все</string>
     <string name="TonConnect_NewConnect">Новое подключение</string>
     <string name="TonConnect_Error_InvalidUrl">Недействительный URL-адрес</string>
+    <string name="TonConnect_Unnamed">Безымянный</string>
     <string name="TonConnect_Wallet">Кошелек</string>
     <string name="TonConnect_ChooseWallet">Выберите кошелек</string>
     <string name="Transactions_ContractDeploy">Развертывание контракта</string>
