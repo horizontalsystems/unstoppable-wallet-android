@@ -112,7 +112,7 @@ private fun SettingSections(
                 R.string.Settings_GetYourTokens,
                 R.drawable.ic_uwt2_24,
                 onClick = {
-                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/piratecash_bot")
+                    LinkHelper.openLinkInAppBrowser(context, "https://t.me/piratecash_bot?start=mobile")
                 }
             )
         }
