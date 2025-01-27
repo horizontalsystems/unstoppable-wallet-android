@@ -136,17 +136,19 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                         .padding(start = 16.dp, end = 16.dp),
                     title = stringResource(R.string.Button_Next),
                     onClick = {
-                        navController.slideFromRight(
-                            R.id.sendXFragment,
-                            SendFragment.Input(
-                                wallet = wallet,
-                                sendEntryPointDestId = R.id.sendTokenSelectFragment,
-                                title = input.title,
-                                predefinedAddress = input.predefinedAddress,
-                                prefilledAddressData = prefilledData,
-                                address = uiState.value
+                        uiState.address?.let {
+                            navController.slideFromRight(
+                                R.id.sendXFragment,
+                                SendFragment.Input(
+                                    wallet = wallet,
+                                    sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                                    title = input.title,
+                                    predefinedAddress = input.predefinedAddress,
+                                    prefilledAddressData = prefilledData,
+                                    address = it
+                                )
                             )
-                        )
+                        }
                     },
                     enabled = uiState.canBeSendToAddress
                 )

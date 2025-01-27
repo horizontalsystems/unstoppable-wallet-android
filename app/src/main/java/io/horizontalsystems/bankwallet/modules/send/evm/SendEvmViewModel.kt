@@ -27,7 +27,7 @@ class SendEvmViewModel(
     val coinMaxAllowedDecimals: Int,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
-    private val address: String
+    private val address: Address
 ) : ViewModelUiState<SendUiState>() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -48,7 +48,7 @@ class SendEvmViewModel(
             coinRate = it
         }
 
-        addressService.setAddress(Address(address))
+        addressService.setAddress(address)
     }
 
     override fun createState() = SendUiState(

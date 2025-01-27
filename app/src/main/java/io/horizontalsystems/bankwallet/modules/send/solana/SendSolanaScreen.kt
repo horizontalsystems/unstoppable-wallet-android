@@ -38,7 +38,7 @@ fun SendSolanaScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
-    address: String,
+    address: Address,
 ) {
     val view = LocalView.current
     val wallet = viewModel.wallet
@@ -99,7 +99,7 @@ fun SendSolanaScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = Address(address),
+                    initial = address,
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,

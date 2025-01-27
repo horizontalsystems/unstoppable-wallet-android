@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendEthereumAdapter
 import io.horizontalsystems.bankwallet.core.isNative
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -56,7 +57,7 @@ object SendEvmModule {
     }
 
 
-    class Factory(private val wallet: Wallet, private val address: String) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet, private val address: Address) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")

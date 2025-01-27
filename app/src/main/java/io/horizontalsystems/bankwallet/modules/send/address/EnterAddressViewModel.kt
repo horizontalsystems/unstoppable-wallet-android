@@ -71,7 +71,8 @@ class EnterAddressViewModel(
         recentAddress = recentAddress,
         contacts = contacts,
         value = value,
-        inputState = inputState
+        inputState = inputState,
+        address = address,
     )
 
     init {
@@ -81,10 +82,11 @@ class EnterAddressViewModel(
     fun onEnterAddress(value: String) {
         parseAddressJob?.cancel()
 
+        address = null
+        inputState = null
+
         if (value.isBlank()) {
-            this.value = value
-            address = null
-            inputState = null
+            this.value = ""
             emitState()
         } else {
             inputState = DataState.Loading
@@ -229,4 +231,5 @@ data class EnterAddressUiState(
     val contacts: List<SContact>,
     val value: String,
     val inputState: DataState<Address>?,
+    val address: Address?,
 )
