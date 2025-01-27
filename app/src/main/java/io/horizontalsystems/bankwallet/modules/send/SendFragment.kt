@@ -11,6 +11,7 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseFragment
 import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
@@ -206,6 +207,6 @@ class SendFragment : BaseFragment() {
         val sendEntryPointDestId: Int = 0,
         val predefinedAddress: String? = null,
         val prefilledAddressData: PrefilledData? = null,
-        val address: String
+        val address: Address
     ) : Parcelable
 }

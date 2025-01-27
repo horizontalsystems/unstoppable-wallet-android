@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRightForResult
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
@@ -43,7 +44,7 @@ fun SendEvmScreen(
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
     prefilledData: PrefilledData?,
-    address: String,
+    address: Address,
     wallet: Wallet,
 ) {
     val viewModel = viewModel<SendEvmViewModel>(
@@ -87,7 +88,7 @@ fun SendEvmScreen(
                         HSpacer(16.dp)
                         subhead1_leah(
                             modifier = Modifier.weight(1f),
-                            text = uiState.address
+                            text = uiState.address.hex
                         )
 
                         HSpacer(16.dp)
