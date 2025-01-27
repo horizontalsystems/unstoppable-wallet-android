@@ -25,7 +25,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.composablePage
 import io.horizontalsystems.bankwallet.core.composablePopup
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
@@ -68,7 +67,6 @@ fun SendBitcoinNavHost(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
-    address: Address,
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -84,7 +82,6 @@ fun SendBitcoinNavHost(
                 amountInputModeViewModel,
                 sendEntryPointDestId,
                 prefilledData,
-                address,
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
@@ -121,7 +118,6 @@ fun SendBitcoinScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
-    address: Address,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState

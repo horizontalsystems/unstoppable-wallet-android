@@ -82,7 +82,6 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
-                                address,
                             )
                         }
                     }
@@ -161,7 +160,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Ton -> {
-                        val factory = SendTonModule.Factory(wallet, predefinedAddress)
+                        val factory = SendTonModule.Factory(wallet, address)
                         val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTonScreen(
@@ -171,7 +170,6 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
-                                address,
                             )
                         }
                     }
