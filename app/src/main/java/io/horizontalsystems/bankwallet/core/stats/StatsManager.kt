@@ -35,6 +35,8 @@ import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
+import io.horizontalsystems.subscriptions.core.PrivacyMode
+import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -81,8 +83,22 @@ class StatsManager(
 
     private fun getInitialUiStatsEnabled(): Boolean {
         val uiStatsEnabled = localStorage.uiStatsEnabled
-        if (uiStatsEnabled != null) return uiStatsEnabled
 
+        if (uiStatsEnabled != null) {
+            if (!uiStatsEnabled && statsAllowedSignatures()) {
+                //check if user has subscription to keep privacy mode
+                val privacyActionAllowed = UserSubscriptionManager.isActionAllowed(PrivacyMode)
+                if (!privacyActionAllowed) {
+                    return true
+                }
+            }
+            return uiStatsEnabled
+        }
+
+        return statsAllowedSignatures()
+    }
+
+    private fun statsAllowedSignatures(): Boolean {
         val signatures = listOf(
             "b797339fb356afce5160fe49274ee17a1c1816db", // appcenter
             "5afb2517b06caac7f108ba9d96ad826f1c4ba30c", // hs
