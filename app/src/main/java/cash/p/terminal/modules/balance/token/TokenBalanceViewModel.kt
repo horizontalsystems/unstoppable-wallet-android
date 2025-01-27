@@ -144,12 +144,4 @@ class TokenBalanceViewModel(
 
         balanceService.clear()
     }
-
-    fun isPirateCash() = (wallet.token.type == TokenType.Eip20(BuildConfig.PIRATE_CONTRACT) ||
-            wallet.token.type == TokenType.Eip20(BuildConfig.PIRATE_CONTRACT.lowercase())) &&
-            wallet.token.blockchainType == BlockchainType.BinanceSmartChain
-
-    fun isCosanta() = (wallet.token.type == TokenType.Eip20(BuildConfig.COSANTA_CONTRACT) ||
-            wallet.token.type == TokenType.Eip20(BuildConfig.COSANTA_CONTRACT.lowercase())) &&
-            wallet.token.blockchainType == BlockchainType.BinanceSmartChain
 }

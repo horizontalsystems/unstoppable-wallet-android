@@ -77,7 +77,7 @@ internal fun CalculatorScreen(
                 tint = colorResource(R.color.grey)
             )
         }
-        val descriptionRes = if (uiState.coin == StackingType.PCASH) {
+        val descriptionRes = if (uiState.stackingType == StackingType.PCASH) {
             R.string.pos_calculator_pirate_description
         } else {
             R.string.pos_calculator_cosanta_description
@@ -126,7 +126,7 @@ internal fun CalculatorTable(uiState: CalculatorUIState, modifier: Modifier = Mo
     ) {
         CalculatorItemHeader(
             period = stringResource(R.string.period),
-            coin = uiState.coin.value,
+            coin = uiState.stackingType.value,
             coinSecondary = uiState.coinSecondary
         )
         uiState.calculateResult.forEach { calculatorItem ->

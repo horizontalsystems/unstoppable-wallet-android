@@ -9,6 +9,8 @@ import cash.p.terminal.featureStacking.ui.staking.StackingType
 import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.balance.BalanceViewHelper
+import cash.p.terminal.wallet.isCosanta
+import cash.p.terminal.wallet.isPirateCash
 import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.IAppNumberFormatter
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -33,7 +35,7 @@ internal class CalculatorViewModel(
     }
 
     fun setCoin(value: StackingType) {
-        _uiState.value = _uiState.value.copy(coin = value)
+        _uiState.value = _uiState.value.copy(stackingType = value)
     }
 
     fun setCalculatorValue(value: String) {
@@ -53,10 +55,13 @@ internal class CalculatorViewModel(
 
     private suspend fun loadCalculatedData(doubleValue: Double) {
         balanceService.balanceItemsFlow.collectLatest { items ->
-            items?.find { it.wallet.coin.code.equals(uiState.value.coin.value, true) }
+            items?.find {
+                (uiState.value.stackingType == StackingType.PCASH && it.wallet.isPirateCash()) ||
+                        (uiState.value.stackingType == StackingType.COSANTA && it.wallet.isCosanta())
+            }
                 ?.let { pcashItem ->
                     val items = piratePlaceRepository.getCalculatorData(
-                        coin = uiState.value.coin.value.lowercase(),
+                        coin = uiState.value.stackingType.value.lowercase(),
                         amount = doubleValue
                     ).items.map {
                         val amountBigDecimal = it.amount.toBigDecimal()
@@ -82,7 +87,7 @@ internal class CalculatorViewModel(
                         coinExchange = buildExchangeRateString(
                             amount = doubleValue,
                             coinPrice = pcashItem.coinPrice,
-                            coin = uiState.value.coin.value.lowercase()
+                            coin = uiState.value.stackingType.value.lowercase()
                         )
                     )
                 }

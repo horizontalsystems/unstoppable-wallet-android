@@ -71,6 +71,8 @@ import cash.p.terminal.ui_compose.components.body_grey
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.balance.DeemedValue
+import cash.p.terminal.wallet.isCosanta
+import cash.p.terminal.wallet.isPirateCash
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -466,7 +468,7 @@ private fun ButtonsRow(
                     enabled = viewItem.swapEnabled
                 )
             }
-            if (viewModel.isCosanta() || viewModel.isPirateCash()) {
+            if (viewItem.wallet.isCosanta() || viewItem.wallet.isPirateCash()) {
                 HSpacer(8.dp)
                 ButtonPrimaryCircle(
                     icon = R.drawable.ic_coins_stacking,

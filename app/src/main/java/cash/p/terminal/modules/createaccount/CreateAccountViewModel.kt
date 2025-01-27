@@ -11,9 +11,9 @@ import cash.p.terminal.core.managers.WalletActivator
 import cash.p.terminal.core.managers.WordsManager
 import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
 import cash.p.terminal.entities.DataState
-import cash.p.terminal.featureStacking.BuildConfig
 import cash.p.terminal.wallet.normalizeNFKD
 import cash.p.terminal.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
+import cash.p.terminal.wallet.BuildConfig
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType

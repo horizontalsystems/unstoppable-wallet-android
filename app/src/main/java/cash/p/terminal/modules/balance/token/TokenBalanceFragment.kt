@@ -13,6 +13,7 @@ import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.isPirateCash
 import io.horizontalsystems.core.getInput
 
 class TokenBalanceFragment : BaseComposeFragment() {
@@ -35,7 +36,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
             onStackingClicked = {
                 navController.slideFromRight(
                     resId = R.id.stacking,
-                    input = if(viewModel.isPirateCash()) StackingType.PCASH else StackingType.COSANTA
+                    input = if(wallet.isPirateCash()) StackingType.PCASH else StackingType.COSANTA
                 )
             }
         )
