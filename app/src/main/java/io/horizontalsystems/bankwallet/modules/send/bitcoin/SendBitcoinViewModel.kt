@@ -43,6 +43,7 @@ class SendBitcoinViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
+    private val address: Address,
 ) : ViewModelUiState<SendBitcoinUiState>() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -98,13 +99,15 @@ class SendBitcoinViewModel(
         viewModelScope.launch {
             feeRateService.start()
         }
+
+        addressService.setAddress(address)
     }
 
     override fun createState() = SendBitcoinUiState(
         availableBalance = amountState.availableBalance,
         amount = amountState.amount,
         feeRate = feeRateState.feeRate,
-        address = addressState.validAddress,
+        address = address,
         memo = memo,
         fee = fee,
         lockTimeInterval = pluginState.lockTimeInterval,
@@ -290,7 +293,7 @@ data class SendBitcoinUiState(
     val amount: BigDecimal?,
     val fee: BigDecimal?,
     val feeRate: Int?,
-    val address: Address?,
+    val address: Address,
     val memo: String?,
     val lockTimeInterval: LockTimeInterval?,
     val addressError: Throwable?,
