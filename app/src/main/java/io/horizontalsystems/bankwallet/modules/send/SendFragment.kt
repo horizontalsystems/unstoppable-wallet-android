@@ -105,7 +105,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Zcash -> {
-                        val factory = SendZCashModule.Factory(wallet, predefinedAddress)
+                        val factory = SendZCashModule.Factory(wallet, address)
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -117,7 +117,6 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
-                                address,
                             )
                         }
                     }
