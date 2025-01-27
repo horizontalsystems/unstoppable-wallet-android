@@ -45,7 +45,6 @@ fun SendEvmScreen(
     prefilledData: PrefilledData?,
     address: String,
     wallet: Wallet,
-    predefinedAddress: String?,
 ) {
     val viewModel = viewModel<SendEvmViewModel>(
         factory = SendEvmModule.Factory(
@@ -56,7 +55,6 @@ fun SendEvmScreen(
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
-    val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
     val amountInputType = amountInputModeViewModel.inputType
@@ -89,7 +87,7 @@ fun SendEvmScreen(
                         HSpacer(16.dp)
                         subhead1_leah(
                             modifier = Modifier.weight(1f),
-                            text = address
+                            text = uiState.address
                         )
 
                         HSpacer(16.dp)

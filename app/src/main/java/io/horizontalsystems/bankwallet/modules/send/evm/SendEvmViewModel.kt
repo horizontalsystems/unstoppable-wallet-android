@@ -26,7 +26,8 @@ class SendEvmViewModel(
     private val addressService: SendEvmAddressService,
     val coinMaxAllowedDecimals: Int,
     private val showAddressInput: Boolean,
-    private val connectivityManager: ConnectivityManager
+    private val connectivityManager: ConnectivityManager,
+    private val address: String
 ) : ViewModelUiState<SendUiState>() {
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
 
@@ -46,22 +47,20 @@ class SendEvmViewModel(
         xRateService.getRateFlow(sendToken.coin.uid).collectWith(viewModelScope) {
             coinRate = it
         }
+
+        addressService.setAddress(Address(address))
     }
 
     override fun createState() = SendUiState(
         availableBalance = amountState.availableBalance,
         amountCaution = amountState.amountCaution,
-        addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
+        address = address,
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
         amountService.setAmount(amount)
-    }
-
-    fun onEnterAddress(address: Address?) {
-        addressService.setAddress(address)
     }
 
     private fun handleUpdatedAmountState(amountState: SendAmountService.State) {
