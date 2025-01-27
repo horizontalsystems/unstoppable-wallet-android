@@ -57,6 +57,7 @@ class SendFragment : BaseFragment() {
                 val sendEntryPointDestId = input.sendEntryPointDestId
                 val predefinedAddress = input.predefinedAddress
                 val prefilledData = input.prefilledAddressData
+                val address = input.address
 
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
@@ -80,6 +81,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
+                                address,
                             )
                         }
                     }
@@ -97,6 +99,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
+                                address,
                             )
                         }
                     }
@@ -114,6 +117,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
+                                address,
                             )
                         }
                     }
@@ -133,6 +137,7 @@ class SendFragment : BaseFragment() {
                                 findNavController(),
                                 amountInputModeViewModel,
                                 prefilledData,
+                                address,
                                 wallet,
                                 predefinedAddress
                             )
@@ -150,6 +155,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
+                                address,
                             )
                         }
                     }
@@ -165,6 +171,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
+                                address,
                             )
                         }
                     }
@@ -180,6 +187,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
+                                address,
                             )
                         }
                     }
@@ -198,6 +206,7 @@ class SendFragment : BaseFragment() {
         val title: String,
         val sendEntryPointDestId: Int = 0,
         val predefinedAddress: String? = null,
-        val prefilledAddressData: PrefilledData? = null
+        val prefilledAddressData: PrefilledData? = null,
+        val address: String
     ) : Parcelable
 }

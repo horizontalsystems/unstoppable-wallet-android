@@ -37,6 +37,7 @@ fun SendEvmScreen(
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
     prefilledData: PrefilledData?,
+    address: String,
     wallet: Wallet,
     predefinedAddress: String?,
 ) {
@@ -99,7 +100,7 @@ fun SendEvmScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
+                    initial = Address(address),
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,

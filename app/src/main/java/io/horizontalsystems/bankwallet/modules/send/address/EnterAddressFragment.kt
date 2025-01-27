@@ -144,6 +144,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                                 title = input.title,
                                 predefinedAddress = input.predefinedAddress,
                                 prefilledAddressData = prefilledData,
+                                address = uiState.value
                             )
                         )
                     },
