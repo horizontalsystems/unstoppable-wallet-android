@@ -47,18 +47,13 @@ class StackingFragment : BaseComposeFragment() {
     }
 
     private fun setCalculatorData(stackingType: StackingType, balance: BigDecimal) {
-        val value = if(stackingType == StackingType.PCASH) {
-            if(balance < BigDecimal(100)) {
-                "10000"
-            } else {
-                balance.toPlainString()
-            }
+        val minBalance = if (stackingType == StackingType.PCASH) BigDecimal(100) else BigDecimal(1)
+        val defaultValue = if (stackingType == StackingType.PCASH) "10000" else "1000"
+
+        val value = if (balance < minBalance) {
+            defaultValue
         } else {
-            if(balance < BigDecimal(1)) {
-                "1000"
-            } else {
-                balance.toPlainString()
-            }
+            balance.toPlainString()
         }
         calculatorViewModel.setCalculatorValue(value)
         calculatorViewModel.setCoin(stackingType)
