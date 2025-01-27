@@ -1,8 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.send.evm
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -103,16 +101,6 @@ fun SendEvmScreen(
                 VSpacer(16.dp)
             }
 
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
@@ -132,10 +120,20 @@ fun SendEvmScreen(
                 amountUnique = amountUnique
             )
 
+            VSpacer(8.dp)
+            AvailableBalance(
+                coinCode = wallet.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                availableBalance = availableBalance,
+                amountInputType = amountInputType,
+                rate = viewModel.coinRate
+            )
+
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
                     if (viewModel.hasConnection()) {
