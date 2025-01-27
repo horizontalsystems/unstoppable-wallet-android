@@ -45,6 +45,7 @@ class SendSolanaViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
+    private val address: Address,
 ) : ViewModelUiState<SendUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
@@ -75,6 +76,8 @@ class SendSolanaViewModel(
         xRateService.getRateFlow(feeToken.coin.uid).collectWith(viewModelScope) {
             feeCoinRate = it
         }
+
+        addressService.setAddress(address)
     }
 
     override fun createState() = SendUiState(
@@ -83,8 +86,7 @@ class SendSolanaViewModel(
         addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
-        canBeSendToAddress = addressState.canBeSend,
-        address = addressState.address,
+        address = address,
     )
 
     fun onEnterAmount(amount: BigDecimal?) {

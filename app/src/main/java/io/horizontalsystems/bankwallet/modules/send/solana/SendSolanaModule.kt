@@ -23,7 +23,7 @@ object SendSolanaModule {
 
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("SendSolanaAdapter is null")
 
@@ -43,7 +43,7 @@ object SendSolanaModule {
                     val solToken = App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: throw IllegalArgumentException()
                     val balance = App.solanaKitManager.solanaKitWrapper?.solanaKit?.balance ?: 0L
                     val solBalance = SolanaAdapter.balanceInBigDecimal(balance, solToken.decimals) - SolanaKit.accountRentAmount
-                    val addressService = SendSolanaAddressService(predefinedAddress)
+                    val addressService = SendSolanaAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendSolanaViewModel(
@@ -57,8 +57,9 @@ object SendSolanaModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        predefinedAddress == null,
+                        true,
                         App.connectivityManager,
+                        address
                     ) as T
                 }
 
@@ -73,8 +74,7 @@ object SendSolanaModule {
         val addressError: Throwable?,
         val canBeSend: Boolean,
         val showAddressInput: Boolean,
-        val canBeSendToAddress: Boolean,
-        val address: Address?,
+        val address: Address,
     )
 
 }
