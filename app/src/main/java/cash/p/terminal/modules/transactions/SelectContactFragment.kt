@@ -16,7 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.getInput
+import io.horizontalsystems.core.getInput
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.ui_compose.components.AppBar

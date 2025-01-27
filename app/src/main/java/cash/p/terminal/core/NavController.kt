@@ -117,18 +117,6 @@ private fun <T: Parcelable> NavController.getNavigationResultX(key: String, onRe
     }
 }
 
-inline fun <reified T: Parcelable> NavController.getInput() : T? {
-    return currentBackStackEntry?.arguments?.getInputX()
-}
-
-inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
-    return parcelable("input")
-}
-
-inline fun <reified T: Parcelable> NavController.requireInput() : T {
-    return getInput()!!
-}
-
 fun <T: Parcelable> NavController.setNavigationResultX(result: T) {
     val resultKey = currentBackStackEntry?.arguments?.getString("resultKey")
 

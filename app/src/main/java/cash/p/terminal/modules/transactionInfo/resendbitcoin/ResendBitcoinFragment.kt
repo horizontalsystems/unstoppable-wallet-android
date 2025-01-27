@@ -24,7 +24,7 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.HSCaution
-import cash.p.terminal.core.getInputX
+import io.horizontalsystems.core.getInputX
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage

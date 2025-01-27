@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.getInput
+import io.horizontalsystems.core.getInput
 import cash.p.terminal.modules.nft.collection.assets.NftCollectionAssetsScreen
 import cash.p.terminal.modules.nft.collection.events.NftCollectionEventsScreen
 import cash.p.terminal.modules.nft.collection.overview.NftCollectionOverviewScreen

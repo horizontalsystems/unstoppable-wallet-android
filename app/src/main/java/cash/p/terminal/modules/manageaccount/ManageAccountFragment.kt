@@ -23,7 +23,7 @@ import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.managers.FaqManager
-import cash.p.terminal.core.requireInput
+import io.horizontalsystems.core.requireInput
 import cash.p.terminal.core.slideFromBottom
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity

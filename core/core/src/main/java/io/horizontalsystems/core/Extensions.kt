@@ -65,6 +65,19 @@ fun Intent.putParcelableExtra(key: String, value: Parcelable) {
     putExtra(key, value)
 }
 
+inline fun <reified T: Parcelable> NavController.getInput() : T? {
+    return currentBackStackEntry?.arguments?.getInputX()
+}
+
+inline fun <reified T: Parcelable> Bundle.getInputX() : T? {
+    return parcelable("input")
+}
+
+
+inline fun <reified T: Parcelable> NavController.requireInput() : T {
+    return getInput()!!
+}
+
 inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
     SDK_INT >= 33 -> getParcelable(key, T::class.java)
     else -> @Suppress("DEPRECATION") getParcelable(key) as? T

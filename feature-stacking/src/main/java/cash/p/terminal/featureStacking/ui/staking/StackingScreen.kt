@@ -36,7 +36,8 @@ internal fun StackingScreen(
     uiState: StackingUIState,
     calculatorUIState: CalculatorUIState,
     onCalculatorValueChanged: (String) -> Unit,
-    onTabChanged: (StackingType, BigDecimal) -> Unit,
+    onTabChanged: (StackingType) -> Unit,
+    setCalculatorData: (StackingType, BigDecimal) -> Unit,
     onBuyClicked: (Token) -> Unit,
     onChartClicked: (String) -> Unit,
     onClickClose: () -> Unit
@@ -73,20 +74,12 @@ internal fun StackingScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
         ) {
             Column(Modifier.padding(it)) {
-                val pagerState = rememberPagerState { uiState.tabs.size }
+                val pagerState = rememberPagerState(initialPage = uiState.tabs.indexOfFirst { tab -> tab.selected }) { uiState.tabs.size }
                 val pirateViewModel = koinViewModel<PirateCoinViewModel>()
                 val cosantaViewModel = koinViewModel<CosantaCoinViewModel>()
 
                 Tabs(tabs = uiState.tabs, onClick = { tab ->
-                    val calculatorBalance = when (tab) {
-                        StackingType.PCASH -> {
-                            pirateViewModel.uiState.value.balance
-                        }
-                        StackingType.COSANTA -> {
-                            cosantaViewModel.uiState.value.balance
-                        }
-                    }
-                    onTabChanged(tab, calculatorBalance)
+                    onTabChanged(tab)
                     coroutineScope.launch {
                         pagerState.scrollToPage(tab.ordinal)
                     }
@@ -101,6 +94,7 @@ internal fun StackingScreen(
                                 onBuyClicked = onBuyClicked,
                                 onCalculatorClicked = {
                                     coroutineScope.launch {
+                                        setCalculatorData(StackingType.PCASH, pirateViewModel.uiState.value.balance)
                                         modalBottomSheetState.show()
                                     }
                                 },
@@ -115,6 +109,7 @@ internal fun StackingScreen(
                                 onBuyClicked = onBuyClicked,
                                 onCalculatorClicked = {
                                     coroutineScope.launch {
+                                        setCalculatorData(StackingType.COSANTA, cosantaViewModel.uiState.value.balance)
                                         modalBottomSheetState.show()
                                     }
                                 },
@@ -142,11 +137,12 @@ private fun StackingScreenPreview() {
                 )
             ),
             calculatorUIState = CalculatorUIState(),
-            onTabChanged = { _, _ -> },
+            onTabChanged = {},
             onBuyClicked = {},
             onClickClose = {},
             onChartClicked = {},
-            onCalculatorValueChanged = {}
+            onCalculatorValueChanged = { },
+            setCalculatorData = { _, _ -> }
         )
     }
 }

@@ -43,8 +43,6 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewModel
-import cash.p.terminal.wallet.balance.DeemedValue
-import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.send.SendFragment
@@ -55,22 +53,24 @@ import cash.p.terminal.modules.transactions.transactionList
 import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.Translator
-import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui.compose.components.ListEmptyView
-import cash.p.terminal.ui_compose.components.RowUniversal
-import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
+import cash.p.terminal.ui_compose.CoinFragmentInput
 import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.HsIconButton
+import cash.p.terminal.ui_compose.components.RowUniversal
+import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_grey
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.wallet.balance.DeemedValue
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -78,7 +78,8 @@ import io.horizontalsystems.core.helpers.HudHelper
 fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
     transactionsViewModel: TransactionsViewModel,
-    navController: NavController
+    navController: NavController,
+    onStackingClicked: () -> Unit
 ) {
     val uiState = viewModel.uiState
 
@@ -100,7 +101,8 @@ fun TokenBalanceScreen(
                     TokenBalanceHeader(
                         balanceViewItem = it,
                         navController = navController,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        onStackingClicked = onStackingClicked
                     )
                 }
                 if (transactionItems == null) {
@@ -123,7 +125,8 @@ fun TokenBalanceScreen(
                         TokenBalanceHeader(
                             balanceViewItem = it,
                             navController = navController,
-                            viewModel = viewModel
+                            viewModel = viewModel,
+                            onStackingClicked = onStackingClicked
                         )
                     }
                 }
@@ -167,6 +170,7 @@ private fun TokenBalanceHeader(
     balanceViewItem: BalanceViewItem,
     navController: NavController,
     viewModel: TokenBalanceViewModel,
+    onStackingClicked: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -216,7 +220,12 @@ private fun TokenBalanceHeader(
             )
         }
         VSpacer(height = 24.dp)
-        ButtonsRow(viewItem = balanceViewItem, navController = navController, viewModel = viewModel)
+        ButtonsRow(
+            viewItem = balanceViewItem,
+            navController = navController,
+            viewModel = viewModel,
+            onStackingClicked = onStackingClicked
+        )
         LockedBalanceSection(balanceViewItem, navController)
         balanceViewItem.warning?.let {
             VSpacer(height = 8.dp)
@@ -373,7 +382,8 @@ private fun onSyncErrorClicked(
 private fun ButtonsRow(
     viewItem: BalanceViewItem,
     navController: NavController,
-    viewModel: TokenBalanceViewModel
+    viewModel: TokenBalanceViewModel,
+    onStackingClicked: () -> Unit
 ) {
     val onClickReceive = {
         try {
@@ -446,11 +456,25 @@ private fun ButtonsRow(
                     icon = R.drawable.ic_swap_24,
                     contentDescription = stringResource(R.string.Swap),
                     onClick = {
-                        navController.slideFromRight(R.id.multiswap, SwapParams.TOKEN_IN to viewItem.wallet.token)
+                        navController.slideFromRight(
+                            R.id.multiswap,
+                            SwapParams.TOKEN_IN to viewItem.wallet.token
+                        )
 
                         stat(page = StatPage.TokenPage, event = StatEvent.Open(StatPage.Swap))
                     },
                     enabled = viewItem.swapEnabled
+                )
+            }
+            if (viewModel.isCosanta() || viewModel.isPirateCash()) {
+                HSpacer(8.dp)
+                ButtonPrimaryCircle(
+                    icon = R.drawable.ic_coins_stacking,
+                    contentDescription = stringResource(R.string.stacking),
+                    onClick = {
+                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                        onStackingClicked()
+                    }
                 )
             }
         }
