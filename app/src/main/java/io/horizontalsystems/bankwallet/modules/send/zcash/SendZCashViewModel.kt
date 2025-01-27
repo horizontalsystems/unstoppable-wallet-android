@@ -34,7 +34,8 @@ class SendZCashViewModel(
     private val addressService: SendZCashAddressService,
     private val memoService: SendZCashMemoService,
     private val contactsRepo: ContactsRepository,
-    private val showAddressInput: Boolean
+    private val showAddressInput: Boolean,
+    private val address: Address
 ) : ViewModelUiState<SendZCashUiState>() {
     val blockchainType = wallet.token.blockchainType
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -66,6 +67,10 @@ class SendZCashViewModel(
         memoService.stateFlow.collectWith(viewModelScope) {
             handleUpdatedMemoState(it)
         }
+
+        viewModelScope.launch {
+            addressService.setAddress(address)
+        }
     }
 
     override fun createState() = SendZCashUiState(
@@ -76,6 +81,7 @@ class SendZCashViewModel(
         memoIsAllowed = memoState.memoIsAllowed,
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -172,4 +178,5 @@ data class SendZCashUiState(
     val memoIsAllowed: Boolean,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
+    val address: Address,
 )
