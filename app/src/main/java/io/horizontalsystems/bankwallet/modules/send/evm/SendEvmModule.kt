@@ -72,7 +72,7 @@ object SendEvmModule {
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative
                     )
-                    val addressService = SendEvmAddressService(address)
+                    val addressService = SendEvmAddressService()
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
                     SendEvmViewModel(
@@ -85,6 +85,7 @@ object SendEvmModule {
                         coinMaxAllowedDecimals,
                         showAddressInput = true,
                         App.connectivityManager,
+                        address
                     ) as T
                 }
                 else -> throw IllegalArgumentException()

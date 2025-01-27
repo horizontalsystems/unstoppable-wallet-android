@@ -138,8 +138,7 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 prefilledData,
                                 address,
-                                wallet,
-                                predefinedAddress
+                                wallet
                             )
                         }
                     }
