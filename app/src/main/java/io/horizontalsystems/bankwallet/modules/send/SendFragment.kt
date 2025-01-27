@@ -144,7 +144,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Solana -> {
-                        val factory = SendSolanaModule.Factory(wallet, predefinedAddress)
+                        val factory = SendSolanaModule.Factory(wallet, address)
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendSolanaScreen(
@@ -154,7 +154,6 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
-                                address,
                             )
                         }
                     }
