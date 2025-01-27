@@ -45,7 +45,8 @@ class EnterAddressViewModel(
 ) : ViewModelUiState<EnterAddressUiState>() {
     private var address: Address? = null
     private var addressError: Throwable? = null
-    private var canBeSendToAddress: Boolean = false
+    private val canBeSendToAddress: Boolean
+        get() = inputState is DataState.Success
     private var recentAddress: String? = "1EzZFZhopU4vBJKLiq5kUKphXZ4M22M1QjmEdfk"
     private val contacts = listOf(
         SContact("My Wallet", "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"),
