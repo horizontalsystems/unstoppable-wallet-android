@@ -2,9 +2,7 @@ package io.horizontalsystems.bankwallet.modules.send.bitcoin
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,7 +28,7 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
-import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
@@ -167,17 +165,16 @@ fun SendBitcoinScreen(
             )
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                if (uiState.showAddressInput) {
+                    HSAddressCell(
+                        title = stringResource(R.string.Send_Confirmation_To),
+                        value = uiState.address.hex
+                    ) {
+                        fragmentNavController.popBackStack()
+                    }
+                    VSpacer(16.dp)
+                }
 
-                AvailableBalance(
-                    coinCode = wallet.coin.code,
-                    coinDecimal = viewModel.coinMaxAllowedDecimals,
-                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                    availableBalance = availableBalance,
-                    amountInputType = amountInputType,
-                    rate = rate
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
                 HSAmountInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     focusRequester = focusRequester,
@@ -197,27 +194,22 @@ fun SendBitcoinScreen(
                     amountUnique = amountUnique
                 )
 
-                if (uiState.showAddressInput) {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HSAddressInput(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        initial = address,
-                        tokenQuery = wallet.token.tokenQuery,
-                        coinCode = wallet.coin.code,
-                        error = addressError,
-                        textPreprocessor = paymentAddressViewModel,
-                        navController = fragmentNavController
-                    ) {
-                        viewModel.onEnterAddress(it)
-                    }
-                }
+                VSpacer(8.dp)
+                AvailableBalance(
+                    coinCode = wallet.coin.code,
+                    coinDecimal = viewModel.coinMaxAllowedDecimals,
+                    fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                    availableBalance = availableBalance,
+                    amountInputType = amountInputType,
+                    rate = rate
+                )
 
-                VSpacer(12.dp)
+                VSpacer(16.dp)
                 HSMemoInput(maxLength = 120) {
                     viewModel.onEnterMemo(it)
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                VSpacer(16.dp)
                 CellUniversalLawrenceSection(
                     buildList {
                         uiState.utxoData?.let { utxoData ->
@@ -245,7 +237,7 @@ fun SendBitcoinScreen(
 
                 feeRateCaution?.let {
                     FeeRateCaution(
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
                         feeRateCaution = feeRateCaution
                     )
                 }
@@ -253,7 +245,7 @@ fun SendBitcoinScreen(
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 24.dp),
+                        .padding(horizontal = 16.dp, vertical = 16.dp),
                     title = stringResource(R.string.Send_DialogProceed),
                     onClick = {
                         fragmentNavController.slideFromRight(
