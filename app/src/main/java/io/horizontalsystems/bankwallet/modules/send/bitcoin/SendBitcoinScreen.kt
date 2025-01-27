@@ -70,6 +70,7 @@ fun SendBitcoinNavHost(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
+    address: String,
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -85,6 +86,7 @@ fun SendBitcoinNavHost(
                 amountInputModeViewModel,
                 sendEntryPointDestId,
                 prefilledData,
+                address,
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
@@ -121,6 +123,7 @@ fun SendBitcoinScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
+    address: String,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -198,7 +201,7 @@ fun SendBitcoinScreen(
                     Spacer(modifier = Modifier.height(12.dp))
                     HSAddressInput(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        initial = prefilledData?.address?.let { Address(it) },
+                        initial = Address(address),
                         tokenQuery = wallet.token.tokenQuery,
                         coinCode = wallet.coin.code,
                         error = addressError,

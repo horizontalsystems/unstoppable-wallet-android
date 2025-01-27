@@ -38,6 +38,7 @@ fun SendZCashScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
+    address: String,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -99,7 +100,7 @@ fun SendZCashScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 HSAddressInput(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = prefilledData?.address?.let { Address(it) },
+                    initial = Address(address),
                     tokenQuery = wallet.token.tokenQuery,
                     coinCode = wallet.coin.code,
                     error = addressError,
