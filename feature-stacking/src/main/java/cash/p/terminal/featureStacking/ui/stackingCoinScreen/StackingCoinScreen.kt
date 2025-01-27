@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -102,32 +101,28 @@ internal fun PirateCoinScreenContent(
         if (uiState.loading) {
             LoadingScreen()
         } else {
-            when (uiState.balance) {
-                BigDecimal.ZERO -> {
-                    NoCoins(
-                        uiState = uiState,
-                        onBuyClicked = {
-                            uiState.token?.let { onBuyClicked(it) }
-                        }
-                    )
-                }
-
-                else -> {
-                    PirateCoinScreenWithGraph(
-                        uiState = uiState,
-                        onBuyClicked = {
-                            uiState.token?.let { onBuyClicked(it) }
-                        },
-                        onCalculatorClicked = onCalculatorClicked,
-                        onChartClicked = {
-                            uiState.token?.let { onChartClicked(it.coin.uid) }
-                        },
-                        graphUIState = graphUIState,
-                        getSelectedPointCallback = getSelectedPointCallback,
-                        onSelectChartInterval = onSelectChartInterval,
-                        onToggleBalanceVisibility = onToggleBalanceVisibility
-                    )
-                }
+            if (uiState.balance == BigDecimal.ZERO && uiState.payoutItems.isEmpty()) {
+                NoCoins(
+                    uiState = uiState,
+                    onBuyClicked = {
+                        uiState.token?.let { onBuyClicked(it) }
+                    }
+                )
+            } else {
+                PirateCoinScreenWithGraph(
+                    uiState = uiState,
+                    onBuyClicked = {
+                        uiState.token?.let { onBuyClicked(it) }
+                    },
+                    onCalculatorClicked = onCalculatorClicked,
+                    onChartClicked = {
+                        uiState.token?.let { onChartClicked(it.coin.uid) }
+                    },
+                    graphUIState = graphUIState,
+                    getSelectedPointCallback = getSelectedPointCallback,
+                    onSelectChartInterval = onSelectChartInterval,
+                    onToggleBalanceVisibility = onToggleBalanceVisibility
+                )
             }
         }
     }
