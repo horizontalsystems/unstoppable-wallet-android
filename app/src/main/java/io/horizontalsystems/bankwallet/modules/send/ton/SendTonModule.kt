@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendTonAdapter
 import io.horizontalsystems.bankwallet.core.isNative
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
@@ -15,7 +16,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 object SendTonModule {
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTonAdapter) ?: throw IllegalStateException("ISendTonAdapter is null")
 
@@ -32,7 +33,7 @@ object SendTonModule {
                         availableBalance = adapter.availableBalance,
                         leaveSomeBalanceForFee = wallet.token.type.isNative
                     )
-                    val addressService = SendTonAddressService(predefinedAddress)
+                    val addressService = SendTonAddressService()
                     val feeService = SendTonFeeService(adapter)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native)) ?: throw IllegalArgumentException()
@@ -48,7 +49,8 @@ object SendTonModule {
                         feeService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        predefinedAddress == null
+                        true,
+                        address
                     ) as T
                 }
 

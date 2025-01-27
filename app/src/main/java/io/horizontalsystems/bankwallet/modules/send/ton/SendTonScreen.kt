@@ -13,11 +13,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.slideFromRight
-import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
-import io.horizontalsystems.bankwallet.modules.address.HSAddressInput
+import io.horizontalsystems.bankwallet.modules.address.HSAddressCell
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
 import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
@@ -39,13 +38,11 @@ fun SendTonScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     prefilledData: PrefilledData?,
-    address: Address,
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
 
     val availableBalance = uiState.availableBalance
-    val addressError = uiState.addressError
     val amountCaution = uiState.amountCaution
     val proceedEnabled = uiState.canBeSend
     val fee = uiState.fee
@@ -69,16 +66,16 @@ fun SendTonScreen(
             title = title,
             onBack = { navController.popBackStack() }
         ) {
-            AvailableBalance(
-                coinCode = wallet.coin.code,
-                coinDecimal = viewModel.coinMaxAllowedDecimals,
-                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
-                availableBalance = availableBalance,
-                amountInputType = amountInputType,
-                rate = viewModel.coinRate
-            )
+            if (uiState.showAddressInput) {
+                HSAddressCell(
+                    title = stringResource(R.string.Send_Confirmation_To),
+                    value = uiState.address.hex
+                ) {
+                    navController.popBackStack()
+                }
+                VSpacer(16.dp)
+            }
 
-            VSpacer(12.dp)
             HSAmountInput(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 focusRequester = focusRequester,
@@ -98,27 +95,22 @@ fun SendTonScreen(
                 amountUnique = amountUnique
             )
 
-            if (uiState.showAddressInput) {
-                VSpacer(12.dp)
-                HSAddressInput(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    initial = address,
-                    tokenQuery = wallet.token.tokenQuery,
-                    coinCode = wallet.coin.code,
-                    error = addressError,
-                    textPreprocessor = paymentAddressViewModel,
-                    navController = navController
-                ) {
-                    viewModel.onEnterAddress(it)
-                }
-            }
+            VSpacer(8.dp)
+            AvailableBalance(
+                coinCode = wallet.coin.code,
+                coinDecimal = viewModel.coinMaxAllowedDecimals,
+                fiatDecimal = viewModel.fiatMaxAllowedDecimals,
+                availableBalance = availableBalance,
+                amountInputType = amountInputType,
+                rate = viewModel.coinRate
+            )
 
-            VSpacer(12.dp)
+            VSpacer(16.dp)
             HSMemoInput(maxLength = 120) {
                 viewModel.onEnterMemo(it)
             }
 
-            VSpacer(12.dp)
+            VSpacer(16.dp)
             HSFee(
                 coinCode = viewModel.feeToken.coin.code,
                 coinDecimal = viewModel.feeTokenMaxAllowedDecimals,
@@ -132,7 +124,7 @@ fun SendTonScreen(
             ButtonPrimaryYellow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
                     navController.slideFromRight(
