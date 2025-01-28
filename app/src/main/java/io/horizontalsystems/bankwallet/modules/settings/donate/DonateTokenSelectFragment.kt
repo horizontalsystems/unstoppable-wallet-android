@@ -51,6 +51,7 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
                             title = sendTitle,
                             sendEntryPointDestId = R.id.sendTokenSelectFragment,
                             address = Address(donateAddress),
+                            hideAddress = true
                         )
                     )
 

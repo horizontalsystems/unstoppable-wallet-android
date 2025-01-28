@@ -57,6 +57,7 @@ class SendFragment : BaseFragment() {
                 val title = input.title
                 val sendEntryPointDestId = input.sendEntryPointDestId
                 val address = input.address
+                val hideAddress = input.hideAddress
                 val amount = input.amount
 
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
@@ -69,7 +70,7 @@ class SendFragment : BaseFragment() {
                     BlockchainType.ECash,
                     BlockchainType.Litecoin,
                     BlockchainType.Dash -> {
-                        val factory = SendBitcoinModule.Factory(wallet, address)
+                        val factory = SendBitcoinModule.Factory(wallet, address, hideAddress)
                         val sendBitcoinViewModel by navGraphViewModels<SendBitcoinViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -86,7 +87,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     is BlockchainType.BinanceChain -> {
-                        val factory = SendBinanceModule.Factory(wallet, address)
+                        val factory = SendBinanceModule.Factory(wallet, address, hideAddress)
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -103,7 +104,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Zcash -> {
-                        val factory = SendZCashModule.Factory(wallet, address)
+                        val factory = SendZCashModule.Factory(wallet, address, hideAddress)
                         val sendZCashViewModel by navGraphViewModels<SendZCashViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -135,13 +136,14 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 address,
                                 wallet,
-                                amount
+                                amount,
+                                hideAddress
                             )
                         }
                     }
 
                     BlockchainType.Solana -> {
-                        val factory = SendSolanaModule.Factory(wallet, address)
+                        val factory = SendSolanaModule.Factory(wallet, address, hideAddress)
                         val sendSolanaViewModel by navGraphViewModels<SendSolanaViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendSolanaScreen(
@@ -156,7 +158,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Ton -> {
-                        val factory = SendTonModule.Factory(wallet, address)
+                        val factory = SendTonModule.Factory(wallet, address, hideAddress)
                         val sendTonViewModel by navGraphViewModels<SendTonViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTonScreen(
@@ -171,7 +173,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Tron -> {
-                        val factory = SendTronModule.Factory(wallet, address)
+                        val factory = SendTronModule.Factory(wallet, address, hideAddress)
                         val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTronScreen(
@@ -199,6 +201,7 @@ class SendFragment : BaseFragment() {
         val title: String,
         val sendEntryPointDestId: Int = 0,
         val address: Address,
-        val amount: BigDecimal? = null
+        val amount: BigDecimal? = null,
+        val hideAddress: Boolean = false
     ) : Parcelable
 }

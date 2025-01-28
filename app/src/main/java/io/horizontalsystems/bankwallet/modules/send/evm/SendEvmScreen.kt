@@ -38,12 +38,10 @@ fun SendEvmScreen(
     address: Address,
     wallet: Wallet,
     amount: BigDecimal?,
+    hideAddress: Boolean,
 ) {
     val viewModel = viewModel<SendEvmViewModel>(
-        factory = SendEvmModule.Factory(
-            wallet,
-            address
-        )
+        factory = SendEvmModule.Factory(wallet, address, hideAddress)
     )
     val uiState = viewModel.uiState
 

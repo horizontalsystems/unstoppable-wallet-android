@@ -57,7 +57,11 @@ object SendEvmModule {
     }
 
 
-    class Factory(private val wallet: Wallet, private val address: Address) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val address: Address,
+        private val hideAddress: Boolean,
+    ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendEthereumAdapter) ?: throw IllegalArgumentException("SendEthereumAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -84,7 +88,7 @@ object SendEvmModule {
                         amountService,
                         addressService,
                         coinMaxAllowedDecimals,
-                        showAddressInput = true,
+                        !hideAddress,
                         App.connectivityManager,
                         address
                     ) as T

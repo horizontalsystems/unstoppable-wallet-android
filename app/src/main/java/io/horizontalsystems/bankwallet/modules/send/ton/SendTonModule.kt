@@ -17,6 +17,7 @@ object SendTonModule {
     class Factory(
         private val wallet: Wallet,
         private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTonAdapter) ?: throw IllegalStateException("ISendTonAdapter is null")
 
@@ -49,7 +50,7 @@ object SendTonModule {
                         feeService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        true,
+                        !hideAddress,
                         address
                     ) as T
                 }
