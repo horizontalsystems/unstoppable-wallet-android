@@ -22,11 +22,11 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
+import java.math.BigDecimal
 
 @Composable
 fun SendTronScreen(
@@ -35,7 +35,7 @@ fun SendTronScreen(
     viewModel: SendTronViewModel,
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
-    prefilledData: PrefilledData?,
+    amount: BigDecimal?,
 ) {
     val view = LocalView.current
     val wallet = viewModel.wallet
@@ -47,7 +47,7 @@ fun SendTronScreen(
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
+        factory = AddressParserModule.Factory(wallet.token, amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 

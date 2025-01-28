@@ -28,7 +28,6 @@ class SendTokenSelectFragment : BaseComposeFragment() {
 
         val blockchainTypes = input?.blockchainTypes
         val tokenTypes = input?.tokenTypes
-        val prefilledData = input?.prefilledData
         val view = LocalView.current
         TokenSelectScreen(
             navController = navController,
@@ -44,7 +43,8 @@ class SendTokenSelectFragment : BaseComposeFragment() {
                                 wallet = it.wallet,
                                 title = sendTitle,
                                 sendEntryPointDestId = R.id.sendTokenSelectFragment,
-                                prefilledAddressData = prefilledData,
+                                address = input?.address,
+                                amount = input?.amount,
                             )
                         )
                     }
@@ -69,14 +69,5 @@ class SendTokenSelectFragment : BaseComposeFragment() {
         val tokenTypes: List<TokenType>?,
         val address: String,
         val amount: BigDecimal?,
-    ) : Parcelable {
-        val prefilledData: PrefilledData
-            get() = PrefilledData(address, amount)
-    }
+    ) : Parcelable
 }
-
-@Parcelize
-data class PrefilledData(
-    val address: String,
-    val amount: BigDecimal? = null,
-) : Parcelable

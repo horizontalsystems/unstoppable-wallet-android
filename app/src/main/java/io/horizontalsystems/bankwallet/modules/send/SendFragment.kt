@@ -34,10 +34,10 @@ import io.horizontalsystems.bankwallet.modules.send.tron.SendTronViewModel
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashModule
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashScreen
 import io.horizontalsystems.bankwallet.modules.send.zcash.SendZCashViewModel
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.core.findNavController
 import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 
 class SendFragment : BaseFragment() {
 
@@ -56,8 +56,8 @@ class SendFragment : BaseFragment() {
                 val wallet = input.wallet
                 val title = input.title
                 val sendEntryPointDestId = input.sendEntryPointDestId
-                val prefilledData = input.prefilledAddressData
                 val address = input.address
+                val amount = input.amount
 
                 val amountInputModeViewModel by navGraphViewModels<AmountInputModeViewModel>(R.id.sendXFragment) {
                     AmountInputModeModule.Factory(wallet.coin.uid)
@@ -80,7 +80,7 @@ class SendFragment : BaseFragment() {
                                 sendBitcoinViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
-                                prefilledData,
+                                amount
                             )
                         }
                     }
@@ -97,7 +97,7 @@ class SendFragment : BaseFragment() {
                                 sendBinanceViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
-                                prefilledData,
+                                amount
                             )
                         }
                     }
@@ -114,7 +114,7 @@ class SendFragment : BaseFragment() {
                                 sendZCashViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
-                                prefilledData,
+                                amount
                             )
                         }
                     }
@@ -133,9 +133,9 @@ class SendFragment : BaseFragment() {
                                 title,
                                 findNavController(),
                                 amountInputModeViewModel,
-                                prefilledData,
                                 address,
-                                wallet
+                                wallet,
+                                amount
                             )
                         }
                     }
@@ -150,7 +150,7 @@ class SendFragment : BaseFragment() {
                                 sendSolanaViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
-                                prefilledData,
+                                amount
                             )
                         }
                     }
@@ -165,7 +165,7 @@ class SendFragment : BaseFragment() {
                                 sendTonViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
-                                prefilledData,
+                                amount
                             )
                         }
                     }
@@ -180,7 +180,7 @@ class SendFragment : BaseFragment() {
                                 sendTronViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
-                                prefilledData,
+                                amount
                             )
                         }
                     }
@@ -198,7 +198,7 @@ class SendFragment : BaseFragment() {
         val wallet: Wallet,
         val title: String,
         val sendEntryPointDestId: Int = 0,
-        val prefilledAddressData: PrefilledData? = null,
-        val address: Address
+        val address: Address,
+        val amount: BigDecimal? = null
     ) : Parcelable
 }

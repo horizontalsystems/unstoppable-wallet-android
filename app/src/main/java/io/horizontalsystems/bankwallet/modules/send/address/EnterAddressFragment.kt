@@ -40,7 +40,6 @@ import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
@@ -54,6 +53,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 import kotlinx.parcelize.Parcelize
+import java.math.BigDecimal
 
 class EnterAddressFragment : BaseComposeFragment() {
     @Composable
@@ -66,18 +66,24 @@ class EnterAddressFragment : BaseComposeFragment() {
         val wallet: Wallet,
         val title: String,
         val sendEntryPointDestId: Int = 0,
-        val prefilledAddressData: PrefilledData? = null
+        val address: String? = null,
+        val amount: BigDecimal? = null,
     ) : Parcelable
 
 }
 
 @Composable
 fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment.Input) {
-    val viewModel = viewModel<EnterAddressViewModel>(factory = EnterAddressViewModel.Factory(input.wallet))
-    val prefilledData = input.prefilledAddressData
+    val viewModel = viewModel<EnterAddressViewModel>(
+        factory = EnterAddressViewModel.Factory(
+            wallet = input.wallet,
+            address = input.address,
+            amount = input.amount
+        )
+    )
     val wallet = input.wallet
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
+        factory = AddressParserModule.Factory(wallet.token, input.amount)
     )
 
     val uiState = viewModel.uiState
@@ -142,8 +148,8 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                                     wallet = wallet,
                                     sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                     title = input.title,
-                                    prefilledAddressData = prefilledData,
-                                    address = it
+                                    address = it,
+                                    amount = uiState.amount
                                 )
                             )
                         }

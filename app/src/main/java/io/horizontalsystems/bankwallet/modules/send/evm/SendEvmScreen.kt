@@ -24,20 +24,20 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.modules.send.evm.confirmation.SendEvmConfirmationFragment
-import io.horizontalsystems.bankwallet.modules.sendtokenselect.PrefilledData
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.core.helpers.HudHelper
+import java.math.BigDecimal
 
 @Composable
 fun SendEvmScreen(
     title: String,
     navController: NavController,
     amountInputModeViewModel: AmountInputModeViewModel,
-    prefilledData: PrefilledData?,
     address: Address,
     wallet: Wallet,
+    amount: BigDecimal?,
 ) {
     val viewModel = viewModel<SendEvmViewModel>(
         factory = SendEvmModule.Factory(
@@ -53,7 +53,7 @@ fun SendEvmScreen(
     val amountInputType = amountInputModeViewModel.inputType
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
-        factory = AddressParserModule.Factory(wallet.token, prefilledData?.amount)
+        factory = AddressParserModule.Factory(wallet.token, amount)
     )
     val amountUnique = paymentAddressViewModel.amountUnique
     val view = LocalView.current
