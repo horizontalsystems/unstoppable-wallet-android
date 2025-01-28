@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -13,7 +14,7 @@ object SendBinanceModule {
 
     class Factory(
         private val wallet: Wallet,
-        private val predefinedAddress: String?,
+        private val address: Address,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendBinanceAdapter) ?: throw IllegalStateException("SendBinanceAdapter is null")
 
@@ -21,7 +22,7 @@ object SendBinanceModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val amountValidator = AmountValidator()
             val amountService = SendAmountService(amountValidator, wallet.coin.code, adapter.availableBalance)
-            val addressService = SendBinanceAddressService(adapter, predefinedAddress)
+            val addressService = SendBinanceAddressService(adapter)
             val feeService = SendBinanceFeeService(adapter, wallet.token, App.feeCoinProvider)
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
 
@@ -33,7 +34,8 @@ object SendBinanceModule {
                 feeService,
                 xRateService,
                 App.contactsRepository,
-                predefinedAddress == null,
+                true,
+                address
             ) as T
         }
 

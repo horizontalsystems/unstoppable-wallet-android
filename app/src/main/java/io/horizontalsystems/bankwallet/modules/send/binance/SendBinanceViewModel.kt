@@ -35,6 +35,7 @@ class SendBinanceViewModel(
     private val xRateService: XRateService,
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
+    private val address: Address,
 ) : ViewModelUiState<SendBinanceUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeToken by feeService::feeToken
@@ -75,6 +76,8 @@ class SendBinanceViewModel(
             feeCoinRate = it
         }
 
+        addressService.setAddress(address)
+
         feeService.start()
     }
 
@@ -86,6 +89,7 @@ class SendBinanceViewModel(
         addressError = addressState.addressError,
         canBeSend = amountState.canBeSend && addressState.canBeSend && feeState.canBeSend,
         showAddressInput = showAddressInput,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -179,4 +183,5 @@ data class SendBinanceUiState(
     val amountCaution: HSCaution?,
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
+    val address: Address,
 )
