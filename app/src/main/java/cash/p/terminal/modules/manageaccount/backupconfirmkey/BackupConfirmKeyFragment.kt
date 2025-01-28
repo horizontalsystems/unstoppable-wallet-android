@@ -25,7 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.requireInput
+import io.horizontalsystems.core.requireInput
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault

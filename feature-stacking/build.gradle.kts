@@ -1,6 +1,7 @@
 plugins {
     id(libs.plugins.android.library.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
+    id(libs.plugins.kotlin.parcelize.get().pluginId)
     alias(libs.plugins.compose.compiler)
 }
 
@@ -9,17 +10,15 @@ android {
 
     compileSdk = 34
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
     defaultConfig {
         minSdk = 27
-        buildConfigField("String", "PIRATE_CONTRACT", "\"0xaFCC12e4040615E7Afe9fb4330eB3D9120acAC05\"")
-        buildConfigField("String", "COSANTA_CONTRACT", "\"0x5F980533B994c93631A639dEdA7892fC49995839\"")
         buildFeatures {
             compose = true
         }

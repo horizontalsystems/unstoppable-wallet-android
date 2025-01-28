@@ -12,7 +12,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.requireInput
+import io.horizontalsystems.core.requireInput
 import cash.p.terminal.entities.nft.EvmNftRecord
 import cash.p.terminal.entities.nft.NftKey
 import cash.p.terminal.entities.nft.NftUid

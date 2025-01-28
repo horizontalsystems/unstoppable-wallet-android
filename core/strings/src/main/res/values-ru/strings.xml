@@ -1762,6 +1762,6 @@
     <string name="period">Период</string>
     <string name="week_period">Неделя</string>
     <string name="year_period">Год</string>
-    <string name="no_active_stacking_pirate_buy_more_descritpion">Внесите %1$s токен(ов) и начните зарабатывать через 24 часа.</string>
-    <string name="no_active_stacking_cosanta_buy_more_descrition">Для активации стейкинга вам нужно ещё %1$s токен(ов) и вы будете получать 13% годовых!</string>
+    <string name="no_active_stacking_pirate_buy_more_descritpion">Для активации стейкинга вам нужно ещё %1$s токен(ов) и вы будете получать 13%% годовых!</string>
+    <string name="no_active_stacking_cosanta_buy_more_descrition">Внесите %1$s токен(ов) и начните зарабатывать через 24 часа.</string>
 </resources>

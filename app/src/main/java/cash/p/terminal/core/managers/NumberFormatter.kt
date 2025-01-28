@@ -1,6 +1,7 @@
 package cash.p.terminal.core.managers
 
 import cash.p.terminal.R
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.Value
 import java.math.BigDecimal
@@ -99,10 +100,10 @@ class NumberFormatter(
             LargeNumberName.Quadrillion -> R.string.CoinPage_MarketCap_Quadrillion
             else -> null
         }?.let {
-            formattedNumber = cash.p.terminal.strings.helpers.Translator.getString(
+            formattedNumber =  Translator.getString(
                 R.string.LargeNumberFormat,
                 formattedNumber,
-                cash.p.terminal.strings.helpers.Translator.getString(it)
+                Translator.getString(it)
             )
         }
 

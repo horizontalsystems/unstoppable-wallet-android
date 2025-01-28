@@ -20,7 +20,6 @@ import cash.p.terminal.featureStacking.ui.cosantaCoinScreen.CosantaCoinChartView
 import cash.p.terminal.featureStacking.ui.cosantaCoinScreen.CosantaCoinViewModel
 import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateCoinChartViewModel
 import cash.p.terminal.featureStacking.ui.pirateCoinScreen.PirateCoinViewModel
-import cash.p.terminal.featureStacking.ui.stackingCoinScreen.StackingCoinChartViewModel
 import cash.p.terminal.featureStacking.ui.stackingCoinScreen.StackingCoinScreen
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
@@ -30,6 +29,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+import java.math.BigDecimal
 
 @Composable
 internal fun StackingScreen(
@@ -37,6 +37,7 @@ internal fun StackingScreen(
     calculatorUIState: CalculatorUIState,
     onCalculatorValueChanged: (String) -> Unit,
     onTabChanged: (StackingType) -> Unit,
+    setCalculatorData: (StackingType, BigDecimal) -> Unit,
     onBuyClicked: (Token) -> Unit,
     onChartClicked: (String) -> Unit,
     onClickClose: () -> Unit
@@ -73,7 +74,9 @@ internal fun StackingScreen(
             backgroundColor = ComposeAppTheme.colors.tyler,
         ) {
             Column(Modifier.padding(it)) {
-                val pagerState = rememberPagerState { uiState.tabs.size }
+                val pagerState = rememberPagerState(initialPage = uiState.tabs.indexOfFirst { tab -> tab.selected }) { uiState.tabs.size }
+                val pirateViewModel = koinViewModel<PirateCoinViewModel>()
+                val cosantaViewModel = koinViewModel<CosantaCoinViewModel>()
 
                 Tabs(tabs = uiState.tabs, onClick = { tab ->
                     onTabChanged(tab)
@@ -91,11 +94,12 @@ internal fun StackingScreen(
                                 onBuyClicked = onBuyClicked,
                                 onCalculatorClicked = {
                                     coroutineScope.launch {
+                                        setCalculatorData(StackingType.PCASH, pirateViewModel.uiState.value.balance)
                                         modalBottomSheetState.show()
                                     }
                                 },
                                 onChartClicked = onChartClicked,
-                                viewModel = koinViewModel<PirateCoinViewModel>(),
+                                viewModel = pirateViewModel,
                                 chartViewModel = koinViewModel<PirateCoinChartViewModel>()
                             )
                         }
@@ -105,11 +109,12 @@ internal fun StackingScreen(
                                 onBuyClicked = onBuyClicked,
                                 onCalculatorClicked = {
                                     coroutineScope.launch {
+                                        setCalculatorData(StackingType.COSANTA, cosantaViewModel.uiState.value.balance)
                                         modalBottomSheetState.show()
                                     }
                                 },
                                 onChartClicked = onChartClicked,
-                                viewModel = koinViewModel<CosantaCoinViewModel>(),
+                                viewModel = cosantaViewModel,
                                 chartViewModel = koinViewModel<CosantaCoinChartViewModel>()
                             )
                         }
@@ -136,7 +141,8 @@ private fun StackingScreenPreview() {
             onBuyClicked = {},
             onClickClose = {},
             onChartClicked = {},
-            onCalculatorValueChanged = {}
+            onCalculatorValueChanged = { },
+            setCalculatorData = { _, _ -> }
         )
     }
 }

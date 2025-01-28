@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.ui_compose.BaseComposeFragment
-import cash.p.terminal.core.getInput
+import io.horizontalsystems.core.getInput
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.OverallScore
 import cash.p.terminal.modules.coin.analytics.CoinAnalyticsModule.ScoreCategory
 import cash.p.terminal.modules.info.ui.InfoHeader

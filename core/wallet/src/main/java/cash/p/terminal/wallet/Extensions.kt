@@ -104,3 +104,12 @@ val TokenType.meta: String?
         is TokenType.Bep2 -> this.symbol
         else -> null
     }
+
+
+fun Wallet.isPirateCash() = (token.type == TokenType.Eip20(BuildConfig.PIRATE_CONTRACT) ||
+        token.type == TokenType.Eip20(BuildConfig.PIRATE_CONTRACT.lowercase())) &&
+        token.blockchainType == BlockchainType.BinanceSmartChain
+
+fun Wallet.isCosanta() = (token.type == TokenType.Eip20(BuildConfig.COSANTA_CONTRACT) ||
+        token.type == TokenType.Eip20(BuildConfig.COSANTA_CONTRACT.lowercase())) &&
+        token.blockchainType == BlockchainType.BinanceSmartChain

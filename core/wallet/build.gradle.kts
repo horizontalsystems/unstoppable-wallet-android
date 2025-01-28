@@ -11,6 +11,8 @@ android {
 
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
+        buildConfigField("String", "PIRATE_CONTRACT", "\"0xaFCC12e4040615E7Afe9fb4330eB3D9120acAC05\"")
+        buildConfigField("String", "COSANTA_CONTRACT", "\"0x5F980533B994c93631A639dEdA7892fC49995839\"")
         minSdk = 27
     }
 

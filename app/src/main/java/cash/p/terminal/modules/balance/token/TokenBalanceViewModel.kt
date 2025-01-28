@@ -3,26 +3,30 @@ package cash.p.terminal.modules.balance.token
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.featureStacking.BuildConfig
 import cash.p.terminal.modules.balance.BackupRequiredError
-import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewModel
-import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.wallet.IAccountManager
-import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
+import cash.p.terminal.wallet.balance.BalanceItem
+import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.entities.TokenType
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
 class TokenBalanceViewModel(
-    private val wallet: cash.p.terminal.wallet.Wallet,
+    private val wallet: Wallet,
     private val balanceService: TokenBalanceService,
     private val balanceViewItemFactory: BalanceViewItemFactory,
     private val transactionsService: TokenTransactionsService,
@@ -100,8 +104,9 @@ class TokenBalanceViewModel(
     }
 
     @Throws(BackupRequiredError::class, IllegalStateException::class)
-    fun getWalletForReceive(): cash.p.terminal.wallet.Wallet {
-        val account = accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
+    fun getWalletForReceive(): Wallet {
+        val account =
+            accountManager.activeAccount ?: throw IllegalStateException("Active account is not set")
         when {
             account.hasAnyBackup -> return wallet
             else -> throw BackupRequiredError(account, wallet.coin.name)
@@ -116,16 +121,21 @@ class TokenBalanceViewModel(
         transactionsService.fetchRateIfNeeded(viewItem.uid)
     }
 
-    fun getTransactionItem(viewItem: TransactionViewItem) = transactionsService.getTransactionItem(viewItem.uid)?.copy(
-        transactionStatusUrl = viewItem.transactionStatusUrl
-    )
+    fun getTransactionItem(viewItem: TransactionViewItem) =
+        transactionsService.getTransactionItem(viewItem.uid)?.copy(
+            transactionStatusUrl = viewItem.transactionStatusUrl
+        )
 
     fun toggleBalanceVisibility() {
         balanceHiddenManager.toggleBalanceHidden()
     }
 
     fun getSyncErrorDetails(viewItem: BalanceViewItem): BalanceViewModel.SyncError = when {
-        connectivityManager.isConnected -> BalanceViewModel.SyncError.Dialog(viewItem.wallet, viewItem.errorMessage)
+        connectivityManager.isConnected -> BalanceViewModel.SyncError.Dialog(
+            viewItem.wallet,
+            viewItem.errorMessage
+        )
+
         else -> BalanceViewModel.SyncError.NetworkNotAvailable()
     }
 
@@ -134,5 +144,4 @@ class TokenBalanceViewModel(
 
         balanceService.clear()
     }
-
 }

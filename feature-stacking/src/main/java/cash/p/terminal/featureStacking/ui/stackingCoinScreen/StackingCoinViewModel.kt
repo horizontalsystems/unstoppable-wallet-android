@@ -5,13 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cash.p.terminal.featureStacking.BuildConfig
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.entities.PayoutViewItem
 import cash.p.terminal.featureStacking.ui.staking.StackingType
 import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.BuildConfig
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IWalletManager
@@ -23,7 +23,6 @@ import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.models.CoinPrice
-import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
