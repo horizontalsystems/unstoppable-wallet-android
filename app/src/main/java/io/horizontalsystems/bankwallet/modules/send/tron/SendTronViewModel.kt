@@ -42,6 +42,7 @@ class SendTronViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
+    private val address: Address,
 ) : ViewModelUiState<SendUiState>() {
     val logger: AppLogger = AppLogger("send-tron")
 
@@ -84,6 +85,10 @@ class SendTronViewModel(
                 feeCoinRate = it
             }
         }
+
+        viewModelScope.launch {
+            addressService.setAddress(address)
+        }
     }
 
     override fun createState() = SendUiState(
@@ -95,6 +100,7 @@ class SendTronViewModel(
         feeViewState = feeState.viewState,
         cautions = cautions,
         showAddressInput = showAddressInput,
+        address = address
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
