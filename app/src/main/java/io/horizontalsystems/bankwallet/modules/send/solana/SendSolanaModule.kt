@@ -24,6 +24,7 @@ object SendSolanaModule {
     class Factory(
         private val wallet: Wallet,
         private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendSolanaAdapter) ?: throw IllegalStateException("SendSolanaAdapter is null")
 
@@ -57,7 +58,7 @@ object SendSolanaModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        true,
+                        !hideAddress,
                         App.connectivityManager,
                         address
                     ) as T

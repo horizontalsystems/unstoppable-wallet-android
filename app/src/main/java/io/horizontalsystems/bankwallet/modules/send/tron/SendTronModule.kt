@@ -17,7 +17,11 @@ import java.math.RoundingMode
 
 object SendTronModule {
 
-    class Factory(private val wallet: Wallet, private val address: Address) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val address: Address,
+        private val hideAddress: Boolean,
+    ) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTronAdapter) ?: throw IllegalStateException("SendTronAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -47,7 +51,7 @@ object SendTronModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        true,
+                        !hideAddress,
                         App.connectivityManager,
                         address
                     ) as T

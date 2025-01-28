@@ -15,6 +15,7 @@ object SendZCashModule {
     class Factory(
         private val wallet: Wallet,
         private val address: Address,
+        private val hideAddress: Boolean,
     ) : ViewModelProvider.Factory {
         val adapter =
             (App.adapterManager.getAdapterForWallet(wallet) as? ISendZcashAdapter) ?: throw IllegalStateException("SendZcashAdapter is null")
@@ -38,7 +39,7 @@ object SendZCashModule {
                 addressService,
                 memoService,
                 App.contactsRepository,
-                true,
+                !hideAddress,
                 address
             ) as T
         }
