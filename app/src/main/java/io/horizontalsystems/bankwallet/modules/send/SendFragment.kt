@@ -56,7 +56,6 @@ class SendFragment : BaseFragment() {
                 val wallet = input.wallet
                 val title = input.title
                 val sendEntryPointDestId = input.sendEntryPointDestId
-                val predefinedAddress = input.predefinedAddress
                 val prefilledData = input.prefilledAddressData
                 val address = input.address
 
@@ -199,7 +198,6 @@ class SendFragment : BaseFragment() {
         val wallet: Wallet,
         val title: String,
         val sendEntryPointDestId: Int = 0,
-        val predefinedAddress: String? = null,
         val prefilledAddressData: PrefilledData? = null,
         val address: Address
     ) : Parcelable

@@ -66,7 +66,6 @@ class EnterAddressFragment : BaseComposeFragment() {
         val wallet: Wallet,
         val title: String,
         val sendEntryPointDestId: Int = 0,
-        val predefinedAddress: String? = null,
         val prefilledAddressData: PrefilledData? = null
     ) : Parcelable
 
@@ -143,7 +142,6 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                                     wallet = wallet,
                                     sendEntryPointDestId = R.id.sendTokenSelectFragment,
                                     title = input.title,
-                                    predefinedAddress = input.predefinedAddress,
                                     prefilledAddressData = prefilledData,
                                     address = it
                                 )
