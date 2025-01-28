@@ -5,10 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
-import io.horizontalsystems.bankwallet.core.utils.AddressUriResult
-import io.horizontalsystems.bankwallet.core.utils.ToncoinUriParser
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.Wallet
@@ -68,6 +65,8 @@ class EnterAddressViewModel(
     private var inputState: DataState<Address>? = null
     private var parseAddressJob: Job? = null
 
+    private val addressExtractor = AddressExtractor(blockchainType, addressUriParser)
+
     init {
         initialAddress?.let {
             onEnterAddress(initialAddress)
@@ -98,34 +97,11 @@ class EnterAddressViewModel(
             inputState = DataState.Loading
             emitState()
 
-            parseForUri(value.trim())
-        }
-    }
-
-    private fun parseForUri(text: String) {
-        if (blockchainType == BlockchainType.Ton && text.contains("//")) {
-            ToncoinUriParser.getAddress(text)?.let { address ->
-                parseAddress(address)
-                return
-            }
-        }
-        when (val result = addressUriParser.parse(text)) {
-            is AddressUriResult.Uri -> {
-                parseAddress(result.addressUri.address)
-            }
-
-            AddressUriResult.InvalidBlockchainType -> {
-                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Blockchain Type"), blockchainType.title))
+            try {
+                parseAddress(addressExtractor.extractAddressFromUri(value.trim()))
+            } catch (e: Throwable) {
+                inputState = DataState.Error(e)
                 emitState()
-            }
-
-            AddressUriResult.InvalidTokenType -> {
-                inputState = DataState.Error(AddressValidationException.Invalid(Throwable("Invalid Token Type"), blockchainType.title))
-                emitState()
-            }
-
-            AddressUriResult.NoUri, AddressUriResult.WrongUri -> {
-                parseAddress(text)
             }
         }
     }
