@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ISendTronAdapter
 import io.horizontalsystems.bankwallet.core.isNative
+import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountValidator
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -16,10 +17,7 @@ import java.math.RoundingMode
 
 object SendTronModule {
 
-    class Factory(
-        private val wallet: Wallet,
-        private val predefinedAddress: String?,
-    ) : ViewModelProvider.Factory {
+    class Factory(private val wallet: Wallet, private val address: Address) : ViewModelProvider.Factory {
         val adapter = (App.adapterManager.getAdapterForWallet(wallet) as? ISendTronAdapter) ?: throw IllegalStateException("SendTronAdapter is null")
 
         @Suppress("UNCHECKED_CAST")
@@ -35,7 +33,7 @@ object SendTronModule {
                         adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
                         wallet.token.type.isNative,
                     )
-                    val addressService = SendTronAddressService(adapter, wallet.token, predefinedAddress)
+                    val addressService = SendTronAddressService(adapter, wallet.token)
                     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
                     val feeToken = App.coinManager.getToken(TokenQuery(BlockchainType.Tron, TokenType.Native)) ?: throw IllegalArgumentException()
 
@@ -49,8 +47,9 @@ object SendTronModule {
                         addressService,
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
-                        predefinedAddress == null,
+                        true,
                         App.connectivityManager,
+                        address
                     ) as T
                 }
 

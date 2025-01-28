@@ -173,7 +173,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     BlockchainType.Tron -> {
-                        val factory = SendTronModule.Factory(wallet, predefinedAddress)
+                        val factory = SendTronModule.Factory(wallet, address)
                         val sendTronViewModel by navGraphViewModels<SendTronViewModel>(R.id.sendXFragment) { factory }
                         setContent {
                             SendTronScreen(
@@ -183,7 +183,6 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
-                                address,
                             )
                         }
                     }
