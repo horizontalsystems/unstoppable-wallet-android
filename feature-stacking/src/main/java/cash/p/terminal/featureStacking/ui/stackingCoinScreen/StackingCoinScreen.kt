@@ -245,40 +245,36 @@ private fun PirateCoinScreenWithGraph(
                 )
             }
             TotalSection(uiState, Modifier.padding(vertical = 24.dp))
-            if (!uiState.isWaitingForStacking()) {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(ColorDivider)
-                )
-                Text(
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.leah,
-                    text = stringResource(id = R.string.investment_chart),
-                    modifier = Modifier.padding(vertical = 14.dp, horizontal = 16.dp)
-                )
-                Chart(
-                    uiState = graphUIState,
-                    getSelectedPointCallback = getSelectedPointCallback,
-                    onSelectChartInterval = onSelectChartInterval
-                )
-            }
-        }
-        if (!uiState.isWaitingForStacking()) {
-            item {
-                Spacer(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(ColorDivider)
-                )
-            }
-            payoutList(
-                payoutItemsMap = uiState.payoutItems
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(ColorDivider)
+            )
+            Text(
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.leah,
+                text = stringResource(id = R.string.investment_chart),
+                modifier = Modifier.padding(vertical = 14.dp, horizontal = 16.dp)
+            )
+            Chart(
+                uiState = graphUIState,
+                getSelectedPointCallback = getSelectedPointCallback,
+                onSelectChartInterval = onSelectChartInterval
             )
         }
+        item {
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(ColorDivider)
+            )
+        }
+        payoutList(
+            payoutItemsMap = uiState.payoutItems
+        )
     }
 }
 
