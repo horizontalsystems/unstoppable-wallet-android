@@ -94,11 +94,13 @@ class EnterAddressViewModel(
             this.value = ""
             emitState()
         } else {
-            inputState = DataState.Loading
-            emitState()
-
             try {
-                parseAddress(addressExtractor.extractAddressFromUri(value.trim()))
+                inputState = DataState.Loading
+                val addressString = addressExtractor.extractAddressFromUri(value.trim())
+                this.value = addressString
+                emitState()
+
+                runAddressParser(addressString)
             } catch (e: Throwable) {
                 inputState = DataState.Error(e)
                 emitState()
@@ -106,28 +108,26 @@ class EnterAddressViewModel(
         }
     }
 
-    private fun parseAddress(addressText: String) {
-        value = addressText
-        emitState()
-
-        parseAddressJob = viewModelScope.launch(Dispatchers.IO) {
-            val handler = addressParserChain.supportedHandler(addressText)
-
-            if (handler == null) {
-                inputState = DataState.Error(AddressValidationException.Unsupported())
-            } else {
-                try {
-                    val parsedAddress = handler.parseAddress(addressText)
-                    address = parsedAddress
-                    inputState = DataState.Success(parsedAddress)
-                } catch (t: Throwable) {
-                    inputState = DataState.Error(t)
-                }
+    private fun runAddressParser(addressText: String) {
+        parseAddressJob = viewModelScope.launch(Dispatchers.Default) {
+            try {
+                val address = parseAddress(addressText)
+                this@EnterAddressViewModel.address = address
+                inputState = DataState.Success(address)
+            } catch (e: Throwable) {
+                inputState = DataState.Error(e)
             }
 
             ensureActive()
             emitState()
         }
+    }
+
+    private fun parseAddress(addressText: String): Address {
+        val handler = addressParserChain.supportedHandler(addressText)
+            ?: throw AddressValidationException.Unsupported()
+
+        return handler.parseAddress(addressText)
     }
 
     class Factory(
