@@ -23,7 +23,8 @@ import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
-import io.horizontalsystems.bankwallet.modules.send.address.EnterAddressFragment
+import io.horizontalsystems.bankwallet.entities.Address
+import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectScreen
 import io.horizontalsystems.bankwallet.modules.tokenselect.TokenSelectViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -39,20 +40,23 @@ class DonateTokenSelectFragment : BaseComposeFragment() {
         TokenSelectScreen(
             navController = navController,
             title = stringResource(R.string.Settings_DonateWith),
-            onClickItem = {
-                val donateAddress: String? = App.appConfigProvider.donateAddresses[it.wallet.token.blockchainType]
-                val sendTitle = Translator.getString(R.string.Settings_DonateToken, it.wallet.token.fullCoin.coin.code)
-                navController.slideFromRight(
-                    R.id.enterAddressFragment,
-                    EnterAddressFragment.Input(
-                        wallet = it.wallet,
-                        title = sendTitle,
-                        sendEntryPointDestId = R.id.sendTokenSelectFragment,
-                        predefinedAddress = donateAddress,
+            onClickItem = { viewItem ->
+                val donateAddress: String? = App.appConfigProvider.donateAddresses[viewItem.wallet.token.blockchainType]
+                donateAddress?.let {
+                    val sendTitle = Translator.getString(R.string.Settings_DonateToken, viewItem.wallet.token.fullCoin.coin.code)
+                    navController.slideFromRight(
+                        R.id.sendXFragment,
+                        SendFragment.Input(
+                            wallet = viewItem.wallet,
+                            title = sendTitle,
+                            sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                            address = Address(donateAddress),
+                        )
                     )
-                )
 
-                stat(page = StatPage.Donate, event = StatEvent.OpenSend(it.wallet.token))
+                    stat(page = StatPage.Donate, event = StatEvent.OpenSend(viewItem.wallet.token))
+                }
+
             },
             viewModel = viewModel(factory = TokenSelectViewModel.FactoryForSend()),
             emptyItemsText = stringResource(R.string.Balance_NoAssetsToSend)
