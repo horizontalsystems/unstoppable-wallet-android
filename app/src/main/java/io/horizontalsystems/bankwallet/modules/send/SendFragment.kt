@@ -87,7 +87,7 @@ class SendFragment : BaseFragment() {
                     }
 
                     is BlockchainType.BinanceChain -> {
-                        val factory = SendBinanceModule.Factory(wallet, predefinedAddress)
+                        val factory = SendBinanceModule.Factory(wallet, address)
                         val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
                             factory
                         }
@@ -99,7 +99,6 @@ class SendFragment : BaseFragment() {
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 prefilledData,
-                                address,
                             )
                         }
                     }

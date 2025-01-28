@@ -6,10 +6,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class SendBinanceAddressService(private val adapter: ISendBinanceAdapter, filledAddress: String?) {
+class SendBinanceAddressService(private val adapter: ISendBinanceAdapter) {
 
-    var address: Address? = filledAddress?.let { Address(it) }
-        private set
+    private var address: Address? = null
     private var addressError: Throwable? = null
 
     private val _stateFlow = MutableStateFlow(
