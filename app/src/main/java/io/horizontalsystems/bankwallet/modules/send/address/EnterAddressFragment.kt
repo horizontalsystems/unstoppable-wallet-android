@@ -146,7 +146,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                                 R.id.sendXFragment,
                                 SendFragment.Input(
                                     wallet = wallet,
-                                    sendEntryPointDestId = R.id.sendTokenSelectFragment,
+                                    sendEntryPointDestId = input.sendEntryPointDestId,
                                     title = input.title,
                                     address = it,
                                     amount = uiState.amount

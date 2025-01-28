@@ -137,7 +137,8 @@ class SendFragment : BaseFragment() {
                                 address,
                                 wallet,
                                 amount,
-                                hideAddress
+                                hideAddress,
+                                sendEntryPointDestId
                             )
                         }
                     }

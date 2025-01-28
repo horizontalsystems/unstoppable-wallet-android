@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromRightForResult
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
@@ -39,6 +39,7 @@ fun SendEvmScreen(
     wallet: Wallet,
     amount: BigDecimal?,
     hideAddress: Boolean,
+    sendEntryPointDestId: Int,
 ) {
     val viewModel = viewModel<SendEvmViewModel>(
         factory = SendEvmModule.Factory(wallet, address, hideAddress)
@@ -114,17 +115,15 @@ fun SendEvmScreen(
                 onClick = {
                     if (viewModel.hasConnection()) {
                         viewModel.getSendData()?.let {
-                            navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
+                            navController.slideFromRight(
                                 R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationFragment.Input(
+                                SendEvmConfirmationFragment.
+                                Input(
                                     sendData = it,
-                                    blockchainType = viewModel.wallet.token.blockchainType
+                                    blockchainType = viewModel.wallet.token.blockchainType,
+                                    sendEntryPointDestId = sendEntryPointDestId
                                 )
-                            ) {
-                                if (it.success) {
-                                    navController.popBackStack()
-                                }
-                            }
+                            )
                         }
                     } else {
                         HudHelper.showErrorMessage(view, R.string.Hud_Text_NoInternet)

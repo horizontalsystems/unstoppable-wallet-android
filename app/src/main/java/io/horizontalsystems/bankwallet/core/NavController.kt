@@ -17,13 +17,16 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import java.util.UUID
 
-fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null) {
-    val navOptions = NavOptions.Builder()
+fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null, xxx: NavOptions.Builder.() -> Unit = { }) {
+    val builder = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_right)
         .setExitAnim(android.R.anim.fade_out)
         .setPopEnterAnim(android.R.anim.fade_in)
         .setPopExitAnim(R.anim.slide_to_right)
-        .build()
+
+    xxx(builder)
+
+    val navOptions = builder.build()
 
     val args = input?.let {
         bundleOf("input" to it)
