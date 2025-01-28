@@ -37,11 +37,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class EnterAddressViewModel(
     private val blockchainType: BlockchainType,
     private val addressUriParser: AddressUriParser,
-    private val addressParserChain: AddressParserChain
+    private val addressParserChain: AddressParserChain,
+    initialAddress: String?,
+    private val amount: BigDecimal?
 ) : ViewModelUiState<EnterAddressUiState>() {
     private var address: Address? = null
     private var addressError: Throwable? = null
@@ -65,6 +68,12 @@ class EnterAddressViewModel(
     private var inputState: DataState<Address>? = null
     private var parseAddressJob: Job? = null
 
+    init {
+        initialAddress?.let {
+            onEnterAddress(initialAddress)
+        }
+    }
+
     override fun createState() = EnterAddressUiState(
         addressError = addressError,
         canBeSendToAddress = canBeSendToAddress,
@@ -73,11 +82,8 @@ class EnterAddressViewModel(
         value = value,
         inputState = inputState,
         address = address,
+        amount = amount
     )
-
-    init {
-
-    }
 
     fun onEnterAddress(value: String) {
         parseAddressJob?.cancel()
@@ -148,7 +154,11 @@ class EnterAddressViewModel(
         }
     }
 
-    class Factory(private val wallet: Wallet) : ViewModelProvider.Factory {
+    class Factory(
+        private val wallet: Wallet,
+        private val address: String?,
+        private val amount: BigDecimal?,
+    ) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val blockchainType = wallet.token.blockchainType
@@ -219,7 +229,13 @@ class EnterAddressViewModel(
             }
             val addressUriParser = AddressUriParser(wallet.token.blockchainType, wallet.token.type)
 
-            return EnterAddressViewModel(wallet.token.blockchainType, addressUriParser, addressParserChain) as T
+            return EnterAddressViewModel(
+                wallet.token.blockchainType,
+                addressUriParser,
+                addressParserChain,
+                address,
+                amount
+            ) as T
         }
     }
 }
@@ -232,4 +248,5 @@ data class EnterAddressUiState(
     val value: String,
     val inputState: DataState<Address>?,
     val address: Address?,
+    val amount: BigDecimal?,
 )
