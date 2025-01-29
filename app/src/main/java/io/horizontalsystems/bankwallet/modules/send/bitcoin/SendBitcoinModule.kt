@@ -40,7 +40,8 @@ object SendBitcoinModule {
                 App.contactsRepository,
                 !hideAddress,
                 App.localStorage,
-                address
+                address,
+                App.recentAddressManager
             ) as T
         }
     }

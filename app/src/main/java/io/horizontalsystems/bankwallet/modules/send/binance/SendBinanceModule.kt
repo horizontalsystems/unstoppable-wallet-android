@@ -36,7 +36,8 @@ object SendBinanceModule {
                 xRateService,
                 App.contactsRepository,
                 !hideAddress,
-                address
+                address,
+                App.recentAddressManager
             ) as T
         }
 

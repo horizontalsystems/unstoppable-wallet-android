@@ -12,6 +12,7 @@ import io.horizontalsystems.bankwallet.core.HSCaution
 import io.horizontalsystems.bankwallet.core.ISendBinanceAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -20,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendConfirmationData
 import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,6 +38,7 @@ class SendBinanceViewModel(
     private val contactsRepo: ContactsRepository,
     private val showAddressInput: Boolean,
     private val address: Address,
+    private val recentAddressManager: RecentAddressManager
 ) : ViewModelUiState<SendBinanceUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeToken by feeService::feeToken
@@ -161,6 +164,8 @@ class SendBinanceViewModel(
 
             logger.info("success")
             sendResult = SendResult.Sent
+
+            recentAddressManager.setRecentAddress(address, BlockchainType.BinanceChain)
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))

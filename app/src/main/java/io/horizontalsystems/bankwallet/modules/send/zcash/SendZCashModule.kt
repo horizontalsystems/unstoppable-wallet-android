@@ -40,7 +40,8 @@ object SendZCashModule {
                 memoService,
                 App.contactsRepository,
                 !hideAddress,
-                address
+                address,
+                App.recentAddressManager
             ) as T
         }
     }

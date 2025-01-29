@@ -13,6 +13,7 @@ import io.horizontalsystems.bankwallet.core.ISendSolanaAdapter
 import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.SendAmountService
@@ -23,6 +24,7 @@ import io.horizontalsystems.bankwallet.modules.send.SendResult
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaModule.SendUiState
 import io.horizontalsystems.bankwallet.modules.xrate.XRateService
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
+import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.Token
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
@@ -46,6 +48,7 @@ class SendSolanaViewModel(
     private val showAddressInput: Boolean,
     private val connectivityManager: ConnectivityManager,
     private val address: Address,
+    private val recentAddressManager: RecentAddressManager
 ) : ViewModelUiState<SendUiState>() {
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
@@ -138,9 +141,11 @@ class SendSolanaViewModel(
             if (totalSolAmount > solBalance)
                 throw EvmError.InsufficientBalanceWithFee
 
-            adapter.send(decimalAmount, addressState.evmAddress!!)
+            adapter.send(decimalAmount, addressState.solanaAddress!!)
 
             sendResult = SendResult.Sent
+
+            recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Solana)
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
         }

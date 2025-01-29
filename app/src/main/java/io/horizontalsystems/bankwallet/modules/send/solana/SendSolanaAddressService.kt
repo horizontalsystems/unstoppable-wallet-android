@@ -17,7 +17,7 @@ class SendSolanaAddressService {
     private val _stateFlow = MutableStateFlow(
         State(
             address = address,
-            evmAddress = solanaAddress,
+            solanaAddress = solanaAddress,
             addressError = addressError,
             canBeSend = solanaAddress != null,
         )
@@ -48,7 +48,7 @@ class SendSolanaAddressService {
         _stateFlow.update {
             State(
                 address = address,
-                evmAddress = solanaAddress,
+                solanaAddress = solanaAddress,
                 addressError = addressError,
                 canBeSend = solanaAddress != null
             )
@@ -57,7 +57,7 @@ class SendSolanaAddressService {
 
     data class State(
         val address: Address?,
-        val evmAddress: SolanaAddress?,
+        val solanaAddress: SolanaAddress?,
         val addressError: Throwable?,
         val canBeSend: Boolean
     )
