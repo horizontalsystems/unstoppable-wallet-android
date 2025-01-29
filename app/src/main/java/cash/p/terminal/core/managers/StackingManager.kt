@@ -27,22 +27,30 @@ class StackingManager(
         const val CACHE_DURATION = 60 * 60 * 1000L
     }
 
-    fun loadInvestmentData(wallet: Wallet, address: String) {
+    fun loadInvestmentData(wallet: Wallet, address: String, forceUpdate: Boolean = false) {
         if (wallet.isPirateCash()) {
-            loadInvestmentData(wallet, address, StackingType.PCASH.value.lowercase())
+            loadInvestmentData(wallet, address, StackingType.PCASH.value.lowercase(), forceUpdate)
         } else if (wallet.isCosanta()) {
-            loadInvestmentData(wallet, address, StackingType.COSANTA.value.lowercase())
+            loadInvestmentData(wallet, address, StackingType.COSANTA.value.lowercase(), forceUpdate)
         } else {
             _unpaidFlow.value = BigDecimal.ZERO
         }
     }
 
-    private fun loadInvestmentData(wallet: Wallet, address: String, coin: String) {
+    private fun loadInvestmentData(
+        wallet: Wallet,
+        address: String,
+        coin: String,
+        forceUpdate: Boolean
+    ) {
         _unpaidFlow.value = null
         val cachedValue = localStorageManager.getStackingUnpaid(wallet)
         if (cachedValue != null) {
             _unpaidFlow.value = cachedValue
-            if (System.currentTimeMillis() - localStorageManager.getStackingUpdateTimestamp(wallet) < CACHE_DURATION) {
+            if (!forceUpdate && System.currentTimeMillis() - localStorageManager.getStackingUpdateTimestamp(
+                    wallet
+                ) < CACHE_DURATION
+            ) {
                 return
             }
         }

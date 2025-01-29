@@ -1,7 +1,6 @@
 package cash.p.terminal.core.adapters
 
 import android.content.Context
-import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.managers.EvmKitWrapper
@@ -66,7 +65,7 @@ class Eip20Adapter(
     }
 
     override fun refresh() {
-        stackingManager.loadInvestmentData(wallet, receiveAddress)
+        stackingManager.loadInvestmentData(wallet, receiveAddress, true)
         eip20Kit.refresh()
     }
 
@@ -80,13 +79,10 @@ class Eip20Adapter(
             .map { }
 
     override val balanceData: BalanceData
-        get() {
-            Log.d("Eip20Adapter", "${wallet.token.coin.code} stackingUnpaid ${stackingManager.unpaidFlow.value}")
-            return BalanceData(
+        get() = BalanceData(
                 available = balanceInBigDecimal(eip20Kit.balance, decimal),
                 stackingUnpaid = stackingManager.unpaidFlow.value ?: BigDecimal.ZERO
             )
-        }
 
    override val balanceUpdatedFlow: Flow<Unit>
         get() = merge(eip20Kit.balanceFlowable.asFlow(), stackingManager.unpaidFlow.filterNotNull())
