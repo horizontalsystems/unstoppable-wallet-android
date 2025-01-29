@@ -52,6 +52,7 @@ import io.horizontalsystems.bankwallet.core.managers.NftMetadataSyncer
 import io.horizontalsystems.bankwallet.core.managers.NumberFormatter
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.core.managers.ReleaseNotesManager
 import io.horizontalsystems.bankwallet.core.managers.RestoreSettingsManager
 import io.horizontalsystems.bankwallet.core.managers.SolanaKitManager
@@ -205,6 +206,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
         lateinit var addressSecurityCheckerChain: AddressSecurityCheckerChain
+        lateinit var recentAddressManager: RecentAddressManager
     }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
@@ -305,7 +307,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         spamManager = SpamManager(localStorage, coinManager, SpamAddressStorage(appDatabase.spamAddressDao()), marketKit, appConfigProvider )
         addressSecurityCheckerChain = AddressSecurityCheckerFactory(spamManager, appConfigProvider).securityCheckerChain(BlockchainType.Ethereum)
-
+        recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao())
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
             walletManager,

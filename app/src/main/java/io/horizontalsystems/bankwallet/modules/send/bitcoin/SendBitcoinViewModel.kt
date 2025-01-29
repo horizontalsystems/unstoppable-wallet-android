@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.core.LocalizedException
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinFeeInfo
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
+import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.contacts.ContactsRepository
@@ -44,6 +45,7 @@ class SendBitcoinViewModel(
     private val showAddressInput: Boolean,
     private val localStorage: ILocalStorage,
     private val address: Address,
+    private val recentAddressManager: RecentAddressManager
 ) : ViewModelUiState<SendBitcoinUiState>() {
     val coinMaxAllowedDecimals = wallet.token.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
@@ -274,6 +276,8 @@ class SendBitcoinViewModel(
 
             logger.info("success")
             sendResult = SendResult.Sent
+
+            recentAddressManager.setRecentAddress(address, blockchainType)
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))

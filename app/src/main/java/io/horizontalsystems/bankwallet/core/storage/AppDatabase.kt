@@ -36,6 +36,7 @@ import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_57_58
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_58_59
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_59_60
 import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_60_61
+import io.horizontalsystems.bankwallet.core.storage.migrations.Migration_61_62
 import io.horizontalsystems.bankwallet.entities.ActiveAccount
 import io.horizontalsystems.bankwallet.entities.BlockchainSettingRecord
 import io.horizontalsystems.bankwallet.entities.EnabledWallet
@@ -44,6 +45,7 @@ import io.horizontalsystems.bankwallet.entities.EvmAddressLabel
 import io.horizontalsystems.bankwallet.entities.EvmMethodLabel
 import io.horizontalsystems.bankwallet.entities.EvmSyncSourceRecord
 import io.horizontalsystems.bankwallet.entities.LogEntry
+import io.horizontalsystems.bankwallet.entities.RecentAddress
 import io.horizontalsystems.bankwallet.entities.RestoreSettingRecord
 import io.horizontalsystems.bankwallet.entities.SpamAddress
 import io.horizontalsystems.bankwallet.entities.SpamScanState
@@ -63,7 +65,7 @@ import io.horizontalsystems.bankwallet.modules.profeatures.storage.ProFeaturesSe
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WCSessionDao
 import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConnectV2Session
 
-@Database(version = 61, exportSchema = false, entities = [
+@Database(version = 62, exportSchema = false, entities = [
     EnabledWallet::class,
     EnabledWalletCache::class,
     AccountRecord::class,
@@ -89,6 +91,7 @@ import io.horizontalsystems.bankwallet.modules.walletconnect.storage.WalletConne
     StatRecord::class,
     SpamAddress::class,
     SpamScanState::class,
+    RecentAddress::class,
 ])
 
 @TypeConverters(DatabaseConverters::class)
@@ -114,6 +117,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun pinDao(): PinDao
     abstract fun statsDao(): StatsDao
     abstract fun spamAddressDao(): SpamAddressDao
+    abstract fun recentAddressDao(): RecentAddressDao
 
     companion object {
 
@@ -161,6 +165,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_58_59,
                             Migration_59_60,
                             Migration_60_61,
+                            Migration_61_62,
                     )
                     .build()
         }

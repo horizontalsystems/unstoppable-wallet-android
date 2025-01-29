@@ -53,7 +53,8 @@ object SendTronModule {
                         App.contactsRepository,
                         !hideAddress,
                         App.connectivityManager,
-                        address
+                        address,
+                        App.recentAddressManager
                     ) as T
                 }
 

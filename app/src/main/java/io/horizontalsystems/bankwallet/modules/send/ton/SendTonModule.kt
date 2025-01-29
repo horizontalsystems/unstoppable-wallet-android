@@ -51,7 +51,8 @@ object SendTonModule {
                         coinMaxAllowedDecimals,
                         App.contactsRepository,
                         !hideAddress,
-                        address
+                        address,
+                        App.recentAddressManager
                     ) as T
                 }
 
