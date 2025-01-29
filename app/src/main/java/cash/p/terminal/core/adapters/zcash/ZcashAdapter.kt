@@ -47,6 +47,8 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
 import java.math.BigDecimal
 import java.util.regex.Pattern
@@ -168,8 +170,8 @@ class ZcashAdapter(
     override val balanceState: AdapterState
         get() = syncState
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER).asFlow()
 
     override val balanceData: BalanceData
         get() = BalanceData(balance, pending = balancePending)
@@ -199,8 +201,8 @@ class ZcashAdapter(
             return BigDecimal.ZERO
         }
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER).asFlow()
 
     override val explorerTitle: String
         get() = "blockchair.com"

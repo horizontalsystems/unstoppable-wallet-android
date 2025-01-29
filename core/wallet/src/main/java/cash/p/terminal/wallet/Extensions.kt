@@ -113,3 +113,5 @@ fun Wallet.isPirateCash() = (token.type == TokenType.Eip20(BuildConfig.PIRATE_CO
 fun Wallet.isCosanta() = (token.type == TokenType.Eip20(BuildConfig.COSANTA_CONTRACT) ||
         token.type == TokenType.Eip20(BuildConfig.COSANTA_CONTRACT.lowercase())) &&
         token.blockchainType == BlockchainType.BinanceSmartChain
+
+fun Wallet.getUniqueKey() = listOf(token.tokenQuery.id, account.id).joinToString()

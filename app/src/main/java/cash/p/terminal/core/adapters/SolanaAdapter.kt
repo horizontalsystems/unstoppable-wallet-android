@@ -9,6 +9,7 @@ import io.horizontalsystems.solanakit.SolanaKit
 import io.horizontalsystems.solanakit.models.Address
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import java.math.BigDecimal
@@ -35,14 +36,14 @@ class SolanaAdapter(kitWrapper: SolanaKitWrapper) : BaseSolanaAdapter(kitWrapper
     override val balanceState: AdapterState
         get() = convertToAdapterState(solanaKit.syncState)
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = solanaKit.balanceSyncStateFlow.map {}.asFlowable()
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = solanaKit.balanceSyncStateFlow.map {}
 
     override val balanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(solanaKit.balance, decimal))
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = solanaKit.balanceFlow.map {}.asFlowable()
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = solanaKit.balanceFlow.map {}
 
     // ISendSolanaAdapter
     override val availableBalance: BigDecimal

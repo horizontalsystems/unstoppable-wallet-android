@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -37,14 +39,14 @@ import cash.p.terminal.modules.balance.BalanceViewItem2
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.walletconnect.list.ui.DraggableCardSimple
-import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui.compose.components.CoinImage
+import cash.p.terminal.ui.compose.components.diffText
+import cash.p.terminal.ui.extensions.RotatingCircleProgressView
+import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.diffColor
-import cash.p.terminal.ui.compose.components.diffText
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui.extensions.RotatingCircleProgressView
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -131,120 +133,148 @@ fun BalanceCardInner(
     type: BalanceCardSubtitleType,
     onClickSyncError: (() -> Unit)? = null
 ) {
-    CellMultilineClear(height = 64.dp) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            WalletIcon(viewItem, onClickSyncError)
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center
+    CellMultilineClear(height = if (viewItem.stackingUnpaid == null) 64.dp else 112.dp) {
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.height(64.dp)
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                WalletIcon(viewItem, onClickSyncError)
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Row(
-                        modifier = Modifier.weight(weight = 1f),
+                        modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        body_leah(
-                            text = viewItem.wallet.coin.code,
+                        Row(
+                            modifier = Modifier.weight(weight = 1f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            body_leah(
+                                text = viewItem.wallet.coin.code,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            if (!viewItem.badge.isNullOrBlank()) {
+                                Box(
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .background(ComposeAppTheme.colors.jeremy)
+                                ) {
+                                    Text(
+                                        modifier = Modifier.padding(
+                                            start = 4.dp,
+                                            end = 4.dp,
+                                            bottom = 1.dp
+                                        ),
+                                        text = viewItem.badge,
+                                        color = ComposeAppTheme.colors.bran,
+                                        style = ComposeAppTheme.typography.microSB,
+                                        maxLines = 1,
+                                    )
+                                }
+                            }
+                        }
+                        Spacer(Modifier.width(24.dp))
+                        Text(
+                            text = if (viewItem.primaryValue.visible) viewItem.primaryValue.value else "*****",
+                            color = if (viewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
+                            style = ComposeAppTheme.typography.headline2,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
                         )
-                        if (!viewItem.badge.isNullOrBlank()) {
-                            Box(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .background(ComposeAppTheme.colors.jeremy)
-                            ) {
+                    }
+
+                    Spacer(modifier = Modifier.height(3.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Box(
+                            modifier = Modifier.weight(1f),
+                        ) {
+                            if (viewItem.syncingTextValue != null) {
+                                subhead2_grey(
+                                    text = viewItem.syncingTextValue,
+                                    maxLines = 1,
+                                )
+                            } else {
+                                when (type) {
+                                    BalanceCardSubtitleType.Rate -> {
+                                        if (viewItem.exchangeValue.visible) {
+                                            Row {
+                                                Text(
+                                                    text = viewItem.exchangeValue.value,
+                                                    color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                                                    style = ComposeAppTheme.typography.subhead2,
+                                                    maxLines = 1,
+                                                )
+                                                Text(
+                                                    modifier = Modifier.padding(start = 4.dp),
+                                                    text = diffText(viewItem.diff),
+                                                    color = diffColor(viewItem.diff),
+                                                    style = ComposeAppTheme.typography.subhead2,
+                                                    maxLines = 1,
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    BalanceCardSubtitleType.CoinName -> {
+                                        subhead2_grey(text = viewItem.wallet.coin.name)
+                                    }
+                                }
+                            }
+                        }
+                        Box(
+                            modifier = Modifier.padding(start = 16.dp),
+                        ) {
+                            if (viewItem.syncedUntilTextValue != null) {
+                                subhead2_grey(
+                                    text = viewItem.syncedUntilTextValue,
+                                    maxLines = 1,
+                                )
+                            } else {
                                 Text(
-                                    modifier = Modifier.padding(
-                                        start = 4.dp,
-                                        end = 4.dp,
-                                        bottom = 1.dp
-                                    ),
-                                    text = viewItem.badge,
-                                    color = ComposeAppTheme.colors.bran,
-                                    style = ComposeAppTheme.typography.microSB,
+                                    text = if (viewItem.secondaryValue.visible) viewItem.secondaryValue.value else "*****",
+                                    color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
+                                    style = ComposeAppTheme.typography.subhead2,
                                     maxLines = 1,
                                 )
                             }
                         }
                     }
-                    Spacer(Modifier.width(24.dp))
-                    Text(
-                        text = if (viewItem.primaryValue.visible) viewItem.primaryValue.value else "*****",
-                        color = if (viewItem.primaryValue.dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
-                        style = ComposeAppTheme.typography.headline2,
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+            if (viewItem.stackingUnpaid != null) {
+                Divider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                    modifier = Modifier.padding(horizontal = 12.dp)
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    subhead2_grey(
+                        text = stringResource(R.string.stacking_unpaid),
+                        maxLines = 1,
+                        modifier = Modifier.weight(1f)
+                    )
+                    subhead2_grey(
+                        text = if(viewItem.stackingUnpaid.visible) viewItem.stackingUnpaid.value else "*****",
                         maxLines = 1,
                     )
                 }
-
-                Spacer(modifier = Modifier.height(3.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Box(
-                        modifier = Modifier.weight(1f),
-                    ) {
-                        if (viewItem.syncingTextValue != null) {
-                            subhead2_grey(
-                                text = viewItem.syncingTextValue,
-                                maxLines = 1,
-                            )
-                        } else {
-                            when (type) {
-                                BalanceCardSubtitleType.Rate -> {
-                                    if (viewItem.exchangeValue.visible) {
-                                        Row {
-                                            Text(
-                                                text = viewItem.exchangeValue.value,
-                                                color = if (viewItem.exchangeValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                                                style = ComposeAppTheme.typography.subhead2,
-                                                maxLines = 1,
-                                            )
-                                            Text(
-                                                modifier = Modifier.padding(start = 4.dp),
-                                                text = diffText(viewItem.diff),
-                                                color = diffColor(viewItem.diff),
-                                                style = ComposeAppTheme.typography.subhead2,
-                                                maxLines = 1,
-                                            )
-                                        }
-                                    }
-                                }
-
-                                BalanceCardSubtitleType.CoinName -> {
-                                    subhead2_grey(text = viewItem.wallet.coin.name)
-                                }
-                            }
-                        }
-                    }
-                    Box(
-                        modifier = Modifier.padding(start = 16.dp),
-                    ) {
-                        if (viewItem.syncedUntilTextValue != null) {
-                            subhead2_grey(
-                                text = viewItem.syncedUntilTextValue,
-                                maxLines = 1,
-                            )
-                        } else {
-                            Text(
-                                text = if (viewItem.secondaryValue.visible) viewItem.secondaryValue.value else "*****",
-                                color = if (viewItem.secondaryValue.dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
-                                style = ComposeAppTheme.typography.subhead2,
-                                maxLines = 1,
-                            )
-                        }
-                    }
-                }
             }
-
-            Spacer(modifier = Modifier.width(16.dp))
         }
     }
 }
@@ -300,7 +330,12 @@ private fun WalletIcon(
     }
 }
 
-fun onSyncErrorClicked(viewItem: BalanceViewItem2, viewModel: BalanceViewModel, navController: NavController, view: View) {
+fun onSyncErrorClicked(
+    viewItem: BalanceViewItem2,
+    viewModel: BalanceViewModel,
+    navController: NavController,
+    view: View
+) {
     when (val syncErrorDetails = viewModel.getSyncErrorDetails(viewItem)) {
         is BalanceViewModel.SyncError.Dialog -> {
             val wallet = syncErrorDetails.wallet

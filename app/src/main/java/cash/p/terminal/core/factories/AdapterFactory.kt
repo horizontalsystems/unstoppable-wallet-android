@@ -28,6 +28,7 @@ import cash.p.terminal.core.adapters.TronAdapter
 import cash.p.terminal.core.adapters.TronTransactionConverter
 import cash.p.terminal.core.adapters.TronTransactionsAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
@@ -35,6 +36,7 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
 import io.horizontalsystems.core.entities.BlockchainType
@@ -76,15 +78,17 @@ class AdapterFactory(
         val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType)
             .getEvmKitWrapper(wallet.account, blockchainType)
         val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
+        val stackingManager = getKoinInstance<StackingManager>()
 
         return Eip20Adapter(
-            context,
-            evmKitWrapper,
-            address,
-            baseToken,
-            coinManager,
-            wallet,
-            evmLabelManager
+            context = context,
+            evmKitWrapper = evmKitWrapper,
+            contractAddress = address,
+            baseToken = baseToken,
+            coinManager = coinManager,
+            wallet = wallet,
+            evmLabelManager = evmLabelManager,
+            stackingManager = stackingManager
         )
     }
 

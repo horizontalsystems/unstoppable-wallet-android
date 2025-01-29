@@ -21,7 +21,7 @@ internal fun buildNetworkClient() = HttpClient(CIO) {
             isLenient = true
         })
     }
-    if(BuildConfig.DEBUG) {
+    if (BuildConfig.DEBUG) {
         install(Logging) {
             logger = object : Logger {
                 private val logTag = "KtorHttpLogger: "

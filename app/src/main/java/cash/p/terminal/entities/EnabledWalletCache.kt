@@ -21,4 +21,5 @@ data class EnabledWalletCache(
     val accountId: String,
     val balance: BigDecimal,
     val balanceLocked: BigDecimal,
+    val stackingUnpaid: BigDecimal
 )

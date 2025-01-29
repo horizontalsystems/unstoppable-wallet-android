@@ -10,6 +10,7 @@ import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.transaction.Fee
 import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.withContext
@@ -42,14 +43,14 @@ class Trc20Adapter(
     override val balanceState: AdapterState
         get() = convertToAdapterState(tronKit.syncState)
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = tronKit.syncStateFlow.map { }.asFlowable()
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = tronKit.syncStateFlow.map { }
 
     override val balanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(tronKit.getTrc20Balance(contractAddress.base58), decimal))
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = tronKit.getTrc20BalanceFlow(contractAddress.base58).map { }.asFlowable()
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = tronKit.getTrc20BalanceFlow(contractAddress.base58).map { }
 
     // ISendTronAdapter
 
