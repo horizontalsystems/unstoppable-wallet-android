@@ -200,7 +200,7 @@ class SendFragment : BaseFragment() {
     data class Input(
         val wallet: Wallet,
         val title: String,
-        val sendEntryPointDestId: Int = 0,
+        val sendEntryPointDestId: Int,
         val address: Address,
         val amount: BigDecimal? = null,
         val hideAddress: Boolean = false

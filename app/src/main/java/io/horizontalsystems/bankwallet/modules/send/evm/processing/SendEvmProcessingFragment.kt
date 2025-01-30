@@ -28,12 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.take
-import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoModule
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoScreen
-import io.horizontalsystems.bankwallet.modules.transactionInfo.TransactionInfoViewModel
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -57,14 +52,7 @@ class SendEvmProcessingFragment : BaseComposeFragment() {
 
     @Composable
     override fun GetContent(navController: NavController) {
-//        SendEvmProcessingScreen(navController)
-
-        val transactionRecord = navController.take("xxx") as TransactionRecord
-        val viewModel = androidx.lifecycle.viewmodel.compose.viewModel<TransactionInfoViewModel>(
-            factory = TransactionInfoModule.Factory(transactionRecord)
-        )
-
-        TransactionInfoScreen(viewModel, navController)
+        SendEvmProcessingScreen(navController)
     }
 
 }
