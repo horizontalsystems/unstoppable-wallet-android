@@ -7,11 +7,9 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.HSCaution
 import cash.p.terminal.core.ethereum.CautionViewItem
-import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
-import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.changenow.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
@@ -40,8 +38,7 @@ class SwapConfirmViewModel(
     private val fiatServiceOutMin: FiatService,
     val sendTransactionService: ISendTransactionService<*>,
     private val timerService: TimerService,
-    private val priceImpactService: PriceImpactService,
-    private val changeNowTransactionsStorage: ChangeNowTransactionsStorage
+    private val priceImpactService: PriceImpactService
 ) : ViewModelUiState<SwapConfirmUiState>() {
     private var sendTransactionSettings: SendTransactionSettings? = null
     private val currency = currencyManager.baseCurrency
@@ -113,7 +110,7 @@ class SwapConfirmViewModel(
 
                 emitState()
 
-                if (sendTransactionState.sendable) {
+                if (isSendable() && needUseTimer()) {
                     timerService.start(10)
                 }
             }
@@ -177,7 +174,7 @@ class SwapConfirmViewModel(
             currency = currency,
             networkFee = sendTransactionState.networkFee,
             cautions = cautions,
-            validQuote = sendTransactionState.sendable,
+            validQuote = isSendable(),
             priceImpact = priceImpactState.priceImpact,
             priceImpactLevel = priceImpactState.priceImpactLevel,
             quoteFields = quoteFields,
@@ -185,6 +182,12 @@ class SwapConfirmViewModel(
             criticalError = criticalError
         )
     }
+
+    private fun isSendable(): Boolean {
+        return swapProvider is ChangeNowProvider || sendTransactionState.sendable
+    }
+
+    private fun needUseTimer() = swapProvider !is ChangeNowProvider
 
     override fun onCleared() {
         timerService.stop()
@@ -277,14 +280,11 @@ class SwapConfirmViewModel(
                 fiatServiceOutMin = FiatService(App.marketKit),
                 sendTransactionService = sendTransactionService,
                 timerService = TimerService(),
-                priceImpactService = PriceImpactService(),
-                changeNowTransactionsStorage = getKoinInstance()
-
+                priceImpactService = PriceImpactService()
             )
         }
     }
 }
-
 
 data class SwapConfirmUiState(
     val expiresIn: Long?,

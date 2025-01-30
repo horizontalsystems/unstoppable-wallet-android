@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.multiswap.providers.changenow
 
+import androidx.collection.LruCache
 import cash.p.terminal.R
 import cash.p.terminal.core.extractBigDecimal
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
@@ -28,6 +29,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -44,11 +47,23 @@ class ChangeNowProvider(
     override val priority = 0
 
     private val currencies = mutableListOf<ChangeNowCurrency>()
-    private var minAmount: BigDecimal? = null
     private val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
     }
     private val coroutineScope = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler)
+
+    private val minAmount: LruCache<String, BigDecimal> = LruCache(10)
+    private var minAmountTimestamp = LruCache<String, Long>(10)
+
+    // SwapConfirmViewModel calls final quote too many times, so cache results
+    private var cachedFinalQuote: Pair<NewTransactionRequest, NewTransactionResponse>? = null
+    private var cacheUpdateTimestamp = 0L
+    private val mutex = Mutex()
+
+    private companion object {
+        const val CACHE_MIN_AMOUNT_DURATION = 1000L * 60
+        const val CACHE_FINAL_QUOTE_DURATION = 1000L * 60 * 5
+    }
 
     private var changeNowTransaction: ChangeNowTransaction? = null
 
@@ -68,9 +83,14 @@ class ChangeNowProvider(
 
     override suspend fun supports(token: Token): Boolean =
         withContext(coroutineScope.coroutineContext) {
-            getChangeNowTicker(token)?.let {
-                isChangeNowTickerActive(it)
-            } != null
+            try {
+                getChangeNowTicker(token)?.let {
+                    isChangeNowTickerActive(it)
+                } != null
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
         }
 
     private suspend fun getChangeNowTicker(token: Token): String? =
@@ -113,40 +133,51 @@ class ChangeNowProvider(
         amountIn: BigDecimal,
         settings: Map<String, Any?>
     ): ISwapQuote = withContext(coroutineScope.coroutineContext) {
-        val (tickerIn, tickerOut) = awaitAll(
-            async { getChangeNowTicker(tokenIn) },
-            async { getChangeNowTicker(tokenOut) }
-        )
+        mutex.withLock {
+            val (tickerIn, tickerOut) = awaitAll(
+                async { getChangeNowTicker(tokenIn) },
+                async { getChangeNowTicker(tokenOut) }
+            )
 
-        val tickerFrom = tickerIn
-            ?: throw IllegalStateException("ChangeNowProvider: ticker for $tokenIn is not found")
-        val tickerTo = tickerOut
-            ?: throw IllegalStateException("ChangeNowProvider: ticker for $tokenOut is not found")
-
-        minAmount = changeNowRepository.getMinAmount(
-            tickerFrom = tickerFrom,
-            tickerTo = tickerTo
-        ).also {
-            if (it > amountIn) {
-                throw SwapDepositTooSmall(it)
+            val tickerFrom = tickerIn
+                ?: throw IllegalStateException("ChangeNowProvider: ticker for $tokenIn is not found")
+            val tickerTo = tickerOut
+                ?: throw IllegalStateException("ChangeNowProvider: ticker for $tokenOut is not found")
+            val key = "$tickerFrom $tickerTo"
+            val cachedValue = minAmount[key]
+            val cachedTimestamp = minAmountTimestamp[key] ?: 0L
+            if(cachedValue != null && System.currentTimeMillis() - cachedTimestamp < CACHE_MIN_AMOUNT_DURATION) {
+                cachedValue
+            } else {
+                changeNowRepository.getMinAmount(
+                    tickerFrom = tickerFrom,
+                    tickerTo = tickerTo
+                ).also {
+                    minAmount.put(key, it)
+                    minAmountTimestamp.put(key, System.currentTimeMillis())
+                }
+            }.also {
+                if (it > amountIn) {
+                    throw SwapDepositTooSmall(it)
+                }
             }
+
+            val amountOut = getExchangeAmountOrThrow(tickerFrom, tickerTo, amountIn)
+                ?: throw IllegalStateException("ChangeNowProvider: amount is not found")
+
+            val actionRequired = getActionRequired(tokenIn, tokenOut)
+
+            SwapQuoteChangeNow(
+                amountOut = amountOut,
+                priceImpact = null,
+                fields = emptyList(),
+                settings = emptyList(),
+                tokenIn = tokenIn,
+                tokenOut = tokenOut,
+                amountIn = amountIn,
+                actionRequired = actionRequired
+            )
         }
-
-        val amountOut = getExchangeAmountOrThrow(tickerFrom, tickerTo, amountIn)
-            ?: throw IllegalStateException("ChangeNowProvider: amount is not found")
-
-        val actionRequired = getActionRequired(tokenIn, tokenOut)
-
-        SwapQuoteChangeNow(
-            amountOut = amountOut,
-            priceImpact = null,
-            fields = emptyList(),
-            settings = emptyList(),
-            tokenIn = tokenIn,
-            tokenOut = tokenOut,
-            amountIn = amountIn,
-            actionRequired = actionRequired
-        )
     }
 
     private fun getActionRequired(
@@ -180,81 +211,93 @@ class ChangeNowProvider(
         swapSettings: Map<String, Any?>,
         sendTransactionSettings: SendTransactionSettings?
     ): ISwapFinalQuote = withContext(coroutineScope.coroutineContext) {
-        val transaction: NewTransactionResponse = try {
-            val (tickerIn, tickerOut) = awaitAll(
-                async { getChangeNowTicker(tokenIn) },
-                async { getChangeNowTicker(tokenOut) }
-            )
-            changeNowRepository.createTransaction(
-                newTransactionRequest = NewTransactionRequest(
+        mutex.withLock {
+            val transaction: NewTransactionResponse = try {
+                val (tickerIn, tickerOut) = awaitAll(
+                    async { getChangeNowTicker(tokenIn) },
+                    async { getChangeNowTicker(tokenOut) }
+                )
+                val request = NewTransactionRequest(
                     from = tickerIn!!,
                     to = tickerOut!!,
                     amount = amountIn.toPlainString(),
                     address = walletUseCase.getReceiveAddress(tokenOut),
                     refundAddress = walletUseCase.getReceiveAddress(tokenIn)
                 )
-            )
-        } catch (e: BackendChangeNowResponseError) {
-            //extract decimal from message
-            if (e.error == BackendChangeNowResponseError.OUT_OF_RANGE) {
-                val amount = e.message.extractBigDecimal() ?: throw e
-                return@withContext SwapFinalQuoteEvm(
-                    tokenIn = tokenIn,
-                    tokenOut = tokenOut,
-                    amountIn = amountIn,
-                    amountOut = BigDecimal.ZERO,
-                    amountOutMin = amount,
-                    sendTransactionData = SendTransactionData.Common(
-                        amount = amountIn,
-                        address = "",
-                        token = tokenIn
-                    ),
-                    priceImpact = null,
-                    fields = emptyList()
-                )
-            } else {
-                throw e
+                if (System.currentTimeMillis() - cacheUpdateTimestamp < CACHE_FINAL_QUOTE_DURATION &&
+                    cachedFinalQuote?.first == request
+                ) {
+                    cachedFinalQuote?.second!!
+                } else {
+                    changeNowRepository.createTransaction(
+                        newTransactionRequest = request
+                    ).also {
+                        cachedFinalQuote = request to it
+                        cacheUpdateTimestamp = System.currentTimeMillis()
+                    }
+                }
+            } catch (e: BackendChangeNowResponseError) {
+                //extract decimal from message
+                if (e.error == BackendChangeNowResponseError.OUT_OF_RANGE) {
+                    val amount = e.message.extractBigDecimal() ?: throw e
+                    return@withContext SwapFinalQuoteEvm(
+                        tokenIn = tokenIn,
+                        tokenOut = tokenOut,
+                        amountIn = amountIn,
+                        amountOut = BigDecimal.ZERO,
+                        amountOutMin = amount,
+                        sendTransactionData = SendTransactionData.Common(
+                            amount = amountIn,
+                            address = "",
+                            token = tokenIn
+                        ),
+                        priceImpact = null,
+                        fields = emptyList()
+                    )
+                } else {
+                    throw e
+                }
+            } catch (e: Exception) {
+                throw IllegalStateException("ChangeNowProvider: error fetchFinalQuote", e)
             }
-        } catch (e: Exception) {
-            throw IllegalStateException("ChangeNowProvider: error fetchFinalQuote", e)
-        }
 
-        val fields = buildList {
-            add(
-                DataFieldRecipientExtended(
-                    address = cash.p.terminal.entities.Address(transaction.payinAddress),
-                    blockchainType = tokenOut.blockchainType
+            val fields = buildList {
+                add(
+                    DataFieldRecipientExtended(
+                        address = cash.p.terminal.entities.Address(transaction.payinAddress),
+                        blockchainType = tokenOut.blockchainType
+                    )
                 )
+            }
+
+            changeNowTransaction = ChangeNowTransaction(
+                date = System.currentTimeMillis(),
+                transactionId = transaction.id,
+                coinUidIn = tokenIn.coin.uid,
+                blockchainTypeIn = tokenIn.blockchainType.uid,
+                amountIn = amountIn,
+                addressIn = walletUseCase.getReceiveAddress(tokenIn),
+                coinUidOut = tokenOut.coin.uid,
+                blockchainTypeOut = tokenOut.blockchainType.uid,
+                amountOut = transaction.amount,
+                addressOut = walletUseCase.getReceiveAddress(tokenOut)
+            )
+
+            SwapFinalQuoteEvm(
+                tokenIn = tokenIn,
+                tokenOut = tokenOut,
+                amountIn = amountIn,
+                amountOut = transaction.amount,
+                amountOutMin = transaction.amount,
+                sendTransactionData = SendTransactionData.Common(
+                    amount = amountIn,
+                    address = transaction.payinAddress,
+                    token = tokenIn
+                ),
+                priceImpact = null,
+                fields = fields
             )
         }
-
-        changeNowTransaction = ChangeNowTransaction(
-            date = System.currentTimeMillis(),
-            transactionId = transaction.id,
-            coinUidIn = tokenIn.coin.uid,
-            blockchainTypeIn = tokenIn.blockchainType.uid,
-            amountIn = amountIn,
-            addressIn = walletUseCase.getReceiveAddress(tokenIn),
-            coinUidOut = tokenOut.coin.uid,
-            blockchainTypeOut = tokenOut.blockchainType.uid,
-            amountOut = transaction.amount,
-            addressOut = walletUseCase.getReceiveAddress(tokenOut)
-        )
-
-        SwapFinalQuoteEvm(
-            tokenIn = tokenIn,
-            tokenOut = tokenOut,
-            amountIn = amountIn,
-            amountOut = transaction.amount,
-            amountOutMin = transaction.amount,
-            sendTransactionData = SendTransactionData.Common(
-                amount = amountIn,
-                address = transaction.payinAddress,
-                token = tokenIn
-            ),
-            priceImpact = null,
-            fields = fields
-        )
     }
 
     fun onTransactionCompleted() {
