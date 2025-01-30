@@ -801,15 +801,19 @@ class HsProvider(baseUrl: String, apiKey: String) {
         ): Single<TopMoversRaw>
 
         @GET("status/updates")
+        @Headers("Cache-Control: no-cache, no-store, must-revalidate")
         fun getStatus(): Single<HsStatus>
 
         @GET("coins/list")
+        @Headers("Cache-Control: no-cache, no-store, must-revalidate")
         fun getAllCoins(): Single<List<CoinResponse>>
 
         @GET("blockchains/list")
+        @Headers("Cache-Control: no-cache, no-store, must-revalidate")
         fun getAllBlockchains(): Single<List<BlockchainResponse>>
 
         @GET("tokens/list")
+        @Headers("Cache-Control: no-cache, no-store, must-revalidate")
         fun getAllTokens(): Single<List<TokenResponse>>
 
         @GET("auth/get-sign-message")
