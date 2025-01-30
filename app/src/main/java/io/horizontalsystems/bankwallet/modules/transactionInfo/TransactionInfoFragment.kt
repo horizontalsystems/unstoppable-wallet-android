@@ -59,14 +59,14 @@ class TransactionInfoFragment : BaseComposeFragment() {
             null
         }
 
-        val viewItem = viewModelTxs?.tmpItemToShow
-        if (viewItem == null) {
+        val transactionRecord = viewModelTxs?.tmpTransactionRecordToShow
+        if (transactionRecord == null) {
             navController.popBackStack(R.id.transactionInfoFragment, true)
             return
         }
 
         val viewModel by navGraphViewModels<TransactionInfoViewModel>(R.id.transactionInfoFragment) {
-            TransactionInfoModule.Factory(viewItem)
+            TransactionInfoModule.Factory(transactionRecord)
         }
 
         TransactionInfoScreen(viewModel, navController)

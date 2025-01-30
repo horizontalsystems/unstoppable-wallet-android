@@ -11,19 +11,18 @@ import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
 import io.horizontalsystems.bankwallet.modules.transactions.NftMetadataService
-import io.horizontalsystems.bankwallet.modules.transactions.TransactionItem
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 object TransactionInfoModule {
 
-    class Factory(private val transactionItem: TransactionItem) : ViewModelProvider.Factory {
+    class Factory(val transactionRecord: TransactionRecord) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            val transactionSource = transactionItem.record.source
+            val transactionSource = transactionRecord.source
             val adapter: ITransactionsAdapter = App.transactionAdapterManager.getAdapter(transactionSource)!!
             val service = TransactionInfoService(
-                transactionItem.record,
+                transactionRecord,
                 adapter,
                 App.marketKit,
                 App.currencyManager,

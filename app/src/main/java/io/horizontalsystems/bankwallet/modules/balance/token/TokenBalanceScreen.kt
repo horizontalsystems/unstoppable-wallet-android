@@ -139,7 +139,7 @@ private fun onTransactionClick(
     navController: NavController
 ) {
     val transactionItem = tokenBalanceViewModel.getTransactionItem(transactionViewItem) ?: return
-    transactionsViewModel.tmpItemToShow = transactionItem
+    transactionsViewModel.tmpTransactionRecordToShow = transactionItem.record
 
     navController.slideFromBottom(R.id.transactionInfoFragment)
 
