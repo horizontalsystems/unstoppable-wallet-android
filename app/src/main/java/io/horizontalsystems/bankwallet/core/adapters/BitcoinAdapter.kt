@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.core.adapters
 
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedAccountException
 import io.horizontalsystems.bankwallet.core.UsedAddress
 import io.horizontalsystems.bankwallet.core.purpose
@@ -25,7 +24,7 @@ class BitcoinAdapter(
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
     wallet: Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), BitcoinKit.Listener, ISendBitcoinAdapter {
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet), BitcoinKit.Listener {
 
     constructor(
         wallet: Wallet,

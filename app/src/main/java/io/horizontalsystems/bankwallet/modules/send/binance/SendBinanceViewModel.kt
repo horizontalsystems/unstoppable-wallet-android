@@ -163,7 +163,7 @@ class SendBinanceViewModel(
             ).blockingGet()
 
             logger.info("success")
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
 
             recentAddressManager.setRecentAddress(address, BlockchainType.BinanceChain)
         } catch (e: Throwable) {

@@ -24,6 +24,8 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.put
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -95,7 +97,7 @@ fun SendConfirmationScreen(
             )
         }
 
-        SendResult.Sent -> {
+        is SendResult.Sent -> {
             HudHelper.showSuccessMessage(
                 view,
                 R.string.Send_Success,
@@ -111,15 +113,25 @@ fun SendConfirmationScreen(
     }
 
     LaunchedEffect(sendResult) {
-        if (sendResult == SendResult.Sent) {
+        if (sendResult is SendResult.Sent) {
             delay(1200)
-            navController.popBackStack(closeUntilDestId, true)
+            sendResult.transactionRecord?.let {
+                navController.put("xxx", it)
+            }
+            navController.slideFromRight(R.id.sendEvmProcessingFragment) {
+                setPopUpTo(closeUntilDestId, true)
+            }
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
-        if (sendResult == SendResult.Sent) {
-            navController.popBackStack(closeUntilDestId, true)
+        if (sendResult is SendResult.Sent) {
+            sendResult.transactionRecord?.let {
+                navController.put("xxx", it)
+            }
+            navController.slideFromRight(R.id.sendEvmProcessingFragment) {
+                setPopUpTo(closeUntilDestId, true)
+            }
         }
     }
 
@@ -251,7 +263,7 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
             )
         }
 
-        SendResult.Sent -> {
+        is SendResult.Sent -> {
             ButtonPrimaryYellow(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Success),

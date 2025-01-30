@@ -146,7 +146,7 @@ class SendTonViewModel(
 
             adapter.send(amountState.amount!!, addressState.tonAddress!!, memo)
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
             logger.info("success")
 
             recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Ton)
