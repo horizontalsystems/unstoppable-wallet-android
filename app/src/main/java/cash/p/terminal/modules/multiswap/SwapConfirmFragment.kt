@@ -173,8 +173,10 @@ fun SwapConfirmScreen(navController: NavController) {
                         }
                     },
                 )
-                VSpacer(height = 12.dp)
-                subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
+                if(uiState.expiresIn != null) {
+                    VSpacer(height = 12.dp)
+                    subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
+                }
             }
         }
     ) {
