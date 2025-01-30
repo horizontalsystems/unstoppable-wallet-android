@@ -34,27 +34,6 @@ fun NavController.slideFromRight(@IdRes resId: Int, input: Parcelable? = null, x
     navigate(resId, args, navOptions)
 }
 
-private object TmpParams {
-    private val maps = mutableMapOf<String, Any>()
-
-    fun put(key: String, value: Any) {
-        maps[key] = value
-    }
-
-    fun take(key: String): Any? {
-        return maps.remove(key)
-    }
-}
-
-fun NavController.put(key: String, value: Any) {
-    TmpParams.put(key, value)
-}
-
-fun NavController.take(key: String): Any? {
-    return TmpParams.take(key)
-}
-
-
 fun NavController.slideFromBottom(@IdRes resId: Int, input: Parcelable? = null) {
     val navOptions = NavOptions.Builder()
         .setEnterAnim(R.anim.slide_from_bottom)

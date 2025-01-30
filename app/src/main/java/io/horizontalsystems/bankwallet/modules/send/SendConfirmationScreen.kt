@@ -24,8 +24,6 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
-import io.horizontalsystems.bankwallet.core.put
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEntity
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
@@ -115,23 +113,13 @@ fun SendConfirmationScreen(
     LaunchedEffect(sendResult) {
         if (sendResult is SendResult.Sent) {
             delay(1200)
-            sendResult.transactionRecord?.let {
-                navController.put("xxx", it)
-            }
-            navController.slideFromRight(R.id.sendEvmProcessingFragment) {
-                setPopUpTo(closeUntilDestId, true)
-            }
+            navController.popBackStack(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         if (sendResult is SendResult.Sent) {
-            sendResult.transactionRecord?.let {
-                navController.put("xxx", it)
-            }
-            navController.slideFromRight(R.id.sendEvmProcessingFragment) {
-                setPopUpTo(closeUntilDestId, true)
-            }
+            navController.popBackStack(closeUntilDestId, true)
         }
     }
 

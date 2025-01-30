@@ -19,7 +19,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.AppLogger
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
-import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -117,12 +116,6 @@ private fun SendEvmConfirmationScreen(
                         buttonEnabled = false
                         HudHelper.showInProcessMessage(view, R.string.Send_Sending, SnackbarDuration.INDEFINITE)
 
-                        val closeUntilDestId = if (input.sendEntryPointDestId == 0) {
-                            R.id.sendXFragment
-                        } else {
-                            input.sendEntryPointDestId
-                        }
-
                         try {
                             logger.info("sending tx")
                             viewModel.send()
@@ -132,9 +125,7 @@ private fun SendEvmConfirmationScreen(
                             HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                             delay(1200)
 
-                            navController.slideFromRight(R.id.sendEvmProcessingFragment) {
-                                setPopUpTo(closeUntilDestId, true)
-                            }
+                            navController.popBackStack(input.sendEntryPointDestId, true)
                         } catch (t: Throwable) {
                             logger.warning("failed", t)
                             HudHelper.showErrorMessage(view, t.javaClass.simpleName)
