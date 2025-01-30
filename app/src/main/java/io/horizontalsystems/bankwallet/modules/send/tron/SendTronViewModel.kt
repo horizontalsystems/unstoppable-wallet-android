@@ -257,7 +257,7 @@ class SendTronViewModel(
             val amount = confirmationData.amount
             adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
             logger.info("success")
 
             recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Tron)

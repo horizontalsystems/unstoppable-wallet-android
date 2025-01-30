@@ -6,6 +6,7 @@ import io.horizontalsystems.bankwallet.core.BalanceData
 import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.IBalanceAdapter
 import io.horizontalsystems.bankwallet.core.IReceiveAdapter
+import io.horizontalsystems.bankwallet.core.ISendBitcoinAdapter
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
 import io.horizontalsystems.bankwallet.core.UnsupportedFilterException
 import io.horizontalsystems.bankwallet.entities.LastBlockInfo
@@ -20,6 +21,7 @@ import io.horizontalsystems.bankwallet.modules.transactions.TransactionLockInfo
 import io.horizontalsystems.bitcoincore.AbstractKit
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.core.IPluginData
+import io.horizontalsystems.bitcoincore.extensions.toReversedHex
 import io.horizontalsystems.bitcoincore.models.Address
 import io.horizontalsystems.bitcoincore.models.TransactionDataSortType
 import io.horizontalsystems.bitcoincore.models.TransactionFilterType
@@ -55,7 +57,7 @@ abstract class BitcoinBaseAdapter(
     private val backgroundManager: BackgroundManager,
     val wallet: Wallet,
     protected val decimal: Int = 8
-) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter {
+) : IAdapter, ITransactionsAdapter, IBalanceAdapter, IReceiveAdapter, ISendBitcoinAdapter {
 
     private val scope = CoroutineScope(Dispatchers.Default)
     private var transactionConfirmationsThreshold = 3
@@ -274,7 +276,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun send(
+    override fun send(
         amount: BigDecimal,
         address: String,
         memo: String?,
@@ -284,30 +286,31 @@ abstract class BitcoinBaseAdapter(
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): Single<Unit> {
+    ): BitcoinTransactionRecord {
         val sortingType = getTransactionSortingType(transactionSorting)
-        return Single.create { emitter ->
-            try {
-                logger.info("call btc-kit.send")
-                kit.send(
-                    address = address,
-                    memo = memo,
-                    value = (amount * satoshisInBitcoin).toLong(),
-                    senderPay = true,
-                    feeRate = feeRate,
-                    sortType = sortingType,
-                    unspentOutputs = unspentOutputs,
-                    pluginData = pluginData ?: mapOf(),
-                    rbfEnabled = rbfEnabled
-                )
-                emitter.onSuccess(Unit)
-            } catch (ex: Exception) {
-                emitter.onError(ex)
-            }
-        }
+
+        logger.info("call btc-kit.send")
+        val fullTransaction = kit.send(
+            address = address,
+            memo = memo,
+            value = (amount * satoshisInBitcoin).toLong(),
+            senderPay = true,
+            feeRate = feeRate,
+            sortType = sortingType,
+            unspentOutputs = unspentOutputs,
+            pluginData = pluginData ?: mapOf(),
+            rbfEnabled = rbfEnabled
+        )
+
+        val transaction = kit.getTransaction(fullTransaction.header.hash.toReversedHex())!!
+
+//        val list = kit.transactions(limit = 1).blockingGet()
+//        val transaction = list.first()
+
+        return transactionRecord(transaction)
     }
 
-    fun availableBalance(
+    override fun availableBalance(
         feeRate: Int,
         address: String?,
         memo: String?,
@@ -323,7 +326,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun minimumSendAmount(address: String?): BigDecimal? {
+    override fun minimumSendAmount(address: String?): BigDecimal? {
         return try {
             satoshiToBTC(kit.minimumSpendableValue(address).toLong(), RoundingMode.CEILING)
         } catch (e: Exception) {
@@ -331,7 +334,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun bitcoinFeeInfo(
+    override fun bitcoinFeeInfo(
         amount: BigDecimal,
         feeRate: Int,
         address: String?,
@@ -362,7 +365,7 @@ abstract class BitcoinBaseAdapter(
         }
     }
 
-    fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
+    override fun validate(address: String, pluginData: Map<Byte, IPluginData>?) {
         kit.validateAddress(address, pluginData ?: mapOf())
     }
 

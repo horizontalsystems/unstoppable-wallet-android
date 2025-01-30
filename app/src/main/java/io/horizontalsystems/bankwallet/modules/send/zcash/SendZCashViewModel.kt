@@ -159,7 +159,7 @@ class SendZCashViewModel(
             )
 
             logger.info("success")
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
 
             recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Zcash)
         } catch (e: Throwable) {

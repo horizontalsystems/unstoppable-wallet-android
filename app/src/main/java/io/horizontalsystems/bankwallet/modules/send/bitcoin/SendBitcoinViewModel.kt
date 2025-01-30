@@ -262,7 +262,7 @@ class SendBitcoinViewModel(
         try {
             sendResult = SendResult.Sending
 
-            val send = adapter.send(
+            val transactionRecord = adapter.send(
                 amountState.amount!!,
                 addressState.validAddress!!.hex,
                 memo,
@@ -272,10 +272,10 @@ class SendBitcoinViewModel(
                 btcBlockchainManager.transactionSortMode(adapter.blockchainType),
                 localStorage.rbfEnabled,
                 logger
-            ).blockingGet()
+            )
 
             logger.info("success")
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent(transactionRecord)
 
             recentAddressManager.setRecentAddress(address, blockchainType)
         } catch (e: Throwable) {

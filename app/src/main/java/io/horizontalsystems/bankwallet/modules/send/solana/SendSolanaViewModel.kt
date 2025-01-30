@@ -143,7 +143,7 @@ class SendSolanaViewModel(
 
             adapter.send(decimalAmount, addressState.solanaAddress!!)
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
 
             recentAddressManager.setRecentAddress(addressState.address!!, BlockchainType.Solana)
         } catch (e: Throwable) {
