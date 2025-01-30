@@ -39,7 +39,7 @@ class TransactionsViewModel(
     private val transactionFilterService: TransactionFilterService,
 ) : ViewModelUiState<TransactionsUiState>() {
 
-    var tmpItemToShow: TransactionItem? = null
+    var tmpTransactionRecordToShow: TransactionRecord? = null
 
     val filterResetEnabled = MutableLiveData<Boolean>()
     val filterTokensLiveData = MutableLiveData<List<Filter<FilterToken?>>>()
