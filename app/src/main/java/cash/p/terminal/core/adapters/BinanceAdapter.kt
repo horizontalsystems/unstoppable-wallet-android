@@ -25,6 +25,8 @@ import io.horizontalsystems.binancechainkit.models.TransactionFilterType
 import io.horizontalsystems.binancechainkit.models.TransactionInfo
 import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class BinanceAdapter(
@@ -67,14 +69,14 @@ class BinanceAdapter(
     override val balanceState: AdapterState
         get() = syncState
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = binanceKit.syncStateFlowable.map { }
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = binanceKit.syncStateFlowable.map { }.asFlow()
 
     override val balanceData: BalanceData
         get() = BalanceData(asset.balance)
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = asset.balanceFlowable.map { }
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = asset.balanceFlowable.map { }.asFlow()
 
     // ITransactionsAdapter
 

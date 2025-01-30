@@ -1,14 +1,14 @@
 package cash.p.terminal.wallet
 
 import cash.p.terminal.wallet.entities.BalanceData
-import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
 
 interface IBalanceAdapter {
     val balanceState: AdapterState
-    val balanceStateUpdatedFlowable: Flowable<Unit>
+    val balanceStateUpdatedFlow: Flow<Unit>
 
     val balanceData: BalanceData
-    val balanceUpdatedFlowable: Flowable<Unit>
+    val balanceUpdatedFlow: Flow<Unit>
 
     fun sendAllowed() = balanceState is AdapterState.Synced
 }

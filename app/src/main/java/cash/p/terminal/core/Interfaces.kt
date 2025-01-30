@@ -116,6 +116,10 @@ interface ILocalStorage {
     var priceChangeInterval: PriceChangeInterval
     val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
 
+    fun getStackingUpdateTimestamp(wallet: Wallet): Long
+    fun setStackingUnpaid(wallet: Wallet, unpaid: BigDecimal)
+    fun getStackingUnpaid(wallet: Wallet): BigDecimal?
+
     fun clear()
 }
 

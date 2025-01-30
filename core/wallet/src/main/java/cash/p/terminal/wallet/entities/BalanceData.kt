@@ -7,6 +7,7 @@ data class BalanceData(
     val timeLocked: BigDecimal = BigDecimal.ZERO,
     val notRelayed: BigDecimal = BigDecimal.ZERO,
     val pending: BigDecimal = BigDecimal.ZERO,
+    val stackingUnpaid: BigDecimal = BigDecimal.ZERO,
 ) {
     val total get() = available + timeLocked + notRelayed + pending
 }

@@ -1,5 +1,6 @@
 package cash.p.terminal.core.di
 
+import cash.p.terminal.di.managerModule
 import cash.p.terminal.di.storageModule
 import cash.p.terminal.di.swapProvidersModule
 import cash.p.terminal.featureStacking.di.featureStackingModule
@@ -10,6 +11,7 @@ import org.koin.dsl.module
 val appModule = module {
     includes(
         storageModule,
+        managerModule,
         walletFeatureModule,
         featureStackingModule,
         networkModule,

@@ -10,6 +10,8 @@ import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 
 class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
@@ -34,14 +36,14 @@ class EvmAdapter(evmKitWrapper: EvmKitWrapper, coinManager: ICoinManager) :
     override val balanceState: AdapterState
         get() = convertToAdapterState(evmKit.syncState)
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.syncStateFlowable.map {}
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = evmKit.syncStateFlowable.map {}.asFlow()
 
     override val balanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(evmKit.accountState?.balance, decimal))
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = evmKit.accountStateFlowable.map { }
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = evmKit.accountStateFlowable.map { }.asFlow()
 
     private fun convertToAdapterState(syncState: EthereumKit.SyncState): AdapterState =
         when (syncState) {

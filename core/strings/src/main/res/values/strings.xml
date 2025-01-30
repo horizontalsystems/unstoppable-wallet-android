@@ -2112,6 +2112,7 @@
     <string name="total_balance">Total balance</string>
     <string name="total_income">Total income</string>
     <string name="unpaid">Unpaid</string>
+    <string name="stacking_unpaid">Stacking unpaid:</string>
     <string name="estimated_annual_interest">Estimated Annual Interest</string>
     <string name="estimated_annual_interest_value_pirate" translatable="false">13%</string>
     <string name="estimated_annual_interest_value_cosanta" translatable="false">31%</string>

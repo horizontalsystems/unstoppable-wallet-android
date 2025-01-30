@@ -2,16 +2,12 @@ package cash.p.terminal.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.SyncMode
 import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.wallet.BalanceSortType
-import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
@@ -20,12 +16,19 @@ import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.theme.ThemeType
+import cash.p.terminal.wallet.BalanceSortType
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.getUniqueKey
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.math.BigDecimal
 import java.util.UUID
 
 class LocalStorageManager(
@@ -74,7 +77,8 @@ class LocalStorageManager(
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
-    private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
+    private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS =
+        "non_recommended_account_alert_dismissed_accounts"
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
     private val APP_ID = "app_id"
     private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
@@ -85,6 +89,8 @@ class LocalStorageManager(
     private val STATS_SYNC_TIME = "stats_sync_time"
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
+    private val STACKING_UPDATE_TIME = "stacking_update_time"
+    private val STACKING_UNPAID = "stacking_unpaid"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -116,7 +122,8 @@ class LocalStorageManager(
     override var marketSearchRecentCoinUids: List<String>
         get() = preferences.getString("marketSearchRecentCoinUids", null)?.split(",") ?: listOf()
         set(value) {
-            preferences.edit().putString("marketSearchRecentCoinUids", value.joinToString(",")).apply()
+            preferences.edit().putString("marketSearchRecentCoinUids", value.joinToString(","))
+                .apply()
         }
 
     override var zcashAccountIds: Set<String>
@@ -145,6 +152,7 @@ class LocalStorageManager(
                     preferences.edit().putString(APP_ID, newId).apply()
                     newId
                 }
+
                 else -> id
             }
         }
@@ -441,9 +449,11 @@ class LocalStorageManager(
         }
 
     override var marketFavoritesManualSortingOrder: List<String>
-        get() = preferences.getString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, null)?.split(",") ?: listOf()
+        get() = preferences.getString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, null)?.split(",")
+            ?: listOf()
         set(value) {
-            preferences.edit().putString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, value.joinToString(",")).apply()
+            preferences.edit()
+                .putString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, value.joinToString(",")).apply()
         }
 
     override var marketFavoritesPeriod: TimeDuration?
@@ -500,9 +510,11 @@ class LocalStorageManager(
     override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
 
     override var nonRecommendedAccountAlertDismissedAccounts: Set<String>
-        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf()) ?: setOf()
+        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf())
+            ?: setOf()
         set(value) {
-            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value).apply()
+            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value)
+                .apply()
         }
 
     override var autoLockInterval: AutoLockInterval
@@ -551,6 +563,7 @@ class LocalStorageManager(
             preferences.contains(UI_STATS_ENABLED) -> {
                 preferences.getBoolean(UI_STATS_ENABLED, false)
             }
+
             else -> null
         }
         set(value) {
@@ -561,4 +574,26 @@ class LocalStorageManager(
                 editor.putBoolean(UI_STATS_ENABLED, value).apply()
             }
         }
+
+    override fun getStackingUnpaid(wallet: Wallet) =
+        if (preferences.contains(STACKING_UNPAID + wallet.getUniqueKey())) {
+            preferences.getString(STACKING_UNPAID + wallet.getUniqueKey(), "0")?.toBigDecimal()
+                ?: BigDecimal.ZERO
+        } else {
+            null
+        }
+
+    override fun setStackingUnpaid(wallet: Wallet, unpaid: BigDecimal) {
+        preferences.edit()
+            .putString(STACKING_UNPAID + wallet.getUniqueKey(), unpaid.toPlainString())
+            .apply()
+        setStackingUpdateTimestamp(wallet, System.currentTimeMillis())
+    }
+
+    override fun getStackingUpdateTimestamp(wallet: Wallet) =
+        preferences.getLong(STACKING_UPDATE_TIME + wallet.getUniqueKey(), 0)
+
+    private fun setStackingUpdateTimestamp(wallet: Wallet, timestamp: Long) {
+        preferences.edit().putLong(STACKING_UPDATE_TIME + wallet.getUniqueKey(), timestamp).apply()
+    }
 }
