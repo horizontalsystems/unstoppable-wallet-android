@@ -393,16 +393,6 @@ private fun SettingSections(
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.TellFriends))
                 }
             )
-        }, {
-            HsSettingCell(
-                R.string.SettingsContact_Title,
-                R.drawable.ic_mail_24,
-                onClick = {
-                    navController.slideFromBottom(R.id.contactOptionsDialog)
-
-                    stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ContactUs))
-                },
-            )
         })
     )
 
