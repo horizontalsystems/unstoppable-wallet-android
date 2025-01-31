@@ -336,9 +336,6 @@
         android:id="@+id/кeyAccountInfoFragment"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.showextendedkey.KeyAccountInfoFragment" />
     <dialog
-        android:id="@+id/contactOptionsDialog"
-        android:name="io.horizontalsystems.bankwallet.modules.settings.about.ContactOptionsDialog" />
-    <dialog
         android:id="@+id/backupRequiredDialog"
         android:name="io.horizontalsystems.bankwallet.modules.manageaccount.dialogs.BackupRequiredDialog" />
     <dialog
