@@ -145,7 +145,7 @@ fun PremiumHeader() {
             modifier = Modifier
                 .padding(end = 10.dp)
                 .size(16.dp),
-            painter = painterResource(R.drawable.crown_yellow_16),
+            painter = painterResource(R.drawable.star_filled_yellow_16),
             tint = ComposeAppTheme.colors.jacob,
             contentDescription = null,
         )
