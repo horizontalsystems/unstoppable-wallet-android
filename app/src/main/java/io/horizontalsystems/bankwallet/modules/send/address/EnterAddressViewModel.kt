@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.bankwallet.core.address.AddressSecurityCheckerChain
 import io.horizontalsystems.bankwallet.core.managers.RecentAddressManager
-import io.horizontalsystems.bankwallet.core.title
 import io.horizontalsystems.bankwallet.core.utils.AddressUriParser
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.DataState
@@ -46,7 +46,8 @@ class EnterAddressViewModel(
     initialAddress: String?,
     private val amount: BigDecimal?,
     contactsRepository: ContactsRepository,
-    recentAddressManager: RecentAddressManager
+    recentAddressManager: RecentAddressManager,
+    private val addressSecurityCheckerChain: AddressSecurityCheckerChain
 ) : ViewModelUiState<EnterAddressUiState>() {
     private var address: Address? = null
     private var addressError: Throwable? = null
@@ -54,6 +55,9 @@ class EnterAddressViewModel(
         get() = inputState is DataState.Success
     private var recentAddress: String? = recentAddressManager.getRecentAddress(blockchainType)
     private val contacts = contactsRepository.getContactsFiltered(blockchainType)
+    private var addressFormatCheck: AddressCheckData = AddressCheckData(true, null)
+    private var phishingCheck: AddressCheckData = AddressCheckData(true, null)
+    private var blacklistCheck: AddressCheckData = AddressCheckData(true, null)
 
     private var value = ""
     private var inputState: DataState<Address>? = null
@@ -75,7 +79,10 @@ class EnterAddressViewModel(
         value = value,
         inputState = inputState,
         address = address,
-        amount = amount
+        amount = amount,
+        addressFormatCheck = addressFormatCheck,
+        phishingCheck = phishingCheck,
+        blacklistCheck = blacklistCheck
     )
 
     fun onEnterAddress(value: String) {
@@ -108,12 +115,35 @@ class EnterAddressViewModel(
                 val address = parseAddress(addressText)
                 this@EnterAddressViewModel.address = address
                 inputState = DataState.Success(address)
+
+                addressFormatCheck = AddressCheckData(false, AddressCheckResult.Correct)
+                phishingCheck = AddressCheckData(true)
+                blacklistCheck = AddressCheckData(true)
+
+                emitState()
+
+                checkAddress(address)
             } catch (e: Throwable) {
                 inputState = DataState.Error(e)
             }
 
             ensureActive()
             emitState()
+        }
+    }
+
+    private suspend fun checkAddress(address: Address) {
+        val issues = addressSecurityCheckerChain.handle(address)
+        phishingCheck = if (issues.any { it is AddressSecurityCheckerChain.SecurityIssue.Spam }) {
+            AddressCheckData(false, AddressCheckResult.Detected)
+        } else {
+            AddressCheckData(false, AddressCheckResult.Clear)
+        }
+
+        blacklistCheck = if (issues.any { it is AddressSecurityCheckerChain.SecurityIssue.Sanctioned }) {
+            AddressCheckData(false, AddressCheckResult.Detected)
+        } else {
+            AddressCheckData(false, AddressCheckResult.Clear)
         }
     }
 
@@ -204,6 +234,7 @@ class EnterAddressViewModel(
             }
             val addressUriParser = AddressUriParser(wallet.token.blockchainType, wallet.token.type)
             val recentAddressManager = RecentAddressManager(App.accountManager, App.appDatabase.recentAddressDao())
+            val addressSecurityCheckerChain = App.addressSecurityCheckerChainFactory.securityCheckerChain(wallet.token.blockchainType)
             return EnterAddressViewModel(
                 wallet.token.blockchainType,
                 addressUriParser,
@@ -211,7 +242,8 @@ class EnterAddressViewModel(
                 address,
                 amount,
                 App.contactsRepository,
-                recentAddressManager
+                recentAddressManager,
+                addressSecurityCheckerChain
             ) as T
         }
     }
@@ -226,4 +258,12 @@ data class EnterAddressUiState(
     val inputState: DataState<Address>?,
     val address: Address?,
     val amount: BigDecimal?,
+    val addressFormatCheck: AddressCheckData,
+    val phishingCheck: AddressCheckData,
+    val blacklistCheck: AddressCheckData
+)
+
+data class AddressCheckData(
+    val inProgress: Boolean,
+    val validationResult: AddressCheckResult? = null
 )
