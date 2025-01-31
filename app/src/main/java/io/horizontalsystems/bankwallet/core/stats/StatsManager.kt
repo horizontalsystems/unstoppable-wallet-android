@@ -68,9 +68,15 @@ class StatsManager(
                 }
             }
         }
+        scope.launch {
+            UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
+                uiStatsEnabled = areUiStatsEnabled()
+                _uiStatsEnabledFlow.update { uiStatsEnabled }
+            }
+        }
     }
 
-    var uiStatsEnabled = getInitialUiStatsEnabled()
+    var uiStatsEnabled = areUiStatsEnabled()
         private set
 
     private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
@@ -81,24 +87,21 @@ class StatsManager(
     private val syncInterval = 60 * 60 // 1H in seconds
     private val sqliteMaxVariableNumber = 999
 
-    private fun getInitialUiStatsEnabled(): Boolean {
-        val uiStatsEnabled = localStorage.uiStatsEnabled
+    private fun areUiStatsEnabled(): Boolean {
+        //not premium user
+        if (!UserSubscriptionManager.isActionAllowed(PrivacyMode)) {
+            return true
+        }
 
+        val uiStatsEnabled = localStorage.uiStatsEnabled
         if (uiStatsEnabled != null) {
-            if (!uiStatsEnabled && statsAllowedSignatures()) {
-                //check if user has subscription to keep privacy mode
-                val privacyActionAllowed = UserSubscriptionManager.isActionAllowed(PrivacyMode)
-                if (!privacyActionAllowed) {
-                    return true
-                }
-            }
             return uiStatsEnabled
         }
 
-        return statsAllowedSignatures()
+        return statsEnabledByDefault()
     }
 
-    private fun statsAllowedSignatures(): Boolean {
+    private fun statsEnabledByDefault(): Boolean {
         val signatures = listOf(
             "b797339fb356afce5160fe49274ee17a1c1816db", // appcenter
             "5afb2517b06caac7f108ba9d96ad826f1c4ba30c", // hs
