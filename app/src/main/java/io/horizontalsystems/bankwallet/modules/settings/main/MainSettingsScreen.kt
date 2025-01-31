@@ -346,17 +346,6 @@ private fun SettingSections(
             R.drawable.ic_support_yellow_24,
             onClick = openVipSupport
         )
-        Divider(
-            thickness = 1.dp,
-            color = ComposeAppTheme.colors.steel10,
-        )
-        HsSettingCell(
-            R.string.Settings_VipClub,
-            R.drawable.ic_club_yellow_24,
-            onClick = {
-
-            }
-        )
     }
 
     VSpacer(32.dp)
