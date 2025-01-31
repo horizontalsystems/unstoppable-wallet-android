@@ -87,11 +87,6 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
     )
 
     val uiState = viewModel.uiState
-    val addressError = uiState.addressError
-    val addressErrorMessage: ErrorMessage? = ErrorMessage(
-        title = stringResource(R.string.Send_Address_ErrorMessage_PhishingDetected),
-        description = stringResource(R.string.Send_Address_ErrorMessage_PhishingDetected_Description)
-    )
     Scaffold(
         backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
@@ -131,7 +126,12 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                         viewModel.onEnterAddress(it)
                     }
                 } else {
-                    AddressCheck(false, addressErrorMessage)
+                    AddressCheck(
+                        false,
+                        uiState.addressFormatCheck,
+                        uiState.phishingCheck,
+                        uiState.blacklistCheck
+                    )
                 }
             }
             ButtonsGroupWithShade {
@@ -164,7 +164,9 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
 @Composable
 fun AddressCheck(
     locked: Boolean,
-    addressErrorMessage: ErrorMessage?
+    addressFormatCheck: AddressCheckData,
+    phishingCheck: AddressCheckData,
+    blacklistCheck: AddressCheckData
 ) {
     Column(
         modifier = Modifier
@@ -180,22 +182,41 @@ fun AddressCheck(
     ) {
         AddressCheckCell(
             title = stringResource(R.string.Send_Address_AddressCheck),
-            inProgress = false,
-            validationResult = AddressCheckResult.Correct
+            inProgress = addressFormatCheck.inProgress,
+            validationResult = addressFormatCheck.validationResult
         )
         CheckCell(
             title = stringResource(R.string.Send_Address_PhishingCheck),
             locked = locked,
-            inProgress = false,
-            validationResult = AddressCheckResult.Detected
+            inProgress = phishingCheck.inProgress,
+            validationResult = phishingCheck.validationResult
         )
         CheckCell(
             title = stringResource(R.string.Send_Address_BlacklistCheck),
             locked = locked,
-            inProgress = false,
-            validationResult = AddressCheckResult.Clear
+            inProgress = blacklistCheck.inProgress,
+            validationResult = blacklistCheck.validationResult
         )
     }
+
+    val addressErrorMessage: ErrorMessage? = when {
+        phishingCheck.validationResult == AddressCheckResult.Detected -> {
+            ErrorMessage(
+                title = stringResource(R.string.Send_Address_ErrorMessage_PhishingDetected),
+                description = stringResource(R.string.Send_Address_ErrorMessage_PhishingDetected_Description)
+            )
+        }
+
+        blacklistCheck.validationResult == AddressCheckResult.Detected -> {
+            ErrorMessage(
+                title = stringResource(R.string.Send_Address_ErrorMessage_BlacklistDetected),
+                description = stringResource(R.string.Send_Address_ErrorMessage_BlacklistDetected_Description)
+            )
+        }
+
+        else -> null
+    }
+
     addressErrorMessage?.let { errorMessage ->
         VSpacer(16.dp)
         TextImportantError(
