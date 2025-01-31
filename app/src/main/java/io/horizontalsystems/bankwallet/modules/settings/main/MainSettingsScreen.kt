@@ -342,8 +342,9 @@ private fun SettingSections(
 
     SectionPremiumUniversalLawrence {
         HsSettingCell(
-            R.string.Settings_VipSupport,
-            R.drawable.ic_support_yellow_24,
+            title = R.string.Settings_VipSupport,
+            icon = R.drawable.ic_support_yellow_24,
+            iconTint = ComposeAppTheme.colors.jacob,
             onClick = openVipSupport
         )
     }
