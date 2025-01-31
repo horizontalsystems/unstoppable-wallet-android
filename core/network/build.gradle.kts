@@ -19,13 +19,13 @@ kotlin {
     }
 
     sourceSets {
-        commonMain  {
+        commonMain {
             dependencies {
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.cio)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.kotlinx.serialization)
-                implementation(libs.ktor.client.log )
+                implementation(libs.ktor.client.log)
 
                 implementation(project.dependencies.platform(libs.koin.bom))
                 implementation(libs.koin.core)
@@ -58,8 +58,6 @@ android {
         minSdk = minSdkVersion
     }
 }
-
-
 tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)

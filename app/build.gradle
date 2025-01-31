@@ -167,9 +167,6 @@ android {
         jvmTarget = "17"
     }
 
-    /*composeOptions {
-        kotlinCompilerExtensionVersion '1.5.12'
-    }*/
     namespace 'cash.p.terminal'
     lint {
         disable 'LogNotTimber'
@@ -283,7 +280,7 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:ton-kit-android:763a5c3'
+    implementation(libs.ton.kit)
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:4a34f53'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:0c770e3'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
