@@ -87,7 +87,7 @@ class ChangeNowProvider(
             try {
                 getChangeNowTicker(token)?.let {
                     isChangeNowTickerActive(it)
-                } != null
+                } ?: false
             } catch (e: Exception) {
                 e.printStackTrace()
                 false
@@ -100,9 +100,9 @@ class ChangeNowProvider(
             token.blockchainType.uid
         )
 
-    private fun isChangeNowTickerActive(ticker: String): String? = currencies.find {
+    private fun isChangeNowTickerActive(ticker: String): Boolean = currencies.find {
         it.ticker == ticker
-    }?.ticker
+    } != null
 
     private suspend fun getExchangeAmountOrThrow(
         tickerFrom: String,
