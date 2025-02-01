@@ -104,6 +104,7 @@ class SwapQuoteService {
                     emitState()
 
                     quotes = fetchQuotes(supportedProviders, tokenIn, tokenOut, amountIn)
+                        .run { sortedByDescending { it.amountOut } }
 
                     if (preferredProvider != null && quotes.none { it.provider == preferredProvider }) {
                         preferredProvider = null
