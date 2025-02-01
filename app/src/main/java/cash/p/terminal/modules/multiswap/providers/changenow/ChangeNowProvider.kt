@@ -19,6 +19,7 @@ import cash.p.terminal.network.changenow.data.entity.BackendChangeNowResponseErr
 import cash.p.terminal.network.changenow.data.entity.request.NewTransactionRequest
 import cash.p.terminal.network.changenow.domain.entity.ChangeNowCurrency
 import cash.p.terminal.network.changenow.domain.entity.NewTransactionResponse
+import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
 import cash.p.terminal.network.changenow.domain.repository.ChangeNowRepository
 import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
 import cash.p.terminal.wallet.Token
@@ -86,7 +87,7 @@ class ChangeNowProvider(
             try {
                 getChangeNowTicker(token)?.let {
                     isChangeNowTickerActive(it)
-                } != null
+                } ?: false
             } catch (e: Exception) {
                 e.printStackTrace()
                 false
@@ -99,9 +100,9 @@ class ChangeNowProvider(
             token.blockchainType.uid
         )
 
-    private fun isChangeNowTickerActive(ticker: String): String? = currencies.find {
+    private fun isChangeNowTickerActive(ticker: String): Boolean = currencies.find {
         it.ticker == ticker
-    }?.ticker
+    } != null
 
     private suspend fun getExchangeAmountOrThrow(
         tickerFrom: String,
@@ -273,6 +274,7 @@ class ChangeNowProvider(
             changeNowTransaction = ChangeNowTransaction(
                 date = System.currentTimeMillis(),
                 transactionId = transaction.id,
+                status = TransactionStatusEnum.NEW.name.lowercase(),
                 coinUidIn = tokenIn.coin.uid,
                 blockchainTypeIn = tokenIn.blockchainType.uid,
                 amountIn = amountIn,

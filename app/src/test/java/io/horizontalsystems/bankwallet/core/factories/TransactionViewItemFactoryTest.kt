@@ -52,7 +52,7 @@ package cash.p.terminal.core.factories
 //                false,
 //                incoming,
 //                Date(txRecordIncoming.timestamp * 1000),
-//                TransactionStatus.Completed,
+//                TransactionStatusDto.Completed,
 //                rate
 //        )
 //
@@ -78,7 +78,7 @@ package cash.p.terminal.core.factories
 //                false,
 //                incoming,
 //                Date(txRecordOutgoing.timestamp * 1000),
-//                TransactionStatus.Completed,
+//                TransactionStatusDto.Completed,
 //                rate
 //        )
 //
@@ -116,7 +116,7 @@ package cash.p.terminal.core.factories
 //                false,
 //                incoming,
 //                Date(txRecordToMyself.timestamp * 1000),
-//                TransactionStatus.Completed,
+//                TransactionStatusDto.Completed,
 //                rate
 //        )
 //

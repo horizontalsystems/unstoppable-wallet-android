@@ -1,9 +1,10 @@
 package cash.p.terminal.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.domain.usecase.UpdateChangeNowStatusesUseCase
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
-import cash.p.terminal.featureStacking.BuildConfig
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
@@ -13,15 +14,16 @@ import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
-import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.ViewModelUiState
-import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 
@@ -36,10 +38,15 @@ class TokenBalanceViewModel(
     private val accountManager: IAccountManager
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
+    private val updateChangeNowStatusesUseCase: UpdateChangeNowStatusesUseCase = getKoinInstance()
+    private val adapterManager: IAdapterManager = getKoinInstance()
+
     private val title = wallet.token.coin.code + wallet.token.badge?.let { " ($it)" }.orEmpty()
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
+
+    private var statusCheckerJob: Job? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -71,6 +78,24 @@ class TokenBalanceViewModel(
             delay(300)
             transactionsService.start()
         }
+    }
+
+    fun startStatusChecker() {
+        statusCheckerJob?.cancel()
+        statusCheckerJob = viewModelScope.launch(Dispatchers.IO) {
+            while (isActive) {
+                adapterManager.getReceiveAdapterForWallet(wallet)?.let { adapter ->
+                    if (updateChangeNowStatusesUseCase(wallet.token, adapter.receiveAddress)) {
+                        transactionsService.refreshList()
+                    }
+                }
+                delay(30_000) // update status every 30 seconds
+            }
+        }
+    }
+
+    fun stopStatusChecker() {
+        statusCheckerJob?.cancel()
     }
 
     override fun createState() = TokenBalanceUiState(

@@ -4,6 +4,7 @@ import cash.p.terminal.network.changenow.data.entity.request.NewTransactionReque
 import cash.p.terminal.network.changenow.domain.entity.ChangeNowCurrency
 import cash.p.terminal.network.changenow.domain.entity.ExchangeAmount
 import cash.p.terminal.network.changenow.domain.entity.NewTransactionResponse
+import cash.p.terminal.network.changenow.domain.entity.TransactionStatus
 import java.math.BigDecimal
 
 interface ChangeNowRepository {
@@ -23,4 +24,8 @@ interface ChangeNowRepository {
     suspend fun createTransaction(
         newTransactionRequest: NewTransactionRequest
     ): NewTransactionResponse
+
+    suspend fun getTransactionStatus(
+        transactionId: String
+    ): TransactionStatus
 }

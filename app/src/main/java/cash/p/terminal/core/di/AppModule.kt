@@ -15,6 +15,7 @@ val appModule = module {
         walletFeatureModule,
         featureStackingModule,
         networkModule,
-        swapProvidersModule
+        swapProvidersModule,
+        useCaseModule
     )
 }

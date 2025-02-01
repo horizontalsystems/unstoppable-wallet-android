@@ -843,6 +843,14 @@
     <string name="Transactions_Mint">Minted</string>
     <string name="Transactions_Approve">Approved</string>
     <string name="Transactions_Swap">Swapped</string>
+    <string name="transaction_swap_status_new">New</string>
+    <string name="transaction_swap_status_waiting">Waiting</string>
+    <string name="transaction_swap_status_confirming">Confirming</string>
+    <string name="transaction_swap_status_exchanging">Exchanging</string>
+    <string name="transaction_swap_status_sending">Sending</string>
+    <string name="transaction_swap_status_refunded">Refunded</string>
+    <string name="transaction_swap_status_verifying">Verifying</string>
+    <string name="transaction_swap_status_unknown">Unknown</string>
     <string name="Transactions_Failed">Failed</string>
     <string name="Transactions_ContractCall">Contract Call</string>
     <string name="Transactions_ExternalContractCall">External Call</string>
