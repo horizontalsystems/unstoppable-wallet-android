@@ -17,6 +17,7 @@ import cash.p.terminal.wallet.isPirateCash
 import io.horizontalsystems.core.getInput
 
 class TokenBalanceFragment : BaseComposeFragment() {
+    private var viewModel: TokenBalanceViewModel? = null
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -27,6 +28,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
             return
         }
         val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
+        this.viewModel = viewModel
         val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
         TokenBalanceScreen(
@@ -40,6 +42,16 @@ class TokenBalanceFragment : BaseComposeFragment() {
                 )
             }
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel?.startStatusChecker()
+    }
+
+    override fun onPause() {
+        viewModel?.stopStatusChecker()
+        super.onPause()
     }
 
 }

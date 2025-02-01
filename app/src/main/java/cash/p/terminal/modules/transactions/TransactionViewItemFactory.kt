@@ -37,6 +37,8 @@ import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.network.changenow.api.ChangeNowHelper
+import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
+import cash.p.terminal.network.changenow.domain.entity.toStatus
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui_compose.ColorName
@@ -1252,11 +1254,23 @@ class TransactionViewItemFactory(
         } else {
             ColoredValue(valueInFormatted, ColorName.Remus)
         }
+        val titleStringRes = when(transaction.status.toStatus()) {
+            TransactionStatusEnum.NEW -> R.string.transaction_swap_status_new
+            TransactionStatusEnum.WAITING -> R.string.transaction_swap_status_waiting
+            TransactionStatusEnum.CONFIRMING -> R.string.transaction_swap_status_confirming
+            TransactionStatusEnum.EXCHANGING -> R.string.transaction_swap_status_exchanging
+            TransactionStatusEnum.SENDING -> R.string.transaction_swap_status_sending
+            TransactionStatusEnum.FINISHED -> R.string.Transactions_Swap
+            TransactionStatusEnum.FAILED -> R.string.Transactions_Failed
+            TransactionStatusEnum.REFUNDED -> R.string.transaction_swap_status_refunded
+            TransactionStatusEnum.VERIFYING -> R.string.transaction_swap_status_verifying
+            TransactionStatusEnum.UNKNOWN -> R.string.transaction_swap_status_unknown
+        }
 
         return TransactionViewItem(
             uid = transactionItem.record.uid,
-            progress = 0f,
-            title = Translator.getString(R.string.Transactions_Swap),
+            progress = if(transaction.isFinished()) 0f else 0.5f,
+            title = Translator.getString(titleStringRes),
             subtitle = "ChangeNow",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
