@@ -33,7 +33,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 class SubscriptionServiceGooglePlay(
-    context: Context
+    context: Context,
 ) : SubscriptionService, PurchasesUpdatedListener {
 
     override var predefinedSubscriptions: List<Subscription> = listOf()
@@ -106,28 +106,66 @@ class SubscriptionServiceGooglePlay(
             it.productId == subscriptionId
         }
 
-        return buildList {
-            val subscriptionOfferDetails = productDetails?.subscriptionOfferDetails
-            subscriptionOfferDetails?.forEach { details ->
-                val pricingPhases = buildList {
-                    details.pricingPhases.pricingPhaseList.forEach {
-                        add(
-                            PricingPhase(
-                                formattedPrice = it.formattedPrice,
-                                billingPeriod = it.billingPeriod,
-                            )
-                        )
-                    }
-                }
+        val map = mutableMapOf<String, List<BasePlan>>()
 
-                add(
-                    BasePlan(
-                        id = details.basePlanId,
-                        pricingPhases = pricingPhases
+        val subscriptionOfferDetails = productDetails?.subscriptionOfferDetails
+        subscriptionOfferDetails?.forEach { details ->
+            val pricingPhases = buildList {
+                details.pricingPhases.pricingPhaseList.forEach {
+                    add(
+                        PricingPhase(
+                            formattedPrice = it.formattedPrice,
+                            billingPeriod = it.billingPeriod,
+                            priceAmountMicros = it.priceAmountMicros,
+                            priceCurrencyCode = it.priceCurrencyCode,
+                        )
                     )
-                )
+                }
+            }
+
+            map[details.basePlanId] = (map[details.basePlanId] ?: listOf()) + BasePlan(
+                id = details.basePlanId,
+                pricingPhases = pricingPhases,
+                offerToken = details.offerToken
+            )
+        }
+
+        return map.map { (_, u) ->
+            getPlanWithBestOffer(u)
+        }
+    }
+
+    private fun getPlanWithBestOffer(plans: List<BasePlan>): BasePlan {
+        val bestPhaseByPlans = plans.associateWith {
+            getBestPricingPhase(it.pricingPhases)
+        }
+
+        return getBestBasePlan(bestPhaseByPlans)
+    }
+
+    private fun getBestPricingPhase(pricingPhases: List<PricingPhase>): PricingPhase {
+        // select the PricingPhase with the lowest priceAmountMicros and the highest numberOfDays
+        return pricingPhases.reduce { best, current ->
+            when {
+                current.priceAmountMicros < best.priceAmountMicros -> current
+                current.priceAmountMicros == best.priceAmountMicros && current.numberOfDays > best.numberOfDays -> current
+                else -> best
             }
         }
+    }
+
+    private fun getBestBasePlan(bestPhaseByPlans: Map<BasePlan, PricingPhase>): BasePlan {
+        // Find the BasePlan with the best (lowest) PricingPhase
+        return bestPhaseByPlans.entries.reduce { bestEntry, currentEntry ->
+            val bestPhase = bestEntry.value
+            val currentPhase = currentEntry.value
+
+            when {
+                currentPhase.priceAmountMicros < bestPhase.priceAmountMicros -> currentEntry
+                currentPhase.priceAmountMicros == bestPhase.priceAmountMicros && currentPhase.numberOfDays > bestPhase.numberOfDays -> currentEntry
+                else -> bestEntry
+            }
+        }.key
     }
 
     override suspend fun getSubscriptions(): List<Subscription> {
@@ -157,19 +195,11 @@ class SubscriptionServiceGooglePlay(
         return activeSubscriptions
     }
 
-    override suspend fun launchPurchaseFlow(subscriptionId: String, planId: String, activity: Activity): HSPurchase? {
+    override suspend fun launchPurchaseFlow(subscriptionId: String, offerToken: String, activity: Activity): HSPurchase? {
         val productDetails = productDetailsResult?.productDetailsList?.find {
             it.productId == subscriptionId
         }
         checkNotNull(productDetails)
-
-        val subscriptionOfferDetails = productDetails.subscriptionOfferDetails
-
-        val offerDetails = subscriptionOfferDetails?.firstOrNull {
-            it.basePlanId == planId
-        }
-
-        checkNotNull(offerDetails)
 
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()
@@ -178,7 +208,7 @@ class SubscriptionServiceGooglePlay(
                 // For One-time product, "setOfferToken" method shouldn't be called.
                 // For subscriptions, to get an offer token, call ProductDetails.subscriptionOfferDetails()
                 // for a list of offers that are available to the user
-                .setOfferToken(offerDetails.offerToken)
+                .setOfferToken(offerToken)
                 .build()
         )
 

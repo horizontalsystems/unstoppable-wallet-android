@@ -8,20 +8,40 @@ import kotlinx.coroutines.launch
 
 class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     private var subscriptions = listOf<Subscription>()
+    private var selectedTabIndex = 0
+    private var hasFreeTrial = false
 
     init {
         viewModelScope.launch {
             subscriptions = UserSubscriptionManager.getSubscriptions()
+            refreshHasFreeTrial()
 
             emitState()
         }
     }
 
     override fun createState() = BuySubscriptionUiState(
-        subscriptions = subscriptions
+        subscriptions = subscriptions,
+        selectedTabIndex = selectedTabIndex,
+        hasFreeTrial = hasFreeTrial,
     )
+
+    fun setSelectedTabIndex(index: Int) {
+        selectedTabIndex = index
+        refreshHasFreeTrial()
+
+        emitState()
+    }
+
+    private fun refreshHasFreeTrial() {
+        val subscription = subscriptions[selectedTabIndex]
+        val basePlans = UserSubscriptionManager.getBasePlans(subscription.id)
+        hasFreeTrial = basePlans.any { it.hasFreeTrial }
+    }
 }
 
 data class BuySubscriptionUiState(
-    val subscriptions: List<Subscription>
+    val subscriptions: List<Subscription>,
+    val selectedTabIndex: Int,
+    val hasFreeTrial: Boolean
 )

@@ -33,7 +33,7 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
         }
     }
 
-    fun launchPurchaseFlow(subscriptionId: String, planId: String, activity: Activity) {
+    fun launchPurchaseFlow(subscriptionId: String, offerToken: String, activity: Activity) {
         purchaseInProgress = true
         error = null
         emitState()
@@ -41,7 +41,7 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
         viewModelScope.launch {
             try {
                 val hsPurchase =
-                    UserSubscriptionManager.launchPurchaseFlow(subscriptionId, planId, activity)
+                    UserSubscriptionManager.launchPurchaseFlow(subscriptionId, offerToken, activity)
 
                 purchase = hsPurchase
                 if (hsPurchase == null) {

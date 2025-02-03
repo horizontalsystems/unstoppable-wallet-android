@@ -35,7 +35,6 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -178,7 +177,7 @@ fun SelectSubscriptionBottomSheet(
                     activity?.let {
                         viewModel.launchPurchaseFlow(
                             subscriptionId = subscriptionId,
-                            planId = uiState.basePlans[selectedItemIndex.value].id,
+                            offerToken = uiState.basePlans[selectedItemIndex.value].offerToken,
                             activity = it
                         )
                     }
@@ -442,20 +441,20 @@ fun ColoredTextSecondaryButton(
 @Composable
 fun SubscriptionTabs(
     subscriptions: List<Subscription>,
-    selectedTabIndex: MutableState<Int>,
+    selectedTabIndex: Int,
     modifier: Modifier,
     onTabSelected: (Int) -> Unit = {}
 ) {
     if (subscriptions.isNotEmpty()) {
         TabRow(
-            selectedTabIndex = selectedTabIndex.value,
+            selectedTabIndex = selectedTabIndex,
             modifier = modifier,
             backgroundColor = ComposeAppTheme.colors.transparent, // Dark background
             contentColor = Color(0xFFEDD716),
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     Modifier
-                        .tabIndicatorOffset(tabPositions[selectedTabIndex.value])
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .height(0.dp), // No indicator line
                     color = Color.Transparent
                 )
@@ -463,14 +462,13 @@ fun SubscriptionTabs(
         ) {
             subscriptions.forEachIndexed { index, tab ->
                 Tab(
-                    selected = selectedTabIndex.value == index,
+                    selected = selectedTabIndex == index,
                     onClick = {
-                        selectedTabIndex.value = index
                         onTabSelected(index)
                     },
                     modifier = Modifier.background(
                         brush =
-                        if (selectedTabIndex.value == index) yellowGradient else steelBrush,
+                        if (selectedTabIndex == index) yellowGradient else steelBrush,
                     ),
                 ) {
                     Row(
@@ -482,13 +480,13 @@ fun SubscriptionTabs(
                         Icon(
                             painter = painterResource(if (index == 0) R.drawable.prem_star_yellow_16 else R.drawable.prem_crown_yellow_16),
                             contentDescription = null,
-                            tint = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
+                            tint = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.jacob,
                             modifier = Modifier.size(18.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = tab.name,
-                            color = if (selectedTabIndex.value == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
+                            color = if (selectedTabIndex == index) ComposeAppTheme.colors.dark else ComposeAppTheme.colors.grey,
                             style = ComposeAppTheme.typography.captionSB
                         )
                     }
@@ -539,7 +537,7 @@ fun InfoBottomSheet(
 fun SubscriptionBottomSheet(
     modalBottomSheetState: SheetState,
     subscriptions: List<Subscription>,
-    selectedTabIndex: MutableState<Int>,
+    selectedTabIndex: Int,
     navController: NavController,
     hideBottomSheet: () -> Unit,
     onError: (Throwable) -> Unit
@@ -551,8 +549,8 @@ fun SubscriptionBottomSheet(
     ) {
         if (subscriptions.isNotEmpty()) {
             SelectSubscriptionBottomSheet(
-                subscriptionId = subscriptions[selectedTabIndex.value].id,
-                type = PremiumPlanType.entries[selectedTabIndex.value],
+                subscriptionId = subscriptions[selectedTabIndex].id,
+                type = PremiumPlanType.entries[selectedTabIndex],
                 onDismiss = hideBottomSheet,
                 onPurchase = { type ->
                     hideBottomSheet()
