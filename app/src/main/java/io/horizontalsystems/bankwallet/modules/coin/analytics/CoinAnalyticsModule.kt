@@ -19,7 +19,6 @@ import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.parcelize.Parcelize
 
 object CoinAnalyticsModule {
@@ -47,6 +46,7 @@ object CoinAnalyticsModule {
     data class BlockViewItem(
         val title: Int?,
         val info: AnalyticInfo?,
+        val showAsPreview: Boolean,
         val value: String? = null,
         val valuePeriod: String? = null,
         val analyticChart: ChartViewItem?,
@@ -186,13 +186,11 @@ object CoinAnalyticsModule {
     )
 
     sealed class AnalyticsViewItem {
-        class Preview(val blocks: List<PreviewBlockViewItem>) : AnalyticsViewItem()
         class Analytics(val blocks: List<BlockViewItem>) : AnalyticsViewItem()
         object NoData : AnalyticsViewItem()
     }
 
     sealed class ActionType {
-        object Preview : ActionType()
         object OpenTvl : ActionType()
         class OpenOverallScoreInfo(val scoreCategory: ScoreCategory) : ActionType()
         class OpenRank(val type: RankType) : ActionType()

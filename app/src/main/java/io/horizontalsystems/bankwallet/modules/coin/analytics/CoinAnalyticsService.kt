@@ -13,7 +13,6 @@ import io.horizontalsystems.marketkit.models.AnalyticsPreview
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.marketkit.models.FullCoin
-import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,19 +51,15 @@ class CoinAnalyticsService(
     }
 
     private suspend fun fetch() {
-        if (UserSubscriptionManager.isActionAllowed(TokenInsights)) {
-            _stateFlow.emit(DataState.Loading)
+        _stateFlow.emit(DataState.Loading)
 
-            try {
-                marketKit.analyticsSingle(fullCoin.coin.uid, currency.code).await()
-                    .let {
-                        _stateFlow.emit(DataState.Success(AnalyticData(analytics = it)))
-                    }
-            } catch (error: Throwable) {
-                handleError(error)
-            }
-        } else {
-            preview()
+        try {
+            marketKit.analyticsSingle(fullCoin.coin.uid, currency.code).await()
+                .let {
+                    _stateFlow.emit(DataState.Success(AnalyticData(analytics = it)))
+                }
+        } catch (error: Throwable) {
+            handleError(error)
         }
     }
 

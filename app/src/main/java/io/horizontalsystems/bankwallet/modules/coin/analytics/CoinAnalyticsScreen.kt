@@ -79,13 +79,6 @@ fun CoinAnalyticsScreen(
                             )
                         }
 
-                        is AnalyticsViewItem.Preview -> {
-                            AnalyticsDataPreview(
-                                previewBlocks = item.blocks,
-                                navController = navController
-                            )
-                        }
-
                         is AnalyticsViewItem.Analytics -> {
                             AnalyticsData(
                                 item.blocks,
@@ -116,26 +109,15 @@ private fun AnalyticsData(
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(blocks) { block ->
-            AnalyticsBlock(
-                block,
-                navController,
-                fragmentManager,
-            )
-        }
-        item {
-            Spacer(modifier = Modifier.height(32.dp))
-        }
-    }
-}
-
-@Composable
-private fun AnalyticsDataPreview(
-    previewBlocks: List<CoinAnalyticsModule.PreviewBlockViewItem>,
-    navController: NavController,
-) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(previewBlocks) { block ->
-            AnalyticsPreviewBlock(block, navController)
+            if (block.showAsPreview) {
+                AnalyticsPreviewBlock(block, navController)
+            } else {
+                AnalyticsBlock(
+                    block,
+                    navController,
+                    fragmentManager,
+                )
+            }
         }
         item {
             Spacer(modifier = Modifier.height(32.dp))
@@ -216,7 +198,6 @@ private fun FooterCell(
     item: CoinAnalyticsModule.FooterType,
     index: Int,
     navController: NavController,
-    isPreview: Boolean = false
 ) {
     when (item) {
         is CoinAnalyticsModule.FooterType.FooterItem -> {
@@ -225,7 +206,7 @@ private fun FooterCell(
                 value = item.value,
                 showTopDivider = index != 0,
                 showRightArrow = item.action != null,
-                cellAction = if (isPreview) null else item.action,
+                cellAction = item.action,
                 onActionClick = { action ->
                     handleActionClick(action, navController)
                 }
@@ -280,7 +261,7 @@ private fun FooterCell(
 
 @Composable
 private fun AnalyticsPreviewBlock(
-    block: CoinAnalyticsModule.PreviewBlockViewItem,
+    block: CoinAnalyticsModule.BlockViewItem,
     navController: NavController
 ) {
     AnalyticsContainer(
@@ -308,42 +289,69 @@ private fun AnalyticsPreviewBlock(
         },
         bottomRows = {
             block.footerItems.forEachIndexed { index, item ->
-                FooterCell(
-                    item = item,
-                    index = index,
-                    navController = navController,
-                    isPreview = true
-                    )
+                if (item is CoinAnalyticsModule.FooterType.FooterItem) {
+                    PreviewFooterCell(item.title, item.action != null, index)
+                } else if(item is CoinAnalyticsModule.FooterType.DetectorFooterItem) {
+                    PreviewFooterCell(item.title, item.action != null, index)
+                }
             }
         },
         onClick = {
             navController.slideFromBottom(R.id.buySubscriptionFragment)
         }
     ) {
-        if (block.showValueDots) {
+        if (block.value != null) {
             AnalyticsContentNumber(
                 number = stringResource(R.string.CoinAnalytics_ThreeDots),
             )
         }
-        block.chartType?.let { chartType ->
+        block.analyticChart?.let { chart ->
             VSpacer(12.dp)
-            if (chartType == CoinAnalyticsModule.PreviewChartType.StackedBars) {
-                val lockedSlices = listOf(
-                    StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
-                    StackBarSlice(value = 37.75f, color = Color(0x80808085)),
-                    StackBarSlice(value = 11.9f, color = Color(0x40808085)),
-                )
-                StackedBarChart(lockedSlices, modifier = Modifier.padding(horizontal = 16.dp))
-            } else {
-                AnalyticsChart(
-                    CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(chartType == CoinAnalyticsModule.PreviewChartType.Line),
-                )
+            when (chart.analyticChart) {
+                is CoinAnalyticsModule.AnalyticChart.StackedBars -> {
+                    val lockedSlices = listOf(
+                        StackBarSlice(value = 50.34f, color = Color(0xBF808085)),
+                        StackBarSlice(value = 37.75f, color = Color(0x80808085)),
+                        StackBarSlice(value = 11.9f, color = Color(0x40808085)),
+                    )
+                    StackedBarChart(lockedSlices, modifier = Modifier.padding(horizontal = 16.dp))
+                }
+
+                is CoinAnalyticsModule.AnalyticChart.Bars -> {
+                    AnalyticsChart(
+                        CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(false),
+                    )
+                }
+
+                is CoinAnalyticsModule.AnalyticChart.Line -> {
+                    AnalyticsChart(
+                        CoinAnalyticsModule.zigzagPlaceholderAnalyticChart(true),
+                    )
+                }
+
+                 else -> {
+
+                 }
             }
-        }
-        if (block.showValueDots || block.chartType != null) {
             VSpacer(12.dp)
         }
     }
+}
+
+@Composable
+private fun PreviewFooterCell(
+    title: CoinAnalyticsModule.BoxItem,
+    showRightArrow: Boolean,
+    index: Int
+) {
+    AnalyticsFooterCell(
+        title = title,
+        value = CoinAnalyticsModule.BoxItem.Dots,
+        showTopDivider = index != 0,
+        showRightArrow = showRightArrow,
+        cellAction = null,
+        onActionClick = { }
+    )
 }
 
 private fun handleActionClick(
@@ -387,10 +395,6 @@ private fun handleActionClick(
 
         CoinAnalyticsModule.ActionType.OpenTvl -> {
             navController.slideFromBottom(R.id.tvlFragment)
-        }
-
-        CoinAnalyticsModule.ActionType.Preview -> {
-            //navController.slideFromBottom(R.id.subscriptionInfoFragment)
         }
 
         is CoinAnalyticsModule.ActionType.OpenDetectorsDetails -> {
