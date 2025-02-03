@@ -10,7 +10,6 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PricingPhase
 import io.horizontalsystems.subscriptions.core.PrivacyMode
 import io.horizontalsystems.subscriptions.core.TokenInsights
-import io.horizontalsystems.subscriptions.core.Tor
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import io.horizontalsystems.subscriptions.core.TransactionSpeedTools
 import io.horizontalsystems.subscriptions.core.VIPClub
@@ -26,7 +25,6 @@ object BuySubscriptionModel {
             TransactionSpeedTools -> R.string.Premium_UpgradeFeature_TxSpeedTools
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode
             AddressVerification -> R.string.Premium_UpgradeFeature_AddressVerification
-            Tor -> R.string.Premium_UpgradeFeature_Tor
             PrivacyMode -> R.string.Premium_UpgradeFeature_PrivacyMode
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport
             VIPClub -> R.string.Premium_UpgradeFeature_VipClub
@@ -41,7 +39,6 @@ object BuySubscriptionModel {
             TransactionSpeedTools -> R.string.Premium_UpgradeFeature_TxSpeedTools_Description
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_Description
             AddressVerification -> R.string.Premium_UpgradeFeature_AddressVerification_Description
-            Tor -> R.string.Premium_UpgradeFeature_Tor_Description
             PrivacyMode -> R.string.Premium_UpgradeFeature_PrivacyMode_Description
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_Description
             VIPClub -> R.string.Premium_UpgradeFeature_VipClub_Description
@@ -56,7 +53,6 @@ object BuySubscriptionModel {
             TransactionSpeedTools -> R.string.Premium_UpgradeFeature_TxSpeedTools_BigDescription
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_BigDescription
             AddressVerification -> R.string.Premium_UpgradeFeature_AddressVerification_BigDescription
-            Tor -> R.string.Premium_UpgradeFeature_Tor_BigDescription
             PrivacyMode -> R.string.Premium_UpgradeFeature_PrivacyMode_BigDescription
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_BigDescription
             VIPClub -> R.string.Premium_UpgradeFeature_VipClub_BigDescription
@@ -71,7 +67,6 @@ object BuySubscriptionModel {
             TransactionSpeedTools -> R.drawable.prem_outgoingraw_24
             DuressMode -> R.drawable.prem_duress_24
             AddressVerification -> R.drawable.prem_shield_24
-            Tor -> R.drawable.prem_tor_24
             PrivacyMode -> R.drawable.prem_fraud_24
             VIPSupport -> R.drawable.prem_vip_support_24
             VIPClub -> R.drawable.prem_chat_support_24

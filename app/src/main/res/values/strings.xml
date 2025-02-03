@@ -929,7 +929,6 @@
     <string name="Premium_UpgradeFeature_TxSpeedTools">Transaction Speed Tools</string>
     <string name="Premium_UpgradeFeature_DuressMode">Duress Mode</string>
     <string name="Premium_UpgradeFeature_AddressVerification">Address Verification</string>
-    <string name="Premium_UpgradeFeature_Tor">TOR</string>
     <string name="Premium_UpgradeFeature_PrivacyMode">Privacy Mode</string>
 
     <string name="Premium_UpgradeFeature_VipSupport_Description">Fast response support.</string>
@@ -940,7 +939,6 @@
     <string name="Premium_UpgradeFeature_TxSpeedTools_Description">Speed up and cancel transactions.</string>
     <string name="Premium_UpgradeFeature_DuressMode_Description">Hides main wallets in case of coercion.</string>
     <string name="Premium_UpgradeFeature_AddressVerification_Description">Additional address check for fraud prevention.</string>
-    <string name="Premium_UpgradeFeature_Tor_Description">Secure connection.</string>
     <string name="Premium_UpgradeFeature_PrivacyMode_Description">Full disconnection from data collection.</string>
 
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Fast response support.</string>
@@ -951,7 +949,6 @@
     <string name="Premium_UpgradeFeature_TxSpeedTools_BigDescription">Speed up and cancel transactions.</string>
     <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Hides main wallets in case of coercion.</string>
     <string name="Premium_UpgradeFeature_AddressVerification_BigDescription">Additional address check for fraud prevention.</string>
-    <string name="Premium_UpgradeFeature_Tor_BigDescription">Secure connection.</string>
     <string name="Premium_UpgradeFeature_PrivacyMode_BigDescription">Full disconnection from data collection.</string>
 
     <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
