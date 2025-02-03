@@ -24,9 +24,6 @@ object DuressMode : IPaidAction
 object AddressVerification : IPaidAction
 
 @Parcelize
-object Tor : IPaidAction
-
-@Parcelize
 object PrivacyMode : IPaidAction
 
 @Parcelize

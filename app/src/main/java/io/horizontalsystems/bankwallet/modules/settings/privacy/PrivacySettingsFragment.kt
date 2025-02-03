@@ -48,6 +48,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
 import io.horizontalsystems.subscriptions.core.PrivacyMode
 import kotlin.system.exitProcess
@@ -179,12 +180,8 @@ fun PrivacyScreen(
             )
 
             VSpacer(20.dp)
-            SectionPremiumUniversalLawrence {
-                TorBlock(
-                    torViewModel,
-                    navController,
-                    showAppRestartAlert,
-                )
+            SectionUniversalLawrence {
+                TorBlock(torViewModel, showAppRestartAlert)
             }
             InfoText(
                 text = stringResource(R.string.SettingsSecurity_TorConnectionDescription),
