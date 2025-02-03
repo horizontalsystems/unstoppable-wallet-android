@@ -68,10 +68,10 @@ object UserSubscriptionManager {
 
     suspend fun launchPurchaseFlow(
         subscriptionId: String,
-        planId: String,
+        offerToken: String,
         activity: Activity
     ): HSPurchase? {
-        return service.launchPurchaseFlow(subscriptionId, planId, activity)
+        return service.launchPurchaseFlow(subscriptionId, offerToken, activity)
     }
 
     fun getBasePlans(subscriptionId: String): List<BasePlan> {

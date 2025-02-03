@@ -36,18 +36,24 @@ class SubscriptionServiceDev(context: Context) : SubscriptionService {
                     pricingPhases = listOf(
                         PricingPhase(
                             formattedPrice = "$10.00",
-                            billingPeriod = "P1M"
+                            billingPeriod = "P1M",
+                            priceAmountMicros = 10L,
+                            priceCurrencyCode = "USD"
                         )
-                    )
+                    ),
+                    offerToken = "offerToken"
                 ),
                 BasePlan(
                     id = "plan-2",
                     pricingPhases = listOf(
                         PricingPhase(
                             formattedPrice = "$100.00",
-                            billingPeriod = "P1Y"
+                            billingPeriod = "P1Y",
+                            priceAmountMicros = 100L,
+                            priceCurrencyCode = "USD"
                         )
-                    )
+                    ),
+                    offerToken = "offerToken"
                 ),
             )
         } else {
@@ -58,18 +64,24 @@ class SubscriptionServiceDev(context: Context) : SubscriptionService {
                     pricingPhases = listOf(
                         PricingPhase(
                             formattedPrice = "$15.00",
-                            billingPeriod = "P1M"
+                            billingPeriod = "P1M",
+                            priceAmountMicros = 15L,
+                            priceCurrencyCode = "USD"
                         )
-                    )
+                    ),
+                    offerToken = "offerToken"
                 ),
                 BasePlan(
                     id = "plan-2",
                     pricingPhases = listOf(
                         PricingPhase(
                             formattedPrice = "$150.00",
-                            billingPeriod = "P1Y"
+                            billingPeriod = "P1Y",
+                            priceAmountMicros = 150L,
+                            priceCurrencyCode = "USD"
                         )
-                    )
+                    ),
+                    offerToken = "offerToken"
                 ),
             )
         }
@@ -83,7 +95,7 @@ class SubscriptionServiceDev(context: Context) : SubscriptionService {
 
     override suspend fun launchPurchaseFlow(
         subscriptionId: String,
-        planId: String,
+        offerToken: String,
         activity: Activity,
     ): HSPurchase? {
         //toggle actionsAllowed value
