@@ -13,33 +13,17 @@ object UserSubscriptionManager {
 
     private val predefinedSubscriptions = listOf(
         Subscription(
-            id = "test.subscription_1",
+            id = "test.subscription_3",
             name = "PRO",
             description = "",
             actions = listOf(
                 TokenInsights,
                 AdvancedSearch,
                 TradeSignals,
-                TransactionSpeedTools,
                 DuressMode,
                 AddressVerification,
                 PrivacyMode,
-            )
-        ),
-        Subscription(
-            id = "test.subscription_2",
-            name = "VIP",
-            description = "",
-            actions = listOf(
                 VIPSupport,
-                VIPClub,
-                TokenInsights,
-                AdvancedSearch,
-                TradeSignals,
-                TransactionSpeedTools,
-                DuressMode,
-                AddressVerification,
-                PrivacyMode,
             )
         ),
     )
