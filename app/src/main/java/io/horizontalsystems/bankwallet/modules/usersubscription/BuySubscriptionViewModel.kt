@@ -38,6 +38,12 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
         val basePlans = UserSubscriptionManager.getBasePlans(subscription.id)
         hasFreeTrial = basePlans.any { it.hasFreeTrial }
     }
+
+    fun restore() {
+        viewModelScope.launch {
+            UserSubscriptionManager.restore()
+        }
+    }
 }
 
 data class BuySubscriptionUiState(

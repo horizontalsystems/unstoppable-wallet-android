@@ -222,7 +222,7 @@ fun SelectSubscriptionScreen(
                             ColoredTextSecondaryButton(
                                 title = stringResource(R.string.Premium_Restore),
                                 onClick = {
-                                    //
+                                    viewModel.restore()
                                 },
                                 color = ComposeAppTheme.colors.leah
                             )
