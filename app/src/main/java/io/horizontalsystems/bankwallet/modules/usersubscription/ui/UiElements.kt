@@ -61,7 +61,6 @@ import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionM
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Steel20
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryDefaults
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryTransparent
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondary
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
@@ -208,14 +207,6 @@ fun SelectSubscriptionBottomSheet(
                             activity = it
                         )
                     }
-                }
-            )
-            VSpacer(12.dp)
-            ButtonPrimaryTransparent(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                title = stringResource(R.string.Premium_AddPromoCode),
-                onClick = {
-                    //TODO
                 }
             )
             VSpacer(36.dp)
