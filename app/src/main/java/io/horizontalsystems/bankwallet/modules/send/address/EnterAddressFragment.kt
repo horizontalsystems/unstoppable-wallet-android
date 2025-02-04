@@ -200,6 +200,13 @@ fun AddressCheck(
     }
 
     val addressErrorMessage: ErrorMessage? = when {
+        addressFormatCheck.validationResult is AddressCheckResult.Incorrect -> {
+            ErrorMessage(
+                title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+                description = addressFormatCheck.validationResult.description ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
+            )
+        }
+
         phishingCheck.validationResult == AddressCheckResult.Detected -> {
             ErrorMessage(
                 title = stringResource(R.string.Send_Address_ErrorMessage_PhishingDetected),
@@ -242,15 +249,15 @@ private fun CheckCell(
             .height(40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        subhead2_grey(text = title)
         Icon(
-            painter = painterResource(R.drawable.prem_crown_yellow_16),
+            painter = painterResource(R.drawable.ic_star_filled_20),
             contentDescription = null,
             tint = ComposeAppTheme.colors.jacob,
             modifier = Modifier
-                .padding(start = 2.dp)
+                .padding(end = 3.dp)
                 .size(20.dp)
         )
+        subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
         if (locked) {
             CheckLocked()
@@ -294,12 +301,12 @@ fun CheckValue(
     } else {
         when (validationResult) {
             AddressCheckResult.Correct,
-            AddressCheckResult.Clear -> subhead2_remus(stringResource(validationResult.stringResId))
+            AddressCheckResult.Clear -> subhead2_remus(stringResource(validationResult.titleResId))
 
-            AddressCheckResult.Incorrect,
-            AddressCheckResult.Detected -> subhead2_lucian(stringResource(validationResult.stringResId))
+            is AddressCheckResult.Incorrect,
+            AddressCheckResult.Detected -> subhead2_lucian(stringResource(validationResult.titleResId))
 
-            else -> {}
+            else -> subhead2_grey(stringResource(R.string.NotAvailable))
         }
     }
 }
@@ -387,11 +394,11 @@ data class SContact(
     val address: String
 )
 
-enum class AddressCheckResult(val stringResId: Int) {
-    Correct(R.string.Send_Address_Error_Correct),
-    Incorrect(R.string.Send_Address_Error_Incorrect),
-    Clear(R.string.Send_Address_Error_Clear),
-    Detected(R.string.Send_Address_Error_Detected)
+sealed class AddressCheckResult(val titleResId: Int, val description: String? = null) {
+    class Incorrect(description: String? = null) : AddressCheckResult(R.string.Send_Address_Error_Incorrect, description)
+    data object Correct : AddressCheckResult(R.string.Send_Address_Error_Correct)
+    data object Clear : AddressCheckResult(R.string.Send_Address_Error_Clear)
+    data object Detected : AddressCheckResult(R.string.Send_Address_Error_Detected)
 }
 
 data class ErrorMessage(
