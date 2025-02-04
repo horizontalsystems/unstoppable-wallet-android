@@ -25,10 +25,8 @@ data class PricingPhase(
     val priceCurrencyCode: String,
 ) {
     val isFree = priceAmountMicros == 0L
-
-    private val period = Period.parse(billingPeriod)
-
-    val numberOfDays = period.years * 365 +
-            period.months * 30 +
-            period.days
+    val period: Period = Period.parse(billingPeriod)
+    val numberOfDays = period.numberOfDays()
 }
+
+fun Period.numberOfDays() = years * 365 + months * 30 + days
