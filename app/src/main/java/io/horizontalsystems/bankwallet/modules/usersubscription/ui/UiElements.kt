@@ -115,6 +115,7 @@ fun SelectSubscriptionBottomSheet(
 
     uiState.error?.let {
         onError(it)
+        viewModel.onErrorHandled()
     }
 
     uiState.purchase?.let {
