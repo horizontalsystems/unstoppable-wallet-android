@@ -15,6 +15,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.StackBarSlice
 import io.horizontalsystems.chartview.ChartData
 import io.horizontalsystems.chartview.models.ChartPoint
+import io.horizontalsystems.marketkit.models.Analytics
 import io.horizontalsystems.marketkit.models.Blockchain
 import io.horizontalsystems.marketkit.models.BlockchainIssues
 import io.horizontalsystems.marketkit.models.Coin
@@ -96,9 +97,8 @@ object CoinAnalyticsModule {
     }
 
     data class TechAdviceData(
-        val adviceTitle: String,
         val detailText: String,
-        val sliderPosition: Int
+        val advice: Analytics.TechnicalAdvice.Advice
     )
 
     enum class OverallScore(val title: Int, val icon: Int) {

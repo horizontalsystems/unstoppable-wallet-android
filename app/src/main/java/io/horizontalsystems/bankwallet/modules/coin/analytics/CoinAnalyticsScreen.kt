@@ -29,6 +29,7 @@ import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsChart
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContainer
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsContentNumber
 import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.AnalyticsFooterCell
+import io.horizontalsystems.bankwallet.modules.coin.analytics.ui.TechnicalAdviceBlock
 import io.horizontalsystems.bankwallet.modules.coin.audits.CoinAuditsFragment
 import io.horizontalsystems.bankwallet.modules.coin.detectors.DetectorsFragment
 import io.horizontalsystems.bankwallet.modules.coin.investments.CoinInvestmentsFragment
@@ -291,7 +292,7 @@ private fun AnalyticsPreviewBlock(
             block.footerItems.forEachIndexed { index, item ->
                 if (item is CoinAnalyticsModule.FooterType.FooterItem) {
                     PreviewFooterCell(item.title, item.action != null, index)
-                } else if(item is CoinAnalyticsModule.FooterType.DetectorFooterItem) {
+                } else if (item is CoinAnalyticsModule.FooterType.DetectorFooterItem) {
                     PreviewFooterCell(item.title, item.action != null, index)
                 }
             }
@@ -329,9 +330,12 @@ private fun AnalyticsPreviewBlock(
                     )
                 }
 
-                 else -> {
-
-                 }
+                is CoinAnalyticsModule.AnalyticChart.TechAdvice -> {
+                    TechnicalAdviceBlock(
+                        detailText = "",
+                        advice = null
+                    )
+                }
             }
             VSpacer(12.dp)
         }
