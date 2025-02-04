@@ -832,6 +832,7 @@
 
     <string name="Transactions_Title">Transactions</string>
     <string name="Transactions_FilterAll">ALL</string>
+    <string name="Transactions_Hide">Transactions Hide</string>
     <string name="Transactions_EmptyList">You don\’t have any pending or past transactions yet</string>
     <string name="Transactions_WaitForSync">Please wait for the sync to finish.</string>
     <string name="Transactions_Pending">Pending</string>
@@ -989,6 +990,7 @@
     <string name="Settings_ExperimentalFeatures">Experimental</string>
     <string name="Settings_BaseCurrency">Base Currency</string>
     <string name="Settings_Language">Language</string>
+    <string name="settings_display_transactions">Display Transactions</string>
     <string name="Settings_Theme">Theme</string>
     <string name="Settings_Terms">Terms</string>
     <string name="Settings_Privacy">Privacy</string>
@@ -1054,7 +1056,15 @@
     <string name="Appearance_HideBalanceTabButtons">Hide Buttons</string>
     <string name="Appearance_HideBalanceTabButtonsDescription">This configuration hides the Send, Receive, and Swap buttons on Balance tab.</string>
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
+    <string name="show_all_transactions">Show All Transactions</string>
+    <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
+    <string name="display">Display</string>
+    <string name="display_nothing">Nothing</string>
+    <string name="display_last_4_transactions">Last 4 transactions</string>
+    <string name="display_last_2_transactions">Last 2 transactions</string>
+    <string name="display_last_1_transaction">Last transaction</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
+    <string name="Appearance_TransactionAutoHide_Description">Security Mode: hides transactions and allows you to set a separate passcode for unlocking them. In case of coercion, the system passcode can display fake transaction data (honey pot).</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
@@ -1143,8 +1153,10 @@
     <string name="SettingsSecurity_Privacy">Privacy</string>
     <string name="SettingsSecurity_Biometric_Authentication">Biometrics</string>
     <string name="SettingsSecurity_Info_Biometric_Authentication">Enabling Biometric Authentication may potentially weaken the security of your device when compared to plain PIN lock code.</string>
+    <string name="set_separate_passcode">Set a Separate Passcode</string>
     <string name="SettingsSecurity_EnablePin">Enable Passcode</string>
     <string name="SettingsSecurity_DisablePin">Disable Passcode</string>
+    <string name="SettingsSecurity_DeleteSeparatePasscode">Delete a Separate Passcode</string>
     <string name="SettingsSecurity_EditPin">Edit Passcode</string>
     <string name="SettingsSecurity_SetDuressPin">Set Duress Mode</string>
     <string name="SettingsSecurity_EditDuressPin">Edit Duress Passcode</string>
@@ -2010,6 +2022,7 @@
     <string name="Unlock_Title">Unlock</string>
     <string name="Unlock_Passcode">Passcode</string>
     <string name="Unlock_EnterPasscode">Enter Passcode</string>
+    <string name="Unlock_EnterPasscode_Transactions_Hide">Enter Passcode for \“Transactions Auto Hide\”</string>
     <string name="Unlock_Incorrect">Incorrect</string>
     <string name="Unlock_BiometricScanner">Biometrics Scanner</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
@@ -2022,6 +2035,7 @@
     <!--Set Pin-->
     <string name="PinSet_Title">Create Passcode</string>
     <string name="PinSet_Info">Your passcode will be used to unlock your wallet</string>
+    <string name="PinSet_Transactions_Hide">Set Passcode for \“Transactions Auto Hide\” mode</string>
     <string name="PinSet_ConfirmInfo">Confirm</string>
     <string name="PinSet_ErrorPinsDontMatch">Passcode did not match. Try again.</string>
     <string name="PinSet_ErrorFailedToSavePin">Error occurred while saving your passcode. Please, try again.</string>

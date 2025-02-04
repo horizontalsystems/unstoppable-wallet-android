@@ -5,6 +5,7 @@ import cash.p.terminal.core.domain.usecase.UpdateChangeNowStatusesUseCase
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
+import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
@@ -19,10 +20,12 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import io.horizontalsystems.core.ViewModelUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -35,7 +38,8 @@ class TokenBalanceViewModel(
     private val transactionViewItem2Factory: TransactionViewItemFactory,
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
-    private val accountManager: IAccountManager
+    private val accountManager: IAccountManager,
+    private val transactionHiddenManager: TransactionHiddenManager
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val updateChangeNowStatusesUseCase: UpdateChangeNowStatusesUseCase = getKoinInstance()
@@ -45,6 +49,7 @@ class TokenBalanceViewModel(
 
     private var balanceViewItem: BalanceViewItem? = null
     private var transactions: Map<String, List<TransactionViewItem>>? = null
+    private var hasHiddenTransactions: Boolean = false
 
     private var statusCheckerJob: Job? = null
 
@@ -78,7 +83,15 @@ class TokenBalanceViewModel(
             delay(300)
             transactionsService.start()
         }
+
+        viewModelScope.launch {
+            transactionHiddenManager.transactionHiddenFlow.collectLatest {
+                transactionsService.refreshList()
+            }
+        }
     }
+
+    fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
     fun startStatusChecker() {
         statusCheckerJob?.cancel()
@@ -102,12 +115,22 @@ class TokenBalanceViewModel(
         title = title,
         balanceViewItem = balanceViewItem,
         transactions = transactions,
+        hasHiddenTransactions = hasHiddenTransactions
     )
 
     private fun updateTransactions(items: List<TransactionItem>) {
-        transactions = items
-            .map { transactionViewItem2Factory.convertToViewItemCached(it) }
-            .groupBy { it.formattedDate }
+        transactions =
+            if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
+                when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
+                    TransactionDisplayLevel.NOTHING -> emptyList()
+                    TransactionDisplayLevel.LAST_1_TRANSACTION -> items.take(1)
+                    TransactionDisplayLevel.LAST_2_TRANSACTIONS -> items.take(2)
+                    TransactionDisplayLevel.LAST_4_TRANSACTIONS -> items.take(4)
+                }.also { hasHiddenTransactions = items.size != it.size }
+            } else {
+                items.also { hasHiddenTransactions = false }
+            }.map { transactionViewItem2Factory.convertToViewItemCached(it) }
+                .groupBy { it.formattedDate }
 
         emitState()
     }

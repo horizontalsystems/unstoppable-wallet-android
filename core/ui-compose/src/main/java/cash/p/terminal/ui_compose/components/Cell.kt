@@ -428,6 +428,27 @@ fun CellUniversalLawrenceSection(
 }
 
 @Composable
+fun CellUniversalLawrenceMutableSection(
+    composableItems: MutableList<@Composable () -> Unit>,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(ComposeAppTheme.colors.lawrence)
+    ) {
+        composableItems.forEachIndexed { index, composable ->
+            SectionUniversalItem(
+                borderTop = index != 0,
+            ) {
+                composable()
+            }
+        }
+    }
+}
+
+@Composable
 fun <T> CellUniversalLawrenceSection(
     items: Iterable<T>,
     showFrame: Boolean = false,

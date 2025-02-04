@@ -42,7 +42,9 @@ import cash.p.terminal.wallet.CexType
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.entities.EncryptedString
 import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.transaction.Fee
@@ -81,6 +83,9 @@ interface ILocalStorage {
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
     var balanceAutoHideEnabled: Boolean
+    var transactionHideEnabled: Boolean
+    var transactionDisplayLevel: TransactionDisplayLevel
+    var transactionHideSecretPin: EncryptedString?
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
     var mainShowedOnce: Boolean

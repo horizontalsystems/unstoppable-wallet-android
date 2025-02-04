@@ -20,6 +20,7 @@ class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
         PinSet(
             title = stringResource(R.string.PinSet_Title),
             description = stringResource(input?.descriptionResId ?: R.string.PinSet_Info),
+            pinType = input?.pinType ?: PinType.REGULAR,
             dismissWithSuccess = {
                 navController.setNavigationResultX(Result(true))
                 navController.popBackStack()
@@ -29,7 +30,7 @@ class SetPinFragment : BaseComposeFragment(screenshotEnabled = false) {
     }
 
     @Parcelize
-    data class Input(val descriptionResId: Int) : Parcelable
+    data class Input(val descriptionResId: Int, val pinType: PinType) : Parcelable
 
     @Parcelize
     data class Result(val success: Boolean) : Parcelable

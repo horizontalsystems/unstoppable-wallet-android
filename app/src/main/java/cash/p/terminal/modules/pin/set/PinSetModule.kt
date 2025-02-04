@@ -3,14 +3,20 @@ package cash.p.terminal.modules.pin.set
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
+import cash.p.terminal.core.getKoinInstance
+import cash.p.terminal.core.managers.TransactionHiddenManager
+import cash.p.terminal.modules.pin.PinType
 
 object PinSetModule {
 
-    class Factory(private val forDuress: Boolean) : ViewModelProvider.Factory {
-
+    class Factory(private val pinType: PinType) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return PinSetViewModel(App.pinComponent, forDuress) as T
+            return PinSetViewModel(
+                pinComponent = App.pinComponent,
+                pinType = pinType,
+                transactionHiddenManager = getKoinInstance<TransactionHiddenManager>()
+            ) as T
         }
     }
 

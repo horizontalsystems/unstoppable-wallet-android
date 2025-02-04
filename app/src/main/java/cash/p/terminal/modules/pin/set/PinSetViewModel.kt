@@ -2,18 +2,22 @@ package cash.p.terminal.modules.pin.set
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import io.horizontalsystems.core.ViewModelUiState
+import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.modules.pin.PinModule
+import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.pin.set.PinSetModule.PinSetViewState
 import cash.p.terminal.modules.pin.set.PinSetModule.SetStage.Confirm
 import cash.p.terminal.modules.pin.set.PinSetModule.SetStage.Enter
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.IPinComponent
+import io.horizontalsystems.core.ViewModelUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class PinSetViewModel(
     private val pinComponent: IPinComponent,
-    private val forDuress: Boolean,
+    private val pinType: PinType,
+    private val transactionHiddenManager: TransactionHiddenManager,
 ) : ViewModelUiState<PinSetViewState>() {
 
     private var enteredPin = ""
@@ -44,6 +48,12 @@ class PinSetViewModel(
         emitState()
     }
 
+    private fun isPinUnique(pin: String) =
+        when (pinType) {
+            PinType.DURESS, PinType.REGULAR -> pinComponent.isUnique(pin, pinType == PinType.DURESS)
+            else -> pinComponent.isUnique(pin, true) && pinComponent.isUnique(pin, false)
+        }
+
     fun onKeyClick(number: Int) {
         if (enteredPin.length >= PinModule.PIN_COUNT) return
 
@@ -56,7 +66,7 @@ class PinSetViewModel(
 
         when {
             stage == Enter -> {
-                if (pinComponent.isUnique(enteredPin, forDuress)) {
+                if (isPinUnique(enteredPin)) {
                     submittedPin = enteredPin
 
                     enteredPin = ""
@@ -69,17 +79,21 @@ class PinSetViewModel(
                 } else {
                     enteredPin = ""
 
-                    error = cash.p.terminal.strings.helpers.Translator.getString(R.string.PinSet_ErrorPinInUse)
+                    error =
+                        cash.p.terminal.strings.helpers.Translator.getString(R.string.PinSet_ErrorPinInUse)
                     emitState()
                 }
             }
+
             submittedPin.isNotEmpty() -> {
                 if (submittedPin == enteredPin) {
                     try {
-                        if (forDuress) {
-                            pinComponent.setDuressPin(submittedPin)
-                        } else {
-                            pinComponent.setPin(submittedPin)
+                        when (pinType) {
+                            PinType.DURESS -> pinComponent.setDuressPin(submittedPin)
+                            PinType.REGULAR -> pinComponent.setPin(submittedPin)
+                            else -> {
+                                transactionHiddenManager.setSeparatePin(submittedPin)
+                            }
                         }
 
                         finished = true
@@ -100,7 +114,7 @@ class PinSetViewModel(
 
         stage = Enter
         reverseSlideAnimation = true
-        error = cash.p.terminal.strings.helpers.Translator.getString(errorMessage)
+        error = Translator.getString(errorMessage)
         viewModelScope.launch {
             delay(500)
             emitState()

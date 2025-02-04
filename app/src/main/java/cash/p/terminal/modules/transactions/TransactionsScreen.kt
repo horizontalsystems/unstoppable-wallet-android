@@ -6,11 +6,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,44 +37,47 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
 import cash.p.terminal.core.stats.stat
 import cash.p.terminal.core.stats.statTab
-import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.balance.BalanceAccountsViewModel
 import cash.p.terminal.modules.balance.BalanceModule
 import cash.p.terminal.modules.balance.BalanceScreenState
-import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.components.AppBar
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui_compose.components.HeaderStick
 import cash.p.terminal.ui_compose.components.HsImage
-import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.ScrollableTabs
-import cash.p.terminal.ui_compose.entities.SectionItemPosition
 import cash.p.terminal.ui_compose.components.SectionUniversalItem
 import cash.p.terminal.ui_compose.components.TabItem
 import cash.p.terminal.ui_compose.components.body_leah
-import cash.p.terminal.ui_compose.sectionItemBorder
 import cash.p.terminal.ui_compose.components.subhead2_grey
+import cash.p.terminal.ui_compose.entities.SectionItemPosition
+import cash.p.terminal.ui_compose.sectionItemBorder
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.entities.ViewState
 
 @Composable
 fun TransactionsScreen(
     navController: NavController,
     viewModel: TransactionsViewModel
 ) {
-    val accountsViewModel = viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
+    val accountsViewModel =
+        viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
 
     val filterTypes by viewModel.filterTypesLiveData.observeAsState()
     val showFilterAlertDot by viewModel.filterResetEnabled.observeAsState(false)
@@ -94,7 +99,10 @@ fun TransactionsScreen(
                         onClick = {
                             navController.slideFromRight(R.id.transactionFilterFragment)
 
-                            stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionFilter))
+                            stat(
+                                page = StatPage.Transactions,
+                                event = StatEvent.Open(StatPage.TransactionFilter)
+                            )
                         },
                     )
                 )
@@ -174,6 +182,59 @@ private fun onTransactionClick(
     stat(page = StatPage.Transactions, event = StatEvent.Open(StatPage.TransactionInfo))
 }
 
+fun LazyListScope.transactionsHiddenBlock(
+    shortBlock: Boolean,
+    onShowAllTransactionsClicked: () -> Unit
+) {
+    item {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 32.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if (!shortBlock) {
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(
+                            color = ComposeAppTheme.colors.raina,
+                            shape = CircleShape
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        modifier = Modifier.size(48.dp),
+                        painter = painterResource(R.drawable.ic_eye_off),
+                        contentDescription = "transactions hidden",
+                        tint = ComposeAppTheme.colors.grey
+                    )
+                }
+                Spacer(Modifier.height(32.dp))
+                subhead2_grey(
+                    text = stringResource(R.string.Transactions_Hide),
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            } else {
+                subhead2_grey(
+                    text = "*****",
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            Spacer(Modifier.height(32.dp))
+            ButtonPrimaryYellow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, bottom = 32.dp),
+                title = stringResource(R.string.show_all_transactions),
+                onClick = onShowAllTransactionsClicked
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyListScope.transactionList(
     transactionsMap: Map<String, List<TransactionViewItem>>,
@@ -243,12 +304,15 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
             SectionItemPosition.First -> {
                 Modifier.clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
             }
+
             SectionItemPosition.Last -> {
                 Modifier.clip(RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp))
             }
+
             SectionItemPosition.Single -> {
                 Modifier.clip(RoundedCornerShape(12.dp))
             }
+
             else -> Modifier
         }
 
@@ -284,6 +348,7 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             contentDescription = null
                         )
                     }
+
                     is TransactionViewItem.Icon.Platform -> {
                         Icon(
                             modifier = Modifier.size(32.dp),
@@ -292,19 +357,25 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             contentDescription = null
                         )
                     }
+
                     is TransactionViewItem.Icon.Regular -> {
-                        val shape = if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                        val shape =
+                            if (icon.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         HsImage(
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier
+                                .size(32.dp)
                                 .clip(shape),
                             url = icon.url,
                             alternativeUrl = icon.alternativeUrl,
                             placeholder = icon.placeholder
                         )
                     }
+
                     is TransactionViewItem.Icon.Double -> {
-                        val backShape = if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
-                        val frontShape = if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                        val backShape =
+                            if (icon.back.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
+                        val frontShape =
+                            if (icon.front.rectangle) RoundedCornerShape(CornerSize(4.dp)) else CircleShape
                         HsImage(
                             modifier = Modifier
                                 .align(Alignment.TopStart)
@@ -336,6 +407,7 @@ fun TransactionCell(item: TransactionViewItem, position: SectionItemPosition, on
                             placeholder = icon.front.placeholder,
                         )
                     }
+
                     is TransactionViewItem.Icon.ImageResource -> {}
                 }
             }
