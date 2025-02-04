@@ -74,6 +74,12 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
     private fun refreshFreeTrialPeriod() {
         freeTrialPeriod = basePlans[selectedIndex].feePricingPhase?.period
     }
+
+    fun onErrorHandled() {
+        error = null
+
+        emitState()
+    }
 }
 
 data class BuySubscriptionChoosePlanUiState(
