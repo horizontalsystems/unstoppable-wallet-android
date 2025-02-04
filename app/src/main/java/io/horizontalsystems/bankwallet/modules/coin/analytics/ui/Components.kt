@@ -347,9 +347,8 @@ fun AnalyticsChart(
 
         is CoinAnalyticsModule.AnalyticChart.TechAdvice -> {
             TechnicalAdviceBlock(
-                adviceTitle = analyticChart.data.adviceTitle,
                 detailText = analyticChart.data.detailText,
-                sliderPosition = analyticChart.data.sliderPosition
+                advice = analyticChart.data.advice
             )
         }
     }

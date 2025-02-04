@@ -199,9 +199,8 @@ class CoinAnalyticsViewModel(
                     analyticChart = ChartViewItem(
                         AnalyticChart.TechAdvice(
                             CoinAnalyticsModule.TechAdviceData(
-                                adviceTitle = advice.title,
                                 detailText = technicalAdviceViewItemFactory.advice(technicalAdvice),
-                                sliderPosition = advice.sliderIndex
+                                advice = advice
                             )
                         ),
                         coin.uid,
