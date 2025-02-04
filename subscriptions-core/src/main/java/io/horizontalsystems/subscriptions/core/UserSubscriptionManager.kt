@@ -85,4 +85,8 @@ object UserSubscriptionManager {
     fun pause() {
 
     }
+
+    suspend fun restore() {
+        service.onResume()
+    }
 }
