@@ -904,14 +904,16 @@
     <string name="SettingsSubscription_SubscriptionPlan">Subscription Plan</string>
     <string name="SettingsSubscription_SubscriptionInfo">Next payment date: %s. You can manage your subscription in the Manage Subscription section.</string>
 
+    <string name="Period_Days">%s days</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Choose the plan</string>
     <string name="Premium_PlanPro">PRO</string>
     <string name="Premium_PlanVip">VIP</string>
-    <string name="Premium_EnjoyFirst7DaysFree_Description">Enjoy the first 7 days FREE. You can cancel your App Store subscription at any time.</string>
-    <string name="Premium_EnjoyFirst7DaysFree">Enjoy the first 7 days FREE.</string>
-    <string name="Premium_Get7DaysFree">Get 7 days FREE.</string>
+    <string name="Premium_EnjoyFreePeriod">Enjoy the first %s FREE.</string>
+    <string name="Premium_CancelSubscriptionInfo">You can cancel your subscription at any time.</string>
+    <string name="Premium_GetFreePeriod">Get %s FREE</string>
+    <string name="Premium_Subscribe">Subscribe</string>
     <string name="Premium_AddPromoCode">Add Promo Code</string>
     <string name="Premium_TryForFree">Try for FREE</string>
     <string name="Premium_Upgrade">Upgrade</string>

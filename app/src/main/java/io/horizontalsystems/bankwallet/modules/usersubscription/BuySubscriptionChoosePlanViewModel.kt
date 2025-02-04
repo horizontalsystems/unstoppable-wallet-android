@@ -7,24 +7,31 @@ import io.horizontalsystems.subscriptions.core.BasePlan
 import io.horizontalsystems.subscriptions.core.HSPurchase
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
+import java.time.Period
 
 class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoosePlanUiState>() {
+    private var freeTrialPeriod: Period? = null
     private var basePlans: List<BasePlan> = listOf()
     private var purchaseInProgress = false
     private var purchase: HSPurchase? = null
     private var error: Throwable? = null
+    private var selectedIndex = 0
 
     override fun createState() = BuySubscriptionChoosePlanUiState(
         basePlans = basePlans,
         purchaseInProgress = purchaseInProgress,
         error = error,
-        purchase = purchase
+        purchase = purchase,
+        selectedIndex = selectedIndex,
+        freeTrialPeriod = freeTrialPeriod
     )
 
     fun getBasePlans(subscriptionId: String) {
         viewModelScope.launch {
             try {
                 basePlans = UserSubscriptionManager.getBasePlans(subscriptionId)
+                refreshFreeTrialPeriod()
+
                 emitState()
             } catch (e: Throwable) {
                 error = e
@@ -56,13 +63,26 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
         }
     }
 
+    fun select(index: Int) {
+        selectedIndex = index
+
+        refreshFreeTrialPeriod()
+
+        emitState()
+    }
+
+    private fun refreshFreeTrialPeriod() {
+        freeTrialPeriod = basePlans[selectedIndex].feePricingPhase?.period
+    }
 }
 
 data class BuySubscriptionChoosePlanUiState(
     val basePlans: List<BasePlan>,
     val purchaseInProgress: Boolean,
     val error: Throwable?,
-    val purchase: HSPurchase?
+    val purchase: HSPurchase?,
+    val selectedIndex: Int,
+    val freeTrialPeriod: Period?
 ) {
     val choosePlanEnabled = !purchaseInProgress
 }

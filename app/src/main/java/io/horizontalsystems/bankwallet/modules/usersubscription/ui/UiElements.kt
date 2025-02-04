@@ -35,8 +35,6 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -82,6 +80,7 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.VIPClub
 import io.horizontalsystems.subscriptions.core.VIPSupport
+import io.horizontalsystems.subscriptions.core.numberOfDays
 
 enum class PremiumPlanType(@StringRes val titleResId: Int) {
     ProPlan(R.string.Premium_PlanPro),
@@ -120,12 +119,16 @@ fun SelectSubscriptionBottomSheet(
     }
 
     uiState.purchase?.let {
-        if(it.status == HSPurchase.Status.Purchased) {
+        if (it.status == HSPurchase.Status.Purchased) {
             onPurchase(type)
         }
     }
 
-    val selectedItemIndex = remember { mutableIntStateOf(0) }
+    val selectedItemIndex = uiState.selectedIndex
+    val freeTrialPeriodDays = uiState.freeTrialPeriod?.let {
+        stringResource(R.string.Period_Days, it.numberOfDays())
+    }
+
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.prem_star_yellow_16),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
@@ -141,26 +144,44 @@ fun SelectSubscriptionBottomSheet(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                uiState.basePlans.forEachIndexed() { index, basePlan ->
+                uiState.basePlans.forEachIndexed { index, basePlan ->
                     SubscriptionOption(
                         title = basePlan.id,
                         price = basePlan.stringRepresentation(),
                         note = "",
-                        isSelected = selectedItemIndex.intValue == index,
+                        isSelected = selectedItemIndex == index,
                         badgeText = null,
                         onClick = {
-                            selectedItemIndex.intValue = index
+                            viewModel.select(index)
                         }
                     )
                 }
             }
 
-            val bottomText = highlightText(
-                text = stringResource(R.string.Premium_EnjoyFirst7DaysFree_Description),
-                textColor = ComposeAppTheme.colors.leah,
-                highlightPart = stringResource(R.string.Premium_EnjoyFirst7DaysFree),
-                highlightColor = ComposeAppTheme.colors.remus
-            )
+            val bottomText = if (freeTrialPeriodDays != null) {
+                buildAnnotatedString {
+                    withStyle(SpanStyle(color = ComposeAppTheme.colors.remus)) {
+                        append(
+                            text = stringResource(
+                                R.string.Premium_EnjoyFreePeriod,
+                                freeTrialPeriodDays
+                            )
+                        )
+                    }
+                    append(" ")
+                    withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
+                        append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
+                    }
+                }
+            } else {
+                buildAnnotatedString {
+                    withStyle(SpanStyle(color = ComposeAppTheme.colors.leah)) {
+                        append(text = stringResource(R.string.Premium_CancelSubscriptionInfo))
+                    }
+                }
+            }
+
+
             VSpacer(12.dp)
             Text(
                 text = bottomText,
@@ -170,14 +191,20 @@ fun SelectSubscriptionBottomSheet(
                 modifier = Modifier.padding(horizontal = 32.dp, vertical = 12.dp)
             )
             VSpacer(24.dp)
+
+            val buttonTitle = if (freeTrialPeriodDays != null) {
+                stringResource(R.string.Premium_GetFreePeriod, freeTrialPeriodDays)
+            } else {
+                stringResource(R.string.Premium_Subscribe)
+            }
             ButtonPrimaryYellow(
                 modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Premium_Get7DaysFree),
+                title = buttonTitle,
                 onClick = {
                     activity?.let {
                         viewModel.launchPurchaseFlow(
                             subscriptionId = subscriptionId,
-                            offerToken = uiState.basePlans[selectedItemIndex.value].offerToken,
+                            offerToken = uiState.basePlans[selectedItemIndex].offerToken,
                             activity = it
                         )
                     }
