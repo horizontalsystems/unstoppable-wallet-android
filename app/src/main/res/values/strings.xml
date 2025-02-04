@@ -442,7 +442,7 @@
     <string name="Send_Processing_Description">Transaction sent successfully. Check its status for details.</string>
 
     <string name="Send_Address_Recent">Recent</string>
-    <string name="Send_Address_Error_Incorrect">Incorrect</string>
+    <string name="Send_Address_Error_Incorrect">Invalid</string>
     <string name="Send_Address_Error_Correct">Correct</string>
     <string name="Send_Address_Error_Detected">Detected</string>
     <string name="Send_Address_Error_Clear">Clear</string>
@@ -464,7 +464,7 @@
     <string name="Send_Error_UnsupportedAddress">Time locking works only when sending to payment addresses starting with 1... (aka BIP44 addresses)</string>
     <string name="Send_Error_MinimumAmount">Min. amount %s</string>
     <string name="Send_Error_MaximumAmount">Max. amount %s</string>
-    <string name="Send_Error_SendToSelf">Sending to yourself is not supported</string>
+    <string name="Send_Error_SendToSelf">Sending %s to your own address is not allowed. Please enter a different recipient address.</string>
 
     <string name="Send_DialogAvailableBalance">Available Balance</string>
     <string name="Send_DialogSpeed">Transaction Speed</string>
