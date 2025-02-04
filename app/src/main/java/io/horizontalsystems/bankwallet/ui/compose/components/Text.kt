@@ -111,6 +111,27 @@ fun headline1_leah(
 }
 
 @Composable
+fun headline1_jacob(
+    text: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {}
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        textAlign = textAlign,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+        style = ComposeAppTheme.typography.headline1,
+        color = ComposeAppTheme.colors.jacob,
+    )
+}
+
+@Composable
 fun L5(
     text: String,
     modifier: Modifier = Modifier,
