@@ -38,6 +38,7 @@ import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.managers.RateAppManager
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
@@ -64,6 +65,7 @@ import io.horizontalsystems.bankwallet.ui.compose.components.caption_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.helpers.LinkHelper
+import io.horizontalsystems.subscriptions.core.VIPSupport
 
 @Composable
 fun SettingsScreen(
@@ -345,7 +347,11 @@ private fun SettingSections(
             title = R.string.Settings_VipSupport,
             icon = R.drawable.ic_support_yellow_24,
             iconTint = ComposeAppTheme.colors.jacob,
-            onClick = openVipSupport
+            onClick = {
+                navController.paidAction(VIPSupport) {
+                    openVipSupport.invoke()
+                }
+            }
         )
     }
 

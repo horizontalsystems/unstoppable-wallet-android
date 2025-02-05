@@ -10,13 +10,13 @@ import kotlinx.coroutines.launch
 class SubscriptionViewModel : ViewModelUiState<SubscriptionViewModel.ViewItem>() {
 
     private var subscriptionName: String? =
-        UserSubscriptionManager.getActiveSubscriptions().firstOrNull()?.name
+        UserSubscriptionManager.getActiveUserSubscriptions().firstOrNull()?.subscription?.name
 
     init {
         viewModelScope.launch {
             UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
                 subscriptionName =
-                    UserSubscriptionManager.getActiveSubscriptions().firstOrNull()?.name
+                    UserSubscriptionManager.getActiveUserSubscriptions().firstOrNull()?.subscription?.name
                 emitState()
             }
         }
