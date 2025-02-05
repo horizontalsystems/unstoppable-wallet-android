@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import cash.p.terminal.entities.ChangeNowTransaction
+import java.math.BigDecimal
 
 @Dao
 interface ChangeNowTransactionsDao {
@@ -28,10 +29,12 @@ interface ChangeNowTransactionsDao {
 
     @Query(
         "SELECT * FROM ChangeNowTransaction WHERE " +
-                "(coinUidIn = :coinUid AND blockchainTypeIn = :blockchainType AND date >= :dateFrom AND date <= :dateTo) ORDER BY date DESC LIMIT 1"
+                "(coinUidIn = :coinUid AND blockchainTypeIn = :blockchainType AND date >= :dateFrom AND date <= :dateTo) " +
+                "AND (:amountIn is NULL OR amountIn == :amountIn) ORDER BY date DESC LIMIT 1"
     )
     fun getByTokenIn(
         coinUid: String,
+        amountIn: BigDecimal?,
         blockchainType: String,
         dateFrom: Long,
         dateTo: Long

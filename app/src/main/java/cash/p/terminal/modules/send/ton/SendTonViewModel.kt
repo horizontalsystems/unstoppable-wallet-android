@@ -18,6 +18,7 @@ import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,8 +26,8 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendTonViewModel(
-    val wallet: cash.p.terminal.wallet.Wallet,
-    val sendToken: Token,
+    val wallet: Wallet,
+    private val sendToken: Token,
     val feeToken: Token,
     val adapter: ISendTonAdapter,
     private val xRateService: XRateService,
@@ -164,7 +165,7 @@ class SendTonViewModel(
     private suspend fun handleUpdatedAddressState(addressState: SendTonAddressService.State) {
         this.addressState = addressState
 
-        feeService.setTonAddress(addressState.tonAddress)
+        feeService.run { setTonAddress(addressState.tonAddress) }
 
         emitState()
     }

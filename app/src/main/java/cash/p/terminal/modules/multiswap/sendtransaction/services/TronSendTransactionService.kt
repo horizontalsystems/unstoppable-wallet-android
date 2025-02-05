@@ -187,6 +187,7 @@ class TronSendTransactionService(
                 activationFee = activationFee,
                 resourcesConsumed = resourcesConsumed
             )
+            loading = false
             emitState()
         } catch (error: Throwable) {
             logger.warning("estimate error", error)

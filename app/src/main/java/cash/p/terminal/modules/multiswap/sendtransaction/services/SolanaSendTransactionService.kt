@@ -137,6 +137,7 @@ class SolanaSendTransactionService(
         this.amountState = amountState
         sendable = amountState.canBeSend
         cautions = amountState.amountCaution?.toCautionViewItem()?.let { listOf(it) } ?: listOf()
+        loading = false
         emitState()
     }
 

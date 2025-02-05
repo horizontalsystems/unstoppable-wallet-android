@@ -128,6 +128,7 @@ class ZCashSendTransactionService(
 
     private fun handleUpdatedAddressState(addressState: SendZCashAddressService.State) {
         this.addressState = addressState
+        loading = false
         emitState()
     }
 

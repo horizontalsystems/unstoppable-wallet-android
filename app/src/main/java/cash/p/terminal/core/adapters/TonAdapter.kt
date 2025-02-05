@@ -99,7 +99,7 @@ class TonAdapter(tonKitWrapper: TonKitWrapper) : BaseTonAdapter(tonKitWrapper, 9
 class TonTransactionRecord(
     source: TransactionSource,
     event: Event,
-    baseToken: Token,
+    val baseToken: Token,
     val actions: List<Action>
 ) : TransactionRecord(
     uid = event.id,
