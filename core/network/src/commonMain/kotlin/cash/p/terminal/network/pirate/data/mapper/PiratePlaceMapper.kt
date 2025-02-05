@@ -63,8 +63,8 @@ internal class PiratePlaceMapper {
                 balance = it.balance,
                 amount = it.amount,
                 createdAt = it.createdAt.toEpochMilli(),
-                balancePrice = it.balancePrice,
-                amountPrice = it.amountPrice
+                balancePrice = it.balancePrice.orEmpty(),
+                amountPrice = it.amountPrice.orEmpty()
             )
         }
     )
