@@ -58,20 +58,10 @@ class SecuritySettingsViewModel(
         emitState()
     }
 
-    fun checkForTransactionHidePin() {
-        if(uiState.transactionAutoHideEnabled &&
-            !uiState.pinEnabled && !uiState.transactionAutoHideSeparatePinExists) {
-            transactionHiddenManager.setTransactionHideEnabled(false)
-        }
-    }
-
     fun onDisableTransactionAutoHidePin() {
         transactionHiddenManager.clearSeparatePin()
         if(balanceHiddenManager.balanceAutoHidden) {
             balanceHiddenManager.setBalanceAutoHidden(false)
-        }
-        if(!pinComponent.isPinSet) {
-            transactionHiddenManager.setTransactionHideEnabled(false)
         }
         emitState()
     }

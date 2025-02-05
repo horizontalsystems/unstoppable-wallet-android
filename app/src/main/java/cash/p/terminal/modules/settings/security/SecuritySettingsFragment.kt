@@ -179,11 +179,6 @@ class SecuritySettingsFragment : BaseComposeFragment() {
             exitProcess(0)
         }
     }
-
-    override fun onDestroy() {
-        securitySettingsViewModel.checkForTransactionHidePin()
-        super.onDestroy()
-    }
 }
 
 @Composable
