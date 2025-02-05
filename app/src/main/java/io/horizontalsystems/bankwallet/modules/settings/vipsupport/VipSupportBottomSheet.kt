@@ -89,7 +89,6 @@ private fun VipSupportView(
         Image(
             painter = painterResource(id = R.drawable.ic_support_106_112),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         VSpacer(24.dp)
