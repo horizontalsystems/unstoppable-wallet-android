@@ -1010,7 +1010,7 @@
     <string name="Settings_AutoLock">Auto-Lock</string>
     <string name="Settings_Telegram" translatable="false">Telegram</string>
     <string name="Settings_Twitter" translatable="false">Twitter</string>
-    <string name="Settings_JoinUnstoppables">Be Free!</string>
+    <string name="Settings_JoinUnstoppables">Follow us</string>
     <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
 
     <string name="Settings_PersonalSupport">Personal Support</string>
@@ -1064,7 +1064,7 @@
     <string name="display_last_2_transactions">Last 2 transactions</string>
     <string name="display_last_1_transaction">Last transaction</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
-    <string name="Appearance_TransactionAutoHide_Description">Security Mode: hides transactions and allows you to set a separate passcode for unlocking them. In case of coercion, the system passcode can display fake transaction data (honey pot).</string>
+    <string name="Appearance_TransactionAutoHide_Description">Security Mode: hides transactions and allows you to set a separate passcode for unlocking them.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
@@ -2136,8 +2136,8 @@
     <string name="unpaid">Unpaid</string>
     <string name="stacking_unpaid">Stacking unpaid:</string>
     <string name="estimated_annual_interest">Estimated Annual Interest</string>
-    <string name="estimated_annual_interest_value_pirate" translatable="false">13%</string>
-    <string name="estimated_annual_interest_value_cosanta" translatable="false">31%</string>
+    <string name="estimated_annual_interest_value_pirate" translatable="false">11%</string>
+    <string name="estimated_annual_interest_value_cosanta" translatable="false">27%</string>
     <string name="accruals">Accruals</string>
     <string name="payouts">Payouts</string>
     <string name="investment_chart">Investment chart</string>
