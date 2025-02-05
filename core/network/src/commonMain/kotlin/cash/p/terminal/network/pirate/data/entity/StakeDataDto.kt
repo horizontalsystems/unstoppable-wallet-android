@@ -20,8 +20,8 @@ data class StakeDto(
     @SerialName("created_at")
     val createdAt: Instant,
     @SerialName("balance_price")
-    val balancePrice: Map<String, String>,
+    val balancePrice: Map<String, String>?,
 
     @SerialName("amount_price")
-    val amountPrice: Map<String, String>
+    val amountPrice: Map<String, String>?
 )
