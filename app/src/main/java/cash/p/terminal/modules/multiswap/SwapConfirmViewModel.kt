@@ -218,13 +218,13 @@ class SwapConfirmViewModel(
                 quoteFields = finalQuote.fields
                 loading = false
                 criticalError = null
-                emitState()
 
                 fiatServiceOut.setAmount(amountOut)
                 fiatServiceOutMin.setAmount(amountOutMin)
                 sendTransactionService.setSendTransactionData(finalQuote.sendTransactionData)
 
                 priceImpactService.setPriceImpact(finalQuote.priceImpact, swapProvider.title)
+                emitState()
             } catch (e: BackendChangeNowResponseError) {
                 e.printStackTrace()
                 loading = false

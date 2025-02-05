@@ -144,7 +144,7 @@ class BinanceChainSendTransactionService(
 
         SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
         this.feeState = feeState
-
+        loading = false
         emitState()
     }
 

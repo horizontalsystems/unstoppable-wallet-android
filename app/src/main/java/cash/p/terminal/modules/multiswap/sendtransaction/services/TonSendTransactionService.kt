@@ -10,6 +10,7 @@ import cash.p.terminal.core.ISendTonAdapter
 import cash.p.terminal.core.ethereum.CautionViewItem
 import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.CoinValue
+import cash.p.terminal.modules.address.AddressHandlerTon
 import cash.p.terminal.modules.amount.AmountValidator
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
@@ -28,7 +29,6 @@ import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.CurrencyValue
-import io.horizontalsystems.tonkit.FriendlyAddress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,6 +48,7 @@ class TonSendTransactionService(
         leaveSomeBalanceForFee = wallet.token.type.isNative
     )
     private val addressService = SendTonAddressService(null)
+    private val addressHandlerTon = AddressHandlerTon()
     private val feeService = SendTonFeeService(adapter)
     private val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
     private val feeToken =
@@ -94,7 +95,15 @@ class TonSendTransactionService(
 
     private fun handleUpdatedFeeState(feeState: SendTonFeeService.State) {
         this.feeState = feeState
+        if(feeState.fee != null) {
+            val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(CoinValue(feeToken, feeState.fee))
+            val secondaryAmountInfo = rate?.let {
+                SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * feeState.fee))
+            }
 
+            feeAmountData = SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
+        }
+        loading = feeState.fee == null
         emitState()
     }
 
@@ -143,17 +152,8 @@ class TonSendTransactionService(
 
     override fun setSendTransactionData(data: SendTransactionData) {
         check(data is SendTransactionData.Common)
-        coroutineScope.launch {
-            val fee = adapter.estimateFee(data.amount, FriendlyAddress.parse(data.address), null)
-            val coinValue = CoinValue(data.token, fee)
-            val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
-            val secondaryAmountInfo = rate?.let {
-                SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value))
-            }
-
-            feeAmountData = SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
-            emitState()
-        }
+        amountService.setAmount(data.amount)
+        addressService.setAddress(addressHandlerTon.parseAddress(data.address))
     }
 
     override suspend fun sendTransaction(): SendTransactionResult {

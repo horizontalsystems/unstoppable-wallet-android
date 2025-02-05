@@ -3,7 +3,6 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.TonTransactionRecord
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
@@ -555,7 +554,11 @@ class TransactionViewItemFactory(
             }
 
             is TonTransactionRecord -> {
-                createViewItemFromTonTransactionRecord(
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = record.actions.singleOrNull()?.type is TonTransactionRecord.Action.Type.Receive
+                ) ?: createViewItemFromTonTransactionRecord(
                     icon = icon,
                     record = record,
                     currencyValue = transactionItem.currencyValue
@@ -1201,6 +1204,7 @@ class TransactionViewItemFactory(
     } else {
         changeNowTransactionsStorage.getByTokenIn(
             token = token,
+            amountIn = transactionItem.record.mainValue?.decimalValue?.abs(),
             timestamp = transactionItem.record.timestamp * 1000
         )
     }?.let {
