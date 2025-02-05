@@ -29,4 +29,9 @@ data class PricingPhase(
     val numberOfDays = period.numberOfDays()
 }
 
+data class UserSubscription(
+    val subscription: Subscription,
+    val purchaseToken: String
+)
+
 fun Period.numberOfDays() = years * 365 + months * 30 + days

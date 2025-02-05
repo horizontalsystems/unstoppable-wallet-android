@@ -278,8 +278,8 @@ class MarketKitWrapper(
     fun requestPersonalSupport(username: String): Single<Response<Void>> =
         requestWithAuthToken { marketKit.requestPersonalSupport(it, username) }
 
-    fun requestVipSupport(username: String): Single<Map<String, String>> =
-        requestWithAuthToken { marketKit.requestVipSupport(it, username) }
+    fun requestVipSupport(subscriptionId: String): Single<Map<String, String>> =
+        requestWithAuthToken { marketKit.requestVipSupport(it, subscriptionId) }
 
     // Stats
 

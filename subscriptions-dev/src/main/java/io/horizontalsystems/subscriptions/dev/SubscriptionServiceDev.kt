@@ -9,8 +9,10 @@ import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PricingPhase
 import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.SubscriptionService
+import io.horizontalsystems.subscriptions.core.UserSubscription
+import java.util.UUID
 
-class SubscriptionServiceDev(context: Context) : SubscriptionService {
+class SubscriptionServiceDev(private val context: Context) : SubscriptionService {
     private val prefs: SharedPreferences by lazy {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
@@ -88,9 +90,11 @@ class SubscriptionServiceDev(context: Context) : SubscriptionService {
 
     override suspend fun getSubscriptions(): List<Subscription> = predefinedSubscriptions
 
-    override fun getActiveSubscriptions(): List<Subscription> {
+    override fun getActiveSubscriptions(): List<UserSubscription> {
         val activeSubscription = prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null)
-        return predefinedSubscriptions.filter { it.id == activeSubscription }
+        val subscriptions = predefinedSubscriptions.filter { it.id == activeSubscription }
+        val testUniqueId = UUID.randomUUID().toString()
+        return subscriptions.map { UserSubscription(it, testUniqueId) }
     }
 
     override suspend fun launchPurchaseFlow(

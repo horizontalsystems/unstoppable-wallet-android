@@ -77,7 +77,6 @@ class LocalStorageManager(
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
-    private val VIP_SUPPORT_LINK = "vip_support_link"
     private val APP_ID = "app_id"
     private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
     private val HIDE_SUSPICIOUS_TX = "hide_suspicious_tx"
@@ -484,12 +483,6 @@ class LocalStorageManager(
         get() = preferences.getBoolean(PERSONAL_SUPPORT_ENABLED, false)
         set(enabled) {
             preferences.edit().putBoolean(PERSONAL_SUPPORT_ENABLED, enabled).apply()
-        }
-
-    override var vipSupportLink: String?
-        get() = preferences.getString(VIP_SUPPORT_LINK, null)
-        set(link) {
-            preferences.edit().putString(VIP_SUPPORT_LINK, link).apply()
         }
 
     override var hideSuspiciousTransactions: Boolean
