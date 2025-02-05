@@ -2,18 +2,21 @@ package cash.p.terminal.modules.settings.security.passcode
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.ILocalStorage
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.BalanceHiddenManager
+import cash.p.terminal.core.managers.TransactionHiddenManager
+import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.core.ViewModelUiState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 
 class SecuritySettingsViewModel(
-    private val systemInfoManager: ISystemInfoManager,
+    systemInfoManager: ISystemInfoManager,
     private val pinComponent: IPinComponent,
     private val balanceHiddenManager: BalanceHiddenManager,
-    private val localStorage: ILocalStorage
+    private val localStorage: ILocalStorage,
+    private val transactionHiddenManager: TransactionHiddenManager
 ) : ViewModelUiState<SecuritySettingsUiState>() {
     val biometricSettingsVisible = systemInfoManager.biometricAuthSupported
 
@@ -36,11 +39,30 @@ class SecuritySettingsViewModel(
         biometricsEnabled = pinComponent.isBiometricAuthEnabled,
         duressPinEnabled = duressPinEnabled,
         balanceAutoHideEnabled = balanceAutoHideEnabled,
+        transactionAutoHideEnabled = transactionHiddenManager.transactionHiddenFlow.value.transactionHidden,
+        displayLevel = transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel,
+        transactionAutoHideSeparatePinExists =
+        transactionHiddenManager.transactionHiddenFlow.value.transactionAutoHidePinExists,
         autoLockIntervalName = localStorage.autoLockInterval.title,
     )
 
     fun enableBiometrics() {
         pinComponent.isBiometricAuthEnabled = true
+        emitState()
+    }
+
+    fun onTransactionAutoHideEnabledChange(enabled: Boolean) {
+        transactionHiddenManager.setTransactionHideEnabled(enabled)
+        transactionHiddenManager.clearSeparatePin()
+        transactionHiddenManager.setTransactionDisplayLevel(TransactionDisplayLevel.NOTHING)
+        emitState()
+    }
+
+    fun onDisableTransactionAutoHidePin() {
+        transactionHiddenManager.clearSeparatePin()
+        if(balanceHiddenManager.balanceAutoHidden) {
+            balanceHiddenManager.setBalanceAutoHidden(false)
+        }
         emitState()
     }
 
@@ -76,5 +98,8 @@ data class SecuritySettingsUiState(
     val biometricsEnabled: Boolean,
     val duressPinEnabled: Boolean,
     val balanceAutoHideEnabled: Boolean,
+    val transactionAutoHideEnabled: Boolean,
+    val displayLevel: TransactionDisplayLevel,
+    val transactionAutoHideSeparatePinExists: Boolean,
     val autoLockIntervalName: Int
 )

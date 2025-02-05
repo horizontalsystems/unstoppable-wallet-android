@@ -31,6 +31,7 @@ import org.koin.core.component.inject
 import java.math.BigDecimal
 import java.util.Locale
 import java.util.Optional
+import kotlin.enums.enumEntries
 
 val <T> Optional<T>.orNull: T?
     get() = when {
@@ -231,4 +232,8 @@ inline fun <reified T> getKoinInstance(): T {
     return object : KoinComponent {
         val value: T by inject()
     }.value
+}
+
+inline fun <reified T : Enum<T>> Enum.Companion.valueOrDefault(index: Int, default: T): T {
+    return enumValues<T>().getOrNull(index) ?: default
 }

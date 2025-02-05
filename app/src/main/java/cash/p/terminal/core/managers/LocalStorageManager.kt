@@ -2,8 +2,10 @@ package cash.p.terminal.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
+import cash.p.terminal.core.valueOrDefault
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.SyncMode
@@ -19,7 +21,9 @@ import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.wallet.BalanceSortType
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.entities.EncryptedString
 import cash.p.terminal.wallet.getUniqueKey
+import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.core.ILockoutStorage
@@ -77,6 +81,9 @@ class LocalStorageManager(
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
+    private val TRANSACTION_AUTO_HIDE_ENABLED = "transaction_auto_hide_enabled"
+    private val TRANSACTION_DISPLAY_LEVEL = "transaction_display_level"
+    private val TRANSACTION_HIDE_SECRET_PIN = "transaction_hide_secret_pin"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS =
         "non_recommended_account_alert_dismissed_accounts"
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
@@ -358,6 +365,29 @@ class LocalStorageManager(
         get() = preferences.getBoolean(BALANCE_AUTO_HIDE_ENABLED, false)
         set(value) {
             preferences.edit().putBoolean(BALANCE_AUTO_HIDE_ENABLED, value).commit()
+        }
+    override var transactionHideEnabled: Boolean
+        get() = preferences.getBoolean(TRANSACTION_AUTO_HIDE_ENABLED, false)
+        set(value) {
+            preferences.edit().putBoolean(TRANSACTION_AUTO_HIDE_ENABLED, value).commit()
+        }
+    override var transactionDisplayLevel: TransactionDisplayLevel
+        get() = preferences.getInt(TRANSACTION_DISPLAY_LEVEL, 0).let {
+            Enum.valueOrDefault<TransactionDisplayLevel>(it, TransactionDisplayLevel.NOTHING)
+        }
+        set(value) {
+            preferences.edit().putInt(TRANSACTION_DISPLAY_LEVEL, value.ordinal).apply()
+        }
+    override var transactionHideSecretPin: EncryptedString?
+        get() = preferences.getString(TRANSACTION_HIDE_SECRET_PIN, null)?.let {
+            EncryptedString(it)
+        }
+        set(value) {
+            preferences.edit()
+                .putString(
+                    TRANSACTION_HIDE_SECRET_PIN,
+                    value?.let { it.value })
+                .apply()
         }
 
     override var balanceTotalCoinUid: String?

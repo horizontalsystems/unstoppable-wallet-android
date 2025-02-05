@@ -24,13 +24,13 @@ class SetDuressPinFragment : BaseComposeFragment(screenshotEnabled = false) {
         PinSet(
             title = stringResource(id = R.string.SetDuressPin_Title),
             description = stringResource(id = R.string.SetDuressPin_Description),
+            pinType = PinType.DURESS,
             dismissWithSuccess = {
                 viewModel.onDuressPinSet()
                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Created)
                 navController.popBackStack(R.id.setDuressPinIntroFragment, true)
             },
             onBackPress = { navController.popBackStack() },
-            forDuress = true
         )
     }
 

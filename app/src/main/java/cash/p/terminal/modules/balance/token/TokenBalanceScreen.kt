@@ -50,6 +50,7 @@ import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.transactions.transactionList
+import cash.p.terminal.modules.transactions.transactionsHiddenBlock
 import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.Translator
@@ -73,6 +74,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isPirateCash
+import cash.p.terminal.wallet.managers.TransactionHiddenState
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -81,7 +83,8 @@ fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
     transactionsViewModel: TransactionsViewModel,
     navController: NavController,
-    onStackingClicked: () -> Unit
+    onStackingClicked: () -> Unit,
+    onShowAllTransactionsClicked: () -> Unit
 ) {
     val uiState = viewModel.uiState
 
@@ -97,7 +100,7 @@ fun TokenBalanceScreen(
         }
     ) { paddingValues ->
         val transactionItems = uiState.transactions
-        if (transactionItems.isNullOrEmpty()) {
+        if (transactionItems == null || (transactionItems.isEmpty() && !uiState.hasHiddenTransactions)) {
             Column(Modifier.padding(paddingValues)) {
                 uiState.balanceViewItem?.let {
                     TokenBalanceHeader(
@@ -146,10 +149,15 @@ fun TokenBalanceScreen(
                     },
                     onBottomReached = { viewModel.onBottomReached() }
                 )
+                if (uiState.hasHiddenTransactions) {
+                    transactionsHiddenBlock(
+                        shortBlock = transactionItems.isNotEmpty(),
+                        onShowAllTransactionsClicked = onShowAllTransactionsClicked
+                    )
+                }
             }
         }
     }
-
 }
 
 

@@ -22,23 +22,29 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
+import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.modules.main.MainModule
+import cash.p.terminal.modules.pin.ConfirmPinFragment
+import cash.p.terminal.modules.pin.PinType
+import cash.p.terminal.modules.pin.SetPinFragment
 import cash.p.terminal.modules.settings.security.passcode.SecurityPasscodeSettingsModule
 import cash.p.terminal.modules.settings.security.passcode.SecuritySettingsViewModel
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsModule
 import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewModel
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
+import cash.p.terminal.modules.settings.security.ui.TransactionAutoHideBlock
+import cash.p.terminal.navigation.slideFromRight
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.extensions.ConfirmationDialog
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.HsSwitch
-import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.body_leah
-import cash.p.terminal.ui.extensions.ConfirmationDialog
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlin.system.exitProcess
 
@@ -58,6 +64,73 @@ class SecuritySettingsFragment : BaseComposeFragment() {
             securitySettingsViewModel = securitySettingsViewModel,
             torViewModel = torViewModel,
             navController = navController,
+            onTransactionAutoHideEnabledChange = { enabled ->
+                if (enabled) {
+                    securitySettingsViewModel.onTransactionAutoHideEnabledChange(true)
+                } else {
+                    navController.authorizedAction(
+                        ConfirmPinFragment.InputConfirm(
+                            descriptionResId = R.string.Unlock_EnterPasscode_Transactions_Hide,
+                            pinType = PinType.TRANSACTIONS_HIDE
+                        )
+                    ) {
+                        securitySettingsViewModel.onTransactionAutoHideEnabledChange(false)
+                    }
+                }
+            },
+            onChangeDisplayClicked = {
+                navController.authorizedAction(
+                    ConfirmPinFragment.InputConfirm(
+                        descriptionResId = R.string.Unlock_EnterPasscode_Transactions_Hide,
+                        pinType = PinType.TRANSACTIONS_HIDE
+                    )
+                ) {
+                    navController.slideFromRight(R.id.chooseDisplayTransactionsFragment)
+                }
+            },
+            onSetTransactionAutoHidePinClicked = {
+                if (!securitySettingsViewModel.uiState.transactionAutoHideSeparatePinExists) {
+                    navController.authorizedAction(
+                        ConfirmPinFragment.InputConfirm(
+                            descriptionResId = R.string.Unlock_EnterPasscode,
+                            pinType = PinType.REGULAR
+                        )
+                    ) {
+                        navController.slideFromRight(
+                            R.id.setPinFragment,
+                            SetPinFragment.Input(
+                                descriptionResId = R.string.PinSet_Transactions_Hide,
+                                pinType = PinType.TRANSACTIONS_HIDE
+                            )
+                        )
+                    }
+                } else {
+                    navController.authorizedAction(
+                        ConfirmPinFragment.InputConfirm(
+                            descriptionResId = R.string.Unlock_EnterPasscode_Transactions_Hide,
+                            pinType = PinType.TRANSACTIONS_HIDE
+                        )
+                    ) {
+                        navController.slideFromRight(
+                            resId = R.id.editPinFragment,
+                            input = SetPinFragment.Input(
+                                R.string.PinSet_Transactions_Hide,
+                                PinType.TRANSACTIONS_HIDE
+                            )
+                        )
+                    }
+                }
+            },
+            onDisableTransactionAutoHidePinClicked = {
+                navController.authorizedAction(
+                    ConfirmPinFragment.InputConfirm(
+                        descriptionResId = R.string.Unlock_EnterPasscode_Transactions_Hide,
+                        pinType = PinType.TRANSACTIONS_HIDE
+                    )
+                ) {
+                    securitySettingsViewModel.onDisableTransactionAutoHidePin()
+                }
+            },
             showAppRestartAlert = { showAppRestartAlert() },
             restartApp = { restartApp() },
         )
@@ -113,6 +186,10 @@ private fun SecurityCenterScreen(
     securitySettingsViewModel: SecuritySettingsViewModel,
     torViewModel: SecurityTorSettingsViewModel,
     navController: NavController,
+    onTransactionAutoHideEnabledChange: (Boolean) -> Unit,
+    onSetTransactionAutoHidePinClicked: () -> Unit,
+    onDisableTransactionAutoHidePinClicked: () -> Unit,
+    onChangeDisplayClicked: () -> Unit,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
 ) {
@@ -127,7 +204,7 @@ private fun SecurityCenterScreen(
 
     val uiState = securitySettingsViewModel.uiState
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Settings_SecurityCenter),
@@ -179,6 +256,16 @@ private fun SecurityCenterScreen(
             InfoText(
                 text = stringResource(R.string.Appearance_BalanceAutoHide_Description),
                 paddingBottom = 32.dp
+            )
+
+            TransactionAutoHideBlock(
+                transactionAutoHideEnabled = uiState.transactionAutoHideEnabled,
+                displayLevel = uiState.displayLevel,
+                transactionAutoHideSeparatePinExists = uiState.transactionAutoHideSeparatePinExists,
+                onTransactionAutoHideEnabledChange = onTransactionAutoHideEnabledChange,
+                onPinClicked = onSetTransactionAutoHidePinClicked,
+                onDisablePinClicked = onDisableTransactionAutoHidePinClicked,
+                onChangeDisplayClicked = onChangeDisplayClicked
             )
 
             TorBlock(

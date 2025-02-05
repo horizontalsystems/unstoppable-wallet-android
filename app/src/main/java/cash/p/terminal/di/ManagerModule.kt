@@ -19,9 +19,11 @@ import cash.p.terminal.core.managers.SolanaWalletManager
 import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TonKitManager
+import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import cash.p.terminal.wallet.managers.ITransactionHiddenManager
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.CurrencyManager
 import org.koin.core.module.dsl.factoryOf
@@ -51,4 +53,5 @@ val managerModule = module {
     singleOf(::EvmLabelManager)
     factoryOf(::SolanaWalletManager)
     singleOf(::BalanceHiddenManager) bind IBalanceHiddenManager::class
+    singleOf(::TransactionHiddenManager) bind ITransactionHiddenManager::class
 }

@@ -4,6 +4,9 @@ import androidx.room.Entity
 
 class SecretString(val value: String)
 
+@JvmInline
+value class EncryptedString(val value: String)
+
 class SecretList(val list: List<String>)
 
 @Entity(primaryKeys = ["id"])
