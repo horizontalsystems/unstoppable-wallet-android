@@ -11,7 +11,6 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.IAccountManager
 import io.horizontalsystems.bankwallet.core.IWalletManager
 import io.horizontalsystems.bankwallet.core.accountTypeDerivation
-import io.horizontalsystems.bankwallet.core.bep2TokenUrl
 import io.horizontalsystems.bankwallet.core.bitcoinCashCoinType
 import io.horizontalsystems.bankwallet.core.eip20TokenUrl
 import io.horizontalsystems.bankwallet.core.imageUrl
@@ -180,23 +179,6 @@ class CoinOverviewViewModel(
                                 copyValue = tokenType.address,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = token.blockchain.eip20TokenUrl(tokenType.address),
-                                name = token.blockchain.name,
-                                token = token,
-                                canAddToWallet = canAddToWallet,
-                                inWallet = inWallet
-                            )
-                        )
-                    }
-
-                    is TokenType.Bep2 -> {
-                        val inWallet =
-                            canAddToWallet && activeWallets.any { it.token == token }
-                        items.add(
-                            TokenVariant(
-                                value = tokenType.symbol,
-                                copyValue = tokenType.symbol,
-                                imgUrl = token.blockchainType.imageUrl,
-                                explorerUrl = token.blockchain.bep2TokenUrl(tokenType.symbol),
                                 name = token.blockchain.name,
                                 token = token,
                                 canAddToWallet = canAddToWallet,

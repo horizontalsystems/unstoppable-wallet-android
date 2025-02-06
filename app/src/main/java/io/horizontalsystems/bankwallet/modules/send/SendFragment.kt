@@ -15,9 +15,6 @@ import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeModule
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceModule
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceScreen
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinModule
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinNavHost
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
@@ -79,23 +76,6 @@ class SendFragment : BaseFragment() {
                                 title,
                                 findNavController(),
                                 sendBitcoinViewModel,
-                                amountInputModeViewModel,
-                                sendEntryPointDestId,
-                                amount
-                            )
-                        }
-                    }
-
-                    is BlockchainType.BinanceChain -> {
-                        val factory = SendBinanceModule.Factory(wallet, address, hideAddress)
-                        val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment) {
-                            factory
-                        }
-                        setContent {
-                            SendBinanceScreen(
-                                title,
-                                findNavController(),
-                                sendBinanceViewModel,
                                 amountInputModeViewModel,
                                 sendEntryPointDestId,
                                 amount

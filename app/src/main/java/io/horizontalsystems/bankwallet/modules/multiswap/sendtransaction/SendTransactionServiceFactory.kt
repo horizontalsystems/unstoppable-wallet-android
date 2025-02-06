@@ -21,7 +21,6 @@ object SendTransactionServiceFactory {
         BlockchainType.Litecoin,
         BlockchainType.Dash,
         BlockchainType.Zcash,
-        BlockchainType.BinanceChain,
         BlockchainType.Solana,
         BlockchainType.Tron,
         BlockchainType.Ton,

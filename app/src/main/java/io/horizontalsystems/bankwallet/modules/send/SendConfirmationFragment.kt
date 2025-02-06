@@ -7,8 +7,6 @@ import androidx.navigation.navGraphViewModels
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.modules.amount.AmountInputModeViewModel
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceConfirmationScreen
-import io.horizontalsystems.bankwallet.modules.send.binance.SendBinanceViewModel
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinConfirmationScreen
 import io.horizontalsystems.bankwallet.modules.send.bitcoin.SendBitcoinViewModel
 import io.horizontalsystems.bankwallet.modules.send.solana.SendSolanaConfirmationScreen
@@ -34,17 +32,6 @@ class SendConfirmationFragment : BaseComposeFragment() {
                     SendBitcoinConfirmationScreen(
                         navController,
                         sendBitcoinViewModel,
-                        amountInputModeViewModel,
-                        input.sendEntryPointDestId
-                    )
-                }
-
-                Type.Bep2 -> {
-                    val sendBinanceViewModel by navGraphViewModels<SendBinanceViewModel>(R.id.sendXFragment)
-
-                    SendBinanceConfirmationScreen(
-                        navController,
-                        sendBinanceViewModel,
                         amountInputModeViewModel,
                         input.sendEntryPointDestId
                     )
@@ -98,7 +85,7 @@ class SendConfirmationFragment : BaseComposeFragment() {
 
     @Parcelize
     enum class Type : Parcelable {
-        Bitcoin, Bep2, ZCash, Solana, Tron, Ton
+        Bitcoin, ZCash, Solana, Tron, Ton
     }
 
     @Parcelize

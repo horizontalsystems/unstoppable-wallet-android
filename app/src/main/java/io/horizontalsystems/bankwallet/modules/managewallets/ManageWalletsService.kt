@@ -131,7 +131,6 @@ class ManageWalletsService(
         is TokenType.Derived,
         is TokenType.AddressTyped,
         is TokenType.Eip20,
-        is TokenType.Bep2,
         is TokenType.Spl,
         is TokenType.Jetton -> true
         else -> false

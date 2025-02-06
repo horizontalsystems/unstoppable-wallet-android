@@ -51,7 +51,6 @@ class AddressViewModel(
                 BlockchainType.Litecoin,
                 BlockchainType.Zcash,
                 BlockchainType.Solana,
-                BlockchainType.BinanceChain,
                 BlockchainType.ECash,
                 BlockchainType.Tron,
                 BlockchainType.Ton,

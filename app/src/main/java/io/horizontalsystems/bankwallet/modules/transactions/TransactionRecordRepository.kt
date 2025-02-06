@@ -70,8 +70,8 @@ class TransactionRecordRepository(
                 BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
-                BlockchainType.Zcash,
-                BlockchainType.BinanceChain -> mergedWallets.add(wallet)
+                BlockchainType.Zcash -> mergedWallets.add(wallet)
+
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
@@ -88,6 +88,7 @@ class TransactionRecordRepository(
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
                 }
+
                 is BlockchainType.Unsupported -> Unit
             }
         }

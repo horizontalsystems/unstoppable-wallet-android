@@ -92,7 +92,6 @@ class BalanceViewItemFactory {
         BlockchainType.Zcash -> 10
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
-        BlockchainType.BinanceChain,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
