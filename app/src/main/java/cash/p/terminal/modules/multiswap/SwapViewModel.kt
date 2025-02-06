@@ -266,7 +266,7 @@ data class SwapUiState(
         error != null -> SwapStep.Error(error)
         tokenIn == null -> SwapStep.InputRequired(InputType.TokenIn)
         tokenOut == null -> SwapStep.InputRequired(InputType.TokenOut)
-        amountIn == null -> SwapStep.InputRequired(InputType.Amount)
+        amountIn == null || amountIn == BigDecimal(0) -> SwapStep.InputRequired(InputType.Amount)
         quote?.actionRequired != null -> SwapStep.ActionRequired(quote.actionRequired!!)
         else -> SwapStep.Proceed
     }
