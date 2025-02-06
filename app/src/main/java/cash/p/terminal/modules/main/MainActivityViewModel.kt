@@ -1,7 +1,5 @@
 package cash.p.terminal.modules.main
 
-import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -55,10 +53,8 @@ class MainActivityViewModel(
         viewModelScope.launch {
             pinComponent.isLocked.collect { isLocked ->
                 if(isLocked) {
-                    Log.d("MainActivityViewModel", "isLocked")
                     App.backgroundManager.currentActivity?.get()?.let {
                         LockScreenActivity.start(it)
-                        Log.d("MainActivityViewModel", "isLocked - start activity")
                     }
                 }
             }
