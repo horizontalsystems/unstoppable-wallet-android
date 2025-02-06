@@ -1,6 +1,7 @@
 package io.horizontalsystems.core
 
 import io.reactivex.Flowable
+import kotlinx.coroutines.flow.StateFlow
 import java.util.Date
 import javax.crypto.SecretKey
 
@@ -33,7 +34,7 @@ interface ISystemInfoManager {
 interface IPinComponent {
     var isBiometricAuthEnabled: Boolean
     val isPinSet: Boolean
-    val isLocked: Boolean
+    val isLocked: StateFlow<Boolean>
     val pinSetFlowable: Flowable<Unit>
 
     fun willEnterForeground()
