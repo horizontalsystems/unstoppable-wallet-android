@@ -70,4 +70,5 @@ dependencies {
 
     implementation(project(":core:strings"))
     implementation(project(":core:core"))
+    implementation(project(":core:network"))
 }

@@ -63,6 +63,7 @@ import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.Observable
 import io.reactivex.Single
 import managers.CoinManager
+import org.koin.java.KoinJavaComponent.inject
 import retrofit2.Response
 import java.math.BigDecimal
 import java.util.Date
@@ -654,7 +655,7 @@ class MarketKit(
             val coinPriceSchedulerFactory = CoinPriceSchedulerFactory(coinPriceManager, hsProvider)
             val coinPriceSyncManager = CoinPriceSyncManager(coinPriceSchedulerFactory)
             coinPriceManager.listener = coinPriceSyncManager
-            val cryptoCompareProvider = CryptoCompareProvider()
+            val cryptoCompareProvider by inject<CryptoCompareProvider>(CryptoCompareProvider::class.java)
             val postManager = PostManager(cryptoCompareProvider)
             val globalMarketInfoStorage = GlobalMarketInfoStorage(marketDatabase)
             val globalMarketInfoManager =
