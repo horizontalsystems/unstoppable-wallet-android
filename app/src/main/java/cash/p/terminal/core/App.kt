@@ -11,7 +11,6 @@ import cash.p.terminal.BuildConfig
 import cash.p.terminal.core.di.appModule
 import cash.p.terminal.core.factories.AccountFactory
 import cash.p.terminal.core.factories.AdapterFactory
-import cash.p.terminal.core.managers.AccountCleaner
 import cash.p.terminal.core.managers.AdapterManager
 import cash.p.terminal.core.managers.AppVersionManager
 import cash.p.terminal.core.managers.BackupManager
@@ -82,9 +81,7 @@ import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
 import cash.p.terminal.modules.walletconnect.WCWalletRequestHandler
 import cash.p.terminal.modules.walletconnect.storage.WCSessionStorage
-import cash.p.terminal.wallet.IAccountCleaner
 import cash.p.terminal.wallet.IAccountManager
-import cash.p.terminal.wallet.IAccountsStorage
 import cash.p.terminal.wallet.IAdapterManager
 import cash.p.terminal.wallet.IEnabledWalletStorage
 import cash.p.terminal.wallet.IWalletManager
@@ -158,7 +155,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
 
         lateinit var connectivityManager: ConnectivityManager
         val appDatabase: AppDatabase by inject(AppDatabase::class.java)
-        val accountsStorage: IAccountsStorage by inject(IAccountsStorage::class.java)
         val enabledWalletsStorage: IEnabledWalletStorage by inject(IEnabledWalletStorage::class.java)
         val binanceKitManager: BinanceKitManager by inject(BinanceKitManager::class.java)
         val solanaKitManager: SolanaKitManager by inject(SolanaKitManager::class.java)
@@ -166,7 +162,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val tonKitManager: TonKitManager by inject(TonKitManager::class.java)
         val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
         lateinit var feeCoinProvider: FeeTokenProvider
-        val accountCleaner: IAccountCleaner by inject(AccountCleaner::class.java)
         lateinit var rateAppManager: IRateAppManager
         val coinManager: ICoinManager by inject(ICoinManager::class.java)
         lateinit var wcSessionManager: WCSessionManager
@@ -234,6 +229,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         priceManager = PriceManager(localStorage)
 
         feeRateProvider = FeeRateProvider(appConfigProvider)
+
         backgroundManager = get()
 
         AppLog.logsDao = appDatabase.logsDao()

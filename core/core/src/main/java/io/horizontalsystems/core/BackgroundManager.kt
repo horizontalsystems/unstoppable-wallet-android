@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
 
@@ -20,11 +21,15 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
         application.registerActivityLifecycleCallbacks(this)
     }
 
+    var currentActivity: WeakReference<Activity>? = null
+        private set
+
     private var foregroundActivityCount: Int = 0
     private var aliveActivityCount: Int = 0
 
     @Synchronized
     override fun onActivityStarted(activity: Activity) {
+        currentActivity = WeakReference(activity)
         if (foregroundActivityCount == 0) {
             scope.launch {
                 _stateFlow.emit(BackgroundManagerState.EnterForeground)
@@ -47,6 +52,7 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
 
     @Synchronized
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        currentActivity = WeakReference(activity)
         aliveActivityCount++
     }
 
@@ -59,11 +65,17 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
                 _stateFlow.emit(BackgroundManagerState.AllActivitiesDestroyed)
             }
         }
+
+        if (currentActivity?.get() == activity) {
+            currentActivity = null
+        }
     }
 
     override fun onActivityPaused(p0: Activity) {}
 
-    override fun onActivityResumed(p0: Activity) {}
+    override fun onActivityResumed(activity: Activity) {
+        currentActivity = WeakReference(activity)
+    }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 

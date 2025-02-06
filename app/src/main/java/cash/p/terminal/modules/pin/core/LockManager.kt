@@ -3,6 +3,8 @@ package cash.p.terminal.modules.pin.core
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import io.horizontalsystems.core.helpers.DateHelper
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.Date
 
 class LockManager(
@@ -10,14 +12,13 @@ class LockManager(
     private val localStorage: ILocalStorage
 ) {
 
-    var isLocked: Boolean = true
-        private set
-    private val lockTimeout = 60L
+    private val _isLocked = MutableStateFlow(true)
+    val isLocked = _isLocked.asStateFlow()
     private var appLastVisitTime: Long = 0
     private var keepUnlocked = false
 
     fun didEnterBackground() {
-        if (isLocked) {
+        if (isLocked.value) {
             return
         }
 
@@ -25,7 +26,7 @@ class LockManager(
     }
 
     fun willEnterForeground() {
-        if (isLocked || !pinManager.isPinSet) {
+        if (isLocked.value || !pinManager.isPinSet) {
             return
         }
 
@@ -38,14 +39,13 @@ class LockManager(
                 return
             }
         }
-
         if (secondsAgo >= autoLockInterval.intervalInSeconds) {
-            isLocked = true
+            _isLocked.value = true
         }
     }
 
     fun onUnlock() {
-        isLocked = false
+        _isLocked.value = false
     }
 
     fun updateLastExitDate() {
@@ -53,7 +53,7 @@ class LockManager(
     }
 
     fun lock() {
-        isLocked = true
+        _isLocked.value = true
         appLastVisitTime = 0
     }
 
