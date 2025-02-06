@@ -31,7 +31,6 @@ import org.koin.core.component.inject
 import java.math.BigDecimal
 import java.util.Locale
 import java.util.Optional
-import kotlin.enums.enumEntries
 
 val <T> Optional<T>.orNull: T?
     get() = when {
