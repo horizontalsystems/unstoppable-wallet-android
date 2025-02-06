@@ -45,6 +45,8 @@ android {
         resValue "string", "walletConnectAppMetaDataIcon", "https://raw.githubusercontent.com/horizontalsystems/HS-Design/master/PressKit/UW-AppIcon-on-light.png"
         resValue "string", "accountsBackupFileSalt", "unstoppable"
 
+        buildConfigField "boolean", "FDROID_BUILD", "false"
+
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a"
         }
@@ -70,17 +72,15 @@ android {
     productFlavors {
         base {
             dimension = "distribution"
-            buildConfigField "boolean", "IS_FDROID", "false"
         }
 
         fdroid {
             dimension = "distribution"
-            buildConfigField "boolean", "IS_FDROID", "true"
+            buildConfigField "boolean", "FDROID_BUILD", "true"
         }
 
         ci {
             dimension = "distribution"
-            buildConfigField "boolean", "IS_FDROID", "false"
 
             applicationIdSuffix ".appcenter"
             versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
