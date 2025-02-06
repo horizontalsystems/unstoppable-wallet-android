@@ -66,6 +66,28 @@ android {
         }
     }
 
+    flavorDimensions += "distribution"
+    productFlavors {
+        base {
+            dimension = "distribution"
+            buildConfigField "boolean", "IS_FDROID", "false"
+        }
+
+        fdroid {
+            dimension = "distribution"
+            buildConfigField "boolean", "IS_FDROID", "true"
+        }
+
+        ci {
+            dimension = "distribution"
+            buildConfigField "boolean", "IS_FDROID", "false"
+
+            applicationIdSuffix ".appcenter"
+            versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
+            signingConfig signingConfigs.appCenter
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
@@ -100,14 +122,6 @@ android {
             resValue "string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4"
         }
 
-        appcenterdebug {
-            initWith debug
-            defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
-            applicationIdSuffix ".dev.appcenter"
-            signingConfig signingConfigs.appCenter
-            matchingFallbacks = ['debug']
-        }
-
         release {
             debuggable false
             minifyEnabled false
@@ -137,16 +151,9 @@ android {
             resValue "string", "udnApiKey", "r2phzgatt_zt9-hd_wyvdjrdsrimnxgokm7knyag1malzgcz"
             resValue "string", "oneInchApiKey", "3EttyCzgWb2GLFIRoPIUYM0M4uKAVEcq"
             resValue "string", "blocksDecodedEthereumRpc", "https://api.blocksdecoded.com/v1/ethereum-rpc/mainnet"
+            resValue "string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/"
+            resValue "string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4"
         }
-
-        appcenterrelease {
-            initWith release
-            defaultConfig.versionCode System.getenv("BUILD_NUMBER")?.toInteger() ?: defaultConfig.versionCode
-            applicationIdSuffix ".appcenter"
-            signingConfig signingConfigs.appCenter
-            matchingFallbacks = ['release']
-        }
-
     }
 
     compileOptions {
@@ -197,6 +204,12 @@ android {
         }
     }
 
+}
+
+configurations {
+    // Initializes a placeholder for the freeDebugImplementation dependency configuration.
+    baseDebugImplementation {}
+    baseReleaseImplementation {}
 }
 
 dependencies {
@@ -281,7 +294,6 @@ dependencies {
     implementation "androidx.work:work-rxjava2:$work_version"
 
     def leakCanary = 'com.squareup.leakcanary:leakcanary-android:2.14'
-    appcenterdebugImplementation leakCanary
     debugImplementation leakCanary
 
     // Wallet kits
@@ -324,10 +336,11 @@ dependencies {
 
     implementation project(':subscriptions-core')
 
-    releaseImplementation project(':subscriptions-google-play')
-    debugImplementation project(':subscriptions-dev')
-    appcenterdebugImplementation project(':subscriptions-dev')
-    appcenterreleaseImplementation project(':subscriptions-dev')
+    baseDebugImplementation project(':subscriptions-dev')
+    baseReleaseImplementation project(':subscriptions-google-play')
+
+    fdroidImplementation project(':subscriptions-fdroid')
+    ciImplementation project(':subscriptions-dev')
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.10.0-rc01'
