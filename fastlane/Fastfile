@@ -10,7 +10,7 @@ platform :android do
     commit = last_git_commit
 
     gradle(task: "clean")
-    gradle(task: "assembleAppcenterdebug", flags: "--stacktrace --no-daemon")
+    gradle(task: "assembleCiDebug", flags: "--stacktrace --no-daemon")
 
     upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
@@ -20,7 +20,7 @@ platform :android do
     commit = last_git_commit
 
     gradle(task: "clean")
-    gradle(task: "assembleAppcenterrelease", flags: "--stacktrace --no-daemon")
+    gradle(task: "assembleCiRelease", flags: "--stacktrace --no-daemon")
 
     upload_to_app_center(api_token: options[:api_token], app_name: options[:app_name], notes: "Author: #{commit[:author]}, changes: #{commit[:message]}")
   end
