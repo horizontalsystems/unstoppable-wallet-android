@@ -15,7 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -26,6 +28,11 @@ import java.math.BigDecimal
 
 class SwapQuoteService {
     private val changeNowProvider: ChangeNowProvider by inject(ChangeNowProvider::class.java)
+
+    private companion object {
+        const val DEBOUNCE_INPUT_MSEC: Long = 300
+    }
+    private var runQuotationJob: Job? = null
 
     private val allProviders = listOf(
         OneInchProvider,
@@ -86,8 +93,6 @@ class SwapQuoteService {
         quote = null
         error = null
 
-        emitState()
-
         val tokenIn = tokenIn
         val tokenOut = tokenOut
         val amountIn = amountIn
@@ -123,8 +128,12 @@ class SwapQuoteService {
 
                     quoting = false
                     emitState()
+                } else {
+                    emitState()
                 }
             }
+        } else {
+            emitState()
         }
     }
 
@@ -160,12 +169,23 @@ class SwapQuoteService {
     }
 
     fun setAmount(v: BigDecimal?) {
-        if (amountIn == v) return
+        if (amountIn == v) {
+            runQuotationWithDebounce()
+            return
+        }
 
         amountIn = v
         preferredProvider = null
 
-        runQuotation()
+        runQuotationWithDebounce()
+    }
+
+    private fun runQuotationWithDebounce() {
+        runQuotationJob?.cancel()
+        runQuotationJob = coroutineScope.launch {
+            delay(DEBOUNCE_INPUT_MSEC)
+            runQuotation()
+        }
     }
 
     fun setTokenIn(token: Token) {
