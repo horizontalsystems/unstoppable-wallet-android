@@ -6,7 +6,6 @@ import io.horizontalsystems.bankwallet.core.IAdapter
 import io.horizontalsystems.bankwallet.core.ICoinManager
 import io.horizontalsystems.bankwallet.core.ILocalStorage
 import io.horizontalsystems.bankwallet.core.ITransactionsAdapter
-import io.horizontalsystems.bankwallet.core.adapters.BinanceAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinAdapter
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinCashAdapter
 import io.horizontalsystems.bankwallet.core.adapters.DashAdapter
@@ -149,10 +148,6 @@ class AdapterFactory(
                 getEvmAdapter(wallet)
             }
 
-            BlockchainType.BinanceChain -> {
-                getBinanceAdapter(wallet, "BNB")
-            }
-
             BlockchainType.Solana -> {
                 val solanaKitWrapper = solanaKitManager.getSolanaKitWrapper(wallet.account)
                 SolanaAdapter(solanaKitWrapper)
@@ -173,20 +168,9 @@ class AdapterFactory(
                 getEip20Adapter(wallet, tokenType.address)
             }
         }
-        is TokenType.Bep2 -> getBinanceAdapter(wallet, tokenType.symbol)
         is TokenType.Spl -> getSplAdapter(wallet, tokenType.address)
         is TokenType.Jetton -> getJettonAdapter(wallet, tokenType.address)
         is TokenType.Unsupported -> null
-    }
-
-    private fun getBinanceAdapter(
-        wallet: Wallet,
-        symbol: String
-    ): BinanceAdapter? {
-        val query = TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
-        return coinManager.getToken(query)?.let { feeToken ->
-            BinanceAdapter(binanceKitManager.binanceKit(wallet), symbol, feeToken, wallet)
-        }
     }
 
     fun evmTransactionsAdapter(source: TransactionSource, blockchainType: BlockchainType): ITransactionsAdapter? {
@@ -246,9 +230,6 @@ class AdapterFactory(
             BlockchainType.ArbitrumOne -> {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(wallet.account)
-            }
-            BlockchainType.BinanceChain -> {
-                binanceKitManager.unlink(wallet.account)
             }
             BlockchainType.Solana -> {
                 solanaKitManager.unlink(wallet.account)

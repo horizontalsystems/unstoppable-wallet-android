@@ -21,7 +21,6 @@ class MarketFiltersService(
     private val blockchainTypes = listOf(
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
-        BlockchainType.BinanceChain,
         BlockchainType.ArbitrumOne,
         BlockchainType.Avalanche,
         BlockchainType.Gnosis,

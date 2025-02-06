@@ -44,7 +44,6 @@ val BitcoinAddress.tokenType: TokenType
         BlockchainType.Zcash,
         BlockchainType.Ethereum,
         BlockchainType.BinanceSmartChain,
-        BlockchainType.BinanceChain,
         BlockchainType.Polygon,
         BlockchainType.Avalanche,
         BlockchainType.Optimism,

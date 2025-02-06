@@ -13,7 +13,6 @@ import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBase58
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBech32
-import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBinanceChain
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerBitcoinCash
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEns
 import io.horizontalsystems.bankwallet.modules.address.AddressHandlerEvm
@@ -196,10 +195,6 @@ class EnterAddressViewModel(
                 BlockchainType.Dash -> {
                     val network = MainNetDash()
                     addressParserChain.addHandler(AddressHandlerBase58(network, blockchainType))
-                }
-
-                BlockchainType.BinanceChain -> {
-                    addressParserChain.addHandler(AddressHandlerBinanceChain())
                 }
 
                 BlockchainType.Zcash -> {

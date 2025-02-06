@@ -23,8 +23,7 @@ object AddressInputModule {
                 BlockchainType.ECash,
                 BlockchainType.Litecoin,
                 BlockchainType.Dash,
-                BlockchainType.Zcash,
-                BlockchainType.BinanceChain -> {
+                BlockchainType.Zcash -> {
                     addressParserChain.addHandler(AddressHandlerPure(tokenQuery.blockchainType))
                 }
                 BlockchainType.Ethereum,

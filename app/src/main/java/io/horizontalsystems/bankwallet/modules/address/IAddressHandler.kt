@@ -4,7 +4,6 @@ import com.unstoppabledomains.resolution.Resolution
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAddressValidator
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.bankwallet.entities.BitcoinAddress
-import io.horizontalsystems.binancechainkit.helpers.Crypto
 import io.horizontalsystems.bitcoincore.network.Network
 import io.horizontalsystems.bitcoincore.utils.Base58AddressConverter
 import io.horizontalsystems.bitcoincore.utils.CashAddressConverter
@@ -106,7 +105,6 @@ class AddressHandlerUdn(
         private fun chainCoinCode(blockchainType: BlockchainType) = when (blockchainType) {
             BlockchainType.Ethereum,
             BlockchainType.BinanceSmartChain,
-            BlockchainType.BinanceChain,
             BlockchainType.Polygon,
             BlockchainType.Optimism,
             BlockchainType.Base,
@@ -214,21 +212,6 @@ class AddressHandlerBitcoinCash(network: Network, override val blockchainType: B
     override fun parseAddress(value: String): Address {
         val address = converter.convert(value)
         return BitcoinAddress(hex = address.stringValue, domain = null, blockchainType = blockchainType, scriptType = address.scriptType)
-    }
-}
-
-class AddressHandlerBinanceChain : IAddressHandler {
-    override val blockchainType = BlockchainType.BinanceChain
-    override fun isSupported(value: String) = try {
-        Crypto.decodeAddress(value)
-        true
-    } catch (e: Throwable) {
-        false
-    }
-
-    override fun parseAddress(value: String): Address {
-        Crypto.decodeAddress(value)
-        return Address(value, blockchainType = blockchainType)
     }
 }
 

@@ -87,11 +87,11 @@ object Migration_45_46 : Migration(45, 46) {
             is CoinType.ArbitrumOneErc20 -> {
                 TokenQuery(BlockchainType.ArbitrumOne, TokenType.Eip20(coinType.address))
             }
-            is CoinType.Bep2 -> if (coinType.symbol == "BNB") {
-                TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
-            } else {
-                TokenQuery(BlockchainType.BinanceChain, TokenType.Bep2(coinType.symbol))
-            }
+//            is CoinType.Bep2 -> if (coinType.symbol == "BNB") {
+//                TokenQuery(BlockchainType.BinanceChain, TokenType.Native)
+//            } else {
+//                TokenQuery(BlockchainType.BinanceChain, TokenType.Bep2(coinType.symbol))
+//            }
             else -> {
                 TokenQuery(BlockchainType.Unsupported(""), TokenType.Unsupported("", ""))
             }

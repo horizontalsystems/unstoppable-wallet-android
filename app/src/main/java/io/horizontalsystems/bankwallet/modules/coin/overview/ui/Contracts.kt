@@ -2,7 +2,14 @@ package io.horizontalsystems.bankwallet.modules.coin.overview.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,7 +26,12 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.imageUrl
 import io.horizontalsystems.bankwallet.modules.coin.ContractInfo
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.*
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.CellSingleLineClear
+import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
+import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
+import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.marketkit.models.BlockchainType
 
 @Preview
@@ -28,7 +40,6 @@ fun ContractsPreview() {
     ComposeAppTheme(darkTheme = true) {
         val contracts = listOf(
             ContractInfo("0xda123as34290098asd0098asdasd9098asd90123asd", BlockchainType.Ethereum.imageUrl,"https://etherscan.io/token/0xda123as34290098asd0098asdasd9098asd90123asd"),
-            ContractInfo("0x34290098asd8asdasd98asd8asdasd9098asd098as9", BlockchainType.BinanceChain.imageUrl,"https://bscscan.com/token/0x34290098asd8asdasd98asd8asdasd9098asd098as9"),
             ContractInfo("BNB", BlockchainType.BinanceSmartChain.imageUrl,"https://explorer.binance.org/asset/BNB"),
         )
         Contracts(contracts = contracts, {}, {})
