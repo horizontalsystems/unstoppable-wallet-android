@@ -30,7 +30,6 @@ import io.horizontalsystems.bankwallet.core.managers.AppVersionManager
 import io.horizontalsystems.bankwallet.core.managers.BackupManager
 import io.horizontalsystems.bankwallet.core.managers.BalanceHiddenManager
 import io.horizontalsystems.bankwallet.core.managers.BaseTokenManager
-import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.CexAssetManager
 import io.horizontalsystems.bankwallet.core.managers.CoinManager
@@ -165,7 +164,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var appDatabase: AppDatabase
         lateinit var accountsStorage: IAccountsStorage
         lateinit var enabledWalletsStorage: IEnabledWalletStorage
-        lateinit var binanceKitManager: BinanceKitManager
         lateinit var solanaKitManager: SolanaKitManager
         lateinit var tronKitManager: TronKitManager
         lateinit var tonKitManager: TonKitManager
@@ -255,8 +253,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         evmSyncSourceManager = EvmSyncSourceManager(appConfigProvider, blockchainSettingsStorage, evmSyncSourceStorage)
 
         btcBlockchainManager = BtcBlockchainManager(blockchainSettingsStorage, marketKit)
-
-        binanceKitManager = BinanceKitManager()
 
         accountsStorage = AccountsStorage(appDatabase)
         restoreSettingsStorage = RestoreSettingsStorage(appDatabase)
@@ -355,7 +351,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             btcBlockchainManager = btcBlockchainManager,
             evmBlockchainManager = evmBlockchainManager,
             evmSyncSourceManager = evmSyncSourceManager,
-            binanceKitManager = binanceKitManager,
             solanaKitManager = solanaKitManager,
             tronKitManager = tronKitManager,
             tonKitManager = tonKitManager,
@@ -370,7 +365,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             adapterFactory,
             btcBlockchainManager,
             evmBlockchainManager,
-            binanceKitManager,
             solanaKitManager,
             tronKitManager,
             tonKitManager,

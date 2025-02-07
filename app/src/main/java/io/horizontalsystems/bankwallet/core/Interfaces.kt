@@ -38,7 +38,6 @@ import io.horizontalsystems.bankwallet.modules.settings.security.autolock.AutoLo
 import io.horizontalsystems.bankwallet.modules.settings.terms.TermsModule
 import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.bankwallet.modules.transactions.FilterTransactionType
-import io.horizontalsystems.binancechainkit.BinanceChainKit
 import io.horizontalsystems.bitcoincore.core.IPluginData
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.ethereumkit.models.Address
@@ -85,7 +84,6 @@ interface ILocalStorage {
     var baseLitecoinProvider: String?
     var baseEthereumProvider: String?
     var baseDashProvider: String?
-    var baseBinanceProvider: String?
     var baseZcashProvider: String?
     var syncMode: SyncMode?
     var sortType: BalanceSortType
@@ -245,14 +243,6 @@ sealed class AdapterState {
             is NotSynced -> "NotSynced ${error.javaClass.simpleName} - message: ${error.message}"
         }
     }
-}
-
-interface IBinanceKitManager {
-    val binanceKit: BinanceChainKit?
-    val statusInfo: Map<String, Any>?
-
-    fun binanceKit(wallet: Wallet): BinanceChainKit
-    fun unlink(account: Account)
 }
 
 interface ITransactionsAdapter {
