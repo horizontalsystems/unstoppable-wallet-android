@@ -909,8 +909,6 @@
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
     <string name="Premium_ChoosePlanForYou">Choose the plan</string>
-    <string name="Premium_PlanPro">PRO</string>
-    <string name="Premium_PlanVip">VIP</string>
     <string name="Premium_EnjoyFreePeriod">Enjoy the first %s FREE.</string>
     <string name="Premium_CancelSubscriptionInfo">You can cancel your subscription at any time.</string>
     <string name="Premium_GetFreePeriod">Get %s FREE</string>
@@ -924,36 +922,36 @@
     <string name="Premium_ThankYouForSubscription">Thank you for your \nsubscription!</string>
     <string name="Premium_YouHaveActivatedPlan">You have activated the %s plan.</string>
     <string name="Premium_GoToApp">Go to App</string>
+    <string name="Premium_UpgradeText">Upgrade your experience with Premium features!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Enjoy the full power of the app.</string>
+    <string name="Premium_SelectSubscription">Select Subscription</string>
 
     <string name="Premium_UpgradeFeature_VipSupport">VIP Support</string>
-    <string name="Premium_UpgradeFeature_VipClub">VIP Club</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Token Insights</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Advanced Search</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Trade Signals</string>
-    <string name="Premium_UpgradeFeature_TxSpeedTools">Transaction Speed Tools</string>
     <string name="Premium_UpgradeFeature_DuressMode">Duress Mode</string>
-    <string name="Premium_UpgradeFeature_AddressVerification">Address Verification</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Address Phishing Protection</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Address Phishing Checker</string>
     <string name="Premium_UpgradeFeature_PrivacyMode">Privacy Mode</string>
 
     <string name="Premium_UpgradeFeature_VipSupport_Description">Fast response support.</string>
-    <string name="Premium_UpgradeFeature_VipClub_Description">Private chat with exclusive information.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Full analytics and data about tokens.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Custom filters for token searches.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Signals for confident trading.</string>
-    <string name="Premium_UpgradeFeature_TxSpeedTools_Description">Speed up and cancel transactions.</string>
     <string name="Premium_UpgradeFeature_DuressMode_Description">Hides main wallets in case of coercion.</string>
-    <string name="Premium_UpgradeFeature_AddressVerification_Description">Additional address check for fraud prevention.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Additional address check for fraud prevention.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Alerts if the recipient address is blacklisted.</string>
     <string name="Premium_UpgradeFeature_PrivacyMode_Description">Full disconnection from data collection.</string>
 
-    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Fast response support.</string>
-    <string name="Premium_UpgradeFeature_VipClub_BigDescription">Private chat with exclusive information.</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Token Insights provides a comprehensive view of a token’s activity and performance metrics. This includes trading volume, liquidity levels, holder behavior, total value locked (TVL), and transaction activity. By offering detailed analytics, the feature enables users to evaluate token potential, monitor market trends, and make data-driven investment decisions. It’s a powerful tool for those who seek to understand token ecosystems and market dynamics in-depth.</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Custom filters for token searches.</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Signals for confident trading.</string>
-    <string name="Premium_UpgradeFeature_TxSpeedTools_BigDescription">Speed up and cancel transactions.</string>
-    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Hides main wallets in case of coercion.</string>
-    <string name="Premium_UpgradeFeature_AddressVerification_BigDescription">Additional address check for fraud prevention.</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode_BigDescription">Full disconnection from data collection.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Provides priority access to a dedicated support team for personalized solutions. Designed for users who require expert assistance and faster response times.</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Provides a detailed view of a token’s activity, including trading volume, liquidity, holder behavior, TVL, and transaction trends. This feature enables users to analyze token potential, track market trends, and make informed investment decisions, offering a deep understanding of token ecosystems.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Enables efficient token discovery with advanced filters like trading volume, blockchain, price trends, sector, and performance against BTC, ETH, and BNB. Includes metrics for CEX/DEX volume, distribution, and top exchange listings for precise selection.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Delivers real-time alerts on trading opportunities and market risks. Powered by advanced algorithms, this feature analyzes trends and indicators, highlighting potential profits or cautioning against losses.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Protects sensitive wallets in high-risk situations by allowing users to set up an alternate wallet with a separate PIN. Under coercion, users can access the secondary wallet, keeping critical assets hidden and secure.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Scans recipient addresses for phishing patterns before transactions. It alerts users to potential scams, reducing the risk of fraudulent transfers.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Compares recipient addresses against high-risk databases, blocking transfers to flagged entities involved in scams or fraud. This feature enhances security and compliance.</string>
+    <string name="Premium_UpgradeFeature_PrivacyMode_BigDescription">Grants the ability to disable UI/UX data collection, ensuring complete privacy and preventing any usage analysis.</string>
 
     <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
     <string name="Premium_ApprovedBy">Approved and Audited By:</string>

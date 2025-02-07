@@ -7,13 +7,12 @@ import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
 class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
-    private var subscriptions = listOf<Subscription>()
-    private var selectedTabIndex = 0
+    private var subscription: Subscription? = null
     private var hasFreeTrial = false
 
     init {
         viewModelScope.launch {
-            subscriptions = UserSubscriptionManager.getSubscriptions()
+            subscription = UserSubscriptionManager.getSubscriptions().firstOrNull()
             refreshHasFreeTrial()
 
             emitState()
@@ -21,20 +20,12 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
     }
 
     override fun createState() = BuySubscriptionUiState(
-        subscriptions = subscriptions,
-        selectedTabIndex = selectedTabIndex,
+        subscription = subscription,
         hasFreeTrial = hasFreeTrial,
     )
 
-    fun setSelectedTabIndex(index: Int) {
-        selectedTabIndex = index
-        refreshHasFreeTrial()
-
-        emitState()
-    }
-
     private fun refreshHasFreeTrial() {
-        val subscription = subscriptions[selectedTabIndex]
+        val subscription = subscription ?: return
         val basePlans = UserSubscriptionManager.getBasePlans(subscription.id)
         hasFreeTrial = basePlans.any { it.hasFreeTrial }
     }
@@ -47,7 +38,6 @@ class BuySubscriptionViewModel : ViewModelUiState<BuySubscriptionUiState>() {
 }
 
 data class BuySubscriptionUiState(
-    val subscriptions: List<Subscription>,
-    val selectedTabIndex: Int,
+    val subscription: Subscription?,
     val hasFreeTrial: Boolean
 )

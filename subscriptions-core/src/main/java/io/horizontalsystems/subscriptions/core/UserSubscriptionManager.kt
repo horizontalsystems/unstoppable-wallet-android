@@ -21,7 +21,8 @@ object UserSubscriptionManager {
                 AdvancedSearch,
                 TradeSignals,
                 DuressMode,
-                AddressVerification,
+                AddressPhishing,
+                AddressBlacklist,
                 PrivacyMode,
                 VIPSupport,
             )
