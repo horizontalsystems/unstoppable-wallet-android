@@ -1,13 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.usersubscription.ui
 
 import androidx.activity.compose.LocalActivity
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -77,14 +77,7 @@ import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
 import io.horizontalsystems.subscriptions.core.HSPurchase
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.Subscription
-import io.horizontalsystems.subscriptions.core.VIPClub
-import io.horizontalsystems.subscriptions.core.VIPSupport
 import io.horizontalsystems.subscriptions.core.numberOfDays
-
-enum class PremiumPlanType(@StringRes val titleResId: Int) {
-    ProPlan(R.string.Premium_PlanPro),
-    VipPlan(R.string.Premium_PlanVip);
-}
 
 val yellowGradient = Brush.horizontalGradient(
     colors = listOf(
@@ -100,10 +93,9 @@ val steelBrush = Brush.horizontalGradient(
 @Composable
 fun SelectSubscriptionBottomSheet(
     subscriptionId: String,
-    type: PremiumPlanType,
     onDismiss: () -> Unit,
     viewModel: BuySubscriptionChoosePlanViewModel = viewModel(),
-    onPurchase: (PremiumPlanType) -> Unit,
+    onPurchase: () -> Unit,
     onError: (Throwable) -> Unit,
 ) {
     val uiState = viewModel.uiState
@@ -120,7 +112,7 @@ fun SelectSubscriptionBottomSheet(
 
     uiState.purchase?.let {
         if (it.status == HSPurchase.Status.Purchased) {
-            onPurchase(type)
+            onPurchase()
         }
     }
 
@@ -130,9 +122,9 @@ fun SelectSubscriptionBottomSheet(
     }
 
     BottomSheetHeader(
-        iconPainter = painterResource(R.drawable.prem_star_yellow_16),
+        iconPainter = painterResource(R.drawable.ic_circle_clock_24),
         iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
-        title = stringResource(type.titleResId),
+        title = stringResource(R.string.Premium_SelectSubscription),
         onCloseClick = onDismiss
     ) {
         Column(
@@ -269,22 +261,19 @@ fun SubscriptionOption(
 }
 
 @Composable
-fun PlanItems(
+fun ColumnScope.PlanItems(
     items: List<IPaidAction>,
     onItemClick: (IPaidAction) -> Unit
 ) {
-    Column {
-        items.forEachIndexed { index, item ->
-            PremiumFeatureItem(
-                icon = item.iconRes,
-                title = item.titleStringRes,
-                subtitle = item.descriptionStringRes,
-                tint = if (item is VIPClub || item is VIPSupport) ComposeAppTheme.colors.jacob else ComposeAppTheme.colors.leah,
-                click = { onItemClick(item) }
-            )
-            if (index < items.size - 1) {
-                Divider(color = ComposeAppTheme.colors.steel20)
-            }
+    items.forEachIndexed { index, item ->
+        PremiumFeatureItem(
+            icon = item.iconRes,
+            title = item.titleStringRes,
+            subtitle = item.descriptionStringRes,
+            click = { onItemClick(item) }
+        )
+        if (index < items.size - 1) {
+            Divider(color = ComposeAppTheme.colors.steel20)
         }
     }
 }
@@ -294,7 +283,6 @@ fun PremiumFeatureItem(
     icon: Int,
     title: Int,
     subtitle: Int,
-    tint: Color = ComposeAppTheme.colors.leah,
     click: () -> Unit = {}
 ) {
     Row(
@@ -308,7 +296,7 @@ fun PremiumFeatureItem(
         Icon(
             painter = painterResource(icon),
             modifier = Modifier.size(24.dp),
-            tint = tint,
+            tint = ComposeAppTheme.colors.jacob,
             contentDescription = null
         )
         HSpacer(16.dp)
@@ -538,14 +526,22 @@ fun InfoBottomSheet(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(vertical = 12.dp, horizontal = 32.dp)
+                    .padding(vertical = 12.dp, horizontal = 24.dp)
                     .fillMaxWidth()
             ) {
                 body_bran(
                     text = description,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
                 )
-                VSpacer(52.dp)
+                VSpacer(56.dp)
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    onClick = hideBottomSheet
+                )
+                VSpacer(32.dp)
             }
         }
     }
@@ -555,8 +551,7 @@ fun InfoBottomSheet(
 @Composable
 fun SubscriptionBottomSheet(
     modalBottomSheetState: SheetState,
-    subscriptions: List<Subscription>,
-    selectedTabIndex: Int,
+    subscription: Subscription,
     navController: NavController,
     hideBottomSheet: () -> Unit,
     onError: (Throwable) -> Unit
@@ -566,17 +561,14 @@ fun SubscriptionBottomSheet(
         sheetState = modalBottomSheetState,
         containerColor = ComposeAppTheme.colors.transparent
     ) {
-        if (subscriptions.isNotEmpty()) {
-            SelectSubscriptionBottomSheet(
-                subscriptionId = subscriptions[selectedTabIndex].id,
-                type = PremiumPlanType.entries[selectedTabIndex],
-                onDismiss = hideBottomSheet,
-                onPurchase = { type ->
-                    hideBottomSheet()
-                    navController.navigate("premium_subscribed_page?type=${type.name}")
-                },
-                onError = onError
-            )
-        }
+        SelectSubscriptionBottomSheet(
+            subscriptionId = subscription.id,
+            onDismiss = hideBottomSheet,
+            onPurchase = {
+                hideBottomSheet()
+                navController.navigate("premium_subscribed_page")
+            },
+            onError = onError
+        )
     }
 }
