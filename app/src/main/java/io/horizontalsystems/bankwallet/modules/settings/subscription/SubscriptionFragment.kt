@@ -1,14 +1,13 @@
 package io.horizontalsystems.bankwallet.modules.settings.subscription
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -19,13 +18,12 @@ import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
-import io.horizontalsystems.bankwallet.ui.compose.components.CellUniversalLawrenceSection
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
-import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.RowUniversal
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
-import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_jacob
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
+import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 
 class SubscriptionFragment : BaseComposeFragment() {
 
@@ -38,52 +36,80 @@ class SubscriptionFragment : BaseComposeFragment() {
 
 @Composable
 fun SubscriptionScreen(navController: NavController) {
-    val viewModel = viewModel<SubscriptionViewModel>(factory = SubscriptionModule.Factory())
+    val viewModel = viewModel<SubscriptionViewModel>()
 
     val uiState = viewModel.uiState
+    val context = LocalContext.current
 
-    Column(
-        modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Settings_Subscription),
+                navigationIcon = {
+                    HsBackButton(onClick = { navController.popBackStack() })
+                }
+            )
+        }
     ) {
-        AppBar(
-            title = stringResource(R.string.Settings_Subscription),
-            navigationIcon = {
-                HsBackButton(onClick = { navController.popBackStack() })
-            }
-        )
         Column(
-            Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.padding(it)
         ) {
             VSpacer(12.dp)
-            CellUniversalLawrenceSection {
-                RowUniversal(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    onClick = {
-                        navController.slideFromBottom(R.id.buySubscriptionFragment)
-                    }
-                ) {
-                    body_leah(
-                        text = stringResource(R.string.SettingsSubscription_SubscriptionPlan),
-                        maxLines = 1,
-                        modifier = Modifier.weight(1f)
-                    )
-                    uiState.subscriptionName?.let {
-                        subhead1_jacob(
-                            text = it,
+
+            SectionUniversalLawrence {
+                if (uiState.userHasActiveSubscription) {
+                    CellUniversal(
+                        borderTop = false,
+                        onClick = {
+                            viewModel.launchManageSubscriptionScreen(context)
+                        }
+                    ) {
+                        body_leah(
+                            text = stringResource(R.string.SettingsSubscription_ManageSubscription),
                             maxLines = 1,
-                            modifier = Modifier.padding(horizontal = 8.dp)
+                            modifier = Modifier.weight(1f)
+                        )
+                        Image(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null,
                         )
                     }
-                    Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(id = R.drawable.ic_arrow_right),
-                        contentDescription = null,
-                    )
+                } else {
+                    CellUniversal(
+                        borderTop = false,
+                        onClick = {
+                            navController.slideFromBottom(R.id.buySubscriptionFragment)
+                        }
+                    ) {
+                        body_leah(
+                            text = stringResource(R.string.SettingsSubscription_GetPremium),
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Image(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null,
+                        )
+                    }
+                    CellUniversal(
+                        onClick = viewModel::restorePurchase
+                    ) {
+                        body_jacob(
+                            text = stringResource(R.string.SettingsSubscription_RestorePurchase),
+                            maxLines = 1,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Image(
+                            modifier = Modifier.size(20.dp),
+                            painter = painterResource(id = R.drawable.ic_arrow_right),
+                            contentDescription = null,
+                        )
+                    }
                 }
             }
-            InfoText(
-                text = stringResource(R.string.SettingsSubscription_SubscriptionInfo, "10.06.25"),
-            )
         }
     }
 }
