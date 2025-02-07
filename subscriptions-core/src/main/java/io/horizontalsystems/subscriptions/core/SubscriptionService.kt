@@ -1,6 +1,7 @@
 package io.horizontalsystems.subscriptions.core
 
 import android.app.Activity
+import android.content.Context
 
 interface SubscriptionService {
     var predefinedSubscriptions: List<Subscription>
@@ -11,4 +12,5 @@ interface SubscriptionService {
     suspend fun launchPurchaseFlow(subscriptionId: String, offerToken: String, activity: Activity): HSPurchase?
     fun getBasePlans(subscriptionId: String): List<BasePlan>
     suspend fun onResume()
+    fun launchManageSubscriptionScreen(context: Context) = Unit
 }

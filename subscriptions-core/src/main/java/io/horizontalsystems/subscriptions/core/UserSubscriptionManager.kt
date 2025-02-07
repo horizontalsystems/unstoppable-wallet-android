@@ -59,6 +59,10 @@ object UserSubscriptionManager {
         return service.launchPurchaseFlow(subscriptionId, offerToken, activity)
     }
 
+    fun launchManageSubscriptionScreen(context: Context) {
+        service.launchManageSubscriptionScreen(context)
+    }
+
     fun getBasePlans(subscriptionId: String): List<BasePlan> {
         return service.getBasePlans(subscriptionId)
     }

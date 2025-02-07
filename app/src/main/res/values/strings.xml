@@ -912,8 +912,11 @@
 
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Active</string>
+    <string name="SettingsSubscription_GetPremium">Get Premium</string>
+    <string name="SettingsSubscription_RestorePurchase">Restore Purchase</string>
     <string name="SettingsSubscription_SubscriptionPlan">Subscription Plan</string>
     <string name="SettingsSubscription_SubscriptionInfo">Next payment date: %s. You can manage your subscription in the Manage Subscription section.</string>
+    <string name="SettingsSubscription_ManageSubscription">Manage Subscription</string>
 
     <string name="Period_Days">%s days</string>
     <!--Premium Screens-->

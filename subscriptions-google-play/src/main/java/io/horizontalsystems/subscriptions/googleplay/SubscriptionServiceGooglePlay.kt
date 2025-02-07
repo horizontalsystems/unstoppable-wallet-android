@@ -2,6 +2,12 @@ package io.horizontalsystems.subscriptions.googleplay
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.content.Intent.CATEGORY_BROWSABLE
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER
+import android.net.Uri
 import android.util.Log
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -196,6 +202,18 @@ class SubscriptionServiceGooglePlay(
         return activeSubscriptions
     }
 
+    override fun launchManageSubscriptionScreen(context: Context) {
+        val packageName = "io.horizontalsystems.bankwallet"
+        val s = "https://play.google.com/store/account/subscriptions?sku=test.subscription_1&package=$packageName"
+        val intent = Intent(ACTION_VIEW, Uri.parse(s)).apply {
+            // The URL should either launch directly in a non-browser app (if it's
+            // the default) or in the disambiguation dialog.
+            addCategory(CATEGORY_BROWSABLE)
+            flags = FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_REQUIRE_NON_BROWSER
+        }
+        context.startActivity(intent)
+    }
+
     override suspend fun launchPurchaseFlow(subscriptionId: String, offerToken: String, activity: Activity): HSPurchase? {
         val productDetails = productDetailsResult?.productDetailsList?.find {
             it.productId == subscriptionId
@@ -259,7 +277,6 @@ class SubscriptionServiceGooglePlay(
 
     private suspend fun handlePurchase(purchase: Purchase) {
         Log.e("AAA", "handlePurchase: $purchase")
-        Log.e("AAA", "purchased: ${purchase.purchaseState == Purchase.PurchaseState.PURCHASED}")
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             if (purchase.isAcknowledged) {
                 addAcknowledgedPurchase(purchase)
@@ -287,6 +304,5 @@ class SubscriptionServiceGooglePlay(
                     }
             }
         )
-        Log.e("AAA", "activeSubscriptions: $activeSubscriptions")
     }
 }
