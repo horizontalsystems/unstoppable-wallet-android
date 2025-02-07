@@ -63,6 +63,9 @@ class EnterAddressViewModel(
         addressError = addressError,
         canBeSendToAddress = canBeSendToAddress,
         recentAddress = recentAddress,
+        recentContact = recentAddress?.let { recent ->
+            contacts.find { contact -> contact.addresses.any { it.address == recentAddress } }?.let { SContact(it.name, recent) }
+        },
         contacts = contacts.flatMap { contact -> contact.addresses.map { SContact(contact.name, it.address) } },
         value = value,
         inputState = inputState,
@@ -103,10 +106,9 @@ class EnterAddressViewModel(
         parseAddressJob = viewModelScope.launch(Dispatchers.Default) {
             try {
                 val address = parseDomain(addressText)
-                this@EnterAddressViewModel.address = address
-
                 val validationResult = addressValidator.validate(address)
                 ensureActive()
+                this@EnterAddressViewModel.address = address
                 addressFormatCheck = AddressCheckData(false, validationResult)
                 emitState()
 
@@ -187,6 +189,7 @@ data class EnterAddressUiState(
     val addressError: Throwable?,
     val canBeSendToAddress: Boolean,
     val recentAddress: String?,
+    val recentContact: SContact?,
     val contacts: List<SContact>,
     val value: String,
     val inputState: DataState<Address>?,

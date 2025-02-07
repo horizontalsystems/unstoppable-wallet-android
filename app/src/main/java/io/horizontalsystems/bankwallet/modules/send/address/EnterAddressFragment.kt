@@ -122,7 +122,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                 }
 
                 if (uiState.value.isBlank()) {
-                    AddressSuggestions(uiState.recentAddress, uiState.contacts) {
+                    AddressSuggestions(uiState.recentAddress, uiState.recentContact, uiState.contacts) {
                         viewModel.onEnterAddress(it)
                     }
                 } else {
@@ -321,8 +321,27 @@ fun CheckLocked() {
 }
 
 @Composable
-fun AddressSuggestions(recent: String?, contacts: List<SContact>, onClick: (String) -> Unit) {
-    recent?.let { address ->
+fun AddressSuggestions(recent: String?, recentContact: SContact?, contacts: List<SContact>, onClick: (String) -> Unit) {
+    if (recentContact != null) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .border(
+                    0.5.dp,
+                    ComposeAppTheme.colors.steel20,
+                    RoundedCornerShape(12.dp)
+                )
+                .clickable {
+                    onClick.invoke(recentContact.address)
+                }
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
+            body_leah(recentContact.name)
+            subhead2_grey(recentContact.address.shortAddress)
+        }
+    } else recent?.let { address ->
         SectionHeaderText(stringResource(R.string.Send_Address_Recent))
         Box(
             modifier = Modifier
