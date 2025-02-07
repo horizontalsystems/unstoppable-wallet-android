@@ -11,8 +11,6 @@ import io.horizontalsystems.bankwallet.entities.CurrencyValue
 import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
-import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainIncomingTransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinIncomingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.evm.ApproveTransactionRecord
@@ -211,20 +209,6 @@ class TransactionViewItemFactory(
                     icon = icon
                 )
             }
-
-            is BinanceChainIncomingTransactionRecord -> createViewItemFromBinanceChainIncomingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                icon
-            )
-
-            is BinanceChainOutgoingTransactionRecord -> createViewItemFromBinanceChainOutgoingTransactionRecord(
-                record,
-                transactionItem.currencyValue,
-                progress,
-                icon
-            )
 
             is BitcoinIncomingTransactionRecord -> createViewItemFromBitcoinIncomingTransactionRecord(
                 record,
@@ -984,65 +968,6 @@ class TransactionViewItemFactory(
             sentToSelf = false,
             doubleSpend = record.conflictingHash != null,
             locked = locked,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromBinanceChainOutgoingTransactionRecord(
-        record: BinanceChainOutgoingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = if (record.sentToSelf) {
-            ColoredValue(getCoinString(record.value, true), ColorName.Leah)
-        } else {
-            getColoredValue(record.value, ColorName.Lucian)
-        }
-
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Send),
-            subtitle = Translator.getString(R.string.Transactions_To, mapped(record.to, record.blockchainType)),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
-            sentToSelf = record.sentToSelf,
-            spam = record.spam,
-            icon = icon ?: singleValueIconType(record.value)
-        )
-    }
-
-    private fun createViewItemFromBinanceChainIncomingTransactionRecord(
-        record: BinanceChainIncomingTransactionRecord,
-        currencyValue: CurrencyValue?,
-        progress: Float?,
-        icon: TransactionViewItem.Icon?
-    ): TransactionViewItem {
-        val primaryValue = getColoredValue(record.value, ColorName.Remus)
-        val secondaryValue = currencyValue?.let {
-            getColoredValue(it, ColorName.Grey)
-        }
-
-        return TransactionViewItem(
-            uid = record.uid,
-            progress = progress,
-            title = Translator.getString(R.string.Transactions_Receive),
-            subtitle = Translator.getString(
-                R.string.Transactions_From,
-                mapped(record.from, record.blockchainType)
-            ),
-            primaryValue = primaryValue,
-            secondaryValue = secondaryValue,
-            showAmount = showAmount,
-            date = Date(record.timestamp * 1000),
             spam = record.spam,
             icon = icon ?: singleValueIconType(record.value)
         )

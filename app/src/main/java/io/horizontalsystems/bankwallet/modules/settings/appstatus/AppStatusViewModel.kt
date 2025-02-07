@@ -10,7 +10,6 @@ import io.horizontalsystems.bankwallet.core.ViewModelUiState
 import io.horizontalsystems.bankwallet.core.adapters.BitcoinBaseAdapter
 import io.horizontalsystems.bankwallet.core.adapters.TonAdapter
 import io.horizontalsystems.bankwallet.core.adapters.zcash.ZcashAdapter
-import io.horizontalsystems.bankwallet.core.managers.BinanceKitManager
 import io.horizontalsystems.bankwallet.core.managers.BtcBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.MarketKitWrapper
@@ -35,7 +34,6 @@ class AppStatusViewModel(
     private val adapterManager: IAdapterManager,
     private val marketKit: MarketKitWrapper,
     private val evmBlockchainManager: EvmBlockchainManager,
-    private val binanceKitManager: BinanceKitManager,
     private val tronKitManager: TronKitManager,
     private val tonKitManager: TonKitManager,
     private val solanaKitManager: SolanaKitManager,
@@ -197,10 +195,6 @@ class AppStatusViewModel(
                 }
             }
 
-        binanceKitManager.statusInfo?.let { statusInfo ->
-            blockchainStatus["Binance Chain"] = statusInfo
-        }
-
         tronKitManager.statusInfo?.let { statusInfo ->
             blockchainStatus["Tron"] = statusInfo
         }
@@ -266,12 +260,6 @@ class AppStatusViewModel(
                     blocks.add(block)
                 }
             }
-
-        binanceKitManager.statusInfo?.let { statusInfo ->
-            val title = if (blocks.isEmpty()) "Blockchain Status" else null
-            val block = getBlockchainInfoBlock(title, "Binance Chain", statusInfo)
-            blocks.add(block)
-        }
 
         tronKitManager.statusInfo?.let { statusInfo ->
             val title = if (blocks.isEmpty()) "Blockchain Status" else null

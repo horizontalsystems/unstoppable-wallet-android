@@ -17,7 +17,6 @@ object AppStatusModule {
                 App.adapterManager,
                 App.marketKit,
                 App.evmBlockchainManager,
-                App.binanceKitManager,
                 App.tronKitManager,
                 App.tonKitManager,
                 App.solanaKitManager,

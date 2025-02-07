@@ -12,7 +12,6 @@ import io.horizontalsystems.bankwallet.entities.TransactionValue
 import io.horizontalsystems.bankwallet.entities.nft.NftAssetBriefMetadata
 import io.horizontalsystems.bankwallet.entities.nft.NftUid
 import io.horizontalsystems.bankwallet.entities.transactionrecords.TransactionRecord
-import io.horizontalsystems.bankwallet.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.BitcoinTransactionRecord
 import io.horizontalsystems.bankwallet.entities.transactionrecords.bitcoin.TransactionLockState
@@ -644,9 +643,6 @@ object TransactionViewItemFactoryHelper {
 
             is BitcoinOutgoingTransactionRecord ->
                 transaction.fee?.let { items.add(getFee(it, rates[it.coinUid])) }
-
-            is BinanceChainOutgoingTransactionRecord ->
-                items.add(getFee(transaction.fee, rates[transaction.fee.coinUid]))
 
             is SolanaOutgoingTransactionRecord -> {
                 if (transaction.fee != null) {
