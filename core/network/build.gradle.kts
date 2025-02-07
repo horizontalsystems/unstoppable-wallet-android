@@ -57,6 +57,9 @@ android {
     defaultConfig {
         minSdk = minSdkVersion
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {

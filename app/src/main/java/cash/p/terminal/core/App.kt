@@ -458,18 +458,18 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             ).signingInfo
 
             when {
-                signingInfo.hasMultipleSigners() -> signingInfo.apkContentsSigners // Send all with apkContentsSigners
-                else -> signingInfo.signingCertificateHistory // Send one with signingCertificateHistory
+                signingInfo?.hasMultipleSigners() == true -> signingInfo.apkContentsSigners // Send all with apkContentsSigners
+                else -> signingInfo?.signingCertificateHistory // Send one with signingCertificateHistory
             }
         } else {
             packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
         }
 
-        signatureList.map {
+        signatureList?.map {
             val digest = MessageDigest.getInstance("SHA")
             digest.update(it.toByteArray())
             digest.digest()
-        }
+        } ?: emptyList()
     } catch (e: Exception) {
         // Handle error
         emptyList()

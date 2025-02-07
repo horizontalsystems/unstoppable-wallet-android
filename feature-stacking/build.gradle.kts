@@ -23,6 +23,9 @@ android {
             compose = true
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
