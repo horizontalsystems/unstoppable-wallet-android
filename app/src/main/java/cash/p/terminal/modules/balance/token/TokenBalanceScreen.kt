@@ -74,7 +74,6 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isPirateCash
-import cash.p.terminal.wallet.managers.TransactionHiddenState
 import io.horizontalsystems.core.helpers.HudHelper
 
 

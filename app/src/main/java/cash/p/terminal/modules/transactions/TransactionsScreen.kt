@@ -74,7 +74,8 @@ import io.horizontalsystems.core.entities.ViewState
 @Composable
 fun TransactionsScreen(
     navController: NavController,
-    viewModel: TransactionsViewModel
+    viewModel: TransactionsViewModel,
+    onShowAllTransactionsClicked: () -> Unit
 ) {
     val accountsViewModel =
         viewModel<BalanceAccountsViewModel>(factory = BalanceModule.AccountsFactory())
@@ -121,7 +122,7 @@ fun TransactionsScreen(
             Crossfade(uiState.viewState, label = "") { viewState ->
                 if (viewState == ViewState.Success) {
                     transactions?.let { transactionItems ->
-                        if (transactionItems.isEmpty()) {
+                        if (transactionItems.isEmpty() && !uiState.hasHiddenTransactions) {
                             if (syncing) {
                                 ListEmptyView(
                                     text = stringResource(R.string.Transactions_WaitForSync),
@@ -159,6 +160,12 @@ fun TransactionsScreen(
                                     onClick = onClick,
                                     onBottomReached = { viewModel.onBottomReached() }
                                 )
+                                if (uiState.hasHiddenTransactions) {
+                                    transactionsHiddenBlock(
+                                        shortBlock = transactionItems.isNotEmpty(),
+                                        onShowAllTransactionsClicked = onShowAllTransactionsClicked
+                                    )
+                                }
                             }
                         }
                     }

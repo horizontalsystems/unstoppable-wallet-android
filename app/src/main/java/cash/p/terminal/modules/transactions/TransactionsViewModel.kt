@@ -7,6 +7,7 @@ import cash.p.terminal.R
 import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
+import cash.p.terminal.core.managers.TransactionHiddenManager
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import io.horizontalsystems.core.entities.ViewState
@@ -20,9 +21,11 @@ import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.badge
+import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.Calendar
@@ -35,6 +38,7 @@ class TransactionsViewModel(
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
+    private val transactionHiddenManager: TransactionHiddenManager
 ) : ViewModelUiState<TransactionsUiState>() {
 
     var tmpItemToShow: TransactionItem? = null
@@ -50,6 +54,7 @@ class TransactionsViewModel(
     private var transactions: Map<String, List<TransactionViewItem>>? = null
     private var viewState: ViewState = ViewState.Loading
     private var syncing = false
+    private var hasHiddenTransactions: Boolean = false
 
     private var refreshViewItemsJob: Job? = null
 
@@ -131,13 +136,29 @@ class TransactionsViewModel(
                 service.refreshList()
             }
         }
+
+        viewModelScope.launch {
+            transactionHiddenManager.transactionHiddenFlow.collectLatest {
+                service.reload()
+            }
+        }
     }
+
+    fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
     private fun handleUpdatedItems(items: List<TransactionItem>) {
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            val viewItems = items
-                .map {
+            val viewItems = if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
+                when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
+                    TransactionDisplayLevel.NOTHING -> emptyList()
+                    TransactionDisplayLevel.LAST_1_TRANSACTION -> items.take(1)
+                    TransactionDisplayLevel.LAST_2_TRANSACTIONS -> items.take(2)
+                    TransactionDisplayLevel.LAST_4_TRANSACTIONS -> items.take(4)
+                }.also { hasHiddenTransactions = items.size != it.size }
+            } else {
+                items.also { hasHiddenTransactions = false }
+            }.map {
                     ensureActive()
                     transactionViewItem2Factory.convertToViewItemCached(it)
                 }
@@ -158,7 +179,8 @@ class TransactionsViewModel(
         transactions = transactions,
         viewState = viewState,
         transactionListId = transactionListId,
-        syncing = syncing
+        syncing = syncing,
+        hasHiddenTransactions = hasHiddenTransactions
     )
 
     private fun handleUpdatedWallets(wallets: List<cash.p.terminal.wallet.Wallet>) {

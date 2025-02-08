@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.findActivity
 import cash.p.terminal.core.managers.RateAppManager
@@ -52,6 +53,8 @@ import cash.p.terminal.modules.balance.ui.BalanceScreen
 import cash.p.terminal.modules.main.MainModule.MainNavigation
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.market.MarketScreen
+import cash.p.terminal.modules.pin.ConfirmPinFragment
+import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.rateapp.RateApp
 import cash.p.terminal.modules.releasenotes.ReleaseNotesFragment
 import cash.p.terminal.modules.rooteddevice.RootedDeviceModule
@@ -71,16 +74,19 @@ import cash.p.terminal.ui.extensions.WalletSwitchBottomSheet
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 class MainFragment : BaseComposeFragment() {
+
+    private var transactionsViewModelRef: WeakReference<TransactionsViewModel>? = null
 
     @Composable
     override fun GetContent(navController: NavController) {
         val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
 
         backStackEntry?.let {
-            val viewModel = ViewModelProvider(backStackEntry.viewModelStore,  TransactionsModule.Factory())
-                .get(TransactionsViewModel::class.java)
+            val viewModel = ViewModelProvider(backStackEntry.viewModelStore,  TransactionsModule.Factory())[TransactionsViewModel::class.java]
+            transactionsViewModelRef = WeakReference(viewModel)
             MainScreenWithRootedDeviceCheck(
                 transactionsViewModel = viewModel,
                 navController = navController,
@@ -102,6 +108,11 @@ class MainFragment : BaseComposeFragment() {
                     requireActivity().moveTaskToBack(true)
                 }
             })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        transactionsViewModelRef?.get()?.showAllTransactions(false)
     }
 
 }
@@ -225,6 +236,9 @@ private fun MainScreen(
             }
             Column(modifier = Modifier.padding(it)) {
                 LaunchedEffect(key1 = selectedPage, block = {
+                    if(uiState.mainNavItems[selectedPage].mainNavItem != MainNavigation.Transactions) {
+                        transactionsViewModel.showAllTransactions(false)
+                    }
                     pagerState.scrollToPage(selectedPage)
                 })
 
@@ -238,8 +252,18 @@ private fun MainScreen(
                         MainNavigation.Market -> MarketScreen(fragmentNavController)
                         MainNavigation.Balance -> BalanceScreen(fragmentNavController)
                         MainNavigation.Transactions -> TransactionsScreen(
-                            fragmentNavController,
-                            transactionsViewModel
+                            navController = fragmentNavController,
+                            viewModel = transactionsViewModel,
+                            onShowAllTransactionsClicked = {
+                                fragmentNavController.authorizedAction(
+                                    ConfirmPinFragment.InputConfirm(
+                                        descriptionResId = R.string.Unlock_EnterPasscode_Transactions_Hide,
+                                        pinType = PinType.TRANSACTIONS_HIDE
+                                    )
+                                ) {
+                                    transactionsViewModel.showAllTransactions(true)
+                                }
+                            }
                         )
 
                         MainNavigation.Settings -> SettingsScreen(fragmentNavController)

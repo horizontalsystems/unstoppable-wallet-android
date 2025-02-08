@@ -91,7 +91,7 @@ fun FilterScreen(
     val filterBlockchain = filterBlockchains?.firstOrNull { it.selected }?.item
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        backgroundColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Transactions_Filter),

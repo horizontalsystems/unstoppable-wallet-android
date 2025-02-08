@@ -33,6 +33,7 @@ object TransactionsModule {
                     App.transactionAdapterManager,
                     App.spamManager
                 ),
+                transactionHiddenManager = getKoinInstance()
             ) as T
         }
     }
