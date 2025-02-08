@@ -1,8 +1,6 @@
 package cash.p.terminal.modules.transactions
 
-import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.managers.SpamManager
-import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
@@ -10,8 +8,10 @@ import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.entities.transactionrecords.nftUids
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
-import io.horizontalsystems.core.entities.Blockchain
+import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.CurrencyValue
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
@@ -19,11 +19,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import org.koin.java.KoinJavaComponent.inject
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
 class TransactionsService(
-    private val transactionRecordRepository: ITransactionRecordRepository,
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
@@ -31,6 +31,9 @@ class TransactionsService(
     private val spamManager: SpamManager,
 ) : Clearable {
 
+    private val transactionRecordRepository: ITransactionRecordRepository by inject(
+        ITransactionRecordRepository::class.java
+    )
     private val itemsSubject = BehaviorSubject.create<List<TransactionItem>>()
     val itemsObservable: Observable<List<TransactionItem>> get() = itemsSubject
 
@@ -128,7 +131,11 @@ class TransactionsService(
     private fun handleLastBlockInfo(source: TransactionSource, lastBlockInfo: LastBlockInfo) {
         var updated = false
         transactionItems.forEachIndexed { index, item ->
-            if (item.record.source == source && item.record.changedBy(item.lastBlockInfo, lastBlockInfo)) {
+            if (item.record.source == source && item.record.changedBy(
+                    item.lastBlockInfo,
+                    lastBlockInfo
+                )
+            ) {
                 transactionItems[index] = item.copy(lastBlockInfo = lastBlockInfo)
                 updated = true
             }
@@ -256,7 +263,12 @@ class TransactionsService(
             transactionItems.find { it.record.uid == recordUid }?.let { transactionItem ->
                 if (transactionItem.currencyValue == null) {
                     transactionItem.record.mainValue?.coin?.uid?.let { coinUid ->
-                        rateRepository.fetchHistoricalRate(HistoricalRateKey(coinUid, transactionItem.record.timestamp))
+                        rateRepository.fetchHistoricalRate(
+                            HistoricalRateKey(
+                                coinUid,
+                                transactionItem.record.timestamp
+                            )
+                        )
                     }
                 }
             }

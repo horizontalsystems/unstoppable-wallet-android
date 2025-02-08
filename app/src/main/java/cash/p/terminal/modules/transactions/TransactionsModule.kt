@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.getKoinInstance
-import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.wallet.Token
-import io.horizontalsystems.hodler.LockTimeInterval
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.hodler.LockTimeInterval
 import java.math.BigDecimal
 import java.util.Date
 
@@ -16,7 +15,6 @@ object TransactionsModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val transactionsService = TransactionsService(
-                TransactionRecordRepository(App.transactionAdapterManager),
                 TransactionsRateRepository(App.currencyManager, App.marketKit),
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
@@ -30,7 +28,11 @@ object TransactionsModule {
                 balanceHiddenManager = App.balanceHiddenManager,
                 transactionAdapterManager = App.transactionAdapterManager,
                 walletManager = App.walletManager,
-                transactionFilterService = TransactionFilterService(App.marketKit, App.transactionAdapterManager, App.spamManager),
+                transactionFilterService = TransactionFilterService(
+                    App.marketKit,
+                    App.transactionAdapterManager,
+                    App.spamManager
+                ),
             ) as T
         }
     }

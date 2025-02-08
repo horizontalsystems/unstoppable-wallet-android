@@ -17,6 +17,7 @@ import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.modules.transactions.TransactionWallet
 import cash.p.terminal.modules.transactions.TransactionsRateRepository
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -26,18 +27,19 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import org.koin.java.KoinJavaComponent.inject
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.Executors
 
 class TokenTransactionsService(
-    private val wallet: cash.p.terminal.wallet.Wallet,
-    private val transactionRecordRepository: ITransactionRecordRepository,
+    private val wallet: Wallet,
     private val rateRepository: TransactionsRateRepository,
     private val transactionSyncStateRepository: TransactionSyncStateRepository,
     private val contactsRepository: ContactsRepository,
     private val nftMetadataService: NftMetadataService,
     private val spamManager: SpamManager,
 ) : Clearable {
+    private val transactionRecordRepository: ITransactionRecordRepository by inject(ITransactionRecordRepository::class.java)
     private val transactionItems = CopyOnWriteArrayList<TransactionItem>()
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
 

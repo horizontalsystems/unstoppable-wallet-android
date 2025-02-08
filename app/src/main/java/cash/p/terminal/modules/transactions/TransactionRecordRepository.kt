@@ -1,8 +1,9 @@
 package cash.p.terminal.modules.transactions
 
-import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.TransactionAdapterManager
+import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.entities.transactionrecords.getShortOutgoingTransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import io.horizontalsystems.core.entities.Blockchain
 import io.horizontalsystems.core.entities.BlockchainType
@@ -18,11 +19,11 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
-import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
 class TransactionRecordRepository(
     private val adapterManager: TransactionAdapterManager,
+    private val changeNowTransactionsStorage: ChangeNowTransactionsStorage,
 ) : ITransactionRecordRepository {
 
     private var selectedFilterTransactionType: FilterTransactionType = FilterTransactionType.All
@@ -35,10 +36,13 @@ class TransactionRecordRepository(
     override val itemsObservable: Observable<List<TransactionRecord>> get() = itemsSubject
 
     private var loadedPageNumber = 0
-    private val items = CopyOnWriteArrayList<TransactionRecord>()
     private val loading = AtomicBoolean(false)
-    private var allLoaded = AtomicBoolean(false)
+
+    private var allNormalLoaded = AtomicBoolean(false)
+    private var allExtraLoaded = AtomicBoolean(false)
+
     private val adaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
+    private val extraSwapAdaptersMap = mutableMapOf<TransactionWallet, TransactionAdapterWrapper>()
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var updatesJob: Job? = null
@@ -56,9 +60,26 @@ class TransactionRecordRepository(
                 tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
                     it.source.blockchain == tmpSelectedBlockchain
                 }
+
                 else -> walletsGroupedBySource
             }
             return activeWallets.mapNotNull { adaptersMap[it] }
+        }
+
+    private val activeSwapExtraAdapters: List<TransactionAdapterWrapper>
+        get() {
+            val tmpSelectedWallet = selectedWallet
+            val tmpSelectedBlockchain = selectedBlockchain
+
+            val activeWallets = when {
+                tmpSelectedWallet != null -> listOf(tmpSelectedWallet)
+                tmpSelectedBlockchain != null -> walletsGroupedBySource.filter {
+                    it.source.blockchain == tmpSelectedBlockchain
+                }
+
+                else -> walletsGroupedBySource
+            }
+            return activeWallets.mapNotNull { extraSwapAdaptersMap[it] }
         }
 
     private fun groupWalletsBySource(transactionWallets: List<TransactionWallet>): List<TransactionWallet> {
@@ -73,6 +94,7 @@ class TransactionRecordRepository(
                 BlockchainType.Dash,
                 BlockchainType.Zcash,
                 BlockchainType.BinanceChain -> mergedWallets.add(wallet)
+
                 BlockchainType.Ethereum,
                 BlockchainType.BinanceSmartChain,
                 BlockchainType.Polygon,
@@ -89,6 +111,7 @@ class TransactionRecordRepository(
                         mergedWallets.add(TransactionWallet(null, wallet.source, null))
                     }
                 }
+
                 is BlockchainType.Unsupported -> Unit
             }
         }
@@ -129,6 +152,8 @@ class TransactionRecordRepository(
             }
             currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
             currentAdapters.clear()
+
+            buildExtraSwapAdapters()
         }
 
         var reload = false
@@ -162,16 +187,53 @@ class TransactionRecordRepository(
 
         if (reload) {
             unsubscribeFromUpdates()
-            allLoaded.set(false)
+            allNormalLoaded.set(false)
+            allExtraLoaded.set(false)
             loadItems(1)
             subscribeForUpdates()
         }
     }
 
-    override fun loadNext() {
-        if (!allLoaded.get()) {
-            loadItems(loadedPageNumber + 1)
+    /***
+     * We need such adapters only fo changenow swaps because they are not typical swaps
+     */
+    private fun buildExtraSwapAdapters() {
+        // update list of adapters based on wallets
+        val currentAdapters = extraSwapAdaptersMap.toMutableMap()
+        extraSwapAdaptersMap.clear()
+        (transactionWallets + walletsGroupedBySource).distinct().forEach { transactionWallet ->
+            var adapter = currentAdapters.remove(transactionWallet)
+            if (adapter == null) {
+                adapterManager.getAdapter(transactionWallet.source)?.let {
+                    adapter = TransactionAdapterWrapper(
+                        transactionsAdapter = it,
+                        transactionWallet = transactionWallet,
+                        transactionType = FilterTransactionType.Outgoing,
+                        contact = contact
+                    )
+                }
+            }
+
+            adapter?.let {
+                extraSwapAdaptersMap[transactionWallet] = it
+            }
         }
+        currentAdapters.values.forEach(TransactionAdapterWrapper::clear)
+        currentAdapters.clear()
+
+
+        if (this.contact != contact) {
+            extraSwapAdaptersMap.forEach { (_, transactionAdapterWrapper) ->
+                transactionAdapterWrapper.setContact(contact)
+            }
+        }
+    }
+
+    override fun loadNext() {
+        if (allNormalLoaded.get() &&
+            (selectedFilterTransactionType != FilterTransactionType.Swap || allExtraLoaded.get())
+        ) return
+        loadItems(loadedPageNumber + 1)
     }
 
     override fun reload() {
@@ -179,7 +241,8 @@ class TransactionRecordRepository(
             transactionAdapterWrapper.reload()
         }
         unsubscribeFromUpdates()
-        allLoaded.set(false)
+        allNormalLoaded.set(false)
+        allExtraLoaded.set(false)
         loadItems(1)
         subscribeForUpdates()
     }
@@ -201,7 +264,8 @@ class TransactionRecordRepository(
 
     @Synchronized
     private fun handleUpdates() {
-        allLoaded.set(false)
+        allNormalLoaded.set(false)
+        allExtraLoaded.set(false)
         loadItems(loadedPageNumber)
     }
 
@@ -218,7 +282,40 @@ class TransactionRecordRepository(
                     .awaitAll()
                     .flatten()
 
-                handleRecords(records, page)
+                var extraRecordsCount = 0
+                val extraRecords =
+                    if (selectedFilterTransactionType == FilterTransactionType.Swap) {
+                        activeSwapExtraAdapters
+                            .map { async { it.get(itemsCount).await() } }
+                            .awaitAll()
+                            .map { transactionRecords ->
+                                extraRecordsCount += transactionRecords.size
+                                transactionRecords.map { record ->
+                                    val shortOutgoingTransactionRecord =
+                                        record.getShortOutgoingTransactionRecord()
+                                    if (shortOutgoingTransactionRecord?.token != null &&
+                                        changeNowTransactionsStorage.getByTokenIn(
+                                            token = shortOutgoingTransactionRecord.token,
+                                            amountIn = shortOutgoingTransactionRecord.amountOut,
+                                            timestamp = shortOutgoingTransactionRecord.timestamp
+                                        ) != null
+                                    ) {
+                                        record
+                                    } else {
+                                        null
+                                    }
+                                }
+                            }
+                            .flatten().filterNotNull()
+                    } else {
+                        emptyList()
+                    }
+
+                if (extraRecordsCount < page * itemsPerPage) {
+                    allExtraLoaded.set(true)
+                }
+
+                handleRecords(records, extraRecords, page)
             } catch (e: Throwable) {
 
             } finally {
@@ -230,27 +327,35 @@ class TransactionRecordRepository(
     override fun clear() {
         adaptersMap.values.forEach(TransactionAdapterWrapper::clear)
         adaptersMap.clear()
+
+        extraSwapAdaptersMap.values.forEach(TransactionAdapterWrapper::clear)
+        extraSwapAdaptersMap.clear()
         coroutineScope.cancel()
     }
 
     @Synchronized
-    private fun handleRecords(records: List<TransactionRecord>, page: Int) {
+    private fun handleRecords(
+        records: List<TransactionRecord>,
+        extraRecords: List<TransactionRecord>,
+        page: Int
+    ) {
         val expectedItemsCount = page * itemsPerPage
 
-        records
+        val normalSortedRecords = records
             .sortedDescending()
             .take(expectedItemsCount)
-            .let {
-                if (it.size < expectedItemsCount) {
-                    allLoaded.set(true)
-                }
 
-                items.clear()
-                items.addAll(it)
-                itemsSubject.onNext(items)
+        if (normalSortedRecords.size < expectedItemsCount) {
+            allNormalLoaded.set(true)
+        }
 
-                loadedPageNumber = page
-            }
+
+        val extraSortedRecords = extraRecords
+            .sortedDescending()
+            .take(expectedItemsCount)
+
+        loadedPageNumber = page
+        itemsSubject.onNext((normalSortedRecords + extraSortedRecords).sortedDescending())
     }
 
     companion object {

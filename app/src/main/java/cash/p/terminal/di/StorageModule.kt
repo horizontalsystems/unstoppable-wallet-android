@@ -20,6 +20,8 @@ import cash.p.terminal.core.storage.RestoreSettingsStorage
 import cash.p.terminal.modules.balance.DefaultBalanceService
 import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
 import cash.p.terminal.modules.contacts.ContactsRepository
+import cash.p.terminal.modules.transactions.ITransactionRecordRepository
+import cash.p.terminal.modules.transactions.TransactionRecordRepository
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.wallet.IAccountCleaner
 import cash.p.terminal.wallet.IAccountsStorage
@@ -52,6 +54,8 @@ val storageModule = module {
     factoryOf(::EvmAccountManagerFactory)
     singleOf(::AdapterFactory)
     factoryOf(::TransactionViewItemFactory)
+
+    factoryOf(::TransactionRecordRepository) bind ITransactionRecordRepository::class
 
     factory<BalanceXRateRepository>(named("wallet")) {
         DefaultBalanceXRateRepository(

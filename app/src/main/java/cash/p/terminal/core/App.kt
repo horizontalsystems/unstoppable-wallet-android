@@ -142,7 +142,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         val appConfigProvider: AppConfigProvider by inject(AppConfigProvider::class.java)
         val adapterManager: IAdapterManager by inject(AdapterManager::class.java)
 
-        lateinit var transactionAdapterManager: TransactionAdapterManager
+        val transactionAdapterManager: TransactionAdapterManager by inject(TransactionAdapterManager::class.java)
         val walletManager: IWalletManager by inject(IWalletManager::class.java)
         lateinit var walletActivator: WalletActivator
         val tokenAutoEnableManager: TokenAutoEnableManager by inject(TokenAutoEnableManager::class.java)
@@ -274,7 +274,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         systemInfoManager = SystemInfoManager(appConfigProvider)
         connectivityManager = ConnectivityManager(backgroundManager)
         val adapterFactory: AdapterFactory = get()
-        transactionAdapterManager = TransactionAdapterManager(adapterManager, adapterFactory)
 
         feeCoinProvider = FeeTokenProvider(marketKit)
 
