@@ -339,6 +339,7 @@ fun Chart(
                                 chartInfoData = uiState.chartInfoData,
                                 hasVolumes = uiState.hasVolumes,
                                 chartViewType = uiState.chartViewType,
+                                considerAlwaysPositive = uiState.considerAlwaysPositive,
                             ) { item ->
                                 selectedPoint = item?.let(getSelectedPointCallback)
                             }
@@ -371,6 +372,7 @@ fun PriceVolChart(
     chartInfoData: ChartInfoData?,
     hasVolumes: Boolean,
     chartViewType: ChartViewType,
+    considerAlwaysPositive: Boolean,
     onSelectPoint: (SelectedItem?) -> Unit,
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
@@ -384,7 +386,12 @@ fun PriceVolChart(
 
     val colors = ComposeAppTheme.colors
 
-    val chartHelper = remember { ChartHelper(chartData, hasVolumes, colors) }
+    val chartHelper = remember { ChartHelper(
+        target = chartData,
+        hasVolumes = hasVolumes,
+        colors = colors,
+        considerAlwaysPositive = considerAlwaysPositive
+    ) }
     chartHelper.setTarget(chartData, hasVolumes)
 
     val scope = rememberCoroutineScope()
@@ -464,14 +471,14 @@ fun PriceVolChart(
                                 gradientColors = chartHelper.mainCurveGradientPressedColors
                             }
                             GraphicLineWithGradient(
-                                mainCurveState.values,
-                                mainCurveState.startTimestamp,
-                                mainCurveState.endTimestamp,
-                                mainCurveState.minValue,
-                                mainCurveState.maxValue,
-                                curveColor,
-                                gradientColors,
-                                selectedItem?.timestamp,
+                                valuesByTimestamp = mainCurveState.values,
+                                minKey = mainCurveState.startTimestamp,
+                                maxKey = mainCurveState.endTimestamp,
+                                minValue = mainCurveState.minValue,
+                                maxValue = mainCurveState.maxValue,
+                                color = curveColor,
+                                gradientColors = gradientColors,
+                                selectedItemKey = selectedItem?.timestamp,
                             )
                         }
 
