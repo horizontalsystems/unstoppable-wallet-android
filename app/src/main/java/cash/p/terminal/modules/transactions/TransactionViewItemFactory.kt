@@ -1287,6 +1287,7 @@ class TransactionViewItemFactory(
             date = Date(transactionItem.record.timestamp * 1000),
             spam = false,
             icon = transactionIcon,
+            changeNowTransactionId = transaction.transactionId,
             transactionStatusUrl = ChangeNowHelper.CHANGE_NOW_URL to ChangeNowHelper.getViewTransactionUrl(
                 transaction.transactionId
             )

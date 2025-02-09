@@ -27,6 +27,9 @@ interface ChangeNowTransactionsDao {
         limit: Int
     ): List<ChangeNowTransaction>
 
+    @Query("SELECT * FROM ChangeNowTransaction WHERE transactionId = :transactionId")
+    fun getTransaction(transactionId: String): ChangeNowTransaction?
+
     @Query(
         "SELECT * FROM ChangeNowTransaction WHERE " +
                 "(coinUidIn = :coinUid AND blockchainTypeIn = :blockchainType AND date >= :dateFrom AND date <= :dateTo) " +

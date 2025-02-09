@@ -2,6 +2,8 @@ package cash.p.terminal.core.domain.usecase
 
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.entities.ChangeNowTransaction
+import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
+import cash.p.terminal.network.changenow.domain.entity.toStatus
 import cash.p.terminal.network.changenow.domain.repository.ChangeNowRepository
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.Dispatchers
@@ -42,5 +44,27 @@ class UpdateChangeNowStatusesUseCase(
             }
         }.awaitAll()
         changed.get()
+    }
+
+    suspend fun updateTransactionStatus(
+        transactionId: String
+    ): TransactionStatusEnum? = withContext(Dispatchers.IO) {
+        changeNowTransactionsStorage.getTransaction(transactionId)?.let { transaction ->
+            if (!transaction.isFinished()) {
+                try {
+                    val status = changeNowRepository.getTransactionStatus(transactionId)
+                    if (status.status.name.lowercase() != transaction.status) {
+                        changeNowTransactionsStorage.save(
+                            transaction.copy(
+                                status = status.status.name.lowercase()
+                            )
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            changeNowTransactionsStorage.getTransaction(transactionId)?.status?.toStatus()
+        }
     }
 }

@@ -29,6 +29,8 @@ class ChangeNowTransactionsStorage(appDatabase: AppDatabase) {
         limit = limit
     )
 
+    fun getTransaction(transactionId: String) = dao.getTransaction(transactionId)
+
     fun getByTokenIn(
         token: Token,
         amountIn: BigDecimal?,

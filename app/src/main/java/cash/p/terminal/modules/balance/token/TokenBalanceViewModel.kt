@@ -189,7 +189,8 @@ class TokenBalanceViewModel(
 
     fun getTransactionItem(viewItem: TransactionViewItem) =
         transactionsService.getTransactionItem(viewItem.uid)?.copy(
-            transactionStatusUrl = viewItem.transactionStatusUrl
+            transactionStatusUrl = viewItem.transactionStatusUrl,
+            changeNowTransactionId = viewItem.changeNowTransactionId
         )
 
     fun toggleBalanceVisibility() {
