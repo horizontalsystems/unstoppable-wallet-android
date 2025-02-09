@@ -227,7 +227,17 @@ class TokenTransactionsService(
 
     private val executorService = Executors.newCachedThreadPool()
 
-    fun refreshList() {
+    fun refreshList(forceLoadData: Boolean = false) {
+        if(forceLoadData) {
+            val tmpList = mutableListOf<TransactionItem>()
+            transactionItems.forEach {
+                tmpList.add(it.copy())
+            }
+
+            transactionItems.clear()
+            transactionItems.addAll(tmpList)
+        }
+
         itemsSubject.onNext(transactionItems)
     }
 

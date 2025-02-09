@@ -1258,7 +1258,8 @@ class TransactionViewItemFactory(
         } else {
             ColoredValue(valueInFormatted, ColorName.Remus)
         }
-        val titleStringRes = when(transaction.status.toStatus()) {
+        val status = transaction.status.toStatus()
+        val titleStringRes = when (status) {
             TransactionStatusEnum.NEW -> R.string.transaction_swap_status_new
             TransactionStatusEnum.WAITING -> R.string.transaction_swap_status_waiting
             TransactionStatusEnum.CONFIRMING -> R.string.transaction_swap_status_confirming
@@ -1273,7 +1274,11 @@ class TransactionViewItemFactory(
 
         return TransactionViewItem(
             uid = transactionItem.record.uid,
-            progress = if(transaction.isFinished()) 0f else 0.5f,
+            progress = if (transaction.isFinished()) {
+                0f
+            } else {
+                (status.ordinal + 1) * (1f / (TransactionStatusEnum.FINISHED.ordinal + 1))
+            },
             title = Translator.getString(titleStringRes),
             subtitle = "ChangeNow",
             primaryValue = primaryValue,
@@ -1282,7 +1287,9 @@ class TransactionViewItemFactory(
             date = Date(transactionItem.record.timestamp * 1000),
             spam = false,
             icon = transactionIcon,
-            transactionStatusUrl = ChangeNowHelper.CHANGE_NOW_URL to ChangeNowHelper.getViewTransactionUrl(transaction.transactionId)
+            transactionStatusUrl = ChangeNowHelper.CHANGE_NOW_URL to ChangeNowHelper.getViewTransactionUrl(
+                transaction.transactionId
+            )
         )
     }
 

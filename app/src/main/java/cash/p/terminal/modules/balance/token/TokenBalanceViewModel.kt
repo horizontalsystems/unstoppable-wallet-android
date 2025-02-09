@@ -116,7 +116,7 @@ class TokenBalanceViewModel(
             while (isActive) {
                 adapterManager.getReceiveAdapterForWallet(wallet)?.let { adapter ->
                     if (updateChangeNowStatusesUseCase(wallet.token, adapter.receiveAddress)) {
-                        transactionsService.refreshList()
+                        transactionsService.refreshList(true)
                     }
                 }
                 delay(30_000) // update status every 30 seconds

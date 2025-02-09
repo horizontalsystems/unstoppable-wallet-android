@@ -1,7 +1,7 @@
 package cash.p.terminal.core.domain.usecase
 
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
-import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
+import cash.p.terminal.entities.ChangeNowTransaction
 import cash.p.terminal.network.changenow.domain.repository.ChangeNowRepository
 import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.Dispatchers
@@ -22,14 +22,7 @@ class UpdateChangeNowStatusesUseCase(
         changeNowTransactionsStorage.getAll(
             token = token,
             address = address,
-            statuses = listOf(
-                TransactionStatusEnum.NEW.name.lowercase(),
-                TransactionStatusEnum.WAITING.name.lowercase(),
-                TransactionStatusEnum.CONFIRMING.name.lowercase(),
-                TransactionStatusEnum.EXCHANGING.name.lowercase(),
-                TransactionStatusEnum.SENDING.name.lowercase(),
-                TransactionStatusEnum.VERIFYING.name.lowercase()
-            ),
+            statusesExcluded = ChangeNowTransaction.FINISHED_STATUSES,
             limit = 10
         ).map { transaction ->
             async {
