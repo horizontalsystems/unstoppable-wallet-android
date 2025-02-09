@@ -5,7 +5,6 @@ import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.diff
 import cash.p.terminal.core.providers.CexAsset
-import cash.p.terminal.core.swappable
 import cash.p.terminal.modules.balance.BalanceModule.warningText
 import cash.p.terminal.modules.balance.cex.BalanceCexViewItem
 import cash.p.terminal.strings.helpers.TranslatableString
@@ -202,7 +201,8 @@ class BalanceViewItemFactory {
         currency: Currency,
         hideBalance: Boolean,
         watchAccount: Boolean,
-        balanceViewType: BalanceViewType
+        balanceViewType: BalanceViewType,
+        isSwappable: Boolean
     ): BalanceViewItem {
         val wallet = item.wallet
         val state = item.state
@@ -287,7 +287,7 @@ class BalanceViewItemFactory {
             failedIconVisible = state is AdapterState.NotSynced,
             coinIconVisible = state !is AdapterState.NotSynced,
             badge = wallet.badge,
-            swapVisible = App.instance.isSwapEnabled && wallet.token.swappable,
+            swapVisible = isSwappable,
             swapEnabled = state is AdapterState.Synced,
             errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
             isWatchAccount = watchAccount,
