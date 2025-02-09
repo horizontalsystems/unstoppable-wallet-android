@@ -2136,8 +2136,6 @@
     <string name="unpaid">Unpaid</string>
     <string name="stacking_unpaid">Stacking unpaid:</string>
     <string name="estimated_annual_interest">Estimated Annual Interest</string>
-    <string name="estimated_annual_interest_value_pirate" translatable="false">11%</string>
-    <string name="estimated_annual_interest_value_cosanta" translatable="false">27%</string>
     <string name="accruals">Accruals</string>
     <string name="payouts">Payouts</string>
     <string name="investment_chart">Investment chart</string>

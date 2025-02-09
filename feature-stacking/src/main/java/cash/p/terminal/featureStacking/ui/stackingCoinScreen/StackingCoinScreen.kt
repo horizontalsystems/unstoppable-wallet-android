@@ -312,13 +312,7 @@ private fun TotalSection(uiState: StackingCoinUIState, modifier: Modifier) {
             add {
                 TitleAndValueCell(
                     title = stringResource(R.string.estimated_annual_interest),
-                    value = stringResource(
-                        id = if (uiState.stackingType == StackingType.PCASH) {
-                            R.string.estimated_annual_interest_value_pirate
-                        } else {
-                            R.string.estimated_annual_interest_value_cosanta
-                        }
-                    ),
+                    value = uiState.annualInterest,
                     modifier = Modifier.height(48.dp)
                 )
             }
@@ -445,7 +439,8 @@ private fun PirateCoinScreenContentPreview() {
                 viewState = ViewState.Success,
                 hasVolumes = false,
                 chartViewType = ChartViewType.Line,
-                chartInfoData = null
+                chartInfoData = null,
+                considerAlwaysPositive = true
             ),
             getSelectedPointCallback = {
                 ChartModule.ChartHeaderView(

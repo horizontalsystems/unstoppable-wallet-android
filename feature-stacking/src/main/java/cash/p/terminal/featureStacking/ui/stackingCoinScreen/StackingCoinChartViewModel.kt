@@ -7,7 +7,8 @@ import io.horizontalsystems.chartview.chart.ChartViewModel
 abstract class StackingCoinChartViewModel(private val service: PirateInvestmentChartService) :
     ChartViewModel(
         service = service,
-        valueFormatter = ChartCurrencyValueFormatterSignificant()
+        valueFormatter = ChartCurrencyValueFormatterSignificant(),
+        considerAlwaysPositive = true
     ) {
     abstract val coinCode: String
 

@@ -23,6 +23,7 @@ import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.TransactionViewItem
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.ui_compose.ColorName
 import cash.p.terminal.ui_compose.ColoredValue
 import io.horizontalsystems.core.helpers.DateHelper
@@ -657,7 +658,7 @@ object TransactionViewItemFactoryHelper {
     fun getExplorerSectionItems(explorerData: TransactionInfoModule.ExplorerData): List<TransactionInfoViewItem> =
         listOf(
             TransactionInfoViewItem.Explorer(
-                cash.p.terminal.strings.helpers.Translator.getString(
+                Translator.getString(
                     R.string.TransactionInfo_ButtonViewOnExplorerName,
                     explorerData.title
                 ),

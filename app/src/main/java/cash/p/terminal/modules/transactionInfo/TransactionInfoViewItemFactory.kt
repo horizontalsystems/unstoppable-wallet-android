@@ -31,6 +31,7 @@ import cash.p.terminal.modules.transactionInfo.TransactionInfoViewItem.Transacti
 import cash.p.terminal.modules.transactionInfo.TransactionViewItemFactoryHelper.getSwapEventSectionItems
 import cash.p.terminal.modules.transactions.TransactionStatus
 import cash.p.terminal.modules.transactions.TransactionViewItem
+import cash.p.terminal.strings.helpers.Translator
 import io.horizontalsystems.core.entities.BlockchainType
 
 class TransactionInfoViewItemFactory(
@@ -41,8 +42,8 @@ class TransactionInfoViewItemFactory(
         val transaction = transactionItem.record
         val rates = transactionItem.rates
         val nftMetadata = transactionItem.nftMetadata
-
-        val status = transaction.status(transactionItem.lastBlockInfo?.height)
+        val status = transactionItem.externalStatus
+            ?: transaction.status(transactionItem.lastBlockInfo?.height)
         val itemSections = mutableListOf<List<TransactionInfoViewItem>>()
         val miscItemsSection = mutableListOf<TransactionInfoViewItem>()
 
@@ -52,7 +53,7 @@ class TransactionInfoViewItemFactory(
             itemSections.add(
                 listOf(
                     TransactionInfoViewItem.WarningMessage(
-                        cash.p.terminal.strings.helpers.Translator.getString(
+                        Translator.getString(
                             R.string.TransactionInfo_SpamWarning
                         )
                     )
@@ -335,7 +336,7 @@ class TransactionInfoViewItemFactory(
                     listOf(
                         Transaction(
                             transaction.transaction.contract?.label
-                                ?: cash.p.terminal.strings.helpers.Translator.getString(R.string.Transactions_ContractCall),
+                                ?: Translator.getString(R.string.Transactions_ContractCall),
                             "",
                             TransactionViewItem.Icon.Platform(transaction.blockchainType).iconRes
                         )
@@ -500,7 +501,7 @@ class TransactionInfoViewItemFactory(
             itemSections.add(
                 listOf(
                     TransactionInfoViewItem.Description(
-                        cash.p.terminal.strings.helpers.Translator.getString(
+                        Translator.getString(
                             R.string.TransactionInfo_SpeedUpDescription
                         )
                     )
@@ -518,7 +519,7 @@ class TransactionInfoViewItemFactory(
             itemSections.add(
                 listOf(
                     TransactionInfoViewItem.Description(
-                        cash.p.terminal.strings.helpers.Translator.getString(
+                        Translator.getString(
                             R.string.TransactionInfo_SpeedUpDescription
                         )
                     )

@@ -7,6 +7,7 @@ import java.math.BigDecimal
 
 internal data class StackingCoinUIState(
     val stackingType: StackingType = StackingType.PCASH,
+    val annualInterest: String = "-",
     val minStackingAmount: BigDecimal = BigDecimal.ZERO,
     val balance: BigDecimal = BigDecimal.ZERO,
     val balanceStr: String = "",

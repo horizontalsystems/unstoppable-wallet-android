@@ -17,15 +17,18 @@ interface ChangeNowTransactionsDao {
         "SELECT * FROM ChangeNowTransaction WHERE " +
                 "((coinUidIn = :coinUid AND blockchainTypeIn = :blockchainType AND addressIn = :address) OR " +
                 "(coinUidOut = :coinUid AND blockchainTypeOut = :blockchainType AND addressOut = :address)) AND " +
-                "status in (:statuses) ORDER BY date DESC LIMIT :limit"
+                "status not in (:statusesExcluded) ORDER BY date DESC LIMIT :limit"
     )
     fun getAll(
         coinUid: String,
         blockchainType: String,
         address: String,
-        statuses: List<String>,
+        statusesExcluded: List<String>,
         limit: Int
     ): List<ChangeNowTransaction>
+
+    @Query("SELECT * FROM ChangeNowTransaction WHERE transactionId = :transactionId")
+    fun getTransaction(transactionId: String): ChangeNowTransaction?
 
     @Query(
         "SELECT * FROM ChangeNowTransaction WHERE " +

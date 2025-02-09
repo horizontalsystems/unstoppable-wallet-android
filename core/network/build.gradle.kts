@@ -5,6 +5,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("com.android.library")
+    id(libs.plugins.devtools.ksp.get().pluginId)
 }
 
 kotlin {
@@ -30,6 +31,9 @@ kotlin {
                 implementation(project.dependencies.platform(libs.koin.bom))
                 implementation(libs.koin.core)
                 implementation(libs.ktor.kotlinx.serialization)
+
+                implementation(libs.room.runtime)
+                implementation(libs.room.ktx)
             }
         }
         androidMain {
@@ -65,4 +69,8 @@ tasks.withType<KotlinJvmCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_11)
     }
+}
+
+dependencies {
+    add("kspAndroid", libs.room.compiler)
 }

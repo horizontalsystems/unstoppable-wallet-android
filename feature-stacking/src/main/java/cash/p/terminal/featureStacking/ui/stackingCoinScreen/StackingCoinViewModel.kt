@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.entities.PayoutViewItem
 import cash.p.terminal.featureStacking.ui.staking.StackingType
+import cash.p.terminal.network.pirate.domain.enity.PeriodType
 import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.AdapterState
@@ -24,8 +25,10 @@ import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.smartFormat
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collectLatest
@@ -49,9 +52,11 @@ internal abstract class StackingCoinViewModel(
     abstract val stackingType: StackingType
 
     private val customDispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
-    private val _uiState = mutableStateOf(StackingCoinUIState(
-        balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
-    ))
+    private val _uiState = mutableStateOf(
+        StackingCoinUIState(
+            balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
+        )
+    )
     val uiState: State<StackingCoinUIState> get() = _uiState
     private var wallet: Wallet? = null
 
@@ -69,6 +74,7 @@ internal abstract class StackingCoinViewModel(
 
     fun loadData() {
         createWalletIfNotExist()
+        loadAnnualInterest()
         viewModelScope.launch(customDispatcher) {
             balanceService.balanceItemsFlow.collect { items ->
                 if (items?.find {
@@ -84,6 +90,22 @@ internal abstract class StackingCoinViewModel(
             }
         }
         balanceService.start()
+    }
+
+    private fun loadAnnualInterest() = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            val data = piratePlaceRepository.getCalculatorData(
+                coin = stackingType.value,
+                amount = 100.0
+            )
+            data.items.find { it.periodType == PeriodType.YEAR }?.let {
+                _uiState.value = uiState.value.copy(
+                    annualInterest = it.amount.smartFormat()+"%"
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("StackingCoinViewModel", "Error loading annual interest", e)
+        }
     }
 
     private fun createWalletIfNotExist() {

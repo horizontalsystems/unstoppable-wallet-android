@@ -1,14 +1,19 @@
 package cash.p.terminal.entities.transactionrecords
 
+import cash.p.terminal.core.adapters.TonTransactionRecord
 import cash.p.terminal.entities.LastBlockInfo
 import cash.p.terminal.entities.TransactionValue
 import cash.p.terminal.entities.nft.NftUid
+import cash.p.terminal.entities.transactionrecords.binancechain.BinanceChainOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.bitcoin.BitcoinOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ContractCallTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.EvmOutgoingTransactionRecord
 import cash.p.terminal.entities.transactionrecords.evm.ExternalContractCallTransactionRecord
+import cash.p.terminal.entities.transactionrecords.solana.SolanaOutgoingTransactionRecord
+import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionRecord
 import cash.p.terminal.modules.transactions.TransactionStatus
-import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.transaction.TransactionSource
+import io.horizontalsystems.core.entities.BlockchainType
 
 abstract class TransactionRecord(
     val uid: String,
@@ -72,12 +77,15 @@ val TransactionRecord.nftUids: Set<NftUid>
         is EvmOutgoingTransactionRecord -> {
             value.nftUid?.let { setOf(it) } ?: emptySet()
         }
+
         is ContractCallTransactionRecord -> {
             ((incomingEvents + outgoingEvents).mapNotNull { it.value.nftUid }).toSet()
         }
+
         is ExternalContractCallTransactionRecord -> {
             ((incomingEvents + outgoingEvents).mapNotNull { it.value.nftUid }).toSet()
         }
+
         else -> emptySet()
     }
 
@@ -87,3 +95,53 @@ val List<TransactionRecord>.nftUids: Set<NftUid>
         forEach { nftUids.addAll(it.nftUids) }
         return nftUids
     }
+
+fun TransactionRecord.getShortOutgoingTransactionRecord(): ShortOutgoingTransactionRecord? = when (this) {
+    is BinanceChainOutgoingTransactionRecord ->
+        ShortOutgoingTransactionRecord(
+            amountOut = mainValue.decimalValue.abs(),
+            token = value.token,
+            timestamp = timestamp * 1000
+        )
+
+    is BitcoinOutgoingTransactionRecord ->
+        ShortOutgoingTransactionRecord(
+            amountOut = mainValue.decimalValue?.abs(),
+            token = token,
+            timestamp = timestamp * 1000
+        )
+
+    is EvmOutgoingTransactionRecord ->
+        ShortOutgoingTransactionRecord(
+            amountOut = mainValue.decimalValue?.abs(),
+            token = (mainValue as? TransactionValue.CoinValue)?.token,
+            timestamp = timestamp * 1000
+        )
+
+    is SolanaOutgoingTransactionRecord ->
+        ShortOutgoingTransactionRecord(
+            amountOut = mainValue.decimalValue?.abs(),
+            token = baseToken,
+            timestamp = timestamp * 1000
+        )
+
+    is TronOutgoingTransactionRecord ->
+        ShortOutgoingTransactionRecord(
+            amountOut = mainValue.decimalValue?.abs(),
+            token = baseToken,
+            timestamp = timestamp * 1000
+        )
+
+    is TonTransactionRecord ->
+        if (actions.singleOrNull()?.type is TonTransactionRecord.Action.Type.Send) {
+            ShortOutgoingTransactionRecord(
+                amountOut = this.mainValue?.decimalValue?.abs(),
+                token = baseToken,
+                timestamp = timestamp * 1000
+            )
+        } else {
+            null
+        }
+
+    else -> null
+}

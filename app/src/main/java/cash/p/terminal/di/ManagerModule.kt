@@ -19,6 +19,7 @@ import cash.p.terminal.core.managers.SolanaWalletManager
 import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TokenAutoEnableManager
 import cash.p.terminal.core.managers.TonKitManager
+import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.core.managers.TronKitManager
 import cash.p.terminal.wallet.IAdapterManager
@@ -52,6 +53,7 @@ val managerModule = module {
     singleOf(::RestoreSettingsManager)
     singleOf(::EvmLabelManager)
     factoryOf(::SolanaWalletManager)
+    singleOf(::TransactionAdapterManager)
     singleOf(::BalanceHiddenManager) bind IBalanceHiddenManager::class
     singleOf(::TransactionHiddenManager) bind ITransactionHiddenManager::class
 }

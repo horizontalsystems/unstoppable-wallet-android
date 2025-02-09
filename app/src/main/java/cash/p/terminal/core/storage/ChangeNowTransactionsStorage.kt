@@ -19,15 +19,17 @@ class ChangeNowTransactionsStorage(appDatabase: AppDatabase) {
     fun getAll(
         token: Token,
         address: String,
-        statuses: List<String>,
+        statusesExcluded: List<String>,
         limit: Int
     ) = dao.getAll(
         coinUid = token.coin.uid,
         blockchainType = token.blockchainType.uid,
         address = address,
-        statuses = statuses,
+        statusesExcluded = statusesExcluded,
         limit = limit
     )
+
+    fun getTransaction(transactionId: String) = dao.getTransaction(transactionId)
 
     fun getByTokenIn(
         token: Token,

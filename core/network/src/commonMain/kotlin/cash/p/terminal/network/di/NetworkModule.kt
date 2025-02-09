@@ -11,6 +11,7 @@ val networkModule = module {
     includes(
         networkPirateModule,
         networkChangeNowModule,
-        networkPirateNewsModule
+        networkPirateNewsModule,
+        databaseModule
     )
 }

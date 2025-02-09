@@ -24,6 +24,7 @@ import java.util.Date
 open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter,
+    private val considerAlwaysPositive: Boolean = false
 ) : ViewModelUiState<ChartUiState>() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
@@ -76,6 +77,7 @@ open class ChartViewModel(
         viewState = viewState,
         hasVolumes = service.hasVolumes,
         chartViewType = service.chartViewType,
+        considerAlwaysPositive = considerAlwaysPositive
     )
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {

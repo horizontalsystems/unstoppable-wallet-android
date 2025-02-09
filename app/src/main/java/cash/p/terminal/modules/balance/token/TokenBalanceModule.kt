@@ -4,17 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import cash.p.terminal.core.getKoinInstance
-import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.modules.balance.BalanceAdapterRepository
 import cash.p.terminal.modules.balance.BalanceCache
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.DefaultBalanceXRateRepository
 import cash.p.terminal.modules.transactions.NftMetadataService
-import cash.p.terminal.modules.transactions.TransactionRecordRepository
 import cash.p.terminal.modules.transactions.TransactionSyncStateRepository
 import cash.p.terminal.modules.transactions.TransactionViewItem
-import cash.p.terminal.modules.transactions.TransactionViewItemFactory
 import cash.p.terminal.modules.transactions.TransactionsRateRepository
 import cash.p.terminal.wallet.Wallet
 
@@ -26,12 +23,14 @@ class TokenBalanceModule {
             val balanceService = TokenBalanceService(
                 wallet,
                 DefaultBalanceXRateRepository("wallet", App.currencyManager, App.marketKit),
-                BalanceAdapterRepository(App.adapterManager, BalanceCache(App.appDatabase.enabledWalletsCacheDao())),
+                BalanceAdapterRepository(
+                    App.adapterManager,
+                    BalanceCache(App.appDatabase.enabledWalletsCacheDao())
+                ),
             )
 
             val tokenTransactionsService = TokenTransactionsService(
                 wallet,
-                TransactionRecordRepository(App.transactionAdapterManager),
                 TransactionsRateRepository(App.currencyManager, App.marketKit),
                 TransactionSyncStateRepository(App.transactionAdapterManager),
                 App.contactsRepository,
@@ -48,7 +47,8 @@ class TokenBalanceModule {
                 balanceHiddenManager = App.balanceHiddenManager,
                 connectivityManager = App.connectivityManager,
                 accountManager = App.accountManager,
-                transactionHiddenManager = getKoinInstance()
+                transactionHiddenManager = getKoinInstance(),
+                getChangeNowAssociatedCoinTickerUseCase = getKoinInstance()
             ) as T
         }
     }

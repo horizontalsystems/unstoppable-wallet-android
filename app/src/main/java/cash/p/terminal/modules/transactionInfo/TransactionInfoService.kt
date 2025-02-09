@@ -2,6 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.adapters.TonTransactionRecord
+import cash.p.terminal.core.domain.usecase.UpdateChangeNowStatusesUseCase
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
@@ -29,6 +30,8 @@ import cash.p.terminal.entities.transactionrecords.tron.TronOutgoingTransactionR
 import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.modules.transactions.NftMetadataService
+import cash.p.terminal.modules.transactions.TransactionStatus
+import cash.p.terminal.modules.transactions.toUniversalStatus
 import io.horizontalsystems.core.CurrencyManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import io.horizontalsystems.core.entities.CurrencyValue
@@ -45,10 +48,12 @@ import java.math.BigDecimal
 
 class TransactionInfoService(
     val transactionRecord: TransactionRecord,
+    private val changeNowTransactionId: String?,
     private val adapter: ITransactionsAdapter,
     private val marketKit: MarketKitWrapper,
     private val currencyManager: CurrencyManager,
     private val nftMetadataService: NftMetadataService,
+    private val updateChangeNowStatusesUseCase: UpdateChangeNowStatusesUseCase,
     balanceHidden: Boolean,
     transactionStatusUrl: Pair<String, String>?
 ) {
@@ -61,8 +66,12 @@ class TransactionInfoService(
 
     var transactionInfoItem = TransactionInfoItem(
         record = transactionRecord,
+        externalStatus = TransactionStatus.Pending,
         lastBlockInfo = adapter.lastBlockInfo,
-        explorerData = TransactionInfoModule.ExplorerData(adapter.explorerTitle, adapter.getTransactionUrl(transactionRecord.transactionHash)),
+        explorerData = TransactionInfoModule.ExplorerData(
+            adapter.explorerTitle,
+            adapter.getTransactionUrl(transactionRecord.transactionHash)
+        ),
         rates = mapOf(),
         nftMetadata = mapOf(),
         hideAmount = balanceHidden,
@@ -88,31 +97,48 @@ class TransactionInfoService(
                             is TonTransactionRecord.Action.Type.Burn -> {
                                 add(actionType.value.coinUid)
                             }
+
                             is TonTransactionRecord.Action.Type.ContractCall -> {
                                 add(actionType.value.coinUid)
                             }
+
                             is TonTransactionRecord.Action.Type.Mint -> {
                                 add(actionType.value.coinUid)
                             }
+
                             is TonTransactionRecord.Action.Type.Receive -> {
                                 add(actionType.value.coinUid)
                             }
+
                             is TonTransactionRecord.Action.Type.Send -> {
                                 add(actionType.value.coinUid)
                             }
+
                             is TonTransactionRecord.Action.Type.Swap -> {
                                 add(actionType.valueIn.coinUid)
                                 add(actionType.valueOut.coinUid)
                             }
+
                             is TonTransactionRecord.Action.Type.ContractDeploy,
                             is TonTransactionRecord.Action.Type.Unsupported -> Unit
                         }
                     }
                 }
+
                 is EvmIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is EvmOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
-                is SwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
-                is UnknownSwapTransactionRecord -> listOf(tx.fee, tx.valueIn, tx.valueOut).map { it?.coinUid }
+                is SwapTransactionRecord -> listOf(
+                    tx.fee,
+                    tx.valueIn,
+                    tx.valueOut
+                ).map { it?.coinUid }
+
+                is UnknownSwapTransactionRecord -> listOf(
+                    tx.fee,
+                    tx.valueIn,
+                    tx.valueOut
+                ).map { it?.coinUid }
+
                 is ApproveTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is ContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
@@ -120,16 +146,22 @@ class TransactionInfoService(
                     tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
                     tempCoinUidList
                 }
+
                 is ExternalContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
                     tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
                     tempCoinUidList
                 }
+
                 is BitcoinIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is BitcoinOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it?.coinUid }
                 is BinanceChainIncomingTransactionRecord -> listOf(tx.value.coinUid)
-                is BinanceChainOutgoingTransactionRecord -> listOf(tx.fee, tx.value).map { it.coinUid }
+                is BinanceChainOutgoingTransactionRecord -> listOf(
+                    tx.fee,
+                    tx.value
+                ).map { it.coinUid }
+
                 is SolanaIncomingTransactionRecord -> listOf(tx.value.coinUid)
                 is SolanaOutgoingTransactionRecord -> listOf(tx.fee?.coinUid, tx.value.coinUid)
                 is SolanaUnknownTransactionRecord -> {
@@ -138,27 +170,33 @@ class TransactionInfoService(
                     tempCoinUidList.addAll(tx.outgoingTransfers.map { it.value.coinUid })
                     tempCoinUidList
                 }
+
                 is TronOutgoingTransactionRecord -> {
                     listOf(tx.value.coinUid, tx.fee?.coinUid)
                 }
+
                 is TronIncomingTransactionRecord -> {
                     listOf(tx.value.coinUid)
                 }
+
                 is TronApproveTransactionRecord -> {
                     listOf(tx.value.coinUid, tx.fee?.coinUid)
                 }
+
                 is TronContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
                     tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
                     tempCoinUidList
                 }
+
                 is TronExternalContractCallTransactionRecord -> {
                     val tempCoinUidList = mutableListOf<String>()
                     tempCoinUidList.addAll(tx.incomingEvents.map { it.value.coinUid })
                     tempCoinUidList.addAll(tx.outgoingEvents.map { it.value.coinUid })
                     tempCoinUidList
                 }
+
                 else -> emptyList()
             }
 
@@ -180,6 +218,7 @@ class TransactionInfoService(
         }
 
     suspend fun start() = withContext(Dispatchers.IO) {
+        handleLastBlockUpdate(getChangeNowTransactionStatus())
         _transactionInfoItemFlow.update { transactionInfoItem }
 
         launch {
@@ -196,7 +235,7 @@ class TransactionInfoService(
         launch {
             adapter.lastBlockUpdatedFlowable.asFlow()
                 .collect {
-                    handleLastBlockUpdate()
+                    handleLastBlockUpdate(getChangeNowTransactionStatus())
                 }
         }
 
@@ -209,6 +248,12 @@ class TransactionInfoService(
         fetchRates()
         fetchNftMetadata()
     }
+
+    private suspend fun getChangeNowTransactionStatus(): TransactionStatus? =
+        changeNowTransactionId?.let { changeNowTransactionId ->
+            updateChangeNowStatusesUseCase.updateTransactionStatus(changeNowTransactionId)
+                .toUniversalStatus()
+        }
 
     private suspend fun fetchNftMetadata() {
         val nftUids = transactionRecord.nftUids
@@ -228,7 +273,11 @@ class TransactionInfoService(
         val rates = coinUids.mapNotNull { coinUid ->
             try {
                 val rate = marketKit
-                    .coinHistoricalPriceSingle(coinUid, currencyManager.baseCurrency.code, timestamp)
+                    .coinHistoricalPriceSingle(
+                        coinUid,
+                        currencyManager.baseCurrency.code,
+                        timestamp
+                    )
                     .await()
                 if (rate != BigDecimal.ZERO) {
                     Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, rate))
@@ -244,8 +293,11 @@ class TransactionInfoService(
     }
 
     @Synchronized
-    private fun handleLastBlockUpdate() {
-        transactionInfoItem = transactionInfoItem.copy(lastBlockInfo = adapter.lastBlockInfo)
+    private fun handleLastBlockUpdate(externalStatus: TransactionStatus?) {
+        transactionInfoItem = transactionInfoItem.copy(
+            lastBlockInfo = adapter.lastBlockInfo,
+            externalStatus = externalStatus
+        )
     }
 
     @Synchronized

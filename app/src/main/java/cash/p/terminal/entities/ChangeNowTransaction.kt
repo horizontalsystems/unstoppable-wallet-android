@@ -22,7 +22,13 @@ data class ChangeNowTransaction(
     val amountOut: BigDecimal,
     val addressOut: String
 ) {
-    fun isFinished() = status == TransactionStatusEnum.FINISHED.name.lowercase() ||
-            status == TransactionStatusEnum.FAILED.name.lowercase() ||
-            status == TransactionStatusEnum.REFUNDED.name.lowercase()
+    fun isFinished() = status in FINISHED_STATUSES
+
+    companion object {
+        val FINISHED_STATUSES = listOf(
+            TransactionStatusEnum.FINISHED.name.lowercase(),
+            TransactionStatusEnum.FAILED.name.lowercase(),
+            TransactionStatusEnum.REFUNDED.name.lowercase()
+        )
+    }
 }

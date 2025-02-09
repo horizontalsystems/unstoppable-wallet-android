@@ -1,6 +1,7 @@
 package cash.p.terminal.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
+import cash.p.terminal.core.App
 import cash.p.terminal.core.domain.usecase.UpdateChangeNowStatusesUseCase
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager
@@ -14,8 +15,10 @@ import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiSt
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
+import cash.p.terminal.network.pirate.domain.useCase.GetChangeNowAssociatedCoinTickerUseCase
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IAdapterManager
+import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.balance.BalanceItem
@@ -39,7 +42,8 @@ class TokenBalanceViewModel(
     private val balanceHiddenManager: BalanceHiddenManager,
     private val connectivityManager: ConnectivityManager,
     private val accountManager: IAccountManager,
-    private val transactionHiddenManager: TransactionHiddenManager
+    private val transactionHiddenManager: TransactionHiddenManager,
+    private val getChangeNowAssociatedCoinTickerUseCase: GetChangeNowAssociatedCoinTickerUseCase
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
     private val updateChangeNowStatusesUseCase: UpdateChangeNowStatusesUseCase = getKoinInstance()
@@ -57,7 +61,10 @@ class TokenBalanceViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             balanceService.balanceItemFlow.collect { balanceItem ->
                 balanceItem?.let {
-                    updateBalanceViewItem(it)
+                    updateBalanceViewItem(
+                        balanceItem = it,
+                        isSwappable = isSwappable(it.wallet.token)
+                    )
                 }
             }
         }
@@ -65,7 +72,10 @@ class TokenBalanceViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             balanceHiddenManager.balanceHiddenFlow.collect {
                 balanceService.balanceItem?.let {
-                    updateBalanceViewItem(it)
+                    updateBalanceViewItem(
+                        balanceItem = it,
+                        isSwappable = isSwappable(it.wallet.token)
+                    )
                     transactionViewItem2Factory.updateCache()
                     transactionsService.refreshList()
                 }
@@ -91,6 +101,13 @@ class TokenBalanceViewModel(
         }
     }
 
+    private suspend fun isSwappable(token: Token) =
+        App.instance.isSwapEnabled &&
+                getChangeNowAssociatedCoinTickerUseCase(
+                    token.coin.uid,
+                    token.blockchainType.uid
+                ) != null
+
     fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
     fun startStatusChecker() {
@@ -99,7 +116,7 @@ class TokenBalanceViewModel(
             while (isActive) {
                 adapterManager.getReceiveAdapterForWallet(wallet)?.let { adapter ->
                     if (updateChangeNowStatusesUseCase(wallet.token, adapter.receiveAddress)) {
-                        transactionsService.refreshList()
+                        transactionsService.refreshList(true)
                     }
                 }
                 delay(30_000) // update status every 30 seconds
@@ -135,13 +152,14 @@ class TokenBalanceViewModel(
         emitState()
     }
 
-    private fun updateBalanceViewItem(balanceItem: BalanceItem) {
+    private fun updateBalanceViewItem(balanceItem: BalanceItem, isSwappable: Boolean) {
         val balanceViewItem = balanceViewItemFactory.viewItem(
             item = balanceItem,
             currency = balanceService.baseCurrency,
             hideBalance = balanceHiddenManager.balanceHidden,
             watchAccount = wallet.account.isWatchAccount,
-            balanceViewType = BalanceViewType.CoinThenFiat
+            balanceViewType = BalanceViewType.CoinThenFiat,
+            isSwappable = isSwappable
         )
 
         this.balanceViewItem = balanceViewItem.copy(
@@ -171,7 +189,8 @@ class TokenBalanceViewModel(
 
     fun getTransactionItem(viewItem: TransactionViewItem) =
         transactionsService.getTransactionItem(viewItem.uid)?.copy(
-            transactionStatusUrl = viewItem.transactionStatusUrl
+            transactionStatusUrl = viewItem.transactionStatusUrl,
+            changeNowTransactionId = viewItem.changeNowTransactionId
         )
 
     fun toggleBalanceVisibility() {
