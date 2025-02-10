@@ -198,7 +198,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':core:ui-compose')
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation libs.appcompat
     implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
@@ -211,7 +211,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
+    implementation libs.androidx.fragment.ktx
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
@@ -234,7 +234,7 @@ dependencies {
 
     implementation libs.androidx.recyclerview
 
-    implementation "com.google.android.material:material:$material_version"
+//    implementation libs.material
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
@@ -284,7 +284,7 @@ dependencies {
     // Wallet kits
     implementation(libs.ton.kit)
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:4a34f53'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:0c770e3'
+    implementation libs.ethereum.kit
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     // implementation 'com.github.horizontalsystems:market-kit-android:55dde9c'
@@ -326,7 +326,7 @@ dependencies {
     implementation project(':feature-stacking')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.9.3'
+    implementation libs.androidx.activity.compose
     // Compose Material Design
     implementation "androidx.compose.material:material:$compose_version"
     // Animations
