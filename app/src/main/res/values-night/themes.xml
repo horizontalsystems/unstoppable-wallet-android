@@ -9,8 +9,6 @@
         <item name="colorAccent">@color/yellow_d</item>
         <item name="android:windowBackground">@color/dark</item>
         <item name="android:navigationBarColor">@color/transparent</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="actionMenuTextAppearance">@style/Headline2</item>
         <item name="colorControlNormal">@color/grey</item>
         <item name="colorControlActivated">@color/yellow_d</item>

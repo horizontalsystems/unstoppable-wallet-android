@@ -11,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.getValue
@@ -63,62 +65,78 @@ class MarketWidgetConfigurationActivity : AppCompatActivity() {
         setContent {
             var selectedType by remember { mutableStateOf<MarketWidgetType?>(null) }
 
-            cash.p.terminal.ui_compose.theme.ComposeAppTheme {
-                Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
-                    AppBar(
-                        title = stringResource(R.string.WidgetList_Config_Title),
-                        navigationIcon = null,
-                        menuItems = listOf(MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Close),
-                            icon = R.drawable.ic_close,
-                            onClick = { finish() }
-                        ))
-                    )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState())
-                    ) {
-                        Spacer(modifier = Modifier.height(12.dp))
-                        CellSingleLineLawrenceSection(MarketWidgetManager.getMarketWidgetTypes()) { type ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .clickable(onClick = {
-                                        selectedType = type
-                                        finishActivity(type, appWidgetId, currentGlanceId, context)
-                                    })
-                                    .padding(horizontal = 16.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                body_leah(
-                                    text = stringResource(type.title),
-                                    modifier = Modifier.weight(1f)
-                                )
-                                if (selectedType == type) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_checkmark_20),
-                                        contentDescription = null,
-                                        colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+            ComposeAppTheme {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .systemBarsPadding()
+                ) {
+                    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+                        AppBar(
+                            title = stringResource(R.string.WidgetList_Config_Title),
+                            navigationIcon = null,
+                            menuItems = listOf(MenuItem(
+                                title = TranslatableString.ResString(R.string.Button_Close),
+                                icon = R.drawable.ic_close,
+                                onClick = { finish() }
+                            ))
+                        )
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            Spacer(modifier = Modifier.height(12.dp))
+                            CellSingleLineLawrenceSection(MarketWidgetManager.getMarketWidgetTypes()) { type ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .clickable(onClick = {
+                                            selectedType = type
+                                            finishActivity(
+                                                type,
+                                                appWidgetId,
+                                                currentGlanceId,
+                                                context
+                                            )
+                                        })
+                                        .padding(horizontal = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    body_leah(
+                                        text = stringResource(type.title),
+                                        modifier = Modifier.weight(1f)
                                     )
+                                    if (selectedType == type) {
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_checkmark_20),
+                                            contentDescription = null,
+                                            colorFilter = ColorFilter.tint(ComposeAppTheme.colors.jacob)
+                                        )
+                                    }
                                 }
                             }
-                        }
-                        if (manufacturer.equals(Build.MANUFACTURER, ignoreCase = true)) {
+                            if (manufacturer.equals(Build.MANUFACTURER, ignoreCase = true)) {
+                                Spacer(modifier = Modifier.height(24.dp))
+                                TextImportantWarning(
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    text = stringResource(R.string.Widget_EnableAutostartWarning)
+                                )
+                            }
                             Spacer(modifier = Modifier.height(24.dp))
-                            TextImportantWarning(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                text = stringResource(R.string.Widget_EnableAutostartWarning)
-                            )
                         }
-                        Spacer(modifier = Modifier.height(24.dp))
                     }
                 }
             }
         }
     }
 
-    private fun finishActivity(selectedType: MarketWidgetType, appWidgetId: Int, glanceId: GlanceId?, context: Context) {
+    private fun finishActivity(
+        selectedType: MarketWidgetType,
+        appWidgetId: Int,
+        glanceId: GlanceId?,
+        context: Context
+    ) {
         val scope = MainScope()
         scope.launch {
             glanceId?.let {

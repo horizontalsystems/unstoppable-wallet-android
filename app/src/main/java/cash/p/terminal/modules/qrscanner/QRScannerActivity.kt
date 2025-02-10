@@ -78,7 +78,6 @@ class QRScannerActivity : BaseActivity() {
                 onCameraPermissionSettingsClick = { openCameraPermissionSettings() }
             )
         }
-        setStatusBarTransparent()
     }
 
     private fun onScan(address: String?) {

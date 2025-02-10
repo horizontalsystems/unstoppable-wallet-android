@@ -225,6 +225,7 @@ dependencies {
     implementation libs.room.runtime
     implementation libs.room.ktx
     implementation libs.androidx.room.rxjava2
+    implementation libs.androidx.material3.android
     ksp libs.room.compiler
     // alternately - if using Java8, use the following instead of compiler
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"

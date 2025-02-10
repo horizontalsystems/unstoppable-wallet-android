@@ -35,6 +35,7 @@ ktor = "2.3.13"
 kotlinx-serialization-json = "1.8.0-RC"
 androidx-constraintlayout = "2.2.0"
 android-core-ktx = "1.13.1"
+material3Android = "1.3.1"
 
 [libraries]
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
@@ -89,6 +90,7 @@ ktor-client-log = { group = "io.ktor", name = "ktor-client-logging", version.ref
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 ktor-kotlinx-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
 [plugins]
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }

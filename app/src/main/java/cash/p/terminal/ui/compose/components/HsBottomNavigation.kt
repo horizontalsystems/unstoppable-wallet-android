@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -59,12 +61,14 @@ import kotlin.math.roundToInt
  * @param content destinations inside this BottomNavigation, this should contain multiple
  * [BottomNavigationItem]s
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HsBottomNavigation(
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = BottomNavigationDefaults.Elevation,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     content: @Composable RowScope.() -> Unit
 ) {
     Surface(
@@ -76,6 +80,7 @@ fun HsBottomNavigation(
         Row(
             Modifier
                 .fillMaxWidth()
+                .windowInsetsPadding(windowInsets)
                 .height(BottomNavigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween,
