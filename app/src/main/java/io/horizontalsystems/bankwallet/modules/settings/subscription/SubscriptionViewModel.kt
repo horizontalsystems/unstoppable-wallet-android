@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.settings.subscription
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
+import io.horizontalsystems.subscriptions.core.UserSubscription
 import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.launch
 
@@ -11,26 +12,25 @@ class SubscriptionViewModel : ViewModelUiState<ManageSubscriptionUiState>() {
 
     init {
         viewModelScope.launch {
-            UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
-                refreshData()
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
+                refreshData(it)
                 emitState()
             }
         }
-
-        refreshData()
-        emitState()
     }
 
     override fun createState() = ManageSubscriptionUiState(
         userHasActiveSubscription = userHasActiveSubscription
     )
 
-    private fun refreshData() {
-        userHasActiveSubscription = UserSubscriptionManager.getActiveUserSubscriptions().isNotEmpty()
+    private fun refreshData(userSubscription: UserSubscription?) {
+        userHasActiveSubscription = userSubscription != null
     }
 
     fun restorePurchase() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            UserSubscriptionManager.restore()
+        }
     }
 
     fun launchManageSubscriptionScreen(context: Context) {

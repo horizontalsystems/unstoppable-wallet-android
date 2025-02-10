@@ -73,7 +73,7 @@ class MainSettingsViewModel(
     private var wcSessionsCount = walletConnectSessionCount
     private var wcPendingRequestCount = 0
     private var showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
-    private var hasSubscription = UserSubscriptionManager.getActiveUserSubscriptions().isNotEmpty()
+    private var hasSubscription = false
 
     init {
         viewModelScope.launch {
@@ -111,9 +111,9 @@ class MainSettingsViewModel(
             }
         }
         viewModelScope.launch {
-            UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
                 showPremiumBanner = !UserSubscriptionManager.isActionAllowed(AdvancedSearch)
-                hasSubscription = UserSubscriptionManager.getActiveUserSubscriptions().isNotEmpty()
+                hasSubscription = it != null
                 emitState()
             }
         }

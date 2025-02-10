@@ -39,7 +39,7 @@ class VipSupportViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val purchaseToken = UserSubscriptionManager.getActiveUserSubscriptions().firstOrNull()?.purchaseToken
+                val purchaseToken = UserSubscriptionManager.activeSubscriptionStateFlow.value?.purchaseToken
                     ?: throw Exception("No Purchase Token")
 
                 val request = marketKitWrapper.requestVipSupport(purchaseToken).await()
