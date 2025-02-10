@@ -1,6 +1,7 @@
 package io.horizontalsystems.subscriptions.core
 
 import android.app.Activity
+import android.content.Context
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -30,6 +31,9 @@ object UserSubscriptionManager {
     )
     private lateinit var service: SubscriptionService
 
+    val activeSubscriptionStateFlow
+        get() = service.activeSubscriptionStateFlow
+
     suspend fun purchaseStateUpdated() {
         _purchaseStateUpdatedFlow.emit(Unit)
     }
@@ -45,10 +49,6 @@ object UserSubscriptionManager {
 
     suspend fun getSubscriptions(): List<Subscription> {
         return service.getSubscriptions()
-    }
-
-    fun getActiveUserSubscriptions(): List<UserSubscription> {
-        return service.getActiveSubscriptions()
     }
 
     suspend fun launchPurchaseFlow(
