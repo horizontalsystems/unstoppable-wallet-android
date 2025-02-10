@@ -57,7 +57,6 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
             } catch (e: Throwable) {
                 error = e
             }
-            UserSubscriptionManager.purchaseStateUpdated()
             purchaseInProgress = false
             emitState()
         }

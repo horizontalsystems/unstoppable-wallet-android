@@ -93,7 +93,7 @@ class CoinAnalyticsViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
                 showPreviewBlocks = !UserSubscriptionManager.isActionAllowed(TokenInsights)
             }
         }
