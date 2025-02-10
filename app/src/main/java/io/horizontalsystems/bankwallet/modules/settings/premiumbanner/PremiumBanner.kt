@@ -1,4 +1,4 @@
-package io.horizontalsystems.bankwallet.modules.settings.main
+package io.horizontalsystems.bankwallet.modules.settings.premiumbanner
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,16 +27,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.headline1_jacob
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
 
-
 @Composable
 fun PremiumBanner(onClick: () -> Unit) {
+    val viewModel = viewModel<PremiumBannerViewModel>()
+    PremiumBannerView(
+        onClick = onClick,
+        hasFreeTrial = viewModel.uiState.hasFreeTrial
+    )
+}
+
+
+@Composable
+fun PremiumBannerView(
+    onClick: () -> Unit,
+    hasFreeTrial: Boolean
+) {
     val darkTheme = isSystemInDarkTheme()
 
     val radialGradient = Brush.linearGradient(
@@ -125,12 +140,17 @@ fun PremiumBanner(onClick: () -> Unit) {
                     .fillMaxHeight()
                     .weight(1f)
                     .padding(vertical = 16.dp),
-                verticalArrangement = Arrangement.SpaceBetween
             ) {
                 headline1_jacob(stringResource(R.string.SettingsBanner_Premium))
-                Column {
+                VSpacer(20.dp)
+                Column(
+                    modifier = Modifier.defaultMinSize(minHeight = 60.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
                     subhead1_leah(stringResource(R.string.SettingsBanner_PremiumBannerDescription))
-                    subhead2_remus(stringResource(R.string.SettingsBanner_PremiumTryFee))
+                    if (hasFreeTrial) {
+                        subhead2_remus(stringResource(R.string.SettingsBanner_PremiumTryFee))
+                    }
                 }
             }
 
@@ -151,6 +171,9 @@ fun PremiumBanner(onClick: () -> Unit) {
 @Composable
 fun PremiumBannerPreview() {
     ComposeAppTheme {
-        PremiumBanner {}
+        PremiumBannerView(
+            onClick = {},
+            hasFreeTrial = true
+        )
     }
 }
