@@ -51,9 +51,6 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
                     UserSubscriptionManager.launchPurchaseFlow(subscriptionId, offerToken, activity)
 
                 purchase = hsPurchase
-                if (hsPurchase == null) {
-                    error = Throwable("Purchase failed")
-                }
             } catch (e: Throwable) {
                 error = e
             }
