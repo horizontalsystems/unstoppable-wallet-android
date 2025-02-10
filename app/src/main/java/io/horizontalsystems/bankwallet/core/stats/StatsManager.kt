@@ -69,7 +69,7 @@ class StatsManager(
             }
         }
         scope.launch {
-            UserSubscriptionManager.purchaseStateUpdatedFlow.collect {
+            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
                 uiStatsEnabled = areUiStatsEnabled()
                 _uiStatsEnabledFlow.update { uiStatsEnabled }
             }
