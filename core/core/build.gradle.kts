@@ -42,11 +42,8 @@ dependencies {
     val kotlin_version = rootProject.ext.get("kotlin_version") as String
     val appcompat_version = rootProject.ext.get("appcompat_version") as String
     val constraint_version = rootProject.ext.get("constraint_version") as String
-    val fragment_ktx_version = rootProject.ext.get("fragment_ktx_version") as String
-    val navigation_ktx_version = rootProject.ext.get("navigation_ktx_version") as String
     val rxjava_version = rootProject.ext.get("rxjava_version") as String
     val biometric_version = rootProject.ext.get("biometric_version") as String
-    val material_version = rootProject.ext.get("material_version") as String
     val junit_version = rootProject.ext.get("junit_version") as String
 
     implementation(platform(libs.compose.bom))
@@ -62,14 +59,14 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:$constraint_version")
     implementation(libs.android.core.ktx)
 
-    implementation("androidx.fragment:fragment-ktx:$fragment_ktx_version")
+    implementation(libs.androidx.fragment.ktx)
     // Navigation component
-    api("androidx.navigation:navigation-fragment-ktx:$navigation_ktx_version")
-    api("androidx.navigation:navigation-ui-ktx:$navigation_ktx_version")
+    api(libs.androidx.navigation.fragment.ktx)
+    api(libs.androidx.navigation.ui.ktx)
 
     implementation("io.reactivex.rxjava2:rxjava:$rxjava_version")
     implementation("androidx.biometric:biometric:$biometric_version")
-    implementation("com.google.android.material:material:$material_version")
+    implementation(libs.material)
 
     implementation(project(":core:strings"))
     implementation(project(":core:ui-compose"))

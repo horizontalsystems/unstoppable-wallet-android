@@ -166,10 +166,10 @@ private fun BottomSheetHeader(
 @Composable
 private fun BottomSheetHeader_Preview() {
     val iconPainter = painterResource(R.drawable.icon_24_lock)
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         BottomSheetHeader(
             iconPainter = iconPainter,
-            iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
             title = stringResource(R.string.ManageAccount_SwitchWallet_Title),
             onCloseClick = { },
         ) {

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -16,7 +15,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BadgedBox
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -39,11 +37,9 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
-import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.findActivity
 import cash.p.terminal.core.managers.RateAppManager
 import cash.p.terminal.core.slideFromBottom
-import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.core.stats.StatEntity
 import cash.p.terminal.core.stats.StatEvent
 import cash.p.terminal.core.stats.StatPage
@@ -67,10 +63,12 @@ import cash.p.terminal.modules.transactions.TransactionsScreen
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.walletconnect.WCAccountTypeNotSupportedDialog
 import cash.p.terminal.modules.walletconnect.WCManager.SupportState
+import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.BadgeText
 import cash.p.terminal.ui.compose.components.HsBottomNavigation
 import cash.p.terminal.ui.compose.components.HsBottomNavigationItem
 import cash.p.terminal.ui.extensions.WalletSwitchBottomSheet
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -85,7 +83,10 @@ class MainFragment : BaseComposeFragment() {
         val backStackEntry = navController.safeGetBackStackEntry(R.id.mainFragment)
 
         backStackEntry?.let {
-            val viewModel = ViewModelProvider(backStackEntry.viewModelStore,  TransactionsModule.Factory())[TransactionsViewModel::class.java]
+            val viewModel = ViewModelProvider(
+                backStackEntry.viewModelStore,
+                TransactionsModule.Factory()
+            )[TransactionsViewModel::class.java]
             transactionsViewModelRef = WeakReference(viewModel)
             MainScreenWithRootedDeviceCheck(
                 transactionsViewModel = viewModel,
@@ -152,8 +153,6 @@ private fun MainScreen(
             }
         }
     }
-
-
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
         sheetBackgroundColor = ComposeAppTheme.colors.transparent,
@@ -167,7 +166,10 @@ private fun MainScreen(
                         modalBottomSheetState.hide()
                         viewModel.onSelect(it)
 
-                        stat(page = StatPage.SwitchWallet, event = StatEvent.Select(StatEntity.Wallet))
+                        stat(
+                            page = StatPage.SwitchWallet,
+                            event = StatEvent.Select(StatEntity.Wallet)
+                        )
                     }
                 },
                 onCancelClick = {
@@ -236,7 +238,7 @@ private fun MainScreen(
             }
             Column(modifier = Modifier.padding(it)) {
                 LaunchedEffect(key1 = selectedPage, block = {
-                    if(uiState.mainNavItems[selectedPage].mainNavItem != MainNavigation.Transactions) {
+                    if (uiState.mainNavItems[selectedPage].mainNavItem != MainNavigation.Transactions) {
                         transactionsViewModel.showAllTransactions(false)
                     }
                     pagerState.scrollToPage(selectedPage)
@@ -349,7 +351,8 @@ private fun HideContentBox(contentHidden: Boolean) {
     Box(
         Modifier
             .fillMaxSize()
-            .then(backgroundModifier))
+            .then(backgroundModifier)
+    )
 }
 
 @Composable
