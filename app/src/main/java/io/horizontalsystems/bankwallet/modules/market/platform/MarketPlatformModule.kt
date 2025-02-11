@@ -20,7 +20,7 @@ object MarketPlatformModule {
                 MarketPlatformViewModel::class.java -> {
                     val repository =
                         MarketPlatformCoinsRepository(platform, App.marketKit, App.currencyManager)
-                    MarketPlatformViewModel(platform, repository, App.marketFavoritesManager) as T
+                    MarketPlatformViewModel(repository, App.marketFavoritesManager) as T
                 }
 
                 ChartViewModel::class.java -> {

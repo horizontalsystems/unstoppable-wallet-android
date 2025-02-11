@@ -1,25 +1,18 @@
 package io.horizontalsystems.bankwallet.modules.market.platform
 
 import androidx.lifecycle.viewModelScope
-import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.ViewModelUiState
-import io.horizontalsystems.bankwallet.core.iconUrl
 import io.horizontalsystems.bankwallet.core.managers.MarketFavoritesManager
-import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
-import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.sort
-import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MarketPlatformViewModel(
-    platform: Platform,
     private val repository: MarketPlatformCoinsRepository,
     private val favoritesManager: MarketFavoritesManager,
 ) : ViewModelUiState<MarketPlatformUiState>() {
@@ -36,15 +29,6 @@ class MarketPlatformViewModel(
     private var viewItems: List<MarketViewItem> = listOf()
     private var cache: List<MarketItem> = emptyList()
     private var isRefreshing = false
-
-    val header = MarketModule.Header(
-        Translator.getString(R.string.MarketPlatformCoins_PlatformEcosystem, platform.name),
-        Translator.getString(
-            R.string.MarketPlatformCoins_PlatformEcosystemDescription,
-            platform.name
-        ),
-        ImageSource.Remote(platform.iconUrl)
-    )
 
     init {
         sync()
