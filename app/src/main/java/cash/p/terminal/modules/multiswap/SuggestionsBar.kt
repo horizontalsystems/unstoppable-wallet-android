@@ -40,9 +40,9 @@ fun SuggestionsBar(
                             modifier = modifier,
                             style = ComposeAppTheme.typography.captionSB,
                             color = if (selectEnabled) {
-                                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah
+                                ComposeAppTheme.colors.leah
                             } else {
-                                cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50
+                                ComposeAppTheme.colors.grey50
                             },
                         )
                     }

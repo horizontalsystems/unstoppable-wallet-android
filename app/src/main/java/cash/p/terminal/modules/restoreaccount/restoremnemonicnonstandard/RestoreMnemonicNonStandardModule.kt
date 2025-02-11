@@ -25,7 +25,7 @@ object RestoreMnemonicNonStandardModule {
         val passphraseError: String?,
         val invalidWordRanges: List<IntRange>,
         val error: String?,
-        val accountType: cash.p.terminal.wallet.AccountType?,
+        val accountType: AccountType?,
         val wordSuggestions: RestoreMnemonicModule.WordSuggestions?,
         val language: Language,
     )

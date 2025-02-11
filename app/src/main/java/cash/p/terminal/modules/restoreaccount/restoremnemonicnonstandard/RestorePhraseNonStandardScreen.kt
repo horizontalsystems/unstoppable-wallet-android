@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -306,7 +307,7 @@ fun RestorePhraseNonStandard(
 
             if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
                 SuggestionsBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
+                    modifier = Modifier.imePadding().align(Alignment.BottomCenter),
                     wordSuggestions = uiState.wordSuggestions
                 ) { wordItem, suggestion ->
                     HudHelper.vibrate(context)
