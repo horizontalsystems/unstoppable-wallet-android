@@ -5,7 +5,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Surface
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -68,7 +71,7 @@ class MarketCategoryFragment : BaseComposeFragment() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryScreen(
     viewModel: MarketCategoryViewModel,
@@ -83,7 +86,9 @@ fun CategoryScreen(
     val selectorDialogState by viewModel.selectorDialogStateLiveData.observeAsState()
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
+        Column(
+            modifier = Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)
+        ) {
             TopCloseButton(onCloseButtonClick)
 
             HSSwipeRefresh(
