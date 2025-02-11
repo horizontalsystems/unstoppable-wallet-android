@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
-import io.horizontalsystems.bankwallet.core.slideFromBottom
+import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.StatSection
@@ -113,7 +113,7 @@ fun TopSectorsScreen(
                                     item,
                                     borderBottom = true
                                 ) { coinCategory ->
-                                    navController.slideFromBottom(
+                                    navController.slideFromRight(
                                         R.id.marketCategoryFragment,
                                         coinCategory
                                     )

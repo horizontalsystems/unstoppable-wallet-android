@@ -10,9 +10,7 @@ import io.horizontalsystems.bankwallet.core.stats.statField
 import io.horizontalsystems.bankwallet.core.stats.statSortType
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.entities.ViewState
-import io.horizontalsystems.bankwallet.modules.market.ImageSource
 import io.horizontalsystems.bankwallet.modules.market.MarketField
-import io.horizontalsystems.bankwallet.modules.market.MarketModule
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
 import io.horizontalsystems.bankwallet.modules.market.topcoins.SelectorDialogState
@@ -29,7 +27,8 @@ class MarketCategoryViewModel(
     private var marketItems: List<MarketItemWrapper> = listOf()
     private var marketField = MarketField.PriceDiff
 
-    val headerLiveData = MutableLiveData<MarketModule.Header>()
+    val categoryName = service.coinCategoryName
+    val categoryDescription = service.coinCategoryDescription
     val menuLiveData = MutableLiveData<MarketCategoryModule.Menu>()
     val viewStateLiveData = MutableLiveData<ViewState>()
     val viewItemsLiveData = MutableLiveData<List<MarketViewItem>>()
@@ -37,7 +36,6 @@ class MarketCategoryViewModel(
     val selectorDialogStateLiveData = MutableLiveData<SelectorDialogState>()
 
     init {
-        syncHeader()
         syncMenu()
 
         viewModelScope.launch {
@@ -59,16 +57,6 @@ class MarketCategoryViewModel(
         }
 
         syncMenu()
-    }
-
-    private fun syncHeader() {
-        headerLiveData.postValue(
-            MarketModule.Header(
-                service.coinCategoryName,
-                service.coinCategoryDescription,
-                ImageSource.Remote(service.coinCategoryImageUrl)
-            )
-        )
     }
 
     private fun syncMenu() {

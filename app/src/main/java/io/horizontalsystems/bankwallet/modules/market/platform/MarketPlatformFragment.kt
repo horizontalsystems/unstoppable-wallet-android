@@ -274,7 +274,7 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun InfoBottomSheet(
+fun InfoBottomSheet(
     icon: Int,
     title: String,
     description: String,
