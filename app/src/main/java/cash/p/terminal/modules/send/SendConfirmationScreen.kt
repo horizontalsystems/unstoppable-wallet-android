@@ -95,7 +95,7 @@ fun SendConfirmationScreen(
             )
         }
 
-        SendResult.Sent -> {
+        is SendResult.Sent -> {
             HudHelper.showSuccessMessage(
                 view,
                 R.string.Send_Success,
@@ -111,14 +111,14 @@ fun SendConfirmationScreen(
     }
 
     LaunchedEffect(sendResult) {
-        if (sendResult == SendResult.Sent) {
+        if (sendResult == SendResult.Sent()) {
             delay(1200)
             navController.popBackStack(closeUntilDestId, true)
         }
     }
 
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
-        if (sendResult == SendResult.Sent) {
+        if (sendResult == SendResult.Sent()) {
             navController.popBackStack(closeUntilDestId, true)
         }
     }
@@ -251,7 +251,7 @@ fun SendButton(modifier: Modifier, sendResult: SendResult?, onClickSend: () -> U
             )
         }
 
-        SendResult.Sent -> {
+        SendResult.Sent() -> {
             ButtonPrimaryYellow(
                 modifier = modifier,
                 title = stringResource(R.string.Send_Success),

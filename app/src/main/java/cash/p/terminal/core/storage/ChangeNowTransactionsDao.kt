@@ -43,6 +43,11 @@ interface ChangeNowTransactionsDao {
         dateTo: Long
     ): ChangeNowTransaction?
 
+    @Query("SELECT * FROM ChangeNowTransaction WHERE outgoingRecordUid = :outgoingRecordUid")
+    fun getByOutgoingRecordUid(
+        outgoingRecordUid: String
+    ): ChangeNowTransaction?
+
     @Query(
         "SELECT * FROM ChangeNowTransaction WHERE " +
                 "(coinUidOut = :coinUid AND blockchainTypeOut = :blockchainType AND date >= :dateFrom AND date <= :dateTo) ORDER BY date DESC LIMIT 1"

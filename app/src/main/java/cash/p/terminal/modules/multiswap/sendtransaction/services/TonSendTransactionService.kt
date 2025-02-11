@@ -159,7 +159,7 @@ class TonSendTransactionService(
     override suspend fun sendTransaction(): SendTransactionResult {
         try {
             adapter.send(amountState.amount!!, addressState.tonAddress!!, memo)
-            return SendTransactionResult.Common(SendResult.Sent)
+            return SendTransactionResult.Common(SendResult.Sent())
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

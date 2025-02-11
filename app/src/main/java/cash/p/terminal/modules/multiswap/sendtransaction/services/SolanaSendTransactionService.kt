@@ -157,7 +157,7 @@ class SolanaSendTransactionService(
 
             adapter.send(decimalAmount, addressState.evmAddress!!)
 
-            return SendTransactionResult.Common(SendResult.Sent)
+            return SendTransactionResult.Common(SendResult.Sent())
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

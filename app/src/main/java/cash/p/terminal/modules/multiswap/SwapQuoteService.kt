@@ -15,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -98,7 +97,7 @@ class SwapQuoteService {
         val amountIn = amountIn
 
         if (tokenIn != null && tokenOut != null) {
-            quotingJob = coroutineScope.launch {
+            quotingJob = coroutineScope.launch(Dispatchers.IO) {
                 val supportedProviders = allProviders.filter { it.supports(tokenIn, tokenOut) }
 
                 if (supportedProviders.isEmpty()) {

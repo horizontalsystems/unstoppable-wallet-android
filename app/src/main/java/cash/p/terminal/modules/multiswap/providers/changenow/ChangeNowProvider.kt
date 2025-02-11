@@ -13,8 +13,10 @@ import cash.p.terminal.modules.multiswap.SwapQuoteChangeNow
 import cash.p.terminal.modules.multiswap.action.ActionCreate
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionData
+import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionResult
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.ui.DataFieldRecipientExtended
+import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.network.changenow.data.entity.BackendChangeNowResponseError
 import cash.p.terminal.network.changenow.data.entity.request.NewTransactionRequest
 import cash.p.terminal.network.changenow.domain.entity.ChangeNowCurrency
@@ -273,6 +275,7 @@ class ChangeNowProvider(
 
             changeNowTransaction = ChangeNowTransaction(
                 date = System.currentTimeMillis(),
+                outgoingRecordUid = null, //set later
                 transactionId = transaction.id,
                 status = TransactionStatusEnum.NEW.name.lowercase(),
                 coinUidIn = tokenIn.coin.uid,
@@ -302,9 +305,19 @@ class ChangeNowProvider(
         }
     }
 
-    fun onTransactionCompleted() {
+    fun onTransactionCompleted(result: SendTransactionResult) {
         changeNowTransaction?.let {
-            changeNowTransactionsStorage.save(it)
+            val recordUid = if(result is SendTransactionResult.Common &&
+                result.result is SendResult.Sent) {
+                result.result.recordUid
+            } else {
+                null
+            }
+            changeNowTransaction = it.copy(
+                outgoingRecordUid = recordUid
+            ).also { transactionWithRecordUid ->
+                changeNowTransactionsStorage.save(transactionWithRecordUid)
+            }
         }
     }
 }

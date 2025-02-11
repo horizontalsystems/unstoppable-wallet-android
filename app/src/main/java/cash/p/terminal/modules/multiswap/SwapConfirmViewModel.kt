@@ -13,6 +13,7 @@ import cash.p.terminal.core.stats.stat
 import cash.p.terminal.modules.multiswap.providers.IMultiSwapProvider
 import cash.p.terminal.modules.multiswap.providers.changenow.ChangeNowProvider
 import cash.p.terminal.modules.multiswap.sendtransaction.ISendTransactionService
+import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionResult
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionServiceFactory
 import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.ui.DataField
@@ -257,9 +258,9 @@ class SwapConfirmViewModel(
         sendTransactionService.sendTransaction()
     }
 
-    fun onTransactionCompleted() {
+    fun onTransactionCompleted(result: SendTransactionResult) {
         if (swapProvider is ChangeNowProvider) {
-            swapProvider.onTransactionCompleted()
+            swapProvider.onTransactionCompleted(result)
         }
     }
 

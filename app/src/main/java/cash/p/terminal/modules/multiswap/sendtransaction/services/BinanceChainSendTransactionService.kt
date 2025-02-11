@@ -170,7 +170,7 @@ class BinanceChainSendTransactionService(
                 memo = null,
                 logger = logger
             ).blockingGet()
-            return SendTransactionResult.Common(SendResult.Sent)
+            return SendTransactionResult.Common(SendResult.Sent())
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

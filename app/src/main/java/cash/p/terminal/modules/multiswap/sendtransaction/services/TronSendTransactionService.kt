@@ -21,6 +21,7 @@ import cash.p.terminal.modules.multiswap.sendtransaction.SendTransactionSettings
 import cash.p.terminal.modules.multiswap.ui.DataField
 import cash.p.terminal.modules.send.SendModule
 import cash.p.terminal.modules.send.SendResult
+import cash.p.terminal.modules.send.tron.FeeState
 import cash.p.terminal.modules.send.tron.SendTronAddressService
 import cash.p.terminal.modules.send.tron.SendTronConfirmationData
 import cash.p.terminal.modules.xrate.XRateService
@@ -62,6 +63,7 @@ class TronSendTransactionService(
     val blockchainType = wallet.token.blockchainType
     val feeTokenMaxAllowedDecimals = feeToken.decimals
     val fiatMaxAllowedDecimals = App.appConfigProvider.fiatDecimal
+    private var feeState: FeeState = FeeState.Loading
 
     private var amountState = amountService.stateFlow.value
     private var addressState = addressService.stateFlow.value
@@ -78,7 +80,6 @@ class TronSendTransactionService(
     var feeCoinRate by mutableStateOf(xRateService.getRate(feeToken.coin.uid))
         private set
     private var confirmationData by mutableStateOf<SendTronConfirmationData?>(null)
-        private set
 
     private var feeAmountData: SendModule.AmountData? = null
     private var cautions: List<CautionViewItem> = listOf()
@@ -134,8 +135,6 @@ class TronSendTransactionService(
 
     private suspend fun estimateFee() {
         try {
-            emitState()
-
             val amount = amountState.amount!!
             val tronAddress = Address.fromBase58(addressState.address!!.hex)
             val fees = adapter.estimateFee(amount, tronAddress)
@@ -163,6 +162,7 @@ class TronSendTransactionService(
                 }
             }
 
+            feeState = FeeState.Success(fees)
             val resourcesConsumed = if (bandwidth != null) {
                 bandwidth + (energy?.let { " \n + $it" } ?: "")
             } else {
@@ -174,25 +174,32 @@ class TronSendTransactionService(
             val isMaxAmount = amountState.availableBalance == amountState.amount!!
             val adjustedAmount = if (token == feeToken && isMaxAmount) amount - fee else amount
 
-            val coinValue = CoinValue(token, fee)
+            val coinValue = CoinValue(feeToken, fee)
             val primaryAmountInfo = SendModule.AmountInfo.CoinValueInfo(coinValue)
-            val secondaryAmountInfo = rate?.let {
+            val secondaryAmountInfo = feeCoinRate?.let {
                 SendModule.AmountInfo.CurrencyValueInfo(CurrencyValue(it.currency, it.value * fee))
             }
             feeAmountData = SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
 
-            confirmationData = confirmationData?.copy(
+            confirmationData = SendTronConfirmationData(
                 amount = adjustedAmount,
                 fee = fee,
                 activationFee = activationFee,
-                resourcesConsumed = resourcesConsumed
+                resourcesConsumed = resourcesConsumed,
+                address = addressState.address!!,
+                contact = null,
+                coin = wallet.coin,
+                feeCoin = feeToken.coin,
+                isInactiveAddress = addressState.isInactiveAddress
             )
+
             loading = false
+            cautions = emptyList()
+
             emitState()
         } catch (error: Throwable) {
             logger.warning("estimate error", error)
 
-            cautions = listOf(createCaution(error))
             feeAmountData = null
             emitState()
 
@@ -203,14 +210,13 @@ class TronSendTransactionService(
 
     override suspend fun sendTransaction(): SendTransactionResult {
         try {
-            val feeLimit = feeAmountData?.primary?.value?.toLong()
             val confirmationData = confirmationData
             requireNotNull(confirmationData) { "confirmationData is null" }
 
             val amount = confirmationData.amount
-            adapter.send(amount, addressState.tronAddress!!, feeLimit)
+            val transactionId = adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
-            return SendTransactionResult.Common(SendResult.Sent)
+            return SendTransactionResult.Common(SendResult.Sent(transactionId))
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

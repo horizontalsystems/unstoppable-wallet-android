@@ -262,7 +262,7 @@ interface ISendBitcoinAdapter {
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): Single<Unit>
+    ): Single<String>
 }
 
 interface ISendEthereumAdapter {
@@ -305,7 +305,7 @@ interface ISendTronAdapter {
     val trxBalanceData: BalanceData
 
     suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
-    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
+    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?): String
     suspend fun isAddressActive(address: TronAddress): Boolean
     fun isOwnAddress(address: TronAddress): Boolean
 }

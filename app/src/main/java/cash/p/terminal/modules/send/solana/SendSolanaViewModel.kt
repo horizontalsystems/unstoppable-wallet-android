@@ -135,7 +135,7 @@ class SendSolanaViewModel(
 
             adapter.send(decimalAmount, addressState.evmAddress!!)
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
         }
