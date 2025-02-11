@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.Surface
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,7 +75,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun PlatformScreen(
     factory: ViewModelProvider.Factory,
@@ -87,7 +90,9 @@ private fun PlatformScreen(
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
+        Column(
+            modifier = Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)
+        ) {
             TopCloseButton(onCloseButtonClick)
 
             HSSwipeRefresh(
