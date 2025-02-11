@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -352,7 +353,7 @@ fun RestorePhrase(
 
             Column {
                 if (isMnemonicPhraseInputFocused && keyboardState == Keyboard.Opened) {
-                    SuggestionsBar(wordSuggestions = uiState.wordSuggestions) { wordItem, suggestion ->
+                    SuggestionsBar(modifier = Modifier.imePadding(), wordSuggestions = uiState.wordSuggestions) { wordItem, suggestion ->
                         HudHelper.vibrate(context)
 
                         val cursorIndex = wordItem.range.first + suggestion.length + 1
