@@ -6,19 +6,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,14 +49,22 @@ import io.horizontalsystems.bankwallet.modules.market.topplatforms.Platform
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.HSSwipeRefresh
 import io.horizontalsystems.bankwallet.ui.compose.Select
+import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
+import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
+import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
 import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
+import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
-import io.horizontalsystems.bankwallet.ui.compose.components.TopCloseButton
+import io.horizontalsystems.bankwallet.ui.compose.components.MenuItem
+import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
+import io.horizontalsystems.bankwallet.ui.compose.components.body_bran
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.title3_leah
+import io.horizontalsystems.bankwallet.ui.extensions.BottomSheetHeader
+import kotlinx.coroutines.launch
 
 class MarketPlatformFragment : BaseComposeFragment() {
 
@@ -63,6 +76,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
 
             PlatformScreen(
                 factory = factory,
+                platform = platform,
                 onCloseButtonClick = { navController.popBackStack() },
                 onCoinClick = { coinUid ->
                     val arguments = CoinFragment.Input(coinUid)
@@ -79,6 +93,7 @@ class MarketPlatformFragment : BaseComposeFragment() {
 @Composable
 private fun PlatformScreen(
     factory: ViewModelProvider.Factory,
+    platform: Platform,
     onCloseButtonClick: () -> Unit,
     onCoinClick: (String) -> Unit,
     viewModel: MarketPlatformViewModel = viewModel(factory = factory),
@@ -88,13 +103,37 @@ private fun PlatformScreen(
     val uiState = viewModel.uiState
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val infoModalBottomSheetState =
+        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var isInfoBottomSheetVisible by remember { mutableStateOf(false) }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
+    Scaffold(
+        backgroundColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = platform.name,
+                navigationIcon = {
+                    HsBackButton(onClick = onCloseButtonClick)
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Info_Title),
+                        icon = R.drawable.ic_info_24,
+                        onClick = {
+                            coroutineScope.launch {
+                                infoModalBottomSheetState.show()
+                            }
+                            isInfoBottomSheetVisible = true
+                        },
+                    )
+                )
+            )
+        },
+    ) { innerPaddings ->
         Column(
-            modifier = Modifier.windowInsetsPadding(TopAppBarDefaults.windowInsets)
+            modifier = Modifier.padding(innerPaddings)
         ) {
-            TopCloseButton(onCloseButtonClick)
-
             HSSwipeRefresh(
                 refreshing = uiState.isRefreshing,
                 onRefresh = {
@@ -139,11 +178,6 @@ private fun PlatformScreen(
                                     },
                                     onCoinClick = onCoinClick,
                                     preItems = {
-                                        viewModel.header.let {
-                                            item {
-                                                HeaderContent(it.title, it.description, it.icon)
-                                            }
-                                        }
                                         item {
                                             Chart(chartViewModel = chartViewModel)
                                         }
@@ -186,6 +220,23 @@ private fun PlatformScreen(
             { openSortingSelector = false }
         )
     }
+    if (isInfoBottomSheetVisible) {
+        InfoBottomSheet(
+            icon = R.drawable.ic_info_24,
+            title = platform.name,
+            description = stringResource(
+                R.string.MarketPlatformCoins_PlatformEcosystemDescription,
+                platform.name
+            ),
+            bottomSheetState = infoModalBottomSheetState,
+            hideBottomSheet = {
+                coroutineScope.launch {
+                    infoModalBottomSheetState.hide()
+                }
+                isInfoBottomSheetVisible = false
+            }
+        )
+    }
 }
 
 @Composable
@@ -218,6 +269,50 @@ private fun HeaderContent(title: String, description: String, image: ImageSource
                 .padding(start = 24.dp)
                 .size(32.dp),
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InfoBottomSheet(
+    icon: Int,
+    title: String,
+    description: String,
+    hideBottomSheet: () -> Unit,
+    bottomSheetState: SheetState
+) {
+    ModalBottomSheet(
+        onDismissRequest = hideBottomSheet,
+        sheetState = bottomSheetState,
+        containerColor = ComposeAppTheme.colors.transparent
+    ) {
+        BottomSheetHeader(
+            iconPainter = painterResource(icon),
+            title = title,
+            titleColor = ComposeAppTheme.colors.leah,
+            iconTint = ColorFilter.tint(ComposeAppTheme.colors.grey),
+            onCloseClick = hideBottomSheet
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 12.dp, horizontal = 24.dp)
+                    .fillMaxWidth()
+            ) {
+                body_bran(
+                    text = description,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                )
+                VSpacer(56.dp)
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    onClick = hideBottomSheet
+                )
+                VSpacer(32.dp)
+            }
+        }
     }
 }
 
