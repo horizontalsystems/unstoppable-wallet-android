@@ -156,8 +156,8 @@ fun SwapConfirmScreen(navController: NavController) {
                             )
 
                             val result = try {
-                                viewModel.swap()
-                                viewModel.onTransactionCompleted()
+                                val result = viewModel.swap()
+                                viewModel.onTransactionCompleted(result)
 
                                 HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
                                 delay(1200)

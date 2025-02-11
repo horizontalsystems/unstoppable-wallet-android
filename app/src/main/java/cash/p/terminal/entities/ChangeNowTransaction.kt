@@ -9,6 +9,7 @@ import java.math.BigDecimal
 data class ChangeNowTransaction(
     @PrimaryKey
     val date: Long = System.currentTimeMillis(),
+    val outgoingRecordUid: String?,
     val transactionId: String,
     val status: String,
 

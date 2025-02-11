@@ -286,12 +286,12 @@ abstract class BitcoinBaseAdapter(
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): Single<Unit> {
+    ): Single<String> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
                 logger.info("call btc-kit.send")
-                kit.send(
+                val sendData = kit.send(
                     address = address,
                     memo = memo,
                     value = (amount * satoshisInBitcoin).toLong(),
@@ -302,7 +302,7 @@ abstract class BitcoinBaseAdapter(
                     pluginData = pluginData ?: mapOf(),
                     rbfEnabled = rbfEnabled
                 )
-                emitter.onSuccess(Unit)
+                emitter.onSuccess(sendData.header.uid)
             } catch (ex: Exception) {
                 emitter.onError(ex)
             }

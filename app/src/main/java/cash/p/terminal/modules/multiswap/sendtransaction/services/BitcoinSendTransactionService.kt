@@ -240,7 +240,7 @@ class BitcoinSendTransactionService(
     @SuppressLint("CheckResult")
     override suspend fun sendTransaction(): SendTransactionResult = withContext(Dispatchers.IO) {
         try {
-            adapter.send(
+            val recordUid = adapter.send(
                 amount = amountState.amount!!,
                 address = addressState.validAddress!!.hex,
                 memo = null,
@@ -251,7 +251,7 @@ class BitcoinSendTransactionService(
                 rbfEnabled = localStorage.rbfEnabled,
                 logger = logger
             ).blockingGet()
-            SendTransactionResult.Common(SendResult.Sent)
+            SendTransactionResult.Common(SendResult.Sent(recordUid))
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

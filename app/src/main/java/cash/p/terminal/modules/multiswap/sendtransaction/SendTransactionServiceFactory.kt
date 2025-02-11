@@ -83,7 +83,7 @@ object SendTransactionServiceFactory {
 
             is TokenType.Eip20 -> {
                 if (token.blockchainType == BlockchainType.Tron) {
-                    SendTransactionServiceEvm(token)
+                    TronSendTransactionService(token)
                 } else {
                     SendTransactionServiceEvm(token)
                 }

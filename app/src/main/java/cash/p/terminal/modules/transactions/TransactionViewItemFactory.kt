@@ -1202,11 +1202,12 @@ class TransactionViewItemFactory(
             timestamp = transactionItem.record.timestamp * 1000
         )
     } else {
-        changeNowTransactionsStorage.getByTokenIn(
-            token = token,
-            amountIn = transactionItem.record.mainValue?.decimalValue?.abs(),
-            timestamp = transactionItem.record.timestamp * 1000
-        )
+        changeNowTransactionsStorage.getByOutgoingRecordUid(transactionItem.record.uid)
+            ?: changeNowTransactionsStorage.getByTokenIn(
+                token = token,
+                amountIn = transactionItem.record.mainValue?.decimalValue?.abs(),
+                timestamp = transactionItem.record.timestamp * 1000
+            )
     }?.let {
         createViewItemFromChangeNowRecord(
             transaction = it,

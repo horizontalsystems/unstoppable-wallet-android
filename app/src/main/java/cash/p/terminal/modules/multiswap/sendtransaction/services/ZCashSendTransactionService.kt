@@ -141,7 +141,7 @@ class ZCashSendTransactionService(
                 logger = logger
             )
 
-            return SendTransactionResult.Common(SendResult.Sent)
+            return SendTransactionResult.Common(SendResult.Sent())
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

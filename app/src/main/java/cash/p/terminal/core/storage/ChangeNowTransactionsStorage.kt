@@ -43,6 +43,12 @@ class ChangeNowTransactionsStorage(appDatabase: AppDatabase) {
         dateTo = timestamp + THRESHOLD_MSEC
     )
 
+    fun getByOutgoingRecordUid(
+        outgoingRecordUid: String
+    ) = dao.getByOutgoingRecordUid(
+        outgoingRecordUid = outgoingRecordUid
+    )
+
     fun getByTokenOut(
         token: Token,
         timestamp: Long
