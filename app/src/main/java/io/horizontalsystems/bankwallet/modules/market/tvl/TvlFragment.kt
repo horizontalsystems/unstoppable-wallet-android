@@ -114,6 +114,7 @@ class TvlFragment : BaseComposeFragment() {
                 refreshing = isRefreshing,
                 onRefresh = {
                     tvlViewModel.refresh()
+                    chartViewModel.refresh()
                 }
             ) {
                 Crossfade(viewState, label = "") { viewState ->
@@ -123,7 +124,13 @@ class TvlFragment : BaseComposeFragment() {
                         }
 
                         is ViewState.Error -> {
-                            ListErrorView(stringResource(R.string.SyncError), tvlViewModel::onErrorClick)
+                            ListErrorView(
+                                errorText = stringResource(R.string.SyncError),
+                                onClick = {
+                                    tvlViewModel.onErrorClick()
+                                    chartViewModel.refresh()
+                                }
+                            )
                         }
 
                         ViewState.Success -> {

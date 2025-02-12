@@ -138,6 +138,7 @@ private fun PlatformScreen(
                 refreshing = uiState.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
+                    chartViewModel.refresh()
 
                     stat(page = StatPage.TopPlatform, event = StatEvent.Refresh)
                 }
@@ -150,8 +151,11 @@ private fun PlatformScreen(
 
                         is ViewState.Error -> {
                             ListErrorView(
-                                stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
+                                errorText = stringResource(R.string.SyncError),
+                                onClick = {
+                                    viewModel.onErrorClick()
+                                    chartViewModel.refresh()
+                                }
                             )
                         }
 
