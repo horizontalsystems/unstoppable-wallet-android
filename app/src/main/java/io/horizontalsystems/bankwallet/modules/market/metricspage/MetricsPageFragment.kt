@@ -93,6 +93,7 @@ class MetricsPageFragment : BaseComposeFragment() {
                 refreshing = uiState.isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
+                    chartViewModel.refresh()
                 }
             ) {
                 Crossfade(uiState.viewState, label = "") { viewState ->
@@ -103,8 +104,11 @@ class MetricsPageFragment : BaseComposeFragment() {
 
                         is ViewState.Error -> {
                             ListErrorView(
-                                stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
+                                errorText = stringResource(R.string.SyncError),
+                                onClick = {
+                                    viewModel.onErrorClick()
+                                    chartViewModel.refresh()
+                                }
                             )
                         }
 

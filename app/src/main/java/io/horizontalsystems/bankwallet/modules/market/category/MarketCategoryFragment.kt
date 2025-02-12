@@ -123,6 +123,7 @@ fun CategoryScreen(
                 refreshing = isRefreshing,
                 onRefresh = {
                     viewModel.refresh()
+                    chartViewModel.refresh()
                 }
             ) {
                 Crossfade(viewItemState) { state ->
@@ -133,8 +134,11 @@ fun CategoryScreen(
 
                         is ViewState.Error -> {
                             ListErrorView(
-                                stringResource(R.string.SyncError),
-                                viewModel::onErrorClick
+                                errorText = stringResource(R.string.SyncError),
+                                onClick = {
+                                    viewModel.onErrorClick()
+                                    chartViewModel.refresh()
+                                }
                             )
                         }
 
