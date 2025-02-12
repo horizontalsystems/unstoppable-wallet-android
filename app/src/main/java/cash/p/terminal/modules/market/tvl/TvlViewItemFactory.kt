@@ -30,10 +30,13 @@ class TvlViewItemFactory {
                 tvlChangeAmount = item.diff,
                 rank = item.rank,
                 name = item.fullCoin?.coin?.name ?: item.name,
-                chain = if (item.chains.size > 1)
+                chain = if (item.chains.size > 1) {
                     TranslatableString.ResString(R.string.TvlRank_MultiChain)
-                else
-                    TranslatableString.PlainString(item.chains.first()),
+                } else if(item.chains.size == 1) {
+                    TranslatableString.PlainString(item.chains.first())
+                } else {
+                    TranslatableString.PlainString("")
+                },
                 iconUrl = item.fullCoin?.coin?.imageUrl ?: item.iconUrl,
                 iconPlaceholder = item.fullCoin?.iconPlaceholder
             )
