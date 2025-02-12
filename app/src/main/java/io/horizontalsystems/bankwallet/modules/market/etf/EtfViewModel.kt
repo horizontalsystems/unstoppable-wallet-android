@@ -68,10 +68,16 @@ class EtfViewModel(
 
     private fun fetchChartData() {
         viewModelScope.launch(Dispatchers.Default) {
-            etfPoints = marketKit.etfPoints(currencyManager.baseCurrency.code).await().sortedBy { it.date }
-            chartDataLoading = false
+            try {
+                etfPoints = marketKit.etfPoints(currencyManager.baseCurrency.code).await()
+                    .sortedBy { it.date }
+                chartDataLoading = false
 
-            emitState()
+                emitState()
+            } catch (e: Throwable) {
+                chartDataLoading = false
+                emitState()
+            }
         }
     }
 
@@ -140,6 +146,7 @@ class EtfViewModel(
     private fun refreshWithMinLoadingSpinnerPeriod() {
         isRefreshing = true
         emitState()
+        fetchChartData()
         syncItems()
         viewModelScope.launch {
             delay(1000)
