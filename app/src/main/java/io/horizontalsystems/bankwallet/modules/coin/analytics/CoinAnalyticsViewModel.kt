@@ -132,6 +132,27 @@ class CoinAnalyticsViewModel(
     private fun getViewItems(analytics: Analytics, showPreviewBlocks: Boolean): List<BlockViewItem> {
         val blocks = mutableListOf<BlockViewItem>()
 
+        analytics.technicalAdvice?.let { technicalAdvice ->
+            val advice = technicalAdvice.advice ?: return@let
+            blocks.add(
+                BlockViewItem(
+                    title = R.string.TechnicalAdvice_Title,
+                    info = AnalyticInfo.TechnicalIndicatorsInfo,
+                    showAsPreview = showPreviewBlocks,
+                    analyticChart = ChartViewItem(
+                        AnalyticChart.TechAdvice(
+                            CoinAnalyticsModule.TechAdviceData(
+                                detailText = technicalAdviceViewItemFactory.advice(technicalAdvice),
+                                advice = advice
+                            )
+                        ),
+                        coin.uid,
+                    ),
+                    footerItems = emptyList()
+                )
+            )
+        }
+
         analytics.cexVolume?.let { data ->
             val footerItems = mutableListOf<FooterItem>()
             data.rating?.let { rating ->
@@ -185,27 +206,6 @@ class CoinAnalyticsViewModel(
                     valuePeriod = getValuePeriod(true),
                     analyticChart = getChartViewItem(data.chartPoints(), ChartViewType.Line, ProChartModule.ChartType.Tvl),
                     footerItems = footerItems
-                )
-            )
-        }
-
-        analytics.technicalAdvice?.let { technicalAdvice ->
-            val advice = technicalAdvice.advice ?: return@let
-            blocks.add(
-                BlockViewItem(
-                    title = R.string.TechnicalAdvice_Title,
-                    info = AnalyticInfo.TechnicalIndicatorsInfo,
-                    showAsPreview = showPreviewBlocks,
-                    analyticChart = ChartViewItem(
-                        AnalyticChart.TechAdvice(
-                            CoinAnalyticsModule.TechAdviceData(
-                                detailText = technicalAdviceViewItemFactory.advice(technicalAdvice),
-                                advice = advice
-                            )
-                        ),
-                        coin.uid,
-                    ),
-                    footerItems = emptyList()
                 )
             )
         }
