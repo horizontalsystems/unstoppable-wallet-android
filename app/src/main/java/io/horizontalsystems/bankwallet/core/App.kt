@@ -21,7 +21,6 @@ import com.walletconnect.web3.wallet.client.Web3Wallet
 import io.horizontalsystems.bankwallet.BuildConfig
 import io.horizontalsystems.bankwallet.core.factories.AccountFactory
 import io.horizontalsystems.bankwallet.core.factories.AdapterFactory
-import io.horizontalsystems.bankwallet.core.factories.AddressSecurityCheckerFactory
 import io.horizontalsystems.bankwallet.core.factories.EvmAccountManagerFactory
 import io.horizontalsystems.bankwallet.core.managers.AccountCleaner
 import io.horizontalsystems.bankwallet.core.managers.AccountManager
@@ -201,7 +200,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         lateinit var spamManager: SpamManager
         lateinit var statsManager: StatsManager
         lateinit var tonConnectManager: TonConnectManager
-        lateinit var addressSecurityCheckerChainFactory: AddressSecurityCheckerFactory
         lateinit var recentAddressManager: RecentAddressManager
     }
 
@@ -300,7 +298,6 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         tokenAutoEnableManager = TokenAutoEnableManager(appDatabase.tokenAutoEnabledBlockchainDao())
 
         spamManager = SpamManager(localStorage, coinManager, SpamAddressStorage(appDatabase.spamAddressDao()), marketKit, appConfigProvider)
-        addressSecurityCheckerChainFactory = AddressSecurityCheckerFactory(spamManager, appConfigProvider)
         recentAddressManager = RecentAddressManager(accountManager, appDatabase.recentAddressDao())
         val evmAccountManagerFactory = EvmAccountManagerFactory(
             accountManager,
