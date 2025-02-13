@@ -12,7 +12,7 @@ import cash.p.terminal.modules.metricchart.MetricsType
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.core.models.HsTimePeriod
-import io.reactivex.Single
+import kotlinx.coroutines.rx2.await
 
 class MetricsPageChartService(
     override val currencyManager: CurrencyManager,
@@ -26,26 +26,21 @@ class MetricsPageChartService(
         HsTimePeriod.Day1,
         HsTimePeriod.Week1,
         HsTimePeriod.Month1,
-        HsTimePeriod.Month3,
-        HsTimePeriod.Month6,
         HsTimePeriod.Year1,
-        HsTimePeriod.Year2,
     )
 
     override val chartViewType = ChartViewType.Line
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
-        return globalMarketRepository.getGlobalMarketPoints(
+    ): ChartPointsWrapper = globalMarketRepository.getGlobalMarketPoints(
             currency.code,
             chartInterval,
             metricsType
-        ).map {
-            ChartPointsWrapper(it)
+        ).let {
+            ChartPointsWrapper(it.await())
         }
-    }
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)

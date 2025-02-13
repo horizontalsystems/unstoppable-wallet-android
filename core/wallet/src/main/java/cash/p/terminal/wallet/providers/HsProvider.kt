@@ -1,6 +1,8 @@
 package cash.p.terminal.wallet.providers
 
 import android.util.Log
+import cash.p.terminal.network.data.entity.ChartPeriod
+import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.wallet.models.Analytics
 import cash.p.terminal.wallet.models.AnalyticsPreview
 import cash.p.terminal.wallet.models.BlockchainResponse
@@ -37,9 +39,18 @@ import cash.p.terminal.wallet.models.TopMoversRaw
 import cash.p.terminal.wallet.models.TopPair
 import cash.p.terminal.wallet.models.TopPlatformMarketCapPoint
 import cash.p.terminal.wallet.models.TopPlatformResponse
+import cash.p.terminal.wallet.providers.mapper.PirateCoinInfoMapper
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.Single
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.withContext
+import org.koin.java.KoinJavaComponent.inject
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -56,9 +67,10 @@ import java.time.Instant
 
 class HsProvider(baseUrl: String, apiKey: String) {
 
-    // TODO: Temporary workaround for Cosanta and wDASH
-    private val lastPrices = mutableMapOf<String, BigDecimal?>()
-    private val lastChanges = mutableMapOf<String, BigDecimal?>()
+    private val piratePlaceRepository: PiratePlaceRepository by inject(PiratePlaceRepository::class.java)
+    private val pirateCoinInfoMapper: PirateCoinInfoMapper by inject(PirateCoinInfoMapper::class.java)
+
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     // TODO Remove old base URL https://api-dev.blocksdecoded.com/v1 and switch it to new servers
     private val pirateService by lazy {
@@ -140,118 +152,103 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.coinCategoryMarketPoints(categoryUid, timePeriod.value, currencyCode)
     }
 
-    private fun fetchPlaceCoinPrice(
-        coinUid: String,
-        requestUid: String,
-        coinPrices: List<CoinPriceResponse>,
+    private suspend fun fetchPlaceCoinPrices(
+        requestUid: Set<String>,
         currencyCode: String,
-        mutableCoinPrices: MutableList<CoinPriceResponse>
-    ) {
-        val response = coinPrices.find { it.uid == coinUid }
-        if (response == null) {
-            val disposable = fetchPiratePlaceCoinInfo(requestUid)
-                .subscribe({
-                    val currency = currencyCode.lowercase()
-                    val price = when (currency) {
-                        "usd" -> it.price.usd
-                        "btc" -> it.price.btc
-                        "eur" -> it.price.eur
-                        "gbp" -> it.price.gbp
-                        "jpy" -> it.price.jpy
-                        "aud" -> it.price.aud
-                        "ars" -> it.price.aud
-                        "brl" -> it.price.brl
-                        "cad" -> it.price.cad
-                        "chf" -> it.price.chf
-                        "cny" -> it.price.cny
-                        "hkd" -> it.price.hkd
-                        "huf" -> it.price.hkd
-                        "ils" -> it.price.ils
-                        "inr" -> it.price.inr
-                        "nok" -> it.price.inr
-                        "php" -> it.price.inr
-                        "rub" -> it.price.rub
-                        "sgd" -> it.price.sgd
-                        "zar" -> it.price.zar
-                        else -> null
-                    }
-                    val priceChange = it.changes.price.percentage24h[currency]
-                    if (price != null && priceChange != null) {
-                        lastPrices[coinUid] = price
-                        lastChanges[coinUid] = priceChange
-                        val coinPriceResponse = CoinPriceResponse(
-                            uid = coinUid,
-                            price = price,
-                            priceChange24h = priceChange,
-                            priceChange1d = priceChange,
-                            lastUpdated = Instant.now().epochSecond
-                        )
-                        mutableCoinPrices.add(coinPriceResponse)
-                    }
-                }, {
-                    Log.e("PiratePlace", "sync() error", it)
-                })
-        } else {
-            lastPrices[coinUid]?.let { price ->
-                lastChanges[coinUid]?.let { change ->
-                    val coinPriceResponse = CoinPriceResponse(
-                        uid = coinUid,
+    ): List<CoinPriceResponse> {
+        val currency = currencyCode.lowercase()
+        return requestUid.map { coroutineScope.async { runCatching { fetchPiratePlaceCoinInfo(it) }.getOrNull() } }
+            .awaitAll()
+            .filterNotNull().mapNotNull {
+                val price = when (currency) {
+                    "usd" -> it.price.usd
+                    "btc" -> it.price.btc
+                    "eur" -> it.price.eur
+                    "gbp" -> it.price.gbp
+                    "jpy" -> it.price.jpy
+                    "aud" -> it.price.aud
+                    "ars" -> it.price.aud
+                    "brl" -> it.price.brl
+                    "cad" -> it.price.cad
+                    "chf" -> it.price.chf
+                    "cny" -> it.price.cny
+                    "hkd" -> it.price.hkd
+                    "huf" -> it.price.hkd
+                    "ils" -> it.price.ils
+                    "inr" -> it.price.inr
+                    "nok" -> it.price.inr
+                    "php" -> it.price.inr
+                    "rub" -> it.price.rub
+                    "sgd" -> it.price.sgd
+                    "zar" -> it.price.zar
+                    else -> null
+                }
+                val priceChange = it.changes.price.percentage24h[currency]
+                if (price != null && priceChange != null) {
+                    CoinPriceResponse(
+                        uid = it.id,
                         price = price,
-                        priceChange24h = change,
-                        priceChange1d = change,
+                        priceChange24h = priceChange,
+                        priceChange1d = priceChange,
                         lastUpdated = Instant.now().epochSecond
                     )
-                    mutableCoinPrices.add(coinPriceResponse)
+                } else {
+                    null
                 }
             }
-        }
     }
 
-    fun getCoinPrices(
+    suspend fun getCoinPrices(
         coinUids: List<String>,
         walletCoinUids: List<String>,
         currencyCode: String
-    ): Single<List<CoinPrice>> {
+    ): List<CoinPrice> {
         val additionalParams = mutableMapOf<String, String>()
         if (walletCoinUids.isNotEmpty()) {
             additionalParams["enabled_uids"] = walletCoinUids.joinToString(separator = ",")
         }
-        return service.getCoinPrices(
+        val fetchedPrices = service.getCoinPrices(
             uids = coinUids.joinToString(separator = ","),
             currencyCode = currencyCode,
             additionalParams = additionalParams
-        )
-            .map { coinPrices ->
-                //  TODO: replace to pirate place API
-                val mutableCoinPrices = coinPrices.toMutableList()
-                if ("cosanta" in coinUids) {
-                    fetchPlaceCoinPrice(
-                        "cosanta",
-                        "cosanta",
-                        coinPrices,
-                        currencyCode,
-                        mutableCoinPrices
-                    )
+        ).await()
+
+        return if (fetchedPrices.size != coinUids.size) {
+            val pricesNotFound =
+                coinUids.toMutableSet().apply {
+                    removeAll(fetchedPrices.map { it.uid }.toSet())
                 }
-                if ("wdash" in coinUids) {
-                    fetchPlaceCoinPrice(
-                        "wdash",
-                        "dash",
-                        coinPrices,
-                        currencyCode,
-                        mutableCoinPrices
-                    )
-                }
-                mutableCoinPrices.mapNotNull { coinPriceResponse ->
-                    coinPriceResponse.coinPrice(currencyCode)
+            // Similar coins with different uids
+            if (pricesNotFound.remove("wdash")) {
+                pricesNotFound.add("dash")
+            }
+            Log.d("HsProvider", "Prices not found: $pricesNotFound, requesting on PiratePlace")
+            fetchedPrices + fetchPlaceCoinPrices(
+                requestUid = pricesNotFound,
+                currencyCode = currencyCode
+            ).also { coinPrices ->
+                if (coinPrices.size != pricesNotFound.size) {
+                    val pricesNotFound2 =
+                        pricesNotFound.toMutableSet().apply {
+                            removeAll(coinPrices.map { it.uid }.toSet())
+                        }
+                    Log.d("HsProvider", "Prices NOT FOUND on PiratePlace: $pricesNotFound2")
                 }
             }
+        } else {
+            fetchedPrices
+        }.mapNotNull { coinPriceResponse ->
+            coinPriceResponse.coinPrice(
+                currencyCode = currencyCode,
+                alternativeUid = if (coinPriceResponse.uid == "dash") "wdash" else null
+            )
+        }
     }
 
-    private fun fetchPiratePlaceCoinInfo(
+    private suspend fun fetchPiratePlaceCoinInfo(
         uid: String
-    ): Single<PiratePlaceCoinRaw> {
-        return piratePlaceService.getPlaceCoinInfo(coin = uid)
+    ): PiratePlaceCoinRaw = withContext(Dispatchers.IO) {
+        piratePlaceService.getPlaceCoinInfo(coin = uid).await()
     }
 
     fun historicalCoinPriceSingle(
@@ -262,13 +259,41 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.getHistoricalCoinPrice(coinUid, currencyCode, timestamp)
     }
 
-    fun coinPriceChartSingle(
+    suspend fun coinPriceChartSingle(
         coinUid: String,
         currencyCode: String,
-        periodType: HsPointTimePeriod,
+        periodType: HsTimePeriod?,
+        pointPeriodType: HsPointTimePeriod,
         fromTimestamp: Long?
-    ): Single<List<ChartCoinPriceResponse>> {
-        return service.getCoinPriceChart(coinUid, currencyCode, fromTimestamp, periodType.value)
+    ): List<ChartCoinPriceResponse> {
+        var cartPrices =
+            service.getCoinPriceChart(coinUid, currencyCode, fromTimestamp, pointPeriodType.value)
+                .await()
+        if (cartPrices.isEmpty()) {
+            val period = if (fromTimestamp == null) {
+                ChartPeriod.MAX
+            } else {
+                when (periodType) {
+                    HsTimePeriod.Hour1 -> ChartPeriod.HOUR
+                    HsTimePeriod.Day1 -> ChartPeriod.DAY
+                    HsTimePeriod.Week1 -> ChartPeriod.WEEK
+                    HsTimePeriod.Month1 -> ChartPeriod.MONTH
+                    HsTimePeriod.Year1 -> ChartPeriod.YEAR
+                    else -> ChartPeriod.MONTH
+                }
+            }
+            cartPrices = piratePlaceRepository.getCoinPriceChart(
+                coin = coinUid,
+                periodType = period
+            ).map {
+                ChartCoinPriceResponse(
+                    price = it.price,
+                    timestamp = it.timestamp / 1000,
+                    totalVolume = BigDecimal.ZERO
+                )
+            }
+        }
+        return cartPrices
     }
 
     fun coinPriceChartStartTime(coinUid: String): Single<Long> {
@@ -279,16 +304,20 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.getTopPlatformMarketCapStart(platform).map { it.timestamp }
     }
 
-    fun getMarketInfoOverview(
+    suspend fun getMarketInfoOverview(
         coinUid: String,
         currencyCode: String,
         language: String,
-    ): Single<MarketInfoOverviewRaw> {
-        return service.getMarketInfoOverview(
-            coinUid = coinUid,
-            currencyCode = currencyCode,
-            language = language
-        )
+    ): MarketInfoOverviewRaw {
+        return try {
+            service.getMarketInfoOverview(
+                coinUid = coinUid,
+                currencyCode = currencyCode,
+                language = language
+            ).await()
+        } catch (e: Exception) {
+            piratePlaceRepository.getCoinInfo(coinUid).let(pirateCoinInfoMapper::mapCoinInfo)
+        }
     }
 
     fun getGlobalMarketPointsSingle(
@@ -440,8 +469,23 @@ class HsProvider(baseUrl: String, apiKey: String) {
         return service.getMarketGlobal(currencyCode)
     }
 
-    fun marketTickers(coinUid: String, currencyCode: String): Single<List<MarketTicker>> {
-        return service.getMarketTickers(coinUid, currencyCode)
+    suspend fun marketTickers(coinUid: String, currencyCode: String): List<MarketTicker> {
+        return try {
+            service.getMarketTickers(coinUid, currencyCode).await()
+        } catch (e: Exception) {
+            piratePlaceRepository.getMarketTickers(coinUid).map {
+                MarketTicker(
+                    base = it.fromSymbol,
+                    target = "USD",
+                    marketName = it.market,
+                    marketImageUrl = null,
+                    volume = it.volume,
+                    fiatVolume = it.volumeUsd,
+                    tradeUrl = it.tradeUrl,
+                    verified = false
+                )
+            }
+        }
     }
 
     fun topMoversRawSingle(currencyCode: String): Single<TopMoversRaw> {

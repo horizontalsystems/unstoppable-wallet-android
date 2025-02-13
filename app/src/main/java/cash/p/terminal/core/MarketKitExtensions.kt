@@ -422,13 +422,13 @@ fun FullCoin.eligibleTokens(accountType: AccountType): List<Token> {
 
 val HsPointTimePeriod.title: Int
     get() = when (this) {
-        HsPointTimePeriod.Minute30 -> R.string.Coin_Analytics_Period_30m
         HsPointTimePeriod.Hour1 -> R.string.Coin_Analytics_Period_1h
-        HsPointTimePeriod.Hour4 -> R.string.Coin_Analytics_Period_4h
-        HsPointTimePeriod.Hour8 -> R.string.Coin_Analytics_Period_8h
         HsPointTimePeriod.Day1 -> R.string.Coin_Analytics_Period_1d
         HsPointTimePeriod.Week1 -> R.string.Coin_Analytics_Period_1w
         HsPointTimePeriod.Month1 -> R.string.Coin_Analytics_Period_1m
+        HsPointTimePeriod.Minute30 -> R.string.Coin_Analytics_Period_30m
+        HsPointTimePeriod.Hour4 -> R.string.Coin_Analytics_Period_4h
+        HsPointTimePeriod.Hour8 -> R.string.Coin_Analytics_Period_8h
     }
 
 val TokenType.Derivation.purpose: HDWallet.Purpose

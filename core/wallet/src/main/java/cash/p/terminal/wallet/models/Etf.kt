@@ -50,8 +50,7 @@ data class EtfResponse(
                 mapOf(
                     HsTimePeriod.Day1 to response.inflow1d,
                     HsTimePeriod.Week1 to response.inflow1w,
-                    HsTimePeriod.Month1 to response.inflow1m,
-                    HsTimePeriod.Month3 to response.inflow3m
+                    HsTimePeriod.Month1 to response.inflow1m
                 )
             )
         }

@@ -13,8 +13,15 @@ data class CoinPriceResponse(
     @SerializedName("last_updated")
     val lastUpdated: Long?
 ) {
-    fun coinPrice(currencyCode: String) = when {
+    fun coinPrice(currencyCode: String, alternativeUid: String? = null) = when {
         price == null || lastUpdated == null -> null
-        else -> CoinPrice(uid, currencyCode, price, priceChange24h, priceChange1d, lastUpdated)
+        else -> CoinPrice(
+            alternativeUid ?: uid,
+            currencyCode,
+            price,
+            priceChange24h,
+            priceChange1d,
+            lastUpdated
+        )
     }
 }

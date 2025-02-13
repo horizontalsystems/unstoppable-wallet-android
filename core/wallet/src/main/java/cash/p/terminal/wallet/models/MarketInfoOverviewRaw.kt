@@ -1,5 +1,6 @@
 package cash.p.terminal.wallet.models
 
+import cash.p.terminal.wallet.entities.FullCoin
 import com.google.gson.annotations.SerializedName
 import io.horizontalsystems.core.models.HsTimePeriod
 import java.math.BigDecimal
@@ -16,7 +17,7 @@ data class MarketInfoOverviewRaw(
     val marketData: MarketData,
 ) {
 
-    fun marketInfoOverview(fullCoin: cash.p.terminal.wallet.entities.FullCoin): MarketInfoOverview {
+    fun marketInfoOverview(fullCoin: FullCoin): MarketInfoOverview {
             val performance = performance.map { (vsCurrency, v) ->
                 vsCurrency to v.mapNotNull { (timePeriodRaw, performance) ->
                     if (performance == null) return@mapNotNull null

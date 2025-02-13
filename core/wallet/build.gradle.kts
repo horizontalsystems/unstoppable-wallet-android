@@ -49,6 +49,7 @@ dependencies {
 
     implementation(libs.rxjava)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.rx2)
 
     implementation(libs.ton.kit)
     implementation(libs.bitcoin.kit)

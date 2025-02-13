@@ -4,14 +4,9 @@ import cash.p.terminal.wallet.entities.Coin
 
 val Coin.imageUrl: String
     get() {
-        var pirate: String = "piratecash"
-        var cosa: String = "cosanta"
-        var wdash: String = "wdash"
         val coinURL = when (uid) {
-            pirate -> "https://pirate.cash/logo.png"
-            cosa -> "https://cosanta.net/logo.png"
-            wdash -> "https://wdash.org/logo.png"
-            else -> "https://cdn.blocksdecoded.com/coin-icons/32px/$uid@3x.png"
+            "wdash" -> "https://wdash.org/logo.png"
+            else -> "https://pirate.place/storage/coins/$uid/image.png"
         }
         return coinURL
     }

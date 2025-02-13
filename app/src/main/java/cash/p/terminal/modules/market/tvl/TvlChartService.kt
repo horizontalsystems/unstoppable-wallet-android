@@ -10,7 +10,7 @@ import io.horizontalsystems.chartview.chart.ChartPointsWrapper
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.core.models.HsTimePeriod
-import io.reactivex.Single
+import kotlinx.coroutines.rx2.await
 
 class TvlChartService(
     override val currencyManager: CurrencyManager,
@@ -23,10 +23,7 @@ class TvlChartService(
         HsTimePeriod.Day1,
         HsTimePeriod.Week1,
         HsTimePeriod.Month1,
-        HsTimePeriod.Month3,
-        HsTimePeriod.Month6,
         HsTimePeriod.Year1,
-        HsTimePeriod.Year2,
     )
     override val chartViewType = ChartViewType.Line
 
@@ -36,17 +33,17 @@ class TvlChartService(
             dataInvalidated()
         }
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency
-    ): Single<ChartPointsWrapper> {
+    ): ChartPointsWrapper {
         val chainParam = if (chain == TvlModule.Chain.All) "" else chain.name
         return globalMarketRepository.getTvlGlobalMarketPoints(
             chainParam,
             currency.code,
             chartInterval
-        ).map {
-            ChartPointsWrapper(it)
+        ).let {
+            ChartPointsWrapper(it.await())
         }
     }
 

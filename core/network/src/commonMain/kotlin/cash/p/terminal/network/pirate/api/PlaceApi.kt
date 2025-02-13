@@ -1,10 +1,13 @@
 package cash.p.terminal.network.pirate.api
 
 import cash.p.terminal.network.api.parseResponse
+import cash.p.terminal.network.data.entity.ChartPeriod
 import cash.p.terminal.network.pirate.data.entity.CalculatorDataDto
 import cash.p.terminal.network.pirate.data.entity.ChangeNowAssociatedCoinDto
 import cash.p.terminal.network.pirate.data.entity.InvestmentDataDto
 import cash.p.terminal.network.pirate.data.entity.InvestmentGraphDataDto
+import cash.p.terminal.network.pirate.data.entity.MarketTickerDto
+import cash.p.terminal.network.pirate.data.entity.PiratePlaceCoinDto
 import cash.p.terminal.network.pirate.data.entity.StakeDataDto
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -17,6 +20,29 @@ internal class PlaceApi(
 ) {
     private companion object {
         const val PIRATE_BASE_PLACE_URL = "https://pirate.place/api/"
+    }
+
+    suspend fun getCoinInfo(coin: String): PiratePlaceCoinDto {
+        return httpClient.get {
+            url(PIRATE_BASE_PLACE_URL + "coins/$coin")
+        }.parseResponse()
+    }
+
+    suspend fun getCoinPriceChart(
+        coin: String,
+        periodType: ChartPeriod
+    ): List<List<String>> {
+        return httpClient.get {
+            url(PIRATE_BASE_PLACE_URL + "coins/$coin/graph/usd/${periodType.value}")
+        }.parseResponse()
+    }
+
+    suspend fun getMarketTickers(
+        coin: String
+    ): List<MarketTickerDto> {
+        return httpClient.get {
+            url(PIRATE_BASE_PLACE_URL + "coins/$coin/tickers")
+        }.parseResponse()
     }
 
     suspend fun getInvestmentData(coin: String, address: String): InvestmentDataDto {

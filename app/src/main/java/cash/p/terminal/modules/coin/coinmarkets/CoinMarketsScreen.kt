@@ -129,13 +129,13 @@ fun CoinMarketList(
     LazyColumn(state = listState) {
         items(items) { item ->
             CoinMarketCell(
-                item.market,
-                item.pair,
-                item.marketImageUrl ?: "",
-                item.volumeToken,
-                MarketDataValue.Volume(item.volumeFiat),
-                item.tradeUrl,
-                item.badge
+                name = item.market,
+                subtitle = item.pair,
+                iconUrl = item.marketImageUrl ?: "",
+                volumeToken = item.volumeToken,
+                marketDataValue = MarketDataValue.Volume(item.volumeFiat),
+                tradeUrl = item.tradeUrl,
+                badge = item.badge
             )
         }
         item {
@@ -166,17 +166,19 @@ fun CoinMarketCell(
         },
         borderBottom = true
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = iconUrl,
-                error = painterResource(R.drawable.ic_platform_placeholder_24)
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .size(32.dp)
-                .clip(RoundedCornerShape(8.dp)),
-        )
+        if(iconUrl.isNotEmpty()) {
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = iconUrl,
+                    error = painterResource(R.drawable.ic_platform_placeholder_24)
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+            )
+        }
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {

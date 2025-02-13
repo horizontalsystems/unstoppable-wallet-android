@@ -5,7 +5,6 @@ import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.models.HsTimePeriod
 import io.horizontalsystems.chartview.ChartViewType
-import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -14,7 +13,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.await
 import java.util.Optional
 
 abstract class AbstractChartService {
@@ -24,10 +22,14 @@ abstract class AbstractChartService {
 
     protected abstract val currencyManager: CurrencyManager
     protected abstract val initialChartInterval: HsTimePeriod
-    protected open fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
-        return Single.error(Exception("Not Implemented"))
+    protected open suspend fun getAllItems(currency: Currency): ChartPointsWrapper {
+        throw Exception("Not Implemented")
     }
-    protected abstract fun getItems(chartInterval: HsTimePeriod, currency: Currency): Single<ChartPointsWrapper>
+
+    protected abstract suspend fun getItems(
+        chartInterval: HsTimePeriod,
+        currency: Currency
+    ): ChartPointsWrapper
 
     protected var chartInterval: HsTimePeriod? = null
         set(value) {
@@ -78,15 +80,14 @@ abstract class AbstractChartService {
     private fun fetchItems() {
         fetchItemsJob?.cancel()
         fetchItemsJob = coroutineScope.launch {
-            val tmpChartInterval = chartInterval
-            val itemsSingle = when {
-                tmpChartInterval == null -> getAllItems(currency)
-                else -> getItems(tmpChartInterval, currency)
-            }
 
             try {
-                val chartPointsWrapper = itemsSingle.await()
-                chartPointsWrapperObservable.onNext(Result.success(chartPointsWrapper))
+                val tmpChartInterval = chartInterval
+                val itemsSingle = when {
+                    tmpChartInterval == null -> getAllItems(currency)
+                    else -> getItems(tmpChartInterval, currency)
+                }
+                chartPointsWrapperObservable.onNext(Result.success(itemsSingle))
             } catch (e: CancellationException) {
                 // Do nothing
             } catch (e: Throwable) {

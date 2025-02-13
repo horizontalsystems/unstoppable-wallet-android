@@ -47,7 +47,6 @@ class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
                     TimeDuration.OneDay -> null
                     TimeDuration.SevenDay -> platform.rank1W
                     TimeDuration.ThirtyDay -> platform.rank1M
-                    TimeDuration.ThreeMonths -> platform.rank3M
                 }
 
                 val rankDiff = if (prevRank == platform.rank || prevRank == null) {
@@ -60,7 +59,6 @@ class TopPlatformsRepository(private val marketKit: MarketKitWrapper) {
                     TimeDuration.OneDay -> null
                     TimeDuration.SevenDay -> platform.change1W
                     TimeDuration.ThirtyDay -> platform.change1M
-                    TimeDuration.ThreeMonths -> platform.change3M
                 }
 
                 TopPlatformItem(

@@ -12,7 +12,7 @@ import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.chartview.ChartViewType
 import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.models.HsTimePeriod
-import io.reactivex.Single
+import kotlinx.coroutines.rx2.await
 
 class CoinCategoryMarketDataChartService(
     override val currencyManager: CurrencyManager,
@@ -24,18 +24,14 @@ class CoinCategoryMarketDataChartService(
     override val chartIntervals = listOf(HsTimePeriod.Day1, HsTimePeriod.Week1, HsTimePeriod.Month1)
     override val chartViewType = ChartViewType.Line
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency
-    ): Single<ChartPointsWrapper> = try {
-        marketKit.coinCategoryMarketPointsSingle(categoryUid, chartInterval, currency.code)
-            .map { info ->
-                info.map { ChartPoint(it.marketCap.toFloat(), it.timestamp) }
-            }
-            .map { ChartPointsWrapper(it) }
-    } catch (e: Exception) {
-        Single.error(e)
-    }
+    ): ChartPointsWrapper = marketKit.coinCategoryMarketPointsSingle(categoryUid, chartInterval, currency.code)
+        .map { info ->
+            info.map { ChartPoint(it.marketCap.toFloat(), it.timestamp) }
+        }
+        .map { ChartPointsWrapper(it) }.await()
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {
         super.updateChartInterval(chartInterval)
