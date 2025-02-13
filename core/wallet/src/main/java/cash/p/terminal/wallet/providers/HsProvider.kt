@@ -79,7 +79,7 @@ class HsProvider(baseUrl: String, apiKey: String) {
     }
 
     private val piratePlaceService by lazy {
-        RetrofitUtils.build("https://pirate.place/api/")
+        RetrofitUtils.build("https://p.cash/api/")
             .create(MarketService::class.java)
     }
 

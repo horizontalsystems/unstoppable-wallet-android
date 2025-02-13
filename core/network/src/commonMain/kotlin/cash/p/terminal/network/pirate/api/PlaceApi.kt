@@ -19,7 +19,7 @@ internal class PlaceApi(
     private val httpClient: HttpClient
 ) {
     private companion object {
-        const val PIRATE_BASE_PLACE_URL = "https://pirate.place/api/"
+        const val PIRATE_BASE_PLACE_URL = "https://p.cash/api/"
     }
 
     suspend fun getCoinInfo(coin: String): PiratePlaceCoinDto {

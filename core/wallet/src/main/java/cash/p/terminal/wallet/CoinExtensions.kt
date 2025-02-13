@@ -6,7 +6,7 @@ val Coin.imageUrl: String
     get() {
         val coinURL = when (uid) {
             "wdash" -> "https://wdash.org/logo.png"
-            else -> "https://pirate.place/storage/coins/$uid/image.png"
+            else -> "https://p.cash/storage/coins/$uid/image.png"
         }
         return coinURL
     }
