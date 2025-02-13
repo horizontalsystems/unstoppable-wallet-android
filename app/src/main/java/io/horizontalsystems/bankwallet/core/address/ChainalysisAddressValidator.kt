@@ -8,7 +8,7 @@ import retrofit2.http.Path
 class ChainalysisAddressValidator(
     baseUrl: String,
     apiKey: String
-) : AddressSecurityCheckerChain.IAddressSecurityCheckerItem {
+) {
 
     private val apiService by lazy {
         APIClient.build(
@@ -17,12 +17,8 @@ class ChainalysisAddressValidator(
         ).create(ChainalysisApi::class.java)
     }
 
-    override suspend fun handle(address: Address): AddressSecurityCheckerChain.SecurityIssue? {
-        val response = apiService.address(address.hex)
-        return if (response.identifications.isNotEmpty())
-            AddressSecurityCheckerChain.SecurityIssue.Sanctioned("Sanctioned address. ${response.identifications.size} identifications found.")
-        else
-            null
+    suspend fun check(address: Address): List<Identification> {
+        return apiService.address(address.hex).identifications
     }
 
     data class ChainalysisApiResponse(
@@ -38,7 +34,7 @@ class ChainalysisAddressValidator(
 
     private interface ChainalysisApi {
         @GET("address/{address}")
-        suspend fun address(@Path("address")  address: String): ChainalysisApiResponse
+        suspend fun address(@Path("address") address: String): ChainalysisApiResponse
     }
 
 }

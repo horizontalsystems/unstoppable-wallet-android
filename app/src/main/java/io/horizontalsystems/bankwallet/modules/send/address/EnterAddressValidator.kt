@@ -14,53 +14,33 @@ import io.horizontalsystems.tonkit.FriendlyAddress
 
 interface EnterAddressValidator {
     @Throws
-    suspend fun validate(address: Address): AddressCheckResult
+    suspend fun validate(address: Address)
 }
 
 class BitcoinAddressValidator(
     private val adapter: ISendBitcoinAdapter
 ) : EnterAddressValidator {
-    override suspend fun validate(address: Address): AddressCheckResult {
-        try {
-            adapter.validate(address.hex, null)
-        } catch (e: Throwable) {
-            return AddressCheckResult.Incorrect()
-        }
-        return AddressCheckResult.Correct
+    override suspend fun validate(address: Address) {
+        adapter.validate(address.hex, null)
     }
 }
 
 class EvmAddressValidator : EnterAddressValidator {
-    override suspend fun validate(address: Address): AddressCheckResult {
-        try {
-            AddressValidator.validate(address.hex)
-            io.horizontalsystems.ethereumkit.models.Address(address.hex)
-        } catch (e: Throwable) {
-            return AddressCheckResult.Incorrect()
-        }
-        return AddressCheckResult.Correct
+    override suspend fun validate(address: Address) {
+        AddressValidator.validate(address.hex)
+        io.horizontalsystems.ethereumkit.models.Address(address.hex)
     }
 }
 
 class SolanaAddressValidator : EnterAddressValidator {
-    override suspend fun validate(address: Address): AddressCheckResult {
-        try {
-            io.horizontalsystems.solanakit.models.Address(address.hex)
-        } catch (e: Throwable) {
-            return AddressCheckResult.Incorrect()
-        }
-        return AddressCheckResult.Correct
+    override suspend fun validate(address: Address) {
+        io.horizontalsystems.solanakit.models.Address(address.hex)
     }
 }
 
 class TonAddressValidator : EnterAddressValidator {
-    override suspend fun validate(address: Address): AddressCheckResult {
-        try {
-            FriendlyAddress.parse(address.hex)
-        } catch (e: Throwable) {
-            return AddressCheckResult.Incorrect()
-        }
-        return AddressCheckResult.Correct
+    override suspend fun validate(address: Address) {
+        FriendlyAddress.parse(address.hex)
     }
 }
 
@@ -68,30 +48,22 @@ class TronAddressValidator(
     private val adapter: ISendTronAdapter,
     private val token: Token
 ) : EnterAddressValidator {
-    override suspend fun validate(address: Address): AddressCheckResult {
-        try {
-            val validAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(address.hex)
-            if (token.type == TokenType.Native && adapter.isOwnAddress(validAddress)) {
-                return AddressCheckResult.Incorrect(Translator.getString(R.string.Send_Error_SendToSelf, "TRX"))
-            }
-        } catch (e: Throwable) {
-            return AddressCheckResult.Incorrect()
+    override suspend fun validate(address: Address) {
+        val validAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(address.hex)
+        if (token.type == TokenType.Native && adapter.isOwnAddress(validAddress)) {
+            throw Exception(Translator.getString(R.string.Send_Error_SendToSelf, "TRX"))
         }
-        return AddressCheckResult.Correct
     }
 }
 
 class ZcashAddressValidator(
     private val adapter: ISendZcashAdapter
 ) : EnterAddressValidator {
-    override suspend fun validate(address: Address): AddressCheckResult {
+    override suspend fun validate(address: Address) {
         try {
             adapter.validate(address.hex)
         } catch (e: ZcashError.SendToSelfNotAllowed) {
-            return AddressCheckResult.Incorrect(Translator.getString(R.string.Send_Error_SendToSelf, "ZEC"))
-        } catch (e: Throwable) {
-            return AddressCheckResult.Incorrect()
+            throw Exception(Translator.getString(R.string.Send_Error_SendToSelf, "ZEC"))
         }
-        return AddressCheckResult.Correct
     }
 }

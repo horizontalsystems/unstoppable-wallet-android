@@ -3,6 +3,7 @@ package io.horizontalsystems.bankwallet.modules.send.address
 import android.os.Parcelable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +35,17 @@ import androidx.navigation.NavController
 import com.tonapps.tonkeeper.api.shortAddress
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
+import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
+import io.horizontalsystems.bankwallet.core.address.AddressCheckType
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.requireInput
+import io.horizontalsystems.bankwallet.core.slideFromBottom
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.Wallet
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
 import io.horizontalsystems.bankwallet.modules.address.AddressParserViewModel
 import io.horizontalsystems.bankwallet.modules.evmfee.ButtonsGroupWithShade
+import io.horizontalsystems.bankwallet.modules.evmfee.FeeSettingsInfoDialog
 import io.horizontalsystems.bankwallet.modules.send.SendFragment
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
@@ -127,10 +134,10 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                     }
                 } else {
                     AddressCheck(
-                        false,
-                        uiState.addressFormatCheck,
-                        uiState.phishingCheck,
-                        uiState.blacklistCheck
+                        uiState.addressValidationInProgress,
+                        uiState.addressValidationError,
+                        uiState.checkResults,
+                        navController
                     )
                 }
             }
@@ -163,10 +170,10 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
 
 @Composable
 fun AddressCheck(
-    locked: Boolean,
-    addressFormatCheck: AddressCheckData,
-    phishingCheck: AddressCheckData,
-    blacklistCheck: AddressCheckData
+    addressValidationInProgress: Boolean,
+    addressValidationError: Throwable?,
+    checkResults: Map<AddressCheckType, AddressCheckData>,
+    navController: NavController
 ) {
     Column(
         modifier = Modifier
@@ -181,73 +188,89 @@ fun AddressCheck(
             )
     ) {
         AddressCheckCell(
-            title = stringResource(R.string.Send_Address_AddressCheck),
-            inProgress = addressFormatCheck.inProgress,
-            validationResult = addressFormatCheck.validationResult
+            inProgress = addressValidationInProgress,
+            validationError = addressValidationError
         )
-        CheckCell(
-            title = stringResource(R.string.Send_Address_PhishingCheck),
-            locked = locked,
-            inProgress = phishingCheck.inProgress,
-            validationResult = phishingCheck.validationResult
-        )
-        CheckCell(
-            title = stringResource(R.string.Send_Address_BlacklistCheck),
-            locked = locked,
-            inProgress = blacklistCheck.inProgress,
-            validationResult = blacklistCheck.validationResult
-        )
+
+        checkResults.forEach { (addressCheckType, checkData) ->
+            CheckCell(
+                title = stringResource(addressCheckType.title),
+                checkType = addressCheckType,
+                inProgress = checkData.inProgress,
+                checkResult = checkData.checkResult,
+                navController
+            )
+        }
     }
 
-    val addressErrorMessage: ErrorMessage? = when {
-        addressFormatCheck.validationResult is AddressCheckResult.Incorrect -> {
-            ErrorMessage(
-                title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-                description = addressFormatCheck.validationResult.description ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
-            )
-        }
+    Errors(addressValidationError, checkResults)
+}
 
-        phishingCheck.validationResult == AddressCheckResult.Detected -> {
-            ErrorMessage(
-                title = stringResource(R.string.Send_Address_ErrorMessage_PhishingDetected),
-                description = stringResource(R.string.Send_Address_ErrorMessage_PhishingDetected_Description)
-            )
-        }
-
-        blacklistCheck.validationResult == AddressCheckResult.Detected -> {
-            ErrorMessage(
-                title = stringResource(R.string.Send_Address_ErrorMessage_BlacklistDetected),
-                description = stringResource(R.string.Send_Address_ErrorMessage_BlacklistDetected_Description)
-            )
-        }
-
-        else -> null
-    }
-
-    addressErrorMessage?.let { errorMessage ->
+@Composable
+private fun Errors(
+    addressValidationError: Throwable?,
+    checkResults: Map<AddressCheckType, AddressCheckData>,
+) {
+    if (addressValidationError != null) {
         VSpacer(16.dp)
         TextImportantError(
             modifier = Modifier.padding(horizontal = 16.dp),
             icon = R.drawable.ic_attention_20,
-            title = errorMessage.title,
-            text = errorMessage.description
+            title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
+            text = addressValidationError.message ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
         )
         VSpacer(32.dp)
+    } else {
+        checkResults.forEach { (addressCheckType, addressCheckData) ->
+            if (addressCheckData.checkResult == AddressCheckResult.Detected) {
+                VSpacer(16.dp)
+                TextImportantError(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    icon = R.drawable.ic_attention_20,
+                    title = stringResource(addressCheckType.detectedErrorTitle),
+                    text = stringResource(addressCheckType.detectedErrorDescription)
+                )
+            }
+        }
+
+        if (checkResults.any { it.value.checkResult == AddressCheckResult.Detected }) {
+            VSpacer(32.dp)
+        }
     }
 }
 
 @Composable
 private fun CheckCell(
     title: String,
-    locked: Boolean,
+    checkType: AddressCheckType,
     inProgress: Boolean,
-    validationResult: AddressCheckResult?
+    checkResult: AddressCheckResult,
+    navController: NavController
 ) {
+    val onClickInfo: (() -> Unit)? = when (checkResult) {
+        AddressCheckResult.Clear -> {
+            {
+                navController.slideFromBottom(
+                    R.id.feeSettingsInfoDialog,
+                    FeeSettingsInfoDialog.Input(Translator.getString(checkType.clearInfoTitle), Translator.getString(checkType.clearInfoDescription))
+                )
+            }
+        }
+
+        else -> null
+    }
+
     Row(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .height(40.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .height(40.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClickInfo != null,
+                onClick = onClickInfo ?: {}
+            ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_star_filled_20),
@@ -259,19 +282,18 @@ private fun CheckCell(
         )
         subhead2_grey(text = title)
         Spacer(Modifier.weight(1f))
-        if (locked) {
+        if (checkResult == AddressCheckResult.NotAllowed) {
             CheckLocked()
         } else {
-            CheckValue(inProgress, validationResult)
+            CheckValue(inProgress, checkResult)
         }
     }
 }
 
 @Composable
 private fun AddressCheckCell(
-    title: String,
     inProgress: Boolean,
-    validationResult: AddressCheckResult?
+    validationError: Throwable?
 ) {
     Row(
         modifier = Modifier
@@ -280,17 +302,26 @@ private fun AddressCheckCell(
         verticalAlignment = Alignment.CenterVertically
     ) {
         subhead2_grey(
-            text = title,
+            text = stringResource(R.string.Send_Address_AddressCheck),
             modifier = Modifier.weight(1f)
         )
-        CheckValue(inProgress, validationResult)
+        if (inProgress) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(20.dp),
+                color = ComposeAppTheme.colors.grey,
+                strokeWidth = 2.dp
+            )
+        } else when (validationError) {
+            null -> subhead2_remus(stringResource(R.string.Send_Address_Error_Correct))
+            else -> subhead2_lucian(stringResource(R.string.Send_Address_Error_Incorrect))
+        }
     }
 }
 
 @Composable
 fun CheckValue(
     inProgress: Boolean,
-    validationResult: AddressCheckResult?
+    validationResult: AddressCheckResult,
 ) {
     if (inProgress) {
         CircularProgressIndicator(
@@ -300,11 +331,17 @@ fun CheckValue(
         )
     } else {
         when (validationResult) {
-            AddressCheckResult.Correct,
-            AddressCheckResult.Clear -> subhead2_remus(stringResource(validationResult.titleResId))
+            AddressCheckResult.Clear -> {
+                subhead2_remus(stringResource(validationResult.title))
+                Icon(
+                    modifier = Modifier.padding(start = 10.dp),
+                    painter = painterResource(R.drawable.ic_info_20),
+                    contentDescription = null,
+                    tint = ComposeAppTheme.colors.grey50,
+                )
+            }
 
-            is AddressCheckResult.Incorrect,
-            AddressCheckResult.Detected -> subhead2_lucian(stringResource(validationResult.titleResId))
+            AddressCheckResult.Detected -> subhead2_lucian(stringResource(validationResult.title))
 
             else -> subhead2_grey(stringResource(R.string.NotAvailable))
         }
@@ -411,16 +448,4 @@ fun SectionHeaderText(title: String) {
 data class SContact(
     val name: String,
     val address: String
-)
-
-sealed class AddressCheckResult(val titleResId: Int, val description: String? = null) {
-    class Incorrect(description: String? = null) : AddressCheckResult(R.string.Send_Address_Error_Incorrect, description)
-    data object Correct : AddressCheckResult(R.string.Send_Address_Error_Correct)
-    data object Clear : AddressCheckResult(R.string.Send_Address_Error_Clear)
-    data object Detected : AddressCheckResult(R.string.Send_Address_Error_Detected)
-}
-
-data class ErrorMessage(
-    val title: String,
-    val description: String
 )
