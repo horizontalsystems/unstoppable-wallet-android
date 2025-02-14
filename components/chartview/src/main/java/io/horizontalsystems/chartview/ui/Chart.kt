@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -333,7 +334,7 @@ fun Chart(
                         val loadingModifier =
                             if (uiState.loading) Modifier.alpha(0.5f) else Modifier
                         Box(
-                            modifier = loadingModifier.fillMaxWidth()
+                            modifier = loadingModifier.fillMaxWidth().clipToBounds()
                         ) {
                             PriceVolChart(
                                 chartInfoData = uiState.chartInfoData,
