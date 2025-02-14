@@ -52,6 +52,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
@@ -127,6 +128,7 @@ interface ILocalStorage {
     var uiStatsEnabled: Boolean?
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
+    val marketSignalsStateChangedFlow: SharedFlow<Boolean>
 
     var priceChangeInterval: PriceChangeInterval
     val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
