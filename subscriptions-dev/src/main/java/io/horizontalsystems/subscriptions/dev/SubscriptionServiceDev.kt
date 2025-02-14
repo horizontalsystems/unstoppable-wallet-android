@@ -10,6 +10,7 @@ import io.horizontalsystems.subscriptions.core.PricingPhase
 import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.SubscriptionService
 import io.horizontalsystems.subscriptions.core.UserSubscription
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
 
 class SubscriptionServiceDev(private val context: Context) : SubscriptionService {
@@ -18,6 +19,7 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
     }
 
     override var predefinedSubscriptions: List<Subscription> = listOf()
+    override val activeSubscriptionStateFlow = MutableStateFlow(null)
 
     override suspend fun onResume() = Unit
 

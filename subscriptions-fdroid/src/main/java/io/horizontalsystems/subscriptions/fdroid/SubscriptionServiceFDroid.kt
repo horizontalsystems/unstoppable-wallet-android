@@ -9,9 +9,11 @@ import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.SubscriptionService
 import io.horizontalsystems.subscriptions.core.UserSubscription
 import io.horizontalsystems.subscriptions.core.VIPSupport
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class SubscriptionServiceFDroid(context: Context) : SubscriptionService {
     override var predefinedSubscriptions = listOf<Subscription>()
+    override val activeSubscriptionStateFlow = MutableStateFlow(null)
 
     override fun isActionAllowed(paidAction: IPaidAction): Boolean {
         return paidAction !is VIPSupport
