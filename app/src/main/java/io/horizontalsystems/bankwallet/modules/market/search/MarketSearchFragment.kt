@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -23,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,8 +44,9 @@ import io.horizontalsystems.bankwallet.core.stats.statSection
 import io.horizontalsystems.bankwallet.modules.coin.CoinFragment
 import io.horizontalsystems.bankwallet.modules.market.search.MarketSearchModule.CoinItem
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
-import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryCircle
+import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderStick
+import io.horizontalsystems.bankwallet.ui.compose.components.HsIconButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsImage
 import io.horizontalsystems.bankwallet.ui.compose.components.ListEmptyView
 import io.horizontalsystems.bankwallet.ui.compose.components.SearchBar
@@ -110,7 +113,11 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
                     CoinFragment.Input(coin.uid)
                 )
 
-                stat(page = StatPage.MarketSearch, section = section.statSection, event = StatEvent.OpenCoin(coin.uid))
+                stat(
+                    page = StatPage.MarketSearch,
+                    section = section.statSection,
+                    event = StatEvent.OpenCoin(coin.uid)
+                )
             }
         ) { favorited, coinUid ->
             viewModel.onFavoriteClick(favorited, coinUid)
@@ -210,28 +217,6 @@ private fun MarketCoin(
         borderTop = true,
         onClick = onClick
     ) {
-        if (favourited) {
-            ButtonSecondaryCircle(
-                modifier = Modifier.padding(end = 16.dp),
-                icon = R.drawable.ic_checkmark_20,
-                contentDescription = stringResource(R.string.CoinPage_Favorite),
-                tint = ComposeAppTheme.colors.dark,
-                background = ComposeAppTheme.colors.yellowD,
-                onClick = {
-                    onFavoriteClick(true, coinUid)
-                }
-            )
-        } else {
-            ButtonSecondaryCircle(
-                modifier = Modifier.padding(end = 16.dp),
-                icon = R.drawable.ic_plus_20,
-                contentDescription = stringResource(R.string.CoinPage_Favorite),
-                onClick = {
-                    onFavoriteClick(false, coinUid)
-                }
-            )
-        }
-
         HsImage(
             url = coinIconUrl,
             alternativeUrl = alternativeCoinIconUrl,
@@ -255,6 +240,34 @@ private fun MarketCoin(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
+        }
+        HSpacer(16.dp)
+        if (favourited) {
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    onFavoriteClick(true, coinUid)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_heart_filled_20),
+                    contentDescription = "heart icon button",
+                    tint = ComposeAppTheme.colors.jacob
+                )
+            }
+        } else {
+            HsIconButton(
+                modifier = Modifier.size(20.dp),
+                onClick = {
+                    onFavoriteClick(false, coinUid)
+                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_heart_20),
+                    contentDescription = "heart icon button",
+                    tint = ComposeAppTheme.colors.grey
+                )
+            }
         }
     }
 }

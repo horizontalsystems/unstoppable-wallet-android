@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.App
+import io.horizontalsystems.bankwallet.core.managers.SignalsControlManager
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.market.MarketViewItem
 import io.horizontalsystems.bankwallet.modules.market.TimeDuration
@@ -23,7 +24,8 @@ object MarketFavoritesModule {
                 menuService,
                 App.currencyManager,
                 App.backgroundManager,
-                App.priceManager
+                App.priceManager,
+                SignalsControlManager(App.localStorage)
             )
             return MarketFavoritesViewModel(service) as T
         }

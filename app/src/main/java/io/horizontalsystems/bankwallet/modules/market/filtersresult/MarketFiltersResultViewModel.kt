@@ -41,7 +41,8 @@ class MarketFiltersResultViewModel(
         viewItems = viewItemsState,
         viewState = viewState,
         sortingField = service.sortingField,
-        selectSortingField = Select(service.sortingField, service.sortingFields)
+        selectSortingField = Select(service.sortingField, service.sortingFields),
+        showSignal = service.showSignals
     )
 
     override fun onCleared() {
@@ -67,8 +68,22 @@ class MarketFiltersResultViewModel(
 
     private fun syncMarketViewItems() {
         viewItemsState = marketItems.map { itemWrapper ->
-            MarketViewItem.create(itemWrapper.marketItem, itemWrapper.favorited)
+            MarketViewItem.create(
+                marketItem = itemWrapper.marketItem,
+                favorited = itemWrapper.favorited,
+                advice = itemWrapper.signal
+            )
         }.toList()
+    }
+
+    fun showSignals() {
+        service.showSignals()
+        emitState()
+    }
+
+    fun hideSignals() {
+        service.hideSignals()
+        emitState()
     }
 
 }
@@ -77,5 +92,6 @@ data class MarketFiltersUiState(
     val viewItems: List<MarketViewItem>,
     val viewState: ViewState,
     val sortingField: SortingField,
-    val selectSortingField: Select<SortingField>
+    val selectSortingField: Select<SortingField>,
+    val showSignal: Boolean
 )

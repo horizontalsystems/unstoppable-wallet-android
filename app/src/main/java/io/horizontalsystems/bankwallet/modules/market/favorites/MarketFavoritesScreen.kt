@@ -75,7 +75,7 @@ fun MarketFavoritesScreen(
                     if (uiState.viewItems.isEmpty()) {
                         ListEmptyView(
                             text = stringResource(R.string.Market_Tab_Watchlist_EmptyList),
-                            icon = R.drawable.ic_rate_24
+                            icon = R.drawable.ic_heart_24
                         )
                     } else {
                         CoinListOrderable(
@@ -197,7 +197,7 @@ fun MarketFavoritesScreen(
 }
 
 @Composable
-fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
+private fun SignalButton(turnedOn: Boolean, onToggle: (Boolean) -> Unit) {
     val title = stringResource(id = R.string.Market_Signals)
     val onClick = { onToggle.invoke(!turnedOn) }
     if (turnedOn) {

@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.market.favorites
 
 import io.horizontalsystems.bankwallet.core.managers.CurrencyManager
 import io.horizontalsystems.bankwallet.core.managers.PriceManager
+import io.horizontalsystems.bankwallet.core.managers.SignalsControlManager
 import io.horizontalsystems.bankwallet.entities.DataState
 import io.horizontalsystems.bankwallet.modules.market.MarketItem
 import io.horizontalsystems.bankwallet.modules.market.SortingField
@@ -38,7 +39,8 @@ class MarketFavoritesService(
     private val menuService: MarketFavoritesMenuService,
     private val currencyManager: CurrencyManager,
     private val backgroundManager: BackgroundManager,
-    private val priceManager: PriceManager
+    private val priceManager: PriceManager,
+    private val signalsControlManager: SignalsControlManager
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private var favoritesJob: Job? = null
@@ -50,7 +52,8 @@ class MarketFavoritesService(
     val marketItemsObservable: Observable<DataState<List<MarketItemWrapper>>>
         get() = marketItemsSubject
 
-    val showSignals by menuService::showSignals
+    val showSignals: Boolean
+        get() = signalsControlManager.showSignals
 
     var watchlistSorting: WatchlistSorting = menuService.listSorting
         set(value) {
@@ -72,7 +75,7 @@ class MarketFavoritesService(
             try {
                 marketItems = repository.get(timeDuration.period, currencyManager.baseCurrency)
                 updateItems()
-                if (menuService.showSignals) {
+                if (signalsControlManager.showSignals) {
                     syncSignals()
                 }
             } catch (e: CancellationException) {
@@ -104,7 +107,7 @@ class MarketFavoritesService(
             MarketItemWrapper(
                 marketItem = it,
                 favorited = true,
-                signal = if (menuService.showSignals) signals[it.fullCoin.coin.uid] else null
+                signal = if (signalsControlManager.showSignals) signals[it.fullCoin.coin.uid] else null
             )
         }
         marketItemsSubject.onNext(DataState.Success(wrapperItems))
@@ -128,7 +131,7 @@ class MarketFavoritesService(
 
     fun refresh() {
         fetch()
-        if (menuService.showSignals) {
+        if (signalsControlManager.showSignals) {
             syncSignals()
         }
     }
@@ -166,6 +169,12 @@ class MarketFavoritesService(
             }
         }
 
+        coroutineScope.launch {
+            signalsControlManager.showSignalsStateChangedFlow.collect {
+                fetch()
+            }
+        }
+
         fetch()
     }
 
@@ -174,12 +183,12 @@ class MarketFavoritesService(
     }
 
     fun showSignals() {
-        menuService.showSignals = true
+        signalsControlManager.showSignals = true
         syncSignals()
     }
 
     fun hideSignals() {
-        menuService.showSignals = false
+        signalsControlManager.showSignals = false
 
         coroutineScope.launch {
             updateItems()

@@ -53,7 +53,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonPrimaryYellow
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
@@ -161,7 +161,7 @@ private fun PlatformScreen(
 
                         ViewState.Success -> {
                             uiState.viewItems.let { viewItems ->
-                                CoinList(
+                                CoinListSlidable(
                                     items = viewItems,
                                     scrollToTop = scrollToTopAfterUpdate,
                                     onAddFavorite = { uid ->

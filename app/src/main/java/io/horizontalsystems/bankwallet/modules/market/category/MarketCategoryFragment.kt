@@ -39,7 +39,7 @@ import io.horizontalsystems.bankwallet.ui.compose.TranslatableString
 import io.horizontalsystems.bankwallet.ui.compose.components.AlertGroup
 import io.horizontalsystems.bankwallet.ui.compose.components.AppBar
 import io.horizontalsystems.bankwallet.ui.compose.components.ButtonSecondaryToggle
-import io.horizontalsystems.bankwallet.ui.compose.components.CoinList
+import io.horizontalsystems.bankwallet.ui.compose.components.CoinListSlidable
 import io.horizontalsystems.bankwallet.ui.compose.components.HeaderSorting
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.ListErrorView
@@ -146,7 +146,7 @@ fun CategoryScreen(
                             viewItems?.let {
                                 val menu by viewModel.menuLiveData.observeAsState()
 
-                                CoinList(
+                                CoinListSlidable(
                                     items = it,
                                     scrollToTop = scrollToTopAfterUpdate,
                                     onAddFavorite = { uid -> viewModel.onAddFavorite(uid) },

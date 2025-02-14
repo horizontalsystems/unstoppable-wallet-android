@@ -1,7 +1,6 @@
 package io.horizontalsystems.bankwallet.modules.coin
 
 import android.os.Parcelable
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -77,7 +76,6 @@ fun CoinScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CoinTabs(
     viewModel: CoinViewModel,
@@ -103,7 +101,7 @@ fun CoinTabs(
                             add(
                                 MenuItem(
                                     title = TranslatableString.ResString(R.string.CoinPage_Unfavorite),
-                                    icon = R.drawable.ic_filled_star_24,
+                                    icon = R.drawable.ic_heart_filled_24,
                                     tint = ComposeAppTheme.colors.jacob,
                                     onClick = {
                                         viewModel.onUnfavoriteClick()
@@ -119,7 +117,8 @@ fun CoinTabs(
                             add(
                                 MenuItem(
                                     title = TranslatableString.ResString(R.string.CoinPage_Favorite),
-                                    icon = R.drawable.ic_star_24,
+                                    icon = R.drawable.ic_heart_24,
+                                    tint = ComposeAppTheme.colors.grey,
                                     onClick = {
                                         viewModel.onFavoriteClick()
 

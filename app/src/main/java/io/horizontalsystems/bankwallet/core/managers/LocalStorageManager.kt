@@ -24,9 +24,14 @@ import io.horizontalsystems.bankwallet.modules.theme.ThemeType
 import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.horizontalsystems.core.IThirdKeyboard
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class LocalStorageManager(
@@ -86,8 +91,12 @@ class LocalStorageManager(
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
+
+    private val _marketSignalsStateChangedFlow =  MutableSharedFlow<Boolean>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    override val marketSignalsStateChangedFlow = _marketSignalsStateChangedFlow
 
     private val gson by lazy { Gson() }
 
@@ -432,6 +441,9 @@ class LocalStorageManager(
         get() = preferences.getBoolean(MARKET_FAVORITES_SHOW_SIGNALS, false)
         set(value) {
             preferences.edit().putBoolean(MARKET_FAVORITES_SHOW_SIGNALS, value).apply()
+            coroutineScope.launch {
+                _marketSignalsStateChangedFlow.emit(value)
+            }
         }
 
     override var marketFavoritesManualSortingOrder: List<String>
