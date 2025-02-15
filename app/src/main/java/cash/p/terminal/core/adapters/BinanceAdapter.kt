@@ -202,13 +202,12 @@ class BinanceAdapter(
         address: String,
         memo: String?,
         logger: AppLogger
-    ): Single<Unit> {
+    ): Single<String> {
         return binanceKit.send(symbol, address, amount, memo ?: "")
             .doOnSubscribe {
                 logger.info("call binanceKit.send")
             }
             .onErrorResumeNext { Single.error(getException(it)) }
-            .map { Unit }
     }
 
     private fun getException(error: Throwable): Exception {

@@ -278,7 +278,7 @@ interface ISendBinanceAdapter {
     val fee: BigDecimal
 
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
+    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<String>
 }
 
 interface ISendZcashAdapter {
