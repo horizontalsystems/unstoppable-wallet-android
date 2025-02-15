@@ -1573,6 +1573,7 @@
     <string name="Coin_Tab_Tweets">Tweets</string>
 
     <string name="CoinPage_TimeDuration_Today">TDY</string>
+    <string name="CoinPage_TimeDuration_Hour">1H</string>
     <string name="CoinPage_TimeDuration_Day">1D</string>
     <string name="CoinPage_TimeDuration_Week">7D</string>
     <string name="CoinPage_TimeDuration_Month">1M</string>
@@ -1816,6 +1817,7 @@
     <string name="Coin_Analytics_Period_1d">1 day</string>
     <string name="Coin_Analytics_Period_1w">1 week</string>
     <string name="Coin_Analytics_Period_1m">1 month</string>
+    <string name="Coin_Analytics_Period_1y">1 year</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">Strong Buy</string>
     <string name="Coin_Analytics_Indicators_StrongSell">Strong Sell</string>
     <string name="Coin_Analytics_Indicators_Sell">Sell</string>

@@ -6,7 +6,7 @@ import java.util.*
 
 class LanguageManager {
 
-    val fallbackLocale by cash.p.terminal.strings.helpers.LocaleHelper::fallbackLocale
+    val fallbackLocale by LocaleHelper::fallbackLocale
 
     var currentLocale: Locale = App.instance.getLocale()
         set(value) {

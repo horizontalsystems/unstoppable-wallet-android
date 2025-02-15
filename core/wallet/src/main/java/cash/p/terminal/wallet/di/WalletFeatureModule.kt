@@ -23,4 +23,5 @@ val walletFeatureModule = module {
     singleOf(::SubscriptionManager)
     factoryOf(::WalletUseCase)
     factoryOf(::CryptoCompareProvider)
+    includes(mappersModule)
 }

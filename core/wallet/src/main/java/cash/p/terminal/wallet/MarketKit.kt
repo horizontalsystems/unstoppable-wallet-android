@@ -163,16 +163,16 @@ class MarketKit(
         }
     }
 
-    fun marketInfoOverviewSingle(
+    suspend fun marketInfoOverviewSingle(
         coinUid: String,
         currencyCode: String,
         language: String,
-    ): Single<MarketInfoOverview> {
+    ): MarketInfoOverview {
         return hsProvider.getMarketInfoOverview(
             coinUid = coinUid,
             currencyCode = currencyCode,
             language = language,
-        ).map { rawOverview ->
+        ).let { rawOverview ->
             val fullCoin = coinManager.fullCoin(coinUid) ?: throw Exception("No Full Coin")
 
             rawOverview.marketInfoOverview(fullCoin)
@@ -285,7 +285,7 @@ class MarketKit(
 
     // Market Tickers
 
-    fun marketTickersSingle(coinUid: String, currencyCode: String): Single<List<MarketTicker>> {
+    suspend fun marketTickersSingle(coinUid: String, currencyCode: String): List<MarketTicker> {
         return hsProvider.marketTickers(coinUid, currencyCode)
     }
 
@@ -313,17 +313,23 @@ class MarketKit(
 
     // Pro Data
 
-    fun cexVolumesSingle(
+    suspend fun cexVolumesSingle(
         coinUid: String,
         currencyCode: String,
         timePeriod: HsTimePeriod
-    ): Single<List<ChartPoint>> {
+    ): List<ChartPoint> {
         val periodType = HsPeriodType.ByPeriod(timePeriod)
         val currentTime = Date().time / 1000
         val fromTimestamp = HsChartRequestHelper.fromTimestamp(currentTime, periodType)
         val interval = HsPointTimePeriod.Day1
-        return hsProvider.coinPriceChartSingle(coinUid, currencyCode, interval, fromTimestamp)
-            .map { response ->
+        return hsProvider.coinPriceChartSingle(
+            coinUid = coinUid,
+            currencyCode = currencyCode,
+            periodType = timePeriod,
+            pointPeriodType = interval,
+            fromTimestamp = fromTimestamp
+        )
+            .let { response ->
                 response.mapNotNull { chartCoinPrice ->
                     chartCoinPrice.totalVolume?.let { volume ->
                         ChartPoint(volume, chartCoinPrice.timestamp, null)
@@ -466,39 +472,21 @@ class MarketKit(
                 )
             }
 
-    // Chart Info
-
-    fun chartPointsSingle(
-        coinUid: String,
-        currencyCode: String,
-        interval: HsPointTimePeriod,
-        pointCount: Int
-    ): Single<List<ChartPoint>> {
-        val fromTimestamp = Date().time / 1000 - interval.interval * pointCount
-
-        return hsProvider.coinPriceChartSingle(coinUid, currencyCode, interval, fromTimestamp)
-            .map { response ->
-                response.map { chartCoinPrice ->
-                    chartCoinPrice.chartPoint
-                }
-            }
-    }
-
-    fun chartPointsSingle(
+    suspend fun chartPointsSingle(
         coinUid: String,
         currencyCode: String,
         periodType: HsPeriodType
-    ): Single<Pair<Long, List<ChartPoint>>> {
+    ): Pair<Long, List<ChartPoint>> {
         val data = intervalData(periodType)
         return hsProvider.coinPriceChartSingle(
-            coinUid,
-            currencyCode,
-            data.interval,
-            data.fromTimestamp
-        )
-            .map {
-                Pair(data.visibleTimestamp, it.map { it.chartPoint })
-            }
+            coinUid = coinUid,
+            currencyCode = currencyCode,
+            periodType = periodType.timePeriod,
+            pointPeriodType = data.interval,
+            fromTimestamp = data.fromTimestamp
+        ).let {
+            Pair(data.visibleTimestamp, it.map { it.chartPoint })
+        }
     }
 
     private fun intervalData(periodType: HsPeriodType): IntervalData {

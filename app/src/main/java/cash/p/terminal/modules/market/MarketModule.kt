@@ -184,8 +184,7 @@ fun MarketInfo.priceChangeValue(period: TimePeriod) = when (period) {
 enum class TimeDuration(val titleResId: Int) : WithTranslatableTitle, Parcelable {
     OneDay(R.string.Market_Filter_TimePeriod_1D),
     SevenDay(R.string.Market_Filter_TimePeriod_1W),
-    ThirtyDay(R.string.Market_Filter_TimePeriod_1M),
-    ThreeMonths(R.string.Market_Filter_TimePeriod_3M);
+    ThirtyDay(R.string.Market_Filter_TimePeriod_1M);
 
     @IgnoredOnParcel
     override val title = TranslatableString.ResString(titleResId)

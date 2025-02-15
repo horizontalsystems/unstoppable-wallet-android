@@ -32,7 +32,6 @@ class EtfViewModel(
         TimeDuration.OneDay,
         TimeDuration.SevenDay,
         TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
     )
     val sortByOptions = listOf(
         EtfModule.SortBy.HighestAssets,
@@ -173,6 +172,5 @@ private fun Etf.priceChangeValue(timeDuration: TimeDuration): BigDecimal? {
         TimeDuration.OneDay -> inflows[HsTimePeriod.Day1]
         TimeDuration.SevenDay -> inflows[HsTimePeriod.Week1]
         TimeDuration.ThirtyDay -> inflows[HsTimePeriod.Month1]
-        TimeDuration.ThreeMonths -> inflows[HsTimePeriod.Month3]
     }
 }

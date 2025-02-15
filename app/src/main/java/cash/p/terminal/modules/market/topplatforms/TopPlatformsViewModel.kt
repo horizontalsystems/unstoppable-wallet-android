@@ -27,7 +27,6 @@ class TopPlatformsViewModel(
     val periods = listOf(
         TimeDuration.SevenDay,
         TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
     )
 
     private var sortingField = SortingField.TopGainers

@@ -1256,6 +1256,7 @@
     <string name="Coin_Tab_Details">Аналитика</string>
     <string name="Coin_Tab_Tweets">Твиты</string>
     <string name="CoinPage_TimeDuration_Today">СГД</string>
+    <string name="CoinPage_TimeDuration_Hour">1Ч</string>
     <string name="CoinPage_TimeDuration_Day">1Д</string>
     <string name="CoinPage_TimeDuration_Week">7Д</string>
     <string name="CoinPage_TimeDuration_Month">1М</string>
@@ -1464,6 +1465,7 @@
     <string name="Coin_Analytics_Period_1d">1 день</string>
     <string name="Coin_Analytics_Period_1w">1 неделя</string>
     <string name="Coin_Analytics_Period_1m">1 месяц</string>
+    <string name="Coin_Analytics_Period_1y">1 год</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">Активно покупать</string>
     <string name="Coin_Analytics_Indicators_StrongSell">Активно продавать</string>
     <string name="Coin_Analytics_Indicators_Sell">Продавать</string>

@@ -36,7 +36,6 @@ class MarketTopCoinsViewModel(
         TimeDuration.OneDay,
         TimeDuration.SevenDay,
         TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
     )
     private val sortingFields = listOf(
         SortingField.HighestCap,

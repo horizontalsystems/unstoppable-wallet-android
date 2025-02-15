@@ -18,7 +18,11 @@ import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
 import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.wallet.IWalletManager
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
 import cash.p.terminal.wallet.entities.FullCoin
@@ -31,11 +35,11 @@ class CoinOverviewViewModel(
     private val service: CoinOverviewService,
     private val factory: CoinViewFactory,
     private val walletManager: IWalletManager,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    accountManager: IAccountManager,
     private val chartIndicatorManager: ChartIndicatorManager
 ) : ViewModel() {
 
-    val isRefreshingLiveData = MutableLiveData<Boolean>(false)
+    val isRefreshingLiveData = MutableLiveData(false)
     val overviewLiveData = MutableLiveData<CoinOverviewViewItem>()
     val viewStateLiveData = MutableLiveData<ViewState>(ViewState.Loading)
 
@@ -135,8 +139,8 @@ class CoinOverviewViewModel(
 
     private fun getTokenVariants(
         fullCoin: FullCoin,
-        account: cash.p.terminal.wallet.Account?,
-        activeWallets: List<cash.p.terminal.wallet.Wallet>
+        account: Account?,
+        activeWallets: List<Wallet>
     ): TokenVariants? {
         val items = mutableListOf<TokenVariant>()
         var type = TokenVariants.Type.Blockchains
@@ -155,7 +159,7 @@ class CoinOverviewViewModel(
                 }
             }
             .sortedWith(
-                compareBy<cash.p.terminal.wallet.Token> { it.type.order }
+                compareBy<Token> { it.type.order }
                     .thenBy { it.blockchainType.order }
             )
             .forEach { token ->

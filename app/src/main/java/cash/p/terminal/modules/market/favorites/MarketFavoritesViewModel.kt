@@ -24,7 +24,6 @@ class MarketFavoritesViewModel(
         TimeDuration.OneDay,
         TimeDuration.SevenDay,
         TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
     )
 
     val sortingOptions = listOf(

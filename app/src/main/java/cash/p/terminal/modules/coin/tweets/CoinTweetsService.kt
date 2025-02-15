@@ -51,7 +51,7 @@ class CoinTweetsService(
                         coinUid,
                         "USD",
                         "en"
-                    ).await()
+                    )
                     val username = marketInfoOverview.links[LinkType.Twitter]
                     if (username.isNullOrBlank()) {
                         throw TweetsProvider.UserNotFound()

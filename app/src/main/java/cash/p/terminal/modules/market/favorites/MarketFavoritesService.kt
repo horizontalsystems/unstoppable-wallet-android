@@ -29,7 +29,6 @@ val TimeDuration.period: TimePeriod
             TimeDuration.OneDay -> TimePeriod.TimePeriod_1D
             TimeDuration.SevenDay -> TimePeriod.TimePeriod_1W
             TimeDuration.ThirtyDay -> TimePeriod.TimePeriod_1M
-            TimeDuration.ThreeMonths -> TimePeriod.TimePeriod_3M
         }
     }
 

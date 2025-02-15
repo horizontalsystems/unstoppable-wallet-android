@@ -1,9 +1,12 @@
 package cash.p.terminal.network.pirate.data.repository
 
+import cash.p.terminal.network.data.entity.ChartPeriod
 import cash.p.terminal.network.pirate.api.PlaceApi
 import cash.p.terminal.network.pirate.data.database.CacheChangeNowCoinAssociationDao
 import cash.p.terminal.network.pirate.data.database.entity.ChangeNowAssociationCoin
 import cash.p.terminal.network.pirate.data.mapper.PiratePlaceMapper
+import cash.p.terminal.network.pirate.domain.enity.CoinPriceChart
+import cash.p.terminal.network.pirate.domain.enity.MarketTicker
 import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -19,6 +22,10 @@ internal class PiratePlaceRepositoryImpl(
 
     private companion object {
         const val CACHE_DURATION = 7 * 24 * 60 * 60 * 1000L // 1 week
+    }
+
+    override suspend fun getCoinInfo(coin: String) = withContext(Dispatchers.IO) {
+        placeApi.getCoinInfo(coin = coin).let(piratePlaceMapper::mapCoinInfo)
     }
 
     override suspend fun getInvestmentData(coin: String, address: String) =
@@ -48,9 +55,9 @@ internal class PiratePlaceRepositoryImpl(
         }
     }
 
-    override suspend fun getInvestmentChart(coin: String, address: String, period: String) =
+    override suspend fun getInvestmentChart(coin: String, address: String, period: ChartPeriod) =
         withContext(Dispatchers.IO) {
-            placeApi.getInvestmentChart(coin = coin, address = address, period = period)
+            placeApi.getInvestmentChart(coin = coin, address = address, period = period.value)
                 .let(piratePlaceMapper::mapInvestmentGraphData)
         }
 
@@ -62,4 +69,15 @@ internal class PiratePlaceRepositoryImpl(
         withContext(Dispatchers.IO) {
             placeApi.getCalculatorData(coin, amount).let(piratePlaceMapper::mapCalculatorData)
         }
+
+    override suspend fun getCoinPriceChart(
+        coin: String,
+        periodType: ChartPeriod
+    ): List<CoinPriceChart> = withContext(Dispatchers.IO) {
+        placeApi.getCoinPriceChart(coin, periodType).map(piratePlaceMapper::mapPricePoint)
+    }
+
+    override suspend fun getMarketTickers(coin: String): List<MarketTicker> = withContext(Dispatchers.IO) {
+        placeApi.getMarketTickers(coin).map(piratePlaceMapper::mapMarketTicker)
+    }
 }

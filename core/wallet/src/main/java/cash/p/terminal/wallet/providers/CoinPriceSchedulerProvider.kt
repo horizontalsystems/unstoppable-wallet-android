@@ -4,6 +4,10 @@ import cash.p.terminal.wallet.managers.CoinPriceManager
 import cash.p.terminal.wallet.managers.ICoinPriceCoinUidDataSource
 import cash.p.terminal.wallet.models.CoinPrice
 import io.reactivex.Single
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 interface ISchedulerProvider {
     val id: String
@@ -20,6 +24,7 @@ class CoinPriceSchedulerProvider(
     private val provider: HsProvider
 ) : ISchedulerProvider {
     var dataSource: ICoinPriceCoinUidDataSource? = null
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override val id = "CoinPriceProvider"
 
@@ -32,10 +37,17 @@ class CoinPriceSchedulerProvider(
     override val syncSingle: Single<Unit>
         get() {
             val (coinUids, walletUids) = combinedCoinUids
-            return provider.getCoinPrices(coinUids, walletUids, currencyCode)
-                .doOnSuccess {
-                    handle(it)
-                }.map {}
+            return Single.just(coroutineScope.launch {
+                runCatching {
+                    handle(
+                        provider.getCoinPrices(
+                            coinUids,
+                            walletUids,
+                            currencyCode
+                        )
+                    )
+                }
+            }).map { }
         }
 
     private val allCoinUids: List<String>

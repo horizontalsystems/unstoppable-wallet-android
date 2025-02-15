@@ -241,13 +241,9 @@ open class ChartViewModel(
 
 val HsTimePeriod.stringResId: Int
     get() = when (this) {
-        HsTimePeriod.Day1, HsTimePeriod.Day -> R.string.CoinPage_TimeDuration_Day
-        HsTimePeriod.Week1, HsTimePeriod.Week -> R.string.CoinPage_TimeDuration_Week
-        HsTimePeriod.Week2 -> R.string.CoinPage_TimeDuration_TwoWeeks
-        HsTimePeriod.Month1, HsTimePeriod.Month -> R.string.CoinPage_TimeDuration_Month
-        HsTimePeriod.Month3 -> R.string.CoinPage_TimeDuration_Month3
-        HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
-        HsTimePeriod.Year1, HsTimePeriod.Year -> R.string.CoinPage_TimeDuration_Year
-        HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
-        HsTimePeriod.Year5 -> R.string.CoinPage_TimeDuration_Year5
+        HsTimePeriod.Hour1 -> R.string.CoinPage_TimeDuration_Hour
+        HsTimePeriod.Day1 -> R.string.CoinPage_TimeDuration_Day
+        HsTimePeriod.Week1 -> R.string.CoinPage_TimeDuration_Week
+        HsTimePeriod.Month1 -> R.string.CoinPage_TimeDuration_Month
+        HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
     }
