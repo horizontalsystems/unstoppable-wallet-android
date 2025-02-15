@@ -23,6 +23,7 @@ import cash.p.terminal.modules.send.SendUiState
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.solanakit.SolanaKit
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,7 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendSolanaViewModel(
-    val wallet: cash.p.terminal.wallet.Wallet,
+    val wallet: Wallet,
     val sendToken: Token,
     val feeToken: Token,
     val solBalance: BigDecimal,

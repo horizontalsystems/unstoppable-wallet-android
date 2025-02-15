@@ -155,9 +155,9 @@ class SolanaSendTransactionService(
             if (totalSolAmount > solBalance)
                 throw EvmError.InsufficientBalanceWithFee
 
-            adapter.send(decimalAmount, addressState.evmAddress!!)
+            val transaction = adapter.send(decimalAmount, addressState.evmAddress!!)
 
-            return SendTransactionResult.Common(SendResult.Sent())
+            return SendTransactionResult.Common(SendResult.Sent(transaction.transaction.hash))
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()
