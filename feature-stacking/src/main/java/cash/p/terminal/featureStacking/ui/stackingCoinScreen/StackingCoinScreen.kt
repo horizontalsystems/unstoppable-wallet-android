@@ -440,7 +440,8 @@ private fun PirateCoinScreenContentPreview() {
                 hasVolumes = false,
                 chartViewType = ChartViewType.Line,
                 chartInfoData = null,
-                considerAlwaysPositive = true
+                considerAlwaysPositive = true,
+                titleHidden = false
             ),
             getSelectedPointCallback = {
                 ChartModule.ChartHeaderView(
