@@ -9,9 +9,12 @@ import cash.p.terminal.core.order
 import cash.p.terminal.core.restoreSettingTypes
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsService
 import cash.p.terminal.modules.receive.FullCoinsProvider
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountType
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenType
 import kotlinx.coroutines.CoroutineScope
@@ -27,14 +30,14 @@ class ManageWalletsService(
     private val walletManager: IWalletManager,
     private val restoreSettingsService: RestoreSettingsService,
     private val fullCoinsProvider: FullCoinsProvider?,
-    private val account: cash.p.terminal.wallet.Account?
+    private val account: Account?
 ) : Clearable {
 
     private val _itemsFlow = MutableStateFlow<List<Item>>(listOf())
     val itemsFlow
         get() = _itemsFlow.asStateFlow()
 
-    val accountType: cash.p.terminal.wallet.AccountType?
+    val accountType: AccountType?
         get() = account?.type
 
     private var fullCoins = listOf<FullCoin>()
@@ -66,7 +69,7 @@ class ManageWalletsService(
         return walletManager.activeWallets.any { it.token == token }
     }
 
-    private fun sync(walletList: List<cash.p.terminal.wallet.Wallet>) {
+    private fun sync(walletList: List<Wallet>) {
         fullCoinsProvider?.setActiveWallets(walletList)
     }
 
@@ -102,7 +105,7 @@ class ManageWalletsService(
         val tokens = if (filter.isNotBlank()) {
             eligibleTokens
         } else if (
-            accountType !is cash.p.terminal.wallet.AccountType.HdExtendedKey &&
+            accountType !is AccountType.HdExtendedKey &&
             (eligibleTokens.all { it.type is TokenType.Derived } || eligibleTokens.all { it.type is TokenType.AddressTyped })
         ) {
             eligibleTokens.filter { isEnabled(it) || it.type.isDefault }
@@ -140,7 +143,7 @@ class ManageWalletsService(
         }
     }
 
-    private fun handleUpdated(wallets: List<cash.p.terminal.wallet.Wallet>) {
+    private fun handleUpdated(wallets: List<Wallet>) {
         sync(wallets)
 
         val newFullCons = fetchFullCoins()
@@ -172,7 +175,7 @@ class ManageWalletsService(
             restoreSettingsService.save(restoreSettings, account, token.blockchainType)
         }
 
-        walletManager.save(listOf(cash.p.terminal.wallet.Wallet(token, account)))
+        walletManager.save(listOf(Wallet(token, account)))
 
         updateSortedItems(token, true)
     }

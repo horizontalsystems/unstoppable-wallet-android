@@ -2130,6 +2130,7 @@
     <string name="no_active_stacking_cosanta_buy_more_descrition">Deposit %1$s token(s) and start earning in 24 hours.</string>
     <string name="tokens">tokens</string>
     <string name="buy_pirate">Buy PirateCash</string>
+    <string name="staking_details">Staking Details</string>
     <string name="buy_cosanta">Buy Cosanta</string>
     <string name="waiting_for_stacking">Staking of coins will begin no later than in %1$d hours</string>
     <string name="stacking_calculator">stacking calculator</string>

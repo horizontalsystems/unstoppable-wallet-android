@@ -187,7 +187,8 @@ private fun NoCoins(uiState: StackingCoinUIState, onBuyClicked: () -> Unit) {
             icon = R.drawable.ic_swap_24,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 12.dp)
+                .padding(top = 12.dp),
+            enabled = !uiState.isWatchAccount
         )
         Spacer(modifier = Modifier.weight(3f))
     }
@@ -231,7 +232,8 @@ private fun PirateCoinScreenWithGraph(
                     onClick = onBuyClicked,
                     icon = R.drawable.ic_swap_24,
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(1f),
+                    enabled = !uiState.isWatchAccount
                 )
                 ButtonPrimaryCircle(
                     icon = R.drawable.ic_calculator,

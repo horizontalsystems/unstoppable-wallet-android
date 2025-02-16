@@ -9,8 +9,11 @@ class WalletStorage(
     private val storage: IEnabledWalletStorage,
 ) : IWalletStorage {
 
+    private val map: HashMap<Wallet, Long> = HashMap()
+
     override fun wallets(account: Account): List<Wallet> {
         val enabledWallets = storage.enabledWallets(account.id)
+        map.clear()
 
         val queries = enabledWallets.mapNotNull { TokenQuery.fromId(it.tokenQueryId) }
         val tokens = marketKit.tokens(queries)
@@ -22,7 +25,7 @@ class WalletStorage(
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
             tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
-                return@mapNotNull Wallet(token, account)
+                return@mapNotNull Wallet(token, account).apply { map[this]= enabledWallet.id }
             }
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
@@ -32,16 +35,16 @@ class WalletStorage(
                 val token = Token(
                     coin = Coin(
                         uid = coinUid,
-                        name = enabledWallet.coinName!!,
-                        code = enabledWallet.coinCode!!,
+                        name = enabledWallet.coinName,
+                        code = enabledWallet.coinCode,
                         image = enabledWallet.coinImage
                     ),
                     blockchain = blockchain,
                     type = tokenQuery.tokenType,
-                    decimals = enabledWallet.coinDecimals!!
+                    decimals = enabledWallet.coinDecimals
                 )
 
-                Wallet(token, account)
+                Wallet(token, account).apply { map[this]= enabledWallet.id }
             } else {
                 null
             }
@@ -52,7 +55,6 @@ class WalletStorage(
         val enabledWallets = mutableListOf<EnabledWallet>()
 
         wallets.forEachIndexed { index, wallet ->
-
             enabledWallets.add(
                 enabledWallet(wallet, index)
             )
@@ -62,7 +64,7 @@ class WalletStorage(
     }
 
     override fun delete(wallets: List<Wallet>) {
-        storage.delete(wallets.map { enabledWallet(it) })
+        storage.delete(wallets.mapNotNull { map[it] })
     }
 
     override fun handle(newEnabledWallets: List<EnabledWallet>) {

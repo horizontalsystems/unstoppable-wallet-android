@@ -4,12 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
-import com.walletconnect.web3.wallet.client.Web3Wallet
 import cash.p.terminal.R
-import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.ILocalStorage
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.factories.uriScheme
 import cash.p.terminal.core.managers.PriceManager
 import cash.p.terminal.core.stats.StatEvent
@@ -20,16 +16,24 @@ import cash.p.terminal.core.utils.AddressUriParser
 import cash.p.terminal.core.utils.AddressUriResult
 import cash.p.terminal.core.utils.ToncoinUriParser
 import cash.p.terminal.entities.AddressUri
-import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.address.AddressHandlerFactory
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListModule
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.BalanceSortType
-import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.isCosanta
+import cash.p.terminal.wallet.isPirateCash
+import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
+import com.walletconnect.web3.wallet.client.Web3Wallet
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.entities.ViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -53,6 +57,7 @@ class BalanceViewModel(
     private var viewState: ViewState? = null
     private var balanceViewItems = listOf<BalanceViewItem2>()
     private var isRefreshing = false
+    private var showStackingForWatchAccount = false
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var errorMessage: String? = null
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
@@ -77,6 +82,7 @@ class BalanceViewModel(
                             it.coinPrice
                         )
                     })
+                    detectPirateAndCosanta(items)
 
                     refreshViewItems(items)
                 }
@@ -122,6 +128,7 @@ class BalanceViewModel(
         balanceTabButtonsEnabled = balanceTabButtonsEnabled,
         sortType = sortType,
         sortTypes = sortTypes,
+        showStackingForWatchAccount = showStackingForWatchAccount
     )
 
     private fun handleUpdatedBalanceViewType(balanceViewType: BalanceViewType) {
@@ -164,6 +171,11 @@ class BalanceViewModel(
             ensureActive()
             emitState()
         }
+    }
+
+    private fun detectPirateAndCosanta(balanceItems: List<BalanceItem>?) {
+        showStackingForWatchAccount =
+            balanceItems?.any { it.wallet.isPirateCash() || it.wallet.isCosanta() } ?: false
     }
 
     fun onHandleRoute() {
@@ -302,7 +314,8 @@ class BalanceViewModel(
             val chain = addressHandlerFactory.parserChain(null)
             val types = chain.supportedAddressHandlers(text)
             if (types.isEmpty()) {
-                errorMessage = cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Error_InvalidQrCode)
+                errorMessage =
+                    cash.p.terminal.strings.helpers.Translator.getString(R.string.Balance_Error_InvalidQrCode)
                 emitState()
                 return
             }
@@ -340,16 +353,16 @@ class BalanceViewModel(
 
     sealed class SyncError {
         class NetworkNotAvailable : SyncError()
-        class Dialog(val wallet: cash.p.terminal.wallet.Wallet, val errorMessage: String?) : SyncError()
+        class Dialog(val wallet: Wallet, val errorMessage: String?) : SyncError()
     }
 }
 
 sealed class ReceiveAllowedState {
     object Allowed : ReceiveAllowedState()
-    data class BackupRequired(val account: cash.p.terminal.wallet.Account) : ReceiveAllowedState()
+    data class BackupRequired(val account: Account) : ReceiveAllowedState()
 }
 
-class BackupRequiredError(val account: cash.p.terminal.wallet.Account, val coinTitle: String) : Error("Backup Required")
+class BackupRequiredError(val account: Account, val coinTitle: String) : Error("Backup Required")
 
 data class BalanceUiState(
     val balanceViewItems: List<BalanceViewItem2>,
@@ -359,6 +372,7 @@ data class BalanceUiState(
     val errorMessage: String?,
     val openSend: OpenSendTokenSelect? = null,
     val balanceTabButtonsEnabled: Boolean,
+    val showStackingForWatchAccount: Boolean,
     val sortType: BalanceSortType,
     val sortTypes: List<BalanceSortType>,
 )
@@ -387,7 +401,7 @@ enum class HeaderNote {
     NonRecommendedAccount
 }
 
-fun cash.p.terminal.wallet.Account.headerNote(nonRecommendedDismissed: Boolean): HeaderNote = when {
+fun Account.headerNote(nonRecommendedDismissed: Boolean): HeaderNote = when {
     nonStandard -> HeaderNote.NonStandardAccount
     nonRecommended -> if (nonRecommendedDismissed) HeaderNote.None else HeaderNote.NonRecommendedAccount
     else -> HeaderNote.None
