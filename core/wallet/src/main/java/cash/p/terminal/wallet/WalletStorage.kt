@@ -75,13 +75,13 @@ class WalletStorage(
 
     private fun enabledWallet(wallet: Wallet, index: Int? = null): EnabledWallet {
         return EnabledWallet(
-            wallet.token.tokenQuery.id,
-            wallet.account.id,
-            index,
-            wallet.coin.name,
-            wallet.coin.code,
-            wallet.decimal,
-            wallet.coin.image
+            tokenQueryId = wallet.token.tokenQuery.id,
+            accountId = wallet.account.id,
+            walletOrder = index,
+            coinName = wallet.coin.name,
+            coinCode = wallet.coin.code,
+            coinDecimals = wallet.decimal,
+            coinImage = wallet.coin.image
         )
     }
 }

@@ -39,6 +39,7 @@ import cash.p.terminal.core.storage.migrations.Migration_60_61
 import cash.p.terminal.core.storage.migrations.Migration_61_62
 import cash.p.terminal.core.storage.migrations.Migration_62_63
 import cash.p.terminal.core.storage.migrations.Migration_63_64
+import cash.p.terminal.core.storage.migrations.Migration_64_65
 import cash.p.terminal.entities.ActiveAccount
 import cash.p.terminal.entities.BlockchainSettingRecord
 import cash.p.terminal.entities.ChangeNowTransaction
@@ -67,7 +68,7 @@ import cash.p.terminal.wallet.entities.AccountRecord
 import cash.p.terminal.wallet.entities.EnabledWallet
 
 @Database(
-    version = 64,
+    version = 65,
     exportSchema = false,
     entities = [
         EnabledWallet::class,
@@ -170,6 +171,7 @@ abstract class AppDatabase : RoomDatabase() {
                             Migration_61_62,
                             Migration_62_63,
                             Migration_63_64,
+                            Migration_64_65,
                     )
                     .build()
         }
