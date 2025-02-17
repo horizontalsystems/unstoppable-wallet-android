@@ -57,11 +57,8 @@ class StatsManager(
     private val appConfigProvider: AppConfigProvider,
     private val backgroundManager: BackgroundManager,
 ) {
-
     private val scope = CoroutineScope(Dispatchers.IO)
-
-    var uiStatsEnabled = areUiStatsEnabled()
-        private set
+    private var uiStatsEnabled = areUiStatsEnabled()
 
     private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
     val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
