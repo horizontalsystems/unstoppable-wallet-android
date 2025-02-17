@@ -37,6 +37,7 @@ import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
 import io.horizontalsystems.bankwallet.core.address.AddressCheckResult
 import io.horizontalsystems.bankwallet.core.address.AddressCheckType
+import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.core.requireInput
 import io.horizontalsystems.bankwallet.core.slideFromBottom
@@ -59,6 +60,8 @@ import io.horizontalsystems.bankwallet.ui.compose.components.subhead1_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_grey
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_lucian
 import io.horizontalsystems.bankwallet.ui.compose.components.subhead2_remus
+import io.horizontalsystems.subscriptions.core.AddressBlacklist
+import io.horizontalsystems.subscriptions.core.IPaidAction
 import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
@@ -138,7 +141,11 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                         uiState.addressValidationError,
                         uiState.checkResults,
                         navController
-                    )
+                    ) { paidAction ->
+                        navController.paidAction(paidAction) {
+                            viewModel.onEnterAddress(uiState.value)
+                        }
+                    }
                 }
             }
             ButtonsGroupWithShade {
@@ -173,7 +180,8 @@ fun AddressCheck(
     addressValidationInProgress: Boolean,
     addressValidationError: Throwable?,
     checkResults: Map<AddressCheckType, AddressCheckData>,
-    navController: NavController
+    navController: NavController,
+    onPaidAction: (action: IPaidAction) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -198,7 +206,8 @@ fun AddressCheck(
                 checkType = addressCheckType,
                 inProgress = checkData.inProgress,
                 checkResult = checkData.checkResult,
-                navController
+                navController,
+                onPaidAction
             )
         }
     }
@@ -245,7 +254,8 @@ private fun CheckCell(
     checkType: AddressCheckType,
     inProgress: Boolean,
     checkResult: AddressCheckResult,
-    navController: NavController
+    navController: NavController,
+    onPaidAction: (action: IPaidAction) -> Unit
 ) {
     val onClickInfo: (() -> Unit)? = when (checkResult) {
         AddressCheckResult.Clear -> {
@@ -254,6 +264,12 @@ private fun CheckCell(
                     R.id.feeSettingsInfoDialog,
                     FeeSettingsInfoDialog.Input(Translator.getString(checkType.clearInfoTitle), Translator.getString(checkType.clearInfoDescription))
                 )
+            }
+        }
+
+        AddressCheckResult.NotAllowed -> {
+            {
+                onPaidAction(AddressBlacklist)
             }
         }
 
