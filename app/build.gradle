@@ -19,7 +19,7 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 127
+        versionCode 128
         versionName "0.42.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "de", "es", "en", "fa", "fr", "ko", "pt", "pt-rBR", "ru", "tr", "zh"
@@ -302,7 +302,7 @@ dependencies {
 
     // Wallet kits
     implementation 'com.github.horizontalsystems:ton-kit-android:1cb4c1e'
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:4a34f53'
+    implementation 'com.github.horizontalsystems:bitcoin-kit-android:3f3194f'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:201296c'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:market-kit-android:fdbf841'
