@@ -82,6 +82,7 @@ class LocalStorageManager(
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
     private val TRANSACTION_AUTO_HIDE_ENABLED = "transaction_auto_hide_enabled"
+    private val TRANSFER_PASSCODE_ENABLED = "transfer_passcode_enabled"
     private val TRANSACTION_DISPLAY_LEVEL = "transaction_display_level"
     private val TRANSACTION_HIDE_SECRET_PIN = "transaction_hide_secret_pin"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS =
@@ -388,6 +389,12 @@ class LocalStorageManager(
                     TRANSACTION_HIDE_SECRET_PIN,
                     value?.let { it.value })
                 .apply()
+        }
+
+    override var transferPasscodeEnabled: Boolean
+        get() = preferences.getBoolean(TRANSFER_PASSCODE_ENABLED, false)
+        set(value) {
+            preferences.edit().putBoolean(TRANSFER_PASSCODE_ENABLED, value).commit()
         }
 
     override var balanceTotalCoinUid: String?

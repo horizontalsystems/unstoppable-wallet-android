@@ -3,7 +3,6 @@ package cash.p.terminal.modules.settings.security.passcode
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
-import cash.p.terminal.core.getKoinInstance
 
 object SecurityPasscodeSettingsModule {
 
@@ -14,8 +13,7 @@ object SecurityPasscodeSettingsModule {
                 systemInfoManager = App.systemInfoManager,
                 pinComponent = App.pinComponent,
                 balanceHiddenManager = App.balanceHiddenManager,
-                localStorage = App.localStorage,
-                transactionHiddenManager = getKoinInstance()
+                localStorage = App.localStorage
             ) as T
         }
     }

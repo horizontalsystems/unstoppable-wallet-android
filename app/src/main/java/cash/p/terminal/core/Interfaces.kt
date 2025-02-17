@@ -83,9 +83,13 @@ interface ILocalStorage {
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
     var balanceAutoHideEnabled: Boolean
+
     var transactionHideEnabled: Boolean
     var transactionDisplayLevel: TransactionDisplayLevel
     var transactionHideSecretPin: EncryptedString?
+
+    var transferPasscodeEnabled: Boolean
+
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
     var mainShowedOnce: Boolean

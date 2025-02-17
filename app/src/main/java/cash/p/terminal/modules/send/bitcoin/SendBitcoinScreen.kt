@@ -24,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
+import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.navigation.slideFromRight
@@ -36,6 +37,8 @@ import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.fee.HSFeeRaw
 import cash.p.terminal.modules.memo.HSMemoInput
+import cash.p.terminal.modules.pin.ConfirmPinFragment
+import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.bitcoin.advanced.BtcTransactionInputSortInfoScreen
 import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
@@ -78,13 +81,13 @@ fun SendBitcoinNavHost(
     ) {
         composable(SendBtcPage) {
             SendBitcoinScreen(
-                title,
-                fragmentNavController,
-                navController,
-                viewModel,
-                amountInputModeViewModel,
-                sendEntryPointDestId,
-                prefilledData,
+                title = title,
+                fragmentNavController = fragmentNavController,
+                composeNavController = navController,
+                viewModel = viewModel,
+                amountInputModeViewModel = amountInputModeViewModel,
+                sendEntryPointDestId = sendEntryPointDestId,
+                prefilledData = prefilledData,
             )
         }
         composablePage(SendBtcAdvancedSettingsPage) {
@@ -253,13 +256,20 @@ fun SendBitcoinScreen(
                         .padding(horizontal = 16.dp, vertical = 24.dp),
                     title = stringResource(R.string.Send_DialogProceed),
                     onClick = {
-                        fragmentNavController.slideFromRight(
-                            R.id.sendConfirmation,
-                            SendConfirmationFragment.Input(
-                                SendConfirmationFragment.Type.Bitcoin,
-                                sendEntryPointDestId
+                        fragmentNavController.authorizedAction(
+                            ConfirmPinFragment.InputConfirm(
+                                descriptionResId = R.string.Unlock_EnterPasscode,
+                                pinType = PinType.TRANSFER
                             )
-                        )
+                        ) {
+                            fragmentNavController.slideFromRight(
+                                R.id.sendConfirmation,
+                                SendConfirmationFragment.Input(
+                                    SendConfirmationFragment.Type.Bitcoin,
+                                    sendEntryPointDestId
+                                )
+                            )
+                        }
                     },
                     enabled = proceedEnabled
                 )

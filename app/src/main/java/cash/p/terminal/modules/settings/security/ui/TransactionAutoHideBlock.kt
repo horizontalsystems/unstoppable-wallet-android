@@ -166,7 +166,7 @@ internal fun TransactionAutoHideBlock(
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TransactionAutoHideBlockPreview() {
+private fun TransactionAutoHideBlockPreview() {
     var transactionAutoHideEnabled by remember { mutableStateOf(true) }
     ComposeAppTheme {
         Column(modifier = Modifier.padding(16.dp)) {

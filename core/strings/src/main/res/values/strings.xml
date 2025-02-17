@@ -1058,6 +1058,7 @@
     <string name="Appearance_BalanceAutoHide">Balance Auto Hide</string>
     <string name="show_all_transactions">Show All Transactions</string>
     <string name="Appearance_TransactionAutoHide">Transaction Auto Hide</string>
+    <string name="appearance_transfer_passcode">Passcode for transfer</string>
     <string name="display">Display</string>
     <string name="display_nothing">Nothing</string>
     <string name="display_last_4_transactions">Last 4 transactions</string>
@@ -1065,6 +1066,7 @@
     <string name="display_last_1_transaction">Last transaction</string>
     <string name="Appearance_BalanceAutoHide_Description">Automatically hides balance each time the app is opened, regardless of previous preferences.</string>
     <string name="Appearance_TransactionAutoHide_Description">Security Mode: hides transactions and allows you to set a separate passcode for unlocking them.</string>
+    <string name="appearance_transfer_passcode_description">This setting requires entering a passcode before sending assets, providing additional protection for your assets in case your device with an unlocked app falls into the wrong hands.</string>
     <string name="Appearance_PriceChangeInterval">Price Change %</string>
 
     <string name="BalanceViewType_CoinValue">Coin Value</string>
@@ -2025,6 +2027,7 @@
     <string name="Unlock_Passcode">Passcode</string>
     <string name="Unlock_EnterPasscode">Enter Passcode</string>
     <string name="Unlock_EnterPasscode_Transactions_Hide">Enter Passcode for \“Transactions Auto Hide\”</string>
+    <string name="Unlock_EnterPasscode_Transfer">Enter a passcode to enable \“Passcode for transfer\”</string>
     <string name="Unlock_Incorrect">Incorrect</string>
     <string name="Unlock_BiometricScanner">Biometrics Scanner</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Enter passcode or try again later</string>
