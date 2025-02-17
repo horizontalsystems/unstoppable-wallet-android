@@ -17,8 +17,12 @@ class ChainalysisAddressValidator(
         ).create(ChainalysisApi::class.java)
     }
 
-    suspend fun check(address: Address): List<Identification> {
-        return apiService.address(address.hex).identifications
+    suspend fun check(address: Address): AddressCheckResult {
+        val response = apiService.address(address.hex)
+        return if (response.identifications.isEmpty())
+            AddressCheckResult.Clear
+        else
+            AddressCheckResult.Detected
     }
 
     data class ChainalysisApiResponse(

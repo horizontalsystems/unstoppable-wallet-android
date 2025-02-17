@@ -120,6 +120,8 @@ android {
             resValue "string", "blocksDecodedEthereumRpc", "https://api-dev.blocksdecoded.com/v1/ethereum-rpc/mainnet"
             resValue "string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/"
             resValue "string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4"
+            resValue "string", "hashDitBaseUrl", "https://api.diting.pro/v2/hashdit/"
+            resValue "string", "hashDitApiKey", "KuyxZfvJXFrpAcztshhYqeWaRusxyGRDDhFYkeIw"
         }
 
         release {
@@ -153,6 +155,8 @@ android {
             resValue "string", "blocksDecodedEthereumRpc", "https://api.blocksdecoded.com/v1/ethereum-rpc/mainnet"
             resValue "string", "chainalysisBaseUrl", "https://public.chainalysis.com/api/v1/"
             resValue "string", "chainalysisApiKey", "928bb256db73f1cb93e1b3366a145d9fbe06e28581c8b665b82ad70bbfef1db4"
+            resValue "string", "hashDitBaseUrl", "https://api.diting.pro/v2/hashdit/"
+            resValue "string", "hashDitApiKey", "KuyxZfvJXFrpAcztshhYqeWaRusxyGRDDhFYkeIw"
         }
     }
 

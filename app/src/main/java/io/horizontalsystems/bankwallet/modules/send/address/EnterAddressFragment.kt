@@ -321,7 +321,7 @@ private fun AddressCheckCell(
 @Composable
 fun CheckValue(
     inProgress: Boolean,
-    validationResult: AddressCheckResult,
+    checkResult: AddressCheckResult,
 ) {
     if (inProgress) {
         CircularProgressIndicator(
@@ -330,9 +330,9 @@ fun CheckValue(
             strokeWidth = 2.dp
         )
     } else {
-        when (validationResult) {
+        when (checkResult) {
             AddressCheckResult.Clear -> {
-                subhead2_remus(stringResource(validationResult.title))
+                subhead2_remus(stringResource(checkResult.title))
                 Icon(
                     modifier = Modifier.padding(start = 10.dp),
                     painter = painterResource(R.drawable.ic_info_20),
@@ -341,9 +341,13 @@ fun CheckValue(
                 )
             }
 
-            AddressCheckResult.Detected -> subhead2_lucian(stringResource(validationResult.title))
+            AddressCheckResult.Detected -> {
+                subhead2_lucian(stringResource(checkResult.title))
+            }
 
-            else -> subhead2_grey(stringResource(R.string.NotAvailable))
+            else -> {
+                subhead2_grey(stringResource(R.string.NotAvailable))
+            }
         }
     }
 }
