@@ -115,6 +115,7 @@
     <string name="Balance_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Balance_Sort_Az">نام</string>
     <string name="Balance_Sort_24hPriceChange">تغییر قیمت</string>
+    <string name="Balance_ProcessingBalance_Title">پردازش</string>
     <string name="Balance_SendHint_CoinName">نام سکه</string>
     <!--Send NFT-->
     <string name="SendNft_Title">ارسال</string>
@@ -124,8 +125,10 @@
     <string name="Send_Fee">هزينه</string>
     <string name="Send_Button_Paste">چسباندن</string>
     <string name="Send_Button_Max">حداکثر</string>
+    <string name="Send_Utxo_AvailableBalance">موجودی در دسترس</string>
     <string name="Send_Confirmation_Title">تایید</string>
     <string name="Send_Confirmation_YouSend">شما فرستادید</string>
+    <string name="Send_Confirmation_Mint">نعناع</string>
     <string name="Send_Confirmation_To">به</string>
     <string name="Send_Confirmation_Method">روش</string>
     <string name="Send_Confirmation_Send_Button">ارسال</string>
@@ -166,6 +169,9 @@
     <string name="FeeInfo_FastDescription">برای تراکنش هایی که اولویت مهم است، استفاده از ارزش کارمزد بالا را توصیه می کنیم. انتظار می رود که یک تراکنش در عرض 10 دقیقه برای بیت کوین و در عرض 1 تا 2 دقیقه برای اتریوم کافی باشد.</string>
     <string name="FeeInfo_TronFee_Title">هزينه</string>
     <!--Tron-->
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">اتصال جدید</string>
+    <string name="TonConnect_Error_InvalidUrl">آدرس URL نامعتبر است</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">وضعیت</string>
     <string name="WalletConnect_Approve_Hint">با کلیک کردن بر روی اتصال، به این برنامه اجازه می دهید آدرس عمومی شما را مشاهده کند. این مرحله امنیتی مهمی برای محافظت از داده های شما در برابر خطرات احتمالی کلاهبرداری است.</string>
@@ -335,6 +341,9 @@
     <string name="Settings_Appearance">ظاهر</string>
     <string name="Settings_PersonalSupport_Request">درخواست</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">۱ ساعت</string>
+    <!--Premium Banner-->
+    <!--Setting Subscription -->
+    <!--Premium Screens-->
     <string name="Appearance_AppIcon">نماد برنامه</string>
     <string name="BalanceViewType_CoinValue">ارزش سکه</string>
     <string name="BalanceViewType_FiatValue">ارزش فیات</string>
@@ -481,6 +490,7 @@
     <string name="Coin_Analytics_Indicators_Risky">پرمخاطره</string>
     <string name="CoinAnalytics_CountItems">%d مورد</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">پرمخاطره</string>
+    <string name="TechnicalAdvice_Details">جزئیات</string>
     <string name="ActivateSubscription_Address">آدرس</string>
     <!-- NFT Collection -->
     <!-- NFT Collection Events -->
