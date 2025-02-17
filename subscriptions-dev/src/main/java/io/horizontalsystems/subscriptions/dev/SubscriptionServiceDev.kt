@@ -11,6 +11,7 @@ import io.horizontalsystems.subscriptions.core.Subscription
 import io.horizontalsystems.subscriptions.core.SubscriptionService
 import io.horizontalsystems.subscriptions.core.UserSubscription
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import java.util.UUID
 
 class SubscriptionServiceDev(private val context: Context) : SubscriptionService {
@@ -19,7 +20,18 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
     }
 
     override var predefinedSubscriptions: List<Subscription> = listOf()
-    override val activeSubscriptionStateFlow = MutableStateFlow(null)
+        set(value) {
+            field = value
+
+            activeSubscriptionStateFlow.update {
+                getActiveSubscriptions().firstOrNull()
+            }
+        }
+    override val activeSubscriptionStateFlow = MutableStateFlow(getActiveSubscriptions().firstOrNull())
+
+    override fun launchManageSubscriptionScreen(context: Context) {
+        setActiveSubscription(null)
+    }
 
     override suspend fun onResume() = Unit
 
@@ -27,8 +39,12 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
         return prefs.getString(KEY_ACTIVE_SUBSCRIPTION, null) != null
     }
 
-    private fun setActiveSubscription(subscription: String?) {
-        prefs.edit().putString(KEY_ACTIVE_SUBSCRIPTION, subscription).commit()
+    private fun setActiveSubscription(subscriptionId: String?) {
+        prefs.edit().putString(KEY_ACTIVE_SUBSCRIPTION, subscriptionId).apply()
+
+        activeSubscriptionStateFlow.update {
+            getActiveSubscriptions().firstOrNull()
+        }
     }
 
     override fun getBasePlans(subscriptionId: String): List<BasePlan> =
