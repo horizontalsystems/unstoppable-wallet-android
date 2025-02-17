@@ -60,6 +60,17 @@ class StatsManager(
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
+    var uiStatsEnabled = areUiStatsEnabled()
+        private set
+
+    private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
+    val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
+
+    private val gson by lazy { Gson() }
+    private val executor = Executors.newCachedThreadPool()
+    private val syncInterval = 60 * 60 // 1H in seconds
+    private val sqliteMaxVariableNumber = 999
+
     init {
         scope.launch {
             backgroundManager.stateFlow.collect { state ->
@@ -75,17 +86,6 @@ class StatsManager(
             }
         }
     }
-
-    var uiStatsEnabled = areUiStatsEnabled()
-        private set
-
-    private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
-    val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
-
-    private val gson by lazy { Gson() }
-    private val executor = Executors.newCachedThreadPool()
-    private val syncInterval = 60 * 60 // 1H in seconds
-    private val sqliteMaxVariableNumber = 999
 
     private fun areUiStatsEnabled(): Boolean {
         //not premium user
