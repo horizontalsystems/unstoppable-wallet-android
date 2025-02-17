@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.address
 
+import HashDitAddressValidator
 import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.SpamManager
 import io.horizontalsystems.bankwallet.entities.Address
@@ -27,7 +28,7 @@ class PhishingAddressChecker(
                     AddressCheckResult.Detected
                 else
                     AddressCheckResult.Clear
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 AddressCheckResult.NotAvailable
             }
         }
@@ -38,15 +39,40 @@ class PhishingAddressChecker(
     }
 }
 
-class BlacklistAddressChecker : AddressChecker {
+class BlacklistAddressChecker(
+    private val hashDitAddressValidator: HashDitAddressValidator,
+    private val eip20AddressValidator: Eip20AddressValidator
+) : AddressChecker {
     override suspend fun checkAddress(address: Address, token: Token): AddressCheckResult {
         if (!UserSubscriptionManager.isActionAllowed(AddressBlacklist)) return AddressCheckResult.NotAllowed
 
-        return AddressCheckResult.NotAvailable
+        return try {
+            val hashDitCheckResult = hashDitAddressValidator.check(address, token)
+            val eip20CheckResult = eip20AddressValidator.check(address, token)
+
+            val checkResults = listOf(hashDitCheckResult, eip20CheckResult)
+
+            when {
+                checkResults.contains(AddressCheckResult.Detected) -> {
+                    AddressCheckResult.Detected
+                }
+
+                checkResults.contains(AddressCheckResult.Clear) &&
+                        checkResults.all { it == AddressCheckResult.Clear || it == AddressCheckResult.NotSupported } -> {
+                    AddressCheckResult.Clear
+                }
+
+                else -> {
+                    AddressCheckResult.NotAvailable
+                }
+            }
+        } catch (e: Throwable) {
+            AddressCheckResult.NotAvailable
+        }
     }
 
     override fun supports(token: Token): Boolean {
-        return false
+        return hashDitAddressValidator.supports(token) || eip20AddressValidator.supports(token)
     }
 }
 
@@ -58,12 +84,8 @@ class SanctionAddressChecker(
             return AddressCheckResult.NotAllowed
 
         return try {
-            val identifications = chainalysisAddressValidator.check(address)
-            if (identifications.isNotEmpty())
-                AddressCheckResult.Detected
-            else
-                AddressCheckResult.Clear
-        } catch (e: Exception) {
+            chainalysisAddressValidator.check(address)
+        } catch (e: Throwable) {
             AddressCheckResult.NotAvailable
         }
     }

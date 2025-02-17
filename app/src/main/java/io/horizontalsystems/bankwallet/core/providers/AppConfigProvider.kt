@@ -167,4 +167,12 @@ class AppConfigProvider(localStorage: ILocalStorage) {
         Translator.getString(R.string.chainalysisApiKey)
     }
 
+    val hashDitBaseUrl by lazy {
+        Translator.getString(R.string.hashDitBaseUrl)
+    }
+
+    val hashDitApiKey by lazy {
+        Translator.getString(R.string.hashDitApiKey)
+    }
+
 }

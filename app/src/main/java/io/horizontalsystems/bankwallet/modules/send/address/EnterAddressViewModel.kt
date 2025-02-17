@@ -47,7 +47,7 @@ class EnterAddressViewModel(
     private var addressValidationInProgress: Boolean = false
     private var addressValidationError: Throwable? = null
     private val availableCheckTypes = addressCheckManager.availableCheckTypes(token)
-    private val checkResults: MutableMap<AddressCheckType, AddressCheckData> =
+    private var checkResults: Map<AddressCheckType, AddressCheckData> =
         availableCheckTypes.associateWith { AddressCheckData(true) }.toMutableMap()
     private var value = ""
     private var inputState: DataState<Address>? = null
@@ -84,9 +84,7 @@ class EnterAddressViewModel(
         inputState = null
         addressValidationInProgress = true
         addressValidationError = null
-        availableCheckTypes.forEach { type ->
-            checkResults[type] = AddressCheckData(true)
-        }
+        checkResults = availableCheckTypes.associateWith { AddressCheckData(true) }
 
         if (value.isBlank()) {
             this.value = ""
@@ -131,15 +129,15 @@ class EnterAddressViewModel(
                 }
 
                 if (addressValidationError != null) {
-                    availableCheckTypes.forEach { type ->
-                        checkResults[type] = AddressCheckData(false)
-                    }
+                    checkResults = availableCheckTypes.associateWith { AddressCheckData(false) }
                     emitState()
                 } else {
                     availableCheckTypes.forEach { type ->
                         val checkResult = addressCheckManager.check(type, address, token)
                         ensureActive()
-                        checkResults[type] = AddressCheckData(false, checkResult)
+                        checkResults = checkResults.toMutableMap().apply {
+                            this[type] = AddressCheckData(false, checkResult)
+                        }
                         emitState()
                     }
                 }
@@ -183,7 +181,7 @@ class EnterAddressViewModel(
             val addressUriParser = AddressUriParser(wallet.token.blockchainType, wallet.token.type)
             val recentAddressManager = RecentAddressManager(App.accountManager, App.appDatabase.recentAddressDao())
             val addressValidator = AddressValidatorFactory.get(wallet)
-            val addressCheckManager = AddressCheckManager(App.spamManager, App.appConfigProvider)
+            val addressCheckManager = AddressCheckManager(App.spamManager, App.appConfigProvider, App.evmBlockchainManager, App.evmSyncSourceManager)
             return EnterAddressViewModel(
                 wallet.token,
                 addressUriParser,
