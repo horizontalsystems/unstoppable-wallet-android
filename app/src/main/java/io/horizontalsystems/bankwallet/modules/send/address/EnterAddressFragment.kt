@@ -132,7 +132,11 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                 }
 
                 if (uiState.value.isBlank()) {
-                    AddressSuggestions(uiState.recentAddress, uiState.recentContact, uiState.contacts) {
+                    AddressSuggestions(
+                        uiState.recentAddress,
+                        uiState.recentContact,
+                        uiState.contacts
+                    ) {
                         viewModel.onEnterAddress(it)
                     }
                 } else {
@@ -163,6 +167,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                                     sendEntryPointDestId = input.sendEntryPointDestId ?: R.id.enterAddressFragment,
                                     title = input.title,
                                     address = it,
+                                    riskyAddress = uiState.checkResults.any { result -> result.value.checkResult == AddressCheckResult.Detected },
                                     amount = uiState.amount
                                 )
                             )
@@ -226,7 +231,8 @@ private fun Errors(
             modifier = Modifier.padding(horizontal = 16.dp),
             icon = R.drawable.ic_attention_20,
             title = stringResource(R.string.SwapSettings_Error_InvalidAddress),
-            text = addressValidationError.message ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
+            text = addressValidationError.message
+                ?: stringResource(R.string.SwapSettings_Error_InvalidAddress)
         )
         VSpacer(32.dp)
     } else {
@@ -262,7 +268,10 @@ private fun CheckCell(
             {
                 navController.slideFromBottom(
                     R.id.feeSettingsInfoDialog,
-                    FeeSettingsInfoDialog.Input(Translator.getString(checkType.clearInfoTitle), Translator.getString(checkType.clearInfoDescription))
+                    FeeSettingsInfoDialog.Input(
+                        Translator.getString(checkType.clearInfoTitle),
+                        Translator.getString(checkType.clearInfoDescription)
+                    )
                 )
             }
         }
@@ -378,7 +387,12 @@ fun CheckLocked() {
 }
 
 @Composable
-fun AddressSuggestions(recent: String?, recentContact: SContact?, contacts: List<SContact>, onClick: (String) -> Unit) {
+fun AddressSuggestions(
+    recent: String?,
+    recentContact: SContact?,
+    contacts: List<SContact>,
+    onClick: (String) -> Unit
+) {
     if (recentContact != null) {
         Column(
             modifier = Modifier

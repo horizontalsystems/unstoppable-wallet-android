@@ -371,6 +371,9 @@
     <dialog
         android:id="@+id/configuredTokenInfo"
         android:name="io.horizontalsystems.bankwallet.modules.configuredtoken.ConfiguredTokenInfoDialog" />
+    <dialog
+        android:id="@+id/addressRiskyBottomSheetAlert"
+        android:name="io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert" />
 
     <!--Wallet Connect-->
     <fragment
