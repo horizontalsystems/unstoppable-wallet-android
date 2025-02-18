@@ -7,11 +7,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
+import io.horizontalsystems.bankwallet.core.providers.Translator
+import io.horizontalsystems.bankwallet.core.slideFromBottomForResult
 import io.horizontalsystems.bankwallet.core.slideFromRight
 import io.horizontalsystems.bankwallet.entities.ViewState
 import io.horizontalsystems.bankwallet.modules.address.AddressParserModule
@@ -22,6 +25,7 @@ import io.horizontalsystems.bankwallet.modules.amount.HSAmountInput
 import io.horizontalsystems.bankwallet.modules.availablebalance.AvailableBalance
 import io.horizontalsystems.bankwallet.modules.fee.HSFee
 import io.horizontalsystems.bankwallet.modules.memo.HSMemoInput
+import io.horizontalsystems.bankwallet.modules.send.AddressRiskyBottomSheetAlert
 import io.horizontalsystems.bankwallet.modules.send.SendConfirmationFragment
 import io.horizontalsystems.bankwallet.modules.send.SendScreen
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
@@ -37,6 +41,7 @@ fun SendTonScreen(
     amountInputModeViewModel: AmountInputModeViewModel,
     sendEntryPointDestId: Int,
     amount: BigDecimal?,
+    riskyAddress: Boolean
 ) {
     val wallet = viewModel.wallet
     val uiState = viewModel.uiState
@@ -47,6 +52,7 @@ fun SendTonScreen(
     val fee = uiState.fee
     val feeInProgress = uiState.feeInProgress
     val amountInputType = amountInputModeViewModel.inputType
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val paymentAddressViewModel = viewModel<AddressParserViewModel>(
         factory = AddressParserModule.Factory(wallet.token, amount)
@@ -68,7 +74,8 @@ fun SendTonScreen(
             if (uiState.showAddressInput) {
                 HSAddressCell(
                     title = stringResource(R.string.Send_Confirmation_To),
-                    value = uiState.address.hex
+                    value = uiState.address.hex,
+                    riskyAddress = riskyAddress
                 ) {
                     navController.popBackStack()
                 }
@@ -124,19 +131,37 @@ fun SendTonScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 16.dp),
-                title = stringResource(R.string.Send_DialogProceed),
+                title = stringResource(R.string.Button_Check),
                 onClick = {
-                    navController.slideFromRight(
-                        R.id.sendConfirmation,
-                        SendConfirmationFragment.Input(
-                            SendConfirmationFragment.Type.Ton,
-                            sendEntryPointDestId
-                        )
-                    )
+                    if (riskyAddress) {
+                        keyboardController?.hide()
+                        navController.slideFromBottomForResult<AddressRiskyBottomSheetAlert.Result>(
+                            R.id.addressRiskyBottomSheetAlert,
+                            AddressRiskyBottomSheetAlert.Input(
+                                alertText = Translator.getString(R.string.Send_RiskyAddress_AlertText)
+                            )
+                        ) {
+                            openConfirm(navController, sendEntryPointDestId)
+                        }
+                    } else {
+                        openConfirm(navController, sendEntryPointDestId)
+                    }
                 },
                 enabled = proceedEnabled
             )
         }
     }
+}
 
+private fun openConfirm(
+    navController: NavController,
+    sendEntryPointDestId: Int
+) {
+    navController.slideFromRight(
+        R.id.sendConfirmation,
+        SendConfirmationFragment.Input(
+            SendConfirmationFragment.Type.Ton,
+            sendEntryPointDestId
+        )
+    )
 }
