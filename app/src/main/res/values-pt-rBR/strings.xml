@@ -66,6 +66,7 @@
     <string name="Intro_Wallet_Screen4Description">Não vaze seus dados privados e financeiros para o mundo.</string>
     <!--Rooted Device-->
     <string name="RootedDevice_Button_Understand">Estou ciente</string>
+    <!--Welcome-->
     <!--Create Wallet-->
     <string name="CreateWallet_Advanced_Title">Avançado</string>
     <string name="CreateWallet_Mnemonic">Frase de Recuperação</string>
@@ -128,6 +129,7 @@
     <string name="ImportCexAccountBinance_Description">Por favor, forneça as Chaves da API e Segredo da API para vincular o seu troco.</string>
     <string name="ImportCexAccountBinance_ApiKey">Chave de API</string>
     <string name="ImportCexAccountBinance_SecretKey">Chave secreta</string>
+    <!--Backup-->
     <!--Market-->
     <string name="Market_Field_MarketCap">Cap. de mercado</string>
     <string name="Market_Field_Volume">Volume</string>
@@ -173,6 +175,7 @@
     <string name="Market_Top_200">Top 200</string>
     <string name="Market_Top_300">Top 300</string>
     <string name="Market_Top_500">Top 500</string>
+    <!--Market Overview-->
     <!--Market Top Platforms-->
     <string name="MarketTopPlatforms_Title">Melhores Plataformas</string>
     <string name="MarketTopPlatforms_Protocols">Protocolos: %s</string>
@@ -209,6 +212,7 @@
     <string name="Market_Filter_PricePeriod">Período de Preço</string>
     <string name="Market_Filter_TradingSignals">Sinais de negociação</string>
     <string name="Market_Filter_PriceChange">Mudança de Preço</string>
+    <string name="Market_Filter_Sectors">Setores</string>
     <string name="Market_PriceChange_24H">24 Horas</string>
     <string name="Market_PriceChange_Utc">Meia-noite UTC</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -235,6 +239,7 @@
     <string name="Market_Filter_Top_300">Top 300</string>
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
     <string name="Market_Filter_ShowResults_Counter">Mostrar Resultados: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
@@ -272,6 +277,7 @@
     <string name="Market_Sorting_Losers">Perdedores</string>
     <string name="Market_Sorting_HighestCap">Maior capitalização</string>
     <string name="Market_Sorting_LowestCap">Menor capitalização</string>
+    <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-Cadeia</string>
     <!--Balance-->
@@ -305,6 +311,7 @@
     <string name="Balance_Receive_Amount">Montante</string>
     <string name="Balance_Receive_SetAmount">Definir Quantidade</string>
     <string name="Balance_LockedAmount_Title">Bloqueado</string>
+    <string name="Balance_ProcessingBalance_Title">Processando</string>
     <string name="Balance_NotRelayedAmount_Title">Transmissão</string>
     <string name="Balance_Receive_Memo">Memo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossível Reconhecer</string>
@@ -333,12 +340,17 @@
     <string name="Send_Rbf_Description">Essa opção permite que você reenvie uma transação travada aumentando o valor da taxa.</string>
     <string name="Send_RbfEnabled">Ativado</string>
     <string name="Send_RbfDisabled">Desativado</string>
+    <string name="Send_Utxo_AvailableBalance">Saldo Disponível</string>
+    <string name="Send_Utxo_UnselectAll">Desmarcar Tudo</string>
+    <string name="Send_Utxo_SelectAll">Marcar tudo</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_YouSend">Enviar</string>
+    <string name="Send_Confirmation_Mint">Mint</string>
     <string name="Send_Confirmation_To">Para</string>
     <string name="Send_Confirmation_Own">Próprio</string>
     <string name="Send_Confirmation_Method">Método</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
+    <string name="Send_Address_Error_CheckLocked">Bloqueado</string>
     <string name="Send_Success">\u2713 Enviado</string>
     <string name="ScanQr_CameraPermission_Title">Permissão da câmera</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Por favor, permita acesso à câmera</string>
@@ -417,6 +429,11 @@
     <string name="Tron_ZeroAmountTrxNotAllowed">Não é possível transferir 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Conta Não Ativa</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Novas carteiras TRON requerem um depósito mínimo de 1 TRX para se tornarem ativas. Carteiras inativas podem armazenar e receber tokens, mas não atualizarão os saldos até serem ativadas.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">Nova Conexão</string>
+    <string name="TonConnect_Error_InvalidUrl">Endereço URL Inválido</string>
+    <string name="TonConnect_Unnamed">Sem nome</string>
+    <string name="TonConnect_Wallet">Carteira</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_Approve_Hint">Ao clicar em conectar, você permite que este aplicativo visualize seu endereço público. Esta é uma importante etapa de segurança para proteger seus dados contra possíveis riscos de phishing.</string>
@@ -521,6 +538,7 @@
     <string name="SwapSettings_Error_InvalidAddress">Endereço inválido</string>
     <string name="SwapSettings_Error_InvalidBlockchainAddress">Endereço %s inválido</string>
     <string name="SwapSettings_Warning_UnusualSlippage">Sua operação pode ser de front-running</string>
+    <!-- Swap Confirmation -->
     <!--Approve-->
     <string name="Approve_RevokeAndApproveInfo">Você pode trocar %s, ou você precisa revogar e aprovar o novo valor</string>
     <string name="Approve_Spender">Gastador</string>
@@ -555,6 +573,7 @@
     <string name="Transactions_ContractCall">Chamada de Contrato</string>
     <string name="Transactions_ExternalContractCall">Ligação Externa</string>
     <string name="Transactions_ContractCreation">Criação de contrato</string>
+    <string name="Transactions_ContractDeploy">Implantação de Contrato</string>
     <string name="Transactions_To">para %s</string>
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited_CoinCode">ilimitado %s</string>
@@ -573,6 +592,7 @@
     <string name="Transactions_Swaps">Trocas</string>
     <string name="Transactions_Approvals">Aprovações</string>
     <string name="Transactions_Unknown">Transação Desconhecida</string>
+    <string name="Transactions_TonTransaction">Transação TON</string>
     <string name="Transactions_Unknown_Description">Transação não pôde ser analisada</string>
     <string name="Transactions_Multiple">Múltiplo</string>
     <string name="Transactions_Filter">Filtro</string>
@@ -604,6 +624,7 @@
     <string name="TransactionInfo_YouGot">Você Tem</string>
     <string name="TransactionInfo_YouSent">Enviar</string>
     <string name="TransactionInfo_Received">Recebido</string>
+    <string name="TransactionInfo_Minted">Mint</string>
     <string name="TransactionInfo_Sent">Enviado</string>
     <string name="TransactionInfo_Approved">Aprovado</string>
     <string name="TransactionInfo_SpeedUp">Acelerar</string>
@@ -632,6 +653,8 @@
     <string name="Info_LockTime_Description">O remetente enviou esses fundos com um bloqueio de gastos que expirará em %s.\n\nNão se preocupe, os Bitcoins recebidos já são seus, mas até que o período de bloqueio expire, você não poderá gastá-los na rede Bitcoin.</string>
     <string name="Info_NotRelayed_Title">Transmissão</string>
     <string name="Info_NotRelayed_Description">A transação que detém esse valor foi transmitida, mas ainda não foi aceita pela rede.</string>
+    <string name="Info_ProcessingBalance_Title">Processando quantia</string>
+    <string name="Info_ProcessingBalance_Description">Transações com esse valor ainda estão sincronizando. Quando forem confirmadas, esses tokens estarão disponíveis para gastar</string>
     <string name="Info_DoubleSpend_Title">Gasto Duplo</string>
     <string name="Info_DoubleSpend_Description">Risco de Gasto Duplo! Existe outra transação na Blockchain que está tentando gastar entradas usadas nesta transação. Apenas uma transação será aceita pela rede</string>
     <string name="Info_DoubleSpend_ThisTx">Esta Tx</string>
@@ -667,7 +690,7 @@
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Digite seu nome de conta Telegram para começar um chat de suporte pessoal com a nossa equipe. Entraremos em contato com você e começaremos a trabalhar em seu problema assim que virmos.</string>
     <string name="Settings_PersonalSupport_YouAlreadyRequestedSupportDescription">Você já pediu um chat privado, encontre-o no Telegram</string>
     <string name="Settings_PersonalSupport_Account">Conta</string>
-    <string name="Settings_PersonalSupport_UsernameHint">\@username</string>
+    <string name="Settings_PersonalSupport_UsernameHint">\@usuário</string>
     <string name="Settings_PersonalSupport_Requested">Solicitado</string>
     <string name="Settings_PersonalSupport_Request">Solicitar</string>
     <string name="Settings_PersonalSupport_NewRequest">Nova solicitação</string>
@@ -675,6 +698,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
     <string name="Settings_Donate_Info">Juntos, com o seu apoio, podemos fazer este aplicativo ainda melhor!</string>
     <string name="Settings_Donate">Doar</string>
+    <string name="Settings_GetYourTokens">Pegue seus tokens</string>
     <string name="Settings_DonateToken">Doe %s</string>
     <string name="Settings_DonateWith">Doar com</string>
     <string name="Settings_Donate_GetAddress">Endereço de Doação</string>
@@ -686,8 +710,14 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 Minutos</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 Minutos</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
+    <!--Premium Banner-->
+    <!--Setting Subscription -->
+    <string name="SettingsSubscription_GetPremium">Obter Premium</string>
+    <!--Premium Screens-->
+    <string name="Premium_Restore">Restaurar</string>
+    <string name="Premium_UpgradeFeature_DuressMode">Modo Coação</string>
     <string name="Appearance_MarketsTab">TAB MARKETS</string>
-    <string name="Appearance_BalanceTab">BALANCE TAB</string>
+    <string name="Appearance_BalanceTab">ABA SALDO</string>
     <string name="Appearance_AppIcon">ICONE DE APLICATIVO</string>
     <string name="Appearance_BalanceValue">Valor Patrimonial</string>
     <string name="Appearance_Warning_CloseApplication">Alterar o ícone fechará o aplicativo</string>
@@ -727,6 +757,7 @@
     <string name="Privacy_BulletedText2">Não há contas de usuário ou bancos de dados armazenando dados do usuário.</string>
     <string name="Privacy_BulletedText3">Se permitido, a carteira compartilhará os hábitos de uso do aplicativo com a equipe do Unstoppable. Isso é para entender quais recursos estão sendo usados (ou não) pelos nossos usuários. Sendo um aplicativo focado em privacidade, precisamos de alguma maneira de avaliar nossos esforços e sem isso não temos ideia se os recursos que construímos estão sendo utilizados ou não.</string>
     <string name="ShareUiData">Compartilhar Dados de UI</string>
+    <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Adicionar novo</string>
     <string name="EvmNetwork_Added">Adicionado</string>
@@ -796,6 +827,7 @@
     <string name="SettingsShare_Text">Seja Unstoppable</string>
     <!--Setting_Contact-->
     <string name="SettingsContact_Title">Fale Conosco</string>
+    <!--Setting_Notifications-->
     <!-- Settings Launch Screen -->
     <string name="SettingsLaunchScreen_Auto">Automático</string>
     <string name="SettingsLaunchScreen_Balance">Saldo</string>
@@ -843,6 +875,9 @@
 \n
 \nEmbora a carteira Unstoppable suporte ambos, recomenda-se usar uma carteira Bitcoin Cash operando no formato TYPE145.</string>
     <string name="ManageCoins_ContractAddress">ENDEREÇO DE CONTRACT</string>
+    <!-- Experimental Feature -->
+    <!-- Bitcoin Hodling -->
+    <!-- Testnet Settings -->
     <!--Manage Accounts-->
     <string name="ManageAccounts_Title">Gerenciar carteiras</string>
     <string name="ManageAccounts_CreateNewWallet">Criar</string>
@@ -948,6 +983,9 @@
     <string name="ManageKeys_Delete_Title">Excluir Carteira</string>
     <string name="ManageKeys_Delete_FromPhone">Excluir do telefone</string>
     <string name="ManageKeys_StopWatching">Parar de Acompanhar</string>
+    <!-- Manage Keys Alert -->
+    <!-- Add Token Dialog-->
+    <!-- Enable Token -->
     <!-- Add Token -->
     <string name="AddToken_Title">Adicionar token</string>
     <string name="AddToken_CoinName">Nome da Moeda</string>
@@ -1189,6 +1227,7 @@
     <string name="TechnicalAdvice_Indicators_Sell">Irá vender</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Venda forte</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">Arriscado</string>
+    <string name="TechnicalAdvice_Details">Detalhes</string>
     <string name="Detectors_TokenDetectors">Detectores de Token</string>
     <string name="Detectors_GeneralDetectors">Detectores Gerais</string>
     <string name="Detectors_IssuesCount">Problemas %d</string>
@@ -1205,6 +1244,8 @@
     <string name="SubscriptionInfo_PersonalSupport_Info">Entre em contato com nossa equipe diretamente através do Telegram para assistência pessoal.</string>
     <string name="SubscriptionInfo_GetPremium">Obter Premium</string>
     <string name="SubscriptionInfo_HavePremium">Eu já tenho Premium</string>
+    <!-- NFT Collection -->
+    <!-- NFT Collection Events -->
     <!--Rate list-->
     <string name="RateList_TopGainers">Ganhadores</string>
     <string name="RateList_TopLosers">Perdedores</string>
@@ -1300,4 +1341,5 @@
     <string name="Cex_SelectCoin_Search">Nome ou código</string>
     <string name="CexDeposit_Title">Depósito %s</string>
     <string name="Cex_Error_FailedToConnectApiKey">Falha ao conectar sua chave de API</string>
+    <!--Cex Withdraw Module-->
 </resources>

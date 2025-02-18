@@ -12,8 +12,6 @@ Unstoppable construída com o seguinte em mente:
 
 Se as frases acima combinam com você, a Unstoppable será para você! E estamos aqui para nos concentrar em suas necessidades exclusivas e atendê-lo da melhor maneira possível.
 
-Se você está procurando uma maneira simples de armazenar Bitcoin ou alguma cripto que esse aplicativo pode não ser para você.
-
 CARACTERÍSTICAS DA CARTEIRA:
 
 — Multi-carteira sem custódia>> Gerencie qualquer número de criptomoedas através de múltiplas carteiras de portifólio de forma sem custódia. Esta carteira é como o seu próprio banco onde você é o único cliente e o único responsável. Ela é projetada para manter os ativos seguros e fáceis de restaurar, mesmo se o telefone for roubado e adulterado.
@@ -34,8 +32,6 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 - Carteira Binance >> Suporte total para Corrente Binance original (incl. BEP2) e Binance Smart Chain.
 
-- Carteira NFT >> Suporte total para tokens não fungíveis (NFTs).
-
 — Crypto Academy >> O aplicativo inclui dois cursos destinados a integrar o novo mundo das criptomoedas e do ecossistema DeFi de forma fácil de compreender, cobrindo aspectos essenciais da segurança das criptomoedas, armazenamento, privacidade, transação, troca e muito mais.
 
 — Carteira para Moedas de Privacidade >> Suporta totalmente as principais moedas de privacidade (ZCash, DASH) de forma SPV. Uma das muito poucas carteiras capazes de apoiar transações Zcash totalmente protegidas, bem como a capacidade de privatizar transações em Bitcoin.
@@ -46,4 +42,4 @@ CARACTERÍSTICAS DA CARTEIRA:
 
 — Totalmente Open Source >> Talvez o aplicativo de carteira mais transparente construído até agora. O processo de produção de 4 anos do aplicativo está abertamente acessível on-line, com 100% do código para qualquer pessoa avaliar ou reutilizar em outros projetos. Verificado e auditado por terceiros.
 
-Seja Unstoppable!  😎
+Seja Unstoppable!

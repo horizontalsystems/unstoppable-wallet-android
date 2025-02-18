@@ -214,6 +214,7 @@
     <string name="Market_Filter_PricePeriod">Ценовой период</string>
     <string name="Market_Filter_TradingSignals">Торговые сигналы</string>
     <string name="Market_Filter_PriceChange">Изменение цены</string>
+    <string name="Market_Filter_Sectors">Секторы</string>
     <string name="Market_PriceChange_24H">24 Часа</string>
     <string name="Market_PriceChange_Utc">Полночь по UTC</string>
     <string name="Market_Filter_Blockchains">Блокчейны</string>
@@ -240,6 +241,7 @@
     <string name="Market_Filter_Top_300">Топ 300</string>
     <string name="Market_Filter_Top_500">Топ 500</string>
     <string name="Market_Filter_Top_1000">Топ 1000</string>
+    <string name="Market_Filter_Top_1500">Топ 1500</string>
     <string name="Market_Filter_ShowResults">Показать результаты</string>
     <string name="Market_Filter_ShowResults_Counter">Показать результаты: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5 млн</string>
@@ -311,6 +313,7 @@
     <string name="Balance_Receive_Amount">Сумма</string>
     <string name="Balance_Receive_SetAmount">Установить сумму</string>
     <string name="Balance_LockedAmount_Title">Заблокировано</string>
+    <string name="Balance_ProcessingBalance_Title">В процессе</string>
     <string name="Balance_NotRelayedAmount_Title">Трансляция</string>
     <string name="Balance_Receive_Memo">Memo(Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Не удалось распознать</string>
@@ -339,12 +342,17 @@
     <string name="Send_Rbf_Description">Эта опция позволяет повторно отправить застрявшую транзакцию, увеличивая сумму комиссии.</string>
     <string name="Send_RbfEnabled">Вкл.</string>
     <string name="Send_RbfDisabled">Выкл.</string>
+    <string name="Send_Utxo_AvailableBalance">Доступный баланс</string>
+    <string name="Send_Utxo_UnselectAll">Отменить выбор</string>
+    <string name="Send_Utxo_SelectAll">Выбрать все</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_YouSend">Вы отправляете</string>
+    <string name="Send_Confirmation_Mint">Минт</string>
     <string name="Send_Confirmation_To">Кому</string>
     <string name="Send_Confirmation_Own">Свой</string>
     <string name="Send_Confirmation_Method">Метод </string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
+    <string name="Send_Address_Error_CheckLocked">Заблокировано</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="ScanQr_CameraPermission_Title">Разрешение камеры</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
@@ -419,6 +427,11 @@
     <string name="Tron_ZeroAmountTrxNotAllowed">Невозможно отправить 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Аккаунт не активен</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Новым кошелькам TRON требуется депозит как минимум 1 TRX для активации. Неактивные кошельки могут принимать и хранить токены, но не будут корректировать балансы до момента активации.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">Новое соединение</string>
+    <string name="TonConnect_Error_InvalidUrl">Неверный URL-адрес</string>
+    <string name="TonConnect_Unnamed">Без имени</string>
+    <string name="TonConnect_Wallet">Кошелек</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Статус</string>
     <string name="WalletConnect_Approve_Hint">Нажав на соединение, вы позволяете этому приложению просматривать ваш публичный адрес. Это важный шаг безопасности, чтобы защитить ваши данные от потенциальных рисков, связанных с фишингом.</string>
@@ -576,6 +589,7 @@
     <string name="Transactions_Swaps">Обмены</string>
     <string name="Transactions_Approvals">Разрешения</string>
     <string name="Transactions_Unknown">Неизвестная транзакция</string>
+    <string name="Transactions_TonTransaction">Транзакция TON</string>
     <string name="Transactions_Unknown_Description">Транзакция не может быть обработана</string>
     <string name="Transactions_Multiple">Множество</string>
     <string name="Transactions_Filter">Фильтр</string>
@@ -607,6 +621,7 @@
     <string name="TransactionInfo_YouGot">Вы получили</string>
     <string name="TransactionInfo_YouSent">Вы отправили</string>
     <string name="TransactionInfo_Received">Получено</string>
+    <string name="TransactionInfo_Minted">Минт</string>
     <string name="TransactionInfo_Sent">Отправлено</string>
     <string name="TransactionInfo_Approved">Разрешено</string>
     <string name="TransactionInfo_SpeedUp">Ускорение</string>
@@ -635,6 +650,8 @@
     <string name="Info_LockTime_Description">Эти средства были отправлены с временной блокировкой, которая истекает %s.\n\nНе волнуйтесь, полученные биткойны уже ваши, но до истечения периода блокировки, вы не сможете потратить их.</string>
     <string name="Info_NotRelayed_Title">Передача</string>
     <string name="Info_NotRelayed_Description">Транзакция, содержащая эту сумму, транслирована, но еще не принята сетью.</string>
+    <string name="Info_ProcessingBalance_Title">Обрабатываемая сумма</string>
+    <string name="Info_ProcessingBalance_Description">Транзакции на эту сумму все еще синхронизируются. После подтверждения эти токены будут доступны для использования</string>
     <string name="Info_DoubleSpend_Title">Двойная трата</string>
     <string name="Info_DoubleSpend_Description">Риск двойной траты! Существует другая транзакция в блокчейне, которая пытается использовать входные данные, используемые в этой транзакции. Только одна транзакция будет принята сетью</string>
     <string name="Info_DoubleSpend_ThisTx">Эта транзакция</string>
@@ -678,6 +695,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержи нас</string>
+    <string name="Settings_GetYourTokens">Получи токены UWT</string>
     <string name="Settings_DonateToken">Пожертвовать %s</string>
     <string name="Settings_DonateWith">Поддержи нас</string>
     <string name="Settings_Donate_GetAddress">Получить адрес</string>
@@ -689,6 +707,12 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 минут</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 минут</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
+    <!--Premium Banner-->
+    <!--Setting Subscription -->
+    <string name="SettingsSubscription_GetPremium">Получите премиум</string>
+    <!--Premium Screens-->
+    <string name="Premium_Restore">Восстановить</string>
+    <string name="Premium_UpgradeFeature_DuressMode">Режим Duress</string>
     <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
@@ -1195,6 +1219,7 @@
     <string name="TechnicalAdvice_Indicators_Sell">Продавать</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Активно продавать</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">Риски</string>
+    <string name="TechnicalAdvice_Details">Детали</string>
     <string name="Detectors_TokenDetectors">Детекторы токенов</string>
     <string name="Detectors_GeneralDetectors">Общие детекторы</string>
     <string name="Detectors_IssuesCount">Проблемы %d</string>

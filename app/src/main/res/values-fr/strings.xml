@@ -212,6 +212,7 @@
     <string name="Market_Filter_PricePeriod">Période de prix</string>
     <string name="Market_Filter_TradingSignals">Signaux de trading</string>
     <string name="Market_Filter_PriceChange">Variation de prix</string>
+    <string name="Market_Filter_Sectors">Secteurs</string>
     <string name="Market_PriceChange_24H">24 Heures</string>
     <string name="Market_PriceChange_Utc">Minuit UTC</string>
     <string name="Market_Filter_Blockchains">Blockchains</string>
@@ -238,6 +239,7 @@
     <string name="Market_Filter_Top_300">Top 300</string>
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
+    <string name="Market_Filter_Top_1500">Top 1500</string>
     <string name="Market_Filter_ShowResults">Afficher les résultats</string>
     <string name="Market_Filter_ShowResults_Counter">Afficher les résultats : %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5mn</string>
@@ -309,6 +311,7 @@
     <string name="Balance_Receive_Amount">Montant</string>
     <string name="Balance_Receive_SetAmount">Définir le montant</string>
     <string name="Balance_LockedAmount_Title">Verrouillé</string>
+    <string name="Balance_ProcessingBalance_Title">Traitement en cours</string>
     <string name="Balance_NotRelayedAmount_Title">Diffusion</string>
     <string name="Balance_Receive_Memo">Mémo (Tag)</string>
     <string name="Balance_Error_InvalidQrCode">Impossible de reconnaître</string>
@@ -337,12 +340,17 @@
     <string name="Send_Rbf_Description">Ce choix vous permet de renvoyer une transaction bloquée en augmentant le montant des frais.</string>
     <string name="Send_RbfEnabled">Activé</string>
     <string name="Send_RbfDisabled">Désactivé</string>
+    <string name="Send_Utxo_AvailableBalance">Solde disponible</string>
+    <string name="Send_Utxo_UnselectAll">Tout désélectionner</string>
+    <string name="Send_Utxo_SelectAll">Tout sélectionner</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_YouSend">Vous envoyez</string>
+    <string name="Send_Confirmation_Mint">Mint</string>
     <string name="Send_Confirmation_To">À</string>
     <string name="Send_Confirmation_Own">Propriétaire</string>
     <string name="Send_Confirmation_Method">Méthode</string>
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
+    <string name="Send_Address_Error_CheckLocked">Verrouillé</string>
     <string name="Send_Success">\u2713 Envoyé</string>
     <string name="ScanQr_CameraPermission_Title">Besoin d\'un accès à la caméra</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Veuillez autoriser l\'accès à l\'appareil photo</string>
@@ -417,6 +425,11 @@
     <string name="Tron_ZeroAmountTrxNotAllowed">Impossible de transférer 0 %s</string>
     <string name="Tron_TokenPage_AddressNotActive_Title">Compte non actif</string>
     <string name="Tron_TokenPage_AddressNotActive_Info">Les nouveaux portefeuilles TRON nécessitent un dépôt d\'au moins 1 TRX pour devenir actifs. Les portefeuilles inactifs peuvent recevoir et détenir des jetons, mais les soldes ne seront pas corrigés tant qu\'ils ne seront pas activés.</string>
+    <!--TonConnect-->
+    <string name="TonConnect_NewConnect">Nouvelle connexion</string>
+    <string name="TonConnect_Error_InvalidUrl">Adresse URL invalide</string>
+    <string name="TonConnect_Unnamed">Inconnu</string>
+    <string name="TonConnect_Wallet">Portefeuille</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Statut</string>
     <string name="WalletConnect_Approve_Hint">En cliquant sur accepter, vous autorisez cette application à afficher votre adresse publique. Il s\'agit d\'une étape importante de sécurité pour protéger vos données contre les risques potentiels d\'hameçonnage.</string>
@@ -556,6 +569,7 @@
     <string name="Transactions_ContractCall">Appel de contrat</string>
     <string name="Transactions_ExternalContractCall">Appel externe</string>
     <string name="Transactions_ContractCreation">Création du contrat</string>
+    <string name="Transactions_ContractDeploy">Déploiement du contrat</string>
     <string name="Transactions_To">a %s</string>
     <string name="Transactions_From">de %s</string>
     <string name="Transaction_Unlimited_CoinCode">%s illimité</string>
@@ -574,6 +588,7 @@
     <string name="Transactions_Swaps">Echanger</string>
     <string name="Transactions_Approvals">Approbations</string>
     <string name="Transactions_Unknown">Transaction inconnue</string>
+    <string name="Transactions_TonTransaction">Transaction TON</string>
     <string name="Transactions_Unknown_Description">La transaction ne peut pas être analysée</string>
     <string name="Transactions_Multiple">Multiples</string>
     <string name="Transactions_Filter">Filtre</string>
@@ -605,6 +620,7 @@
     <string name="TransactionInfo_YouGot">Vous avez reçu</string>
     <string name="TransactionInfo_YouSent">Vous avez envoyé</string>
     <string name="TransactionInfo_Received">Reçue</string>
+    <string name="TransactionInfo_Minted">Mint</string>
     <string name="TransactionInfo_Sent">Envoyée</string>
     <string name="TransactionInfo_Approved">Approuvé</string>
     <string name="TransactionInfo_SpeedUp">Accélérer</string>
@@ -633,6 +649,8 @@
     <string name="Info_LockTime_Description">L\'expéditeur a envoyé ces fonds avec un verrouillage des dépenses qui expirera sur le %s.\n\n Pas d\'inquiétude, les Bitcoins reçus sont déjà à vous mais jusqu\'à l\'expiration de la période de verrouillage, vous ne pouvez pas les dépenser sur le réseau Bitcoin.</string>
     <string name="Info_NotRelayed_Title">Diffuser</string>
     <string name="Info_NotRelayed_Description">La transaction contenant ce montant a été diffusée mais n\'a pas encore été acceptée par le réseau.</string>
+    <string name="Info_ProcessingBalance_Title">Montant en cours de traitement</string>
+    <string name="Info_ProcessingBalance_Description">Les transactions de ce montant sont encore en cours de synchronisation. Une fois confirmés, ces jetons seront disponibles</string>
     <string name="Info_DoubleSpend_Title">Double dépense</string>
     <string name="Info_DoubleSpend_Description">Risque de double dépense ! Il y a une autre transaction sur la blockchain qui essaie de dépenser les intrants utilisés dans cette transaction. Une seule transaction sera acceptée par le réseau</string>
     <string name="Info_DoubleSpend_ThisTx">Cette Tx</string>
@@ -676,6 +694,7 @@
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
+    <string name="Settings_GetYourTokens">Obtenir vos tokens</string>
     <string name="Settings_DonateToken">Donate %s</string>
     <string name="Settings_DonateWith">Donnez avec</string>
     <string name="Settings_Donate_GetAddress">Adresse du don</string>
@@ -687,6 +706,12 @@
     <string name="SettingsSecurity_AutoLock_After15Min">15 minutes</string>
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 heure</string>
+    <!--Premium Banner-->
+    <!--Setting Subscription -->
+    <string name="SettingsSubscription_GetPremium">Devenez Premium</string>
+    <!--Premium Screens-->
+    <string name="Premium_Restore">Restaurer</string>
+    <string name="Premium_UpgradeFeature_DuressMode">Mode de Duress</string>
     <string name="Appearance_MarketsTab">TAB DES MARCHÉS</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
@@ -934,7 +959,6 @@
     <string name="PrivateKeys_EvmPrivateKey">Clé privée EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Permet un contrôle total des crypto-monnaies basées sur l\'EVM, c\'est-à-dire Ethereum, Binance Smart Chain, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Permet d\'exercer un contrôle total sur les actifs du portefeuille correspondant.</string>
-    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Permet un contrôle total du Bitcoin et des autres crypto-monnaies basées sur l\'UTXO, c\'est-à-dire Litecoin, Bitcoin Cash, Dash, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_NeverShareWarning">Ne partagez jamais votre phrase de récupération avec quiconque. Une équipe imparable ne demandera jamais votre phrase de récupération.</string>
     <!-- Public Keys -->
@@ -1195,6 +1219,7 @@
     <string name="TechnicalAdvice_Indicators_Sell">Vendre</string>
     <string name="TechnicalAdvice_Indicators_StrongSell">Vente forte</string>
     <string name="TechnicalAdvice_Indicators_RiskyToTrade">Risqué</string>
+    <string name="TechnicalAdvice_Details">Détailles</string>
     <string name="Detectors_TokenDetectors">Détection de token</string>
     <string name="Detectors_GeneralDetectors">Détection générale</string>
     <string name="Detectors_IssuesCount">Problèmes %d</string>
