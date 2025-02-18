@@ -146,7 +146,8 @@ class TokenBalanceViewModel(
                 }.also { hasHiddenTransactions = items.size != it.size }
             } else {
                 items.also { hasHiddenTransactions = false }
-            }.map { transactionViewItem2Factory.convertToViewItemCached(it) }
+            }.distinctBy { it.record.uid }
+                .map { transactionViewItem2Factory.convertToViewItemCached(it) }
                 .groupBy { it.formattedDate }
 
         emitState()

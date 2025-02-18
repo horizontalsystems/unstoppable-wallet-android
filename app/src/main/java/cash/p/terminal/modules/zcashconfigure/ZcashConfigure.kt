@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,17 +20,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,7 +41,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -57,31 +58,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.setNavigationResultX
 import cash.p.terminal.modules.enablecoin.restoresettings.ZCashConfig
 import cash.p.terminal.modules.evmfee.ButtonsGroupWithShade
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.InfoText
+import cash.p.terminal.ui.compose.components.TextPreprocessor
+import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
+import cash.p.terminal.ui.extensions.BottomSheetHeader
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryTransparent
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.CellMultilineLawrenceSection
 import cash.p.terminal.ui_compose.components.HeaderText
-import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.TextImportantWarning
-import cash.p.terminal.ui.compose.components.TextPreprocessor
-import cash.p.terminal.ui.compose.components.TextPreprocessorImpl
 import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.title3_leah
-import cash.p.terminal.ui.extensions.BottomSheetHeader
 import cash.p.terminal.ui_compose.findNavController
 import cash.p.terminal.ui_compose.theme.ColoredTextStyle
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import coil.compose.rememberAsyncImagePainter
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
@@ -117,12 +118,12 @@ class ZcashConfigure : BaseComposeFragment() {
     data class Result(val config: ZCashConfig?) : Parcelable
 }
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ZcashConfigureScreen(
     onCloseClick: () -> Unit,
     onCloseWithResult: (ZCashConfig) -> Unit,
-    viewModel: ZcashConfigureViewModel = viewModel()
+    viewModel: ZcashConfigureViewModel = viewModel(),
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets
 ) {
     var showSlowSyncWarning by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -158,7 +159,7 @@ fun ZcashConfigureScreen(
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
-        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             SlowSyncWarningBottomSheet(
                 text = stringResource(R.string.Restore_ZCash_SlowSyncWarningText),
@@ -175,7 +176,7 @@ fun ZcashConfigureScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
         ) {
             Column(modifier = Modifier.padding(it)) {
@@ -183,6 +184,7 @@ fun ZcashConfigureScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
+                        .windowInsetsPadding(windowInsets)
                         .verticalScroll(rememberScrollState()),
                 ) {
                     Spacer(Modifier.height(12.dp))
@@ -346,7 +348,7 @@ private fun SlowSyncWarningBottomSheet(
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         title = stringResource(R.string.Alert_TitleWarning),
-        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         onCloseClick = onCloseClick
     ) {
         TextImportantWarning(
@@ -385,7 +387,7 @@ private fun BirthdayHeightInput(
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(12.dp))
             .background(ComposeAppTheme.colors.lawrence)
             .height(44.dp)
             .padding(horizontal = 16.dp),
@@ -426,7 +428,7 @@ private fun BirthdayHeightInput(
 @Preview
 @Composable
 private fun Preview_ZcashConfigure() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme(darkTheme = false) {
+    ComposeAppTheme(darkTheme = false) {
         ZcashConfigureScreen({}, {})
     }
 }

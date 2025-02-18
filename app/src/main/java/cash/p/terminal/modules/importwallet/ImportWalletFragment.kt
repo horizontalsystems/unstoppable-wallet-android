@@ -66,7 +66,6 @@ class ImportWalletFragment : BaseComposeFragment() {
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ImportWalletScreen(
     navController: NavController,

@@ -2,10 +2,13 @@ package cash.p.terminal.modules.backuplocal.fullbackup
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,9 +34,11 @@ import cash.p.terminal.ui_compose.components.subhead2_lucian
 @Composable
 fun SelectBackupItemsScreen(
     onNextClick: (accountIds: List<String>) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
-    val viewModel = viewModel<SelectBackupItemsViewModel>(factory = SelectBackupItemsViewModel.Factory())
+    val viewModel =
+        viewModel<SelectBackupItemsViewModel>(factory = SelectBackupItemsViewModel.Factory())
     val uiState = viewModel.uiState
 
     Scaffold(
@@ -47,7 +52,7 @@ fun SelectBackupItemsScreen(
             )
         },
         bottomBar = {
-            ButtonsGroupWithShade {
+            ButtonsGroupWithShade(Modifier.windowInsetsPadding(windowInsets)) {
                 ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -60,14 +65,19 @@ fun SelectBackupItemsScreen(
             }
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(it)) {
+        LazyColumn(modifier = Modifier
+            .padding(it)
+            .windowInsetsPadding(windowInsets)) {
 
             when (uiState.viewState) {
                 ViewState.Success -> {
                     if (uiState.wallets.isNotEmpty()) {
                         item {
                             HeaderText(text = stringResource(id = R.string.BackupManager_Wallets))
-                            CellUniversalLawrenceSection(items = uiState.wallets, showFrame = true) { wallet ->
+                            CellUniversalLawrenceSection(
+                                items = uiState.wallets,
+                                showFrame = true
+                            ) { wallet ->
                                 RowUniversal(
                                     modifier = Modifier.padding(horizontal = 16.dp),
                                     onClick = { viewModel.toggle(wallet) }

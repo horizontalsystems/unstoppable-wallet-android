@@ -3,14 +3,17 @@ package cash.p.terminal.modules.settings.security
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -221,6 +224,7 @@ private fun SecurityCenterScreen(
     onTransferPasscodeEnabledChange: (Boolean) -> Unit,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         securitySettingsViewModel.update()
@@ -247,6 +251,7 @@ private fun SecurityCenterScreen(
             Modifier
                 .padding(it)
                 .verticalScroll(rememberScrollState())
+                .windowInsetsPadding(windowInsets)
         ) {
             PasscodeBlock(
                 securitySettingsViewModel,

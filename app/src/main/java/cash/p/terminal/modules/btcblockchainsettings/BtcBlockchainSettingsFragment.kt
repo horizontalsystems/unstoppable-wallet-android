@@ -4,16 +4,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,8 +53,8 @@ class BtcBlockchainSettingsFragment : BaseComposeFragment() {
             factory = BtcBlockchainSettingsModule.Factory(navController.requireInput())
         )
         BtcBlockchainSettingsScreen(
-            viewModel,
-            navController
+            viewModel = viewModel,
+            navController = navController
         )
     }
 
@@ -60,7 +63,8 @@ class BtcBlockchainSettingsFragment : BaseComposeFragment() {
 @Composable
 private fun BtcBlockchainSettingsScreen(
     viewModel: BtcBlockchainSettingsViewModel,
-    navController: NavController
+    navController: NavController,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
 
     if (viewModel.closeScreen) {
@@ -68,7 +72,7 @@ private fun BtcBlockchainSettingsScreen(
     }
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
+        Column(modifier = Modifier.windowInsetsPadding(windowInsets)) {
             AppBar(
                 title = viewModel.title,
                 navigationIcon = {

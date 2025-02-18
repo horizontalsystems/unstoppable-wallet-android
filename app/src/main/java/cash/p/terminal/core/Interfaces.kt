@@ -45,6 +45,7 @@ import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.entities.EncryptedString
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
+import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.transaction.Fee
@@ -290,7 +291,7 @@ interface ISendZcashAdapter {
     val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long
+    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): FirstClassByteArray
 }
 
 interface ISendSolanaAdapter {

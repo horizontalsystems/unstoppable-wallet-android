@@ -262,7 +262,7 @@ fun LazyListScope.transactionList(
         itemsIndexed(
             items = transactions,
             key = { _, item ->
-                item.uid
+                item.date.time
             }
         ) { index, item ->
             val position: SectionItemPosition = when {

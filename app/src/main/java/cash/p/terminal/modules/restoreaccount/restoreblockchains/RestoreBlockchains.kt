@@ -57,7 +57,6 @@ import io.horizontalsystems.core.entities.Blockchain
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ManageWalletsScreen(
     mainViewModel: RestoreViewModel,
@@ -139,7 +138,7 @@ fun ManageWalletsScreen(
 
     ModalBottomSheetLayout(
         sheetState = modalBottomSheetState,
-        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             blockchainTokensViewModel.config?.let { config ->
                 BottomSheetSelectorMultiple(
@@ -154,7 +153,7 @@ fun ManageWalletsScreen(
         },
     ) {
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.Restore_Title),

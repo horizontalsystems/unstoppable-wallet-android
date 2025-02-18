@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.wallet.Clearable
+import cash.p.terminal.wallet.Token
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import kotlinx.parcelize.Parcelize
@@ -16,7 +17,7 @@ class RestoreSettingsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    var openZcashConfigure by mutableStateOf<cash.p.terminal.wallet.Token?>(null)
+    var openZcashConfigure by mutableStateOf<Token?>(null)
         private set
 
     private var currentRequest: RestoreSettingsService.Request? = null
