@@ -62,11 +62,13 @@ class SecuritySettingsViewModel(
         emitState()
     }
 
-    fun onTransactionAutoHideEnabledChange(enabled: Boolean) {
+    fun onTransactionAutoHideEnabledChange(enabled: Boolean, emitState: Boolean = true) {
         transactionHiddenManager.setTransactionHideEnabled(enabled)
         transactionHiddenManager.clearSeparatePin()
         transactionHiddenManager.setTransactionDisplayLevel(TransactionDisplayLevel.NOTHING)
-        emitState()
+        if (emitState) {
+            emitState()
+        }
     }
 
     fun onDisableTransactionAutoHidePin() {
@@ -84,6 +86,9 @@ class SecuritySettingsViewModel(
 
     fun disablePin() {
         pinComponent.disablePin()
+        if (localStorage.transactionHideSecretPin == null) {
+            onTransactionAutoHideEnabledChange(enabled = false, emitState = false)
+        }
         pinComponent.isBiometricAuthEnabled = false
         localStorage.transferPasscodeEnabled = false
         emitState()
