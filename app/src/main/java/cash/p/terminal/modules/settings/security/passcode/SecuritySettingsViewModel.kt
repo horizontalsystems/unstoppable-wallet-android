@@ -76,6 +76,9 @@ class SecuritySettingsViewModel(
         if (balanceHiddenManager.balanceAutoHidden) {
             balanceHiddenManager.setBalanceAutoHidden(false)
         }
+        if(!pinComponent.isPinSet) {
+            transactionHiddenManager.setTransactionHideEnabled(false)
+        }
         emitState()
     }
 
