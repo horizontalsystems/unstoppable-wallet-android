@@ -3,27 +3,34 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
-import cash.p.terminal.wallet.entities.UsedAddress
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.entities.UsedAddress
 import io.horizontalsystems.bitcoincore.BitcoinCore
 import io.horizontalsystems.bitcoincore.models.BalanceInfo
 import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.dashkit.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
-import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 
 class DashAdapter(
     override val kit: DashKit,
     syncMode: BitcoinCore.SyncMode,
     backgroundManager: BackgroundManager,
-    wallet: cash.p.terminal.wallet.Wallet,
-) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold), DashKit.Listener, ISendBitcoinAdapter {
+    wallet: Wallet,
+) : BitcoinBaseAdapter(kit, syncMode, backgroundManager, wallet, confirmationsThreshold),
+    DashKit.Listener, ISendBitcoinAdapter {
 
-    constructor(wallet: cash.p.terminal.wallet.Wallet, syncMode: BitcoinCore.SyncMode, backgroundManager: BackgroundManager) :
+    constructor(
+        wallet: Wallet,
+        syncMode: BitcoinCore.SyncMode,
+        backgroundManager: BackgroundManager
+    ) :
             this(createKit(wallet, syncMode), syncMode, backgroundManager, wallet)
 
     init {
@@ -34,7 +41,8 @@ class DashAdapter(
     // BitcoinBaseAdapter
     //
 
-    override val satoshisInBitcoin: BigDecimal = BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
+    override val satoshisInBitcoin: BigDecimal =
+        BigDecimal.valueOf(Math.pow(10.0, decimal.toDouble()))
 
     //
     // DashKit Listener
@@ -58,7 +66,10 @@ class DashAdapter(
         setState(state)
     }
 
-    override fun onTransactionsUpdate(inserted: List<DashTransactionInfo>, updated: List<DashTransactionInfo>) {
+    override fun onTransactionsUpdate(
+        inserted: List<DashTransactionInfo>,
+        updated: List<DashTransactionInfo>
+    ) {
         val records = mutableListOf<TransactionRecord>()
 
         for (info in inserted) {
@@ -82,16 +93,22 @@ class DashAdapter(
     override val blockchainType = BlockchainType.Dash
 
     override fun usedAddresses(change: Boolean): List<UsedAddress> =
-        kit.usedAddresses(change).map { UsedAddress(it.index, it.address, "https://blockchair.com/dash/address/${it.address}") }
+        kit.usedAddresses(change).map {
+            UsedAddress(
+                index = it.index,
+                address = it.address,
+                explorerUrl = "https://blockchair.com/dash/address/${it.address}"
+            )
+        }
 
     companion object {
         private const val confirmationsThreshold = 3
 
-        private fun createKit(wallet: cash.p.terminal.wallet.Wallet, syncMode: BitcoinCore.SyncMode): DashKit {
+        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode): DashKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
-                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+                is AccountType.HdExtendedKey -> {
                     return DashKit(
                         context = App.instance,
                         extendedKey = accountType.hdExtendedKey,
@@ -101,7 +118,8 @@ class DashAdapter(
                         confirmationsThreshold = confirmationsThreshold
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+
+                is AccountType.Mnemonic -> {
                     return DashKit(
                         context = App.instance,
                         words = accountType.words,
@@ -112,7 +130,8 @@ class DashAdapter(
                         confirmationsThreshold = confirmationsThreshold
                     )
                 }
-                is cash.p.terminal.wallet.AccountType.BitcoinAddress -> {
+
+                is AccountType.BitcoinAddress -> {
                     return DashKit(
                         context = App.instance,
                         watchAddress = accountType.address,
@@ -122,6 +141,7 @@ class DashAdapter(
                         confirmationsThreshold = confirmationsThreshold
                     )
                 }
+
                 else -> throw UnsupportedAccountException()
             }
         }
