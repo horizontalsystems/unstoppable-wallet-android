@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import cash.p.terminal.core.App
 import io.horizontalsystems.core.entities.Blockchain
 
-object BtcBlockchainSettingsModule {
+internal object BtcBlockchainSettingsModule {
 
     class Factory(private val blockchain: Blockchain) : ViewModelProvider.Factory {
 

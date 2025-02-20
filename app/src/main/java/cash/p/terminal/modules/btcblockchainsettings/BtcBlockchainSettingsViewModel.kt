@@ -1,65 +1,95 @@
 package cash.p.terminal.modules.btcblockchainsettings
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
+import cash.p.terminal.core.ILocalStorage
+import cash.p.terminal.core.factories.AdapterFactory
 import cash.p.terminal.entities.BtcRestoreMode
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.BlockchainSettingsIcon
 import cash.p.terminal.modules.btcblockchainsettings.BtcBlockchainSettingsModule.ViewItem
+import cash.p.terminal.strings.helpers.Translator
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
+import org.koin.java.KoinJavaComponent.inject
 
-class BtcBlockchainSettingsViewModel(
+internal class BtcBlockchainSettingsViewModel(
     private val service: BtcBlockchainSettingsService
-) : ViewModel() {
+) : ViewModelUiState<BtcBlockchainSettingsUIState>() {
 
-    var closeScreen by mutableStateOf(false)
-        private set
+    private val localStorage by inject<ILocalStorage>(ILocalStorage::class.java)
+    private val adapterFactory by inject<AdapterFactory>(AdapterFactory::class.java)
 
-    var restoreSources by mutableStateOf<List<ViewItem>>(listOf())
-        private set
+    private val isCustomPeersEnabled = service.blockchain.type == BlockchainType.Dash
 
-    var saveButtonEnabled by mutableStateOf(false)
-        private set
+    private var closeScreen = false
+    private var restoreSources = emptyList<ViewItem>()
+    private var saveButtonEnabled = false
+    private var customPeers: String? = null
 
-    val title: String = service.blockchain.name
-    val blockchainIconUrl = service.blockchain.type.imageUrl
+    override fun createState() = BtcBlockchainSettingsUIState(
+        title = service.blockchain.name,
+        blockchainIconUrl = service.blockchain.type.imageUrl,
+        restoreSources = restoreSources,
+        saveButtonEnabled = saveButtonEnabled || isCustomPeersChanged(),
+        closeScreen = closeScreen,
+        customPeers = customPeers
+    )
 
     init {
         viewModelScope.launch {
             service.hasChangesObservable.asFlow().collect {
                 saveButtonEnabled = it
                 syncRestoreModeState()
+                emitState()
             }
         }
 
+        if (isCustomPeersEnabled) {
+            customPeers = localStorage.customDashPeers
+        }
+
         syncRestoreModeState()
+        emitState()
     }
 
     fun onSelectRestoreMode(viewItem: ViewItem) {
         service.setRestoreMode(viewItem.id)
     }
 
+    fun onCustomPeersChange(peers: String) {
+        customPeers = peers
+        emitState()
+    }
+
+    private fun isCustomPeersChanged(): Boolean {
+        return isCustomPeersEnabled && customPeers != localStorage.customDashPeers
+    }
+
     fun onSaveClick() {
-        service.save()
+        service.save(isCustomPeersChanged())
         closeScreen = true
+        if (isCustomPeersEnabled) {
+            localStorage.customDashPeers = customPeers.orEmpty()
+        }
+        emitState()
     }
 
     private fun syncRestoreModeState() {
         val viewItems = service.restoreModes.map { mode ->
             ViewItem(
                 id = mode.raw,
-                title = cash.p.terminal.strings.helpers.Translator.getString(mode.title),
-                subtitle = cash.p.terminal.strings.helpers.Translator.getString(mode.description),
+                title = Translator.getString(mode.title),
+                subtitle = Translator.getString(mode.description),
                 selected = mode == service.restoreMode,
                 icon = mode.icon
             )
         }
         restoreSources = viewItems
+        emitState()
     }
 
     private val BtcRestoreMode.icon: BlockchainSettingsIcon
@@ -70,3 +100,13 @@ class BtcBlockchainSettingsViewModel(
         }
 
 }
+
+@Immutable
+internal data class BtcBlockchainSettingsUIState(
+    val title: String,
+    val blockchainIconUrl: String,
+    val restoreSources: List<ViewItem>,
+    val saveButtonEnabled: Boolean,
+    val closeScreen: Boolean,
+    val customPeers: String?
+)

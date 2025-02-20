@@ -99,6 +99,7 @@ class LocalStorageManager(
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val STACKING_UPDATE_TIME = "stacking_update_time"
     private val STACKING_UNPAID = "stacking_unpaid"
+    private val DASH_PEERS = "dash_peers"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -610,6 +611,12 @@ class LocalStorageManager(
             } else {
                 editor.putBoolean(UI_STATS_ENABLED, value).apply()
             }
+        }
+
+    override var customDashPeers: String
+        get() = preferences.getString(DASH_PEERS, "").orEmpty()
+        set(value) {
+            preferences.edit().putString(DASH_PEERS, value).apply()
         }
 
     override fun getStackingUnpaid(wallet: Wallet) =

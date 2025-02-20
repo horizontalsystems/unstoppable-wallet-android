@@ -24,8 +24,8 @@ class BtcBlockchainSettingsService(
     val restoreModes: List<BtcRestoreMode>
         get() = btcBlockchainManager.availableRestoreModes(blockchain.type)
 
-    fun save() {
-        if (restoreMode != btcBlockchainManager.restoreMode(blockchain.type)) {
+    fun save(forceUpdate: Boolean) {
+        if (forceUpdate || restoreMode != btcBlockchainManager.restoreMode(blockchain.type)) {
             btcBlockchainManager.save(restoreMode, blockchain.type)
 
             stat(page = StatPage.BlockchainSettingsBtc, event = StatEvent.SwitchBtcSource(blockchain.uid, restoreMode))

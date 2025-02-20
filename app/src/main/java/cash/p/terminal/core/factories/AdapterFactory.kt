@@ -169,7 +169,8 @@ class AdapterFactory(
                     DashAdapter(
                         wallet = wallet,
                         syncMode = syncMode,
-                        backgroundManager = backgroundManager
+                        backgroundManager = backgroundManager,
+                        customPeers = localStorage.customDashPeers
                     )
                 }
 

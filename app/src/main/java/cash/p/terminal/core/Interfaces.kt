@@ -121,6 +121,8 @@ interface ILocalStorage {
     var statsLastSyncTime: Long
     var uiStatsEnabled: Boolean?
 
+    var customDashPeers: String
+
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
 
     var priceChangeInterval: PriceChangeInterval
