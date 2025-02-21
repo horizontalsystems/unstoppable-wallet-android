@@ -78,6 +78,7 @@ class TransactionRecordRepository(
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.Base,
+                BlockchainType.ZkSync,
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
