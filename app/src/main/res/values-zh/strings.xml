@@ -155,8 +155,6 @@
     <string name="Market_Tab_Platform">平台</string>
     <string name="Market_Tab_Pairs">配对标点</string>
     <string name="Market_Tab_Sectors">行业</string>
-    <string name="Market_Tab_Watchlist">关注</string>
-    <string name="Market_Tab_Watchlist_EmptyList">您的观察列表为空。</string>
     <string name="Market_Category_TopCoins">前列代币</string>
     <string name="Market_Signals">信号</string>
     <string name="Market_Volume">Volume</string>
@@ -743,7 +741,6 @@
     <string name="BackupManager_MergeDescription">此操作将覆盖您的本地付款联系人。</string>
     <string name="BackupManager_BackupRequired">必须备份</string>
     <string name="BackupManager_WatchWallets">观察地址</string>
-    <string name="BackupManager_Watchlist">关注</string>
     <string name="BackupManager_CustomRpc">自定义 RPC</string>
     <string name="BackupManager_AppSettingsTitle">应用设置</string>
     <string name="BackupManager_AppSettingsDescription">语言、 货币、 外观 ...</string>
@@ -828,7 +825,6 @@
     <string name="SettingsLaunchScreen_Auto">自动</string>
     <string name="SettingsLaunchScreen_Balance">余额</string>
     <string name="SettingsLaunchScreen_MarketOverview">行情</string>
-    <string name="SettingsLaunchScreen_Watchlist">关注</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">深色</string>
     <string name="SettingsTheme_Light">浅色</string>
@@ -845,10 +841,8 @@
     <string name="Hud_Text_Done">完成</string>
     <string name="Hud_Text_Verified">已验证</string>
     <string name="Hud_Text_EmailAddressCopied">电子邮件地址已复制</string>
-    <string name="Hud_Added_To_Watchlist">添加到关注列表</string>
     <string name="Hud_Added_To_Wallet">加入钱包</string>
     <string name="Hud_Removed_From_Wallet">已从钱包删除</string>
-    <string name="Hud_Removed_from_Watchlist">从关注列表移除</string>
     <string name="Hud_Removed">已删除</string>
     <string name="Hud_WaitForSynchronization">等待同步</string>
     <!--Manage Coins-->
