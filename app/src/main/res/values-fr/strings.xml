@@ -155,8 +155,6 @@
     <string name="Market_Tab_Platform">Platformes</string>
     <string name="Market_Tab_Pairs">Paires</string>
     <string name="Market_Tab_Sectors">Secteurs</string>
-    <string name="Market_Tab_Watchlist">Liste de suivi</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Votre liste de suivi est vide.</string>
     <string name="Market_Category_TopCoins">Top des coins</string>
     <string name="Market_Signals">Signaux</string>
     <string name="Market_Volume">Volume</string>
@@ -743,7 +741,6 @@
     <string name="BackupManager_MergeDescription">Cette action écrasera vos contacts de paiement locaux.</string>
     <string name="BackupManager_BackupRequired">Sauvegarde requise</string>
     <string name="BackupManager_WatchWallets">Regarder les portefeuilles</string>
-    <string name="BackupManager_Watchlist">Liste de suivi</string>
     <string name="BackupManager_CustomRpc">RPC personnalisé</string>
     <string name="BackupManager_AppSettingsTitle">Paramètres de l\'application</string>
     <string name="BackupManager_AppSettingsDescription">Langue, Devise, Apparence ...</string>
@@ -828,7 +825,6 @@
     <string name="SettingsLaunchScreen_Auto">Auto</string>
     <string name="SettingsLaunchScreen_Balance">Solde</string>
     <string name="SettingsLaunchScreen_MarketOverview">Vue d\'ensemble du marché</string>
-    <string name="SettingsLaunchScreen_Watchlist">Liste de suivi</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">Sombre</string>
     <string name="SettingsTheme_Light">Classique</string>
@@ -845,10 +841,8 @@
     <string name="Hud_Text_Done">Fait</string>
     <string name="Hud_Text_Verified">Vérifié</string>
     <string name="Hud_Text_EmailAddressCopied">Adresse email copiée</string>
-    <string name="Hud_Added_To_Watchlist">Ajouter à la liste de suivi</string>
     <string name="Hud_Added_To_Wallet">Ajouté au portefeuille</string>
     <string name="Hud_Removed_From_Wallet">Supprimé du portefeuille</string>
-    <string name="Hud_Removed_from_Watchlist">Retirer de la liste de suivi</string>
     <string name="Hud_Removed">Supprimer</string>
     <string name="Hud_WaitForSynchronization">Attendez la synchronisation</string>
     <!--Manage Coins-->
