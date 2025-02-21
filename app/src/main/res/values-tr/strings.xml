@@ -155,8 +155,6 @@
     <string name="Market_Tab_Platform">Platformlar</string>
     <string name="Market_Tab_Pairs">Çiftler</string>
     <string name="Market_Tab_Sectors">Sektörler</string>
-    <string name="Market_Tab_Watchlist">İzleme Listesi</string>
-    <string name="Market_Tab_Watchlist_EmptyList">İzleme listeniz boş.</string>
     <string name="Market_Category_TopCoins">En iyi Coinler</string>
     <string name="Market_Signals">Sinyaller</string>
     <string name="Market_Volume">Hacim</string>
@@ -747,7 +745,6 @@
     <string name="BackupManager_MergeDescription">Bu işlem, aygıtta bulunan ödeme kişilerinizin üzerine yazılır.</string>
     <string name="BackupManager_BackupRequired">Yedekleme Gerekli</string>
     <string name="BackupManager_WatchWallets">Cüzdan İzle</string>
-    <string name="BackupManager_Watchlist">İzleme Listesi</string>
     <string name="BackupManager_CustomRpc">Özel RPC</string>
     <string name="BackupManager_AppSettingsTitle">Uygulama Ayarları</string>
     <string name="BackupManager_AppSettingsDescription">Dil, Para Birimi, Görünüm...</string>
@@ -832,7 +829,6 @@
     <string name="SettingsLaunchScreen_Auto">Oto</string>
     <string name="SettingsLaunchScreen_Balance">Bakiye</string>
     <string name="SettingsLaunchScreen_MarketOverview">Piyasaya Genel Bakış</string>
-    <string name="SettingsLaunchScreen_Watchlist">İzleme Listesi</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">Karanlık</string>
     <string name="SettingsTheme_Light">Açık</string>
@@ -849,10 +845,8 @@
     <string name="Hud_Text_Done">Bitti</string>
     <string name="Hud_Text_Verified">Onaylandı</string>
     <string name="Hud_Text_EmailAddressCopied">E-posta adresi kopyalandı</string>
-    <string name="Hud_Added_To_Watchlist">İzleme Listesine Eklendi</string>
     <string name="Hud_Added_To_Wallet">Cüzdana Eklendi</string>
     <string name="Hud_Removed_From_Wallet">Cüzdandan Kaldırıldı</string>
-    <string name="Hud_Removed_from_Watchlist">İzleme Listesinden Kaldır</string>
     <string name="Hud_Removed">Kaldır</string>
     <string name="Hud_WaitForSynchronization">Senkronizasyonu bekleyin</string>
     <!--Manage Coins-->
