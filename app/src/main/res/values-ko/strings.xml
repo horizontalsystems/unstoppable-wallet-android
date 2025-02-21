@@ -155,8 +155,6 @@
     <string name="Market_Tab_Platform">플랫폼</string>
     <string name="Market_Tab_Pairs">쌍</string>
     <string name="Market_Tab_Sectors">분야</string>
-    <string name="Market_Tab_Watchlist">관심 목록</string>
-    <string name="Market_Tab_Watchlist_EmptyList">관심 목록이 비어 있습니다.</string>
     <string name="Market_Category_TopCoins">주요 코인</string>
     <string name="Market_Signals">신호</string>
     <string name="Market_Volume">거래량</string>
@@ -747,7 +745,6 @@
     <string name="BackupManager_MergeDescription">이 작업을 수행하면 현지 결제 연락처가 덮어쓰여집니다.</string>
     <string name="BackupManager_BackupRequired">백업이 필요합니다</string>
     <string name="BackupManager_WatchWallets">관찰 주소</string>
-    <string name="BackupManager_Watchlist">관심목록</string>
     <string name="BackupManager_CustomRpc">사용자 지정 RPC</string>
     <string name="BackupManager_AppSettingsTitle">앱 설정</string>
     <string name="BackupManager_AppSettingsDescription">언어, 통화, 외관...</string>
@@ -836,7 +833,6 @@
     <string name="SettingsLaunchScreen_Auto">자동</string>
     <string name="SettingsLaunchScreen_Balance">잔액</string>
     <string name="SettingsLaunchScreen_MarketOverview">시장 개요</string>
-    <string name="SettingsLaunchScreen_Watchlist">관심목록</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">어두운</string>
     <string name="SettingsTheme_Light">밝은</string>
@@ -853,10 +849,8 @@
     <string name="Hud_Text_Done">완료</string>
     <string name="Hud_Text_Verified">확인</string>
     <string name="Hud_Text_EmailAddressCopied">이메일 주소 복사됨</string>
-    <string name="Hud_Added_To_Watchlist">관심목록에 추가되었습니다</string>
     <string name="Hud_Added_To_Wallet">지갑에 추가됨</string>
     <string name="Hud_Removed_From_Wallet">지갑에서 제거됨</string>
-    <string name="Hud_Removed_from_Watchlist">관심목록에서 제거</string>
     <string name="Hud_Removed">제거됨</string>
     <string name="Hud_WaitForSynchronization">동기화 대기 중</string>
     <!--Manage Coins-->
