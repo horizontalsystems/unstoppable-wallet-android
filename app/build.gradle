@@ -104,6 +104,7 @@ android {
             resValue "string", "gnosisscanApiKey", "V2J8YU15ZX9S1W3GTUV2HXM11TP2TUBRW4"
             resValue "string", "ftmscanApiKey", "57YQ2GIRAZNV6M5HIJYYG3XQGGNIPVV8MF"
             resValue "string", "basescanApiKey", "AKEWS351FN9P9E2CFPWRWQVGHYUP7W8SUF"
+            resValue "string", "eraZkSyncApiKey", "NCUEZ2NFQHW7TG7J7J4MTG4VNG2V4Z2Z48"
             resValue "string", "is_release", "false"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/master/src/faq.json"
@@ -139,6 +140,7 @@ android {
             resValue "string", "gnosisscanApiKey", "KEXFAQKDUENZ5U9CW3ZKYJEJ84ZIHH9QTY"
             resValue "string", "ftmscanApiKey", "JAWRPW27KEMVXMJJ9UKY63CVPH3X5V9SMP"
             resValue "string", "basescanApiKey", "QU4RJVJXQCW812J3234EW9EV815TA6XC55"
+            resValue "string", "eraZkSyncApiKey", "NCUEZ2NFQHW7TG7J7J4MTG4VNG2V4Z2Z48"
             resValue "string", "is_release", "true"
             resValue "string", "guidesUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/refs/tags/v1.4/src/edu.json"
             resValue "string", "faqUrl", "https://raw.githubusercontent.com/horizontalsystems/Unstoppable-Wallet-Website/v1.3/src/faq.json"
@@ -303,9 +305,9 @@ dependencies {
     // Wallet kits
     implementation 'com.github.horizontalsystems:ton-kit-android:1cb4c1e'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:3f3194f'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:201296c'
+    implementation 'com.github.horizontalsystems:ethereum-kit-android:d423acf'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
-    implementation 'com.github.horizontalsystems:market-kit-android:fdbf841'
+    implementation 'com.github.horizontalsystems:market-kit-android:988d5a3'
     implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK

@@ -39,6 +39,7 @@ class EvmSyncSourceManager(
             BlockchainType.Gnosis -> TransactionSource.gnosis(appConfigProvider.gnosisscanApiKey)
             BlockchainType.Fantom -> TransactionSource.fantom(appConfigProvider.ftmscanApiKey)
             BlockchainType.Base -> TransactionSource.basescan(appConfigProvider.basescanApiKey)
+            BlockchainType.ZkSync -> TransactionSource.eraZkSync(appConfigProvider.eraZkSyncApiKey)
             else -> throw Exception("Non-supported EVM blockchain")
         }
     }
@@ -155,6 +156,15 @@ class EvmSyncSourceManager(
                         listOf(URI("https://endpoints.omniatech.io/v1/base/mainnet/public")),
                         null
                     ),
+                    defaultTransactionSource(blockchainType)
+                )
+            )
+
+            BlockchainType.ZkSync -> listOf(
+                evmSyncSource(
+                    blockchainType,
+                    "ZKsync",
+                    RpcSource.zkSyncRpcHttp(),
                     defaultTransactionSource(blockchainType)
                 )
             )

@@ -32,6 +32,7 @@ class MarketFiltersService(
         BlockchainType.Unsupported("okex-chain"),
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.Polygon,
         BlockchainType.Unsupported("solana"),
         BlockchainType.Unsupported("sora"),

@@ -56,6 +56,7 @@ class AddressHandlerFactory(
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {
@@ -90,6 +91,7 @@ class AddressHandlerFactory(
             BlockchainType.Avalanche,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.ArbitrumOne -> {

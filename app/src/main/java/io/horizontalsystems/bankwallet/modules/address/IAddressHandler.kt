@@ -108,6 +108,7 @@ class AddressHandlerUdn(
             BlockchainType.Polygon,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.Avalanche,
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
@@ -138,6 +139,7 @@ class AddressHandlerUdn(
                 BlockchainType.Ethereum,
                 BlockchainType.Optimism,
                 BlockchainType.Base,
+                BlockchainType.ZkSync,
                 BlockchainType.ArbitrumOne,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom -> "ERC20"
