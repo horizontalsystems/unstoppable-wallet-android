@@ -156,8 +156,6 @@
     <string name="Market_Tab_Platform">Plattformen</string>
     <string name="Market_Tab_Pairs">Paare</string>
     <string name="Market_Tab_Sectors">Sektoren</string>
-    <string name="Market_Tab_Watchlist">Merkliste</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Ihre Beobachtungsliste ist leer.</string>
     <string name="Market_Category_TopCoins">Top Münzen</string>
     <string name="Market_Signals">Signale</string>
     <string name="Market_Volume">Volume</string>
@@ -744,7 +742,6 @@
     <string name="BackupManager_MergeDescription">Diese Aktion wird Ihre lokalen Zahlungskontakte überschreiben.</string>
     <string name="BackupManager_BackupRequired">Sicherung erforderlich</string>
     <string name="BackupManager_WatchWallets">Watch-Adresse</string>
-    <string name="BackupManager_Watchlist">Merkliste</string>
     <string name="BackupManager_CustomRpc">Eigener RPC</string>
     <string name="BackupManager_AppSettingsTitle">App-Einstellungen</string>
     <string name="BackupManager_AppSettingsDescription">Sprache, Währung, Erscheinung ...</string>
@@ -833,7 +830,6 @@
     <string name="SettingsLaunchScreen_Auto">Auto</string>
     <string name="SettingsLaunchScreen_Balance">Guthaben</string>
     <string name="SettingsLaunchScreen_MarketOverview">Marktübersicht</string>
-    <string name="SettingsLaunchScreen_Watchlist">Merkliste</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">Dunkel</string>
     <string name="SettingsTheme_Light">Hell</string>
@@ -850,10 +846,8 @@
     <string name="Hud_Text_Done">Fertig</string>
     <string name="Hud_Text_Verified">Verifiziert</string>
     <string name="Hud_Text_EmailAddressCopied">E-Mail-Adresse kopiert</string>
-    <string name="Hud_Added_To_Watchlist">Zur Merkliste hinzugefügt</string>
     <string name="Hud_Added_To_Wallet">Zum Wallet hinzugefügt</string>
     <string name="Hud_Removed_From_Wallet">Aus dem Wallet entfernt</string>
-    <string name="Hud_Removed_from_Watchlist">Aus Merkliste entfernt</string>
     <string name="Hud_Removed">Entfernt</string>
     <string name="Hud_WaitForSynchronization">Warten auf Synchronisation</string>
     <!--Manage Coins-->
