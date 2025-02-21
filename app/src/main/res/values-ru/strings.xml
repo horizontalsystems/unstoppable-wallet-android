@@ -157,8 +157,6 @@
     <string name="Market_Tab_Platform">Платформы</string>
     <string name="Market_Tab_Pairs">Пары</string>
     <string name="Market_Tab_Sectors">Секторы</string>
-    <string name="Market_Tab_Watchlist">Избранное</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Список избранного пуст.</string>
     <string name="Market_Category_TopCoins">Топ токены</string>
     <string name="Market_Signals">Сигналы</string>
     <string name="Market_Volume">Объем</string>
@@ -744,7 +742,6 @@
     <string name="BackupManager_MergeDescription">Это действие перезапишет ваши локальные контакты.</string>
     <string name="BackupManager_BackupRequired">Необходима резерв. копия</string>
     <string name="BackupManager_WatchWallets">Просмотр кошелька</string>
-    <string name="BackupManager_Watchlist">Избранное</string>
     <string name="BackupManager_CustomRpc">Пользовательские RPC</string>
     <string name="BackupManager_AppSettingsTitle">Настройки приложения</string>
     <string name="BackupManager_AppSettingsDescription">Язык, валюта, внешний вид</string>
@@ -829,7 +826,6 @@
     <string name="SettingsLaunchScreen_Auto">По умолчанию</string>
     <string name="SettingsLaunchScreen_Balance">Баланс</string>
     <string name="SettingsLaunchScreen_MarketOverview">Обзор рынка</string>
-    <string name="SettingsLaunchScreen_Watchlist">Избранное</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">Тёмная</string>
     <string name="SettingsTheme_Light">Светлая</string>
@@ -846,10 +842,8 @@
     <string name="Hud_Text_Done">Готово</string>
     <string name="Hud_Text_Verified">Подтверждено</string>
     <string name="Hud_Text_EmailAddressCopied">Адрес электронной почты скопирован</string>
-    <string name="Hud_Added_To_Watchlist">Добавлено в избранное</string>
     <string name="Hud_Added_To_Wallet">Добавлено в кошелек</string>
     <string name="Hud_Removed_From_Wallet">Удалено из кошелька</string>
-    <string name="Hud_Removed_from_Watchlist">Удалить из избранного</string>
     <string name="Hud_Removed">Удалено</string>
     <string name="Hud_WaitForSynchronization">Дождитесь синхронизации</string>
     <!--Manage Coins-->
