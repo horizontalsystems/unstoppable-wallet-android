@@ -85,7 +85,6 @@
     <string name="Market_Sort_PopupTitle">مرتب‌ کردن بر اساس</string>
     <string name="Market_SeeAll">همه</string>
     <string name="Market_Tab_Posts">اخبار</string>
-    <string name="Market_Tab_Watchlist_EmptyList">فهرست تماشا شما خالی است.</string>
     <!--Market Overview-->
     <!--Market Top Platforms-->
     <string name="MarketPlatformCoins_PlatformEcosystem"> Ecosystem %s</string>
@@ -381,7 +380,6 @@
     <string name="SettingsLaunchScreen_Auto">خودکار</string>
     <string name="SettingsLaunchScreen_Balance">بالانس</string>
     <string name="SettingsLaunchScreen_MarketOverview">بررسی اجمالی بازار</string>
-    <string name="SettingsLaunchScreen_Watchlist">فهرست تماشا</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">تیره</string>
     <string name="SettingsTheme_Light">روشن</string>
@@ -397,8 +395,6 @@
     <string name="Hud_Text_AddressAdded">نشانی افزوده شد</string>
     <string name="Hud_Text_Done">انجام شد</string>
     <string name="Hud_Text_EmailAddressCopied">آدرس ایمیل کپی شد</string>
-    <string name="Hud_Added_To_Watchlist">به فهرست تماشا افزوده شد</string>
-    <string name="Hud_Removed_from_Watchlist">از فهرست تماشا برداشته شد</string>
     <!--Manage Coins-->
     <string name="ManageCoins_title">مدیر سكه</string>
     <string name="ManageCoins_AddToken">اضافه کردن نشان</string>
