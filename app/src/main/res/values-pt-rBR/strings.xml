@@ -155,8 +155,6 @@
     <string name="Market_Tab_Platform">Plataformas</string>
     <string name="Market_Tab_Pairs">Pares</string>
     <string name="Market_Tab_Sectors">Setores</string>
-    <string name="Market_Tab_Watchlist">Catálogo</string>
-    <string name="Market_Tab_Watchlist_EmptyList">Seu catálogo está vazio.</string>
     <string name="Market_Category_TopCoins">Top Moedas</string>
     <string name="Market_Signals">Sinais</string>
     <string name="Market_Volume">Volume</string>
@@ -747,7 +745,6 @@
     <string name="BackupManager_MergeDescription">Esta ação sobrescreverá seus contatos de pagamento locais.</string>
     <string name="BackupManager_BackupRequired">Backup necessário</string>
     <string name="BackupManager_WatchWallets">Carteiras de Relógio</string>
-    <string name="BackupManager_Watchlist">Catálogo</string>
     <string name="BackupManager_CustomRpc">RPC Personalizado</string>
     <string name="BackupManager_AppSettingsTitle">Configurações do Aplicativo</string>
     <string name="BackupManager_AppSettingsDescription">Linguagem, Moeda, Aparência …</string>
@@ -832,7 +829,6 @@
     <string name="SettingsLaunchScreen_Auto">Automático</string>
     <string name="SettingsLaunchScreen_Balance">Saldo</string>
     <string name="SettingsLaunchScreen_MarketOverview">Visão Geral do Mercado</string>
-    <string name="SettingsLaunchScreen_Watchlist">Catálogo</string>
     <!--Settings-->
     <string name="SettingsTheme_Dark">Escuro</string>
     <string name="SettingsTheme_Light">Claro</string>
@@ -849,10 +845,8 @@
     <string name="Hud_Text_Done">Concluído</string>
     <string name="Hud_Text_Verified">Confirmado</string>
     <string name="Hud_Text_EmailAddressCopied">Endereço de e-mail copiado</string>
-    <string name="Hud_Added_To_Watchlist">Adicionado à Lista</string>
     <string name="Hud_Added_To_Wallet">Adicionado à Carteira</string>
     <string name="Hud_Removed_From_Wallet">Removido da Carteira</string>
-    <string name="Hud_Removed_from_Watchlist">Removido da Lista</string>
     <string name="Hud_Removed">Removido</string>
     <string name="Hud_WaitForSynchronization">Aguarde a sincronização</string>
     <!--Manage Coins-->
