@@ -19,7 +19,7 @@ class SolanaRpcSourceManager(
     val rpcSourceUpdateObservable: Observable<Unit>
         get() = rpcSourceSubjectUpdate
 
-    val allRpcSources = listOf(RpcSource.TritonOne, RpcSource.Serum)
+    val allRpcSources = listOf(RpcSource.TritonOne/*, RpcSource.Serum*/)
 
     val rpcSource: RpcSource
         get() {

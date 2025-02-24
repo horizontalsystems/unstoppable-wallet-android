@@ -34,7 +34,7 @@ class SolanaKitManager(
     var solanaKitWrapper: SolanaKitWrapper? = null
 
     private var useCount = 0
-    var currentAccount: cash.p.terminal.wallet.Account? = null
+    var currentAccount: Account? = null
         private set
     private val solanaKitStoppedSubject = PublishSubject.create<Unit>()
 
@@ -51,7 +51,7 @@ class SolanaKitManager(
     }
 
     @Synchronized
-    fun getSolanaKitWrapper(account: cash.p.terminal.wallet.Account): SolanaKitWrapper {
+    fun getSolanaKitWrapper(account: Account): SolanaKitWrapper {
         if (this.solanaKitWrapper != null && currentAccount != account) {
             stopKit()
         }
@@ -59,10 +59,10 @@ class SolanaKitManager(
         if (this.solanaKitWrapper == null) {
             val accountType = account.type
             this.solanaKitWrapper = when (accountType) {
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
-                is cash.p.terminal.wallet.AccountType.SolanaAddress -> {
+                is AccountType.SolanaAddress -> {
                     createKitInstance(accountType, account)
                 }
                 else -> throw UnsupportedAccountException()
@@ -78,8 +78,8 @@ class SolanaKitManager(
     }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.Mnemonic,
-        account: cash.p.terminal.wallet.Account
+        accountType: AccountType.Mnemonic,
+        account: Account
     ): SolanaKitWrapper {
         val seed = accountType.seed
         val address = Signer.address(seed)
@@ -90,15 +90,16 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
+            solscanApiKey = appConfigProvider.solscanApiKey,
+            debug = true
         )
 
         return SolanaKitWrapper(kit, signer)
     }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.SolanaAddress,
-        account: cash.p.terminal.wallet.Account
+        accountType: AccountType.SolanaAddress,
+        account: Account
     ): SolanaKitWrapper {
         val address = accountType.address
 
@@ -107,14 +108,15 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
+            solscanApiKey = appConfigProvider.solscanApiKey,
+            debug = true
         )
 
         return SolanaKitWrapper(kit, null)
     }
 
     @Synchronized
-    fun unlink(account: cash.p.terminal.wallet.Account) {
+    fun unlink(account: Account) {
         if (account == currentAccount) {
             useCount -= 1
 
