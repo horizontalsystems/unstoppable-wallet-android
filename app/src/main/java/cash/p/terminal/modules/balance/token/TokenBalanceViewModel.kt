@@ -23,8 +23,10 @@ import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
 import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.BlockchainType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -101,12 +103,16 @@ class TokenBalanceViewModel(
         }
     }
 
+    private fun isBep20(token: Token) =
+        token.type is TokenType.Eip20 && token.blockchainType == BlockchainType.BinanceSmartChain
+
     private suspend fun isSwappable(token: Token) =
-        App.instance.isSwapEnabled &&
-                getChangeNowAssociatedCoinTickerUseCase(
-                    token.coin.uid,
-                    token.blockchainType.uid
-                ) != null
+        App.instance.isSwapEnabled && (
+                isBep20(token) ||
+                        getChangeNowAssociatedCoinTickerUseCase(
+                            token.coin.uid,
+                            token.blockchainType.uid
+                        ) != null)
 
     fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
