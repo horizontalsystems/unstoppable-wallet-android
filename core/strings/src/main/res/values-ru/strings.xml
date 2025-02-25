@@ -1645,6 +1645,7 @@
     <string name="Unlock_Title">Разблокировать</string>
     <string name="Unlock_Passcode">Код доступа</string>
     <string name="Unlock_EnterPasscode">Введите код доступа</string>
+    <string name="Unlock_EnterPasscode_Transfer">Введите пароль, чтобы включить \"Пароль для перевода\"</string>
     <string name="Unlock_Incorrect">Неправильно</string>
     <string name="Unlock_BiometricScanner">Биометрический сканер</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Введите код доступа или повторите попытку позже</string>
@@ -1739,6 +1740,7 @@
     <string name="no_active_stacking">Нет активных стейкинг-транзакций.</string>
     <string name="tokens">токены</string>
     <string name="buy_pirate">Купить PirateCash</string>
+    <string name="staking_details">Детали стэкинга</string>
     <string name="buy_cosanta">Купить Cosanta</string>
     <string name="Balance_ProcessingBalance_Title">Обработка</string>
     <string name="Info_ProcessingBalance_Title">Обработка суммы</string>
@@ -1746,11 +1748,11 @@
     <string name="no_active_stacking_pirate_description">Стейкинг PIRATE: Для активации стейкинга необходимо еще 100 токенов и будете получать 13% годовых!</string>
     <string name="no_active_stacking_cosanta_description">COSANTA Стейкинг: Внесите 1 токен и начните зарабатывать через 24 часа.</string>
     <string name="waiting_for_stacking">Стейкинг монет начнется не позднее чем через %1$d часов</string>
-    <string name="stacking_calculator">калькулятор стейкинга</string>
+    <string name="stacking_calculator">калькулятор стэкинга</string>
     <string name="total_balance">Общий баланс</string>
     <string name="total_income">Общий доход</string>
     <string name="unpaid">Невыплачено</string>
-    <string name="stacking_unpaid">Ожидающие выплаты за стекинг:</string>
+    <string name="stacking_unpaid">Ожидающие выплаты за стэкинг:</string>
     <string name="estimated_annual_interest">Предполагаемый годовой процент</string>
     <string name="accruals">Начисления</string>
     <string name="investment_chart">График инвестиций</string>
