@@ -26,7 +26,7 @@ class HashDitAddressValidator(
 
         val chain = evmBlockchainManager.getChain(token.blockchainType)
         val response = apiService.transactionSecurity(TransactionSecurityData(chain.id, address.hex))
-        return if (response.data.risk_level == 0)
+        return if (response.data.risk_level < 4)
             AddressCheckResult.Clear
         else
             AddressCheckResult.Detected
