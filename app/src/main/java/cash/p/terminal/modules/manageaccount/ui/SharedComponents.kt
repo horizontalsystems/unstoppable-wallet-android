@@ -135,7 +135,7 @@ fun KeyActionItem(
 fun ConfirmCopyBottomSheet(onConfirm: () -> Unit, onCancel: () -> Unit) {
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
-        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         title = stringResource(R.string.RecoveryPhrase_CopyWarning_Title),
         onCloseClick = onCancel
     ) {
@@ -209,7 +209,7 @@ fun SeedPhraseList(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(24.dp))
-            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
+            .border(1.dp, ComposeAppTheme.colors.steel20, RoundedCornerShape(24.dp))
             .clickable(
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },

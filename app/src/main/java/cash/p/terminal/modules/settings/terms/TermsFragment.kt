@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import androidx.activity.addCallback
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -67,73 +66,73 @@ fun TermsScreen(
         navController.popBackStack()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(ComposeAppTheme.colors.tyler)
-    ) {
-        AppBar(
-            title = stringResource(R.string.Settings_Terms),
-            menuItems = listOf(
-                MenuItem(
-                    title = TranslatableString.ResString(R.string.Button_Close),
-                    icon = R.drawable.ic_close,
-                    onClick = {
-                        navController.setNavigationResultX(TermsFragment.Result(false))
-                        navController.popBackStack()
-                    }
+    Scaffold(
+        containerColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Settings_Terms),
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Close),
+                        icon = R.drawable.ic_close,
+                        onClick = {
+                            navController.setNavigationResultX(TermsFragment.Result(false))
+                            navController.popBackStack()
+                        }
+                    )
                 )
             )
-        )
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
-        ) {
+        }
+    ) {
+        Column(Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(modifier = Modifier.height(12.dp))
 
-            Spacer(modifier = Modifier.height(12.dp))
+                CellUniversalLawrenceSection(viewModel.termsViewItems) { item ->
+                    val onClick = if (!viewModel.readOnlyState) {
+                        { viewModel.onTapTerm(item.termType, !item.checked) }
+                    } else {
+                        null
+                    }
 
-            CellUniversalLawrenceSection(viewModel.termsViewItems) { item ->
-                val onClick = if (!viewModel.readOnlyState) {
-                    { viewModel.onTapTerm(item.termType, !item.checked) }
-                } else {
-                    null
+                    RowUniversal(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        onClick = onClick
+                    ) {
+                        HsCheckbox(
+                            checked = item.checked,
+                            enabled = !viewModel.readOnlyState,
+                            onCheckedChange = { checked ->
+                                viewModel.onTapTerm(item.termType, checked)
+                            },
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        subhead2_leah(
+                            text = stringResource(item.termType.description)
+                        )
+                    }
                 }
 
-                RowUniversal(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    onClick = onClick
-                ) {
-                    HsCheckbox(
-                        checked = item.checked,
-                        enabled = !viewModel.readOnlyState,
-                        onCheckedChange = { checked ->
-                            viewModel.onTapTerm(item.termType, checked)
-                        },
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    subhead2_leah(
-                        text = stringResource(item.termType.description)
-                    )
-                }
+                Spacer(Modifier.height(60.dp))
             }
 
-            Spacer(Modifier.height(60.dp))
-        }
-
-        if (viewModel.buttonVisible) {
-            ButtonsGroupWithShade {
-                ButtonPrimaryYellow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    title = stringResource(R.string.Button_IAgree),
-                    onClick = { viewModel.onAgreeClick() },
-                    enabled = viewModel.buttonEnabled
-                )
+            if (viewModel.buttonVisible) {
+                ButtonsGroupWithShade {
+                    ButtonPrimaryYellow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp),
+                        title = stringResource(R.string.Button_IAgree),
+                        onClick = { viewModel.onAgreeClick() },
+                        enabled = viewModel.buttonEnabled
+                    )
+                }
             }
         }
     }
-
 }
 

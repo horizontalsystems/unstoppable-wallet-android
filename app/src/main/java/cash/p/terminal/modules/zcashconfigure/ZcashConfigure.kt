@@ -26,14 +26,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -118,6 +117,7 @@ class ZcashConfigure : BaseComposeFragment() {
     data class Result(val config: ZCashConfig?) : Parcelable
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ZcashConfigureScreen(
     onCloseClick: () -> Unit,
@@ -127,15 +127,7 @@ fun ZcashConfigureScreen(
 ) {
     var showSlowSyncWarning by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        ModalBottomSheetValue.Hidden,
-        confirmValueChange = {
-            if (it == ModalBottomSheetValue.Hidden) {
-                showSlowSyncWarning = false
-            }
-            true
-        }
-    )
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
@@ -147,112 +139,116 @@ fun ZcashConfigureScreen(
         onCloseWithResult.invoke(it)
     }
 
-    if (showSlowSyncWarning) {
-        LaunchedEffect(Unit) {
-            sheetState.show()
-        }
-    }
-
     var textState by rememberSaveable("", stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue(""))
     }
 
-    ModalBottomSheetLayout(
-        sheetState = sheetState,
-        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
-        sheetContent = {
+    if (showSlowSyncWarning) {
+        ModalBottomSheet(
+            sheetState = sheetState,
+            dragHandle = null,
+            containerColor = ComposeAppTheme.colors.transparent,
+            onDismissRequest = {
+                showSlowSyncWarning = false
+            }
+        ) {
             SlowSyncWarningBottomSheet(
                 text = stringResource(R.string.Restore_ZCash_SlowSyncWarningText),
                 onContinueClick = {
-                    showSlowSyncWarning = false
-                    scope.launch { sheetState.hide() }
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showSlowSyncWarning = false
+                        }
+                    }
                     viewModel.restoreAsOld()
                 },
                 onCloseClick = {
-                    showSlowSyncWarning = false
-                    scope.launch { sheetState.hide() }
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showSlowSyncWarning = false
+                        }
+                    }
                 },
             )
         }
+    }
+    Scaffold(
+        containerColor = ComposeAppTheme.colors.tyler,
+        topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
     ) {
-        Scaffold(
-            backgroundColor = ComposeAppTheme.colors.tyler,
-            topBar = { ZcashAppBar(onCloseClick = onCloseClick) }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
-                Column(
+        Column(modifier = Modifier.padding(it)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .windowInsetsPadding(windowInsets)
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                Spacer(Modifier.height(12.dp))
+                CellMultilineLawrenceSection(
+                    listOf(
+                        {
+                            OptionCell(
+                                title = stringResource(R.string.Restore_ZCash_NewWallet),
+                                subtitle = stringResource(R.string.Restore_ZCash_NewWallet_Description),
+                                checked = viewModel.uiState.restoreAsNew,
+                                onClick = {
+                                    viewModel.restoreAsNew()
+                                    textState =
+                                        textState.copy(text = "", selection = TextRange(0))
+                                    focusManager.clearFocus()
+                                }
+                            )
+                        },
+                        {
+                            OptionCell(
+                                title = stringResource(R.string.Restore_ZCash_OldWallet),
+                                subtitle = stringResource(R.string.Restore_ZCash_OldWallet_Description),
+                                checked = viewModel.uiState.restoreAsOld,
+                                onClick = {
+                                    showSlowSyncWarning = true
+                                    textState =
+                                        textState.copy(text = "", selection = TextRange(0))
+                                    focusManager.clearFocus()
+                                }
+                            )
+                        },
+                    )
+                )
+
+                Spacer(Modifier.height(24.dp))
+                HeaderText(text = stringResource(R.string.Restore_BirthdayHeight))
+
+                BirthdayHeightInput(
+                    textState = textState,
+                    focusRequester = focusRequester,
+                    textPreprocessor = object : TextPreprocessor {
+                        override fun process(text: String): String {
+                            return text.replace("[^0-9]".toRegex(), "")
+                        }
+                    },
+                    onValueChange = { textFieldValue ->
+                        textState = textFieldValue
+                        viewModel.setBirthdayHeight(textFieldValue.text)
+                    }
+                )
+
+                InfoText(
+                    text = stringResource(R.string.Restore_ZCash_BirthdayHeight_Hint),
+                )
+
+                Spacer(Modifier.height(24.dp))
+            }
+
+            ButtonsGroupWithShade {
+                ButtonPrimaryYellow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f)
-                        .windowInsetsPadding(windowInsets)
-                        .verticalScroll(rememberScrollState()),
-                ) {
-                    Spacer(Modifier.height(12.dp))
-                    CellMultilineLawrenceSection(
-                        listOf(
-                            {
-                                OptionCell(
-                                    title = stringResource(R.string.Restore_ZCash_NewWallet),
-                                    subtitle = stringResource(R.string.Restore_ZCash_NewWallet_Description),
-                                    checked = viewModel.uiState.restoreAsNew,
-                                    onClick = {
-                                        viewModel.restoreAsNew()
-                                        textState =
-                                            textState.copy(text = "", selection = TextRange(0))
-                                        focusManager.clearFocus()
-                                    }
-                                )
-                            },
-                            {
-                                OptionCell(
-                                    title = stringResource(R.string.Restore_ZCash_OldWallet),
-                                    subtitle = stringResource(R.string.Restore_ZCash_OldWallet_Description),
-                                    checked = viewModel.uiState.restoreAsOld,
-                                    onClick = {
-                                        showSlowSyncWarning = true
-                                        textState =
-                                            textState.copy(text = "", selection = TextRange(0))
-                                        focusManager.clearFocus()
-                                    }
-                                )
-                            },
-                        )
-                    )
-
-                    Spacer(Modifier.height(24.dp))
-                    HeaderText(text = stringResource(R.string.Restore_BirthdayHeight))
-
-                    BirthdayHeightInput(
-                        textState = textState,
-                        focusRequester = focusRequester,
-                        textPreprocessor = object : TextPreprocessor {
-                            override fun process(text: String): String {
-                                return text.replace("[^0-9]".toRegex(), "")
-                            }
-                        },
-                        onValueChange = { textFieldValue ->
-                            textState = textFieldValue
-                            viewModel.setBirthdayHeight(textFieldValue.text)
-                        }
-                    )
-
-                    InfoText(
-                        text = stringResource(R.string.Restore_ZCash_BirthdayHeight_Hint),
-                    )
-
-                    Spacer(Modifier.height(24.dp))
-                }
-
-                ButtonsGroupWithShade {
-                    ButtonPrimaryYellow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        title = stringResource(R.string.Button_Done),
-                        onClick = { viewModel.onDoneClick() },
-                        enabled = viewModel.uiState.doneButtonEnabled
-                    )
-                }
+                        .padding(start = 16.dp, end = 16.dp),
+                    title = stringResource(R.string.Button_Done),
+                    onClick = { viewModel.onDoneClick() },
+                    enabled = viewModel.uiState.doneButtonEnabled
+                )
             }
         }
     }

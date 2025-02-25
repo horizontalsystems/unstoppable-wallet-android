@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -187,10 +188,11 @@ fun NavGraphBuilder.composablePopup(
             )
         },
         popExitTransition = {
-            slideOutOfContainer(
-                AnimatedContentTransitionScope.SlideDirection.Down,
-                animationSpec = tween(250)
-            )
+            fadeOut(animationSpec = tween(250)) +
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Down,
+                        animationSpec = tween(250)
+                    )
         },
         content = content
     )

@@ -1070,7 +1070,7 @@
     <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
     <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
-    <string name="ImportWallet_ExchangeWallet">с exchange кошелька</string>
+    <string name="ImportWallet_ExchangeWallet">С exchange кошелька</string>
     <string name="ImportWallet_ExchangeWallet_Description">Подключиться к кошельку на централизованной бирже.</string>
     <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
     <string name="ImportWallet_WatchAddress_Description">Режим наблюдения EVM-цепи и BTC, LTC, DASH адресов</string>

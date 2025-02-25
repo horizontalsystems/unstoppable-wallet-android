@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,17 +22,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
-import io.horizontalsystems.core.getInput
 import cash.p.terminal.modules.markdown.MarkdownContent
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.caption_jacob
-import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
+import io.horizontalsystems.core.getInput
 import kotlinx.parcelize.Parcelize
 
 class ReleaseNotesFragment : BaseComposeFragment() {
@@ -53,7 +53,7 @@ class ReleaseNotesFragment : BaseComposeFragment() {
 fun ReleaseNotesScreen(
     closeablePopup: Boolean,
     onCloseClick: () -> Unit,
-    viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory()),
+    viewModel: ReleaseNotesViewModel = viewModel(factory = ReleaseNotesModule.Factory())
 ) {
     BackHandler() {
         viewModel.whatsNewShown()
@@ -61,7 +61,7 @@ fun ReleaseNotesScreen(
     }
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             if (closeablePopup) {
                 AppBar(
