@@ -18,7 +18,6 @@ object UserSubscriptionManager {
                 DuressMode,
                 AddressPhishing,
                 AddressBlacklist,
-                PrivacyMode,
                 VIPSupport,
             )
         ),

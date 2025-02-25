@@ -24,7 +24,4 @@ object AddressPhishing : IPaidAction
 object AddressBlacklist : IPaidAction
 
 @Parcelize
-object PrivacyMode : IPaidAction
-
-@Parcelize
 object VIPSupport : IPaidAction

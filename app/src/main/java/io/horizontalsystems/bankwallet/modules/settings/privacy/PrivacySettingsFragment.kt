@@ -27,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.BaseComposeFragment
-import io.horizontalsystems.bankwallet.core.paidAction
 import io.horizontalsystems.bankwallet.core.stats.StatEvent
 import io.horizontalsystems.bankwallet.core.stats.StatPage
 import io.horizontalsystems.bankwallet.core.stats.stat
@@ -42,15 +41,12 @@ import io.horizontalsystems.bankwallet.ui.compose.components.HSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.HsBackButton
 import io.horizontalsystems.bankwallet.ui.compose.components.HsSwitch
 import io.horizontalsystems.bankwallet.ui.compose.components.InfoText
-import io.horizontalsystems.bankwallet.ui.compose.components.PremiumHeader
 import io.horizontalsystems.bankwallet.ui.compose.components.TextImportantWarning
 import io.horizontalsystems.bankwallet.ui.compose.components.VSpacer
 import io.horizontalsystems.bankwallet.ui.compose.components.body_leah
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.CellUniversal
-import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionPremiumUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.compose.components.cell.SectionUniversalLawrence
 import io.horizontalsystems.bankwallet.ui.extensions.ConfirmationDialog
-import io.horizontalsystems.subscriptions.core.PrivacyMode
 import kotlin.system.exitProcess
 
 class PrivacySettingsFragment : BaseComposeFragment() {
@@ -152,8 +148,7 @@ fun PrivacyScreen(
             )
 
             VSpacer(height = 24.dp)
-            PremiumHeader()
-            SectionPremiumUniversalLawrence {
+            SectionUniversalLawrence {
                 CellUniversal {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_share_24px),
@@ -166,11 +161,9 @@ fun PrivacyScreen(
                     HsSwitch(
                         checked = uiState.uiStatsEnabled,
                         onCheckedChange = {
-                            navController.paidAction(PrivacyMode) {
-                                viewModel.toggleUiStats(it)
+                            viewModel.toggleUiStats(it)
 
-                                stat(page = StatPage.Privacy, event = StatEvent.EnableUiStats(it))
-                            }
+                            stat(page = StatPage.Privacy, event = StatEvent.EnableUiStats(it))
                         }
                     )
                 }
