@@ -9,7 +9,6 @@ import io.horizontalsystems.subscriptions.core.BasePlan
 import io.horizontalsystems.subscriptions.core.DuressMode
 import io.horizontalsystems.subscriptions.core.IPaidAction
 import io.horizontalsystems.subscriptions.core.PricingPhase
-import io.horizontalsystems.subscriptions.core.PrivacyMode
 import io.horizontalsystems.subscriptions.core.TokenInsights
 import io.horizontalsystems.subscriptions.core.TradeSignals
 import io.horizontalsystems.subscriptions.core.VIPSupport
@@ -24,7 +23,6 @@ object BuySubscriptionModel {
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode
             AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing
             AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist
-            PrivacyMode -> R.string.Premium_UpgradeFeature_PrivacyMode
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
@@ -37,7 +35,6 @@ object BuySubscriptionModel {
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_Description
             AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing_Description
             AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist_Description
-            PrivacyMode -> R.string.Premium_UpgradeFeature_PrivacyMode_Description
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_Description
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
@@ -50,7 +47,6 @@ object BuySubscriptionModel {
             DuressMode -> R.string.Premium_UpgradeFeature_DuressMode_BigDescription
             AddressPhishing -> R.string.Premium_UpgradeFeature_AddressPhishing_BigDescription
             AddressBlacklist -> R.string.Premium_UpgradeFeature_AddressBlacklist_BigDescription
-            PrivacyMode -> R.string.Premium_UpgradeFeature_PrivacyMode_BigDescription
             VIPSupport -> R.string.Premium_UpgradeFeature_VipSupport_BigDescription
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }
@@ -63,7 +59,6 @@ object BuySubscriptionModel {
             DuressMode -> R.drawable.prem_duress_24
             AddressPhishing -> R.drawable.prem_shield_24
             AddressBlacklist -> R.drawable.prem_warning_24
-            PrivacyMode -> R.drawable.prem_fraud_24
             VIPSupport -> R.drawable.prem_vip_support_24
             else -> throw IllegalArgumentException("Unknown IPaidAction")
         }

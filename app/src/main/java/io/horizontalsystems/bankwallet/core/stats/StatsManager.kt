@@ -35,8 +35,6 @@ import io.horizontalsystems.core.BackgroundManagerState
 import io.horizontalsystems.core.toHexString
 import io.horizontalsystems.hdwalletkit.HDExtendedKey
 import io.horizontalsystems.marketkit.models.HsTimePeriod
-import io.horizontalsystems.subscriptions.core.PrivacyMode
-import io.horizontalsystems.subscriptions.core.UserSubscriptionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -58,7 +56,7 @@ class StatsManager(
     private val backgroundManager: BackgroundManager,
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
-    private var uiStatsEnabled = areUiStatsEnabled()
+    private var uiStatsEnabled = localStorage.uiStatsEnabled ?: statsEnabledByDefault()
 
     private val _uiStatsEnabledFlow = MutableStateFlow(uiStatsEnabled)
     val uiStatsEnabledFlow = _uiStatsEnabledFlow.asStateFlow()
@@ -76,26 +74,6 @@ class StatsManager(
                 }
             }
         }
-        scope.launch {
-            UserSubscriptionManager.activeSubscriptionStateFlow.collect {
-                uiStatsEnabled = areUiStatsEnabled()
-                _uiStatsEnabledFlow.update { uiStatsEnabled }
-            }
-        }
-    }
-
-    private fun areUiStatsEnabled(): Boolean {
-        //not premium user
-        if (!UserSubscriptionManager.isActionAllowed(PrivacyMode)) {
-            return true
-        }
-
-        val uiStatsEnabled = localStorage.uiStatsEnabled
-        if (uiStatsEnabled != null) {
-            return uiStatsEnabled
-        }
-
-        return statsEnabledByDefault()
     }
 
     private fun statsEnabledByDefault(): Boolean {
