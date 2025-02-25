@@ -30,7 +30,7 @@ horizontalsystems-ethereum = "201296c"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
 horizontalsystems-solana = "ce738d8"
-horizontalsystems-tron = "dc3dca7"
+horizontalsystems-tron = "bdd7602"
 
 gson = "2.10.1"
 retrofit = "2.11.0"
