@@ -11,7 +11,7 @@ class StringExtensionsTest {
         val input = "192.168.1.1:8080,example.com:3000\nlocalhost:5000,server.org:21"
         val expected = listOf("192.168.1.1", "example.com", "localhost", "server.org")
 
-        val result = input.buildAddresses()
+        val result = input.splitToAddresses()
         assertEquals(expected, result)
     }
 
@@ -20,7 +20,7 @@ class StringExtensionsTest {
         val input = "192.168.0.1:8080,10.0.0.1:1234\n127.0.0.1:5000"
         val expected = listOf("192.168.0.1", "10.0.0.1", "127.0.0.1")
 
-        val result = input.buildAddresses()
+        val result = input.splitToAddresses()
         assertEquals(expected, result)
     }
 
@@ -29,7 +29,7 @@ class StringExtensionsTest {
         val input = "example.com:8080,sub.domain.org:443\napi.service.net:9090"
         val expected = listOf("example.com", "sub.domain.org", "api.service.net")
 
-        val result = input.buildAddresses()
+        val result = input.splitToAddresses()
         assertEquals(expected, result)
     }
 
@@ -38,7 +38,7 @@ class StringExtensionsTest {
         val input = "192.168.1.1,example.com\nlocalhost"
         val expected = listOf("192.168.1.1", "example.com", "localhost")
 
-        val result = input.buildAddresses()
+        val result = input.splitToAddresses()
         assertEquals(expected, result)
     }
 
@@ -46,7 +46,7 @@ class StringExtensionsTest {
     fun testBuildAddressesWithEmptyInput() {
         val input = ""
 
-        val result = input.buildAddresses()
+        val result = input.splitToAddresses()
         assertTrue(result.isEmpty())
     }
 }

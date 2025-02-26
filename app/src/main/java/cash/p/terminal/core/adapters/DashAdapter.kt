@@ -4,8 +4,11 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.adapters.dash.DashKit
-import cash.p.terminal.core.buildAddresses
+import cash.p.terminal.core.adapters.dash.DashKit.Companion.getIpByUrl
+import cash.p.terminal.core.adapters.dash.MainNetDash
+import cash.p.terminal.core.splitToAddresses
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.network.pirate.domain.repository.MasterNodesRepository
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.UsedAddress
@@ -17,6 +20,10 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 
 class DashAdapter(
@@ -31,8 +38,14 @@ class DashAdapter(
         wallet: Wallet,
         syncMode: BitcoinCore.SyncMode,
         backgroundManager: BackgroundManager,
-        customPeers: String
-    ) : this(createKit(wallet, syncMode, customPeers), syncMode, backgroundManager, wallet)
+        customPeers: String,
+        masterNodesRepository: MasterNodesRepository
+    ) : this(
+        kit = createKit(wallet, syncMode, customPeers, masterNodesRepository),
+        syncMode = syncMode,
+        backgroundManager = backgroundManager,
+        wallet = wallet
+    )
 
     init {
         kit.listener = this
@@ -104,11 +117,13 @@ class DashAdapter(
 
     companion object {
         private const val confirmationsThreshold = 3
+        private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
         private fun createKit(
             wallet: Wallet,
             syncMode: BitcoinCore.SyncMode,
-            customPeers: String
+            userPeers: String,
+            masterNodesRepository: MasterNodesRepository
         ): DashKit {
             val account = wallet.account
 
@@ -122,7 +137,7 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
                     ).apply {
-                        addPeers(customPeers.buildAddresses())
+                        setupPeers(masterNodesRepository, userPeers)
                     }
                 }
 
@@ -136,7 +151,7 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
                     ).apply {
-                        addPeers(customPeers.buildAddresses())
+                        setupPeers(masterNodesRepository, userPeers)
                     }
                 }
 
@@ -149,7 +164,7 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
                     ).apply {
-                        addPeers(customPeers.buildAddresses())
+                        setupPeers(masterNodesRepository, userPeers)
                     }
                 }
 
@@ -160,5 +175,26 @@ class DashAdapter(
         fun clear(walletId: String) {
             DashKit.clear(App.instance, NetworkType.MainNet, walletId)
         }
+
+        private fun DashKit.setupPeers(
+            masterNodesRepository: MasterNodesRepository,
+            userPeers: String
+        ) {
+            coroutineScope.launch {
+                trySetPeers(userPeers.splitToAddresses()) ||
+                        trySetPeers(MainNetDash.defaultSeeds) ||
+                        trySetPeers(masterNodesRepository.getMasterNodes().ips)
+            }
+        }
+
+        private fun DashKit.trySetPeers(peers: List<String>) =
+            peers.mapNotNull(::getIpByUrl).flatten().run {
+                if (isNotEmpty()) {
+                    addPeers(this)
+                    true
+                } else {
+                    false
+                }
+            }
     }
 }

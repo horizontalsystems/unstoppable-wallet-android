@@ -398,16 +398,12 @@ class DashKit : AbstractKit, IInstantTransactionDelegate, BitcoinCore.Listener {
         coroutineScope.launch {
             dnsList.map { host ->
                 launch {
-                    try {
-                        val ips = InetAddress
-                            .getAllByName(host)
-                            .filter { it !is Inet6Address }
-                            .map { it.hostAddress }
-                        logger.warning("Found ips for $host: $ips")
+                    val ips = getIpByUrl(host)
+                    if (ips != null) {
                         mutex.withLock {
                             coreStorage.setPeerAddresses(ips.map { PeerAddress(it, 0) })
                         }
-                    } catch (e: UnknownHostException) {
+                    } else {
                         logger.warning("Cannot look up host: $host")
                     }
                 }
@@ -562,6 +558,16 @@ class DashKit : AbstractKit, IInstantTransactionDelegate, BitcoinCore.Listener {
                     continue
                 }
             }
+        }
+
+        fun getIpByUrl(host: String): List<String>? = try {
+            InetAddress
+                .getAllByName(host)
+                .filter { it !is Inet6Address }
+                .mapNotNull { it.hostAddress }
+        } catch (e: UnknownHostException) {
+            e.printStackTrace()
+            null
         }
     }
 

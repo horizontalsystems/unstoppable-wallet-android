@@ -4,6 +4,14 @@ import io.horizontalsystems.bitcoincore.network.Network
 
 class MainNetDash : Network() {
 
+    companion object {
+        internal val defaultSeeds = listOf(
+            "dnsseed.dash.org",
+            "dnsseed.dashdot.io",
+            "dnsseed.masternode.io"
+        )
+    }
+
     override val protocolVersion = 70228
     override val noBloomVersion = 70201
 
@@ -24,9 +32,5 @@ class MainNetDash : Network() {
     override val dustRelayTxFee =
         1000 // https://github.com/dashpay/dash/blob/master/src/policy/policy.h#L36
 
-    override var dnsSeeds = listOf(
-        "dnsseed.dash.org",
-        "dnsseed.dashdot.io",
-        "dnsseed.masternode.io"
-    )
+    override var dnsSeeds: List<String> = emptyList()
 }

@@ -39,6 +39,7 @@ import cash.p.terminal.core.managers.SolanaKitManager
 import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
+import cash.p.terminal.network.pirate.domain.repository.MasterNodesRepository
 import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -62,6 +63,7 @@ class AdapterFactory(
     private val coinManager: ICoinManager,
     private val evmLabelManager: EvmLabelManager,
     private val localStorage: ILocalStorage,
+    private val masterNodesRepository: MasterNodesRepository
 ) {
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
@@ -171,7 +173,8 @@ class AdapterFactory(
                         wallet = wallet,
                         syncMode = syncMode,
                         backgroundManager = backgroundManager,
-                        customPeers = localStorage.customDashPeers
+                        customPeers = localStorage.customDashPeers,
+                        masterNodesRepository = masterNodesRepository
                     )
                 }
 
