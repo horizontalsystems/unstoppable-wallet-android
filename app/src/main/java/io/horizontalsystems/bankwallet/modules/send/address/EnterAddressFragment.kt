@@ -123,6 +123,7 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                     value = uiState.value,
                     hint = stringResource(id = R.string.Send_Hint_Address),
                     state = uiState.inputState,
+                    showStateIcon = false,
                     textPreprocessor = paymentAddressViewModel,
                     navController = navController,
                     chooseContactEnable = false,
@@ -157,7 +158,10 @@ fun EnterAddressScreen(navController: NavController, input: EnterAddressFragment
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, end = 16.dp),
-                    title = stringResource(R.string.Button_Next),
+                    title = if (uiState.addressValidationError != null)
+                        stringResource(R.string.Send_Address_Error_InvalidAddress)
+                    else
+                        stringResource(R.string.Button_Next),
                     onClick = {
                         uiState.address?.let {
                             navController.slideFromRight(
@@ -188,31 +192,33 @@ fun AddressCheck(
     navController: NavController,
     onPaidAction: (action: IPaidAction) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .padding(top = 16.dp)
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .border(
-                0.5.dp,
-                ComposeAppTheme.colors.steel20,
-                RoundedCornerShape(12.dp)
-            )
-    ) {
-        checkResults.forEach { (addressCheckType, checkData) ->
-            CheckCell(
-                title = stringResource(addressCheckType.title),
-                checkType = addressCheckType,
-                inProgress = checkData.inProgress,
-                checkResult = checkData.checkResult,
-                navController,
-                onPaidAction
-            )
+    if (addressValidationError == null || addressValidationError is AddressValidationError.SendToSelfForbidden) {
+        Column(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .border(
+                    0.5.dp,
+                    ComposeAppTheme.colors.steel20,
+                    RoundedCornerShape(12.dp)
+                )
+        ) {
+            checkResults.forEach { (addressCheckType, checkData) ->
+                CheckCell(
+                    title = stringResource(addressCheckType.title),
+                    checkType = addressCheckType,
+                    inProgress = checkData.inProgress,
+                    checkResult = checkData.checkResult,
+                    navController,
+                    onPaidAction
+                )
+            }
         }
-    }
 
-    Errors(addressValidationError, checkResults)
+        Errors(addressValidationError, checkResults)
+    }
 }
 
 @Composable
@@ -297,7 +303,7 @@ private fun CheckCell(
             contentDescription = null,
             tint = ComposeAppTheme.colors.jacob,
             modifier = Modifier
-                .padding(end = 3.dp)
+                .padding(end = 8.dp)
                 .size(20.dp)
         )
         subhead2_grey(text = title)

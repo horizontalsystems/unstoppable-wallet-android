@@ -51,7 +51,9 @@ class TronAddressValidator(
     override suspend fun validate(address: Address) {
         val validAddress = io.horizontalsystems.tronkit.models.Address.fromBase58(address.hex)
         if (token.type == TokenType.Native && adapter.isOwnAddress(validAddress)) {
-            throw Exception(Translator.getString(R.string.Send_Error_SendToSelf, "TRX"))
+            throw AddressValidationError.SendToSelfForbidden(
+                Translator.getString(R.string.Send_Error_SendToSelf, "TRX")
+            )
         }
     }
 }
@@ -63,7 +65,13 @@ class ZcashAddressValidator(
         try {
             adapter.validate(address.hex)
         } catch (e: ZcashError.SendToSelfNotAllowed) {
-            throw Exception(Translator.getString(R.string.Send_Error_SendToSelf, "ZEC"))
+            throw AddressValidationError.SendToSelfForbidden(
+                Translator.getString(R.string.Send_Error_SendToSelf, "ZEC")
+            )
         }
     }
+}
+
+sealed class AddressValidationError : Throwable() {
+    class SendToSelfForbidden(override val message: String) : AddressValidationError()
 }

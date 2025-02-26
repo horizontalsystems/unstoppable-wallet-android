@@ -52,6 +52,7 @@ fun FormsInputAddress(
     value: String,
     hint: String,
     state: DataState<Address>? = null,
+    showStateIcon: Boolean = true,
     textPreprocessor: TextPreprocessor = TextPreprocessorImpl,
     navController: NavController,
     chooseContactEnable: Boolean,
@@ -127,20 +128,28 @@ fun FormsInputAddress(
                     HSCircularProgressIndicator()
                 }
                 is DataState.Error -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_attention_20),
-                        contentDescription = null,
-                        tint = cautionColor
-                    )
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_attention_20),
+                            contentDescription = null,
+                            tint = cautionColor
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
                 }
                 is DataState.Success -> {
-                    Icon(
-                        modifier = Modifier.padding(end = 8.dp),
-                        painter = painterResource(id = R.drawable.ic_check_20),
-                        contentDescription = null,
-                        tint = ComposeAppTheme.colors.remus
-                    )
+                    if(showStateIcon) {
+                        Icon(
+                            modifier = Modifier.padding(end = 8.dp),
+                            painter = painterResource(id = R.drawable.ic_check_20),
+                            contentDescription = null,
+                            tint = ComposeAppTheme.colors.remus
+                        )
+                    } else {
+                        HSpacer(28.dp)
+                    }
                 }
                 else -> {
                     Spacer(modifier = Modifier.width(28.dp))
