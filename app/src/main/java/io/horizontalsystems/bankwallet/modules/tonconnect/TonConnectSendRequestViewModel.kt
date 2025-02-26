@@ -1,6 +1,9 @@
 package io.horizontalsystems.bankwallet.modules.tonconnect
 
 import androidx.lifecycle.viewModelScope
+import com.tonapps.blockchain.ton.TonNetwork
+import com.tonapps.extensions.equalsAddress
+import com.tonapps.wallet.data.core.entity.RawMessageEntity
 import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import io.horizontalsystems.bankwallet.core.App
 import io.horizontalsystems.bankwallet.core.IAccountManager
@@ -16,15 +19,18 @@ import io.horizontalsystems.marketkit.models.TokenQuery
 import io.horizontalsystems.marketkit.models.TokenType
 import io.horizontalsystems.tonkit.core.TonWallet
 import io.horizontalsystems.tonkit.models.Event
+import io.horizontalsystems.tonkit.models.SignTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TonConnectSendRequestViewModel(
-    private val sendRequestEntity: SendRequestEntity?,
+    private val signTransaction: SignTransaction?,
     private val accountManager: IAccountManager,
     private val tonConnectManager: TonConnectManager,
 ) : ViewModelUiState<TonConnectSendRequestUiState>() {
 
+    private val sendRequestEntity = signTransaction?.request
     private var error: TonConnectSendRequestError? = null
     private val transactionSigner = tonConnectManager.transactionSigner
     private val tonConnectKit = App.tonConnectManager.kit
@@ -54,11 +60,57 @@ class TonConnectSendRequestViewModel(
             return
         }
 
+        val connectionAccountId = signTransaction?.dApp?.accountId
+        val requestAccountId = sendRequestEntity.fromAccountId
+
+        if (requestAccountId != null && connectionAccountId != null && !requestAccountId.equalsAddress(connectionAccountId)) {
+            error = TonConnectSendRequestError.InvalidData("Invalid \"from\" address. Specified wallet address not connected to this app.")
+
+            responseBadRequest(sendRequestEntity)
+            return
+        }
+
+        if (validUntilIsInvalid(sendRequestEntity)) {
+            error = TonConnectSendRequestError.InvalidData("Invalid validUntil field")
+
+            responseBadRequest(sendRequestEntity)
+            return
+        }
+
+        try {
+            val messages = sendRequestEntity.messages
+            if (addressIsRaw(messages)) {
+                error = TonConnectSendRequestError.InvalidData("Send to Raw address is not allowed")
+                responseBadRequest(sendRequestEntity)
+                return
+            }
+        }catch (e: Exception){
+            error = TonConnectSendRequestError.InvalidData("Failed to parse messages")
+            responseBadRequest(sendRequestEntity)
+            return
+        }
+
+        if (isTestnet(sendRequestEntity)) {
+            error = TonConnectSendRequestError.InvalidData("Send to Testnet is not allowed")
+            responseBadRequest(sendRequestEntity)
+            return
+        }
+
+        if (sendRequestEntity.messages.isEmpty()) {
+            error = TonConnectSendRequestError.InvalidData("Empty messages")
+            responseBadRequest(sendRequestEntity)
+            return
+        }
+
         val (accountId, _) = sendRequestEntity.dAppId.split(":", limit = 2)
         val account = accountManager.account(accountId)
 
         if (account == null) {
             error = TonConnectSendRequestError.AccountNotFound()
+            return
+        } else if (account != accountManager.activeAccount){
+            error = TonConnectSendRequestError.DifferentAccount("Incorrect account selected")
+            responseBadRequest(sendRequestEntity)
             return
         }
 
@@ -69,8 +121,14 @@ class TonConnectSendRequestViewModel(
             tonKitWrapper = it
         }
 
-        val tonEvent = transactionSigner.getDetails(sendRequestEntity, tonWallet).also {
-            tonEvent = it
+        val tonEvent = try {
+            val event = transactionSigner.getDetails(sendRequestEntity, tonWallet)
+            tonEvent = event
+            event
+        } catch (e: Exception) {
+            error = TonConnectSendRequestError.InvalidData("Failed to get details")
+            responseBadRequest(sendRequestEntity)
+            return
         }
 
         val token = App.coinManager.getToken(TokenQuery(BlockchainType.Ton, TokenType.Native))
@@ -87,6 +145,37 @@ class TonConnectSendRequestViewModel(
         )
 
         tonTransactionRecord = tonTransactionConverter?.createTransactionRecord(tonEvent)
+    }
+
+    private fun isTestnet(sendRequestEntity: SendRequestEntity): Boolean {
+        return sendRequestEntity.network == TonNetwork.TESTNET
+    }
+
+    private fun addressIsRaw(messages: List<RawMessageEntity>): Boolean {
+        messages.forEach { message ->
+            if (message.addressValue.contains(":", ignoreCase = true)) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private suspend fun TonConnectSendRequestViewModel.responseBadRequest(entity: SendRequestEntity) {
+        withContext(Dispatchers.IO) {
+            tonConnectKit.badRequest(entity)
+        }
+    }
+
+    private fun validUntilIsInvalid(sendRequestEntity: SendRequestEntity): Boolean {
+        return try {
+            val result = sendRequestEntity.validUntil
+            if (result == 0L) {
+                throw IllegalArgumentException("Invalid validUntil")
+            }
+            false
+        } catch (e: IllegalArgumentException) {
+            true
+        }
     }
 
     fun confirm() {
@@ -111,8 +200,10 @@ class TonConnectSendRequestViewModel(
 }
 
 sealed class TonConnectSendRequestError : Error() {
+    class InvalidData(override val message: String) : TonConnectSendRequestError()
     class EmptySendRequest : TonConnectSendRequestError()
     class AccountNotFound : TonConnectSendRequestError()
+    class DifferentAccount(override val message: String) : TonConnectSendRequestError()
     class Other(override val message: String) : TonConnectSendRequestError()
 }
 

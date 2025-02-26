@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.tonapps.wallet.data.core.entity.SendRequestEntity
 import com.tonapps.wallet.data.tonconnect.entities.DAppRequestEntity
 import com.walletconnect.web3.wallet.client.Wallet
 import io.horizontalsystems.bankwallet.core.App
@@ -18,6 +17,7 @@ import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
 import io.horizontalsystems.core.security.KeyStoreValidationError
+import io.horizontalsystems.tonkit.models.SignTransaction
 import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
@@ -32,7 +32,7 @@ class MainActivityViewModel(
 
     val navigateToMainLiveData = MutableLiveData(false)
     val wcEvent = MutableLiveData<Wallet.Model?>()
-    val tcSendRequest = MutableLiveData<SendRequestEntity?>()
+    val tcSendRequest = MutableLiveData<SignTransaction?>()
     val tcDappRequest = MutableLiveData<DAppRequestEntity?>()
     val intentLiveData = MutableLiveData<Intent?>()
 

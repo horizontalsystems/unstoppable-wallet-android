@@ -303,7 +303,7 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:ton-kit-android:1cb4c1e'
+    implementation 'com.github.horizontalsystems:ton-kit-android:1ffc986'
     implementation 'com.github.horizontalsystems:bitcoin-kit-android:ff7cfa4'
     implementation 'com.github.horizontalsystems:ethereum-kit-android:d423acf'
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
