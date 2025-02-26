@@ -4,6 +4,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,52 +72,66 @@ fun TonConnectSendRequestScreen(navController: NavController) {
             val coroutineScope = rememberCoroutineScope()
             val view = LocalView.current
 
-            var buttonEnabled by remember { mutableStateOf(true) }
-
-            ButtonPrimaryYellow(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Button_Confirm),
-                enabled = uiState.confirmEnabled && buttonEnabled,
-                onClick = {
-                    coroutineScope.launch {
-                        buttonEnabled = false
-                        HudHelper.showInProcessMessage(
-                            view,
-                            R.string.Send_Sending,
-                            SnackbarDuration.INDEFINITE
-                        )
-
-                        try {
-                            logger.info("click confirm button")
-                            viewModel.confirm()
-                            logger.info("success")
-
-                            HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
-                            delay(1200)
-                        } catch (t: Throwable) {
-                            logger.warning("failed", t)
-                            HudHelper.showErrorMessage(view, t.javaClass.simpleName)
-                        }
-
-                        buttonEnabled = true
+            if (uiState.error != null) {
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Close),
+                    enabled = true,
+                    onClick = {
                         navController.popBackStack()
                     }
-                }
-            )
-            VSpacer(16.dp)
-            ButtonPrimaryDefault(
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(R.string.Button_Reject),
-                enabled = uiState.rejectEnabled,
-                onClick = {
-                    viewModel.reject()
-                    navController.popBackStack()
-                }
-            )
+                )
+            } else {
+                var buttonEnabled by remember { mutableStateOf(true) }
+
+                ButtonPrimaryYellow(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Confirm),
+                    enabled = uiState.confirmEnabled && buttonEnabled,
+                    onClick = {
+                        coroutineScope.launch {
+                            buttonEnabled = false
+                            HudHelper.showInProcessMessage(
+                                view,
+                                R.string.Send_Sending,
+                                SnackbarDuration.INDEFINITE
+                            )
+
+                            try {
+                                logger.info("click confirm button")
+                                viewModel.confirm()
+                                logger.info("success")
+
+                                HudHelper.showSuccessMessage(view, R.string.Hud_Text_Done)
+                                delay(1200)
+                            } catch (t: Throwable) {
+                                logger.warning("failed", t)
+                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                            }
+
+                            buttonEnabled = true
+                            navController.popBackStack()
+                        }
+                    }
+                )
+                VSpacer(16.dp)
+                ButtonPrimaryDefault(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.Button_Reject),
+                    enabled = uiState.rejectEnabled,
+                    onClick = {
+                        viewModel.reject()
+                        navController.popBackStack()
+                    }
+                )
+            }
         }
     ) {
         uiState.error?.let { error ->
-            TextImportantError(text = error.message ?: error.javaClass.simpleName)
+            TextImportantError(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = error.message ?: error.javaClass.simpleName
+            )
         }
 
         Crossfade(uiState.tonTransactionRecord) { record ->
