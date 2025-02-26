@@ -446,6 +446,7 @@
     <string name="Send_Address_Recent">Recent</string>
     <string name="Send_Address_Error_CheckLocked">Locked</string>
     <string name="Send_Address_Error_Incorrect">Invalid</string>
+    <string name="Send_Address_Error_InvalidAddress">Invalid Address</string>
     <string name="Send_Address_Error_Correct">Correct</string>
     <string name="Send_Address_Error_Detected">Detected</string>
     <string name="Send_Address_Error_Clear">Clear</string>
