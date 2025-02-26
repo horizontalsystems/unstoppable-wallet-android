@@ -24,13 +24,14 @@ import java.util.Date
 open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter,
-    private val considerAlwaysPositive: Boolean = false
+    private val considerAlwaysPositive: Boolean = false,
 ) : ViewModelUiState<ChartUiState>() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
     private var chartHeaderView: ChartModule.ChartHeaderView? = null
     private var chartInfoData: ChartInfoData? = null
     private var loading = false
+    private var titleHidden = false
     private var viewState: ViewState = ViewState.Success
     private val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
 
@@ -69,6 +70,11 @@ open class ChartViewModel(
         }
     }
 
+    protected fun setTitleHidden(titleHidden: Boolean) {
+        this.titleHidden = titleHidden
+        emitState()
+    }
+
     override fun createState() = ChartUiState(
         tabItems = tabItems,
         chartHeaderView = chartHeaderView,
@@ -77,7 +83,8 @@ open class ChartViewModel(
         viewState = viewState,
         hasVolumes = service.hasVolumes,
         chartViewType = service.chartViewType,
-        considerAlwaysPositive = considerAlwaysPositive
+        considerAlwaysPositive = considerAlwaysPositive,
+        titleHidden = titleHidden
     )
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {

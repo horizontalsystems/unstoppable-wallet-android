@@ -16,14 +16,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -49,8 +48,6 @@ internal fun CalculatorScreen(
 ) {
     Column(
         modifier = Modifier
-            .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-            .background(ComposeAppTheme.colors.lawrence)
             .padding(horizontal = 16.dp)
             .verticalScroll(rememberScrollState()),
     ) {
@@ -138,7 +135,7 @@ internal fun CalculatorTable(uiState: CalculatorUIState, modifier: Modifier = Mo
                 PeriodType.YEAR -> stringResource(R.string.year_period)
                 PeriodType.UNKNOWN -> return@forEach
             }
-            Divider(
+            HorizontalDivider(
                 color = ComposeAppTheme.colors.steel20,
                 thickness = 1.dp
             )

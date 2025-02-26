@@ -14,5 +14,6 @@ data class ChartUiState(
     val viewState: ViewState,
     val hasVolumes: Boolean,
     val chartViewType: ChartViewType,
-    val considerAlwaysPositive: Boolean
+    val considerAlwaysPositive: Boolean,
+    val titleHidden: Boolean
 )

@@ -4,24 +4,24 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
-import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.entities.LastBlockInfo
-import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.ui_compose.ColoredValue
-import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.core.entities.Blockchain
-import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
@@ -106,14 +106,14 @@ class TransactionsViewModel(
 
                 filterContactLiveData.postValue(state.contact)
 
-                if (filterHideSuspiciousTx.value != state.hideSuspiciousTx){
+                if (filterHideSuspiciousTx.value != state.hideSuspiciousTx) {
                     service.reload()
                 }
                 filterHideSuspiciousTx.postValue(state.hideSuspiciousTx)
 
                 transactionListId = selectedTransactionWallet.hashCode().toString() +
-                    state.selectedTransactionType.name +
-                    state.selectedBlockchain?.uid
+                        state.selectedTransactionType.name +
+                        state.selectedBlockchain?.uid
             }
         }
 
@@ -149,20 +149,20 @@ class TransactionsViewModel(
     private fun handleUpdatedItems(items: List<TransactionItem>) {
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            val viewItems = if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
-                when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
-                    TransactionDisplayLevel.NOTHING -> emptyList()
-                    TransactionDisplayLevel.LAST_1_TRANSACTION -> items.take(1)
-                    TransactionDisplayLevel.LAST_2_TRANSACTIONS -> items.take(2)
-                    TransactionDisplayLevel.LAST_4_TRANSACTIONS -> items.take(4)
-                }.also { hasHiddenTransactions = items.size != it.size }
-            } else {
-                items.also { hasHiddenTransactions = false }
-            }.map {
+            val viewItems =
+                if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
+                    when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
+                        TransactionDisplayLevel.NOTHING -> emptyList()
+                        TransactionDisplayLevel.LAST_1_TRANSACTION -> items.take(1)
+                        TransactionDisplayLevel.LAST_2_TRANSACTIONS -> items.take(2)
+                        TransactionDisplayLevel.LAST_4_TRANSACTIONS -> items.take(4)
+                    }.also { hasHiddenTransactions = items.size != it.size }
+                } else {
+                    items.also { hasHiddenTransactions = false }
+                }.map {
                     ensureActive()
                     transactionViewItem2Factory.convertToViewItemCached(it)
-                }
-                .groupBy {
+                }.groupBy {
                     ensureActive()
                     it.formattedDate
                 }
@@ -219,10 +219,11 @@ class TransactionsViewModel(
         service.clear()
     }
 
-    fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)?.copy(
-        transactionStatusUrl = viewItem.transactionStatusUrl,
-        changeNowTransactionId = viewItem.changeNowTransactionId
-    )
+    fun getTransactionItem(viewItem: TransactionViewItem) =
+        service.getTransactionItem(viewItem.uid)?.copy(
+            transactionStatusUrl = viewItem.transactionStatusUrl,
+            changeNowTransactionId = viewItem.changeNowTransactionId
+        )
 
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
         transactionFilterService.updateFilterHideSuspiciousTx(checked)
@@ -262,7 +263,13 @@ data class TransactionViewItem(
 
     sealed class Icon {
         class ImageResource(val resourceId: Int) : Icon()
-        class Regular(val url: String?, val alternativeUrl: String?, val placeholder: Int?, val rectangle: Boolean = false) : Icon()
+        class Regular(
+            val url: String?,
+            val alternativeUrl: String?,
+            val placeholder: Int?,
+            val rectangle: Boolean = false
+        ) : Icon()
+
         class Double(val back: Regular, val front: Regular) : Icon()
         object Failed : Icon()
         class Platform(blockchainType: BlockchainType) : Icon() {

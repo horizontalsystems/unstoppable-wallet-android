@@ -21,7 +21,7 @@ internal class PiratePlaceRepositoryImpl(
     private val mutex = Mutex()
 
     private companion object {
-        const val CACHE_DURATION = 7 * 24 * 60 * 60 * 1000L // 1 week
+        const val CACHE_DURATION = 1 * 24 * 60 * 60 * 1000L // 1 day
     }
 
     override suspend fun getCoinInfo(coin: String) = withContext(Dispatchers.IO) {

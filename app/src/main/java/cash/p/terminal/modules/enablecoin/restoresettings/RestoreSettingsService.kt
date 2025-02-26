@@ -6,6 +6,8 @@ import cash.p.terminal.core.managers.RestoreSettings
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.ZcashBirthdayProvider
 import cash.p.terminal.core.restoreSettingTypes
+import cash.p.terminal.wallet.Account
+import cash.p.terminal.wallet.AccountOrigin
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.subjects.PublishSubject
@@ -16,13 +18,13 @@ class RestoreSettingsService(
     ) : Clearable {
 
     val approveSettingsObservable = PublishSubject.create<TokenWithSettings>()
-    val rejectApproveSettingsObservable = PublishSubject.create<cash.p.terminal.wallet.Token>()
+    val rejectApproveSettingsObservable = PublishSubject.create<Token>()
     val requestObservable = PublishSubject.create<Request>()
 
-    fun approveSettings(token: Token, account: cash.p.terminal.wallet.Account? = null) {
+    fun approveSettings(token: Token, account: Account? = null) {
         val blockchainType = token.blockchainType
 
-        if (account != null && account.origin == cash.p.terminal.wallet.AccountOrigin.Created) {
+        if (account != null && account.origin == AccountOrigin.Created) {
             val settings = RestoreSettings()
             blockchainType.restoreSettingTypes.forEach { settingType ->
                 manager.getSettingValueForCreatedAccount(settingType, blockchainType)?.let {
@@ -45,7 +47,7 @@ class RestoreSettingsService(
         approveSettingsObservable.onNext(TokenWithSettings(token, RestoreSettings()))
     }
 
-    fun save(settings: RestoreSettings, account: cash.p.terminal.wallet.Account, blockchainType: BlockchainType) {
+    fun save(settings: RestoreSettings, account: Account, blockchainType: BlockchainType) {
         manager.save(settings, account, blockchainType)
     }
 

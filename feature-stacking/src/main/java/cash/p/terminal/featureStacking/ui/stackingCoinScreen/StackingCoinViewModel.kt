@@ -159,7 +159,8 @@ internal abstract class StackingCoinViewModel(
                 dimmed = false
             ).value,
             token = wallet?.token,
-            receiveAddress = receiveAddress
+            receiveAddress = receiveAddress,
+            isWatchAccount = wallet?.account?.isWatchAccount ?: false
         )
 
         viewModelScope.launch(customDispatcher +

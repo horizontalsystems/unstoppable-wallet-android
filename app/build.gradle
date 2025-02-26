@@ -20,7 +20,7 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 122
+        versionCode 124
         versionName "0.41.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -174,8 +174,10 @@ android {
     }
 
     configurations.all { c ->
+        exclude(group: "com.github.metaplex-foundation.kborsh", module: "kborsh-jvm")
         c.resolutionStrategy.dependencySubstitution {
             substitute module('org.bouncycastle:bcprov-jdk15to18:1.68') using module('org.bouncycastle:bcprov-jdk15on:1.65')
+            substitute module('org.bouncycastle:bcprov-jdk15to18:1.69') using module('org.bouncycastle:bcprov-jdk15on:1.65')
             substitute module('com.google.protobuf:protobuf-java:3.6.1') using module('com.google.protobuf:protobuf-javalite:3.21.1')
             substitute module('net.jcip:jcip-annotations:1.0') using module('com.github.stephenc.jcip:jcip-annotations:1.0-1')
 
@@ -226,6 +228,7 @@ dependencies {
     implementation libs.room.ktx
     implementation libs.androidx.room.rxjava2
     implementation libs.androidx.material3.android
+    testImplementation libs.junit.jupiter
     ksp libs.room.compiler
     // alternately - if using Java8, use the following instead of compiler
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
@@ -283,16 +286,16 @@ dependencies {
 
     // Wallet kits
     implementation(libs.ton.kit)
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:4a34f53'
+    implementation libs.bitcoin.kit
     implementation libs.ethereum.kit
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     // implementation 'com.github.horizontalsystems:market-kit-android:55dde9c'
-    implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
+//    implementation libs.solana.kit
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-    implementation "cash.z.ecc.android:zcash-android-sdk:2.2.6"
+    implementation libs.zcash.android.sdk
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
@@ -324,6 +327,7 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':feature-stacking')
+    implementation project(':solanakit')
 
     // Integration with activities
     implementation libs.androidx.activity.compose

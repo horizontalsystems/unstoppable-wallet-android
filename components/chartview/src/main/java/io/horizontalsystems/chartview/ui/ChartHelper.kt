@@ -281,7 +281,7 @@ class ChartHelper(
             )
         }
 
-        if (target.rsi == null) {
+        if (target.rsi == null || target.rsi?.points.isNullOrEmpty()) {
             rsiCurve = null
         } else if (rsiCurve == null) {
             initRsiCurve()
@@ -347,15 +347,17 @@ class ChartHelper(
 
         if (hasVolumes) {
             val volumeByTimestamp = target.volumeByTimestamp()
-            val volumeMin = volumeByTimestamp.minOf { it.value }
-            val volumeMax = volumeByTimestamp.maxOf { it.value }
-            volumeBars?.setValues(
-                volumeByTimestamp,
-                minKey,
-                maxKey,
-                volumeMin,
-                volumeMax
-            )
+            if (volumeByTimestamp.isNotEmpty()) {
+                val volumeMin = volumeByTimestamp.minOf { it.value }
+                val volumeMax = volumeByTimestamp.maxOf { it.value }
+                volumeBars?.setValues(
+                    volumeByTimestamp,
+                    minKey,
+                    maxKey,
+                    volumeMin,
+                    volumeMax
+                )
+            }
         }
 
         defineColors()

@@ -4,13 +4,16 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,7 +41,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
+fun TonConnectMainScreen(
+    navController: NavController, deepLinkUri: String?,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
+) {
     val context = LocalContext.current
     val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -112,7 +118,9 @@ fun TonConnectMainScreen(navController: NavController, deepLinkUri: String?) {
                 )
             }
         ) {
-            Column(modifier = Modifier.padding(it)) {
+            Column(modifier = Modifier
+                .padding(it)
+                .windowInsetsPadding(windowInsets)) {
                 Column(modifier = Modifier.weight(1f)) {
                     val dapps = uiState.dapps
                     if (dapps.isEmpty()) {

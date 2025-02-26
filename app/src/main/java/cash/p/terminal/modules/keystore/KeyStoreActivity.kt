@@ -146,7 +146,7 @@ private fun KeyStoreScreen(
         showBiometricPrompt.invoke()
     }
 
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         if (viewModel.showSystemLockWarning) {
             Column(
                 modifier = Modifier
@@ -212,7 +212,7 @@ private fun KeysInvalidatedDialog(onClick: () -> Unit) {
 @Preview
 @Composable
 private fun Preview_KeysInvalidatedDialog() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         KeysInvalidatedDialog {}
     }
 }
@@ -220,7 +220,7 @@ private fun Preview_KeysInvalidatedDialog() {
 @Preview
 @Composable
 private fun Preview_NoSystemWarning() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         NoSystemLockWarning()
     }
 }

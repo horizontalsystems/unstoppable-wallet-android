@@ -3,14 +3,17 @@ package cash.p.terminal.modules.blockchainsettings
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -47,6 +50,7 @@ class BlockchainSettingsFragment : BaseComposeFragment() {
 @Composable
 private fun BlockchainSettingsScreen(
     navController: NavController,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
     viewModel: BlockchainSettingsViewModel = viewModel(factory = BlockchainSettingsModule.Factory()),
 ) {
 
@@ -62,6 +66,7 @@ private fun BlockchainSettingsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .windowInsetsPadding(windowInsets)
                     .verticalScroll(rememberScrollState()),
             ) {
                 Spacer(Modifier.height(12.dp))

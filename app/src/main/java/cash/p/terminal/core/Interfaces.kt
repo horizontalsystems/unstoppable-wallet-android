@@ -45,6 +45,7 @@ import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.entities.EncryptedString
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.managers.TransactionDisplayLevel
+import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.transaction.Fee
@@ -83,9 +84,13 @@ interface ILocalStorage {
     var rateAppLastRequestTime: Long
     var balanceHidden: Boolean
     var balanceAutoHideEnabled: Boolean
+
     var transactionHideEnabled: Boolean
     var transactionDisplayLevel: TransactionDisplayLevel
     var transactionHideSecretPin: EncryptedString?
+
+    var transferPasscodeEnabled: Boolean
+
     var balanceTotalCoinUid: String?
     var termsAccepted: Boolean
     var mainShowedOnce: Boolean
@@ -115,6 +120,8 @@ interface ILocalStorage {
     var rbfEnabled: Boolean
     var statsLastSyncTime: Long
     var uiStatsEnabled: Boolean?
+
+    var customDashPeers: String
 
     val utxoExpertModeEnabledFlow: StateFlow<Boolean>
 
@@ -286,7 +293,7 @@ interface ISendZcashAdapter {
     val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long
+    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): FirstClassByteArray
 }
 
 interface ISendSolanaAdapter {

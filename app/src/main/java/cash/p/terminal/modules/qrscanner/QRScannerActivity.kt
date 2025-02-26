@@ -18,15 +18,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -120,6 +123,7 @@ class QRScannerActivity : BaseActivity() {
 @Composable
 private fun QRScannerScreen(
     showPasteButton: Boolean,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
     onScan: (String) -> Unit,
     onCloseClick: () -> Unit,
     onCameraPermissionSettingsClick: () -> Unit
@@ -139,10 +143,11 @@ private fun QRScannerScreen(
         )
     }
 
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         Box(
             Modifier
                 .fillMaxSize()
+                .windowInsetsPadding(windowInsets)
                 .background(color = ComposeAppTheme.colors.tyler),
             contentAlignment = Alignment.Center
         ) {
@@ -280,7 +285,7 @@ private fun PermissionNeededDialog(
     onOkClick: () -> Unit,
     onCancelClick: () -> Unit,
 ) {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         Dialog(onDismissRequest = onCancelClick) {
             Column(
                 modifier = Modifier
@@ -314,7 +319,7 @@ private fun PermissionNeededDialog(
 @Preview
 @Composable
 private fun Preview_PermissionNeededDialog() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         PermissionNeededDialog({}, {})
     }
 }

@@ -11,13 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,6 +24,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -41,23 +41,23 @@ import cash.p.terminal.modules.enablecoin.blockchaintokens.BlockchainTokensViewM
 import cash.p.terminal.modules.enablecoin.restoresettings.RestoreSettingsViewModel
 import cash.p.terminal.modules.restoreaccount.RestoreViewModel
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.HsSwitch
+import cash.p.terminal.ui.extensions.BottomSheetSelectorMultiple
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellMultilineClear
 import cash.p.terminal.ui_compose.components.HSpacer
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.HsIconButton
-import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.subhead2_grey
-import cash.p.terminal.ui.extensions.BottomSheetSelectorMultiple
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
-import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManageWalletsScreen(
     mainViewModel: RestoreViewModel,
@@ -80,7 +80,13 @@ fun ManageWalletsScreen(
     val manualBackup = mainViewModel.manualBackup
     val fileBackup = mainViewModel.fileBackup
 
-    val factory = RestoreBlockchainsModule.Factory(mainViewModel.accountName, accountType, manualBackup, fileBackup, statPage)
+    val factory = RestoreBlockchainsModule.Factory(
+        mainViewModel.accountName,
+        accountType,
+        manualBackup,
+        fileBackup,
+        statPage
+    )
     val viewModel: RestoreBlockchainsViewModel = viewModel(factory = factory)
     val restoreSettingsViewModel: RestoreSettingsViewModel = viewModel(factory = factory)
     val blockchainTokensViewModel: BlockchainTokensViewModel = viewModel(factory = factory)
@@ -122,114 +128,116 @@ fun ManageWalletsScreen(
     }
 
     val coroutineScope = rememberCoroutineScope()
-    val skipHalfExpanded by remember { mutableStateOf(true) }
-    val modalBottomSheetState = rememberModalBottomSheetState(
-        initialValue = ModalBottomSheetValue.Hidden,
-        skipHalfExpanded = skipHalfExpanded
-    )
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    var showBottomSheet by remember { mutableStateOf(false)
+    }
     LaunchedEffect(blockchainTokensViewModel.showBottomSheetDialog) {
         if (blockchainTokensViewModel.showBottomSheetDialog) {
-            coroutineScope.launch {
-                modalBottomSheetState.show()
-            }
+            showBottomSheet = true
             blockchainTokensViewModel.bottomSheetDialogShown()
         }
     }
 
-    ModalBottomSheetLayout(
-        sheetState = modalBottomSheetState,
-        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
-        sheetContent = {
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            sheetState = bottomSheetState,
+            dragHandle = null,
+            containerColor = ComposeAppTheme.colors.transparent,
+            onDismissRequest = { showBottomSheet = false }
+        ) {
             blockchainTokensViewModel.config?.let { config ->
                 BottomSheetSelectorMultiple(
                     config = config,
                     onItemsSelected = { blockchainTokensViewModel.onSelect(it) },
                     onCloseClick = {
                         blockchainTokensViewModel.onCancelSelect()
-                        coroutineScope.launch { modalBottomSheetState.hide() }
+                        coroutineScope.launch { bottomSheetState.hide() }.invokeOnCompletion {
+                            if (!bottomSheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
                     },
                 )
             }
-        },
-    ) {
-        Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
-            topBar = {
-                AppBar(
-                    title = stringResource(R.string.Restore_Title),
-                    navigationIcon = {
-                        HsBackButton(onClick = onBackClick)
-                    },
-                    menuItems = listOf(
-                        MenuItem(
-                            title = TranslatableString.ResString(R.string.Button_Restore),
-                            onClick = { viewModel.onRestore() },
-                            enabled = doneButtonEnabled
-                        )
-                    ),
-                )
-            }
-        ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Divider(
-                        thickness = 1.dp,
-                        color = ComposeAppTheme.colors.steel10,
+        }
+    }
+    Scaffold(
+        containerColor = ComposeAppTheme.colors.tyler,
+        topBar = {
+            AppBar(
+                title = stringResource(R.string.Restore_Title),
+                navigationIcon = {
+                    HsBackButton(onClick = onBackClick)
+                },
+                menuItems = listOf(
+                    MenuItem(
+                        title = TranslatableString.ResString(R.string.Button_Restore),
+                        onClick = { viewModel.onRestore() },
+                        enabled = doneButtonEnabled
                     )
-                }
-                coinItems?.let {
-                    items(it) { viewItem ->
-                        CellMultilineClear(
-                            borderBottom = true,
-                            onClick = { onItemClick(viewItem, viewModel) }
+                ),
+            )
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = ComposeAppTheme.colors.steel10,
+                )
+            }
+            coinItems?.let {
+                items(it) { viewItem ->
+                    CellMultilineClear(
+                        borderBottom = true,
+                        onClick = { onItemClick(viewItem, viewModel) }
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp)
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
+                            Image(
+                                painter = viewItem.imageSource.painter(),
+                                contentDescription = null,
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(horizontal = 16.dp)
-                            ) {
-                                Image(
-                                    painter = viewItem.imageSource.painter(),
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .padding(end = 16.dp)
-                                        .size(32.dp)
+                                    .padding(end = 16.dp)
+                                    .size(32.dp)
+                            )
+                            Column(modifier = Modifier.weight(1f)) {
+                                body_leah(
+                                    text = viewItem.title,
+                                    maxLines = 1,
                                 )
-                                Column(modifier = Modifier.weight(1f)) {
-                                    body_leah(
-                                        text = viewItem.title,
-                                        maxLines = 1,
-                                    )
-                                    subhead2_grey(
-                                        text = viewItem.subtitle,
-                                        maxLines = 1,
-                                        modifier = Modifier.padding(top = 1.dp)
-                                    )
-                                }
-                                HSpacer(12.dp)
-                                if (viewItem.hasSettings) {
-                                    HsIconButton(
-                                        onClick = { viewModel.onClickSettings(viewItem.item) }
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_edit_20),
-                                            contentDescription = null,
-                                            tint = ComposeAppTheme.colors.grey
-                                        )
-                                    }
-                                }
-                                HsSwitch(
-                                    checked = viewItem.enabled,
-                                    onCheckedChange = { onItemClick(viewItem, viewModel) },
+                                subhead2_grey(
+                                    text = viewItem.subtitle,
+                                    maxLines = 1,
+                                    modifier = Modifier.padding(top = 1.dp)
                                 )
                             }
+                            HSpacer(12.dp)
+                            if (viewItem.hasSettings) {
+                                HsIconButton(
+                                    onClick = { viewModel.onClickSettings(viewItem.item) }
+                                ) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_edit_20),
+                                        contentDescription = null,
+                                        tint = ComposeAppTheme.colors.grey
+                                    )
+                                }
+                            }
+                            HsSwitch(
+                                checked = viewItem.enabled,
+                                onCheckedChange = { onItemClick(viewItem, viewModel) },
+                            )
                         }
                     }
                 }

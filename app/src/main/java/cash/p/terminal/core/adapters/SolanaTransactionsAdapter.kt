@@ -118,7 +118,7 @@ class SolanaTransactionsAdapter(
             }
 
     companion object {
-        const val decimal = 18
+        const val decimal = 9
 
         fun clear(walletId: String) {
             SolanaKit.clear(App.instance, walletId)

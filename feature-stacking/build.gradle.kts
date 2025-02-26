@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.koin.compose)
 
     implementation(platform(libs.compose.bom))
-    implementation(libs.compose.material)
+    implementation(libs.androidx.material3.android)
     implementation(libs.compose.tooling)
     implementation(libs.javax.inject)
     implementation(libs.rxjava)

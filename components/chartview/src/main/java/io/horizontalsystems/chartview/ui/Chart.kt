@@ -89,8 +89,13 @@ private const val MAX_WIDTH = 600
 @Composable
 fun HsChartLineHeader(
     chartHeaderView: ChartModule.ChartHeaderView?,
+    balanceHidden: Boolean
 ) {
-    val mainValue = chartHeaderView?.value ?: "--"
+    val mainValue = if (balanceHidden) {
+        "*****"
+    } else {
+        chartHeaderView?.value ?: "--"
+    }
     val mainValueHint = chartHeaderView?.valueHint
     val diff = chartHeaderView?.diff
     val date = chartHeaderView?.date
@@ -329,12 +334,17 @@ fun Chart(
                 ViewState.Loading -> Unit
                 ViewState.Success -> {
                     Column {
-                        HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
+                        HsChartLineHeader(
+                            chartHeaderView = selectedPoint ?: uiState.chartHeaderView,
+                            balanceHidden = uiState.titleHidden
+                        )
 
                         val loadingModifier =
                             if (uiState.loading) Modifier.alpha(0.5f) else Modifier
                         Box(
-                            modifier = loadingModifier.fillMaxWidth().clipToBounds()
+                            modifier = loadingModifier
+                                .fillMaxWidth()
+                                .clipToBounds()
                         ) {
                             PriceVolChart(
                                 chartInfoData = uiState.chartInfoData,
@@ -387,12 +397,14 @@ fun PriceVolChart(
 
     val colors = ComposeAppTheme.colors
 
-    val chartHelper = remember { ChartHelper(
-        target = chartData,
-        hasVolumes = hasVolumes,
-        colors = colors,
-        considerAlwaysPositive = considerAlwaysPositive
-    ) }
+    val chartHelper = remember {
+        ChartHelper(
+            target = chartData,
+            hasVolumes = hasVolumes,
+            colors = colors,
+            considerAlwaysPositive = considerAlwaysPositive
+        )
+    }
     chartHelper.setTarget(chartData, hasVolumes)
 
     val scope = rememberCoroutineScope()

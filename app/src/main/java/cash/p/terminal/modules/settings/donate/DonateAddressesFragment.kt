@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -32,6 +32,7 @@ import cash.p.terminal.ui_compose.components.RowUniversal
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_leah
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.title
 import io.horizontalsystems.core.helpers.HudHelper
 import io.horizontalsystems.core.imageUrl
@@ -52,7 +53,7 @@ fun DonateScreen(
     onBackPress: () -> Unit
 ) {
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = stringResource(R.string.Settings_Donate_Addresses),
@@ -137,7 +138,7 @@ private fun DonateAddress(
 @Preview
 @Composable
 fun DonateScreenPreview() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         DonateScreen {}
     }
 }

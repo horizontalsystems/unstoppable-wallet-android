@@ -4,13 +4,15 @@ import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,19 +40,19 @@ import cash.p.terminal.modules.walletconnect.list.WalletConnectListUiState
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel.ConnectionResult
 import cash.p.terminal.strings.helpers.TranslatableString
+import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
 import cash.p.terminal.ui_compose.components.HsBackButton
-import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui_compose.components.MenuItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WCSessionsScreen(
     navController: NavController,
-    deepLinkUri: String?
+    deepLinkUri: String?,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     val context = LocalContext.current
     val invalidUrlBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -59,11 +61,14 @@ fun WCSessionsScreen(
     val viewModel = viewModel<WalletConnectListViewModel>(
         factory = WalletConnectListModule.Factory()
     )
-    val qrScannerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.setConnectionUri(result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: "")
+    val qrScannerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                viewModel.setConnectionUri(
+                    result.data?.getStringExtra(ModuleField.SCAN_ADDRESS) ?: ""
+                )
+            }
         }
-    }
 
     val uiState by viewModel.uiState.collectAsState(initial = WalletConnectListUiState())
 
@@ -134,8 +139,12 @@ fun WCSessionsScreen(
                     )
                 )
             }
-        ) {
-            Column(modifier = Modifier.padding(it)) {
+        ) { innerPaddings ->
+            Column(
+                modifier = Modifier
+                    .windowInsetsPadding(windowInsets)
+                    .padding(innerPaddings)
+            ) {
                 Column(modifier = Modifier.weight(1f)) {
                     if (uiState.sessionViewItems.isEmpty() && uiState.pairingsNumber == 0) {
                         ListEmptyView(
@@ -155,7 +164,14 @@ fun WCSessionsScreen(
                             .padding(start = 16.dp, end = 16.dp)
                             .fillMaxWidth(),
                         title = stringResource(R.string.WalletConnect_NewConnect),
-                        onClick = { qrScannerLauncher.launch(QRScannerActivity.getScanQrIntent(context, true)) }
+                        onClick = {
+                            qrScannerLauncher.launch(
+                                QRScannerActivity.getScanQrIntent(
+                                    context,
+                                    true
+                                )
+                            )
+                        }
                     )
                 }
             }

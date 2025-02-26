@@ -913,8 +913,8 @@ class TransactionViewItemFactory(
     private fun getColoredValue(value: Any, color: ColorName): ColoredValue =
         when (value) {
             is TransactionValue -> ColoredValue(
-                getCoinString(value),
-                if (value.zeroValue) ColorName.Leah else color
+                value = getCoinString(value),
+                color = if (value.zeroValue) ColorName.Leah else color
             )
 
             is CurrencyValue -> ColoredValue(

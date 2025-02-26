@@ -424,6 +424,17 @@ private fun ButtonsRow(
                 title = stringResource(R.string.Balance_Address),
                 onClick = onClickReceive,
             )
+            if (viewItem.wallet.isCosanta() || viewItem.wallet.isPirateCash()) {
+                HSpacer(8.dp)
+                ButtonPrimaryCircle(
+                    icon = R.drawable.ic_coins_stacking,
+                    contentDescription = stringResource(R.string.stacking),
+                    onClick = {
+                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                        onStackingClicked()
+                    }
+                )
+            }
         } else {
             ButtonPrimaryYellow(
                 modifier = Modifier.weight(1f),

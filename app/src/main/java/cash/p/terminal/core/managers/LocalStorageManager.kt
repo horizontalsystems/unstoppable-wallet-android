@@ -82,6 +82,7 @@ class LocalStorageManager(
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
     private val TRANSACTION_AUTO_HIDE_ENABLED = "transaction_auto_hide_enabled"
+    private val TRANSFER_PASSCODE_ENABLED = "transfer_passcode_enabled"
     private val TRANSACTION_DISPLAY_LEVEL = "transaction_display_level"
     private val TRANSACTION_HIDE_SECRET_PIN = "transaction_hide_secret_pin"
     private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS =
@@ -98,6 +99,7 @@ class LocalStorageManager(
     private val UI_STATS_ENABLED = "ui_stats_enabled"
     private val STACKING_UPDATE_TIME = "stacking_update_time"
     private val STACKING_UNPAID = "stacking_unpaid"
+    private val DASH_PEERS = "dash_peers"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -390,6 +392,12 @@ class LocalStorageManager(
                 .apply()
         }
 
+    override var transferPasscodeEnabled: Boolean
+        get() = preferences.getBoolean(TRANSFER_PASSCODE_ENABLED, false)
+        set(value) {
+            preferences.edit().putBoolean(TRANSFER_PASSCODE_ENABLED, value).commit()
+        }
+
     override var balanceTotalCoinUid: String?
         get() = preferences.getString("balanceTotalCoinUid", null)
         set(value) {
@@ -603,6 +611,12 @@ class LocalStorageManager(
             } else {
                 editor.putBoolean(UI_STATS_ENABLED, value).apply()
             }
+        }
+
+    override var customDashPeers: String
+        get() = preferences.getString(DASH_PEERS, "").orEmpty()
+        set(value) {
+            preferences.edit().putString(DASH_PEERS, value).apply()
         }
 
     override fun getStackingUnpaid(wallet: Wallet) =

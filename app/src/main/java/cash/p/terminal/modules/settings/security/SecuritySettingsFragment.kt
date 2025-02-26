@@ -3,14 +3,17 @@ package cash.p.terminal.modules.settings.security
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -23,6 +26,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.navigation.NavController
 import cash.p.terminal.R
 import cash.p.terminal.core.authorizedAction
+import cash.p.terminal.core.ensurePinSet
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.pin.ConfirmPinFragment
 import cash.p.terminal.modules.pin.PinType
@@ -34,6 +38,7 @@ import cash.p.terminal.modules.settings.security.tor.SecurityTorSettingsViewMode
 import cash.p.terminal.modules.settings.security.ui.PasscodeBlock
 import cash.p.terminal.modules.settings.security.ui.TorBlock
 import cash.p.terminal.modules.settings.security.ui.TransactionAutoHideBlock
+import cash.p.terminal.modules.settings.security.ui.TransferPasscodeBlock
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.ui.compose.components.HsSwitch
 import cash.p.terminal.ui.compose.components.InfoText
@@ -66,7 +71,13 @@ class SecuritySettingsFragment : BaseComposeFragment() {
             navController = navController,
             onTransactionAutoHideEnabledChange = { enabled ->
                 if (enabled) {
-                    securitySettingsViewModel.onTransactionAutoHideEnabledChange(true)
+                    if (securitySettingsViewModel.uiState.pinEnabled) {
+                        securitySettingsViewModel.onTransactionAutoHideEnabledChange(true)
+                    } else {
+                        navController.ensurePinSet(R.string.PinSet_Title) {
+                            securitySettingsViewModel.onTransactionAutoHideEnabledChange(true)
+                        }
+                    }
                 } else {
                     navController.authorizedAction(
                         ConfirmPinFragment.InputConfirm(
@@ -133,6 +144,26 @@ class SecuritySettingsFragment : BaseComposeFragment() {
             },
             showAppRestartAlert = { showAppRestartAlert() },
             restartApp = { restartApp() },
+            onTransferPasscodeEnabledChange = { enabled ->
+                if (enabled) {
+                    if (securitySettingsViewModel.uiState.pinEnabled) {
+                        securitySettingsViewModel.onTransferPasscodeEnabledChange(true)
+                    } else {
+                        navController.ensurePinSet(R.string.PinSet_Title) {
+                            securitySettingsViewModel.onTransferPasscodeEnabledChange(true)
+                        }
+                    }
+                } else {
+                    navController.authorizedAction(
+                        ConfirmPinFragment.InputConfirm(
+                            descriptionResId = R.string.Unlock_EnterPasscode_Transfer,
+                            pinType = PinType.REGULAR
+                        )
+                    ) {
+                        securitySettingsViewModel.onTransferPasscodeEnabledChange(false)
+                    }
+                }
+            }
         )
     }
 
@@ -190,8 +221,10 @@ private fun SecurityCenterScreen(
     onSetTransactionAutoHidePinClicked: () -> Unit,
     onDisableTransactionAutoHidePinClicked: () -> Unit,
     onChangeDisplayClicked: () -> Unit,
+    onTransferPasscodeEnabledChange: (Boolean) -> Unit,
     showAppRestartAlert: () -> Unit,
     restartApp: () -> Unit,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     LifecycleEventEffect(event = Lifecycle.Event.ON_RESUME) {
         securitySettingsViewModel.update()
@@ -218,6 +251,7 @@ private fun SecurityCenterScreen(
             Modifier
                 .padding(it)
                 .verticalScroll(rememberScrollState())
+                .windowInsetsPadding(windowInsets)
         ) {
             PasscodeBlock(
                 securitySettingsViewModel,
@@ -266,6 +300,11 @@ private fun SecurityCenterScreen(
                 onPinClicked = onSetTransactionAutoHidePinClicked,
                 onDisablePinClicked = onDisableTransactionAutoHidePinClicked,
                 onChangeDisplayClicked = onChangeDisplayClicked
+            )
+
+            TransferPasscodeBlock(
+                transferPasscodeEnabled = uiState.transferPasscodeEnabled,
+                onTransferPasscodeEnabledChange = onTransferPasscodeEnabledChange
             )
 
             TorBlock(

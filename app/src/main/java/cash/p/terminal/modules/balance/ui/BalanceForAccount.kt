@@ -221,18 +221,6 @@ fun BalanceTitleRow(
     title: String
 ) {
     Row(
-        modifier = Modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-            ) {
-                navController.slideFromBottom(
-                    R.id.manageAccountsFragment,
-                    ManageAccountsModule.Mode.Switcher
-                )
-
-                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ManageWallets))
-            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         title3_leah(
@@ -245,7 +233,19 @@ fun BalanceTitleRow(
         Icon(
             painter = painterResource(id = R.drawable.ic_down_24),
             contentDescription = null,
-            tint = ComposeAppTheme.colors.grey
+            tint = ComposeAppTheme.colors.yellowD,
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                ) {
+                    navController.slideFromBottom(
+                        R.id.manageAccountsFragment,
+                        ManageAccountsModule.Mode.Switcher
+                    )
+
+                    stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.ManageWallets))
+                },
         )
     }
 }

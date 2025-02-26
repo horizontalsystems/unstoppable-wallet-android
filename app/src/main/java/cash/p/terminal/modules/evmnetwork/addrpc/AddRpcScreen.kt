@@ -3,12 +3,15 @@ package cash.p.terminal.modules.evmnetwork.addrpc
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,6 +36,7 @@ import io.horizontalsystems.core.entities.Blockchain
 fun AddRpcScreen(
     navController: NavController,
     blockchain: Blockchain,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets
 ) {
     val viewModel = viewModel<AddRpcViewModel>(factory = AddRpcModule.Factory(blockchain))
     if (viewModel.viewState.closeScreen) {
@@ -43,6 +47,7 @@ fun AddRpcScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .windowInsetsPadding(windowInsets)
             .background(ComposeAppTheme.colors.tyler)
     ) {
         AppBar(

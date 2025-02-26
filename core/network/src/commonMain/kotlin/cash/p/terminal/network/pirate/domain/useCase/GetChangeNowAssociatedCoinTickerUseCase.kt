@@ -6,6 +6,9 @@ class GetChangeNowAssociatedCoinTickerUseCase(
     private val placeRepository: PiratePlaceRepository
 ) {
     suspend operator fun invoke(coinUid: String, blockchain: String): String? =
-        placeRepository.getChangeNowCoinAssociation(coinUid)
-            .find { it.blockchain == blockchain }?.ticker
+        runCatching {
+            placeRepository.getChangeNowCoinAssociation(coinUid)
+                .find { it.blockchain == blockchain }?.ticker
+        }.getOrNull()
+
 }

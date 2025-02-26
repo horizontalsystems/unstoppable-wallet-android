@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -187,7 +187,8 @@ private fun NoCoins(uiState: StackingCoinUIState, onBuyClicked: () -> Unit) {
             icon = R.drawable.ic_swap_24,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 12.dp)
+                .padding(top = 12.dp),
+            enabled = !uiState.isWatchAccount
         )
         Spacer(modifier = Modifier.weight(3f))
     }
@@ -231,7 +232,8 @@ private fun PirateCoinScreenWithGraph(
                     onClick = onBuyClicked,
                     icon = R.drawable.ic_swap_24,
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(1f),
+                    enabled = !uiState.isWatchAccount
                 )
                 ButtonPrimaryCircle(
                     icon = R.drawable.ic_calculator,
@@ -440,7 +442,8 @@ private fun PirateCoinScreenContentPreview() {
                 hasVolumes = false,
                 chartViewType = ChartViewType.Line,
                 chartInfoData = null,
-                considerAlwaysPositive = true
+                considerAlwaysPositive = true,
+                titleHidden = false
             ),
             getSelectedPointCallback = {
                 ChartModule.ChartHeaderView(

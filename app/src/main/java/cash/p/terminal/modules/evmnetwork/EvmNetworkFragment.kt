@@ -7,18 +7,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -115,6 +118,7 @@ private fun EvmNetworkNavHost(
 private fun EvmNetworkScreen(
     navController: NavController,
     blockchain: Blockchain,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
     onBackPress: () -> Unit,
 ) {
     val viewModel = viewModel<EvmNetworkViewModel>(
@@ -151,7 +155,9 @@ private fun EvmNetworkScreen(
             )
 
             LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .windowInsetsPadding(windowInsets),
             ) {
 
                 item {
@@ -168,7 +174,10 @@ private fun EvmNetworkScreen(
                         BlockchainSettingCell(item.name, item.url, item.selected, null) {
                             viewModel.onSelectSyncSource(item.syncSource)
 
-                            stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.SwitchEvmSource(blockchain.uid, item.name))
+                            stat(
+                                page = StatPage.BlockchainSettingsEvm,
+                                event = StatEvent.SwitchEvmSource(blockchain.uid, item.name)
+                            )
                         }
                     }
                 }
@@ -180,7 +189,10 @@ private fun EvmNetworkScreen(
                         onClick = { syncSource ->
                             viewModel.onSelectSyncSource(syncSource)
 
-                            stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.SwitchEvmSource(blockchain.uid, "custom"))
+                            stat(
+                                page = StatPage.BlockchainSettingsEvm,
+                                event = StatEvent.SwitchEvmSource(blockchain.uid, "custom")
+                            )
                         },
                         onReveal = { id ->
                             if (revealedCardId != id) {
@@ -194,7 +206,10 @@ private fun EvmNetworkScreen(
                         viewModel.onRemoveCustomRpc(it)
                         HudHelper.showErrorMessage(view, R.string.Hud_Removed)
 
-                        stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.DeleteCustomEvmSource(blockchain.uid))
+                        stat(
+                            page = StatPage.BlockchainSettingsEvm,
+                            event = StatEvent.DeleteCustomEvmSource(blockchain.uid)
+                        )
                     }
                 }
 
@@ -203,7 +218,10 @@ private fun EvmNetworkScreen(
                     AddButton {
                         navController.navigate(AddRpcPage)
 
-                        stat(page = StatPage.BlockchainSettingsEvm, event = StatEvent.OpenBlockchainSettingsEvmAdd(blockchain.uid))
+                        stat(
+                            page = StatPage.BlockchainSettingsEvm,
+                            event = StatEvent.OpenBlockchainSettingsEvmAdd(blockchain.uid)
+                        )
                     }
                 }
             }

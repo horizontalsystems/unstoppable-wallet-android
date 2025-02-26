@@ -12,7 +12,11 @@ class SolanaOutgoingTransactionRecord(
     val to: String?,
     val value: TransactionValue,
     val sentToSelf: Boolean
-): SolanaTransactionRecord(transaction, baseToken, source) {
+) : SolanaTransactionRecord(
+    transaction = transaction,
+    baseToken = baseToken,
+    source = source
+) {
 
     override val mainValue = value
 
