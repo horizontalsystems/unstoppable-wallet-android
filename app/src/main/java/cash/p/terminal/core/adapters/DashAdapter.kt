@@ -3,6 +3,8 @@ package cash.p.terminal.core.adapters
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
+import cash.p.terminal.core.adapters.dash.DashKit
+import cash.p.terminal.core.buildAddresses
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.Wallet
@@ -13,7 +15,6 @@ import io.horizontalsystems.bitcoincore.models.BlockInfo
 import io.horizontalsystems.bitcoincore.storage.UnspentOutputInfo
 import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
-import cash.p.terminal.core.adapters.dash.DashKit
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
 import java.math.BigDecimal
@@ -104,7 +105,11 @@ class DashAdapter(
     companion object {
         private const val confirmationsThreshold = 3
 
-        private fun createKit(wallet: Wallet, syncMode: BitcoinCore.SyncMode, customPeers: String): DashKit {
+        private fun createKit(
+            wallet: Wallet,
+            syncMode: BitcoinCore.SyncMode,
+            customPeers: String
+        ): DashKit {
             val account = wallet.account
 
             when (val accountType = account.type) {
@@ -117,7 +122,7 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
                     ).apply {
-                        addPeers(prepareCustomPeers(customPeers))
+                        addPeers(customPeers.buildAddresses())
                     }
                 }
 
@@ -131,7 +136,7 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
                     ).apply {
-                        addPeers(prepareCustomPeers(customPeers))
+                        addPeers(customPeers.buildAddresses())
                     }
                 }
 
@@ -144,16 +149,12 @@ class DashAdapter(
                         networkType = NetworkType.MainNet,
                         confirmationsThreshold = confirmationsThreshold
                     ).apply {
-                        addPeers(prepareCustomPeers(customPeers))
+                        addPeers(customPeers.buildAddresses())
                     }
                 }
 
                 else -> throw UnsupportedAccountException()
             }
-        }
-
-        private fun prepareCustomPeers(customPeers: String): List<String> {
-            return customPeers.split(",").map { it.trim() }
         }
 
         fun clear(walletId: String) {

@@ -238,3 +238,11 @@ inline fun <reified T> getKoinInstance(): T {
 inline fun <reified T : Enum<T>> Enum.Companion.valueOrDefault(index: Int, default: T): T {
     return enumValues<T>().getOrNull(index) ?: default
 }
+
+fun String.buildAddresses(): List<String> {
+    return split(",")
+        .map { it.split("\n") }.flatten()
+        .map { it.replace(Regex(":\\d+"), "") }
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+}
