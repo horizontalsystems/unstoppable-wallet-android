@@ -121,6 +121,17 @@ class TonConnectSendRequestViewModel(
             tonKitWrapper = it
         }
 
+        val accountBalance = tonKitWrapper.tonKit.account?.balance
+        if (accountBalance != null){
+            sendRequestEntity.messages.forEach { message ->
+                if (message.amount > accountBalance){
+                    error = TonConnectSendRequestError.InvalidData("Transaction amount exceeds available balance")
+                    responseBadRequest(sendRequestEntity)
+                    return
+                }
+            }
+        }
+
         val tonEvent = try {
             val event = transactionSigner.getDetails(sendRequestEntity, tonWallet)
             tonEvent = event
