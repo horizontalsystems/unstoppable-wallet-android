@@ -123,12 +123,11 @@ class TonConnectSendRequestViewModel(
 
         val accountBalance = tonKitWrapper.tonKit.account?.balance
         if (accountBalance != null){
-            sendRequestEntity.messages.forEach { message ->
-                if (message.amount > accountBalance){
-                    error = TonConnectSendRequestError.InvalidData("Transaction amount exceeds available balance")
-                    responseBadRequest(sendRequestEntity)
-                    return
-                }
+            val totalSentAmount = sendRequestEntity.messages.sumOf { it.amount }
+            if (totalSentAmount > accountBalance){
+                error = TonConnectSendRequestError.InvalidData("Transaction amount exceeds available balance")
+                responseBadRequest(sendRequestEntity)
+                return
             }
         }
 
