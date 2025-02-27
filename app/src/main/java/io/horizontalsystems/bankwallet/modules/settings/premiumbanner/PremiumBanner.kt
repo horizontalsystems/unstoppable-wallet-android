@@ -148,6 +148,7 @@ fun PremiumBannerView(
                     verticalArrangement = Arrangement.Center
                 ) {
                     subhead1_leah(stringResource(R.string.SettingsBanner_PremiumBannerDescription))
+                    VSpacer(4.dp)
                     if (hasFreeTrial) {
                         subhead2_remus(stringResource(R.string.SettingsBanner_PremiumTryFee))
                     }
