@@ -80,6 +80,18 @@ class SubscriptionServiceDev(private val context: Context) : SubscriptionService
             //VIP plans
             listOf(
                 BasePlan(
+                    id = "plan-0",
+                    pricingPhases = listOf(
+                        PricingPhase(
+                            formattedPrice = "$0.00",
+                            billingPeriod = "P1M",
+                            priceAmountMicros = 0L,
+                            priceCurrencyCode = "USD"
+                        )
+                    ),
+                    offerToken = "offerToken"
+                ),
+                BasePlan(
                     id = "plan-1",
                     pricingPhases = listOf(
                         PricingPhase(
