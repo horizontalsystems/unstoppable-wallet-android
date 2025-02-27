@@ -72,6 +72,7 @@ android {
     productFlavors {
         base {
             dimension = "distribution"
+            signingConfig signingConfigs.debug
         }
 
         fdroid {
@@ -90,6 +91,7 @@ android {
 
     buildTypes {
         debug {
+            signingConfig null
             debuggable true
             minifyEnabled false
             applicationIdSuffix ".dev"
