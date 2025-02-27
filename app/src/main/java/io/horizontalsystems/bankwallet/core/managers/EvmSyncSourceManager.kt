@@ -67,6 +67,12 @@ class EvmSyncSourceManager(
             BlockchainType.BinanceSmartChain -> listOf(
                 evmSyncSource(
                     blockchainType,
+                    "Binance",
+                    RpcSource.binanceSmartChainHttp(),
+                    defaultTransactionSource(blockchainType)
+                ),
+                evmSyncSource(
+                    blockchainType,
                     "BlockRazor",
                     RpcSource.Http(listOf(URI("https://unstoppable.bsc.blockrazor.xyz")), null),
                     defaultTransactionSource(blockchainType)
@@ -75,12 +81,6 @@ class EvmSyncSourceManager(
                     blockchainType,
                     "48club",
                     RpcSource.Http(listOf(URI("https://unstoppable.rpc.48.club")), null),
-                    defaultTransactionSource(blockchainType)
-                ),
-                evmSyncSource(
-                    blockchainType,
-                    "Binance",
-                    RpcSource.binanceSmartChainHttp(),
                     defaultTransactionSource(blockchainType)
                 ),
                 evmSyncSource(
