@@ -217,11 +217,12 @@ fun AddressCheck(
     checkResults: Map<AddressCheckType, AddressCheckData>,
     onClick: (type: AddressCheckType) -> Unit
 ) {
-    if (addressValidationError == null || addressValidationError is AddressValidationError.SendToSelfForbidden) {
+    VSpacer(16.dp)
+    if (addressValidationError == null) {
         Column(
             modifier = Modifier
-                .padding(top = 16.dp)
                 .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
                 .border(
@@ -240,9 +241,9 @@ fun AddressCheck(
                 )
             }
         }
-
-        Errors(addressValidationError, checkResults)
     }
+
+    Errors(addressValidationError, checkResults)
 }
 
 @Composable
@@ -251,7 +252,6 @@ private fun Errors(
     checkResults: Map<AddressCheckType, AddressCheckData>,
 ) {
     if (addressValidationError != null) {
-        VSpacer(16.dp)
         TextImportantError(
             modifier = Modifier.padding(horizontal = 16.dp),
             icon = R.drawable.ic_attention_20,
@@ -263,13 +263,13 @@ private fun Errors(
     } else {
         checkResults.forEach { (addressCheckType, addressCheckData) ->
             if (addressCheckData.checkResult == AddressCheckResult.Detected) {
-                VSpacer(16.dp)
                 TextImportantError(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     icon = R.drawable.ic_attention_20,
                     title = stringResource(addressCheckType.detectedErrorTitle),
                     text = stringResource(addressCheckType.detectedErrorDescription)
                 )
+                VSpacer(16.dp)
             }
         }
 
