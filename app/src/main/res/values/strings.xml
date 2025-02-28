@@ -454,6 +454,15 @@
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
     <string name="Send_Address_PhishingCheck_ClearInfo_Title">Phishing: Clear</string>
     <string name="Send_Address_PhishingCheck_ClearInfo_Description">The verification is based on your transaction history, and no suspicious activity has been detected. The entered address has not been involved in known spam transactions associated with phishing attempts.</string>
+    <string name="Send_Address_PhishingCheck_Info1">This check reviews the sender’s transaction history for potential phishing risks.</string>
+    <string name="Send_Address_PhishingCheck_Info2">Clear means no issues detected</string>
+    <string name="Send_Address_PhishingCheck_Info3">Detected indicates possible phishing activity</string>
+    <string name="Send_Address_BlacklistCheck_Info1">This check verifies if the recipient\'s address is on known blacklists, sourced from Hashdit.io and our own data.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">Clear means no flags</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Detected means the address is blacklisted and may pose risks.</string>
+    <string name="Send_Address_SanctionCheck_Info1">This check ensures the recipient’s address is not under international sanctions, sourced from Chainalysis.com.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Clear means no sanctions</string>
+    <string name="Send_Address_SanctionCheck_Info3">Detected indicates potential legal risks</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
     <string name="Send_Address_BlacklistCheck_ClearInfo_Title">Blacklist: Clear</string>
     <string name="Send_Address_BlacklistCheck_ClearInfo_Description">The recipient address has passed verification through Chainalysis.com and has not been flagged. This means the address has not been detected in any known blacklists or associated with suspicious activity.</string>
