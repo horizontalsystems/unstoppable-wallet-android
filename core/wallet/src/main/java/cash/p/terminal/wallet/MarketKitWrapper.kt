@@ -113,7 +113,7 @@ class MarketKitWrapper(
     ) =
         marketKit.coinCategoryMarketPointsSingle(categoryUid, interval, currencyCode)
 
-    fun sync() = marketKit.sync()
+    fun sync(forceUpdate: Boolean) = marketKit.sync(forceUpdate)
 
     // Coin Prices
 

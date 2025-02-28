@@ -33,10 +33,10 @@ class BitcoinAdapter(
         backgroundManager: BackgroundManager,
         derivation: TokenType.Derivation
     ) : this(
-        createKit(wallet, syncMode, derivation),
-        syncMode,
-        backgroundManager,
-        wallet
+        kit = createKit(wallet, syncMode, derivation),
+        syncMode = syncMode,
+        backgroundManager = backgroundManager,
+        wallet = wallet
     )
 
     init {

@@ -4,6 +4,9 @@ import androidx.room.*
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.entities.Coin
+import cash.p.terminal.wallet.entities.FullCoin
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.models.BlockchainEntity
 import cash.p.terminal.wallet.models.TokenEntity
 
@@ -11,7 +14,7 @@ import cash.p.terminal.wallet.models.TokenEntity
 interface CoinDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(coin: cash.p.terminal.wallet.entities.Coin)
+    fun insert(coin: Coin)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(blockchainEntity: BlockchainEntity)
@@ -20,13 +23,13 @@ interface CoinDao {
     fun insert(tokenEntity: TokenEntity)
 
     @Query("SELECT * FROM Coin WHERE uid = :uid LIMIT 1")
-    fun getCoin(uid: String): cash.p.terminal.wallet.entities.Coin?
+    fun getCoin(uid: String): Coin?
 
     @Query("SELECT * FROM Coin WHERE uid IN (:uids)")
-    fun getCoins(uids: List<String>): List<cash.p.terminal.wallet.entities.Coin>
+    fun getCoins(uids: List<String>): List<Coin>
 
     @Query("SELECT * FROM Coin")
-    fun getAllCoins(): List<cash.p.terminal.wallet.entities.Coin>
+    fun getAllCoins(): List<Coin>
 
     @RawQuery
     fun getFullCoins(query: SupportSQLiteQuery): List<FullCoinWrapper>
@@ -63,7 +66,7 @@ interface CoinDao {
 
     data class FullCoinWrapper(
         @Embedded
-        val coin: cash.p.terminal.wallet.entities.Coin,
+        val coin: Coin,
 
         @Relation(
             entity = TokenEntity::class,
@@ -73,8 +76,8 @@ interface CoinDao {
         val tokens: List<TokenEntityWrapper>
     ) {
 
-        val fullCoin: cash.p.terminal.wallet.entities.FullCoin
-        get() = cash.p.terminal.wallet.entities.FullCoin(
+        val fullCoin: FullCoin
+        get() = FullCoin(
             coin,
             tokens.map { it.token(coin) }
         )
@@ -92,14 +95,14 @@ interface CoinDao {
         val blockchainEntity: BlockchainEntity
     ) {
 
-        fun token(coin: cash.p.terminal.wallet.entities.Coin): Token {
+        fun token(coin: Coin): Token {
             val tokenType = if (tokenEntity.decimals != null) {
-                cash.p.terminal.wallet.entities.TokenType.fromType(
+                TokenType.fromType(
                     tokenEntity.type,
                     tokenEntity.reference
                 )
             } else {
-                cash.p.terminal.wallet.entities.TokenType.Unsupported(
+                TokenType.Unsupported(
                     tokenEntity.type,
                     tokenEntity.reference
                 )
@@ -123,7 +126,7 @@ interface CoinDao {
             parentColumn = "coinUid",
             entityColumn = "uid"
         )
-        val coin: cash.p.terminal.wallet.entities.Coin,
+        val coin: Coin,
 
         @Relation(
             parentColumn = "blockchainUid",

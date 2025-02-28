@@ -5,35 +5,32 @@ import cash.p.terminal.R
 import cash.p.terminal.core.managers.RestoreSettingType
 import cash.p.terminal.entities.FeePriceScale
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
-import cash.p.terminal.strings.helpers.shorten
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.AccountType
+import cash.p.terminal.wallet.Derivation
 import cash.p.terminal.wallet.Token
-import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
-import cash.p.terminal.wallet.customCoinPrefix
 import cash.p.terminal.wallet.customCoinUid
 import cash.p.terminal.wallet.entities.BitcoinCashCoinType
-import io.horizontalsystems.core.entities.Blockchain
-import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
-import cash.p.terminal.wallet.protocolType
-import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
-import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
-import io.horizontalsystems.hdwalletkit.HDWallet
 import cash.p.terminal.wallet.models.CoinPrice
 import cash.p.terminal.wallet.models.HsPointTimePeriod
 import cash.p.terminal.wallet.models.TopPlatform
+import cash.p.terminal.wallet.protocolType
+import cash.p.terminal.wallet.zCashCoinType
+import io.horizontalsystems.bitcoincash.MainNetBitcoinCash
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.hdwalletkit.ExtendedKeyCoinType
+import io.horizontalsystems.hdwalletkit.HDWallet
 import io.horizontalsystems.nftkit.models.NftType
 import java.math.BigDecimal
 
 val Token.isCustom: Boolean
     get() = coin.uid == tokenQuery.customCoinUid
-
-val Coin.isCustom: Boolean
-    get() = uid.startsWith(TokenQuery.customCoinPrefix)
 
 val Token.isSupported: Boolean
     get() = tokenQuery.isSupported
@@ -60,49 +57,6 @@ val Token.swappable: Boolean
         else -> false
     }
 
-val Token.protocolInfo: String
-    get() = when (type) {
-        TokenType.Native -> {
-            val parts = mutableListOf(blockchain.name)
-            when (this.blockchainType) {
-                BlockchainType.Ethereum -> parts.add("(ERC20)")
-                BlockchainType.BinanceSmartChain -> parts.add("(BEP20)")
-                BlockchainType.BinanceChain -> parts.add("(BEP2)")
-                else -> {}
-            }
-            parts.joinToString(" ")
-        }
-
-        is TokenType.Eip20,
-        is TokenType.Bep2,
-        is TokenType.Spl,
-        is TokenType.Jetton -> protocolType ?: ""
-
-        else -> ""
-    }
-
-val Token.typeInfo: String
-    get() = when (val type = type) {
-        is TokenType.Derived,
-        is TokenType.AddressTyped,
-        TokenType.Native -> cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPlatforms_Native)
-
-        is TokenType.Eip20 -> type.address.shorten()
-        is TokenType.Bep2 -> type.symbol
-        is TokenType.Spl -> type.address.shorten()
-        is TokenType.Jetton -> type.address.shorten()
-        is TokenType.Unsupported -> ""
-    }
-
-val Token.copyableTypeInfo: String?
-    get() = when (val type = type) {
-        is TokenType.Eip20 -> type.address
-        is TokenType.Bep2 -> type.symbol
-        is TokenType.Spl -> type.address
-        is TokenType.Jetton -> type.address
-        else -> null
-    }
-
 val TokenQuery.isSupported: Boolean
     get() = when (blockchainType) {
         BlockchainType.Bitcoin,
@@ -117,7 +71,7 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.ECash,
         BlockchainType.Dash,
         BlockchainType.Zcash -> {
-            tokenType is TokenType.Native
+            tokenType is TokenType.AddressSpecTyped
         }
 
         BlockchainType.Ethereum,
@@ -460,6 +414,12 @@ val BlockchainType.nativeTokenQueries: List<TokenQuery>
             }
         }
 
+        BlockchainType.Zcash -> {
+            TokenType.AddressSpecType.values().map {
+                TokenQuery(this, TokenType.AddressSpecTyped(it))
+            }
+        }
+
         else -> {
             listOf(TokenQuery(this, TokenType.Native))
         }
@@ -485,19 +445,21 @@ val TokenType.title: String
     get() = when (this) {
         is TokenType.Derived -> derivation.accountTypeDerivation.rawName
         is TokenType.AddressTyped -> type.bitcoinCashCoinType.title
+        is TokenType.AddressSpecTyped -> type.name
         else -> ""
     }
 
 val TokenType.description: String
     get() = when (this) {
         is TokenType.Derived -> derivation.accountTypeDerivation.addressType + derivation.accountTypeDerivation.recommended
-        is TokenType.AddressTyped -> cash.p.terminal.strings.helpers.Translator.getString(type.bitcoinCashCoinType.description)
+        is TokenType.AddressTyped -> Translator.getString(type.bitcoinCashCoinType.description)
+        is TokenType.AddressSpecTyped -> Translator.getString(type.zCashCoinType.description)
         else -> ""
     }
 
 val TokenType.isDefault
     get() = when (this) {
-        is TokenType.Derived -> derivation.accountTypeDerivation == AccountType.Derivation.default
+        is TokenType.Derived -> derivation.accountTypeDerivation == Derivation.default
         is TokenType.AddressTyped -> type.bitcoinCashCoinType == BitcoinCashCoinType.default
         else -> false
     }

@@ -225,8 +225,8 @@ class MarketKit(
     ) =
         hsProvider.coinCategoryMarketPointsSingle(categoryUid, interval, currencyCode)
 
-    fun sync() {
-        hsDataSyncer.sync()
+    fun sync(forceUpdate: Boolean) {
+        hsDataSyncer.sync(forceUpdate)
     }
 
     // Coin Prices

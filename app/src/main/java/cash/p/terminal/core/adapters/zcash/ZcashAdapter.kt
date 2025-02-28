@@ -22,6 +22,7 @@ import cash.p.terminal.wallet.IReceiveAdapter
 import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
+import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import cash.z.ecc.android.sdk.CloseableSynchronizer
 import cash.z.ecc.android.sdk.SdkSynchronizer
 import cash.z.ecc.android.sdk.Synchronizer
@@ -39,6 +40,7 @@ import cash.z.ecc.android.sdk.model.AccountUuid
 import cash.z.ecc.android.sdk.model.BlockHeight
 import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import cash.z.ecc.android.sdk.model.PercentDecimal
+import cash.z.ecc.android.sdk.model.WalletBalance
 import cash.z.ecc.android.sdk.model.Zatoshi
 import cash.z.ecc.android.sdk.model.ZcashNetwork
 import cash.z.ecc.android.sdk.tool.DerivationTool
@@ -62,6 +64,7 @@ class ZcashAdapter(
     context: Context,
     private val wallet: Wallet,
     restoreSettings: RestoreSettings,
+    private val addressSpecTyped: AddressSpecType?,
     private val localStorage: ILocalStorage,
 ) : IAdapter, IBalanceAdapter, IReceiveAdapter, ITransactionsAdapter, ISendZcashAdapter {
     private var accountBirthday = 0L
@@ -88,12 +91,25 @@ class ZcashAdapter(
 
     override val isMainNet: Boolean = true
 
+    init {
+        println("ZcashAdapter type $addressSpecTyped")
+    }
+
 
     companion object {
         private const val ALIAS_PREFIX = "zcash_"
 
-        private fun getValidAliasFromAccountId(accountId: String): String {
-            return ALIAS_PREFIX + accountId.replace("-", "_")
+        private fun getValidAliasFromAccountId(
+            accountId: String,
+            addressSpecTyped: AddressSpecType?
+        ): String {
+            return (ALIAS_PREFIX + accountId.replace("-", "_")).let {
+                if (addressSpecTyped != null) {
+                    it + "_${addressSpecTyped.name}"
+                } else {
+                    it
+                }
+            }
         }
 
         private val DECIMAL_COUNT = 8
@@ -102,10 +118,17 @@ class ZcashAdapter(
         fun clear(accountId: String) {
             runBlocking {
                 Synchronizer.erase(
-                    App.instance,
-                    ZcashNetwork.Mainnet,
-                    getValidAliasFromAccountId(accountId)
+                    appContext = App.instance,
+                    network = ZcashNetwork.Mainnet,
+                    alias = getValidAliasFromAccountId(accountId, null)
                 )
+                AddressSpecType.entries.forEach {
+                    Synchronizer.erase(
+                        appContext = App.instance,
+                        network = ZcashNetwork.Mainnet,
+                        alias = getValidAliasFromAccountId(accountId, it)
+                    )
+                }
             }
         }
     }
@@ -139,7 +162,7 @@ class ZcashAdapter(
         synchronizer = Synchronizer.newBlocking(
             context = context,
             zcashNetwork = network,
-            alias = getValidAliasFromAccountId(wallet.account.id),
+            alias = getValidAliasFromAccountId(wallet.account.id, addressSpecTyped),
             lightWalletEndpoint = lightWalletEndpoint,
             birthday = birthday,
             walletInitMode = walletInitMode,
@@ -151,9 +174,19 @@ class ZcashAdapter(
         )
 
         zcashAccount = runBlocking { getFirstAccount() }
-        receiveAddress = runBlocking { synchronizer.getSaplingAddress(getFirstAccount()) }
+        receiveAddress = runBlocking {
+            when (addressSpecTyped) {
+                AddressSpecType.Shielded -> synchronizer.getSaplingAddress(getFirstAccount())
+                AddressSpecType.Transparent -> synchronizer.getTransparentAddress(getFirstAccount())
+                AddressSpecType.Unified -> synchronizer.getUnifiedAddress(getFirstAccount())
+                null -> synchronizer.getSaplingAddress(getFirstAccount())
+            }
+        }
         transactionsProvider =
-            ZcashTransactionsProvider(receiveAddress, synchronizer as SdkSynchronizer)
+            ZcashTransactionsProvider(
+                receiveAddress = receiveAddress,
+                synchronizer = synchronizer as SdkSynchronizer
+            )
         synchronizer.onProcessorErrorHandler = ::onProcessorError
         synchronizer.onChainErrorHandler = ::onChainError
     }
@@ -206,11 +239,29 @@ class ZcashAdapter(
 
     private val balance: BigDecimal
         get() {
-            val walletBalance =
-                synchronizer.walletBalances.value?.get(zcashAccount?.accountUuid)?.sapling
-                    ?: return BigDecimal.ZERO
-            return walletBalance.available.convertZatoshiToZec(DECIMAL_COUNT) +
-                    walletBalance.pending.convertZatoshiToZec(DECIMAL_COUNT)
+            return with(walletBalance) {
+                available.convertZatoshiToZec(DECIMAL_COUNT) +
+                        pending.convertZatoshiToZec(DECIMAL_COUNT)
+            }
+        }
+
+    private val walletBalance: WalletBalance
+        get() {
+            return when (addressSpecTyped) {
+                null,
+                AddressSpecType.Shielded -> synchronizer.walletBalances.value?.get(zcashAccount?.accountUuid)?.sapling
+                    ?: WalletBalance(Zatoshi(0), Zatoshi(0), Zatoshi(0))
+
+                AddressSpecType.Transparent -> WalletBalance(
+                    available = synchronizer.walletBalances.value?.get(zcashAccount?.accountUuid)?.unshielded
+                        ?: Zatoshi(0),
+                    changePending = Zatoshi(0),
+                    valuePending = Zatoshi(0)
+                )
+
+                AddressSpecType.Unified -> synchronizer.walletBalances.value?.get(zcashAccount?.accountUuid)?.orchard
+                    ?: WalletBalance(Zatoshi(0), Zatoshi(0), Zatoshi(0))
+            }
         }
 
     private val balancePending: BigDecimal
@@ -255,7 +306,12 @@ class ZcashAdapter(
             val transactionHash = it.transactionHash.fromHex().reversedArray()
             Triple(transactionHash, it.timestamp, it.transactionIndex)
         }
-        return transactionsProvider.getTransactions(fromParams, transactionType, address, limit)
+        return transactionsProvider.getTransactions(
+            fromParams,
+            transactionType,
+            address,
+            limit
+        )
             .map { transactions ->
                 transactions.map {
                     getTransactionRecord(it)
@@ -279,18 +335,16 @@ class ZcashAdapter(
 
     override val availableBalance: BigDecimal
         get() {
-            val walletBalance =
-                synchronizer.walletBalances.value?.get(zcashAccount?.accountUuid)?.sapling
-            val available = (walletBalance?.available ?: Zatoshi(0)) +
-                    (walletBalance?.pending ?: Zatoshi(0))
+            return with(walletBalance) {
+                val available = available + pending
+                val defaultFee = ZcashSdk.MINERS_FEE
 
-            val defaultFee = ZcashSdk.MINERS_FEE
-
-            return if (available <= defaultFee) {
-                BigDecimal.ZERO
-            } else {
-                available.minus(defaultFee)
-                    .convertZatoshiToZec(DECIMAL_COUNT)
+                if (available <= defaultFee) {
+                    BigDecimal.ZERO
+                } else {
+                    available.minus(defaultFee)
+                        .convertZatoshiToZec(DECIMAL_COUNT)
+                }
             }
         }
 
@@ -393,7 +447,7 @@ class ZcashAdapter(
                 blockHeight = transaction.minedHeight?.toInt(),
                 confirmationsThreshold = confirmationsThreshold,
                 timestamp = transaction.timestamp,
-                fee = transaction.feePaid?.let { it.convertZatoshiToZec(DECIMAL_COUNT) },
+                fee = transaction.feePaid?.convertZatoshiToZec(DECIMAL_COUNT),
                 failed = transaction.failed,
                 lockInfo = null,
                 conflictingHash = null,
