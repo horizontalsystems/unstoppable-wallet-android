@@ -261,11 +261,11 @@ class MarketKit(
 
     // Coin Historical Price
 
-    fun coinHistoricalPriceSingle(
+    suspend fun coinHistoricalPriceSingle(
         coinUid: String,
         currencyCode: String,
         timestamp: Long
-    ): Single<BigDecimal> {
+    ): BigDecimal {
         return coinHistoricalPriceManager.coinHistoricalPriceSingle(
             coinUid,
             currencyCode,

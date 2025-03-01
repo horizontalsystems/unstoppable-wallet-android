@@ -272,18 +272,14 @@ class TransactionInfoService(
 
         val rates = coinUids.mapNotNull { coinUid ->
             try {
-                val rate = marketKit
+                marketKit
                     .coinHistoricalPriceSingle(
                         coinUid,
                         currencyManager.baseCurrency.code,
                         timestamp
-                    )
-                    .await()
-                if (rate != BigDecimal.ZERO) {
-                    Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, rate))
-                } else {
-                    null
-                }
+                    ).takeIf { it != BigDecimal.ZERO }?.let {
+                        Pair(coinUid, CurrencyValue(currencyManager.baseCurrency, it))
+                    }
             } catch (error: Exception) {
                 null
             }
