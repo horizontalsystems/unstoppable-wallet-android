@@ -69,7 +69,10 @@ val TokenQuery.isSupported: Boolean
         }
 
         BlockchainType.ECash,
-        BlockchainType.Dash,
+        BlockchainType.Dash -> {
+            tokenType is TokenType.Native
+        }
+
         BlockchainType.Zcash -> {
             tokenType is TokenType.AddressSpecTyped
         }
