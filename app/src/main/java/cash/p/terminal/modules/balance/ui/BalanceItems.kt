@@ -435,7 +435,7 @@ fun BalanceItems(
                 wallets(
                     items = balanceViewItems,
                     key = {
-                        it.wallet.hashCode()
+                        it.wallet.token.tokenQuery.id
                     }
                 ) { item ->
                     BalanceCardSwipable(
