@@ -38,6 +38,8 @@ import java.math.BigDecimal
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.Executors
+import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 
 internal abstract class StackingCoinViewModel(
     private val walletManager: IWalletManager,
@@ -46,7 +48,8 @@ internal abstract class StackingCoinViewModel(
     private val accountManager: IAccountManager,
     private val marketKitWrapper: MarketKitWrapper,
     private val balanceService: BalanceService,
-    private val balanceHiddenManager: IBalanceHiddenManager
+    private val balanceHiddenManager: IBalanceHiddenManager,
+    private val backgroundManager: BackgroundManager
 ) : ViewModel() {
 
     abstract val minStackingAmount: Int
@@ -184,6 +187,9 @@ internal abstract class StackingCoinViewModel(
                     Log.e("StackingCoinViewModel", "Error loading balance", throwable)
                 }) {
             balanceService.balanceItemsFlow.collectLatest { items ->
+                if(backgroundManager.stateFlow.value != BackgroundManagerState.EnterForeground) {
+                    return@collectLatest
+                }
                 items?.find { it.wallet.coin.code == stackingType.value }?.let { item ->
                     loadInvestmentData(
                         balance = item.balanceData.total,
@@ -316,5 +322,6 @@ internal abstract class StackingCoinViewModel(
 
     override fun onCleared() {
         balanceService.clear()
+        customDispatcher.close()
     }
 }

@@ -5,16 +5,16 @@ import android.app.Application
 import android.os.Bundle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 
 class BackgroundManager(application: Application) : Application.ActivityLifecycleCallbacks {
 
     private val scope = CoroutineScope(Dispatchers.Default)
-    private val _stateFlow: MutableSharedFlow<BackgroundManagerState> = MutableSharedFlow()
-    val stateFlow: SharedFlow<BackgroundManagerState>
+    private val _stateFlow: MutableStateFlow<BackgroundManagerState> = MutableStateFlow(BackgroundManagerState.Unknown)
+    val stateFlow: StateFlow<BackgroundManagerState>
         get() = _stateFlow
 
     init {
@@ -82,5 +82,8 @@ class BackgroundManager(application: Application) : Application.ActivityLifecycl
 }
 
 enum class BackgroundManagerState {
-    EnterForeground, EnterBackground, AllActivitiesDestroyed
+    Unknown,
+    EnterForeground,
+    EnterBackground,
+    AllActivitiesDestroyed
 }
