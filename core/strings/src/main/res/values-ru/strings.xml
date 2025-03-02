@@ -1800,4 +1800,7 @@
     <string name="Unlock_EnterPasscode_Transactions_Hide">Введите пароль для режима \"Автоскрытие транзакций\"</string>
     <string name="PinSet_Transactions_Hide">Установить пароль для режима \"Автоскрытие транзакций\"</string>
     <string name="RateList_TopGainers">Растущие активы</string>
+    <string name="zcash_transparent_description">Полностью отслеживаемые транзакции</string>
+    <string name="zcash_shielded_description">Частные защищённые транзакции</string>
+    <string name="zcash_unified_description">Комбинированные прозрачные и приватные транзакции</string>
 </resources>

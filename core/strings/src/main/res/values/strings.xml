@@ -1552,7 +1552,7 @@
     <string name="CoinSettings_BitcoinCashCoinType_Type145_Description">Common after 2018</string>
     <string name="zcash_transparent_description">Fully traceable transactions</string>
     <string name="zcash_shielded_description">Private protected transactions</string>
-    <string name="zcash_unified_description">Combined transparent and private</string>
+    <string name="zcash_unified_description">Combined transparent and private transactions</string>
 
     <!-- Tor -->
 
