@@ -22,7 +22,7 @@ import cash.p.terminal.core.stats.StatSection
 import cash.p.terminal.core.stats.stat
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.CellNews
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.helpers.LinkHelper
@@ -81,7 +81,7 @@ fun MarketPostsScreen(viewModel: MarketPostsViewModel = viewModel(factory = Mark
 fun PreviewMarketPostView() {
     val postItem = MarketPostsModule.PostViewItem(
         "Tidal",
-        "3iQ’s The Ether Fund begins \$CAD trading on TSX after Bitcoin The Ether Fund begins after Bitcoin",
+        "3iQ's The Ether Fund begins \$CAD trading on TSX after Bitcoin The Ether Fund begins after Bitcoin",
         "Traders in East Asia are ready to take on more built by Wipro to streamline its liquefied.",
         "1h ago",
         "https://www.binance.org/news"

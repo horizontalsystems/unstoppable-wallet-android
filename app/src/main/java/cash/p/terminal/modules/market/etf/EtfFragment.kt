@@ -53,7 +53,7 @@ import io.horizontalsystems.core.entities.ViewState
 import io.horizontalsystems.chartview.chart.GraphicLine
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui_compose.components.ImageSource
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.AlertGroup

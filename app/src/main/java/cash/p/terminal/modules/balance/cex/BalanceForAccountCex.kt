@@ -47,7 +47,6 @@ import cash.p.terminal.modules.balance.ui.BalanceSortingSelector
 import cash.p.terminal.modules.balance.ui.BalanceTitleRow
 import cash.p.terminal.modules.balance.ui.TotalBalanceRow
 import cash.p.terminal.modules.balance.ui.wallets
-import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -59,6 +58,7 @@ import cash.p.terminal.ui_compose.components.body_leah
 import cash.p.terminal.ui_compose.components.diffColor
 import cash.p.terminal.ui.compose.components.diffText
 import cash.p.terminal.ui.extensions.RotatingCircleProgressView
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 
@@ -74,7 +74,7 @@ fun BalanceForAccountCex(navController: NavController, accountViewItem: AccountV
     val activeScreen = uiState.isActiveScreen
     if (activeScreen) {
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = {
@@ -334,7 +334,7 @@ fun WalletIconCex(
                     .then(clickableModifier),
                 painter = painterResource(id = R.drawable.ic_attention_24),
                 contentDescription = "coin icon",
-                colorFilter = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.lucian)
+                colorFilter = ColorFilter.tint(ComposeAppTheme.colors.lucian)
             )
         } else {
             CoinImage(

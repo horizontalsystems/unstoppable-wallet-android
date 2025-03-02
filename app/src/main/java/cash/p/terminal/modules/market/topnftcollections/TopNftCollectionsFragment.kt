@@ -32,7 +32,7 @@ import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.SortingField
 import cash.p.terminal.modules.market.TimeDuration
 import cash.p.terminal.modules.nft.collection.NftCollectionFragment
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.ButtonSecondaryToggle
 import cash.p.terminal.ui.compose.components.DescriptionCard
