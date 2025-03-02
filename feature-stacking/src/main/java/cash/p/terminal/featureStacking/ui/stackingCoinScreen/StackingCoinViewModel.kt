@@ -31,6 +31,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
@@ -90,6 +91,21 @@ internal abstract class StackingCoinViewModel(
             }
         }
         balanceService.start()
+    }
+
+    fun refresh() {
+        _uiState.value = uiState.value.copy(
+            isRefreshing = true
+        )
+        viewModelScope.launch {
+            loadAnnualInterest()
+            loadBalance()
+            balanceService.refresh()
+            delay(1000)
+            _uiState.value = uiState.value.copy(
+                isRefreshing = false
+            )
+        }
     }
 
     private fun loadAnnualInterest() = viewModelScope.launch(Dispatchers.IO) {
