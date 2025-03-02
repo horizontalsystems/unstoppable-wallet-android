@@ -17,7 +17,7 @@ import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.imageUrl
 
 class ConfiguredTokenInfoViewModel(
-    private val token: Token,
+    token: Token,
     private val accountManager: cash.p.terminal.wallet.IAccountManager,
     private val restoreSettingsManager: RestoreSettingsManager
 ) : ViewModel() {
@@ -44,7 +44,8 @@ class ConfiguredTokenInfoViewModel(
             is TokenType.AddressTyped -> {
                 ConfiguredTokenInfoType.Bch
             }
-            TokenType.Native -> when (token.blockchainType) {
+            TokenType.Native -> null
+            is TokenType.AddressSpecTyped -> when (token.blockchainType) {
                 BlockchainType.Zcash -> {
                     ConfiguredTokenInfoType.BirthdayHeight(getBirthdayHeight(token))
                 }

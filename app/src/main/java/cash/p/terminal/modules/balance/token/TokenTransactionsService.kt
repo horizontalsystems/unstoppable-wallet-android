@@ -83,11 +83,11 @@ class TokenTransactionsService(
 
         transactionSyncStateRepository.setTransactionWallets(listOf(transactionWallet))
         transactionRecordRepository.set(
-            listOf(transactionWallet),
-            transactionWallet,
-            FilterTransactionType.All,
-            null,
-            null
+            transactionWallets = listOf(transactionWallet),
+            wallet = transactionWallet,
+            transactionType = FilterTransactionType.All,
+            blockchain = null,
+            contact = null
         )
     }
 

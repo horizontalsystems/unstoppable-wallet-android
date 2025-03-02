@@ -21,7 +21,8 @@ internal data class StackingCoinUIState(
     val payoutItems: Map<String, List<PayoutViewItem>> = emptyMap(),
     val loading: Boolean = true,
     val balanceHidden: Boolean = true,
-    val isWatchAccount: Boolean = false
+    val isWatchAccount: Boolean = false,
+    val isRefreshing: Boolean = false
 ) {
     fun isWaitingForStacking(): Boolean =
         balance < minStackingAmount || unpaidStr == null || unpaidStr == ""

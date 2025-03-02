@@ -13,6 +13,7 @@ import cash.p.terminal.core.providers.PredefinedBlockchainSettingsProvider
 import cash.p.terminal.entities.DataState
 import cash.p.terminal.wallet.normalizeNFKD
 import cash.p.terminal.modules.createaccount.CreateAccountModule.Kind.Mnemonic12
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.BuildConfig
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.entities.TokenQuery
@@ -59,11 +60,11 @@ class CreateAccountViewModel(
 
         val accountType = mnemonicAccountType(selectedKind.wordsCount)
         val account = accountFactory.account(
-            accountName,
-            accountType,
-            cash.p.terminal.wallet.AccountOrigin.Created,
-            false,
-            false,
+            name = accountName,
+            type = accountType,
+            origin = cash.p.terminal.wallet.AccountOrigin.Created,
+            backedUp = false,
+            fileBackedUp = false,
         )
 
         accountManager.save(account)
@@ -83,7 +84,7 @@ class CreateAccountViewModel(
         } else {
             passphraseState = DataState.Error(
                 Exception(
-                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
+                    Translator.getString(R.string.CreateWallet_Error_PassphraseForbiddenSymbols)
                 )
             )
         }
@@ -118,7 +119,7 @@ class CreateAccountViewModel(
         if (passphrase.isBlank()) {
             passphraseState = DataState.Error(
                 Exception(
-                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
+                    Translator.getString(R.string.CreateWallet_Error_EmptyPassphrase)
                 )
             )
             return true
@@ -126,7 +127,7 @@ class CreateAccountViewModel(
         if (passphrase != passphraseConfirmation) {
             passphraseConfirmState = DataState.Error(
                 Exception(
-                    cash.p.terminal.strings.helpers.Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)
+                    Translator.getString(R.string.CreateWallet_Error_InvalidConfirmation)
                 )
             )
             return true

@@ -39,7 +39,7 @@ import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.ui_compose.components.ImageSource
 import cash.p.terminal.modules.market.topcoins.OptionController
 import cash.p.terminal.modules.market.topplatforms.Platform
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.ui.compose.components.AlertGroup
 import cash.p.terminal.ui.compose.components.CoinList

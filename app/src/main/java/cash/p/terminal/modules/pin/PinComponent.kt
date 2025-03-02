@@ -41,6 +41,9 @@ class PinComponent(
                     BackgroundManagerState.AllActivitiesDestroyed -> {
                        lock()
                     }
+                    BackgroundManagerState.Unknown -> {
+                        //do nothing
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package cash.p.terminal.modules.balance
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,11 +24,16 @@ import cash.p.terminal.modules.walletconnect.list.WalletConnectListViewModel
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.wallet.BalanceSortType
+import cash.p.terminal.wallet.IAccountManager
+import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.balance.BalanceItem
 import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import cash.p.terminal.wallet.isCosanta
+import cash.p.terminal.wallet.isOldZCash
 import cash.p.terminal.wallet.isPirateCash
 import com.walletconnect.web3.wallet.client.Wallet.Params.Pair
 import com.walletconnect.web3.wallet.client.Web3Wallet
@@ -39,6 +45,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 import java.math.BigDecimal
 
 class BalanceViewModel(
@@ -61,6 +68,9 @@ class BalanceViewModel(
     private var openSendTokenSelect: OpenSendTokenSelect? = null
     private var errorMessage: String? = null
     private var balanceTabButtonsEnabled = localStorage.balanceTabButtonsEnabled
+
+    private val marketKit: MarketKitWrapper by inject(MarketKitWrapper::class.java)
+    private val accountManager: IAccountManager by inject(IAccountManager::class.java)
 
     private val sortTypes =
         listOf(BalanceSortType.Value, BalanceSortType.Name, BalanceSortType.PercentGrowth)
@@ -163,6 +173,7 @@ class BalanceViewModel(
                         networkAvailable = service.networkAvailable
                     )
                 }
+                replaceOldZCashWithNew()
             } else {
                 viewState = null
                 balanceViewItems = listOf()
@@ -170,6 +181,26 @@ class BalanceViewModel(
 
             ensureActive()
             emitState()
+        }
+    }
+
+    /***
+     * We migrated to new address scheme, so we need to replace old ZCash with new one
+     */
+    private fun replaceOldZCashWithNew() {
+        balanceViewItems.find { it.wallet.isOldZCash() }?.let { oldZCashViewItem ->
+            val account = accountManager.activeAccount ?: return
+            val tokenQuery = TokenQuery(
+                BlockchainType.Zcash, TokenType.AddressSpecTyped(
+                    AddressSpecType.Shielded
+                )
+            )
+            marketKit.token(tokenQuery)?.let { token ->
+                Log.d("BalanceViewModel", "Replacing old ZCash with new one")
+                service.disable(oldZCashViewItem.wallet)
+                Log.d("BalanceViewModel", "Activating new ZCash")
+                service.enable(Wallet(token, account))
+            }
         }
     }
 

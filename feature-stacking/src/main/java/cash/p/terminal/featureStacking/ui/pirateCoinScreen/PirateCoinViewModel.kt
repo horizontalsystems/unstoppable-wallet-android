@@ -9,6 +9,7 @@ import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.balance.BalanceService
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
+import io.horizontalsystems.core.BackgroundManager
 
 internal class PirateCoinViewModel(
     walletManager: IWalletManager,
@@ -17,7 +18,8 @@ internal class PirateCoinViewModel(
     balanceService: BalanceService,
     accountManager: IAccountManager,
     marketKitWrapper: MarketKitWrapper,
-    balanceHiddenManager: IBalanceHiddenManager
+    balanceHiddenManager: IBalanceHiddenManager,
+    backgroundManager: BackgroundManager
 ) : StackingCoinViewModel(
     walletManager = walletManager,
     adapterManager = adapterManager,
@@ -25,7 +27,8 @@ internal class PirateCoinViewModel(
     balanceService = balanceService,
     accountManager = accountManager,
     marketKitWrapper = marketKitWrapper,
-    balanceHiddenManager = balanceHiddenManager
+    balanceHiddenManager = balanceHiddenManager,
+    backgroundManager = backgroundManager
 ) {
     override val minStackingAmount = 100
     override val stackingType: StackingType = StackingType.PCASH

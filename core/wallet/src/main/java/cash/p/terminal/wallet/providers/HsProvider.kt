@@ -50,6 +50,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.rx2.await
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import org.koin.java.KoinJavaComponent.inject
 import retrofit2.Response
 import retrofit2.http.Body
@@ -251,12 +252,24 @@ class HsProvider(baseUrl: String, apiKey: String) {
         piratePlaceService.getPlaceCoinInfo(coin = uid).await()
     }
 
-    fun historicalCoinPriceSingle(
+    suspend fun historicalCoinPriceSingle(
         coinUid: String,
         currencyCode: String,
         timestamp: Long
-    ): Single<HistoricalCoinPriceResponse> {
-        return service.getHistoricalCoinPrice(coinUid, currencyCode, timestamp)
+    ): HistoricalCoinPriceResponse {
+        return try {
+            withTimeout(2000) {
+                service.getHistoricalCoinPrice(coinUid, currencyCode, timestamp).await()
+            }
+        } catch (e: Exception) {
+            val response = piratePlaceRepository.getCoinInfo(coinUid)
+            val price = response.price[currencyCode.lowercase()]
+                ?: throw Exception("Price not found")
+            HistoricalCoinPriceResponse(
+                price = price,
+                timestamp = timestamp
+            )
+        }
     }
 
     suspend fun coinPriceChartSingle(

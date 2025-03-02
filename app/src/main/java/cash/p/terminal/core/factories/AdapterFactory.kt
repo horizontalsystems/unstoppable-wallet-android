@@ -129,7 +129,12 @@ class AdapterFactory(
                             BlockchainType.Bitcoin,
                             wallet.account.origin
                         )
-                        BitcoinAdapter(wallet, syncMode, backgroundManager, tokenType.derivation)
+                        BitcoinAdapter(
+                            wallet = wallet,
+                            syncMode = syncMode,
+                            backgroundManager = backgroundManager,
+                            derivation = tokenType.derivation
+                        )
                     }
 
                     BlockchainType.Litecoin -> {
@@ -155,8 +160,31 @@ class AdapterFactory(
                         BlockchainType.BitcoinCash,
                         wallet.account.origin
                     )
-                    BitcoinCashAdapter(wallet, syncMode, backgroundManager, tokenType.type)
+                    BitcoinCashAdapter(
+                        wallet = wallet,
+                        syncMode = syncMode,
+                        backgroundManager = backgroundManager,
+                        addressType = tokenType.type
+                    )
                 } else null
+            }
+
+            is TokenType.AddressSpecTyped -> {
+                when (wallet.token.blockchainType) {
+                    BlockchainType.Zcash -> {
+                        ZcashAdapter(
+                            context = context,
+                            wallet = wallet,
+                            restoreSettings = restoreSettingsManager.settings(
+                                wallet.account,
+                                wallet.token.blockchainType
+                            ),
+                            addressSpecTyped = tokenType.type,
+                            localStorage = localStorage
+                        )
+                    }
+                    else -> null
+                }
             }
 
             TokenType.Native -> when (wallet.token.blockchainType) {
@@ -180,13 +208,14 @@ class AdapterFactory(
 
                 BlockchainType.Zcash -> {
                     ZcashAdapter(
-                        context,
-                        wallet,
-                        restoreSettingsManager.settings(
+                        context = context,
+                        wallet = wallet,
+                        restoreSettings = restoreSettingsManager.settings(
                             wallet.account,
                             wallet.token.blockchainType
                         ),
-                        localStorage
+                        addressSpecTyped = null,
+                        localStorage = localStorage
                     )
                 }
 

@@ -222,6 +222,7 @@ abstract class BitcoinBaseAdapter(
                     BackgroundManagerState.EnterBackground -> {
                         kit.onEnterBackground()
                     }
+                    BackgroundManagerState.Unknown,
                     BackgroundManagerState.AllActivitiesDestroyed -> {
 
                     }

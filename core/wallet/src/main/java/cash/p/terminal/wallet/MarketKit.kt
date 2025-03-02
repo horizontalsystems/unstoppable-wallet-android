@@ -225,8 +225,8 @@ class MarketKit(
     ) =
         hsProvider.coinCategoryMarketPointsSingle(categoryUid, interval, currencyCode)
 
-    fun sync() {
-        hsDataSyncer.sync()
+    fun sync(forceUpdate: Boolean) {
+        hsDataSyncer.sync(forceUpdate)
     }
 
     // Coin Prices
@@ -261,11 +261,11 @@ class MarketKit(
 
     // Coin Historical Price
 
-    fun coinHistoricalPriceSingle(
+    suspend fun coinHistoricalPriceSingle(
         coinUid: String,
         currencyCode: String,
         timestamp: Long
-    ): Single<BigDecimal> {
+    ): BigDecimal {
         return coinHistoricalPriceManager.coinHistoricalPriceSingle(
             coinUid,
             currencyCode,

@@ -37,7 +37,7 @@ class SyncManager(
         get() = tokenAccountSyncer.syncState
 
     val transactionsSyncState: SolanaKit.SyncState
-        get() = transactionSyncer.syncState
+        get() = transactionSyncer.syncState.value
 
     private var started = false
 
@@ -48,7 +48,7 @@ class SyncManager(
         transactionSyncer.listener = this
     }
 
-    suspend fun start(scope: CoroutineScope) {
+    fun start(scope: CoroutineScope) {
         if (started) return
         started = true
         this.scope = scope

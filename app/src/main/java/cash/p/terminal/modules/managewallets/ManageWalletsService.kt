@@ -106,7 +106,9 @@ class ManageWalletsService(
             eligibleTokens
         } else if (
             accountType !is AccountType.HdExtendedKey &&
-            (eligibleTokens.all { it.type is TokenType.Derived } || eligibleTokens.all { it.type is TokenType.AddressTyped })
+            (eligibleTokens.all { it.type is TokenType.Derived } ||
+                    eligibleTokens.all { it.type is TokenType.AddressTyped } ||
+                    eligibleTokens.all { it.type is TokenType.AddressSpecTyped })
         ) {
             eligibleTokens.filter { isEnabled(it) || it.type.isDefault }
         } else {
@@ -134,6 +136,7 @@ class ManageWalletsService(
         is TokenType.Bep2,
         is TokenType.Spl,
         is TokenType.Jetton -> true
+
         else -> false
     }
 

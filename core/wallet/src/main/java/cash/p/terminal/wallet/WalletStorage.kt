@@ -25,12 +25,13 @@ class WalletStorage(
             val tokenQuery = TokenQuery.fromId(enabledWallet.tokenQueryId) ?: return@mapNotNull null
 
             tokens.find { it.tokenQuery == tokenQuery }?.let { token ->
-                return@mapNotNull Wallet(token, account).apply { map[this]= enabledWallet.id }
+                return@mapNotNull Wallet(token, account).apply { map[this] = enabledWallet.id }
             }
 
             if (enabledWallet.coinName != null && enabledWallet.coinCode != null && enabledWallet.coinDecimals != null) {
                 val coinUid = tokenQuery.customCoinUid
-                val blockchain = blockchains.firstOrNull { it.uid == tokenQuery.blockchainType.uid } ?: return@mapNotNull null
+                val blockchain = blockchains.firstOrNull { it.uid == tokenQuery.blockchainType.uid }
+                    ?: return@mapNotNull null
 
                 val token = Token(
                     coin = Coin(
@@ -44,7 +45,7 @@ class WalletStorage(
                     decimals = enabledWallet.coinDecimals
                 )
 
-                Wallet(token, account).apply { map[this]= enabledWallet.id }
+                Wallet(token, account).apply { map[this] = enabledWallet.id }
             } else {
                 null
             }
@@ -60,7 +61,9 @@ class WalletStorage(
             )
         }
 
-        storage.save(enabledWallets)
+        storage.save(enabledWallets).forEachIndexed { index, id ->
+            map[wallets[index]] = id
+        }
     }
 
     override fun delete(wallets: List<Wallet>) {

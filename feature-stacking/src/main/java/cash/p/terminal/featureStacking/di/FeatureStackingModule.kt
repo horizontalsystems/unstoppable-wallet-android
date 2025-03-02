@@ -23,7 +23,8 @@ val featureStackingModule = module {
             balanceService = get(named("wallet")),
             accountManager = get(),
             marketKitWrapper = get(),
-            balanceHiddenManager = get()
+            balanceHiddenManager = get(),
+            backgroundManager = get()
         )
     }
     viewModel {
@@ -34,7 +35,8 @@ val featureStackingModule = module {
             balanceService = get(named("wallet")),
             accountManager = get(),
             marketKitWrapper = get(),
-            balanceHiddenManager = get()
+            balanceHiddenManager = get(),
+            backgroundManager = get()
         )
     }
     viewModelOf(::PirateCoinChartViewModel)

@@ -31,12 +31,15 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.Executors
+import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 
 internal abstract class StackingCoinViewModel(
     private val walletManager: IWalletManager,
@@ -45,7 +48,8 @@ internal abstract class StackingCoinViewModel(
     private val accountManager: IAccountManager,
     private val marketKitWrapper: MarketKitWrapper,
     private val balanceService: BalanceService,
-    private val balanceHiddenManager: IBalanceHiddenManager
+    private val balanceHiddenManager: IBalanceHiddenManager,
+    private val backgroundManager: BackgroundManager
 ) : ViewModel() {
 
     abstract val minStackingAmount: Int
@@ -90,6 +94,21 @@ internal abstract class StackingCoinViewModel(
             }
         }
         balanceService.start()
+    }
+
+    fun refresh() {
+        _uiState.value = uiState.value.copy(
+            isRefreshing = true
+        )
+        viewModelScope.launch {
+            loadAnnualInterest()
+            loadBalance()
+            balanceService.refresh()
+            delay(1000)
+            _uiState.value = uiState.value.copy(
+                isRefreshing = false
+            )
+        }
     }
 
     private fun loadAnnualInterest() = viewModelScope.launch(Dispatchers.IO) {
@@ -168,6 +187,9 @@ internal abstract class StackingCoinViewModel(
                     Log.e("StackingCoinViewModel", "Error loading balance", throwable)
                 }) {
             balanceService.balanceItemsFlow.collectLatest { items ->
+                if(backgroundManager.stateFlow.value != BackgroundManagerState.EnterForeground) {
+                    return@collectLatest
+                }
                 items?.find { it.wallet.coin.code == stackingType.value }?.let { item ->
                     loadInvestmentData(
                         balance = item.balanceData.total,
@@ -300,5 +322,6 @@ internal abstract class StackingCoinViewModel(
 
     override fun onCleared() {
         balanceService.clear()
+        customDispatcher.close()
     }
 }

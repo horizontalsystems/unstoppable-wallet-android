@@ -87,6 +87,9 @@ import cash.p.terminal.wallet.IEnabledWalletStorage
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.MarketKitWrapper
 import cash.p.terminal.wallet.SubscriptionManager
+import cash.p.terminal.wallet.entities.TokenQuery
+import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.entities.TokenType.AddressSpecType
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.widgets.MarketWidgetManager
 import cash.p.terminal.widgets.MarketWidgetRepository
@@ -105,6 +108,7 @@ import io.horizontalsystems.core.CoreApp
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.IAppNumberFormatter
 import io.horizontalsystems.core.ICoreApp
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.security.EncryptionManager
 import io.horizontalsystems.core.security.KeyStoreManager
 import io.horizontalsystems.ethereumkit.core.EthereumKit
@@ -478,7 +482,7 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
         coroutineScope.launch {
             EthereumKit.init()
             adapterManager.startAdapterManager()
-            marketKit.sync()
+            marketKit.sync(needForceUpdateCoins())
             rateAppManager.onAppLaunch()
             nftMetadataSyncer.start()
             pinComponent.initDefaultPinLevel()
@@ -497,4 +501,13 @@ class App : CoreApp(), WorkConfiguration.Provider, ImageLoaderFactory {
             contactsRepository.initialize()
         }
     }
+
+    /*** Check if we don't have new zcash coins in the market kit */
+    private fun needForceUpdateCoins() = marketKit.token(
+            TokenQuery(
+                BlockchainType.Zcash, TokenType.AddressSpecTyped(
+                    AddressSpecType.Shielded
+                )
+            )
+        ) == null
 }

@@ -2,7 +2,6 @@ package cash.p.terminal.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
-import cash.p.terminal.core.App
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
 import cash.p.terminal.core.valueOrDefault
@@ -19,6 +18,7 @@ import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.wallet.BalanceSortType
+import cash.p.terminal.wallet.Derivation
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.wallet.entities.EncryptedString
@@ -326,10 +326,10 @@ class LocalStorageManager(
         }
 
     //used only in db migration
-    override var bitcoinDerivation: cash.p.terminal.wallet.AccountType.Derivation?
+    override var bitcoinDerivation: Derivation?
         get() {
             val derivationString = preferences.getString(BITCOIN_DERIVATION, null)
-            return derivationString?.let { cash.p.terminal.wallet.AccountType.Derivation.valueOf(it) }
+            return derivationString?.let { Derivation.valueOf(it) }
         }
         set(derivation) {
             preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()

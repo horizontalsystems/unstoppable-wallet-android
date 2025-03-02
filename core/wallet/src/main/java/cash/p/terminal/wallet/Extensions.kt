@@ -3,6 +3,7 @@ package cash.p.terminal.wallet
 import cash.p.terminal.wallet.entities.BitcoinCashCoinType
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.entities.ZCashCoinType
 import io.horizontalsystems.core.entities.BlockchainType
 
 val Token.badge: String?
@@ -15,17 +16,21 @@ val Token.badge: String?
             tokenType.type.bitcoinCashCoinType.value.uppercase()
         }
 
+        is TokenType.AddressSpecTyped -> {
+            tokenType.type.name.uppercase()
+        }
+
         else -> {
             protocolType?.uppercase()
         }
     }
 
-val TokenType.Derivation.accountTypeDerivation: AccountType.Derivation
+val TokenType.Derivation.accountTypeDerivation: Derivation
     get() = when (this) {
-        TokenType.Derivation.Bip44 -> cash.p.terminal.wallet.AccountType.Derivation.bip44
-        TokenType.Derivation.Bip49 -> cash.p.terminal.wallet.AccountType.Derivation.bip49
-        TokenType.Derivation.Bip84 -> cash.p.terminal.wallet.AccountType.Derivation.bip84
-        TokenType.Derivation.Bip86 -> cash.p.terminal.wallet.AccountType.Derivation.bip86
+        TokenType.Derivation.Bip44 -> Derivation.bip44
+        TokenType.Derivation.Bip49 -> Derivation.bip49
+        TokenType.Derivation.Bip84 -> Derivation.bip84
+        TokenType.Derivation.Bip86 -> Derivation.bip86
     }
 
 
@@ -33,6 +38,13 @@ val TokenType.AddressType.bitcoinCashCoinType: BitcoinCashCoinType
     get() = when (this) {
         TokenType.AddressType.Type0 -> BitcoinCashCoinType.type0
         TokenType.AddressType.Type145 -> BitcoinCashCoinType.type145
+    }
+
+val TokenType.AddressSpecType.zCashCoinType: ZCashCoinType
+    get() = when (this) {
+        TokenType.AddressSpecType.Shielded -> ZCashCoinType.Shielded
+        TokenType.AddressSpecType.Transparent -> ZCashCoinType.Transparent
+        TokenType.AddressSpecType.Unified -> ZCashCoinType.Unified
     }
 
 
@@ -105,6 +117,8 @@ val TokenType.meta: String?
         else -> null
     }
 
+fun Wallet.isOldZCash() = token.type == TokenType.Native &&
+        token.blockchainType == BlockchainType.Zcash
 
 fun Wallet.isPirateCash() = (token.type == TokenType.Eip20(BuildConfig.PIRATE_CONTRACT) ||
         token.type == TokenType.Eip20(BuildConfig.PIRATE_CONTRACT.lowercase())) &&

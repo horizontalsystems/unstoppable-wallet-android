@@ -17,6 +17,7 @@ import cash.p.terminal.core.supports
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.chart.ChartIndicatorManager
 import cash.p.terminal.modules.coin.CoinViewFactory
+import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.IAccountManager
@@ -27,6 +28,7 @@ import cash.p.terminal.wallet.accountTypeDerivation
 import cash.p.terminal.wallet.bitcoinCashCoinType
 import cash.p.terminal.wallet.entities.FullCoin
 import cash.p.terminal.wallet.entities.TokenType
+import cash.p.terminal.wallet.zCashCoinType
 import io.horizontalsystems.core.imageUrl
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
@@ -278,12 +280,33 @@ class CoinOverviewViewModel(
                         )
                     }
 
+                    is TokenType.AddressSpecTyped -> {
+                        type = TokenVariants.Type.CoinTypes
+
+                        val zCashCoinType = tokenType.type.zCashCoinType
+
+                        val inWallet =
+                            canAddToWallet && activeWallets.any { it.token == token }
+                        items.add(
+                            TokenVariant(
+                                value = zCashCoinType.title,
+                                copyValue = null,
+                                imgUrl = token.blockchainType.imageUrl,
+                                explorerUrl = null,
+                                name = zCashCoinType.value,
+                                token = token,
+                                canAddToWallet = canAddToWallet,
+                                inWallet = inWallet
+                            )
+                        )
+                    }
+
                     TokenType.Native -> {
                         val inWallet =
                             canAddToWallet && activeWallets.any { it.token == token }
                         items.add(
                             TokenVariant(
-                                value = cash.p.terminal.strings.helpers.Translator.getString(R.string.CoinPlatforms_Native),
+                                value = Translator.getString(R.string.CoinPlatforms_Native),
                                 copyValue = null,
                                 imgUrl = token.blockchainType.imageUrl,
                                 explorerUrl = null,

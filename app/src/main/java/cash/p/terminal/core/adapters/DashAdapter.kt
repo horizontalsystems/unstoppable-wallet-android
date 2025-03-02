@@ -1,5 +1,6 @@
 package cash.p.terminal.core.adapters
 
+import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.ISendBitcoinAdapter
 import cash.p.terminal.core.UnsupportedAccountException
@@ -20,6 +21,7 @@ import io.horizontalsystems.core.BackgroundManager
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.dashkit.DashKit.NetworkType
 import io.horizontalsystems.dashkit.models.DashTransactionInfo
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -180,7 +182,10 @@ class DashAdapter(
             masterNodesRepository: MasterNodesRepository,
             userPeers: String
         ) {
-            coroutineScope.launch {
+            coroutineScope.launch(CoroutineExceptionHandler { _, throwable ->
+                throwable.printStackTrace()
+                Log.d("DashAdapter", "Failed to set peers", throwable)
+            }) {
                 trySetPeers(userPeers.splitToAddresses()) ||
                         trySetPeers(MainNetDash.defaultSeeds) ||
                         trySetPeers(masterNodesRepository.getMasterNodes().ips)

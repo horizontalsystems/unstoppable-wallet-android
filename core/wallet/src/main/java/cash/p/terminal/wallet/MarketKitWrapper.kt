@@ -5,11 +5,11 @@ import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.exceptions.InvalidAuthTokenException
 import cash.p.terminal.wallet.exceptions.NoAuthTokenException
 import cash.p.terminal.wallet.models.CoinPrice
-import io.horizontalsystems.core.models.HsPeriodType
-import io.horizontalsystems.core.models.HsTimePeriod
 import cash.p.terminal.wallet.models.MarketInfo
 import cash.p.terminal.wallet.models.NftTopCollection
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.models.HsPeriodType
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.Observable
 import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
@@ -113,7 +113,7 @@ class MarketKitWrapper(
     ) =
         marketKit.coinCategoryMarketPointsSingle(categoryUid, interval, currencyCode)
 
-    fun sync() = marketKit.sync()
+    fun sync(forceUpdate: Boolean) = marketKit.sync(forceUpdate)
 
     // Coin Prices
 
@@ -160,12 +160,12 @@ class MarketKitWrapper(
 
     // Coin Historical Price
 
-    fun coinHistoricalPriceSingle(
+    suspend fun coinHistoricalPriceSingle(
         coinUid: String,
         currencyCode: String,
         timestamp: Long
-    ): Single<BigDecimal> =
-        if (coinUid.isCustomCoin) Single.never() else marketKit.coinHistoricalPriceSingle(
+    ): BigDecimal? =
+        if (coinUid.isCustomCoin) null else marketKit.coinHistoricalPriceSingle(
             coinUid,
             currencyCode,
             timestamp
@@ -184,9 +184,10 @@ class MarketKitWrapper(
 
     // Market Tickers
 
-    suspend fun marketTickersSingle(coinUid: String, currencyCode: String) = withContext(Dispatchers.IO) {
-        marketKit.marketTickersSingle(coinUid, currencyCode)
-    }
+    suspend fun marketTickersSingle(coinUid: String, currencyCode: String) =
+        withContext(Dispatchers.IO) {
+            marketKit.marketTickersSingle(coinUid, currencyCode)
+        }
 
     // Details
 
@@ -202,9 +203,10 @@ class MarketKitWrapper(
 
     // Pro Details
 
-    suspend fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) = withContext(Dispatchers.IO) {
-        marketKit.cexVolumesSingle(coinUid, currencyCode, timePeriod)
-    }
+    suspend fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
+        withContext(Dispatchers.IO) {
+            marketKit.cexVolumesSingle(coinUid, currencyCode, timePeriod)
+        }
 
     fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         requestWithAuthToken { marketKit.dexLiquiditySingle(it, coinUid, currencyCode, timePeriod) }
@@ -260,9 +262,10 @@ class MarketKitWrapper(
 
     fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
 
-    suspend fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) = withContext(Dispatchers.IO) {
-        marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
-    }
+    suspend fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
+        withContext(Dispatchers.IO) {
+            marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
+        }
 
     // Global Market Info
 

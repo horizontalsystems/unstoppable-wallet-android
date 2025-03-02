@@ -18,7 +18,7 @@ class ManageWalletsViewModel(
     private val clearables: List<Clearable>
 ) : ViewModel() {
 
-    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<cash.p.terminal.wallet.Token>>>()
+    val viewItemsLiveData = MutableLiveData<List<CoinViewItem<Token>>>()
 
     init {
         viewModelScope.launch {

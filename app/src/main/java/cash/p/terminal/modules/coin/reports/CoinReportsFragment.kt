@@ -22,7 +22,7 @@ import cash.p.terminal.ui_compose.BaseComposeFragment
 import io.horizontalsystems.core.requireInput
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.CellNews
 import cash.p.terminal.ui_compose.components.HsBackButton

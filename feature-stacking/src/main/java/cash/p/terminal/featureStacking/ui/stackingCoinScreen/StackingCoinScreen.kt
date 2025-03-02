@@ -40,6 +40,7 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.TitleAndTwoValuesCell
@@ -74,16 +75,24 @@ internal fun StackingCoinScreen(
     LaunchedEffect(viewModel.uiState.value.receiveAddress) {
         viewModel.uiState.value.receiveAddress?.let(chartViewModel::setReceiveAddress)
     }
-    PirateCoinScreenContent(
-        uiState = viewModel.uiState.value,
-        onBuyClicked = onBuyClicked,
-        onCalculatorClicked = onCalculatorClicked,
-        onChartClicked = onChartClicked,
-        graphUIState = chartViewModel.uiState,
-        getSelectedPointCallback = chartViewModel::getSelectedPoint,
-        onSelectChartInterval = chartViewModel::onSelectChartInterval,
-        onToggleBalanceVisibility = viewModel::toggleBalanceVisibility
-    )
+    HSSwipeRefresh(
+        refreshing = viewModel.uiState.value.isRefreshing,
+        onRefresh = {
+            viewModel.refresh()
+            chartViewModel.refresh()
+        }
+    ) {
+        PirateCoinScreenContent(
+            uiState = viewModel.uiState.value,
+            onBuyClicked = onBuyClicked,
+            onCalculatorClicked = onCalculatorClicked,
+            onChartClicked = onChartClicked,
+            graphUIState = chartViewModel.uiState,
+            getSelectedPointCallback = chartViewModel::getSelectedPoint,
+            onSelectChartInterval = chartViewModel::onSelectChartInterval,
+            onToggleBalanceVisibility = viewModel::toggleBalanceVisibility
+        )
+    }
 }
 
 @Composable
