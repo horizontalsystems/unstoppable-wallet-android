@@ -118,12 +118,13 @@ class SolanaKit(
         scope?.cancel()
     }
 
-    fun refresh() {
-        if (scope?.isActive != true) return
+    fun refresh(): Boolean {
+        if (scope?.isActive != true) return false
 
         scope?.launch {
             syncManager.refresh(this)
         }
+        return true
     }
 
     fun debugInfo(): String {

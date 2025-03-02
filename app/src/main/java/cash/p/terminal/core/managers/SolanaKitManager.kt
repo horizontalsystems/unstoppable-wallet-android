@@ -2,6 +2,7 @@ package cash.p.terminal.core.managers
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.providers.AppConfigProvider
@@ -13,6 +14,7 @@ import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +28,10 @@ class SolanaKitManager(
     private val backgroundManager: BackgroundManager
 ) {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope =
+        CoroutineScope(Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
+            Log.d("SolanaKitManager", "Coroutine error", throwable)
+        })
     private var backgroundEventListenerJob: Job? = null
     private var rpcUpdatedJob: Job? = null
     private var tokenAccountJob: Job? = null
@@ -62,9 +67,11 @@ class SolanaKitManager(
                 is AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
+
                 is AccountType.SolanaAddress -> {
                     createKitInstance(accountType, account)
                 }
+
                 else -> throw UnsupportedAccountException()
             }
             startKit()
@@ -152,9 +159,13 @@ class SolanaKitManager(
                 if (state == BackgroundManagerState.EnterForeground) {
                     solanaKitWrapper?.solanaKit?.let { kit ->
                         Handler(Looper.getMainLooper()).postDelayed({
-                            kit.refresh()
+                            if (!kit.refresh()) {
+                                startKit()
+                            }
                         }, 1000)
                     }
+                } else if (state == BackgroundManagerState.EnterBackground) {
+                    stopKit()
                 }
             }
         }

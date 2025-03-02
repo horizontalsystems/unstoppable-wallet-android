@@ -16,6 +16,9 @@ import io.horizontalsystems.solanakit.models.TokenTransfer
 import io.horizontalsystems.solanakit.models.Transaction
 import io.horizontalsystems.solanakit.noderpc.endpoints.getSignaturesForAddress
 import java.math.BigDecimal
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 interface ITransactionListener {
     fun onUpdateTransactionSyncState(syncState: SolanaKit.SyncState)
@@ -28,21 +31,22 @@ class TransactionSyncer(
     private val transactionManager: TransactionManager,
     private val pendingTransactionSyncer: PendingTransactionSyncer
 ) {
-    var syncState: SolanaKit.SyncState =
+    private val _syncState = MutableStateFlow<SolanaKit.SyncState>(
         SolanaKit.SyncState.NotSynced(SolanaKit.SyncError.NotStarted())
-        private set(value) {
-            if (value != field) {
-                field = value
-                listener?.onUpdateTransactionSyncState(value)
-            }
-        }
+    )
+    val syncState: StateFlow<SolanaKit.SyncState> = _syncState.asStateFlow()
 
     var listener: ITransactionListener? = null
 
-    suspend fun sync() {
-        if (syncState is SolanaKit.SyncState.Syncing) return
+    private fun updateSyncState(newState: SolanaKit.SyncState) {
+        _syncState.value = newState
+        listener?.onUpdateTransactionSyncState(newState)
+    }
 
-        syncState = SolanaKit.SyncState.Syncing()
+    suspend fun sync() {
+        if (_syncState.value is SolanaKit.SyncState.Syncing) return
+
+        updateSyncState(SolanaKit.SyncState.Syncing())
 
         pendingTransactionSyncer.sync()
 
@@ -79,10 +83,10 @@ class TransactionSyncer(
             )
 
             transactionManager.handle(transactions)
-            syncState = SolanaKit.SyncState.Synced()
+            updateSyncState(SolanaKit.SyncState.Synced())
         } catch (exception: Throwable) {
             exception.printStackTrace()
-            syncState = SolanaKit.SyncState.NotSynced(exception)
+            updateSyncState(SolanaKit.SyncState.NotSynced(exception))
         }
     }
 
