@@ -126,7 +126,7 @@ class TransactionsViewModel(
 
         viewModelScope.launch {
             service.itemsObservable.asFlow().collect { items ->
-                handleUpdatedItems(items)
+                handleUpdatedItems(items.distinctBy { it.record.uid })
             }
         }
 
