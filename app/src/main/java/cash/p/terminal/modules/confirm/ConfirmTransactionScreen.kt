@@ -2,6 +2,8 @@ package cash.p.terminal.modules.confirm
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -58,7 +60,17 @@ fun ConfirmTransactionScreen(
                 },
             )
         },
-        bottomBar = {
+        containerColor = ComposeAppTheme.colors.tyler,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ) {
+            VSpacer(height = 12.dp)
+            content.invoke(this)
+            Spacer(Modifier.weight(1f))
             ButtonsGroupWithShade {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -66,19 +78,6 @@ fun ConfirmTransactionScreen(
                     content = buttonsSlot
                 )
             }
-        },
-        containerColor = ComposeAppTheme.colors.tyler,
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
-        ) {
-            VSpacer(height = 12.dp)
-
-            content.invoke(this)
-
-            VSpacer(height = 32.dp)
         }
     }
 }
