@@ -225,11 +225,11 @@ fun PriceWithToggleCell(
         modifier = Modifier.padding(horizontal = 16.dp),
     ) {
         subhead2_grey(text = title, modifier = Modifier.padding(end = 16.dp))
-        Spacer(Modifier.weight(1f))
         subhead1_leah(
             text = if (showValueOne) valueOne else valueTwo,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(1f)
         )
         HSpacer(8.dp)
         HsIconButton(
