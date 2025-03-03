@@ -48,10 +48,10 @@ class TronSendTransactionService(
     val coinMaxAllowedDecimals = wallet.token.decimals
 
     val amountService = SendAmountService(
-        amountValidator,
-        wallet.token.coin.code,
-        adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
-        wallet.token.type.isNative,
+        amountValidator = amountValidator,
+        coinCode = wallet.token.coin.code,
+        availableBalance = adapter.balanceData.available.setScale(coinMaxAllowedDecimals, RoundingMode.DOWN),
+        leaveSomeBalanceForFee = wallet.token.type.isNative
     )
     val addressService = SendTronAddressService(adapter, wallet.token, null)
     val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
@@ -88,6 +88,7 @@ class TronSendTransactionService(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.balanceData.available,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,

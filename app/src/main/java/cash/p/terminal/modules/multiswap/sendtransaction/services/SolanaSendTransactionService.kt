@@ -53,7 +53,7 @@ class SolanaSendTransactionService(
             coinMaxAllowedDecimals,
             RoundingMode.DOWN
         ),
-        leaveSomeBalanceForFee = wallet.token.type.isNative,
+        leaveSomeBalanceForFee = wallet.token.type.isNative
     )
     private val solToken =
         App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native))
@@ -99,6 +99,7 @@ class SolanaSendTransactionService(
     }
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.availableBalance,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,

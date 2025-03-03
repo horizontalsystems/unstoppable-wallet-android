@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
+import java.math.BigDecimal
 
 class BitcoinSendTransactionService(
     token: Token
@@ -82,7 +83,8 @@ class BitcoinSendTransactionService(
         cautions = cautions,
         sendable = sendable,
         loading = loading,
-        fields = fields
+        fields = fields,
+        availableBalance = calculateAvailableBalance()
     )
 
     val coinMaxAllowedDecimals = wallet.token.decimals
@@ -130,6 +132,16 @@ class BitcoinSendTransactionService(
         coroutineScope.launch {
             feeRateService.start()
         }
+    }
+
+    private fun calculateAvailableBalance(): BigDecimal? = feeRateState.feeRate?.let {
+        adapter.availableBalance(
+            feeRate = it,
+            address = addressState.validAddress?.hex,
+            unspentOutputs = customUnspentOutputs,
+            pluginData = pluginState.pluginData,
+            memo = null
+        )
     }
 
     private fun updateUtxoData(usedUtxosSize: Int) {
