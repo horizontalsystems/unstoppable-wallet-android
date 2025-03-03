@@ -28,17 +28,4 @@ enum class AddressCheckType {
             Sanction -> R.string.Send_Address_ErrorMessage_SanctionDetected_Description
         }
 
-    val clearInfoTitle: Int
-        get() = when (this) {
-            Phishing -> R.string.Send_Address_PhishingCheck_ClearInfo_Title
-            Blacklist -> R.string.Send_Address_BlacklistCheck_ClearInfo_Title
-            Sanction -> R.string.Send_Address_SanctionCheck_ClearInfo_Title
-        }
-
-    val clearInfoDescription: Int
-        get() = when (this) {
-            Phishing -> R.string.Send_Address_PhishingCheck_ClearInfo_Description
-            Blacklist -> R.string.Send_Address_BlacklistCheck_ClearInfo_Description
-            Sanction -> R.string.Send_Address_SanctionCheck_ClearInfo_Description
-        }
 }
