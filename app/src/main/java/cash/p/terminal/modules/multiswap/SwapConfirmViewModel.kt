@@ -25,6 +25,7 @@ import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.ViewModelUiState
 import io.horizontalsystems.core.entities.Currency
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
@@ -45,7 +46,7 @@ class SwapConfirmViewModel(
     private val currency = currencyManager.baseCurrency
     private val tokenIn = swapQuote.tokenIn
     private val tokenOut = swapQuote.tokenOut
-    private val amountIn = swapQuote.amountIn
+    private var amountIn = swapQuote.amountIn
     private var fiatAmountIn: BigDecimal? = null
 
     private var fiatAmountOut: BigDecimal? = null
@@ -131,6 +132,16 @@ class SwapConfirmViewModel(
             }
         }
 
+        viewModelScope.launch {
+            sendTransactionService.stateFlow.collectLatest {
+                if (it.availableBalance != null && it.availableBalance < amountIn) {
+                    amountIn = it.availableBalance
+                    fiatServiceIn.setAmount(amountIn)
+                    refresh()
+                }
+            }
+        }
+
         sendTransactionService.start(viewModelScope)
 
         fetchFinalQuote()
@@ -207,11 +218,11 @@ class SwapConfirmViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val finalQuote = swapProvider.fetchFinalQuote(
-                    tokenIn,
-                    tokenOut,
-                    amountIn,
-                    swapSettings,
-                    sendTransactionSettings
+                    tokenIn = tokenIn,
+                    tokenOut = tokenOut,
+                    amountIn = amountIn,
+                    swapSettings = swapSettings,
+                    sendTransactionSettings = sendTransactionSettings
                 )
 
                 amountOut = finalQuote.amountOut

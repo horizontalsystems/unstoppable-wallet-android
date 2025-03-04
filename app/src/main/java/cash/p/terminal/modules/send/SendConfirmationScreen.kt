@@ -4,13 +4,16 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -78,7 +81,8 @@ fun SendConfirmationScreen(
     memo: String?,
     rbfEnabled: Boolean?,
     onClickSend: () -> Unit,
-    sendEntryPointDestId: Int
+    sendEntryPointDestId: Int,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
 ) {
     val closeUntilDestId = if (sendEntryPointDestId == 0) {
         R.id.sendXFragment
@@ -123,7 +127,7 @@ fun SendConfirmationScreen(
         }
     }
 
-    Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+    Column(Modifier.windowInsetsPadding(windowInsets).background(color = ComposeAppTheme.colors.tyler)) {
         AppBar(
             title = stringResource(R.string.Send_Confirmation_Title),
             navigationIcon = {

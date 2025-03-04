@@ -70,6 +70,7 @@ class TonSendTransactionService(
         private set
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.availableBalance,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,

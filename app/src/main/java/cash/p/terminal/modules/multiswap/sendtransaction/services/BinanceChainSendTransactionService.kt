@@ -74,6 +74,7 @@ class BinanceChainSendTransactionService(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.availableBalance,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,

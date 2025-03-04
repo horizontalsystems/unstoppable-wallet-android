@@ -144,6 +144,8 @@ class TonKitManager(
                         delay(1000)
                         kit.refresh()
                     }
+                } else if (state == BackgroundManagerState.EnterBackground) {
+                    tonKitWrapper?.tonKit?.stop()
                 }
             }
         }

@@ -2,10 +2,12 @@ package cash.p.terminal.modules.confirm
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +20,7 @@ import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.VSpacer
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun ConfirmTransactionScreen(
@@ -57,7 +60,17 @@ fun ConfirmTransactionScreen(
                 },
             )
         },
-        bottomBar = {
+        containerColor = ComposeAppTheme.colors.tyler,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ) {
+            VSpacer(height = 12.dp)
+            content.invoke(this)
+            Spacer(Modifier.weight(1f))
             ButtonsGroupWithShade {
                 Column(
                     modifier = Modifier.padding(horizontal = 16.dp),
@@ -65,19 +78,6 @@ fun ConfirmTransactionScreen(
                     content = buttonsSlot
                 )
             }
-        },
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .verticalScroll(rememberScrollState())
-        ) {
-            VSpacer(height = 12.dp)
-
-            content.invoke(this)
-
-            VSpacer(height = 32.dp)
         }
     }
 }

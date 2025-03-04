@@ -131,6 +131,7 @@ class SendTransactionServiceEvm(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.balanceData.available,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,

@@ -9,6 +9,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.core.AppLogger
 import cash.p.terminal.core.ISendZcashAdapter
 import cash.p.terminal.core.ethereum.CautionViewItem
+import cash.p.terminal.core.isNative
 import cash.p.terminal.entities.Address
 import cash.p.terminal.entities.CoinValue
 import cash.p.terminal.modules.amount.AmountValidator
@@ -38,9 +39,10 @@ class ZCashSendTransactionService(
 
     private val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
     private val amountService = SendAmountService(
-        AmountValidator(),
-        wallet.coin.code,
-        adapter.availableBalance
+        amountValidator = AmountValidator(),
+        coinCode = wallet.token.coin.code,
+        availableBalance = adapter.availableBalance,
+        leaveSomeBalanceForFee = wallet.token.type.isNative
     )
     private val addressService = SendZCashAddressService(adapter, null)
 
@@ -95,6 +97,7 @@ class ZCashSendTransactionService(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.availableBalance,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,

@@ -47,6 +47,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.alternativeImageUrl
 import cash.p.terminal.wallet.badge
 import cash.p.terminal.wallet.imageUrl
+import io.horizontalsystems.bitcoincore.managers.SendValueErrors
 import io.horizontalsystems.chartview.cell.CellUniversal
 import io.horizontalsystems.chartview.cell.SectionUniversalLawrence
 import io.horizontalsystems.core.SnackbarDuration
@@ -163,7 +164,14 @@ fun SwapConfirmScreen(navController: NavController) {
                                 delay(1200)
                                 SwapConfirmFragment.Result(true)
                             } catch (t: Throwable) {
-                                HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                if (t.cause is SendValueErrors.InsufficientUnspentOutputs) {
+                                    HudHelper.showErrorMessage(
+                                        view,
+                                        R.string.EthereumTransaction_Error_InsufficientBalance_Title
+                                    )
+                                } else {
+                                    HudHelper.showErrorMessage(view, t.javaClass.simpleName)
+                                }
                                 SwapConfirmFragment.Result(false)
                             }
 
@@ -173,7 +181,7 @@ fun SwapConfirmScreen(navController: NavController) {
                         }
                     },
                 )
-                if(uiState.expiresIn != null) {
+                if (uiState.expiresIn != null) {
                     VSpacer(height = 12.dp)
                     subhead1_leah(text = "Quote expires in ${uiState.expiresIn}")
                 }
