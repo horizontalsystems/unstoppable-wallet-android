@@ -349,7 +349,7 @@ interface ISendBitcoinAdapter {
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): BitcoinTransactionRecord
+    ): BitcoinTransactionRecord?
 }
 
 interface ISendEthereumAdapter {

@@ -286,7 +286,7 @@ abstract class BitcoinBaseAdapter(
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): BitcoinTransactionRecord {
+    ): BitcoinTransactionRecord? {
         val sortingType = getTransactionSortingType(transactionSorting)
 
         logger.info("call btc-kit.send")
@@ -302,12 +302,12 @@ abstract class BitcoinBaseAdapter(
             rbfEnabled = rbfEnabled
         )
 
-        val transaction = kit.getTransaction(fullTransaction.header.hash.toReversedHex())!!
+        val transaction = kit.getTransaction(fullTransaction.header.hash.toReversedHex())
 
 //        val list = kit.transactions(limit = 1).blockingGet()
 //        val transaction = list.first()
 
-        return transactionRecord(transaction)
+        return transaction?.let { transactionRecord(it) }
     }
 
     override fun availableBalance(
