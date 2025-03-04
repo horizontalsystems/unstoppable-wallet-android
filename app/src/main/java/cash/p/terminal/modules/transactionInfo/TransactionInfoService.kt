@@ -2,7 +2,7 @@ package cash.p.terminal.modules.transactionInfo
 
 import cash.p.terminal.core.ITransactionsAdapter
 import cash.p.terminal.core.adapters.TonTransactionRecord
-import cash.p.terminal.core.domain.usecase.UpdateChangeNowStatusesUseCase
+import cash.p.terminal.core.usecase.UpdateChangeNowStatusesUseCase
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord

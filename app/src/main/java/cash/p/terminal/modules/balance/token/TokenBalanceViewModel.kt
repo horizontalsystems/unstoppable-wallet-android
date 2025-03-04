@@ -2,7 +2,7 @@ package cash.p.terminal.modules.balance.token
 
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.domain.usecase.UpdateChangeNowStatusesUseCase
+import cash.p.terminal.core.usecase.UpdateChangeNowStatusesUseCase
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager

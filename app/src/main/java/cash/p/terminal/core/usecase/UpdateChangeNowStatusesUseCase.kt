@@ -1,4 +1,4 @@
-package cash.p.terminal.core.domain.usecase
+package cash.p.terminal.core.usecase
 
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.entities.ChangeNowTransaction
