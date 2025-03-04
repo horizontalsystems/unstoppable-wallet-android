@@ -94,7 +94,8 @@ private fun SettingSections(
             listOf {
                 HsSettingCell(
                     title = R.string.update_app,
-                    icon = R.drawable.ic_star_20,
+                    icon = R.drawable.ic_refresh,
+                    iconTint = ComposeAppTheme.colors.jacob,
                     showAlert = true,
                     onClick = {
                         RateAppManager.openPlayMarket(context)
@@ -111,9 +112,9 @@ private fun SettingSections(
     CellUniversalLawrenceSection(
         listOf {
             HsSettingCell(
-                R.string.Settings_Donate,
-                R.drawable.ic_heart_filled_24,
-                ComposeAppTheme.colors.jacob,
+                title = R.string.Settings_Donate,
+                icon = R.drawable.ic_heart_filled_24,
+                iconTint = ComposeAppTheme.colors.jacob,
                 onClick = {
                     navController.slideFromRight(R.id.donateTokenSelectFragment)
 

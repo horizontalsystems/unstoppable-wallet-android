@@ -99,7 +99,7 @@ class MainViewModel(
     private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
     private var torEnabled = localStorage.torEnabled
-    private val updateAvailable: StateFlow<Boolean> = checkGooglePlayUpdateUseCase.invoke()
+    private val updateAvailable: StateFlow<Boolean> = checkGooglePlayUpdateUseCase()
         .map { it is UpdateResult.ImmediateUpdateAvailable || it is UpdateResult.FlexibleUpdateAvailable }
         .stateIn(
             scope = viewModelScope,
