@@ -1,5 +1,6 @@
 package io.horizontalsystems.bankwallet.core.address
 
+import io.horizontalsystems.bankwallet.core.managers.EvmBlockchainManager
 import io.horizontalsystems.bankwallet.core.managers.EvmSyncSourceManager
 import io.horizontalsystems.bankwallet.entities.Address
 import io.horizontalsystems.ethereumkit.contracts.ContractMethod
@@ -9,9 +10,7 @@ import io.horizontalsystems.marketkit.models.TokenType
 import kotlinx.coroutines.rx2.await
 import io.horizontalsystems.ethereumkit.models.Address as EvmAddress
 
-class Eip20AddressValidator(
-    val evmSyncSourceManager: EvmSyncSourceManager
-) {
+class Eip20AddressValidator(val evmSyncSourceManager: EvmSyncSourceManager) {
     suspend fun check(address: Address, token: Token): AddressCheckResult {
         val syncSource = evmSyncSourceManager.defaultSyncSources(token.blockchainType).first()
         val contractAddress = (token.type as? TokenType.Eip20)?.address?.let { EvmAddress(it) }
@@ -20,7 +19,8 @@ class Eip20AddressValidator(
         val method = method(address, contractAddress)
             ?: return AddressCheckResult.NotSupported
 
-        val response: ByteArray = EthereumKit.call(syncSource.rpcSource, contractAddress, method.encodedABI()).await()
+        val response: ByteArray =
+            EthereumKit.call(syncSource.rpcSource, contractAddress, method.encodedABI()).await()
 
         return if (response.contains(1.toByte()))
             AddressCheckResult.Detected
@@ -29,6 +29,7 @@ class Eip20AddressValidator(
     }
 
     fun supports(token: Token): Boolean {
+        if (!EvmBlockchainManager.blockchainTypes.contains(token.blockchainType)) return false
         val contractAddress = (token.type as? TokenType.Eip20)?.address?.let { EvmAddress(it) }
             ?: return false
 
