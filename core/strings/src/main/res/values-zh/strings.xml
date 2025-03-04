@@ -1711,4 +1711,5 @@
     <string name="CexWithdraw_Error_MinimumAmount">您可以提取的最低金额是 %s</string>
     <string name="CexWithdraw_Error_MaximumAmount">您可以提取的最大金额是 %s</string>
     <string name="CexWithdraw_Error_WithdrawTitle">提取失败</string>
+    <string name="update_app">更新应用</string>
 </resources>

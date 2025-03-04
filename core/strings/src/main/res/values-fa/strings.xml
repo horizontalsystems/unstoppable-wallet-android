@@ -782,4 +782,5 @@
     <string name="CexWithdraw_Network">خالص</string>
     <string name="CexWithdraw_Fee">هزينه</string>
     <string name="CexWithdraw_GetCode">ارسال مجدد</string>
+    <string name="update_app">بروزرسانی برنامه</string>
 </resources>

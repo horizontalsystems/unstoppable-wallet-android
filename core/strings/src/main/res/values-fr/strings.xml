@@ -1690,4 +1690,5 @@
     <string name="CexWithdraw_Error_MinimumAmount">Le montant minimum que vous pouvez retirer est %s</string>
     <string name="CexWithdraw_Error_MaximumAmount">Le montant maximum que vous pouvez retirer est %s</string>
     <string name="CexWithdraw_Error_WithdrawTitle">Échec du retrait</string>
+    <string name="update_app">Mettre à jour l\'application</string>
 </resources>

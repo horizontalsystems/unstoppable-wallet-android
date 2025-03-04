@@ -1507,4 +1507,5 @@
     <string name="CexWithdraw_Error_MinimumAmount">Çekebileceğiniz minimum miktar %s</string>
     <string name="CexWithdraw_Error_MaximumAmount">Çekebileceğiniz maksimum miktar %s</string>
     <string name="CexWithdraw_Error_WithdrawTitle">Para çekme başarısız oldu</string>
+    <string name="update_app">Uygulamayı Güncelle</string>
 </resources>

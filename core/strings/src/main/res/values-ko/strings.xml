@@ -1715,4 +1715,5 @@
     <string name="CexWithdraw_Error_MinimumAmount">최소 인출 금액은 %s입니다.</string>
     <string name="CexWithdraw_Error_MaximumAmount">최대 인출 가능액은 %s입니다.</string>
     <string name="CexWithdraw_Error_WithdrawTitle">출금 실패</string>
+    <string name="update_app">앱 업데이트</string>
 </resources>

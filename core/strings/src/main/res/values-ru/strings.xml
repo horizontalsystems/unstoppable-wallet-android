@@ -1803,4 +1803,5 @@
     <string name="zcash_transparent_description">Полностью отслеживаемые транзакции</string>
     <string name="zcash_shielded_description">Частные защищённые транзакции</string>
     <string name="zcash_unified_description">Комбинированные прозрачные и приватные транзакции</string>
+    <string name="update_app">Обновить приложение</string>
 </resources>
