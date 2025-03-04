@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.core.slideFromRightForResult
 import cash.p.terminal.entities.Address
 import cash.p.terminal.wallet.Wallet
@@ -24,6 +25,8 @@ import cash.p.terminal.modules.address.HSAddressInput
 import cash.p.terminal.modules.amount.AmountInputModeViewModel
 import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
+import cash.p.terminal.modules.pin.ConfirmPinFragment
+import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.evm.confirmation.SendEvmConfirmationFragment
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
@@ -115,16 +118,23 @@ fun SendEvmScreen(
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
                     if (viewModel.hasConnection()) {
-                        viewModel.getSendData()?.let {
-                            navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
-                                R.id.sendEvmConfirmationFragment,
-                                SendEvmConfirmationFragment.Input(
-                                    sendData = it,
-                                    blockchainType = viewModel.wallet.token.blockchainType
-                                )
-                            ) {
-                                if (it.success) {
-                                    navController.popBackStack()
+                        navController.authorizedAction(
+                            ConfirmPinFragment.InputConfirm(
+                                descriptionResId = R.string.Unlock_EnterPasscode,
+                                pinType = PinType.TRANSFER
+                            )
+                        ) {
+                            viewModel.getSendData()?.let {
+                                navController.slideFromRightForResult<SendEvmConfirmationFragment.Result>(
+                                    R.id.sendEvmConfirmationFragment,
+                                    SendEvmConfirmationFragment.Input(
+                                        sendData = it,
+                                        blockchainType = viewModel.wallet.token.blockchainType
+                                    )
+                                ) {
+                                    if (it.success) {
+                                        navController.popBackStack()
+                                    }
                                 }
                             }
                         }

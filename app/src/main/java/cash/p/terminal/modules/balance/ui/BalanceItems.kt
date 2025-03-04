@@ -64,7 +64,7 @@ import cash.p.terminal.modules.rateapp.RateAppModule
 import cash.p.terminal.modules.rateapp.RateAppViewModel
 import cash.p.terminal.modules.sendtokenselect.SendTokenSelectFragment
 import cash.p.terminal.navigation.slideFromRight
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryDefault
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
@@ -76,6 +76,7 @@ import cash.p.terminal.ui_compose.components.HeaderSorting
 import cash.p.terminal.ui_compose.components.HsIconButton
 import cash.p.terminal.ui.compose.components.SelectorDialogCompose
 import cash.p.terminal.ui.compose.components.SelectorItem
+import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui_compose.components.subhead2_grey
 import cash.p.terminal.ui_compose.components.subhead2_leah
@@ -321,9 +322,31 @@ fun BalanceItems(
                             contentDescription = stringResource(R.string.stacking),
                             onClick = {
                                 navController.slideFromRight(R.id.stacking)
-
-                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                                stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Stacking))
                             }
+                        )
+                    }
+                    VSpacer(12.dp)
+                }
+            } else if (uiState.showStackingForWatchAccount && accountViewItem.isWatchAccount) {
+                item {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        ButtonPrimaryYellowWithIcon(
+                            title = stringResource(R.string.staking_details),
+                            onClick = {
+                                navController.slideFromRight(R.id.stacking)
+                                stat(
+                                    page = StatPage.Balance,
+                                    event = StatEvent.Open(StatPage.Stacking)
+                                )
+                            },
+                            icon = R.drawable.ic_coins_stacking,
+                            modifier = Modifier
+                                .weight(1f)
                         )
                     }
                     VSpacer(12.dp)
@@ -412,7 +435,7 @@ fun BalanceItems(
                 wallets(
                     items = balanceViewItems,
                     key = {
-                        it.wallet.hashCode()
+                        it.wallet.token.tokenQuery.id
                     }
                 ) { item ->
                     BalanceCardSwipable(

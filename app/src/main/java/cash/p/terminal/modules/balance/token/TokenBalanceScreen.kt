@@ -50,6 +50,7 @@ import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.modules.transactions.transactionList
+import cash.p.terminal.modules.transactions.transactionsHiddenBlock
 import cash.p.terminal.navigation.entity.SwapParams
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.strings.helpers.Translator
@@ -81,7 +82,8 @@ fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
     transactionsViewModel: TransactionsViewModel,
     navController: NavController,
-    onStackingClicked: () -> Unit
+    onStackingClicked: () -> Unit,
+    onShowAllTransactionsClicked: () -> Unit
 ) {
     val uiState = viewModel.uiState
 
@@ -97,7 +99,7 @@ fun TokenBalanceScreen(
         }
     ) { paddingValues ->
         val transactionItems = uiState.transactions
-        if (transactionItems.isNullOrEmpty()) {
+        if (transactionItems == null || (transactionItems.isEmpty() && !uiState.hasHiddenTransactions)) {
             Column(Modifier.padding(paddingValues)) {
                 uiState.balanceViewItem?.let {
                     TokenBalanceHeader(
@@ -146,10 +148,15 @@ fun TokenBalanceScreen(
                     },
                     onBottomReached = { viewModel.onBottomReached() }
                 )
+                if (uiState.hasHiddenTransactions) {
+                    transactionsHiddenBlock(
+                        shortBlock = transactionItems.isNotEmpty(),
+                        onShowAllTransactionsClicked = onShowAllTransactionsClicked
+                    )
+                }
             }
         }
     }
-
 }
 
 
@@ -417,6 +424,17 @@ private fun ButtonsRow(
                 title = stringResource(R.string.Balance_Address),
                 onClick = onClickReceive,
             )
+            if (viewItem.wallet.isCosanta() || viewItem.wallet.isPirateCash()) {
+                HSpacer(8.dp)
+                ButtonPrimaryCircle(
+                    icon = R.drawable.ic_coins_stacking,
+                    contentDescription = stringResource(R.string.stacking),
+                    onClick = {
+                        stat(page = StatPage.Balance, event = StatEvent.Open(StatPage.Swap))
+                        onStackingClicked()
+                    }
+                )
+            }
         } else {
             ButtonPrimaryYellow(
                 modifier = Modifier.weight(1f),

@@ -46,7 +46,7 @@ import cash.p.terminal.modules.managewallets.ManageWalletsModule
 import cash.p.terminal.modules.managewallets.ManageWalletsViewModel
 import cash.p.terminal.modules.markdown.MarkdownFragment
 import cash.p.terminal.modules.zcashconfigure.ZcashConfigure
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ButtonSecondaryDefault
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.helpers.LinkHelper

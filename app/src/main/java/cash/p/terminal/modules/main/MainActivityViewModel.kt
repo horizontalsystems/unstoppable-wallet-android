@@ -10,6 +10,7 @@ import cash.p.terminal.core.App
 import cash.p.terminal.wallet.IAccountManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.managers.UserManager
+import cash.p.terminal.modules.lockscreen.LockScreenActivity
 import cash.p.terminal.modules.walletconnect.WCDelegate
 import io.horizontalsystems.core.IKeyStoreManager
 import io.horizontalsystems.core.IPinComponent
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel(
     private val userManager: UserManager,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val accountManager: IAccountManager,
     private val pinComponent: IPinComponent,
     private val systemInfoManager: ISystemInfoManager,
     private val keyStoreManager: IKeyStoreManager,
@@ -46,6 +47,16 @@ class MainActivityViewModel(
         viewModelScope.launch {
             tonConnectKit.sendRequestFlow.collect {
                 tcSendRequest.postValue(it)
+            }
+        }
+
+        viewModelScope.launch {
+            pinComponent.isLocked.collect { isLocked ->
+                if(isLocked) {
+                    App.backgroundManager.currentActivity?.get()?.let {
+                        LockScreenActivity.start(it)
+                    }
+                }
             }
         }
     }
@@ -75,10 +86,6 @@ class MainActivityViewModel(
 
         if (accountManager.isAccountsEmpty && !localStorage.mainShowedOnce) {
             throw MainScreenValidationError.Welcome()
-        }
-
-        if (pinComponent.isLocked) {
-            throw MainScreenValidationError.Unlock()
         }
     }
 

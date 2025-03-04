@@ -53,7 +53,7 @@ class SolanaSendTransactionService(
             coinMaxAllowedDecimals,
             RoundingMode.DOWN
         ),
-        leaveSomeBalanceForFee = wallet.token.type.isNative,
+        leaveSomeBalanceForFee = wallet.token.type.isNative
     )
     private val solToken =
         App.coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native))
@@ -99,6 +99,7 @@ class SolanaSendTransactionService(
     }
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.availableBalance,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,
@@ -137,6 +138,7 @@ class SolanaSendTransactionService(
         this.amountState = amountState
         sendable = amountState.canBeSend
         cautions = amountState.amountCaution?.toCautionViewItem()?.let { listOf(it) } ?: listOf()
+        loading = false
         emitState()
     }
 
@@ -154,9 +156,9 @@ class SolanaSendTransactionService(
             if (totalSolAmount > solBalance)
                 throw EvmError.InsufficientBalanceWithFee
 
-            adapter.send(decimalAmount, addressState.evmAddress!!)
+            val transaction = adapter.send(decimalAmount, addressState.evmAddress!!)
 
-            return SendTransactionResult.Common(SendResult.Sent)
+            return SendTransactionResult.Common(SendResult.Sent(transaction.transaction.hash))
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

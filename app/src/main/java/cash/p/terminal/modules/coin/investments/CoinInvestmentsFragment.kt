@@ -30,7 +30,7 @@ import io.horizontalsystems.core.requireInput
 import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.investments.CoinInvestmentsModule.FundViewItem
 import cash.p.terminal.modules.coin.overview.ui.Loading
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellSingleLineClear
 import cash.p.terminal.ui_compose.components.CellSingleLineLawrenceSection

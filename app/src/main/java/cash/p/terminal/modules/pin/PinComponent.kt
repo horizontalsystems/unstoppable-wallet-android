@@ -13,6 +13,10 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class PinComponent(
@@ -37,6 +41,9 @@ class PinComponent(
                     BackgroundManagerState.AllActivitiesDestroyed -> {
                        lock()
                     }
+                    BackgroundManagerState.Unknown -> {
+                        //do nothing
+                    }
                 }
             }
         }
@@ -53,8 +60,13 @@ class PinComponent(
     override val pinSetFlowable: Flowable<Unit>
         get() = pinManager.pinSetSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val isLocked: Boolean
-        get() = appLockManager.isLocked && isPinSet
+    override val isLocked: StateFlow<Boolean> = appLockManager.isLocked
+        .map { isLocked -> isLocked && isPinSet }
+        .stateIn(
+            scope = CoroutineScope(Dispatchers.Default),
+            started = SharingStarted.Eagerly,
+            initialValue = false
+        )
 
     override var isBiometricAuthEnabled: Boolean
         get() = pinSettingsStorage.biometricAuthEnabled
@@ -75,7 +87,7 @@ class PinComponent(
     }
 
     override fun setPin(pin: String) {
-        if (appLockManager.isLocked) {
+        if (appLockManager.isLocked.value) {
             appLockManager.onUnlock()
         }
 

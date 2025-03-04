@@ -45,6 +45,7 @@ class ConnectivityManager(backgroundManager: BackgroundManager) {
                     BackgroundManagerState.EnterBackground -> {
                         didEnterBackground()
                     }
+                    BackgroundManagerState.Unknown,
                     BackgroundManagerState.AllActivitiesDestroyed -> {
                         //do nothing
                     }

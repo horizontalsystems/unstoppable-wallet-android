@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -88,8 +89,13 @@ private const val MAX_WIDTH = 600
 @Composable
 fun HsChartLineHeader(
     chartHeaderView: ChartModule.ChartHeaderView?,
+    balanceHidden: Boolean
 ) {
-    val mainValue = chartHeaderView?.value ?: "--"
+    val mainValue = if (balanceHidden) {
+        "*****"
+    } else {
+        chartHeaderView?.value ?: "--"
+    }
     val mainValueHint = chartHeaderView?.valueHint
     val diff = chartHeaderView?.diff
     val date = chartHeaderView?.date
@@ -328,17 +334,23 @@ fun Chart(
                 ViewState.Loading -> Unit
                 ViewState.Success -> {
                     Column {
-                        HsChartLineHeader(selectedPoint ?: uiState.chartHeaderView)
+                        HsChartLineHeader(
+                            chartHeaderView = selectedPoint ?: uiState.chartHeaderView,
+                            balanceHidden = uiState.titleHidden
+                        )
 
                         val loadingModifier =
                             if (uiState.loading) Modifier.alpha(0.5f) else Modifier
                         Box(
-                            modifier = loadingModifier.fillMaxWidth()
+                            modifier = loadingModifier
+                                .fillMaxWidth()
+                                .clipToBounds()
                         ) {
                             PriceVolChart(
                                 chartInfoData = uiState.chartInfoData,
                                 hasVolumes = uiState.hasVolumes,
                                 chartViewType = uiState.chartViewType,
+                                considerAlwaysPositive = uiState.considerAlwaysPositive,
                             ) { item ->
                                 selectedPoint = item?.let(getSelectedPointCallback)
                             }
@@ -371,6 +383,7 @@ fun PriceVolChart(
     chartInfoData: ChartInfoData?,
     hasVolumes: Boolean,
     chartViewType: ChartViewType,
+    considerAlwaysPositive: Boolean,
     onSelectPoint: (SelectedItem?) -> Unit,
 ) {
     val height = if (hasVolumes) 204.dp else 160.dp
@@ -384,7 +397,14 @@ fun PriceVolChart(
 
     val colors = ComposeAppTheme.colors
 
-    val chartHelper = remember { ChartHelper(chartData, hasVolumes, colors) }
+    val chartHelper = remember {
+        ChartHelper(
+            target = chartData,
+            hasVolumes = hasVolumes,
+            colors = colors,
+            considerAlwaysPositive = considerAlwaysPositive
+        )
+    }
     chartHelper.setTarget(chartData, hasVolumes)
 
     val scope = rememberCoroutineScope()
@@ -464,14 +484,14 @@ fun PriceVolChart(
                                 gradientColors = chartHelper.mainCurveGradientPressedColors
                             }
                             GraphicLineWithGradient(
-                                mainCurveState.values,
-                                mainCurveState.startTimestamp,
-                                mainCurveState.endTimestamp,
-                                mainCurveState.minValue,
-                                mainCurveState.maxValue,
-                                curveColor,
-                                gradientColors,
-                                selectedItem?.timestamp,
+                                valuesByTimestamp = mainCurveState.values,
+                                minKey = mainCurveState.startTimestamp,
+                                maxKey = mainCurveState.endTimestamp,
+                                minValue = mainCurveState.minValue,
+                                maxValue = mainCurveState.maxValue,
+                                color = curveColor,
+                                gradientColors = gradientColors,
+                                selectedItemKey = selectedItem?.timestamp,
                             )
                         }
 

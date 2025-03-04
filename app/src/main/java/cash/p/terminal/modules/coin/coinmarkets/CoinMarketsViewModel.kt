@@ -37,13 +37,13 @@ class CoinMarketsViewModel(private val service: CoinMarketsService) : ViewModel(
 
     private fun createViewItem(item: MarketTickerItem): MarketTickerViewItem {
         return MarketTickerViewItem(
-            item.market,
-            item.marketImageUrl,
-            "${item.baseCoinCode}/${item.targetCoinCode}",
-            App.numberFormatter.formatFiatShort(item.volumeFiat, service.currency.symbol, service.currency.decimal),
-            App.numberFormatter.formatCoinShort(item.volumeToken, item.baseCoinCode, 8),
-            item.tradeUrl,
-            if (item.verified) TranslatableString.ResString(R.string.CoinPage_MarketsLabel_Verified) else null
+            market = item.market,
+            marketImageUrl = item.marketImageUrl,
+            pair = "${item.baseCoinCode}/${item.targetCoinCode}",
+            volumeFiat = App.numberFormatter.formatFiatShort(item.volumeFiat, service.currency.symbol, service.currency.decimal),
+            volumeToken = App.numberFormatter.formatCoinShort(item.volumeToken, item.baseCoinCode, 8),
+            tradeUrl = item.tradeUrl,
+            badge = if (item.verified) TranslatableString.ResString(R.string.CoinPage_MarketsLabel_Verified) else null
         )
     }
 

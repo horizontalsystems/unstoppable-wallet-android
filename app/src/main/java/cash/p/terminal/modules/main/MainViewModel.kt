@@ -81,7 +81,7 @@ class MainViewModel(
     private var deeplinkPage: DeeplinkPage? = null
     private var mainNavItems = navigationItems()
     private var showRateAppDialog = false
-    private var contentHidden = pinComponent.isLocked
+    private var contentHidden = false
     private var showWhatsNew = false
     private var activeWallet = accountManager.activeAccount
     private var wcSupportState: WCManager.SupportState? = null
@@ -94,6 +94,11 @@ class MainViewModel(
         get() = accountManager.accounts.filter { it.isWatchAccount }
 
     init {
+        pinComponent.isLocked.collectWith(viewModelScope) {
+            contentHidden = it
+            emitState()
+        }
+
         localStorage.marketsTabEnabledFlow.collectWith(viewModelScope) {
             marketsTabEnabled = it
             syncNavigation()
@@ -182,10 +187,9 @@ class MainViewModel(
     }
 
     fun onResume() {
-        contentHidden = pinComponent.isLocked
         emitState()
         viewModelScope.launch {
-            if (!pinComponent.isLocked && releaseNotesManager.shouldShowChangeLog()) {
+            if (!pinComponent.isLocked.value && releaseNotesManager.shouldShowChangeLog()) {
                 showWhatsNew()
             }
         }

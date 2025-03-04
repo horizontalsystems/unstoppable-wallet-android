@@ -14,7 +14,12 @@ import java.math.BigDecimal
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
-class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, private val colors: Colors) {
+class ChartHelper(
+    private var target: ChartData,
+    var hasVolumes: Boolean,
+    private val colors: Colors,
+    private val considerAlwaysPositive: Boolean
+) {
 
     private var minValue: Float = 0.0f
     private var maxValue: Float = 0.0f
@@ -33,7 +38,8 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
     var mainCurveColor = colors.greenD
     var mainCurveGradientColors = Pair(Color(0x00416BFF), Color(0x8013D670))
     var mainCurvePressedColor = colors.leah
-    var mainCurveGradientPressedColors = Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
+    var mainCurveGradientPressedColors =
+        Pair(colors.leah.copy(alpha = 0f), colors.leah.copy(alpha = 0.5f))
     var mainBarsColor = colors.jacob
     var mainBarsPressedColor = colors.grey50
 
@@ -90,7 +96,8 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
         when {
             chartData.disabled -> {
                 mainCurveColor = colors.grey
-                mainCurveGradientColors = Pair(colors.grey50.copy(alpha = 0f), colors.grey50.copy(alpha = 0.5f))
+                mainCurveGradientColors =
+                    Pair(colors.grey50.copy(alpha = 0f), colors.grey50.copy(alpha = 0.5f))
             }
 
             !chartData.isMovementChart -> {
@@ -98,7 +105,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
                 mainCurveGradientColors = Pair(Color(0x00FFA800), Color(0x80FFA800))
             }
 
-            chartData.diff() < BigDecimal.ZERO -> {
+            chartData.diff() < BigDecimal.ZERO && !considerAlwaysPositive -> {
                 mainCurveColor = colors.redD
                 mainCurveGradientColors = Pair(Color(0x007413D6), Color(0x80FF0303))
             }
@@ -274,7 +281,7 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
             )
         }
 
-        if (target.rsi == null) {
+        if (target.rsi == null || target.rsi?.points.isNullOrEmpty()) {
             rsiCurve = null
         } else if (rsiCurve == null) {
             initRsiCurve()
@@ -340,15 +347,17 @@ class ChartHelper(private var target: ChartData, var hasVolumes: Boolean, privat
 
         if (hasVolumes) {
             val volumeByTimestamp = target.volumeByTimestamp()
-            val volumeMin = volumeByTimestamp.minOf { it.value }
-            val volumeMax = volumeByTimestamp.maxOf { it.value }
-            volumeBars?.setValues(
-                volumeByTimestamp,
-                minKey,
-                maxKey,
-                volumeMin,
-                volumeMax
-            )
+            if (volumeByTimestamp.isNotEmpty()) {
+                val volumeMin = volumeByTimestamp.minOf { it.value }
+                val volumeMax = volumeByTimestamp.maxOf { it.value }
+                volumeBars?.setValues(
+                    volumeByTimestamp,
+                    minKey,
+                    maxKey,
+                    volumeMin,
+                    volumeMax
+                )
+            }
         }
 
         defineColors()

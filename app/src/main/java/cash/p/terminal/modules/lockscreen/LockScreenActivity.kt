@@ -6,8 +6,13 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.ui.Modifier
 import cash.p.terminal.core.BaseActivity
 import cash.p.terminal.modules.pin.ui.PinUnlock
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class LockScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,12 +20,18 @@ class LockScreenActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
 
         setContent {
-            cash.p.terminal.ui_compose.theme.ComposeAppTheme {
-                PinUnlock(
-                    onSuccess = {
-                        finish()
-                    }
-                )
+            ComposeAppTheme {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .systemBarsPadding()
+                ) {
+                    PinUnlock(
+                        onSuccess = {
+                            finish()
+                        }
+                    )
+                }
             }
         }
 

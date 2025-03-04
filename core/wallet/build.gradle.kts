@@ -37,6 +37,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -46,13 +49,13 @@ dependencies {
 
     implementation(libs.rxjava)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.rx2)
 
     implementation(libs.ton.kit)
     implementation(libs.bitcoin.kit)
     implementation(libs.ethereum.kit)
     implementation(libs.blockchain.fee.kit)
     implementation(libs.binance.kit)
-    implementation(libs.solana.kit)
     implementation(libs.tron.kit)
     implementation(libs.gson)
 
@@ -70,4 +73,5 @@ dependencies {
 
     implementation(project(":core:strings"))
     implementation(project(":core:core"))
+    implementation(project(":core:network"))
 }

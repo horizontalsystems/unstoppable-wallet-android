@@ -52,5 +52,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(project(":core:strings"))
     implementation(project(":core:resources"))
+    implementation(libs.androidx.material3.android)
     debugImplementation(libs.androidx.ui.tooling)
 }

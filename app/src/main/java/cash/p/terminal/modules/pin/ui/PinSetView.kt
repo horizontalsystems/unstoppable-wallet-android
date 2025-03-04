@@ -4,12 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cash.p.terminal.R
+import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.pin.set.PinSetModule
 import cash.p.terminal.modules.pin.set.PinSetViewModel
 import cash.p.terminal.ui.compose.animations.CrossSlide
@@ -21,10 +22,10 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 fun PinSet(
     title: String,
     description: String,
+    pinType: PinType,
     dismissWithSuccess: () -> Unit,
     onBackPress: () -> Unit,
-    forDuress: Boolean = false,
-    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(forDuress))
+    viewModel: PinSetViewModel = viewModel(factory = PinSetModule.Factory(pinType))
 ) {
     if (viewModel.uiState.finished) {
         dismissWithSuccess.invoke()
@@ -32,7 +33,7 @@ fun PinSet(
     }
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = title,

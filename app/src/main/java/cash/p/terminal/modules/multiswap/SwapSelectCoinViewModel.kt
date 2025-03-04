@@ -16,6 +16,7 @@ import cash.p.terminal.core.supported
 import cash.p.terminal.core.supports
 import io.horizontalsystems.core.entities.CurrencyValue
 import cash.p.terminal.modules.receive.FullCoinsProvider
+import cash.p.terminal.wallet.AccountType
 import cash.p.terminal.wallet.Token
 import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.badge
@@ -97,7 +98,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
                 suggestedTokens
                     .sortedWith(
-                        compareBy<cash.p.terminal.wallet.Token> { it.coin.marketCapRank }
+                        compareBy<Token> { it.coin.marketCapRank }
                             .thenBy { it.blockchainType.order }
                             .thenBy { it.badge }
                     )
@@ -109,7 +110,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
 
             // Featured Tokens
             val tokenQueries: List<TokenQuery> = when (activeAccount.type) {
-                is cash.p.terminal.wallet.AccountType.HdExtendedKey -> {
+                is AccountType.HdExtendedKey -> {
                     BlockchainType.supported.map { it.nativeTokenQueries }.flatten()
                 }
 
@@ -123,7 +124,7 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
                 token.blockchainType.supports(activeAccount.type) && resultTokens.none { it.token == token }
             }
                 .sortedWith(
-                    compareBy<cash.p.terminal.wallet.Token> { it.blockchainType.order }
+                    compareBy<Token> { it.blockchainType.order }
                         .thenBy { it.badge }
                 ).map {
                     CoinBalanceItem(it, null, null)
@@ -140,11 +141,15 @@ class SwapSelectCoinViewModel(private val otherSelectedToken: Token?) : ViewMode
             .flatten()
             .map {
                 val balance: BigDecimal? =
-                    activeWallets.firstOrNull { wallet -> wallet.coin.uid == it.coin.uid && wallet.token.blockchainType == it.blockchainType }
+                    activeWallets.firstOrNull { wallet ->
+                        wallet.coin.uid == it.coin.uid &&
+                                wallet.token.blockchainType == it.blockchainType &&
+                                wallet.token.type == it.type
+                    }
                         ?.let { wallet ->
                             adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.available
                         }
-                if(it.blockchainType == BlockchainType.BinanceChain) {
+                if (it.blockchainType == BlockchainType.BinanceChain) {
                     Log.d("CoinTest", "${it.coin.code} ${it.coin.name} ${it.blockchainType}")
                 }
                 CoinBalanceItem(it, balance, getFiatValue(it, balance))

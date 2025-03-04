@@ -27,7 +27,7 @@ import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.ContractInfo
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.nft.asset.NftAssetModule
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.OnBottomReached
 import cash.p.terminal.ui.compose.SelectOptional
 import cash.p.terminal.ui.compose.components.*

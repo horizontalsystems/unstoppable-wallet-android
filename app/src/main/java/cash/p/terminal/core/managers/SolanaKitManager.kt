@@ -2,6 +2,7 @@ package cash.p.terminal.core.managers
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import cash.p.terminal.core.App
 import cash.p.terminal.core.UnsupportedAccountException
 import cash.p.terminal.core.providers.AppConfigProvider
@@ -13,6 +14,7 @@ import io.horizontalsystems.solanakit.Signer
 import io.horizontalsystems.solanakit.SolanaKit
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +28,10 @@ class SolanaKitManager(
     private val backgroundManager: BackgroundManager
 ) {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope =
+        CoroutineScope(Dispatchers.Default + CoroutineExceptionHandler { _, throwable ->
+            Log.d("SolanaKitManager", "Coroutine error", throwable)
+        })
     private var backgroundEventListenerJob: Job? = null
     private var rpcUpdatedJob: Job? = null
     private var tokenAccountJob: Job? = null
@@ -34,7 +39,7 @@ class SolanaKitManager(
     var solanaKitWrapper: SolanaKitWrapper? = null
 
     private var useCount = 0
-    var currentAccount: cash.p.terminal.wallet.Account? = null
+    var currentAccount: Account? = null
         private set
     private val solanaKitStoppedSubject = PublishSubject.create<Unit>()
 
@@ -51,7 +56,7 @@ class SolanaKitManager(
     }
 
     @Synchronized
-    fun getSolanaKitWrapper(account: cash.p.terminal.wallet.Account): SolanaKitWrapper {
+    fun getSolanaKitWrapper(account: Account): SolanaKitWrapper {
         if (this.solanaKitWrapper != null && currentAccount != account) {
             stopKit()
         }
@@ -59,12 +64,14 @@ class SolanaKitManager(
         if (this.solanaKitWrapper == null) {
             val accountType = account.type
             this.solanaKitWrapper = when (accountType) {
-                is cash.p.terminal.wallet.AccountType.Mnemonic -> {
+                is AccountType.Mnemonic -> {
                     createKitInstance(accountType, account)
                 }
-                is cash.p.terminal.wallet.AccountType.SolanaAddress -> {
+
+                is AccountType.SolanaAddress -> {
                     createKitInstance(accountType, account)
                 }
+
                 else -> throw UnsupportedAccountException()
             }
             startKit()
@@ -78,8 +85,8 @@ class SolanaKitManager(
     }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.Mnemonic,
-        account: cash.p.terminal.wallet.Account
+        accountType: AccountType.Mnemonic,
+        account: Account
     ): SolanaKitWrapper {
         val seed = accountType.seed
         val address = Signer.address(seed)
@@ -90,15 +97,16 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
+            solscanApiKey = appConfigProvider.solscanApiKey,
+            debug = true
         )
 
         return SolanaKitWrapper(kit, signer)
     }
 
     private fun createKitInstance(
-        accountType: cash.p.terminal.wallet.AccountType.SolanaAddress,
-        account: cash.p.terminal.wallet.Account
+        accountType: AccountType.SolanaAddress,
+        account: Account
     ): SolanaKitWrapper {
         val address = accountType.address
 
@@ -107,14 +115,15 @@ class SolanaKitManager(
             addressString = address,
             rpcSource = rpcSourceManager.rpcSource,
             walletId = account.id,
-            solscanApiKey = appConfigProvider.solscanApiKey
+            solscanApiKey = appConfigProvider.solscanApiKey,
+            debug = true
         )
 
         return SolanaKitWrapper(kit, null)
     }
 
     @Synchronized
-    fun unlink(account: cash.p.terminal.wallet.Account) {
+    fun unlink(account: Account) {
         if (account == currentAccount) {
             useCount -= 1
 
@@ -150,9 +159,13 @@ class SolanaKitManager(
                 if (state == BackgroundManagerState.EnterForeground) {
                     solanaKitWrapper?.solanaKit?.let { kit ->
                         Handler(Looper.getMainLooper()).postDelayed({
-                            kit.refresh()
+                            if (!kit.refresh()) {
+                                startKit()
+                            }
                         }, 1000)
                     }
+                } else if (state == BackgroundManagerState.EnterBackground) {
+                    stopKit()
                 }
             }
         }

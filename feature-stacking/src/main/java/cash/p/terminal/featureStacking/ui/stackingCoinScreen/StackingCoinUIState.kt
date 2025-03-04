@@ -7,6 +7,7 @@ import java.math.BigDecimal
 
 internal data class StackingCoinUIState(
     val stackingType: StackingType = StackingType.PCASH,
+    val annualInterest: String = "-",
     val minStackingAmount: BigDecimal = BigDecimal.ZERO,
     val balance: BigDecimal = BigDecimal.ZERO,
     val balanceStr: String = "",
@@ -19,7 +20,9 @@ internal data class StackingCoinUIState(
     val unpaidSecondary: String? = null,
     val payoutItems: Map<String, List<PayoutViewItem>> = emptyMap(),
     val loading: Boolean = true,
-    val balanceHidden: Boolean = true
+    val balanceHidden: Boolean = true,
+    val isWatchAccount: Boolean = false,
+    val isRefreshing: Boolean = false
 ) {
     fun isWaitingForStacking(): Boolean =
         balance < minStackingAmount || unpaidStr == null || unpaidStr == ""

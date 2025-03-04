@@ -1,5 +1,6 @@
 package cash.p.terminal.featureStacking.ui
 
+import cash.p.terminal.network.data.entity.ChartPeriod
 import cash.p.terminal.network.pirate.domain.enity.InvestmentGraphData
 import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import io.horizontalsystems.chartview.ChartViewType
@@ -9,9 +10,6 @@ import io.horizontalsystems.chartview.models.ChartPoint
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.models.HsTimePeriod
-import io.reactivex.Single
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.rx2.rxSingle
 
 class PirateInvestmentChartService(
     override val currencyManager: CurrencyManager,
@@ -28,32 +26,37 @@ class PirateInvestmentChartService(
     }
 
     override val chartIntervals: List<HsTimePeriod> = listOf(
-        HsTimePeriod.Day,
-        HsTimePeriod.Week,
-        HsTimePeriod.Month,
-        HsTimePeriod.Year
+        HsTimePeriod.Day1,
+        HsTimePeriod.Week1,
+        HsTimePeriod.Month1,
+        HsTimePeriod.Year1
     )
 
     override val initialChartInterval: HsTimePeriod = chartIntervals.first()
 
     override val chartViewType: ChartViewType = ChartViewType.Line
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency
-    ): Single<ChartPointsWrapper> {
+    ): ChartPointsWrapper {
         return if (receiveAddress.isEmpty()) {
-            Single.never()
+            ChartPointsWrapper(emptyList())
         } else {
-            rxSingle(Dispatchers.IO) {
-                mapToChartPointsWrapper(
-                    piratePlaceRepository.getInvestmentChart(
-                        coin = coinCode,
-                        address = receiveAddress,
-                        period = chartInterval.value
-                    )
-                )
+            val period = when (chartInterval) {
+                HsTimePeriod.Day1 -> ChartPeriod.DAY
+                HsTimePeriod.Week1 -> ChartPeriod.WEEK
+                HsTimePeriod.Month1 -> ChartPeriod.MONTH
+                HsTimePeriod.Year1 -> ChartPeriod.YEAR
+                else -> ChartPeriod.DAY
             }
+            mapToChartPointsWrapper(
+                piratePlaceRepository.getInvestmentChart(
+                    coin = coinCode,
+                    address = receiveAddress,
+                    period = period
+                )
+            )
         }
     }
 
@@ -61,7 +64,7 @@ class PirateInvestmentChartService(
         val chartPoints = investmentGraphData.points.map {
             ChartPoint(
                 value = it.balance.toFloat(),
-                timestamp = it.from/1000,
+                timestamp = it.from / 1000,
             )
         }
         return ChartPointsWrapper(chartPoints)

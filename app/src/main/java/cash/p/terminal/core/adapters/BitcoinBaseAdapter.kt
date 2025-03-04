@@ -44,7 +44,9 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Date
@@ -93,8 +95,8 @@ abstract class BitcoinBaseAdapter(
     protected val adapterStateUpdatedSubject: PublishSubject<Unit> = PublishSubject.create()
     protected val transactionRecordsSubject: PublishSubject<List<TransactionRecord>> = PublishSubject.create()
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = balanceUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER).asFlow()
 
     override val lastBlockUpdatedFlowable: Flowable<Unit>
         get() = lastBlockUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
@@ -102,8 +104,8 @@ abstract class BitcoinBaseAdapter(
     override val transactionsStateUpdatedFlowable: Flowable<Unit>
         get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER)
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = adapterStateUpdatedSubject.toFlowable(BackpressureStrategy.BUFFER).asFlow()
 
     override fun getTransactionRecordsFlowable(
         token: Token?,
@@ -220,6 +222,7 @@ abstract class BitcoinBaseAdapter(
                     BackgroundManagerState.EnterBackground -> {
                         kit.onEnterBackground()
                     }
+                    BackgroundManagerState.Unknown,
                     BackgroundManagerState.AllActivitiesDestroyed -> {
 
                     }
@@ -284,12 +287,12 @@ abstract class BitcoinBaseAdapter(
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): Single<Unit> {
+    ): Single<String> {
         val sortingType = getTransactionSortingType(transactionSorting)
         return Single.create { emitter ->
             try {
                 logger.info("call btc-kit.send")
-                kit.send(
+                val sendData = kit.send(
                     address = address,
                     memo = memo,
                     value = (amount * satoshisInBitcoin).toLong(),
@@ -300,7 +303,7 @@ abstract class BitcoinBaseAdapter(
                     pluginData = pluginData ?: mapOf(),
                     rbfEnabled = rbfEnabled
                 )
-                emitter.onSuccess(Unit)
+                emitter.onSuccess(sendData.header.uid)
             } catch (ex: Exception) {
                 emitter.onError(ex)
             }

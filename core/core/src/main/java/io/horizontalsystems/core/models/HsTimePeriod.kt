@@ -1,42 +1,29 @@
 package io.horizontalsystems.core.models
 
 enum class HsTimePeriod(val value: String) {
+    Hour1("1h"),
     Day1("1d"),
     Week1("1w"),
-    Week2("2w"),
     Month1("1m"),
-    Month3("3m"),
-    Month6("6m"),
-    Year1("1y"),
-    Year2("2y"),
-    Year5("5y"),
-
-    Day("day"),
-    Week("week"),
-    Month("month"),
-    Year("year");
+    Year1("1y");
 
     val range: Long
         get() = when (this) {
-            Day1, Day -> day
-            Week1, Week -> 7 * day
-            Week2 -> 14 * day
-            Month1, Month -> 30 * day
-            Month3 -> 90 * day
-            Month6 -> 180 * day
-            Year1, Year -> 365 * day
-            Year2 -> 730 * day
-            Year5 -> 1825 * day
+            Hour1 -> 60 * 60
+            Day1 -> day
+            Week1 -> 7 * day
+            Month1 -> 30 * day
+            Year1 -> 365 * day
         }
 
     private val day = (24 * 60 * 60).toLong()
 }
 
-sealed class HsPeriodType {
+sealed class HsPeriodType(open val timePeriod: HsTimePeriod?) {
 
-    data class ByPeriod(val timePeriod: HsTimePeriod) : HsPeriodType()
-    data class ByCustomPoints(val timePeriod: HsTimePeriod, val pointsCount: Int) : HsPeriodType()
-    data class ByStartTime(val startTime: Long) : HsPeriodType()
+    data class ByPeriod(override val timePeriod: HsTimePeriod) : HsPeriodType(timePeriod)
+    data class ByCustomPoints(override val timePeriod: HsTimePeriod, val pointsCount: Int) : HsPeriodType(timePeriod)
+    data class ByStartTime(val startTime: Long) : HsPeriodType(null)
 
     val range: Long?
         get() = when (this) {

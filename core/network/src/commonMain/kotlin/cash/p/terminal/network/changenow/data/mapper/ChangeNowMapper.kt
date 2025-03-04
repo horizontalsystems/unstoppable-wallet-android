@@ -4,9 +4,12 @@ import cash.p.terminal.network.changenow.data.entity.ChangeNowCurrencyDto
 import cash.p.terminal.network.changenow.data.entity.ExchangeAmountDto
 import cash.p.terminal.network.changenow.data.entity.MinAmountDto
 import cash.p.terminal.network.changenow.data.entity.NewTransactionResponseDto
+import cash.p.terminal.network.changenow.data.entity.TransactionStatusDto
 import cash.p.terminal.network.changenow.domain.entity.ChangeNowCurrency
 import cash.p.terminal.network.changenow.domain.entity.ExchangeAmount
 import cash.p.terminal.network.changenow.domain.entity.NewTransactionResponse
+import cash.p.terminal.network.changenow.domain.entity.TransactionStatus
+import cash.p.terminal.network.changenow.domain.entity.toStatus
 
 internal class ChangeNowMapper {
     fun mapCurrencyDtoToCurrency(list: List<ChangeNowCurrencyDto>) =
@@ -42,5 +45,15 @@ internal class ChangeNowMapper {
         refundAddress = dto.refundAddress,
         refundExtraId = dto.refundExtraId,
         amount = dto.amount.toBigDecimal()
+    )
+
+    fun mapTransactionStatusDto(dto: TransactionStatusDto) = TransactionStatus(
+        status = dto.status.toStatus(),
+        payinAddress = dto.payinAddress,
+        payoutAddress = dto.payoutAddress,
+        fromCurrency = dto.fromCurrency,
+        toCurrency = dto.toCurrency,
+        id = dto.id,
+        updatedAt = dto.updatedAt
     )
 }

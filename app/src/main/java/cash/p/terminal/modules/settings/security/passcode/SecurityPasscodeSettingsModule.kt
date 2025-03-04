@@ -10,10 +10,10 @@ object SecurityPasscodeSettingsModule {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SecuritySettingsViewModel(
-                App.systemInfoManager,
-                App.pinComponent,
-                App.balanceHiddenManager,
-                App.localStorage,
+                systemInfoManager = App.systemInfoManager,
+                pinComponent = App.pinComponent,
+                balanceHiddenManager = App.balanceHiddenManager,
+                localStorage = App.localStorage
             ) as T
         }
     }

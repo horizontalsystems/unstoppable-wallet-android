@@ -73,13 +73,13 @@ class BalanceAdapterRepository(
         wallets.forEach { wallet ->
             adapterManager.getBalanceAdapterForWallet(wallet)?.let { adapter ->
                 balanceStateUpdatedJob = coroutineScope.launch {
-                    adapter.balanceStateUpdatedFlowable.asFlow().collect {
+                    adapter.balanceStateUpdatedFlow.collect {
                         updatesSubject.onNext(wallet)
                     }
                 }
 
                 balanceUpdatedJob = coroutineScope.launch {
-                    adapter.balanceUpdatedFlowable.asFlow().collect {
+                    adapter.balanceUpdatedFlow.collect {
                         updatesSubject.onNext(wallet)
 
                         adapterManager.getBalanceAdapterForWallet(wallet)?.balanceData?.let {

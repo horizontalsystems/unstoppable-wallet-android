@@ -38,7 +38,7 @@ fun DoubleText(
                 ),
             text = title,
             style = ComposeAppTheme.typography.title2R,
-            color = if (dimmed) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah,
+            color = if (dimmed) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.leah,
             maxLines = 1
         )
         Spacer(modifier = Modifier.height(6.dp))
@@ -51,7 +51,7 @@ fun DoubleText(
                 ),
             text = body,
             style = ComposeAppTheme.typography.body,
-            color = if (dimmed) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey50 else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey,
+            color = if (dimmed) ComposeAppTheme.colors.grey50 else ComposeAppTheme.colors.grey,
             maxLines = 1
         )
     }

@@ -177,15 +177,11 @@ val ProChartModule.ChartType.statPage
 
 val HsTimePeriod?.statPeriod: StatPeriod
     get() = when (this) {
-        HsTimePeriod.Day1, HsTimePeriod.Day -> StatPeriod.Day1
-        HsTimePeriod.Week1, HsTimePeriod.Week -> StatPeriod.Week1
-        HsTimePeriod.Week2 -> StatPeriod.Week2
-        HsTimePeriod.Month1, HsTimePeriod.Month -> StatPeriod.Month1
-        HsTimePeriod.Month3 -> StatPeriod.Month3
-        HsTimePeriod.Month6 -> StatPeriod.Month6
-        HsTimePeriod.Year1, HsTimePeriod.Year -> StatPeriod.Year1
-        HsTimePeriod.Year2 -> StatPeriod.Year2
-        HsTimePeriod.Year5 -> StatPeriod.Year5
+        HsTimePeriod.Hour1 -> StatPeriod.Hour1
+        HsTimePeriod.Day1 -> StatPeriod.Day1
+        HsTimePeriod.Week1 -> StatPeriod.Week1
+        HsTimePeriod.Month1 -> StatPeriod.Month1
+        HsTimePeriod.Year1 -> StatPeriod.Year1
         null -> StatPeriod.All
     }
 
@@ -318,7 +314,6 @@ val TimeDuration.statPeriod: StatPeriod
         TimeDuration.OneDay -> StatPeriod.Day1
         TimeDuration.SevenDay -> StatPeriod.Week1
         TimeDuration.ThirtyDay -> StatPeriod.Month1
-        TimeDuration.ThreeMonths -> StatPeriod.Month3
     }
 
 val MarketModule.Tab.statTab: StatTab

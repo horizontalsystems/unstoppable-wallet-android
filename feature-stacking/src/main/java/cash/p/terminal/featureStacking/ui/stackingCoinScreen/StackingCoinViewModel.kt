@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.featureStacking.R
 import cash.p.terminal.featureStacking.ui.entities.PayoutViewItem
 import cash.p.terminal.featureStacking.ui.staking.StackingType
+import cash.p.terminal.network.pirate.domain.enity.PeriodType
 import cash.p.terminal.network.pirate.domain.repository.PiratePlaceRepository
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.wallet.AdapterState
@@ -24,16 +25,21 @@ import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.managers.IBalanceHiddenManager
 import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.smartFormat
 import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.Executors
+import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.BackgroundManagerState
 
 internal abstract class StackingCoinViewModel(
     private val walletManager: IWalletManager,
@@ -42,16 +48,19 @@ internal abstract class StackingCoinViewModel(
     private val accountManager: IAccountManager,
     private val marketKitWrapper: MarketKitWrapper,
     private val balanceService: BalanceService,
-    private val balanceHiddenManager: IBalanceHiddenManager
+    private val balanceHiddenManager: IBalanceHiddenManager,
+    private val backgroundManager: BackgroundManager
 ) : ViewModel() {
 
     abstract val minStackingAmount: Int
     abstract val stackingType: StackingType
 
     private val customDispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
-    private val _uiState = mutableStateOf(StackingCoinUIState(
-        balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
-    ))
+    private val _uiState = mutableStateOf(
+        StackingCoinUIState(
+            balanceHidden = balanceHiddenManager.balanceHiddenFlow.value
+        )
+    )
     val uiState: State<StackingCoinUIState> get() = _uiState
     private var wallet: Wallet? = null
 
@@ -69,6 +78,7 @@ internal abstract class StackingCoinViewModel(
 
     fun loadData() {
         createWalletIfNotExist()
+        loadAnnualInterest()
         viewModelScope.launch(customDispatcher) {
             balanceService.balanceItemsFlow.collect { items ->
                 if (items?.find {
@@ -84,6 +94,37 @@ internal abstract class StackingCoinViewModel(
             }
         }
         balanceService.start()
+    }
+
+    fun refresh() {
+        _uiState.value = uiState.value.copy(
+            isRefreshing = true
+        )
+        viewModelScope.launch {
+            loadAnnualInterest()
+            loadBalance()
+            balanceService.refresh()
+            delay(1000)
+            _uiState.value = uiState.value.copy(
+                isRefreshing = false
+            )
+        }
+    }
+
+    private fun loadAnnualInterest() = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            val data = piratePlaceRepository.getCalculatorData(
+                coin = stackingType.value,
+                amount = 100.0
+            )
+            data.items.find { it.periodType == PeriodType.YEAR }?.let {
+                _uiState.value = uiState.value.copy(
+                    annualInterest = it.amount.smartFormat()+"%"
+                )
+            }
+        } catch (e: Exception) {
+            Log.e("StackingCoinViewModel", "Error loading annual interest", e)
+        }
     }
 
     private fun createWalletIfNotExist() {
@@ -137,7 +178,8 @@ internal abstract class StackingCoinViewModel(
                 dimmed = false
             ).value,
             token = wallet?.token,
-            receiveAddress = receiveAddress
+            receiveAddress = receiveAddress,
+            isWatchAccount = wallet?.account?.isWatchAccount ?: false
         )
 
         viewModelScope.launch(customDispatcher +
@@ -145,6 +187,9 @@ internal abstract class StackingCoinViewModel(
                     Log.e("StackingCoinViewModel", "Error loading balance", throwable)
                 }) {
             balanceService.balanceItemsFlow.collectLatest { items ->
+                if(backgroundManager.stateFlow.value != BackgroundManagerState.EnterForeground) {
+                    return@collectLatest
+                }
                 items?.find { it.wallet.coin.code == stackingType.value }?.let { item ->
                     loadInvestmentData(
                         balance = item.balanceData.total,
@@ -277,5 +322,6 @@ internal abstract class StackingCoinViewModel(
 
     override fun onCleared() {
         balanceService.clear()
+        customDispatcher.close()
     }
 }

@@ -1,7 +1,6 @@
 package cash.p.terminal.wallet
 
 import android.os.Parcelable
-import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.wallet.entities.TokenType
 import io.horizontalsystems.core.entities.BlockchainType
@@ -198,59 +197,6 @@ sealed class AccountType : Parcelable {
         }
     }
 
-    @Parcelize
-    enum class Derivation(val value: String) : Parcelable {
-        bip44("bip44"),
-        bip49("bip49"),
-        bip84("bip84"),
-        bip86("bip86");
-
-        val recommended: String
-            get() = when (this) {
-                bip84 -> " " + Translator.getString(R.string.Restore_Bip_Recommended)
-                else -> ""
-            }
-
-        val addressType: String
-            get() = when (this) {
-                bip44 -> "Legacy"
-                bip49 -> "SegWit"
-                bip84 -> "Native SegWit"
-                bip86 -> "Taproot"
-            }
-
-        val rawName: String
-            get() = when (this) {
-                bip44 -> "BIP 44"
-                bip49 -> "BIP 49"
-                bip84 -> "BIP 84"
-                bip86 -> "BIP 86"
-            }
-
-        val purpose: HDWallet.Purpose
-            get() = when (this) {
-                bip44 -> HDWallet.Purpose.BIP44
-                bip49 -> HDWallet.Purpose.BIP49
-                bip84 -> HDWallet.Purpose.BIP84
-                bip86 -> HDWallet.Purpose.BIP86
-            }
-
-        val order: Int
-            get() = when (this) {
-                bip84 -> 0
-                bip86 -> 1
-                bip49 -> 2
-                bip44 -> 3
-            }
-
-        companion object {
-            val default = bip84
-            private val map = values().associateBy(Derivation::value)
-
-            fun fromString(value: String?): Derivation? = map[value]
-        }
-    }
-
     val description: String
         get() = when (this) {
             is Mnemonic -> {
@@ -373,12 +319,12 @@ sealed class AccountType : Parcelable {
     }
 }
 
-val HDWallet.Purpose.derivation: AccountType.Derivation
+val HDWallet.Purpose.derivation: Derivation
     get() = when (this) {
-        HDWallet.Purpose.BIP44 -> cash.p.terminal.wallet.AccountType.Derivation.bip44
-        HDWallet.Purpose.BIP49 -> cash.p.terminal.wallet.AccountType.Derivation.bip49
-        HDWallet.Purpose.BIP84 -> cash.p.terminal.wallet.AccountType.Derivation.bip84
-        HDWallet.Purpose.BIP86 -> cash.p.terminal.wallet.AccountType.Derivation.bip86
+        HDWallet.Purpose.BIP44 -> Derivation.bip44
+        HDWallet.Purpose.BIP49 -> Derivation.bip49
+        HDWallet.Purpose.BIP84 -> Derivation.bip84
+        HDWallet.Purpose.BIP86 -> Derivation.bip86
     }
 
 val HDWallet.Purpose.tokenTypeDerivation: TokenType.Derivation

@@ -16,7 +16,7 @@ class LanguageSettingsViewModel(
     private val localStorage: ILocalStorage
 ) : ViewModel() {
 
-    val languageItems = cash.p.terminal.strings.helpers.LocaleType.values().map {
+    val languageItems = LocaleType.values().map {
         LanguageViewItem(
             it,
             languageManager.getName(it.tag),
@@ -38,7 +38,7 @@ class LanguageSettingsViewModel(
     var reloadApp by mutableStateOf(false)
         private set
 
-    fun onSelectLocale(localeType: cash.p.terminal.strings.helpers.LocaleType) {
+    fun onSelectLocale(localeType: LocaleType) {
         if (localeType.tag == currentLocaleTag) {
             closeScreen = true
         } else {

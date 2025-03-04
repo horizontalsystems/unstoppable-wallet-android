@@ -18,6 +18,7 @@ import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,8 +26,8 @@ import java.math.BigDecimal
 import java.net.UnknownHostException
 
 class SendTonViewModel(
-    val wallet: cash.p.terminal.wallet.Wallet,
-    val sendToken: Token,
+    val wallet: Wallet,
+    private val sendToken: Token,
     val feeToken: Token,
     val adapter: ISendTonAdapter,
     private val xRateService: XRateService,
@@ -56,6 +57,8 @@ class SendTonViewModel(
     private val logger: AppLogger = AppLogger("send-ton")
 
     init {
+        addCloseable(feeService)
+
         viewModelScope.launch(Dispatchers.Default) {
             amountService.stateFlow.collect {
                 handleUpdatedAmountState(it)
@@ -90,6 +93,7 @@ class SendTonViewModel(
         canBeSend = amountState.canBeSend && addressState.canBeSend,
         showAddressInput = showAddressInput,
         fee = feeState.fee,
+        feeInProgress = feeState.inProgress,
     )
 
     fun onEnterAmount(amount: BigDecimal?) {
@@ -139,7 +143,7 @@ class SendTonViewModel(
 
             adapter.send(amountState.amount!!, addressState.tonAddress!!, memo)
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
             logger.info("success")
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))
@@ -153,7 +157,7 @@ class SendTonViewModel(
         else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 
-    private suspend fun handleUpdatedAmountState(amountState: SendTonAmountService.State) {
+    private fun handleUpdatedAmountState(amountState: SendTonAmountService.State) {
         this.amountState = amountState
 
         feeService.setAmount(amountState.amount)
@@ -161,10 +165,10 @@ class SendTonViewModel(
         emitState()
     }
 
-    private suspend fun handleUpdatedAddressState(addressState: SendTonAddressService.State) {
+    private fun handleUpdatedAddressState(addressState: SendTonAddressService.State) {
         this.addressState = addressState
 
-        feeService.setTonAddress(addressState.tonAddress)
+        feeService.run { setTonAddress(addressState.tonAddress) }
 
         emitState()
     }
@@ -184,4 +188,5 @@ data class SendTonUiState(
     val canBeSend: Boolean,
     val showAddressInput: Boolean,
     val fee: BigDecimal?,
+    val feeInProgress: Boolean,
 )

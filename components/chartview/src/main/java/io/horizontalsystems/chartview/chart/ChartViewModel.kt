@@ -24,12 +24,14 @@ import java.util.Date
 open class ChartViewModel(
     private val service: AbstractChartService,
     private val valueFormatter: ChartModule.ChartNumberFormatter,
+    private val considerAlwaysPositive: Boolean = false,
 ) : ViewModelUiState<ChartUiState>() {
 
     private var tabItems = listOf<TabItem<HsTimePeriod?>>()
     private var chartHeaderView: ChartModule.ChartHeaderView? = null
     private var chartInfoData: ChartInfoData? = null
     private var loading = false
+    private var titleHidden = false
     private var viewState: ViewState = ViewState.Success
     private val numberFormatter: IAppNumberFormatter by inject(IAppNumberFormatter::class.java)
 
@@ -68,6 +70,11 @@ open class ChartViewModel(
         }
     }
 
+    protected fun setTitleHidden(titleHidden: Boolean) {
+        this.titleHidden = titleHidden
+        emitState()
+    }
+
     override fun createState() = ChartUiState(
         tabItems = tabItems,
         chartHeaderView = chartHeaderView,
@@ -76,6 +83,8 @@ open class ChartViewModel(
         viewState = viewState,
         hasVolumes = service.hasVolumes,
         chartViewType = service.chartViewType,
+        considerAlwaysPositive = considerAlwaysPositive,
+        titleHidden = titleHidden
     )
 
     fun onSelectChartInterval(chartInterval: HsTimePeriod?) {
@@ -239,13 +248,9 @@ open class ChartViewModel(
 
 val HsTimePeriod.stringResId: Int
     get() = when (this) {
-        HsTimePeriod.Day1, HsTimePeriod.Day -> R.string.CoinPage_TimeDuration_Day
-        HsTimePeriod.Week1, HsTimePeriod.Week -> R.string.CoinPage_TimeDuration_Week
-        HsTimePeriod.Week2 -> R.string.CoinPage_TimeDuration_TwoWeeks
-        HsTimePeriod.Month1, HsTimePeriod.Month -> R.string.CoinPage_TimeDuration_Month
-        HsTimePeriod.Month3 -> R.string.CoinPage_TimeDuration_Month3
-        HsTimePeriod.Month6 -> R.string.CoinPage_TimeDuration_HalfYear
-        HsTimePeriod.Year1, HsTimePeriod.Year -> R.string.CoinPage_TimeDuration_Year
-        HsTimePeriod.Year2 -> R.string.CoinPage_TimeDuration_Year2
-        HsTimePeriod.Year5 -> R.string.CoinPage_TimeDuration_Year5
+        HsTimePeriod.Hour1 -> R.string.CoinPage_TimeDuration_Hour
+        HsTimePeriod.Day1 -> R.string.CoinPage_TimeDuration_Day
+        HsTimePeriod.Week1 -> R.string.CoinPage_TimeDuration_Week
+        HsTimePeriod.Month1 -> R.string.CoinPage_TimeDuration_Month
+        HsTimePeriod.Year1 -> R.string.CoinPage_TimeDuration_Year
     }

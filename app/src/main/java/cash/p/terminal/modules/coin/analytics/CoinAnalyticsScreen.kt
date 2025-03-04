@@ -35,7 +35,7 @@ import cash.p.terminal.modules.coin.majorholders.CoinMajorHoldersFragment
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.coin.reports.CoinReportsFragment
 import cash.p.terminal.modules.metricchart.ProChartFragment
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.InfoText
 import cash.p.terminal.ui.compose.components.ListEmptyView
 import cash.p.terminal.ui.compose.components.ListErrorView

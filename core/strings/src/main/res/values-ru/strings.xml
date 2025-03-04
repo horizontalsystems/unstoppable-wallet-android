@@ -196,6 +196,7 @@
     <string name="Market_Signals">Сигналы</string>
     <string name="Market_Volume">Объём торгов</string>
     <string name="Market_MarketCap">Рын. капитализация</string>
+    <string name="Market_TVL">Общая заблокированная стоимость</string>
     <string name="Market_Signal_Description">Приведенные ниже сигналы основаны на технических индикаторах цены Bollinger Bands и RSI за последние примерно 30 дней. Эти сигналы являются алгоритмическими и могут часто изменяться.</string>
     <string name="Market_Signal_StrongBuy_Description">Высокая уверенность в повышении цены.</string>
     <string name="Market_Signal_Buy_Description">Вероятное повышение цены в ближайшем будущем.</string>
@@ -317,6 +318,7 @@
     <string name="Market_Filter_TimePeriod_6M">6 Месяцев</string>
     <string name="Market_Filter_TimePeriod_1Y">1 Год</string>
     <string name="Market_Sorting_Gainers">Лидеры роста</string>
+    <string name="Market_Sorting_Losers">Лидеры падения</string>
     <string name="Market_Sorting_HighestCap">Наивысшей кап.</string>
     <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
     <!--Coin Markets-->
@@ -700,6 +702,14 @@
     <string name="Transactions_Mint">Минт</string>
     <string name="Transactions_Approve">Разрешено</string>
     <string name="Transactions_Swap">Обмен выполнен</string>
+    <string name="transaction_swap_status_new">Новая</string>
+    <string name="transaction_swap_status_waiting">В ожидании</string>
+    <string name="transaction_swap_status_confirming">Подтверждается</string>
+    <string name="transaction_swap_status_exchanging">Процесс обмена</string>
+    <string name="transaction_swap_status_sending">Ожидание отправки</string>
+    <string name="transaction_swap_status_refunded">Средства возвращены</string>
+    <string name="transaction_swap_status_verifying">Верификация пользователя</string>
+    <string name="transaction_swap_status_unknown">Неизвестный статус</string>
     <string name="Transactions_Failed">Не удалось</string>
     <string name="Transactions_ContractCall">Вызов контракта</string>
     <string name="Transactions_ExternalContractCall">Внешний вызов</string>
@@ -824,7 +834,7 @@
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
-    <string name="Settings_JoinUnstoppables">Продолжить</string>
+    <string name="Settings_JoinUnstoppables">Следите за нами</string>
     <string name="Settings_JoinUnstoppables_Description">Учитесь и осваивайте крипто через эксклюзивные видео. Узнайте нас ближе в неформальной обстановке. Будьте первыми, кто увидит, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
@@ -865,6 +875,7 @@
     <string name="Appearance_HideBalanceTabButtonsDescription">Эта конфигурация скрывает кнопки «Отправить», «Получить» и «Обменять» на вкладке «Баланс».</string>
     <string name="Appearance_BalanceAutoHide">Автоскрытие баланса</string>
     <string name="Appearance_BalanceAutoHide_Description">Автоматически скрывает баланс при открытии приложения, независимо от предыдущих настроек.</string>
+    <string name="appearance_transfer_passcode_description">Этот параметр требует ввода кода перед отправкой активов, обеспечивая дополнительную защиту ваших средств в случае, если устройство с разблокированным приложением попадет в чужие руки.</string>
     <string name="Appearance_PriceChangeInterval">Изменение цены %</string>
     <string name="BalanceViewType_CoinValue">Токен значение</string>
     <string name="BalanceViewType_FiatValue">Фиатное значение</string>
@@ -898,6 +909,7 @@
     <string name="Privacy_BulletedText1">Кошелек не собирает никакие персональные данные.</string>
     <string name="Privacy_BulletedText2">Нет пользовательских аккаунтов или баз данных, хранящих данные пользователей.</string>
     <string name="Privacy_BulletedText3">Если вы разрешите, кошелек будет делиться информацией об использовании приложения с командой P.CASH. Это необходимо, чтобы понять, какие функции используются (или нет) нашими пользователями. Будучи приложением, ориентированным на конфиденциальность, нам важно оценивать свои усилия, и без этих данных мы не сможем узнать, востребованы ли созданные нами функции.</string>
+    <string name="ShareUiData">Поделиться данными интерфейса</string>
     <string name="SecurityCenter_Internet">ИНТЕРНЕТ</string>
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Добавить новый</string>
@@ -910,6 +922,7 @@
     <string name="AddEvmSyncSource_Warning_UrlExists">RPC Источник с таким url уже существует</string>
     <string name="AddEvmSyncSource_Error_InvalidUrl">Введенный url неверен. Допустимый url должен иметь одну из следующих схем: http, https, ws, wss</string>
     <!--Btc Blockchain Settings -->
+    <string name="custom_peers">Пользовательские узлы (например, 188.40.241.115, dnsseed.custom.io)</string>
     <string name="BtcBlockchainSettings_RestoreSourceChangeWarning">После изменения источника восстановления, кошелек должен будет повторно синхронизироваться с блокчейном.</string>
     <string name="BtcBlockchainSettings_RestoreSourceSettingsDescription">Выберите источник данных для восстановления кошелька. Восстановление из блокчейна занимает значительно больше времени.</string>
     <string name="BtcBlockchainSettings_InputsOutputs">Вводы/Выводы</string>
@@ -1057,7 +1070,7 @@
     <string name="ImportWallet_BackupFile_Description">Импорт из файла резервной копии.</string>
     <string name="ImportWallet_RecoveryPhrase">Фраза восстановления</string>
     <string name="ImportWallet_RecoveryPhrase_Description">Импорт с помощью фразы восстановления или приватного ключа.</string>
-    <string name="ImportWallet_ExchangeWallet">с exchange кошелька</string>
+    <string name="ImportWallet_ExchangeWallet">С exchange кошелька</string>
     <string name="ImportWallet_ExchangeWallet_Description">Подключиться к кошельку на централизованной бирже.</string>
     <string name="ImportWallet_WatchAddress">Просмотр кошелька</string>
     <string name="ImportWallet_WatchAddress_Description">Режим наблюдения EVM-цепи и BTC, LTC, DASH адресов</string>
@@ -1246,6 +1259,7 @@
     <string name="Coin_Tab_Details">Аналитика</string>
     <string name="Coin_Tab_Tweets">Твиты</string>
     <string name="CoinPage_TimeDuration_Today">СГД</string>
+    <string name="CoinPage_TimeDuration_Hour">1Ч</string>
     <string name="CoinPage_TimeDuration_Day">1Д</string>
     <string name="CoinPage_TimeDuration_Week">7Д</string>
     <string name="CoinPage_TimeDuration_Month">1М</string>
@@ -1454,6 +1468,7 @@
     <string name="Coin_Analytics_Period_1d">1 день</string>
     <string name="Coin_Analytics_Period_1w">1 неделя</string>
     <string name="Coin_Analytics_Period_1m">1 месяц</string>
+    <string name="Coin_Analytics_Period_1y">1 год</string>
     <string name="Coin_Analytics_Indicators_StrongBuy">Активно покупать</string>
     <string name="Coin_Analytics_Indicators_StrongSell">Активно продавать</string>
     <string name="Coin_Analytics_Indicators_Sell">Продавать</string>
@@ -1585,6 +1600,7 @@
     <string name="NftCollection_EventType_Mint">Минт</string>
     <string name="NftCollection_EventType_Unknown">Неизвестная</string>
     <!--Rate list-->
+    <string name="RateList_TopLosers">Падающие активы</string>
     <string name="RateList_Posts">Новости</string>
     <string name="Market_DaysAgo">%dд назад</string>
     <string name="Market_HoursAgo">%dч назад</string>
@@ -1629,6 +1645,7 @@
     <string name="Unlock_Title">Разблокировать</string>
     <string name="Unlock_Passcode">Код доступа</string>
     <string name="Unlock_EnterPasscode">Введите код доступа</string>
+    <string name="Unlock_EnterPasscode_Transfer">Введите пароль, чтобы включить \"Пароль для перевода\"</string>
     <string name="Unlock_Incorrect">Неправильно</string>
     <string name="Unlock_BiometricScanner">Биометрический сканер</string>
     <string name="Unlock_BiometricScannerDisabled_Description">Введите код доступа или повторите попытку позже</string>
@@ -1723,6 +1740,7 @@
     <string name="no_active_stacking">Нет активных стейкинг-транзакций.</string>
     <string name="tokens">токены</string>
     <string name="buy_pirate">Купить PirateCash</string>
+    <string name="staking_details">Детали стэкинга</string>
     <string name="buy_cosanta">Купить Cosanta</string>
     <string name="Balance_ProcessingBalance_Title">Обработка</string>
     <string name="Info_ProcessingBalance_Title">Обработка суммы</string>
@@ -1730,10 +1748,11 @@
     <string name="no_active_stacking_pirate_description">Стейкинг PIRATE: Для активации стейкинга необходимо еще 100 токенов и будете получать 13% годовых!</string>
     <string name="no_active_stacking_cosanta_description">COSANTA Стейкинг: Внесите 1 токен и начните зарабатывать через 24 часа.</string>
     <string name="waiting_for_stacking">Стейкинг монет начнется не позднее чем через %1$d часов</string>
-    <string name="stacking_calculator">калькулятор стейкинга</string>
+    <string name="stacking_calculator">калькулятор стэкинга</string>
     <string name="total_balance">Общий баланс</string>
     <string name="total_income">Общий доход</string>
     <string name="unpaid">Невыплачено</string>
+    <string name="stacking_unpaid">Ожидающие выплаты за стэкинг:</string>
     <string name="estimated_annual_interest">Предполагаемый годовой процент</string>
     <string name="accruals">Начисления</string>
     <string name="investment_chart">График инвестиций</string>
@@ -1752,6 +1771,7 @@
     <string name="Transactions_ContractDeploy">Развертывание контракта</string>
     <string name="Transactions_TonTransaction">Ton транзакция</string>
     <string name="Settings_GetYourTokens">Зарабатывайте PIRATE, играя!</string>
+    <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКОВ</string>
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="ExtendedKey_AccountInfo">Сделать</string>
     <string name="payouts">Выплаты</string>
@@ -1764,4 +1784,23 @@
     <string name="year_period">Год</string>
     <string name="no_active_stacking_pirate_buy_more_descritpion">Для активации стейкинга вам нужно ещё %1$s токен(ов) и вы будете получать 13%% годовых!</string>
     <string name="no_active_stacking_cosanta_buy_more_descrition">Внесите %1$s токен(ов) и начните зарабатывать через 24 часа.</string>
+    <string name="Transactions_Hide">Скрытие транзакций</string>
+    <string name="settings_display_transactions">Отображение транзакций</string>
+    <string name="show_all_transactions">Показать все транзакции</string>
+    <string name="Appearance_TransactionAutoHide">Автоскрытие транзакций</string>
+    <string name="appearance_transfer_passcode">Код подтверждения перевода</string>
+    <string name="display">Показать</string>
+    <string name="display_nothing">Не отображать</string>
+    <string name="display_last_4_transactions">Последние 4 транзакции</string>
+    <string name="display_last_2_transactions">Последние 2 транзакции</string>
+    <string name="display_last_1_transaction">Последняя операция</string>
+    <string name="Appearance_TransactionAutoHide_Description">"Режим безопасности: скрывает транзакции и позволяет установить отдельный пароль для их разблокировки. "</string>
+    <string name="set_separate_passcode">Установить отдельный пароль</string>
+    <string name="SettingsSecurity_DeleteSeparatePasscode">Удалить отдельный пароль</string>
+    <string name="Unlock_EnterPasscode_Transactions_Hide">Введите пароль для режима \"Автоскрытие транзакций\"</string>
+    <string name="PinSet_Transactions_Hide">Установить пароль для режима \"Автоскрытие транзакций\"</string>
+    <string name="RateList_TopGainers">Растущие активы</string>
+    <string name="zcash_transparent_description">Полностью отслеживаемые транзакции</string>
+    <string name="zcash_shielded_description">Частные защищённые транзакции</string>
+    <string name="zcash_unified_description">Комбинированные прозрачные и приватные транзакции</string>
 </resources>

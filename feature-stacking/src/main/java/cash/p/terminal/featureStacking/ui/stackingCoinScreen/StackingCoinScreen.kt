@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -40,6 +40,7 @@ import cash.p.terminal.ui_compose.components.ButtonPrimaryCircle
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellowWithIcon
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.components.HsImage
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.TitleAndTwoValuesCell
@@ -74,16 +75,24 @@ internal fun StackingCoinScreen(
     LaunchedEffect(viewModel.uiState.value.receiveAddress) {
         viewModel.uiState.value.receiveAddress?.let(chartViewModel::setReceiveAddress)
     }
-    PirateCoinScreenContent(
-        uiState = viewModel.uiState.value,
-        onBuyClicked = onBuyClicked,
-        onCalculatorClicked = onCalculatorClicked,
-        onChartClicked = onChartClicked,
-        graphUIState = chartViewModel.uiState,
-        getSelectedPointCallback = chartViewModel::getSelectedPoint,
-        onSelectChartInterval = chartViewModel::onSelectChartInterval,
-        onToggleBalanceVisibility = viewModel::toggleBalanceVisibility
-    )
+    HSSwipeRefresh(
+        refreshing = viewModel.uiState.value.isRefreshing,
+        onRefresh = {
+            viewModel.refresh()
+            chartViewModel.refresh()
+        }
+    ) {
+        PirateCoinScreenContent(
+            uiState = viewModel.uiState.value,
+            onBuyClicked = onBuyClicked,
+            onCalculatorClicked = onCalculatorClicked,
+            onChartClicked = onChartClicked,
+            graphUIState = chartViewModel.uiState,
+            getSelectedPointCallback = chartViewModel::getSelectedPoint,
+            onSelectChartInterval = chartViewModel::onSelectChartInterval,
+            onToggleBalanceVisibility = viewModel::toggleBalanceVisibility
+        )
+    }
 }
 
 @Composable
@@ -187,7 +196,8 @@ private fun NoCoins(uiState: StackingCoinUIState, onBuyClicked: () -> Unit) {
             icon = R.drawable.ic_swap_24,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 12.dp)
+                .padding(top = 12.dp),
+            enabled = !uiState.isWatchAccount
         )
         Spacer(modifier = Modifier.weight(3f))
     }
@@ -231,7 +241,8 @@ private fun PirateCoinScreenWithGraph(
                     onClick = onBuyClicked,
                     icon = R.drawable.ic_swap_24,
                     modifier = Modifier
-                        .weight(1f)
+                        .weight(1f),
+                    enabled = !uiState.isWatchAccount
                 )
                 ButtonPrimaryCircle(
                     icon = R.drawable.ic_calculator,
@@ -245,40 +256,36 @@ private fun PirateCoinScreenWithGraph(
                 )
             }
             TotalSection(uiState, Modifier.padding(vertical = 24.dp))
-            if (!uiState.isWaitingForStacking()) {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(ColorDivider)
-                )
-                Text(
-                    style = ComposeAppTheme.typography.body,
-                    color = ComposeAppTheme.colors.leah,
-                    text = stringResource(id = R.string.investment_chart),
-                    modifier = Modifier.padding(vertical = 14.dp, horizontal = 16.dp)
-                )
-                Chart(
-                    uiState = graphUIState,
-                    getSelectedPointCallback = getSelectedPointCallback,
-                    onSelectChartInterval = onSelectChartInterval
-                )
-            }
-        }
-        if (!uiState.isWaitingForStacking()) {
-            item {
-                Spacer(
-                    modifier = Modifier
-                        .padding(top = 24.dp)
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(ColorDivider)
-                )
-            }
-            payoutList(
-                payoutItemsMap = uiState.payoutItems
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(ColorDivider)
+            )
+            Text(
+                style = ComposeAppTheme.typography.body,
+                color = ComposeAppTheme.colors.leah,
+                text = stringResource(id = R.string.investment_chart),
+                modifier = Modifier.padding(vertical = 14.dp, horizontal = 16.dp)
+            )
+            Chart(
+                uiState = graphUIState,
+                getSelectedPointCallback = getSelectedPointCallback,
+                onSelectChartInterval = onSelectChartInterval
             )
         }
+        item {
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 24.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(ColorDivider)
+            )
+        }
+        payoutList(
+            payoutItemsMap = uiState.payoutItems
+        )
     }
 }
 
@@ -316,13 +323,7 @@ private fun TotalSection(uiState: StackingCoinUIState, modifier: Modifier) {
             add {
                 TitleAndValueCell(
                     title = stringResource(R.string.estimated_annual_interest),
-                    value = stringResource(
-                        id = if (uiState.stackingType == StackingType.PCASH) {
-                            R.string.estimated_annual_interest_value_pirate
-                        } else {
-                            R.string.estimated_annual_interest_value_cosanta
-                        }
-                    ),
+                    value = uiState.annualInterest,
                     modifier = Modifier.height(48.dp)
                 )
             }
@@ -449,7 +450,9 @@ private fun PirateCoinScreenContentPreview() {
                 viewState = ViewState.Success,
                 hasVolumes = false,
                 chartViewType = ChartViewType.Line,
-                chartInfoData = null
+                chartInfoData = null,
+                considerAlwaysPositive = true,
+                titleHidden = false
             ),
             getSelectedPointCallback = {
                 ChartModule.ChartHeaderView(

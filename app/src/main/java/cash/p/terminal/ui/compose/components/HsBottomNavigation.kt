@@ -11,7 +11,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material.*
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -65,6 +65,7 @@ fun HsBottomNavigation(
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = BottomNavigationDefaults.Elevation,
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets,
     content: @Composable RowScope.() -> Unit
 ) {
     Surface(
@@ -76,6 +77,7 @@ fun HsBottomNavigation(
         Row(
             Modifier
                 .fillMaxWidth()
+                .windowInsetsPadding(windowInsets)
                 .height(BottomNavigationHeight)
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -140,7 +142,10 @@ fun RowScope.HsBottomNavigationItem(
     // The color of the Ripple should always the selected color, as we want to show the color
     // before the item is considered selected, and hence before the new contentColor is
     // provided by BottomNavigationTransition.
-    val ripple = ripple(bounded = false, color = selectedContentColor)
+    val ripple = ripple(
+        bounded = true,
+        color = selectedContentColor
+    )
 
     Box(
         modifier

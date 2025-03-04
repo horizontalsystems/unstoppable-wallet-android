@@ -51,7 +51,6 @@ class IntroActivity : BaseActivity() {
         setContent {
             IntroScreen(viewModel, nightMode) { finish() }
         }
-        setStatusBarTransparent()
     }
 
     companion object {
@@ -63,7 +62,6 @@ class IntroActivity : BaseActivity() {
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun IntroScreen(viewModel: IntroViewModel, nightMode: Boolean, closeActivity: () -> Unit) {
     val pageCount = 3

@@ -172,6 +172,9 @@
         android:id="@+id/setPinFragment"
         android:name="cash.p.terminal.modules.pin.SetPinFragment" />
     <fragment
+        android:id="@+id/chooseDisplayTransactionsFragment"
+        android:name="cash.p.terminal.modules.settings.displaytransactions.DisplayTransactionsFragment" />
+    <fragment
         android:id="@+id/editPinFragment"
         android:name="cash.p.terminal.modules.pin.EditPinFragment" />
     <fragment

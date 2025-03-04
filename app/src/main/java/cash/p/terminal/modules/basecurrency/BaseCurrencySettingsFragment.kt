@@ -4,20 +4,22 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -56,13 +58,13 @@ class BaseCurrencySettingsFragment : BaseComposeFragment() {
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun BaseCurrencyScreen(
     navController: NavController,
     viewModel: BaseCurrencySettingsViewModel = viewModel(
         factory = BaseCurrencySettingsModule.Factory()
-    )
+    ),
+    windowInsets: WindowInsets = NavigationBarDefaults.windowInsets
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -87,7 +89,7 @@ private fun BaseCurrencyScreen(
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
-        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             WarningBottomSheet(
                 text = stringResource(
@@ -106,7 +108,7 @@ private fun BaseCurrencyScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.SettingsCurrency_Title),
@@ -120,6 +122,7 @@ private fun BaseCurrencyScreen(
                 Modifier
                     .verticalScroll(rememberScrollState())
                     .padding(paddingValues)
+                    .windowInsetsPadding(windowInsets)
             ) {
                 VSpacer(12.dp)
                 CellUniversalLawrenceSection(viewModel.popularItems) { item ->
@@ -157,7 +160,7 @@ private fun WarningBottomSheet(
     BottomSheetHeader(
         iconPainter = painterResource(R.drawable.ic_attention_24),
         title = stringResource(R.string.SettingsCurrency_DisclaimerTitle),
-        iconTint = ColorFilter.tint(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.jacob),
+        iconTint = ColorFilter.tint(ComposeAppTheme.colors.jacob),
         onCloseClick = onCloseClick
     ) {
         TextImportantWarning(

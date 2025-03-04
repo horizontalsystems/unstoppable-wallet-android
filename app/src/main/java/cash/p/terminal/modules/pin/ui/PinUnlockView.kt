@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,7 +27,9 @@ import cash.p.terminal.R
 import cash.p.terminal.modules.pin.unlock.PinUnlockModule
 import cash.p.terminal.modules.pin.unlock.PinUnlockViewModel
 import cash.p.terminal.ui_compose.components.title3_leah
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PinUnlock(
     onSuccess: () -> Unit,
@@ -65,10 +70,11 @@ fun PinUnlock(
     }
 
     Scaffold(
-        backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             Row(
                 modifier = Modifier
+                    .windowInsetsPadding(TopAppBarDefaults.windowInsets)
                     .fillMaxWidth()
                     .height(64.dp),
                 verticalAlignment = Alignment.CenterVertically,

@@ -74,6 +74,7 @@ class BinanceChainSendTransactionService(
     private var fields = listOf<DataField>()
 
     override fun createState() = SendTransactionServiceState(
+        availableBalance = adapter.availableBalance,
         networkFee = feeAmountData,
         cautions = cautions,
         sendable = sendable,
@@ -144,7 +145,7 @@ class BinanceChainSendTransactionService(
 
         SendModule.AmountData(primaryAmountInfo, secondaryAmountInfo)
         this.feeState = feeState
-
+        loading = false
         emitState()
     }
 
@@ -164,13 +165,13 @@ class BinanceChainSendTransactionService(
     override suspend fun sendTransaction(): SendTransactionResult {
         val logger = logger.getScopedUnique()
         try {
-            adapter.send(
+            val transactionId = adapter.send(
                 amount = amountState.amount!!,
                 address = addressState.address!!.hex,
                 memo = null,
                 logger = logger
             ).blockingGet()
-            return SendTransactionResult.Common(SendResult.Sent)
+            return SendTransactionResult.Common(SendResult.Sent(transactionId))
         } catch (e: Throwable) {
             cautions = listOf(createCaution(e))
             emitState()

@@ -3,7 +3,6 @@ package cash.p.terminal.modules.transactions
 import cash.p.terminal.R
 import cash.p.terminal.core.App
 import cash.p.terminal.core.adapters.TonTransactionRecord
-import cash.p.terminal.core.imageUrl
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
@@ -37,6 +36,8 @@ import cash.p.terminal.entities.transactionrecords.tron.TronTransactionRecord
 import cash.p.terminal.modules.contacts.ContactsRepository
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.network.changenow.api.ChangeNowHelper
+import cash.p.terminal.network.changenow.domain.entity.TransactionStatusEnum
+import cash.p.terminal.network.changenow.domain.entity.toStatus
 import cash.p.terminal.strings.helpers.Translator
 import cash.p.terminal.strings.helpers.shorten
 import cash.p.terminal.ui_compose.ColorName
@@ -553,7 +554,11 @@ class TransactionViewItemFactory(
             }
 
             is TonTransactionRecord -> {
-                createViewItemFromTonTransactionRecord(
+                tryConvertToChangeNowViewItemSwap(
+                    transactionItem = transactionItem,
+                    token = record.baseToken,
+                    isIncoming = record.actions.singleOrNull()?.type is TonTransactionRecord.Action.Type.Receive
+                ) ?: createViewItemFromTonTransactionRecord(
                     icon = icon,
                     record = record,
                     currencyValue = transactionItem.currencyValue
@@ -908,8 +913,8 @@ class TransactionViewItemFactory(
     private fun getColoredValue(value: Any, color: ColorName): ColoredValue =
         when (value) {
             is TransactionValue -> ColoredValue(
-                getCoinString(value),
-                if (value.zeroValue) ColorName.Leah else color
+                value = getCoinString(value),
+                color = if (value.zeroValue) ColorName.Leah else color
             )
 
             is CurrencyValue -> ColoredValue(
@@ -1197,10 +1202,12 @@ class TransactionViewItemFactory(
             timestamp = transactionItem.record.timestamp * 1000
         )
     } else {
-        changeNowTransactionsStorage.getByTokenIn(
-            token = token,
-            timestamp = transactionItem.record.timestamp * 1000
-        )
+        changeNowTransactionsStorage.getByOutgoingRecordUid(transactionItem.record.uid)
+            ?: changeNowTransactionsStorage.getByTokenIn(
+                token = token,
+                amountIn = transactionItem.record.mainValue?.decimalValue?.abs(),
+                timestamp = transactionItem.record.timestamp * 1000
+            )
     }?.let {
         createViewItemFromChangeNowRecord(
             transaction = it,
@@ -1252,11 +1259,28 @@ class TransactionViewItemFactory(
         } else {
             ColoredValue(valueInFormatted, ColorName.Remus)
         }
+        val status = transaction.status.toStatus()
+        val titleStringRes = when (status) {
+            TransactionStatusEnum.NEW -> R.string.transaction_swap_status_new
+            TransactionStatusEnum.WAITING -> R.string.transaction_swap_status_waiting
+            TransactionStatusEnum.CONFIRMING -> R.string.transaction_swap_status_confirming
+            TransactionStatusEnum.EXCHANGING -> R.string.transaction_swap_status_exchanging
+            TransactionStatusEnum.SENDING -> R.string.transaction_swap_status_sending
+            TransactionStatusEnum.FINISHED -> R.string.Transactions_Swap
+            TransactionStatusEnum.FAILED -> R.string.Transactions_Failed
+            TransactionStatusEnum.REFUNDED -> R.string.transaction_swap_status_refunded
+            TransactionStatusEnum.VERIFYING -> R.string.transaction_swap_status_verifying
+            TransactionStatusEnum.UNKNOWN -> R.string.transaction_swap_status_unknown
+        }
 
         return TransactionViewItem(
             uid = transactionItem.record.uid,
-            progress = 0f,
-            title = Translator.getString(R.string.Transactions_Swap),
+            progress = if (transaction.isFinished()) {
+                0f
+            } else {
+                (status.ordinal + 1) * (1f / (TransactionStatusEnum.FINISHED.ordinal + 1))
+            },
+            title = Translator.getString(titleStringRes),
             subtitle = "ChangeNow",
             primaryValue = primaryValue,
             secondaryValue = secondaryValue,
@@ -1264,7 +1288,10 @@ class TransactionViewItemFactory(
             date = Date(transactionItem.record.timestamp * 1000),
             spam = false,
             icon = transactionIcon,
-            transactionStatusUrl = ChangeNowHelper.CHANGE_NOW_URL to ChangeNowHelper.getViewTransactionUrl(transaction.transactionId)
+            changeNowTransactionId = transaction.transactionId,
+            transactionStatusUrl = ChangeNowHelper.CHANGE_NOW_URL to ChangeNowHelper.getViewTransactionUrl(
+                transaction.transactionId
+            )
         )
     }
 

@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -14,6 +15,8 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +41,7 @@ import cash.p.terminal.ui_compose.components.body_grey50
 import cash.p.terminal.ui_compose.components.title3_leah
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @ExperimentalAnimationApi
 @Composable
 fun SearchBar(
@@ -57,7 +61,9 @@ fun SearchBar(
     var searchText by remember { mutableStateOf("") }
 
     TopAppBar(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier
+            .windowInsetsPadding(TopAppBarDefaults.windowInsets)
+            .height(64.dp),
         title = {
             title3_leah(
                 text = if (searchMode) "" else title,

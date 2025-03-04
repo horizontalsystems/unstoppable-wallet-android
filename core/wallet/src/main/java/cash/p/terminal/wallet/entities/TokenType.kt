@@ -17,6 +17,12 @@ sealed class TokenType : Parcelable {
         Type145,
     }
 
+    enum class AddressSpecType {
+        Shielded,
+        Transparent,
+        Unified,
+    }
+
     @Parcelize
     object Native : TokenType()
 
@@ -25,6 +31,9 @@ sealed class TokenType : Parcelable {
 
     @Parcelize
     data class AddressTyped(val type: AddressType) : TokenType()
+
+    @Parcelize
+    data class AddressSpecTyped(val type: AddressSpecType) : TokenType()
 
     @Parcelize
     data class Eip20(val address: String) : TokenType()
@@ -50,6 +59,7 @@ sealed class TokenType : Parcelable {
                 is Spl -> listOf("spl", address)
                 is Jetton -> listOf("the-open-network", address)
                 is AddressTyped -> listOf("address_type", type.name.lowercase())
+                is AddressSpecTyped -> listOf("address_spec_type", type.name.lowercase())
                 is Derived -> listOf("derived", derivation.name.lowercase())
                 is Unsupported -> if (reference.isNotBlank()) {
                     listOf("unsupported", type, reference)
@@ -68,6 +78,7 @@ sealed class TokenType : Parcelable {
             is Spl -> Value("spl", address)
             is Jetton -> Value("the-open-network", address)
             is AddressTyped -> Value("address_type", type.name)
+            is AddressSpecTyped -> Value("address_spec_type", type.name)
             is Derived -> Value("derived", derivation.name)
             is Unsupported -> Value(type, reference)
         }
@@ -111,6 +122,15 @@ sealed class TokenType : Parcelable {
                     if (reference.isNotBlank()) {
                         try {
                             return AddressTyped(AddressType.valueOf(reference.lowercase().replaceFirstChar(Char::uppercase)))
+                        } catch (e: IllegalArgumentException) {
+                        }
+                    }
+                }
+
+                "address_spec_type" -> {
+                    if (reference.isNotBlank()) {
+                        try {
+                            return AddressSpecTyped(AddressSpecType.valueOf(reference.lowercase().replaceFirstChar(Char::uppercase)))
                         } catch (e: IllegalArgumentException) {
                         }
                     }

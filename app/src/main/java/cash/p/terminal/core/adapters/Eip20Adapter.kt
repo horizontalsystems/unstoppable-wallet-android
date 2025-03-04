@@ -1,23 +1,28 @@
 package cash.p.terminal.core.adapters
 
 import android.content.Context
-import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
-import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.managers.EvmLabelManager
-import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
+import cash.p.terminal.wallet.AdapterState
+import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.entities.BalanceData
 import io.horizontalsystems.erc20kit.core.Erc20Kit
 import io.horizontalsystems.ethereumkit.core.EthereumKit.SyncState
 import io.horizontalsystems.ethereumkit.models.Address
 import io.horizontalsystems.ethereumkit.models.Chain
 import io.horizontalsystems.ethereumkit.models.DefaultBlockParameter
 import io.horizontalsystems.ethereumkit.models.TransactionData
-import cash.p.terminal.wallet.Token
-import io.reactivex.Flowable
 import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.reactive.asFlow
 import java.math.BigDecimal
 import java.math.BigInteger
 
@@ -27,14 +32,23 @@ class Eip20Adapter(
     contractAddress: String,
     baseToken: Token,
     coinManager: ICoinManager,
-    wallet: Wallet,
-    evmLabelManager: EvmLabelManager
+    private val wallet: Wallet,
+    evmLabelManager: EvmLabelManager,
+    private val stackingManager: StackingManager
 ) : BaseEvmAdapter(evmKitWrapper, wallet.decimal, coinManager) {
 
-    private val transactionConverter = EvmTransactionConverter(coinManager, evmKitWrapper, wallet.transactionSource, App.spamManager, baseToken, evmLabelManager)
+    private val transactionConverter = EvmTransactionConverter(
+        coinManager,
+        evmKitWrapper,
+        wallet.transactionSource,
+        App.spamManager,
+        baseToken,
+        evmLabelManager
+    )
 
     private val contractAddress: Address = Address(contractAddress)
-    val eip20Kit: Erc20Kit = Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
+    private val eip20Kit: Erc20Kit =
+        Erc20Kit.getInstance(context, this.evmKit, this.contractAddress)
 
     val pendingTransactions: List<TransactionRecord>
         get() = eip20Kit.getPendingTransactions().map { transactionConverter.transactionRecord(it) }
@@ -42,6 +56,7 @@ class Eip20Adapter(
     // IAdapter
 
     override fun start() {
+        stackingManager.loadInvestmentData(wallet, receiveAddress)
         // started via EthereumKitManager
     }
 
@@ -50,6 +65,7 @@ class Eip20Adapter(
     }
 
     override fun refresh() {
+        stackingManager.loadInvestmentData(wallet, receiveAddress, true)
         eip20Kit.refresh()
     }
 
@@ -58,14 +74,19 @@ class Eip20Adapter(
     override val balanceState: AdapterState
         get() = convertToAdapterState(eip20Kit.syncState)
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = eip20Kit.syncStateFlowable.map { }
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = merge(eip20Kit.syncStateFlowable.asFlow(), stackingManager.unpaidFlow.filterNotNull())
+            .map { }
 
     override val balanceData: BalanceData
-        get() = BalanceData(balanceInBigDecimal(eip20Kit.balance, decimal))
+        get() = BalanceData(
+                available = balanceInBigDecimal(eip20Kit.balance, decimal),
+                stackingUnpaid = stackingManager.unpaidFlow.value ?: BigDecimal.ZERO
+            )
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = eip20Kit.balanceFlowable.map { Unit }
+   override val balanceUpdatedFlow: Flow<Unit>
+        get() = merge(eip20Kit.balanceFlowable.asFlow(), stackingManager.unpaidFlow.filterNotNull())
+            .map { }
 
     // ISendEthereumAdapter
 
@@ -80,11 +101,14 @@ class Eip20Adapter(
         is SyncState.Syncing -> AdapterState.Syncing()
     }
 
-    fun allowance(spenderAddress: Address, defaultBlockParameter: DefaultBlockParameter): Single<BigDecimal> {
+    fun allowance(
+        spenderAddress: Address,
+        defaultBlockParameter: DefaultBlockParameter
+    ): Single<BigDecimal> {
         return eip20Kit.getAllowanceAsync(spenderAddress, defaultBlockParameter)
-                .map {
-                    scaleDown(it.toBigDecimal())
-                }
+            .map {
+                scaleDown(it.toBigDecimal())
+            }
     }
 
     fun buildRevokeTransactionData(spenderAddress: Address): TransactionData {

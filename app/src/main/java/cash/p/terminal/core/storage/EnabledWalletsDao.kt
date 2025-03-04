@@ -13,16 +13,15 @@ interface EnabledWalletsDao {
     fun enabledCoins(accountId: String): List<EnabledWallet>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(enabledWallet: EnabledWallet)
+    fun insert(enabledWallet: EnabledWallet): Long
 
     @Query("DELETE FROM EnabledWallet")
     fun deleteAll()
 
     @Transaction
-    fun insertWallets(enabledWallets: List<EnabledWallet>) {
-        enabledWallets.forEach { insert(it) }
-    }
+    fun insertWallets(enabledWallets: List<EnabledWallet>): List<Long>
+        = enabledWallets.map { insert(it) }
 
-    @Query("DELETE FROM EnabledWallet WHERE LOWER(tokenQueryId) IN (:tokenQueryIds) AND LOWER(accountId) IN (:accountIds)")
-    fun deleteWallets(tokenQueryIds: List<String>, accountIds: List<String>)
+    @Query("DELETE FROM EnabledWallet WHERE id IN (:ids)")
+    fun deleteWallets(ids: List<Long>)
 }

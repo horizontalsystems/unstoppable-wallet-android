@@ -22,6 +22,7 @@ class FeeTokenProvider(
             TokenType.Native,
             is TokenType.Derived,
             is TokenType.AddressTyped,
+            is TokenType.AddressSpecTyped,
             is TokenType.Unsupported -> null
         }
 

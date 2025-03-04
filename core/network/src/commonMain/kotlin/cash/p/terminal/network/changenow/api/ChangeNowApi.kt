@@ -5,6 +5,7 @@ import cash.p.terminal.network.changenow.data.entity.ChangeNowCurrencyDto
 import cash.p.terminal.network.changenow.data.entity.ExchangeAmountDto
 import cash.p.terminal.network.changenow.data.entity.MinAmountDto
 import cash.p.terminal.network.changenow.data.entity.NewTransactionResponseDto
+import cash.p.terminal.network.changenow.data.entity.TransactionStatusDto
 import cash.p.terminal.network.changenow.data.entity.request.NewTransactionRequest
 import cash.p.terminal.network.data.setJsonBody
 import io.ktor.client.HttpClient
@@ -56,6 +57,14 @@ internal class ChangeNowApi(
         return httpClient.post {
             url(BASE_URL + "transactions/$API_KEY")
             setJsonBody(newTransactionRequest)
+        }.parseChangeNowResponse()
+    }
+
+    suspend fun getTransactionStatus(
+        transactionId: String
+    ): TransactionStatusDto {
+        return httpClient.get {
+            url(BASE_URL + "transactions/$transactionId/$API_KEY")
         }.parseChangeNowResponse()
     }
 }

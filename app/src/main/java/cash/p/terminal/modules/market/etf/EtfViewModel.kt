@@ -32,7 +32,6 @@ class EtfViewModel(
         TimeDuration.OneDay,
         TimeDuration.SevenDay,
         TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
     )
     val sortByOptions = listOf(
         EtfModule.SortBy.HighestAssets,
@@ -68,10 +67,16 @@ class EtfViewModel(
 
     private fun fetchChartData() {
         viewModelScope.launch(Dispatchers.Default) {
-            etfPoints = marketKit.etfPoints(currencyManager.baseCurrency.code).await().sortedBy { it.date }
-            chartDataLoading = false
+            try {
+                etfPoints = marketKit.etfPoints(currencyManager.baseCurrency.code).await()
+                    .sortedBy { it.date }
+                chartDataLoading = false
 
-            emitState()
+                emitState()
+            } catch (e: Throwable) {
+                chartDataLoading = false
+                emitState()
+            }
         }
     }
 
@@ -140,6 +145,7 @@ class EtfViewModel(
     private fun refreshWithMinLoadingSpinnerPeriod() {
         isRefreshing = true
         emitState()
+        fetchChartData()
         syncItems()
         viewModelScope.launch {
             delay(1000)
@@ -173,6 +179,5 @@ private fun Etf.priceChangeValue(timeDuration: TimeDuration): BigDecimal? {
         TimeDuration.OneDay -> inflows[HsTimePeriod.Day1]
         TimeDuration.SevenDay -> inflows[HsTimePeriod.Week1]
         TimeDuration.ThirtyDay -> inflows[HsTimePeriod.Month1]
-        TimeDuration.ThreeMonths -> inflows[HsTimePeriod.Month3]
     }
 }

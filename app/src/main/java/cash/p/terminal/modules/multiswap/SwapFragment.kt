@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -377,7 +378,7 @@ private fun SwapScreenInner(
                     uiState.availableBalance != null && uiState.availableBalance > BigDecimal.ZERO
 
                 SuggestionsBar(
-                    modifier = Modifier.align(Alignment.BottomCenter),
+                    modifier = Modifier.imePadding().align(Alignment.BottomCenter),
                     onDelete = {
                         onEnterAmount.invoke(null)
                     },

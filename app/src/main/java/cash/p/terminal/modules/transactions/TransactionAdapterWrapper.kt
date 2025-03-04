@@ -2,7 +2,6 @@ package cash.p.terminal.modules.transactions
 
 import cash.p.terminal.wallet.Clearable
 import cash.p.terminal.core.ITransactionsAdapter
-import cash.p.terminal.core.storage.ChangeNowTransactionsStorage
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import io.reactivex.Observable
@@ -18,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 class TransactionAdapterWrapper(
     private val transactionsAdapter: ITransactionsAdapter,
-    private val transactionWallet: TransactionWallet,
+    val transactionWallet: TransactionWallet,
     private var transactionType: FilterTransactionType,
     private var contact: Contact?
 ) : Clearable {

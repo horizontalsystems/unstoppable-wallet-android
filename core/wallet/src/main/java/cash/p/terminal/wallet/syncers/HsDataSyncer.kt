@@ -12,12 +12,17 @@ class HsDataSyncer(
 
     private var disposable: Disposable? = null
 
-    fun sync() {
+    fun sync(forceUpdate: Boolean) {
         disposable = hsProvider.statusSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .subscribe({ status ->
-                coinSyncer.sync(status.coins, status.blockchains, status.tokens)
+                coinSyncer.sync(
+                    coinsTimestamp = status.coins,
+                    blockchainsTimestamp = status.blockchains,
+                    tokensTimestamp = status.tokens,
+                    forceUpdate = forceUpdate
+                )
             }, {
                 Log.e("CoinSyncer", "sync() error", it)
             })

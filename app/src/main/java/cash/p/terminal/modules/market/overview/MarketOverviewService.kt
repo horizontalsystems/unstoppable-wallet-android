@@ -32,7 +32,6 @@ class MarketOverviewService(
     val timeDurationOptions: List<TimeDuration> = listOf(
         TimeDuration.SevenDay,
         TimeDuration.ThirtyDay,
-        TimeDuration.ThreeMonths,
     )
     val topMoversObservable: BehaviorSubject<Result<TopMovers>> = BehaviorSubject.create()
     val marketOverviewObservable: BehaviorSubject<Result<MarketOverview>> = BehaviorSubject.create()

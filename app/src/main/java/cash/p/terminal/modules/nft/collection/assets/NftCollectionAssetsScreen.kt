@@ -24,7 +24,7 @@ import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.nft.asset.NftAssetModule
 import cash.p.terminal.modules.nft.holdings.NftAssetViewItem
 import cash.p.terminal.modules.nft.ui.NftAssetPreview
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.OnBottomReached
 import cash.p.terminal.ui_compose.components.HSCircularProgressIndicator
 import cash.p.terminal.ui.compose.components.ListErrorView

@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Surface
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,7 +17,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cash.p.terminal.R
-import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.core.composablePage
 import cash.p.terminal.core.composablePopup
 import cash.p.terminal.core.slideFromBottom
@@ -29,11 +28,12 @@ import cash.p.terminal.modules.settings.appstatus.AppStatusScreen
 import cash.p.terminal.modules.settings.main.HsSettingCell
 import cash.p.terminal.modules.settings.privacy.PrivacyScreen
 import cash.p.terminal.modules.settings.terms.TermsScreen
+import cash.p.terminal.ui.helpers.LinkHelper
+import cash.p.terminal.ui_compose.BaseComposeFragment
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui_compose.components.CellUniversalLawrenceSection
 import cash.p.terminal.ui_compose.components.HsBackButton
 import cash.p.terminal.ui_compose.components.VSpacer
-import cash.p.terminal.ui.helpers.LinkHelper
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class AboutFragment : BaseComposeFragment() {
@@ -170,7 +170,7 @@ private fun SettingSections(
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.githubLink)
 
-                    stat(page = StatPage.AboutApp, event= StatEvent.Open(StatPage.ExternalGithub))
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.ExternalGithub))
                 }
             )
         }, {
@@ -180,11 +180,11 @@ private fun SettingSections(
                 onClick = {
                     LinkHelper.openLinkInAppBrowser(context, viewModel.appWebPageLink)
 
-                    stat(page = StatPage.AboutApp, event= StatEvent.Open(StatPage.ExternalWebsite))
+                    stat(page = StatPage.AboutApp, event = StatEvent.Open(StatPage.ExternalWebsite))
                 }
             )
         })
     )
-    
+
     VSpacer(32.dp)
 }

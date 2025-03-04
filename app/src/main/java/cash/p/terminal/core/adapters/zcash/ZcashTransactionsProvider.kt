@@ -32,7 +32,7 @@ class ZcashTransactionsProvider(
                 val newZcashTransactions = newTransactions.map {
                     val recipient = if (it.isSentTransaction) {
                         synchronizer.getRecipients(it)
-                            .filterIsInstance<TransactionRecipient.Address>()
+                            .filterIsInstance<TransactionRecipient.RecipientAddress>()
                             .firstOrNull()
                             ?.addressValue
                     } else {

@@ -130,7 +130,6 @@ class MarketOverviewViewModel(
             TimeDuration.OneDay -> HsTimePeriod.Day1
             TimeDuration.SevenDay -> HsTimePeriod.Week1
             TimeDuration.ThirtyDay -> HsTimePeriod.Month1
-            TimeDuration.ThreeMonths -> HsTimePeriod.Month3
         }
         val nftCollectionItems = marketOverview.nftCollections.getOrElse(timePeriod) { listOf() }.map { it.nftCollectionItem }
 

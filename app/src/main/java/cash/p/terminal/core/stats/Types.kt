@@ -569,6 +569,7 @@ enum class StatSortType(val key: String) {
 }
 
 enum class StatPeriod(val key: String) {
+    Hour1("1h"),
     Day1("1d"),
     Week1("1w"),
     Week2("2w"),

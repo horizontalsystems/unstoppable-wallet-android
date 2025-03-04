@@ -22,9 +22,9 @@ object SendZCashModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val xRateService = XRateService(App.marketKit, App.currencyManager.baseCurrency)
             val amountService = SendAmountService(
-                AmountValidator(),
-                wallet.coin.code,
-                adapter.availableBalance
+                amountValidator = AmountValidator(),
+                coinCode = wallet.coin.code,
+                availableBalance = adapter.availableBalance
             )
             val addressService = SendZCashAddressService(adapter, predefinedAddress)
             val memoService = SendZCashMemoService()

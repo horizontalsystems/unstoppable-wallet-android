@@ -309,10 +309,11 @@ private fun NumberInputWithButtons(
 
 @Composable
 fun ButtonsGroupWithShade(
+    modifier: Modifier = Modifier,
     ButtonsContent: @Composable (() -> Unit)
 ) {
     Column(
-        modifier = Modifier.offset(y = -(24.dp))
+        modifier = modifier.offset(y = -(24.dp))
     ) {
         Box(
             modifier = Modifier
@@ -320,7 +321,7 @@ fun ButtonsGroupWithShade(
                 .height(24.dp)
                 .background(
                     brush = Brush.verticalGradient(
-                        listOf(cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler)
+                        listOf(ComposeAppTheme.colors.transparent, ComposeAppTheme.colors.tyler)
                     )
                 )
         )

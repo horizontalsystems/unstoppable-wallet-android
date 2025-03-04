@@ -28,7 +28,7 @@ import cash.p.terminal.modules.market.overview.ui.MetricChartsView
 import cash.p.terminal.modules.market.overview.ui.TopPairsBoardView
 import cash.p.terminal.modules.market.overview.ui.TopPlatformsBoardView
 import cash.p.terminal.modules.market.overview.ui.TopSectorsBoardView
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.helpers.LinkHelper

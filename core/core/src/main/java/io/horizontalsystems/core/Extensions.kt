@@ -8,9 +8,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import io.horizontalsystems.core.entities.BlockchainType
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -95,5 +93,14 @@ fun BigDecimal.scaleUp(scale: Int): BigInteger {
         unscaledValue() * BigInteger.TEN.pow(exponent)
     } else {
         unscaledValue() / BigInteger.TEN.pow(exponent.absoluteValue)
+    }
+}
+
+fun Double.smartFormat(): String {
+    val hasDecimalPart = this % 1 != 0.0
+    return if (hasDecimalPart) {
+        String.format("%.1f", this)
+    } else {
+        String.format("%.0f", this)
     }
 }

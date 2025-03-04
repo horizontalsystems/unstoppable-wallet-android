@@ -20,8 +20,8 @@ android {
         compileSdk compile_sdk_version
         minSdkVersion min_sdk_version
         targetSdkVersion compile_sdk_version
-        versionCode 112
-        versionName "0.41.2"
+        versionCode 127
+        versionName "0.41.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         ksp {
@@ -54,6 +54,7 @@ android {
     buildFeatures {
         compose true
         viewBinding true
+        buildConfig true
     }
 
     signingConfigs {
@@ -167,17 +168,16 @@ android {
         jvmTarget = "17"
     }
 
-    /*composeOptions {
-        kotlinCompilerExtensionVersion '1.5.12'
-    }*/
     namespace 'cash.p.terminal'
     lint {
         disable 'LogNotTimber'
     }
 
     configurations.all { c ->
+        exclude(group: "com.github.metaplex-foundation.kborsh", module: "kborsh-jvm")
         c.resolutionStrategy.dependencySubstitution {
             substitute module('org.bouncycastle:bcprov-jdk15to18:1.68') using module('org.bouncycastle:bcprov-jdk15on:1.65')
+            substitute module('org.bouncycastle:bcprov-jdk15to18:1.69') using module('org.bouncycastle:bcprov-jdk15on:1.65')
             substitute module('com.google.protobuf:protobuf-java:3.6.1') using module('com.google.protobuf:protobuf-javalite:3.21.1')
             substitute module('net.jcip:jcip-annotations:1.0') using module('com.github.stephenc.jcip:jcip-annotations:1.0-1')
 
@@ -200,7 +200,7 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':core:ui-compose')
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation libs.appcompat
     implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
@@ -213,7 +213,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.fragment:fragment-ktx:$fragment_ktx_version"
+    implementation libs.androidx.fragment.ktx
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
@@ -221,12 +221,14 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.1"
 
     //AppWidgets
-    implementation 'androidx.glance:glance-appwidget:1.0.0'
+    implementation 'androidx.glance:glance-appwidget:1.1.1'
 
     // Room
     implementation libs.room.runtime
     implementation libs.room.ktx
     implementation libs.androidx.room.rxjava2
+    implementation libs.androidx.material3.android
+    testImplementation libs.junit.jupiter
     ksp libs.room.compiler
     // alternately - if using Java8, use the following instead of compiler
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
@@ -235,7 +237,7 @@ dependencies {
 
     implementation libs.androidx.recyclerview
 
-    implementation "com.google.android.material:material:$material_version"
+//    implementation libs.material
 
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     // Because RxAndroid releases are few and far between, it is recommended you also
@@ -273,7 +275,7 @@ dependencies {
     implementation("io.github.alexzhirkevich:qrose:1.0.1")
 
     // WorkManager Kotlin
-    def work_version = "2.9.0"
+    def work_version = "2.10.0"
     implementation "androidx.work:work-runtime-ktx:$work_version"
     // WorkManager RxJava2 support
     implementation "androidx.work:work-rxjava2:$work_version"
@@ -283,17 +285,17 @@ dependencies {
     debugImplementation leakCanary
 
     // Wallet kits
-    implementation 'com.github.horizontalsystems:ton-kit-android:763a5c3'
-    implementation 'com.github.horizontalsystems:bitcoin-kit-android:4a34f53'
-    implementation 'com.github.horizontalsystems:ethereum-kit-android:0c770e3'
+    implementation(libs.ton.kit)
+    implementation libs.bitcoin.kit
+    implementation libs.ethereum.kit
     implementation 'com.github.horizontalsystems:blockchain-fee-rate-kit-android:1d3bd49'
     implementation 'com.github.horizontalsystems:binance-chain-kit-android:c1509a2'
     // implementation 'com.github.horizontalsystems:market-kit-android:55dde9c'
-    implementation 'com.github.horizontalsystems:solana-kit-android:ce738d8'
+//    implementation libs.solana.kit
     implementation 'com.github.horizontalsystems:tron-kit-android:dc3dca7'
     // Zcash SDK
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
-    implementation "cash.z.ecc.android:zcash-android-sdk:2.2.6"
+    implementation libs.zcash.android.sdk
     implementation("io.github.binance:binance-connector-java:3.0.0rc2") {
         exclude group: "org.bouncycastle", module: "bcprov-jdk18on"
     }
@@ -311,8 +313,8 @@ dependencies {
 
     implementation 'com.twitter.twittertext:twitter-text:3.1.0'
 
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.8.1'
 
     // UI modules
 
@@ -325,9 +327,10 @@ dependencies {
     implementation project(':components:icons')
     implementation project(':components:chartview')
     implementation project(':feature-stacking')
+    implementation project(':solanakit')
 
     // Integration with activities
-    implementation 'androidx.activity:activity-compose:1.9.0'
+    implementation libs.androidx.activity.compose
     // Compose Material Design
     implementation "androidx.compose.material:material:$compose_version"
     // Animations
@@ -341,7 +344,7 @@ dependencies {
 
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
-    def coil_version = "2.5.0"
+    def coil_version = "2.6.0"
     implementation "io.coil-kt:coil-compose:$coil_version"
     implementation "io.coil-kt:coil-svg:$coil_version"
     implementation("io.coil-kt:coil-gif:$coil_version")

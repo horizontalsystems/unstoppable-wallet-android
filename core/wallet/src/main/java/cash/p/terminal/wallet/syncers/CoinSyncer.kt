@@ -1,7 +1,6 @@
 package cash.p.terminal.wallet.syncers
 
 import android.util.Log
-import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.SyncInfo
 import cash.p.terminal.wallet.entities.Coin
 import cash.p.terminal.wallet.entities.TokenType
@@ -13,6 +12,7 @@ import cash.p.terminal.wallet.models.TokenResponse
 import cash.p.terminal.wallet.providers.HsProvider
 import cash.p.terminal.wallet.storage.CoinStorage
 import cash.p.terminal.wallet.storage.SyncerStateDao
+import io.horizontalsystems.core.entities.BlockchainType
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -31,22 +31,30 @@ class CoinSyncer(
 
     val fullCoinsUpdatedObservable = PublishSubject.create<Unit>()
 
-    fun sync(coinsTimestamp: Long, blockchainsTimestamp: Long, tokensTimestamp: Long) {
+    fun sync(
+        coinsTimestamp: Long,
+        blockchainsTimestamp: Long,
+        tokensTimestamp: Long,
+        forceUpdate: Boolean
+    ) {
         val lastCoinsSyncTimestamp = syncerStateDao.get(keyCoinsLastSyncTimestamp)?.toLong() ?: 0
         val coinsOutdated = lastCoinsSyncTimestamp != coinsTimestamp
 
-        val lastBlockchainsSyncTimestamp = syncerStateDao.get(keyBlockchainsLastSyncTimestamp)?.toLong() ?: 0
+        val lastBlockchainsSyncTimestamp =
+            syncerStateDao.get(keyBlockchainsLastSyncTimestamp)?.toLong() ?: 0
         val blockchainsOutdated = lastBlockchainsSyncTimestamp != blockchainsTimestamp
 
         val lastTokensSyncTimestamp = syncerStateDao.get(keyTokensLastSyncTimestamp)?.toLong() ?: 0
         val tokensOutdated = lastTokensSyncTimestamp != tokensTimestamp
 
-        if (!coinsOutdated && !blockchainsOutdated && !tokensOutdated) return
+        if (!forceUpdate && !coinsOutdated && !blockchainsOutdated && !tokensOutdated) return
 
         disposable = Single.zip(
             hsProvider.allCoinsSingle().map { it.map { coinResponse -> coinEntity(coinResponse) } },
-            hsProvider.allBlockchainsSingle().map { it.map { blockchainResponse -> blockchainEntity(blockchainResponse) } },
-            hsProvider.allTokensSingle().map { it.map { tokenResponse -> tokenEntity(tokenResponse) } }
+            hsProvider.allBlockchainsSingle()
+                .map { it.map { blockchainResponse -> blockchainEntity(blockchainResponse) } },
+            hsProvider.allTokensSingle()
+                .map { it.map { tokenResponse -> tokenEntity(tokenResponse) } }
         ) { r1, r2, r3 -> Triple(r1, r2, r3) }
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
@@ -92,7 +100,11 @@ class CoinSyncer(
         disposable = null
     }
 
-    private fun handleFetched(coins: List<Coin>, blockchainEntities: List<BlockchainEntity>, tokenEntities: List<TokenEntity>) {
+    private fun handleFetched(
+        coins: List<Coin>,
+        blockchainEntities: List<BlockchainEntity>,
+        tokenEntities: List<TokenEntity>
+    ) {
         storage.update(coins, blockchainEntities, transform(tokenEntities))
         fullCoinsUpdatedObservable.onNext(Unit)
     }
@@ -100,25 +112,32 @@ class CoinSyncer(
     private fun transform(tokenEntities: List<TokenEntity>): List<TokenEntity> {
         val derivationReferences = TokenType.Derivation.values().map { it.name }
         val addressTypes = TokenType.AddressType.values().map { it.name }
+        val addressSpecTypes = TokenType.AddressSpecType.values().map { it.name }
 
         var result = tokenEntities
         result = transform(
-            result,
-            BlockchainType.Bitcoin.uid,
-            "derived",
-            derivationReferences
+            tokenEntities = result,
+            blockchainUid = BlockchainType.Bitcoin.uid,
+            transformedType = "derived",
+            references = derivationReferences
         )
         result = transform(
-            result,
-            BlockchainType.Litecoin.uid,
-            "derived",
-            derivationReferences
+            tokenEntities = result,
+            blockchainUid = BlockchainType.Zcash.uid,
+            transformedType = "address_spec_type",
+            references = addressSpecTypes
         )
         result = transform(
-            result,
-            BlockchainType.BitcoinCash.uid,
-            "address_type",
-            addressTypes
+            tokenEntities = result,
+            blockchainUid = BlockchainType.Litecoin.uid,
+            transformedType = "derived",
+            references = derivationReferences
+        )
+        result = transform(
+            tokenEntities = result,
+            blockchainUid = BlockchainType.BitcoinCash.uid,
+            transformedType = "address_type",
+            references = addressTypes
         )
 
         return result

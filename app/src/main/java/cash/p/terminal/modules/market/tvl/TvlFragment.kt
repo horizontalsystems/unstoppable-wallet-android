@@ -41,7 +41,7 @@ import cash.p.terminal.modules.market.MarketDataValue
 import io.horizontalsystems.core.entities.Value
 import cash.p.terminal.modules.market.tvl.TvlModule.SelectorDialogState
 import cash.p.terminal.modules.market.tvl.TvlModule.TvlDiffType
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.Select
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui.compose.components.AlertGroup

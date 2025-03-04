@@ -57,9 +57,9 @@ class TransactionsRateRepository(
                     key.coinUid,
                     baseCurrency.code,
                     key.timestamp
-                ).await()
+                )
 
-                if (rate.compareTo(BigDecimal.ZERO) != 0) {
+                if (rate != null  && rate.compareTo(BigDecimal.ZERO) != 0) {
                     historicalRateSubject.onNext(Pair(key, CurrencyValue(baseCurrency, rate)))
                 }
             } catch (e: Throwable) {

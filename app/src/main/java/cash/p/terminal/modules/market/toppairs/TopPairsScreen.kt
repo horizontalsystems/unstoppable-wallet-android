@@ -37,7 +37,7 @@ import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.market.MarketDataValue
 import cash.p.terminal.modules.market.overview.TopPairViewItem
-import cash.p.terminal.ui.compose.HSSwipeRefresh
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
 import cash.p.terminal.ui.compose.components.CoinImage
 import cash.p.terminal.ui_compose.components.HSpacer

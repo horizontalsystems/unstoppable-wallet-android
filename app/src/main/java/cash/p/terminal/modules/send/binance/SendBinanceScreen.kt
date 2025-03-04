@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import cash.p.terminal.R
+import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.navigation.slideFromRight
 import cash.p.terminal.entities.Address
 import cash.p.terminal.modules.address.AddressParserModule
@@ -24,11 +25,14 @@ import cash.p.terminal.modules.amount.HSAmountInput
 import cash.p.terminal.modules.availablebalance.AvailableBalance
 import cash.p.terminal.modules.fee.HSFee
 import cash.p.terminal.modules.memo.HSMemoInput
+import cash.p.terminal.modules.pin.ConfirmPinFragment
+import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.send.SendConfirmationFragment
 import cash.p.terminal.modules.send.SendScreen
 import cash.p.terminal.modules.send.bitcoin.advanced.FeeRateCaution
 import cash.p.terminal.modules.sendtokenselect.PrefilledData
 import cash.p.terminal.ui_compose.components.ButtonPrimaryYellow
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 @Composable
 fun SendBinanceScreen(
@@ -54,7 +58,7 @@ fun SendBinanceScreen(
     )
     val amountUnique = paymentAddressViewModel.amountUnique
 
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         val focusRequester = remember { FocusRequester() }
 
         LaunchedEffect(Unit) {
@@ -139,13 +143,20 @@ fun SendBinanceScreen(
                     .padding(horizontal = 16.dp, vertical = 24.dp),
                 title = stringResource(R.string.Send_DialogProceed),
                 onClick = {
-                    navController.slideFromRight(
-                        R.id.sendConfirmation,
-                        SendConfirmationFragment.Input(
-                            SendConfirmationFragment.Type.Bep2,
-                            sendEntryPointDestId
+                    navController.authorizedAction(
+                        ConfirmPinFragment.InputConfirm(
+                            descriptionResId = R.string.Unlock_EnterPasscode,
+                            pinType = PinType.TRANSFER
                         )
-                    )
+                    ) {
+                        navController.slideFromRight(
+                            R.id.sendConfirmation,
+                            SendConfirmationFragment.Input(
+                                SendConfirmationFragment.Type.Bep2,
+                                sendEntryPointDestId
+                            )
+                        )
+                    }
                 },
                 enabled = proceedEnabled
             )

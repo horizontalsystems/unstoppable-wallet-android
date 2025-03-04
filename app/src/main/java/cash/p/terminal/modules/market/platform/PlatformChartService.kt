@@ -51,15 +51,15 @@ class PlatformChartService(
         super.start()
     }
 
-    override fun getAllItems(currency: Currency): Single<ChartPointsWrapper> {
-        return getChartPointsWrapper(currency, HsPeriodType.ByStartTime(chartStartTime))
+    override suspend fun getAllItems(currency: Currency): ChartPointsWrapper {
+        return getChartPointsWrapper(currency, HsPeriodType.ByStartTime(chartStartTime)).await()
     }
 
-    override fun getItems(
+    override suspend fun getItems(
         chartInterval: HsTimePeriod,
         currency: Currency,
-    ): Single<ChartPointsWrapper> {
-        return getChartPointsWrapper(currency, HsPeriodType.ByPeriod(chartInterval))
+    ): ChartPointsWrapper {
+        return getChartPointsWrapper(currency, HsPeriodType.ByPeriod(chartInterval)).await()
     }
 
     override fun updateChartInterval(chartInterval: HsTimePeriod?) {

@@ -5,14 +5,15 @@ import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.exceptions.InvalidAuthTokenException
 import cash.p.terminal.wallet.exceptions.NoAuthTokenException
 import cash.p.terminal.wallet.models.CoinPrice
-import io.horizontalsystems.core.models.HsPeriodType
-import cash.p.terminal.wallet.models.HsPointTimePeriod
-import io.horizontalsystems.core.models.HsTimePeriod
 import cash.p.terminal.wallet.models.MarketInfo
 import cash.p.terminal.wallet.models.NftTopCollection
 import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.models.HsPeriodType
+import io.horizontalsystems.core.models.HsTimePeriod
 import io.reactivex.Observable
 import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import retrofit2.Response
 import java.math.BigDecimal
@@ -82,8 +83,10 @@ class MarketKitWrapper(
     fun marketInfosSingle(categoryUid: String, currencyCode: String) =
         marketKit.marketInfosSingle(categoryUid, currencyCode)
 
-    fun marketInfoOverviewSingle(coinUid: String, currencyCode: String, language: String) =
-        marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language)
+    suspend fun marketInfoOverviewSingle(coinUid: String, currencyCode: String, language: String) =
+        withContext(Dispatchers.IO) {
+            marketKit.marketInfoOverviewSingle(coinUid, currencyCode, language)
+        }
 
     fun analyticsSingle(coinUid: String, currencyCode: String) =
         requestWithAuthToken { marketKit.analyticsSingle(it, coinUid, currencyCode) }
@@ -110,7 +113,7 @@ class MarketKitWrapper(
     ) =
         marketKit.coinCategoryMarketPointsSingle(categoryUid, interval, currencyCode)
 
-    fun sync() = marketKit.sync()
+    fun sync(forceUpdate: Boolean) = marketKit.sync(forceUpdate)
 
     // Coin Prices
 
@@ -157,12 +160,12 @@ class MarketKitWrapper(
 
     // Coin Historical Price
 
-    fun coinHistoricalPriceSingle(
+    suspend fun coinHistoricalPriceSingle(
         coinUid: String,
         currencyCode: String,
         timestamp: Long
-    ): Single<BigDecimal> =
-        if (coinUid.isCustomCoin) Single.never() else marketKit.coinHistoricalPriceSingle(
+    ): BigDecimal? =
+        if (coinUid.isCustomCoin) null else marketKit.coinHistoricalPriceSingle(
             coinUid,
             currencyCode,
             timestamp
@@ -181,8 +184,10 @@ class MarketKitWrapper(
 
     // Market Tickers
 
-    fun marketTickersSingle(coinUid: String, currencyCode: String) =
-        marketKit.marketTickersSingle(coinUid, currencyCode)
+    suspend fun marketTickersSingle(coinUid: String, currencyCode: String) =
+        withContext(Dispatchers.IO) {
+            marketKit.marketTickersSingle(coinUid, currencyCode)
+        }
 
     // Details
 
@@ -198,8 +203,10 @@ class MarketKitWrapper(
 
     // Pro Details
 
-    fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
-        marketKit.cexVolumesSingle(coinUid, currencyCode, timePeriod)
+    suspend fun cexVolumesSingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
+        withContext(Dispatchers.IO) {
+            marketKit.cexVolumesSingle(coinUid, currencyCode, timePeriod)
+        }
 
     fun dexLiquiditySingle(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) =
         requestWithAuthToken { marketKit.dexLiquiditySingle(it, coinUid, currencyCode, timePeriod) }
@@ -255,16 +262,10 @@ class MarketKitWrapper(
 
     fun chartStartTimeSingle(coinUid: String) = marketKit.chartStartTimeSingle(coinUid)
 
-    fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
-        marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
-
-    fun chartPointsSingle(
-        coinUid: String,
-        currencyCode: String,
-        period: HsPointTimePeriod,
-        pointCount: Int
-    ) =
-        marketKit.chartPointsSingle(coinUid, currencyCode, period, pointCount)
+    suspend fun chartPointsSingle(coinUid: String, currencyCode: String, periodType: HsPeriodType) =
+        withContext(Dispatchers.IO) {
+            marketKit.chartPointsSingle(coinUid, currencyCode, periodType)
+        }
 
     // Global Market Info
 

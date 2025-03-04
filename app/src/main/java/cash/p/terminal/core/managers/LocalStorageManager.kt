@@ -2,16 +2,13 @@ package cash.p.terminal.core.managers
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.IMarketStorage
+import cash.p.terminal.core.valueOrDefault
 import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.SyncMode
 import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.wallet.BalanceSortType
-import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketModule
 import cash.p.terminal.modules.market.TimeDuration
@@ -20,12 +17,22 @@ import cash.p.terminal.modules.settings.appearance.AppIcon
 import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
 import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.theme.ThemeType
+import cash.p.terminal.wallet.BalanceSortType
+import cash.p.terminal.wallet.Derivation
+import cash.p.terminal.wallet.Wallet
+import cash.p.terminal.wallet.balance.BalanceViewType
+import cash.p.terminal.wallet.entities.EncryptedString
+import cash.p.terminal.wallet.getUniqueKey
+import cash.p.terminal.wallet.managers.TransactionDisplayLevel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.horizontalsystems.core.ILockoutStorage
 import io.horizontalsystems.core.IPinSettingsStorage
 import io.horizontalsystems.core.IThirdKeyboard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.math.BigDecimal
 import java.util.UUID
 
 class LocalStorageManager(
@@ -74,7 +81,12 @@ class LocalStorageManager(
     private val RELAUNCH_BY_SETTING_CHANGE = "relaunch_by_setting_change"
     private val MARKETS_TAB_ENABLED = "markets_tab_enabled"
     private val BALANCE_AUTO_HIDE_ENABLED = "balance_auto_hide_enabled"
-    private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS = "non_recommended_account_alert_dismissed_accounts"
+    private val TRANSACTION_AUTO_HIDE_ENABLED = "transaction_auto_hide_enabled"
+    private val TRANSFER_PASSCODE_ENABLED = "transfer_passcode_enabled"
+    private val TRANSACTION_DISPLAY_LEVEL = "transaction_display_level"
+    private val TRANSACTION_HIDE_SECRET_PIN = "transaction_hide_secret_pin"
+    private val NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS =
+        "non_recommended_account_alert_dismissed_accounts"
     private val PERSONAL_SUPPORT_ENABLED = "personal_support_enabled"
     private val APP_ID = "app_id"
     private val APP_AUTO_LOCK_INTERVAL = "app_auto_lock_interval"
@@ -85,6 +97,9 @@ class LocalStorageManager(
     private val STATS_SYNC_TIME = "stats_sync_time"
     private val PRICE_CHANGE_INTERVAL = "price_change_interval"
     private val UI_STATS_ENABLED = "ui_stats_enabled"
+    private val STACKING_UPDATE_TIME = "stacking_update_time"
+    private val STACKING_UNPAID = "stacking_unpaid"
+    private val DASH_PEERS = "dash_peers"
 
     private val _utxoExpertModeEnabledFlow = MutableStateFlow(false)
     override val utxoExpertModeEnabledFlow = _utxoExpertModeEnabledFlow
@@ -116,7 +131,8 @@ class LocalStorageManager(
     override var marketSearchRecentCoinUids: List<String>
         get() = preferences.getString("marketSearchRecentCoinUids", null)?.split(",") ?: listOf()
         set(value) {
-            preferences.edit().putString("marketSearchRecentCoinUids", value.joinToString(",")).apply()
+            preferences.edit().putString("marketSearchRecentCoinUids", value.joinToString(","))
+                .apply()
         }
 
     override var zcashAccountIds: Set<String>
@@ -145,6 +161,7 @@ class LocalStorageManager(
                     preferences.edit().putString(APP_ID, newId).apply()
                     newId
                 }
+
                 else -> id
             }
         }
@@ -309,10 +326,10 @@ class LocalStorageManager(
         }
 
     //used only in db migration
-    override var bitcoinDerivation: cash.p.terminal.wallet.AccountType.Derivation?
+    override var bitcoinDerivation: Derivation?
         get() {
             val derivationString = preferences.getString(BITCOIN_DERIVATION, null)
-            return derivationString?.let { cash.p.terminal.wallet.AccountType.Derivation.valueOf(it) }
+            return derivationString?.let { Derivation.valueOf(it) }
         }
         set(derivation) {
             preferences.edit().putString(BITCOIN_DERIVATION, derivation?.value).apply()
@@ -350,6 +367,35 @@ class LocalStorageManager(
         get() = preferences.getBoolean(BALANCE_AUTO_HIDE_ENABLED, false)
         set(value) {
             preferences.edit().putBoolean(BALANCE_AUTO_HIDE_ENABLED, value).commit()
+        }
+    override var transactionHideEnabled: Boolean
+        get() = preferences.getBoolean(TRANSACTION_AUTO_HIDE_ENABLED, false)
+        set(value) {
+            preferences.edit().putBoolean(TRANSACTION_AUTO_HIDE_ENABLED, value).commit()
+        }
+    override var transactionDisplayLevel: TransactionDisplayLevel
+        get() = preferences.getInt(TRANSACTION_DISPLAY_LEVEL, 0).let {
+            Enum.valueOrDefault<TransactionDisplayLevel>(it, TransactionDisplayLevel.NOTHING)
+        }
+        set(value) {
+            preferences.edit().putInt(TRANSACTION_DISPLAY_LEVEL, value.ordinal).apply()
+        }
+    override var transactionHideSecretPin: EncryptedString?
+        get() = preferences.getString(TRANSACTION_HIDE_SECRET_PIN, null)?.let {
+            EncryptedString(it)
+        }
+        set(value) {
+            preferences.edit()
+                .putString(
+                    TRANSACTION_HIDE_SECRET_PIN,
+                    value?.let { it.value })
+                .apply()
+        }
+
+    override var transferPasscodeEnabled: Boolean
+        get() = preferences.getBoolean(TRANSFER_PASSCODE_ENABLED, false)
+        set(value) {
+            preferences.edit().putBoolean(TRANSFER_PASSCODE_ENABLED, value).commit()
         }
 
     override var balanceTotalCoinUid: String?
@@ -441,9 +487,11 @@ class LocalStorageManager(
         }
 
     override var marketFavoritesManualSortingOrder: List<String>
-        get() = preferences.getString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, null)?.split(",") ?: listOf()
+        get() = preferences.getString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, null)?.split(",")
+            ?: listOf()
         set(value) {
-            preferences.edit().putString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, value.joinToString(",")).apply()
+            preferences.edit()
+                .putString(MARKET_FAVORITES_MANUAL_SORTING_ORDER, value.joinToString(",")).apply()
         }
 
     override var marketFavoritesPeriod: TimeDuration?
@@ -500,9 +548,11 @@ class LocalStorageManager(
     override val marketsTabEnabledFlow = _marketsTabEnabledFlow.asStateFlow()
 
     override var nonRecommendedAccountAlertDismissedAccounts: Set<String>
-        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf()) ?: setOf()
+        get() = preferences.getStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, setOf())
+            ?: setOf()
         set(value) {
-            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value).apply()
+            preferences.edit().putStringSet(NON_RECOMMENDED_ACCOUNT_ALERT_DISMISSED_ACCOUNTS, value)
+                .apply()
         }
 
     override var autoLockInterval: AutoLockInterval
@@ -551,6 +601,7 @@ class LocalStorageManager(
             preferences.contains(UI_STATS_ENABLED) -> {
                 preferences.getBoolean(UI_STATS_ENABLED, false)
             }
+
             else -> null
         }
         set(value) {
@@ -561,4 +612,32 @@ class LocalStorageManager(
                 editor.putBoolean(UI_STATS_ENABLED, value).apply()
             }
         }
+
+    override var customDashPeers: String
+        get() = preferences.getString(DASH_PEERS, "").orEmpty()
+        set(value) {
+            preferences.edit().putString(DASH_PEERS, value).apply()
+        }
+
+    override fun getStackingUnpaid(wallet: Wallet) =
+        if (preferences.contains(STACKING_UNPAID + wallet.getUniqueKey())) {
+            preferences.getString(STACKING_UNPAID + wallet.getUniqueKey(), "0")?.toBigDecimal()
+                ?: BigDecimal.ZERO
+        } else {
+            null
+        }
+
+    override fun setStackingUnpaid(wallet: Wallet, unpaid: BigDecimal) {
+        preferences.edit()
+            .putString(STACKING_UNPAID + wallet.getUniqueKey(), unpaid.toPlainString())
+            .apply()
+        setStackingUpdateTimestamp(wallet, System.currentTimeMillis())
+    }
+
+    override fun getStackingUpdateTimestamp(wallet: Wallet) =
+        preferences.getLong(STACKING_UPDATE_TIME + wallet.getUniqueKey(), 0)
+
+    private fun setStackingUpdateTimestamp(wallet: Wallet, timestamp: Long) {
+        preferences.edit().putLong(STACKING_UPDATE_TIME + wallet.getUniqueKey(), timestamp).apply()
+    }
 }

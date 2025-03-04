@@ -20,6 +20,7 @@ import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.xrate.XRateService
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.wallet.Token
+import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.tronkit.transaction.Fee
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ import java.net.UnknownHostException
 import io.horizontalsystems.tronkit.models.Address as TronAddress
 
 class SendTronViewModel(
-    val wallet: cash.p.terminal.wallet.Wallet,
+    val wallet: Wallet,
     private val sendToken: Token,
     private val feeToken: Token,
     private val adapter: ISendTronAdapter,
@@ -246,7 +247,7 @@ class SendTronViewModel(
             val amount = confirmationData.amount
             adapter.send(amount, addressState.tronAddress!!, feeState.feeLimit)
 
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
             logger.info("success")
         } catch (e: Throwable) {
             sendResult = SendResult.Failed(createCaution(e))

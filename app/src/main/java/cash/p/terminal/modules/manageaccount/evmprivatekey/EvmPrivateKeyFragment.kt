@@ -36,6 +36,7 @@ import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui_compose.components.TextImportantWarning
 import cash.p.terminal.ui_compose.components.VSpacer
 import cash.p.terminal.ui.helpers.TextHelper
+import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import io.horizontalsystems.core.helpers.HudHelper
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -55,7 +56,6 @@ class EvmPrivateKeyFragment : BaseComposeFragment(screenshotEnabled = false) {
 
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun EvmPrivateKeyScreen(
     navController: NavController,
@@ -69,7 +69,7 @@ private fun EvmPrivateKeyScreen(
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
-        sheetBackgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.transparent,
+        sheetBackgroundColor = ComposeAppTheme.colors.transparent,
         sheetContent = {
             ConfirmCopyBottomSheet(
                 onConfirm = {
@@ -90,7 +90,7 @@ private fun EvmPrivateKeyScreen(
         }
     ) {
         Scaffold(
-            backgroundColor = cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.tyler,
+            backgroundColor = ComposeAppTheme.colors.tyler,
             topBar = {
                 AppBar(
                     title = stringResource(R.string.EvmPrivateKey_Title),

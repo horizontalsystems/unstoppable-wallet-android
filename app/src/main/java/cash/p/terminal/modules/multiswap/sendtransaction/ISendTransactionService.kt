@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import org.koin.java.KoinJavaComponent.inject
+import java.math.BigDecimal
 import java.net.UnknownHostException
 
 abstract class ISendTransactionService<T>(protected val token: Token) :
@@ -74,6 +75,7 @@ abstract class ISendTransactionService<T>(protected val token: Token) :
 }
 
 data class SendTransactionServiceState(
+    val availableBalance: BigDecimal?,
     val networkFee: SendModule.AmountData?,
     val cautions: List<CautionViewItem>,
     val sendable: Boolean,

@@ -135,7 +135,7 @@ class Eip1559GasPriceService(
                 tip < riskOfStuckBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
                     warnings.add(FeeSettingsWarning.RiskOfGettingStuck)
                 }
-                tip >= overpricingBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
+                tip > overpricingBound.calculate(recommendedGasPrice.maxPriorityFeePerGas) -> {
                     warnings.add(FeeSettingsWarning.Overpricing)
                 }
             }

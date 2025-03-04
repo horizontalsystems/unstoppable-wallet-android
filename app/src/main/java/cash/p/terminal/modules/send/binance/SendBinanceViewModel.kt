@@ -156,7 +156,7 @@ class SendBinanceViewModel(
             ).blockingGet()
 
             logger.info("success")
-            sendResult = SendResult.Sent
+            sendResult = SendResult.Sent()
         } catch (e: Throwable) {
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))

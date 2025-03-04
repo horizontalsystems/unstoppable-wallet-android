@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class UserManager(
-    private val accountManager: cash.p.terminal.wallet.IAccountManager
+    private val accountManager: IAccountManager
 ) {
     private var currentUserLevel = Int.MAX_VALUE
 

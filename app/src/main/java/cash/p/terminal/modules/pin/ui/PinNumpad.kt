@@ -11,8 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -137,7 +137,7 @@ private fun NumberKey(
         modifier = Modifier
             .size(72.dp)
             .clip(CircleShape)
-            .border(1.dp, cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20, CircleShape)
+            .border(1.dp, ComposeAppTheme.colors.steel20, CircleShape)
             .clickable(
                 enabled = enabled,
                 onClick = {
@@ -150,7 +150,7 @@ private fun NumberKey(
         Text(
             text = number.toString(),
             style = ComposeAppTheme.typography.title2R,
-            color = if (enabled) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.leah else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20,
+            color = if (enabled) ComposeAppTheme.colors.leah else ComposeAppTheme.colors.steel20,
         )
     }
 }
@@ -181,7 +181,7 @@ private fun ImageKey(
             Icon(
                 modifier = Modifier.align(Alignment.Center),
                 painter = painterResource(image),
-                tint = if (enabled) cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.grey else cash.p.terminal.ui_compose.theme.ComposeAppTheme.colors.steel20,
+                tint = if (enabled) ComposeAppTheme.colors.grey else ComposeAppTheme.colors.steel20,
                 contentDescription = contentDescription,
             )
         }
@@ -191,7 +191,7 @@ private fun ImageKey(
 @Preview
 @Composable
 fun Preview_Pin() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         Column(
             modifier = Modifier
                 .background(color = ComposeAppTheme.colors.tyler)
@@ -212,7 +212,7 @@ fun Preview_Pin() {
 @Preview
 @Composable
 fun Preview_PinLocked() {
-    cash.p.terminal.ui_compose.theme.ComposeAppTheme {
+    ComposeAppTheme {
         Column(
             modifier = Modifier
                 .background(color = ComposeAppTheme.colors.tyler)

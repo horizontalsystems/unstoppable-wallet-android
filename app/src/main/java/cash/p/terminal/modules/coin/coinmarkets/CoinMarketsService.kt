@@ -37,8 +37,7 @@ class CoinMarketsService(
 
     private suspend fun syncMarketTickers() {
         try {
-            val tickers =
-                marketKit.marketTickersSingle(fullCoin.coin.uid, currency.code).await()
+            val tickers = marketKit.marketTickersSingle(fullCoin.coin.uid, currency.code)
             marketTickers = tickers.sortedByDescending { it.volume }
             emitItems()
         } catch (e: Throwable) {

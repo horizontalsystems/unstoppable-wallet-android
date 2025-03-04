@@ -39,4 +39,11 @@ internal class ChangeNowRepositoryImpl(
         changeNowApi.createTransaction(newTransactionRequest)
             .let(changeNowMapper::mapNewTransactionResponseDto)
     }
+
+    override suspend fun getTransactionStatus(
+        transactionId: String
+    ) = withContext(Dispatchers.IO) {
+        changeNowApi.getTransactionStatus(transactionId)
+            .let(changeNowMapper::mapTransactionStatusDto)
+    }
 }

@@ -32,7 +32,6 @@ import cash.p.terminal.ui_compose.CoinFragmentInput
 import io.horizontalsystems.chartview.ui.Chart
 import cash.p.terminal.modules.coin.overview.ui.Loading
 import cash.p.terminal.modules.metricchart.MetricsType
-import cash.p.terminal.ui.compose.HSSwipeRefresh
 import cash.p.terminal.strings.helpers.TranslatableString
 import cash.p.terminal.ui_compose.components.AppBar
 import cash.p.terminal.ui.compose.components.ButtonSecondaryWithIcon
@@ -43,6 +42,7 @@ import cash.p.terminal.ui.compose.components.ListErrorView
 import cash.p.terminal.ui.compose.components.MarketCoinClear
 import cash.p.terminal.ui_compose.components.MenuItem
 import cash.p.terminal.ui.compose.hsRememberLazyListState
+import cash.p.terminal.ui_compose.components.HSSwipeRefresh
 import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 
 class MetricsPageFragment : BaseComposeFragment() {

@@ -7,7 +7,10 @@ import androidx.navigation.NavController
 import androidx.navigation.navGraphViewModels
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.authorizedAction
 import cash.p.terminal.featureStacking.ui.staking.StackingType
+import cash.p.terminal.modules.pin.ConfirmPinFragment
+import cash.p.terminal.modules.pin.PinType
 import cash.p.terminal.modules.transactions.TransactionsModule
 import cash.p.terminal.modules.transactions.TransactionsViewModel
 import cash.p.terminal.navigation.slideFromRight
@@ -17,6 +20,7 @@ import cash.p.terminal.wallet.isPirateCash
 import io.horizontalsystems.core.getInput
 
 class TokenBalanceFragment : BaseComposeFragment() {
+    private var viewModel: TokenBalanceViewModel? = null
 
     @Composable
     override fun GetContent(navController: NavController) {
@@ -27,6 +31,7 @@ class TokenBalanceFragment : BaseComposeFragment() {
             return
         }
         val viewModel by viewModels<TokenBalanceViewModel> { TokenBalanceModule.Factory(wallet) }
+        this.viewModel = viewModel
         val transactionsViewModel by navGraphViewModels<TransactionsViewModel>(R.id.mainFragment) { TransactionsModule.Factory() }
 
         TokenBalanceScreen(
@@ -38,8 +43,28 @@ class TokenBalanceFragment : BaseComposeFragment() {
                     resId = R.id.stacking,
                     input = if(wallet.isPirateCash()) StackingType.PCASH else StackingType.COSANTA
                 )
+            },
+            onShowAllTransactionsClicked = {
+                navController.authorizedAction(
+                    ConfirmPinFragment.InputConfirm(
+                        descriptionResId = R.string.Unlock_EnterPasscode_Transactions_Hide,
+                        pinType = PinType.TRANSACTIONS_HIDE
+                    )
+                ) {
+                    viewModel.showAllTransactions(true)
+                }
             }
         )
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel?.startStatusChecker()
+    }
+
+    override fun onPause() {
+        viewModel?.stopStatusChecker()
+        super.onPause()
+        viewModel?.showAllTransactions(false)
+    }
 }

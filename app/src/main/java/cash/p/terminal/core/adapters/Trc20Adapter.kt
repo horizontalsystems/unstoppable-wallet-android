@@ -8,10 +8,9 @@ import cash.p.terminal.wallet.Wallet
 import io.horizontalsystems.tronkit.TronKit.SyncState
 import io.horizontalsystems.tronkit.models.Address
 import io.horizontalsystems.tronkit.transaction.Fee
-import io.reactivex.Flowable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlowable
 import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 
@@ -42,14 +41,14 @@ class Trc20Adapter(
     override val balanceState: AdapterState
         get() = convertToAdapterState(tronKit.syncState)
 
-    override val balanceStateUpdatedFlowable: Flowable<Unit>
-        get() = tronKit.syncStateFlow.map { }.asFlowable()
+    override val balanceStateUpdatedFlow: Flow<Unit>
+        get() = tronKit.syncStateFlow.map { }
 
     override val balanceData: BalanceData
         get() = BalanceData(balanceInBigDecimal(tronKit.getTrc20Balance(contractAddress.base58), decimal))
 
-    override val balanceUpdatedFlowable: Flowable<Unit>
-        get() = tronKit.getTrc20BalanceFlow(contractAddress.base58).map { }.asFlowable()
+    override val balanceUpdatedFlow: Flow<Unit>
+        get() = tronKit.getTrc20BalanceFlow(contractAddress.base58).map { }
 
     // ISendTronAdapter
 
@@ -62,12 +61,12 @@ class Trc20Adapter(
         tronKit.estimateFee(contract)
     }
 
-    override suspend fun send(amount: BigDecimal, to: Address, feeLimit: Long?) {
+    override suspend fun send(amount: BigDecimal, to: Address, feeLimit: Long?): String {
         if (signer == null) throw Exception()
         val amountBigInt = amount.movePointRight(decimal).toBigInteger()
         val contract = tronKit.transferTrc20TriggerSmartContract(contractAddress, to, amountBigInt)
 
-        tronKit.send(contract, signer, feeLimit)
+        return tronKit.send(contract, signer, feeLimit)
     }
 
     private fun convertToAdapterState(syncState: SyncState): AdapterState = when (syncState) {

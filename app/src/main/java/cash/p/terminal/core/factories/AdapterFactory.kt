@@ -2,7 +2,7 @@ package cash.p.terminal.core.factories
 
 import android.content.Context
 import android.util.Log
-import cash.p.terminal.wallet.IAdapter
+import cash.p.terminal.core.App
 import cash.p.terminal.core.ICoinManager
 import cash.p.terminal.core.ILocalStorage
 import cash.p.terminal.core.ITransactionsAdapter
@@ -28,6 +28,7 @@ import cash.p.terminal.core.adapters.TronAdapter
 import cash.p.terminal.core.adapters.TronTransactionConverter
 import cash.p.terminal.core.adapters.TronTransactionsAdapter
 import cash.p.terminal.core.adapters.zcash.ZcashAdapter
+import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BinanceKitManager
 import cash.p.terminal.core.managers.BtcBlockchainManager
 import cash.p.terminal.core.managers.EvmBlockchainManager
@@ -35,14 +36,17 @@ import cash.p.terminal.core.managers.EvmLabelManager
 import cash.p.terminal.core.managers.EvmSyncSourceManager
 import cash.p.terminal.core.managers.RestoreSettingsManager
 import cash.p.terminal.core.managers.SolanaKitManager
+import cash.p.terminal.core.managers.StackingManager
 import cash.p.terminal.core.managers.TonKitManager
 import cash.p.terminal.core.managers.TronKitManager
-import io.horizontalsystems.core.entities.BlockchainType
+import cash.p.terminal.network.pirate.domain.repository.MasterNodesRepository
+import cash.p.terminal.wallet.IAdapter
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.TokenQuery
 import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.transaction.TransactionSource
 import io.horizontalsystems.core.BackgroundManager
+import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.tonkit.Address
 
 class AdapterFactory(
@@ -59,6 +63,7 @@ class AdapterFactory(
     private val coinManager: ICoinManager,
     private val evmLabelManager: EvmLabelManager,
     private val localStorage: ILocalStorage,
+    private val masterNodesRepository: MasterNodesRepository
 ) {
 
     private fun getEvmAdapter(wallet: Wallet): IAdapter? {
@@ -76,15 +81,17 @@ class AdapterFactory(
         val evmKitWrapper = evmBlockchainManager.getEvmKitManager(blockchainType)
             .getEvmKitWrapper(wallet.account, blockchainType)
         val baseToken = evmBlockchainManager.getBaseToken(blockchainType) ?: return null
+        val stackingManager = getKoinInstance<StackingManager>()
 
         return Eip20Adapter(
-            context,
-            evmKitWrapper,
-            address,
-            baseToken,
-            coinManager,
-            wallet,
-            evmLabelManager
+            context = context,
+            evmKitWrapper = evmKitWrapper,
+            contractAddress = address,
+            baseToken = baseToken,
+            coinManager = coinManager,
+            wallet = wallet,
+            evmLabelManager = evmLabelManager,
+            stackingManager = stackingManager
         )
     }
 
@@ -122,7 +129,12 @@ class AdapterFactory(
                             BlockchainType.Bitcoin,
                             wallet.account.origin
                         )
-                        BitcoinAdapter(wallet, syncMode, backgroundManager, tokenType.derivation)
+                        BitcoinAdapter(
+                            wallet = wallet,
+                            syncMode = syncMode,
+                            backgroundManager = backgroundManager,
+                            derivation = tokenType.derivation
+                        )
                     }
 
                     BlockchainType.Litecoin -> {
@@ -148,8 +160,31 @@ class AdapterFactory(
                         BlockchainType.BitcoinCash,
                         wallet.account.origin
                     )
-                    BitcoinCashAdapter(wallet, syncMode, backgroundManager, tokenType.type)
+                    BitcoinCashAdapter(
+                        wallet = wallet,
+                        syncMode = syncMode,
+                        backgroundManager = backgroundManager,
+                        addressType = tokenType.type
+                    )
                 } else null
+            }
+
+            is TokenType.AddressSpecTyped -> {
+                when (wallet.token.blockchainType) {
+                    BlockchainType.Zcash -> {
+                        ZcashAdapter(
+                            context = context,
+                            wallet = wallet,
+                            restoreSettings = restoreSettingsManager.settings(
+                                wallet.account,
+                                wallet.token.blockchainType
+                            ),
+                            addressSpecTyped = tokenType.type,
+                            localStorage = localStorage
+                        )
+                    }
+                    else -> null
+                }
             }
 
             TokenType.Native -> when (wallet.token.blockchainType) {
@@ -162,18 +197,25 @@ class AdapterFactory(
                 BlockchainType.Dash -> {
                     val syncMode =
                         btcBlockchainManager.syncMode(BlockchainType.Dash, wallet.account.origin)
-                    DashAdapter(wallet, syncMode, backgroundManager)
+                    DashAdapter(
+                        wallet = wallet,
+                        syncMode = syncMode,
+                        backgroundManager = backgroundManager,
+                        customPeers = localStorage.customDashPeers,
+                        masterNodesRepository = masterNodesRepository
+                    )
                 }
 
                 BlockchainType.Zcash -> {
                     ZcashAdapter(
-                        context,
-                        wallet,
-                        restoreSettingsManager.settings(
+                        context = context,
+                        wallet = wallet,
+                        restoreSettings = restoreSettingsManager.settings(
                             wallet.account,
                             wallet.token.blockchainType
                         ),
-                        localStorage
+                        addressSpecTyped = null,
+                        localStorage = localStorage
                     )
                 }
 
@@ -257,7 +299,13 @@ class AdapterFactory(
         val baseToken =
             coinManager.getToken(TokenQuery(BlockchainType.Solana, TokenType.Native)) ?: return null
         val solanaTransactionConverter =
-            SolanaTransactionConverter(coinManager, source, baseToken, solanaKitWrapper)
+            SolanaTransactionConverter(
+                coinManager = coinManager,
+                source = source,
+                baseToken = baseToken,
+                spamManager = App.spamManager,
+                solanaKitWrapper = solanaKitWrapper
+            )
 
         return SolanaTransactionsAdapter(solanaKitWrapper, solanaTransactionConverter)
     }

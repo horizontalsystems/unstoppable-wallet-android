@@ -62,13 +62,13 @@ class CoinOverviewService(
                     fullCoin.coin.uid,
                     currencyManager.baseCurrency.code,
                     languageManager.currentLanguage
-                ).await()
+                )
                 coinOverviewSubject.onNext(
                     DataState.Success(
                         CoinOverviewItem(
-                            fullCoin.coin.code,
-                            marketInfoOverview,
-                            guideUrl
+                            coinCode = fullCoin.coin.code,
+                            marketInfoOverview = marketInfoOverview,
+                            guideUrl = guideUrl
                         )
                     )
                 )

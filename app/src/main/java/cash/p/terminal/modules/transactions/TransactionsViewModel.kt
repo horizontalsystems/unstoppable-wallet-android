@@ -4,25 +4,28 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.TransactionAdapterManager
-import io.horizontalsystems.core.entities.CurrencyValue
+import cash.p.terminal.core.managers.TransactionHiddenManager
 import cash.p.terminal.entities.LastBlockInfo
-import io.horizontalsystems.core.entities.ViewState
 import cash.p.terminal.entities.nft.NftAssetBriefMetadata
 import cash.p.terminal.entities.nft.NftUid
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
 import cash.p.terminal.modules.contacts.model.Contact
 import cash.p.terminal.ui_compose.ColoredValue
-import io.horizontalsystems.core.helpers.DateHelper
-import io.horizontalsystems.core.entities.Blockchain
-import io.horizontalsystems.core.entities.BlockchainType
 import cash.p.terminal.wallet.IWalletManager
 import cash.p.terminal.wallet.badge
+import cash.p.terminal.wallet.managers.TransactionDisplayLevel
+import io.horizontalsystems.core.ViewModelUiState
+import io.horizontalsystems.core.entities.Blockchain
+import io.horizontalsystems.core.entities.BlockchainType
+import io.horizontalsystems.core.entities.CurrencyValue
+import io.horizontalsystems.core.entities.ViewState
+import io.horizontalsystems.core.helpers.DateHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.asFlow
 import java.util.Calendar
@@ -35,6 +38,7 @@ class TransactionsViewModel(
     private val transactionAdapterManager: TransactionAdapterManager,
     private val walletManager: IWalletManager,
     private val transactionFilterService: TransactionFilterService,
+    private val transactionHiddenManager: TransactionHiddenManager
 ) : ViewModelUiState<TransactionsUiState>() {
 
     var tmpItemToShow: TransactionItem? = null
@@ -50,6 +54,7 @@ class TransactionsViewModel(
     private var transactions: Map<String, List<TransactionViewItem>>? = null
     private var viewState: ViewState = ViewState.Loading
     private var syncing = false
+    private var hasHiddenTransactions: Boolean = false
 
     private var refreshViewItemsJob: Job? = null
 
@@ -101,14 +106,14 @@ class TransactionsViewModel(
 
                 filterContactLiveData.postValue(state.contact)
 
-                if (filterHideSuspiciousTx.value != state.hideSuspiciousTx){
+                if (filterHideSuspiciousTx.value != state.hideSuspiciousTx) {
                     service.reload()
                 }
                 filterHideSuspiciousTx.postValue(state.hideSuspiciousTx)
 
                 transactionListId = selectedTransactionWallet.hashCode().toString() +
-                    state.selectedTransactionType.name +
-                    state.selectedBlockchain?.uid
+                        state.selectedTransactionType.name +
+                        state.selectedBlockchain?.uid
             }
         }
 
@@ -121,7 +126,7 @@ class TransactionsViewModel(
 
         viewModelScope.launch {
             service.itemsObservable.asFlow().collect { items ->
-                handleUpdatedItems(items)
+                handleUpdatedItems(items.distinctBy { it.record.uid })
             }
         }
 
@@ -131,17 +136,33 @@ class TransactionsViewModel(
                 service.refreshList()
             }
         }
+
+        viewModelScope.launch {
+            transactionHiddenManager.transactionHiddenFlow.collectLatest {
+                service.reload()
+            }
+        }
     }
+
+    fun showAllTransactions(show: Boolean) = transactionHiddenManager.showAllTransactions(show)
 
     private fun handleUpdatedItems(items: List<TransactionItem>) {
         refreshViewItemsJob?.cancel()
         refreshViewItemsJob = viewModelScope.launch(Dispatchers.Default) {
-            val viewItems = items
-                .map {
+            val viewItems =
+                if (transactionHiddenManager.transactionHiddenFlow.value.transactionHidden) {
+                    when (transactionHiddenManager.transactionHiddenFlow.value.transactionDisplayLevel) {
+                        TransactionDisplayLevel.NOTHING -> emptyList()
+                        TransactionDisplayLevel.LAST_1_TRANSACTION -> items.take(1)
+                        TransactionDisplayLevel.LAST_2_TRANSACTIONS -> items.take(2)
+                        TransactionDisplayLevel.LAST_4_TRANSACTIONS -> items.take(4)
+                    }.also { hasHiddenTransactions = items.size != it.size }
+                } else {
+                    items.also { hasHiddenTransactions = false }
+                }.map {
                     ensureActive()
                     transactionViewItem2Factory.convertToViewItemCached(it)
-                }
-                .groupBy {
+                }.groupBy {
                     ensureActive()
                     it.formattedDate
                 }
@@ -158,7 +179,8 @@ class TransactionsViewModel(
         transactions = transactions,
         viewState = viewState,
         transactionListId = transactionListId,
-        syncing = syncing
+        syncing = syncing,
+        hasHiddenTransactions = hasHiddenTransactions
     )
 
     private fun handleUpdatedWallets(wallets: List<cash.p.terminal.wallet.Wallet>) {
@@ -197,9 +219,11 @@ class TransactionsViewModel(
         service.clear()
     }
 
-    fun getTransactionItem(viewItem: TransactionViewItem) = service.getTransactionItem(viewItem.uid)?.copy(
-        transactionStatusUrl = viewItem.transactionStatusUrl
-    )
+    fun getTransactionItem(viewItem: TransactionViewItem) =
+        service.getTransactionItem(viewItem.uid)?.copy(
+            transactionStatusUrl = viewItem.transactionStatusUrl,
+            changeNowTransactionId = viewItem.changeNowTransactionId
+        )
 
     fun updateFilterHideSuspiciousTx(checked: Boolean) {
         transactionFilterService.updateFilterHideSuspiciousTx(checked)
@@ -212,6 +236,7 @@ data class TransactionItem(
     val currencyValue: CurrencyValue?,
     val lastBlockInfo: LastBlockInfo?,
     val nftMetadata: Map<NftUid, NftAssetBriefMetadata>,
+    val changeNowTransactionId: String? = null,
     val transactionStatusUrl: Pair<String, String>? = null
 ) {
     val createdAt = System.currentTimeMillis()
@@ -232,12 +257,19 @@ data class TransactionViewItem(
     val spam: Boolean = false,
     val locked: Boolean? = null,
     val icon: Icon,
+    val changeNowTransactionId: String? = null,
     val transactionStatusUrl: Pair<String, String>? = null
 ) {
 
     sealed class Icon {
         class ImageResource(val resourceId: Int) : Icon()
-        class Regular(val url: String?, val alternativeUrl: String?, val placeholder: Int?, val rectangle: Boolean = false) : Icon()
+        class Regular(
+            val url: String?,
+            val alternativeUrl: String?,
+            val placeholder: Int?,
+            val rectangle: Boolean = false
+        ) : Icon()
+
         class Double(val back: Regular, val front: Regular) : Icon()
         object Failed : Icon()
         class Platform(blockchainType: BlockchainType) : Icon() {

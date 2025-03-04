@@ -7,26 +7,13 @@ import cash.p.terminal.core.managers.Bep2TokenInfoService
 import cash.p.terminal.core.managers.EvmKitWrapper
 import cash.p.terminal.core.providers.FeeRates
 import cash.p.terminal.core.utils.AddressUriResult
-import cash.p.terminal.entities.AppVersion
 import cash.p.terminal.entities.LastBlockInfo
-import cash.p.terminal.entities.LaunchPage
 import cash.p.terminal.entities.RestoreSettingRecord
-import cash.p.terminal.entities.SyncMode
 import cash.p.terminal.entities.TransactionDataSortMode
 import cash.p.terminal.entities.transactionrecords.TransactionRecord
-import cash.p.terminal.modules.amount.AmountInputType
-import cash.p.terminal.wallet.BalanceSortType
-import cash.p.terminal.wallet.balance.BalanceViewType
-import cash.p.terminal.modules.main.MainModule
 import cash.p.terminal.modules.market.MarketModule
-import cash.p.terminal.modules.market.TimeDuration
-import cash.p.terminal.modules.market.favorites.WatchlistSorting
-import cash.p.terminal.modules.settings.appearance.AppIcon
-import cash.p.terminal.modules.settings.appearance.PriceChangeInterval
-import cash.p.terminal.modules.settings.security.autolock.AutoLockInterval
 import cash.p.terminal.modules.settings.security.tor.TorStatus
 import cash.p.terminal.modules.settings.terms.TermsModule
-import cash.p.terminal.modules.theme.ThemeType
 import cash.p.terminal.modules.transactions.FilterTransactionType
 import cash.p.terminal.wallet.Account
 import cash.p.terminal.wallet.AccountOrigin
@@ -43,6 +30,7 @@ import cash.p.terminal.wallet.Token
 import cash.p.terminal.wallet.Wallet
 import cash.p.terminal.wallet.entities.BalanceData
 import cash.p.terminal.wallet.entities.TokenQuery
+import cash.z.ecc.android.sdk.model.FirstClassByteArray
 import io.horizontalsystems.solanakit.models.FullTransaction
 import io.horizontalsystems.tonkit.FriendlyAddress
 import io.horizontalsystems.tronkit.transaction.Fee
@@ -53,71 +41,6 @@ import kotlinx.coroutines.flow.StateFlow
 import java.math.BigDecimal
 import io.horizontalsystems.solanakit.models.Address as SolanaAddress
 import io.horizontalsystems.tronkit.models.Address as TronAddress
-
-interface ILocalStorage {
-    var marketSearchRecentCoinUids: List<String>
-    var zcashAccountIds: Set<String>
-    var autoLockInterval: AutoLockInterval
-    var chartIndicatorsEnabled: Boolean
-    var amountInputType: AmountInputType?
-    var baseCurrencyCode: String?
-    var authToken: String?
-    val appId: String?
-
-    var baseBitcoinProvider: String?
-    var baseLitecoinProvider: String?
-    var baseEthereumProvider: String?
-    var baseDashProvider: String?
-    var baseBinanceProvider: String?
-    var baseZcashProvider: String?
-    var syncMode: SyncMode?
-    var sortType: BalanceSortType
-    var appVersions: List<AppVersion>
-    var isAlertNotificationOn: Boolean
-    var encryptedSampleText: String?
-    var bitcoinDerivation: AccountType.Derivation?
-    var torEnabled: Boolean
-    var appLaunchCount: Int
-    var rateAppLastRequestTime: Long
-    var balanceHidden: Boolean
-    var balanceAutoHideEnabled: Boolean
-    var balanceTotalCoinUid: String?
-    var termsAccepted: Boolean
-    var mainShowedOnce: Boolean
-    var notificationId: String?
-    var notificationServerTime: Long
-    var currentTheme: ThemeType
-    var balanceViewType: BalanceViewType?
-    var changelogShownForAppVersion: String?
-    var ignoreRootedDeviceWarning: Boolean
-    var launchPage: LaunchPage?
-    var appIcon: AppIcon?
-    var mainTab: MainModule.MainNavigation?
-    var marketFavoritesSorting: WatchlistSorting?
-    var marketFavoritesShowSignals: Boolean
-    var marketFavoritesManualSortingOrder: List<String>
-    var marketFavoritesPeriod: TimeDuration?
-    var relaunchBySettingChange: Boolean
-    var marketsTabEnabled: Boolean
-    val marketsTabEnabledFlow: StateFlow<Boolean>
-    var balanceTabButtonsEnabled: Boolean
-    val balanceTabButtonsEnabledFlow: StateFlow<Boolean>
-    var nonRecommendedAccountAlertDismissedAccounts: Set<String>
-    var personalSupportEnabled: Boolean
-    var hideSuspiciousTransactions: Boolean
-    var pinRandomized: Boolean
-    var utxoExpertModeEnabled: Boolean
-    var rbfEnabled: Boolean
-    var statsLastSyncTime: Long
-    var uiStatsEnabled: Boolean?
-
-    val utxoExpertModeEnabledFlow: StateFlow<Boolean>
-
-    var priceChangeInterval: PriceChangeInterval
-    val priceChangeIntervalFlow: StateFlow<PriceChangeInterval>
-
-    fun clear()
-}
 
 interface IRestoreSettingsStorage {
     fun restoreSettings(accountId: String, blockchainTypeUid: String): List<RestoreSettingRecord>
@@ -253,7 +176,7 @@ interface ISendBitcoinAdapter {
         transactionSorting: TransactionDataSortMode?,
         rbfEnabled: Boolean,
         logger: AppLogger
-    ): Single<Unit>
+    ): Single<String>
 }
 
 interface ISendEthereumAdapter {
@@ -269,7 +192,7 @@ interface ISendBinanceAdapter {
     val fee: BigDecimal
 
     fun validate(address: String)
-    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<Unit>
+    fun send(amount: BigDecimal, address: String, memo: String?, logger: AppLogger): Single<String>
 }
 
 interface ISendZcashAdapter {
@@ -277,7 +200,7 @@ interface ISendZcashAdapter {
     val fee: BigDecimal
 
     suspend fun validate(address: String): ZcashAdapter.ZCashAddressType
-    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): Long
+    suspend fun send(amount: BigDecimal, address: String, memo: String, logger: AppLogger): FirstClassByteArray
 }
 
 interface ISendSolanaAdapter {
@@ -296,7 +219,7 @@ interface ISendTronAdapter {
     val trxBalanceData: BalanceData
 
     suspend fun estimateFee(amount: BigDecimal, to: TronAddress): List<Fee>
-    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?)
+    suspend fun send(amount: BigDecimal, to: TronAddress, feeLimit: Long?): String
     suspend fun isAddressActive(address: TronAddress): Boolean
     fun isOwnAddress(address: TronAddress): Boolean
 }
