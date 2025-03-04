@@ -1003,6 +1003,7 @@
     <string name="Settings_WalletConnect" translatable="false">WalletConnect</string>
     <string name="Settings_TonConnect" translatable="false">Ton Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
+    <string name="update_app">Update App</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
     <string name="Settings_Contact_ViaTelegram">via Telegram</string>

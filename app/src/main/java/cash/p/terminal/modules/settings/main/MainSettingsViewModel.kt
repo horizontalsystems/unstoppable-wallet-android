@@ -4,18 +4,27 @@ import androidx.lifecycle.viewModelScope
 import cash.p.terminal.R
 import cash.p.terminal.core.IBackupManager
 import cash.p.terminal.core.ITermsManager
-import io.horizontalsystems.core.ViewModelUiState
 import cash.p.terminal.core.managers.LanguageManager
 import cash.p.terminal.core.providers.AppConfigProvider
+import cash.p.terminal.core.usecase.CheckGooglePlayUpdateUseCase
+import cash.p.terminal.core.usecase.UpdateResult
 import cash.p.terminal.modules.settings.main.MainSettingsModule.CounterType
 import cash.p.terminal.modules.walletconnect.WCManager
 import cash.p.terminal.modules.walletconnect.WCSessionManager
+import cash.p.terminal.wallet.IAccountManager
+import cash.z.ecc.android.sdk.ext.collectWith
 import io.horizontalsystems.core.CurrencyManager
 import io.horizontalsystems.core.IPinComponent
 import io.horizontalsystems.core.ISystemInfoManager
+import io.horizontalsystems.core.ViewModelUiState
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.rx2.asFlow
+import org.koin.java.KoinJavaComponent.inject
 
 class MainSettingsViewModel(
     private val backupManager: IBackupManager,
@@ -24,11 +33,15 @@ class MainSettingsViewModel(
     private val pinComponent: IPinComponent,
     private val wcSessionManager: WCSessionManager,
     private val wcManager: WCManager,
-    private val accountManager: cash.p.terminal.wallet.IAccountManager,
+    private val accountManager: IAccountManager,
     private val appConfigProvider: AppConfigProvider,
     private val languageManager: LanguageManager,
     private val currencyManager: CurrencyManager,
 ) : ViewModelUiState<MainSettingUiState>() {
+
+    private val checkGooglePlayUpdateUseCase: CheckGooglePlayUpdateUseCase by inject(
+        CheckGooglePlayUpdateUseCase::class.java
+    )
 
     val appVersion: String
         get() {
@@ -63,6 +76,14 @@ class MainSettingsViewModel(
 
     private val isPinSet: Boolean
         get() = pinComponent.isPinSet
+
+    private val updateAvailable: StateFlow<Boolean> = checkGooglePlayUpdateUseCase()
+        .map { it is UpdateResult.ImmediateUpdateAvailable || it is UpdateResult.FlexibleUpdateAvailable }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = false
+        )
 
 
     private var wcCounterType: CounterType? = null
@@ -104,11 +125,18 @@ class MainSettingsViewModel(
                 emitState()
             }
         }
+        updateAvailable.collectWith(viewModelScope) {
+            if (it) {
+                emitState()
+            }
+        }
+
         syncCounter()
     }
 
     override fun createState(): MainSettingUiState {
         return MainSettingUiState(
+            isUpdateAvailable = updateAvailable.value,
             currentLanguage = currentLanguageDisplayName,
             baseCurrencyCode = baseCurrencyCode,
             appWebPageLink = appWebPageLink,
@@ -136,6 +164,7 @@ class MainSettingsViewModel(
 }
 
 data class MainSettingUiState(
+    val isUpdateAvailable: Boolean,
     val currentLanguage: String,
     val baseCurrencyCode: String,
     val appWebPageLink: String,

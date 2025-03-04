@@ -379,6 +379,9 @@ dependencies {
 
     api 'com.jaredrummler:android-shell:1.0.0'
     api 'com.offbynull.portmapper:portmapper:2.0.5'
+
+    implementation libs.google.play.app.update
+    implementation libs.google.play.app.update.ktx
 }
 
 configurations.all {

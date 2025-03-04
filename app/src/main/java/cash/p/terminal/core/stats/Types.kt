@@ -104,6 +104,7 @@ enum class StatPage(val key: String) {
     Privacy("privacy"),
     PublicKeys("public_keys"),
     RateUs("rate_us"),
+    Update("update"),
     Receive("receive"),
     ReceiveTokenList("receive_token_list"),
     RecoveryPhrase("recovery_phrase"),
