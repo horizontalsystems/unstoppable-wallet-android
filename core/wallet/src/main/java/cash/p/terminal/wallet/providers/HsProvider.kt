@@ -241,7 +241,7 @@ class HsProvider(baseUrl: String, apiKey: String) {
         }.mapNotNull { coinPriceResponse ->
             coinPriceResponse.coinPrice(
                 currencyCode = currencyCode,
-                alternativeUid = if (coinPriceResponse.uid == "dash") "wdash" else null
+                alternativeUid = if (coinPriceResponse.uid == "wdash") "dash" else null
             )
         }
     }
