@@ -85,13 +85,7 @@ fun SwapConfirmScreen(navController: NavController) {
     val currentBackStackEntry = remember { navController.currentBackStackEntry }
     val viewModel = viewModel<SwapConfirmViewModel>(
         viewModelStoreOwner = currentBackStackEntry!!,
-        initializer = try {
-            SwapConfirmViewModel.init(currentQuote, settings)
-        } catch (e: Exception) {
-            Toast.makeText(App.instance, R.string.unsupported_token, Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
-            return
-        }
+        factory = SwapConfirmViewModel.provideFactory(currentQuote, settings, navController)
     )
 
     val uiState = viewModel.uiState
