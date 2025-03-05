@@ -1,5 +1,6 @@
 package cash.p.terminal.core.managers
 
+import android.util.Log
 import cash.p.terminal.R
 import cash.p.terminal.wallet.AdapterState
 import cash.p.terminal.core.App
@@ -136,15 +137,18 @@ class TonKitManager(
     }
 
     private suspend fun start() {
+        Log.d("TonKitManager", "start")
         tonKitWrapper?.tonKit?.start()
         job = scope.launch {
             backgroundManager.stateFlow.collect { state ->
                 if (state == BackgroundManagerState.EnterForeground) {
+                    Log.d("TonKitManager", "EnterForeground")
                     tonKitWrapper?.tonKit?.let { kit ->
                         delay(1000)
                         kit.refresh()
                     }
                 } else if (state == BackgroundManagerState.EnterBackground) {
+                    Log.d("TonKitManager", "EnterBackground")
                     tonKitWrapper?.tonKit?.stop()
                 }
             }
