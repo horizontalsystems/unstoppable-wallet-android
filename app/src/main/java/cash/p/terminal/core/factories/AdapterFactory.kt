@@ -225,6 +225,7 @@ class AdapterFactory(
                 BlockchainType.Avalanche,
                 BlockchainType.Optimism,
                 BlockchainType.Base,
+                BlockchainType.ZkSync,
                 BlockchainType.Gnosis,
                 BlockchainType.Fantom,
                 BlockchainType.ArbitrumOne -> {
@@ -355,6 +356,7 @@ class AdapterFactory(
             BlockchainType.Polygon,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.ArbitrumOne -> {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(wallet.account)
@@ -387,6 +389,7 @@ class AdapterFactory(
             BlockchainType.Polygon,
             BlockchainType.Optimism,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
             BlockchainType.ArbitrumOne -> {
                 val evmKitManager = evmBlockchainManager.getEvmKitManager(blockchainType)
                 evmKitManager.unlink(transactionSource.account)

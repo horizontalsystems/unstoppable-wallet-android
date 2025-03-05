@@ -19,6 +19,7 @@ object UniswapV3Provider : BaseUniswapV3Provider(DexType.Uniswap) {
         BlockchainType.Polygon,
         BlockchainType.BinanceSmartChain,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         -> true
         else -> false
     }

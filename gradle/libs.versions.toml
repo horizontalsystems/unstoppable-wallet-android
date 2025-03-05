@@ -26,7 +26,7 @@ appcompat = "1.7.0"
 
 horizontalsystems-ton = "763a5c3"
 horizontalsystems-bitcoin = "239abba"
-horizontalsystems-ethereum = "201296c"
+horizontalsystems-ethereum = "d423acf"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
 horizontalsystems-solana = "ce738d8"

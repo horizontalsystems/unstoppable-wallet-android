@@ -63,6 +63,9 @@ class AppConfigProvider(localStorage: ILocalStorage) {
     val basescanApiKey by lazy {
         Translator.getString(R.string.basescanApiKey).split(",")
     }
+    val eraZkSyncApiKey by lazy {
+        Translator.getString(R.string.eraZkSyncApiKey).split(",")
+    }
     val guidesUrl by lazy {
         Translator.getString(R.string.guidesUrl)
     }
@@ -144,6 +147,7 @@ class AppConfigProvider(localStorage: ILocalStorage) {
             BlockchainType.Avalanche to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.Optimism to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.Base to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
+            BlockchainType.ZkSync to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.ArbitrumOne to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",
             BlockchainType.Solana to "CefzHT5zCUncm3yhTLck9bCRYkbjHrKToT1GpPUyqCMa",
             BlockchainType.Gnosis to "0x52be29951B0D10d5eFa48D58363a25fE5Cc097e9",

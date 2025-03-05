@@ -50,6 +50,7 @@ val Token.swappable: Boolean
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
         BlockchainType.ArbitrumOne -> true
@@ -82,6 +83,7 @@ val TokenQuery.isSupported: Boolean
         BlockchainType.Polygon,
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,
@@ -123,6 +125,7 @@ val Blockchain.description: String
         BlockchainType.Avalanche -> "AVAX, ERC20 tokens"
         BlockchainType.Optimism -> "L2 chain"
         BlockchainType.Base -> "L2 chain"
+        BlockchainType.ZkSync -> "L2 chain"
         BlockchainType.ArbitrumOne -> "L2 chain"
         BlockchainType.Solana -> "SOL, SPL tokens"
         BlockchainType.Gnosis -> "xDAI, ERC20 tokens"
@@ -155,6 +158,7 @@ private val blockchainOrderMap: Map<BlockchainType, Int> by lazy {
         BlockchainType.Solana,
         BlockchainType.Polygon,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.Avalanche,
         BlockchainType.Zcash,
         BlockchainType.BitcoinCash,
@@ -184,6 +188,7 @@ val BlockchainType.tokenIconPlaceholder: Int
         BlockchainType.Polygon -> R.drawable.polygon_erc20
         BlockchainType.Optimism -> R.drawable.optimism_erc20
         BlockchainType.Base -> R.drawable.base_erc20
+        BlockchainType.ZkSync -> R.drawable.zksync_erc20
         BlockchainType.ArbitrumOne -> R.drawable.arbitrum_erc20
         BlockchainType.Gnosis -> R.drawable.gnosis_erc20
         BlockchainType.Fantom -> R.drawable.fantom_erc20
@@ -210,6 +215,7 @@ val BlockchainType.brandColor: Color?
         BlockchainType.Avalanche -> Color(0xFFD74F49)
         BlockchainType.Optimism -> Color(0xFFEB3431)
         BlockchainType.Base -> Color(0xFF2759F6)
+        BlockchainType.ZkSync -> Color(0xFF8D8FF0)
         BlockchainType.ArbitrumOne -> Color(0xFF96BEDC)
         else -> null
     }
@@ -249,6 +255,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Avalanche
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.Base
+                    || this == BlockchainType.ZkSync
                     || this == BlockchainType.ArbitrumOne
                     || this == BlockchainType.Gnosis
                     || this == BlockchainType.Fantom
@@ -260,6 +267,7 @@ fun BlockchainType.supports(accountType: AccountType): Boolean {
                     || this == BlockchainType.Avalanche
                     || this == BlockchainType.Optimism
                     || this == BlockchainType.Base
+                    || this == BlockchainType.ZkSync
                     || this == BlockchainType.ArbitrumOne
                     || this == BlockchainType.Gnosis
                     || this == BlockchainType.Fantom
@@ -479,6 +487,7 @@ val BlockchainType.Companion.supported: List<BlockchainType>
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.ArbitrumOne,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,

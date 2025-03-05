@@ -114,6 +114,7 @@ class BalanceViewItemFactory {
         BlockchainType.Avalanche,
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.Solana,
         BlockchainType.Gnosis,
         BlockchainType.Fantom,

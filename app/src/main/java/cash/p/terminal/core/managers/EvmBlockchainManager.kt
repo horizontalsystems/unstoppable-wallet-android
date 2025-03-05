@@ -48,6 +48,7 @@ class EvmBlockchainManager(
         BlockchainType.Avalanche -> Chain.Avalanche
         BlockchainType.Optimism -> Chain.Optimism
         BlockchainType.Base -> Chain.Base
+        BlockchainType.ZkSync -> Chain.ZkSync
         BlockchainType.ArbitrumOne -> Chain.ArbitrumOne
         BlockchainType.Gnosis -> Chain.Gnosis
         BlockchainType.Fantom -> Chain.Fantom
@@ -83,6 +84,7 @@ class EvmBlockchainManager(
             BlockchainType.Gnosis,
             BlockchainType.Fantom,
             BlockchainType.Base,
+            BlockchainType.ZkSync,
         )
     }
 }

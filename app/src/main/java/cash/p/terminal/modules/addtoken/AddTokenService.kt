@@ -33,6 +33,7 @@ class AddTokenService(
         BlockchainType.ArbitrumOne,
         BlockchainType.Optimism,
         BlockchainType.Base,
+        BlockchainType.ZkSync,
         BlockchainType.Solana
     )
 

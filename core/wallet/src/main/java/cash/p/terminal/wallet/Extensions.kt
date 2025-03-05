@@ -95,6 +95,7 @@ val BlockchainType.title: String
         BlockchainType.BinanceChain -> "BNB Beacon Coin"
         BlockchainType.Optimism -> "Optimism"
         BlockchainType.Base -> "Base"
+        BlockchainType.ZkSync -> "ZKsync"
         BlockchainType.Solana -> "Solana"
         BlockchainType.Gnosis -> "Gnosis"
         BlockchainType.Fantom -> "Fantom"
