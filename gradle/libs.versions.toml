@@ -25,7 +25,7 @@ javax-inject = "1"
 appcompat = "1.7.0"
 
 horizontalsystems-ton = "763a5c3"
-horizontalsystems-bitcoin = "239abba"
+horizontalsystems-bitcoin = "4d423b7"
 horizontalsystems-ethereum = "d423acf"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
