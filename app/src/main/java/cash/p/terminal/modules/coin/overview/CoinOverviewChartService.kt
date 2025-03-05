@@ -10,6 +10,7 @@ import cash.p.terminal.modules.chart.ChartIndicatorManager
 import io.horizontalsystems.chartview.chart.ChartPointsWrapper
 import io.horizontalsystems.core.CurrencyManager
 import cash.p.terminal.wallet.MarketKitWrapper
+import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.entities.Currency
 import io.horizontalsystems.core.models.HsPeriodType
 import io.horizontalsystems.core.models.HsTimePeriod
@@ -22,6 +23,7 @@ import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.await
 import retrofit2.HttpException
 import java.io.IOException
+import java.math.BigDecimal
 import cash.p.terminal.wallet.models.ChartPoint as MarketKitChartPoint
 
 class CoinOverviewChartService(
@@ -152,7 +154,7 @@ class CoinOverviewChartService(
         chartInterval: HsTimePeriod?
     ): ChartPointsWrapper {
         if (points.isEmpty()) return ChartPointsWrapper(listOf())
-        val latestCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: return ChartPointsWrapper(listOf())
+        val latestCoinPrice = marketKit.coinPrice(coinUid, currency.code) ?: CoinPrice(coinUid, currency.code, points.last().value, BigDecimal.ZERO, BigDecimal.ZERO, points.last().timestamp)
 
         val pointsAdjusted = points.toMutableList()
         var startTimestampAdjusted = startTimestamp
