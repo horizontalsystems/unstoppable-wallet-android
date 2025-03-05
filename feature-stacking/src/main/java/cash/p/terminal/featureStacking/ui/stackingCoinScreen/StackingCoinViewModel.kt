@@ -212,7 +212,6 @@ internal abstract class StackingCoinViewModel(
                 CoroutineExceptionHandler { _, throwable ->
                     Log.e("StackingCoinViewModel", "Error loading investment data", throwable)
                     _uiState.value = uiState.value.copy(
-                        unpaidStr = "",
                         loading = false
                     )
                 }) {
