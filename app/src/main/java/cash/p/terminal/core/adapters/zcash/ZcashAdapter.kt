@@ -51,11 +51,13 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.reactive.asFlow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.util.regex.Pattern
 import kotlin.math.max
@@ -379,6 +381,29 @@ class ZcashAdapter(
             memo = memo
         )
         return synchronizer.createProposedTransactions(
+            proposal = proposal,
+            usk = spendingKey
+        ).first().txId
+    }
+
+    suspend fun proposeShielding():  FirstClassByteArray = withContext(Dispatchers.IO) {
+        val spendingKey =
+            DerivationTool.getInstance()
+                .deriveUnifiedSpendingKey(seed, network, zcashAccount?.hdAccountIndex!!)
+        val proposal = synchronizer.proposeShielding(
+            account = zcashAccount!!,
+            shieldingThreshold = Zatoshi(100000L),
+            // Using empty string for memo to clear the default memo prefix value defined in
+            // the SDK
+            memo = "",
+            // Using null will select whichever of the account's trans. receivers has funds
+            // to shield
+            transparentReceiver = null
+        )
+        if(proposal == null) {
+            throw Throwable("Failed to create proposal")
+        }
+        synchronizer.createProposedTransactions(
             proposal = proposal,
             usk = spendingKey
         ).first().txId

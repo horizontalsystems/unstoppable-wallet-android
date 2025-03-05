@@ -396,6 +396,7 @@
     <string name="Balance_Withdraw">Withdraw</string>
     <string name="Balance_Title">Balance</string>
     <string name="Balance_Send">Send</string>
+    <string name="shield_funds">Shield and consolidate funds</string>
     <string name="Balance_Swap">Swap</string>
     <string name="Balance_Deposit">Deposit</string>
     <string name="Balance_Receive">Receive</string>
@@ -1578,6 +1579,7 @@
     <string name="Coin_Tab_Market">Markets</string>
     <string name="Coin_Tab_Details">Analytics</string>
     <string name="Coin_Tab_Tweets">Tweets</string>
+    <string name="typical_fee"><![CDATA[Typical fee < 0.001]]></string>
 
     <string name="CoinPage_TimeDuration_Today">TDY</string>
     <string name="CoinPage_TimeDuration_Hour">1H</string>

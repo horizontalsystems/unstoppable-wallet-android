@@ -3,6 +3,7 @@ package cash.p.terminal.modules.balance
 import androidx.compose.runtime.Immutable
 import cash.p.terminal.R
 import cash.p.terminal.core.App
+import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.diff
 import cash.p.terminal.core.providers.CexAsset
 import cash.p.terminal.modules.balance.BalanceModule.warningText
@@ -17,6 +18,7 @@ import cash.p.terminal.wallet.balance.BalanceViewHelper
 import cash.p.terminal.wallet.balance.BalanceViewHelper.coinValue
 import cash.p.terminal.wallet.balance.BalanceViewType
 import cash.p.terminal.wallet.balance.DeemedValue
+import cash.p.terminal.wallet.entities.TokenType
 import cash.p.terminal.wallet.models.CoinPrice
 import io.horizontalsystems.core.entities.BlockchainType
 import io.horizontalsystems.core.entities.Currency
@@ -41,6 +43,8 @@ data class BalanceViewItem(
     val swapEnabled: Boolean = false,
     val errorMessage: String?,
     val isWatchAccount: Boolean,
+    val isSendDisabled: Boolean,
+    val isShowShieldFunds: Boolean,
     val warning: WarningText?
 )
 
@@ -223,11 +227,11 @@ class BalanceViewItemFactory {
 
         val lockedValues = buildList {
             lockedCoinValue(
-                state,
-                item.balanceData.timeLocked,
-                hideBalance,
-                wallet.decimal,
-                wallet.token
+                state = state,
+                balance = item.balanceData.timeLocked,
+                hideBalance = hideBalance,
+                coinDecimals = wallet.decimal,
+                token = wallet.token
             )?.let {
                 add(
                     LockedValue(
@@ -240,11 +244,11 @@ class BalanceViewItemFactory {
             }
 
             lockedCoinValue(
-                state,
-                item.balanceData.pending,
-                hideBalance,
-                wallet.decimal,
-                wallet.token
+                state = state,
+                balance = item.balanceData.pending,
+                hideBalance = hideBalance,
+                coinDecimals = wallet.decimal,
+                token = wallet.token
             )?.let {
                 add(
                     LockedValue(
@@ -274,6 +278,12 @@ class BalanceViewItemFactory {
             }
         }
 
+        val sendDisabled =
+            (item.wallet.token.type as? TokenType.AddressSpecTyped)?.type == TokenType.AddressSpecType.Transparent
+        val isShowShieldFunds =
+            (item.wallet.token.type as? TokenType.AddressSpecTyped)?.type == TokenType.AddressSpecType.Transparent &&
+                    item.balanceData.total > ZcashAdapter.FEE
+
         return BalanceViewItem(
             wallet = item.wallet,
             primaryValue = primaryValue,
@@ -291,7 +301,9 @@ class BalanceViewItemFactory {
             swapEnabled = state is AdapterState.Synced,
             errorMessage = (state as? AdapterState.NotSynced)?.error?.message,
             isWatchAccount = watchAccount,
-            warning = item.warning?.warningText
+            warning = item.warning?.warningText,
+            isSendDisabled = sendDisabled,
+            isShowShieldFunds = isShowShieldFunds
         )
     }
 

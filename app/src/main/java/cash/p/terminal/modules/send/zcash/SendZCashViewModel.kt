@@ -68,6 +68,13 @@ class SendZCashViewModel(
         }
     }
 
+    companion object {
+        fun createCaution(error: Throwable) = when (error) {
+            is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
+            is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
+            else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
+        }
+    }
     override fun createState() = SendZCashUiState(
         fee = fee,
         availableBalance = amountState.availableBalance,
@@ -155,12 +162,6 @@ class SendZCashViewModel(
             logger.warning("failed", e)
             sendResult = SendResult.Failed(createCaution(e))
         }
-    }
-
-    private fun createCaution(error: Throwable) = when (error) {
-        is UnknownHostException -> HSCaution(TranslatableString.ResString(R.string.Hud_Text_NoInternet))
-        is LocalizedException -> HSCaution(TranslatableString.ResString(error.errorTextRes))
-        else -> HSCaution(TranslatableString.PlainString(error.message ?: ""))
     }
 }
 

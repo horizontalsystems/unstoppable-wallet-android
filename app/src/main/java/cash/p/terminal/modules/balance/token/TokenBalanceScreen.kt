@@ -16,9 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -46,6 +46,7 @@ import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.evmfee.FeeSettingsInfoDialog
 import cash.p.terminal.modules.manageaccount.dialogs.BackupRequiredDialog
 import cash.p.terminal.modules.send.SendFragment
+import cash.p.terminal.modules.send.SendResult
 import cash.p.terminal.modules.syncerror.SyncErrorDialog
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionsViewModel
@@ -74,6 +75,7 @@ import cash.p.terminal.ui_compose.theme.ComposeAppTheme
 import cash.p.terminal.wallet.balance.DeemedValue
 import cash.p.terminal.wallet.isCosanta
 import cash.p.terminal.wallet.isPirateCash
+import io.horizontalsystems.core.SnackbarDuration
 import io.horizontalsystems.core.helpers.HudHelper
 
 
@@ -81,6 +83,7 @@ import io.horizontalsystems.core.helpers.HudHelper
 fun TokenBalanceScreen(
     viewModel: TokenBalanceViewModel,
     transactionsViewModel: TransactionsViewModel,
+    sendResult: SendResult? = viewModel.sendResult,
     navController: NavController,
     onStackingClicked: () -> Unit,
     onShowAllTransactionsClicked: () -> Unit
@@ -88,7 +91,7 @@ fun TokenBalanceScreen(
     val uiState = viewModel.uiState
 
     Scaffold(
-        backgroundColor = ComposeAppTheme.colors.tyler,
+        containerColor = ComposeAppTheme.colors.tyler,
         topBar = {
             AppBar(
                 title = uiState.title,
@@ -99,6 +102,33 @@ fun TokenBalanceScreen(
         }
     ) { paddingValues ->
         val transactionItems = uiState.transactions
+        val view = LocalView.current
+        when (sendResult) {
+            SendResult.Sending -> {
+                HudHelper.showInProcessMessage(
+                    view,
+                    R.string.Send_Sending,
+                    SnackbarDuration.INDEFINITE
+                )
+            }
+
+            is SendResult.Sent -> {
+                HudHelper.showSuccessMessage(
+                    view,
+                    R.string.Send_Success,
+                    SnackbarDuration.LONG
+                )
+            }
+
+            is SendResult.Failed -> {
+                HudHelper.showErrorMessage(
+                    view,
+                    sendResult.caution.getDescription() ?: sendResult.caution.getString()
+                )
+            }
+
+            null -> Unit
+        }
         if (transactionItems == null || (transactionItems.isEmpty() && !uiState.hasHiddenTransactions)) {
             Column(Modifier.padding(paddingValues)) {
                 uiState.balanceViewItem?.let {
@@ -436,27 +466,29 @@ private fun ButtonsRow(
                 )
             }
         } else {
-            ButtonPrimaryYellow(
-                modifier = Modifier.weight(1f),
-                title = stringResource(R.string.Balance_Send),
-                onClick = {
-                    val sendTitle = Translator.getString(
-                        R.string.Send_Title,
-                        viewItem.wallet.token.fullCoin.coin.code
-                    )
-                    navController.slideFromRight(
-                        R.id.sendXFragment,
-                        SendFragment.Input(viewItem.wallet, sendTitle)
-                    )
+            if (!viewItem.isSendDisabled) {
+                ButtonPrimaryYellow(
+                    modifier = Modifier.weight(1f),
+                    title = stringResource(R.string.Balance_Send),
+                    onClick = {
+                        val sendTitle = Translator.getString(
+                            R.string.Send_Title,
+                            viewItem.wallet.token.fullCoin.coin.code
+                        )
+                        navController.slideFromRight(
+                            R.id.sendXFragment,
+                            SendFragment.Input(viewItem.wallet, sendTitle)
+                        )
 
-                    stat(
-                        page = StatPage.TokenPage,
-                        event = StatEvent.OpenSend(viewItem.wallet.token)
-                    )
-                },
-                enabled = viewItem.sendEnabled
-            )
-            HSpacer(8.dp)
+                        stat(
+                            page = StatPage.TokenPage,
+                            event = StatEvent.OpenSend(viewItem.wallet.token)
+                        )
+                    },
+                    enabled = viewItem.sendEnabled
+                )
+                HSpacer(8.dp)
+            }
             if (!viewItem.swapVisible) {
                 ButtonPrimaryDefault(
                     modifier = Modifier.weight(1f),
@@ -512,5 +544,21 @@ private fun ButtonsRow(
                 stat(page = StatPage.TokenPage, event = StatEvent.OpenCoin(coinUid))
             },
         )
+    }
+    if (viewItem.isShowShieldFunds) {
+        Column(
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ButtonPrimaryYellow(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.shield_funds),
+                onClick = viewModel::proposeShielding
+            )
+            body_grey(
+                text = stringResource(R.string.typical_fee),
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
     }
 }

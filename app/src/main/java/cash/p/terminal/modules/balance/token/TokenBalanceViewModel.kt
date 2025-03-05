@@ -1,17 +1,24 @@
 package cash.p.terminal.modules.balance.token
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import cash.p.terminal.core.App
-import cash.p.terminal.core.usecase.UpdateChangeNowStatusesUseCase
+import cash.p.terminal.core.AppLogger
+import cash.p.terminal.core.adapters.zcash.ZcashAdapter
 import cash.p.terminal.core.getKoinInstance
 import cash.p.terminal.core.managers.BalanceHiddenManager
 import cash.p.terminal.core.managers.ConnectivityManager
 import cash.p.terminal.core.managers.TransactionHiddenManager
+import cash.p.terminal.core.usecase.UpdateChangeNowStatusesUseCase
 import cash.p.terminal.modules.balance.BackupRequiredError
 import cash.p.terminal.modules.balance.BalanceViewItem
 import cash.p.terminal.modules.balance.BalanceViewItemFactory
 import cash.p.terminal.modules.balance.BalanceViewModel
 import cash.p.terminal.modules.balance.token.TokenBalanceModule.TokenBalanceUiState
+import cash.p.terminal.modules.send.SendResult
+import cash.p.terminal.modules.send.zcash.SendZCashViewModel
 import cash.p.terminal.modules.transactions.TransactionItem
 import cash.p.terminal.modules.transactions.TransactionViewItem
 import cash.p.terminal.modules.transactions.TransactionViewItemFactory
@@ -48,6 +55,7 @@ class TokenBalanceViewModel(
     private val getChangeNowAssociatedCoinTickerUseCase: GetChangeNowAssociatedCoinTickerUseCase
 ) : ViewModelUiState<TokenBalanceUiState>() {
 
+    private val logger = AppLogger("TokenBalanceViewModel-${wallet.coin.code}")
     private val updateChangeNowStatusesUseCase: UpdateChangeNowStatusesUseCase = getKoinInstance()
     private val adapterManager: IAdapterManager = getKoinInstance()
 
@@ -58,6 +66,8 @@ class TokenBalanceViewModel(
     private var hasHiddenTransactions: Boolean = false
 
     private var statusCheckerJob: Job? = null
+    var sendResult by mutableStateOf<SendResult?>(null)
+        private set
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -211,6 +221,24 @@ class TokenBalanceViewModel(
         )
 
         else -> BalanceViewModel.SyncError.NetworkNotAvailable()
+    }
+
+    fun proposeShielding() {
+        val logger = logger.getScopedUnique()
+        viewModelScope.launch {
+            try {
+                sendResult = SendResult.Sending
+                (adapterManager.getAdapterForWallet(wallet) as? ZcashAdapter?)?.let { adapter ->
+                    adapter.proposeShielding()
+                }
+                sendResult = SendResult.Sent()
+            } catch (e: Throwable) {
+                logger.warning("failed", e)
+                sendResult = SendResult.Failed(SendZCashViewModel.createCaution(e))
+            }
+            delay(1000)
+            sendResult = null
+        }
     }
 
     override fun onCleared() {
