@@ -250,7 +250,7 @@ fun SendBitcoinScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 16.dp),
-                    title = stringResource(R.string.Button_Check),
+                    title = stringResource(R.string.Button_Next),
                     onClick = {
                         if (riskyAddress) {
                             keyboardController?.hide()
