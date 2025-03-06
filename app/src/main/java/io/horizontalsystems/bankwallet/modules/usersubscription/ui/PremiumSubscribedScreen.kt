@@ -69,7 +69,10 @@ fun PremiumSubscribedScreen(
                             .padding(horizontal = 44.dp)
                     )
                     VSpacer(12.dp)
-                    body_jacob(stringResource(R.string.Premium_EnjoyFullPowerOfTheApp))
+                    body_jacob(
+                        text = stringResource(R.string.Premium_EnjoyFullPowerOfTheApp),
+                        textAlign = TextAlign.Center,
+                    )
                     VSpacer(24.dp)
                 }
                 Column(

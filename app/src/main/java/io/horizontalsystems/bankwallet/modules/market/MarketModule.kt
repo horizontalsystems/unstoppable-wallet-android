@@ -49,10 +49,10 @@ object MarketModule {
     enum class Tab(@StringRes val titleResId: Int) {
         Coins(R.string.Market_Tab_Coins),
         Watchlist(R.string.Market_Tab_Watchlist),
+        Sectors(R.string.Market_Tab_Sectors),
         Posts(R.string.Market_Tab_Posts),
         Platform(R.string.Market_Tab_Platform),
-        Pairs(R.string.Market_Tab_Pairs),
-        Sectors(R.string.Market_Tab_Sectors);
+        Pairs(R.string.Market_Tab_Pairs);
 
         companion object {
             private val map = entries.associateBy(Tab::name)

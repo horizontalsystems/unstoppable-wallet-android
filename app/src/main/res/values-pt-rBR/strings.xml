@@ -48,7 +48,6 @@
     <string name="Button_Apply">Aplicar</string>
     <string name="Button_SetAmount">Definir Quantidade</string>
     <string name="Button_ContinueAnyway">Continuar Mesmo Assim</string>
-    <string name="Button_Check">Verificar</string>
     <string name="Error_OutOfRange">Não pode ser menor que %1$s ou mais do que %2$s</string>
     <string name="Error_NotInteger">Número inteiro errado</string>
     <string name="Error">Erro</string>

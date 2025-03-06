@@ -326,22 +326,6 @@ private fun SettingSections(
         }
     )
 
-    VSpacer(32.dp)
-
-    CellUniversalLawrenceSection(
-        listOf(
-            {
-                HsSettingCell(
-                    R.string.Settings_BotSupport,
-                    R.drawable.ic_ai_assistant_24,
-                    onClick = {
-
-                    }
-                )
-            },
-        )
-    )
-
     if (!BuildConfig.FDROID_BUILD) {
         VSpacer(24.dp)
 
@@ -431,6 +415,28 @@ private fun SettingSections(
                     LinkHelper.openLinkInAppBrowser(context, App.appConfigProvider.appTwitterLink)
 
                     stat(page = StatPage.Settings, event = StatEvent.Open(StatPage.ExternalTwitter))
+                }
+            )
+        })
+    )
+
+    VSpacer(32.dp)
+
+    CellUniversalLawrenceSection(
+        listOf({
+            HsSettingCell(
+                R.string.Settings_Faq,
+                R.drawable.ic_faq_20,
+                onClick = {
+                    navController.slideFromRight(R.id.faqListFragment)
+                }
+            )
+        }, {
+            HsSettingCell(
+                R.string.Guides_Title,
+                R.drawable.ic_academy_20,
+                onClick = {
+                    navController.slideFromRight(R.id.academyFragment)
                 }
             )
         })
