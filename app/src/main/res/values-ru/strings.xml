@@ -371,8 +371,25 @@
     <string name="Send_Address_Error_Clear">Чисто</string>
     <string name="Send_Address_AddressCheck">Проверка адреса</string>
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">Анализирует указанный адрес назначения на предмет потенциальных рисков фишинга.</string>
+    <string name="Send_Address_PhishingCheck_Info2">Чисто: Подозрительная активность не обнаружена.</string>
+    <string name="Send_Address_PhishingCheck_Info3">Обнаружено: Похоже, кто-то пытается обманом заставить вас отправить средства на неверный адрес. Не продолжайте, если вы не полностью уверены в правильности адреса. Рассмотрите возможность сначала отправить небольшую тестовую транзакцию.</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">Проверяет, числится ли адрес назначения в официальных или неофициальных черных списках.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">Чисто: Отметок в черных списках нет.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Обнаружено: Адрес внесен в черный список и может быть связан с юридическими рисками или угрозами безопасности. Продолжайте с осторожностью. Многие криптовалютные биржи ограничивают пользователей, которые вносят или выводят средства с кошельков, взаимодействовавших с адресами из черных списков. Имейте это в виду.</string>
     <string name="Send_Address_SanctionCheck">Sanction Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">Проверяет, подпадает ли адрес получателя под международные санкции, используя данные Chainalysis.com.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Чисто: Санкции не обнаружены.</string>
+    <string name="Send_Address_SanctionCheck_Info3">Обнаружено: Потенциальный юридический риск. Транзакции с этим адресом могут быть ограничены или незаконны в определенных юрисдикциях.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Обнаружен фишинговый адрес!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Обнаружен адрес из черного списка!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Обнаружен санкционный адрес!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Введенный вами адрес может быть мошенническим. Мошенники часто изменяют первые и последние символы. Внимательно проверьте полный адрес перед отправкой во избежание потерь.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Введенный вами адрес помечен как находящийся в черном списке. Транзакции на этот адрес могут привести к потерям или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Введенный вами адрес помечен как санкционный. Транзакции на этот адрес могут привести к потерям или другим рискам. Пожалуйста, проверьте данные получателя перед продолжением.</string>
+    <string name="Send_RiskyAddress">Рискованный адрес!</string>
+    <string name="Send_RiskyAddress_AlertText">Вы собираетесь отправить средства на адрес с высоким уровнем риска. Продолжение может привести к потере средств или другим угрозам безопасности. Продолжая, вы принимаете потенциальные риски. Вы уверены, что хотите продолжить?</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="ScanQr_CameraPermission_Title">Разрешение камеры</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
@@ -452,6 +469,7 @@
     <string name="TonConnect_Error_InvalidUrl">Неверный URL-адрес</string>
     <string name="TonConnect_Unnamed">Без имени</string>
     <string name="TonConnect_Wallet">Кошелек</string>
+    <string name="TonConnect_ChooseWallet">Выберите кошелёк</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Статус</string>
     <string name="WalletConnect_Approve_Hint">Нажав на соединение, вы позволяете этому приложению просматривать ваш публичный адрес. Это важный шаг безопасности, чтобы защитить ваши данные от потенциальных рисков, связанных с фишингом.</string>
@@ -698,6 +716,7 @@
     <string name="Settings_RateUs">Оцените нас</string>
     <string name="Settings_LaunchScreen">Экран запуска</string>
     <string name="Settings_Appearance">Оформление</string>
+    <string name="Settings_Subscription">Подписка</string>
     <string name="Settings_Contact_ViaTelegram">через Telegram</string>
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
@@ -744,10 +763,20 @@
     <string name="SettingsSubscription_ManageSubscription">Управление подпиской</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Премиум</string>
+    <string name="Premium_ChoosePlanForYou">Выберите план</string>
+    <string name="Premium_CancelSubscriptionInfo">Вы можете отменить подписку в любое время.</string>
+    <string name="Premium_Subscribe">Подписаться</string>
+    <string name="Premium_AddPromoCode">Ввести промокод</string>
     <string name="Premium_TryForFree">Попробовать БЕСПЛАТНО</string>
     <string name="Premium_Upgrade">Обновить</string>
     <string name="Premium_Restore">Восстановить</string>
+    <string name="Premium_Annually">Ежегодно</string>
+    <string name="Premium_Monthly">Ежемесячно</string>
+    <string name="Premium_ThankYouForSubscription">Благодарим вас \nза подписку!</string>
+    <string name="Premium_GoToApp">Перейти в приложение</string>
     <string name="Premium_UpgradeText">Улучшите свой опыт с премиум функциями!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
+    <string name="Premium_SelectSubscription">Выбрать подписку</string>
     <string name="Premium_UpgradeFeature_TokenInsights">Списки токенов</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
     <string name="Premium_UpgradeFeature_TradeSignals">Отслеживание трендов</string>
@@ -773,6 +802,11 @@
 Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Будьте частью развития. Присоединяйтесь к VIP-группе и получите прямой канал связи с нашей командой, возможность голосовать за будущие функции и эксклюзивный доступ к предстоящим обновлениям.
 Ваш голос имеет значение — вместе мы создаем криптокошелек нового поколения.</string>
+    <string name="Premium_HighlyRatedSecurity">Высоко оцененная безопасность, исключительная приватность и по-настоящему некастодиальный кошелек.</string>
+    <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
+    <string name="Premium_WhatUsersSay">Что говорят пользователи:</string>
+    <string name="Premium_SubscriptionPeriod_Month">месяц</string>
+    <string name="Premium_SubscriptionPeriod_Year">год</string>
     <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
@@ -814,6 +848,7 @@
     <string name="Privacy_BulletedText2">Здесь нет пользовательских аккаунтов или баз данных для хранения данных пользователей.</string>
     <string name="Privacy_BulletedText3">Если разрешено, кошелек будет делиться с командой Unstoppable информацией о привычках использования приложения. Это необходимо для понимания, какие функции используются (или нет) нашими пользователями. В качестве приложения, ориентированного на конфиденциальность, нам нужен способ оценить наши усилия, и без этого мы не сможем определить, используются ли построенные нами функции или нет.</string>
     <string name="ShareUiData">Поделиться данными UI</string>
+    <string name="ShareUiDataDescription">Эта настройка позволяет отключить аналитику UI/UX и обеспечить полную конфиденциальность.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Добавить новый</string>
