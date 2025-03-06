@@ -186,15 +186,11 @@
     <string name="MarketGlobalMetrics_Volume">24s Hacim</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF Girişi</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Tüm kripto paraların toplam piyasa değeri.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Kripto piyasa 24 saatlik işlem hacmi.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">DeFi\'deki Toplam Kilit Değer (TVL).</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Zincir ile filtrele</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Toplam Net Giriş</string>
-    <string name="MarketEtf_Description">Bir ETF\'nin net girişi, nakit girişlerinin çıkışlardan çıkarılmasıyla eşittir.</string>
     <string name="MarketEtf_HighestAssets">En Yüksek Varlıklar</string>
     <string name="MarketEtf_LowestAssets">En Düşük Varlıklar</string>
     <string name="MarketEtf_Inflow">Giriş</string>
