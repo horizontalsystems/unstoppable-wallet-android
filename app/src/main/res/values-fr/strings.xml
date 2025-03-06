@@ -186,15 +186,11 @@
     <string name="MarketGlobalMetrics_Volume">Vol. 24h</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrées d\'ETF</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valeur de marché totale de toutes les cryptomonnaies.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Le volume de trading de 24h du marché des cryptomonnaies.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Valeur totale verrouillée (TVL) dans DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrer par chaîne</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Tout</string>
     <string name="MarketGlobalMetrics_NoCoin">Ce projet n\'a pas de pièce de monnaie</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Flux net total</string>
-    <string name="MarketEtf_Description">Le flux net entrant d\'un ETF est égal à ses entrées de trésorerie moins ses sorties.</string>
     <string name="MarketEtf_HighestAssets">Actifs les plus élevés</string>
     <string name="MarketEtf_LowestAssets">Les actifs les moins élevés</string>
     <string name="MarketEtf_Inflow">Flux entrant</string>
