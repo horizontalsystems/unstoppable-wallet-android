@@ -187,11 +187,15 @@
     <string name="MarketGlobalMetrics_Volume">Volume em 24 horas</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL no DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrada de ETF</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Volume de operação em 24h do mercado de cripto</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Valor Total Bloqueado (VTB) no DeFi</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrar por cadeia</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Todas</string>
     <string name="MarketGlobalMetrics_NoCoin">Esse projeto não tem uma moeda</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Total de Despesa líquida</string>
+    <string name="MarketEtf_Description">A entrada líquida de um ETF é igual às suas entradas de caixa menos as saídas</string>
     <string name="MarketEtf_HighestAssets">Ativos mais altos</string>
     <string name="MarketEtf_LowestAssets">Menos Ativos</string>
     <string name="MarketEtf_Inflow">Receita</string>
@@ -736,6 +740,8 @@
     <string name="Settings_PersonalSupport_NewRequest">Nova solicitação</string>
     <string name="Settings_PersonalSupport_Requestfailed">Falha na solicitação</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
+    <string name="Settings_VipSupport_StartChat">Junte-se ao grupo VIP</string>
+    <string name="Settings_VipSupport_Description">Obtenha acesso exclusivo ao nosso Grupo VIP, onde usuários premium e a equipe da Carteira Unstoppable colaboram. Receba assistência direta, discuta atualizações futuras e ajude a moldar a evolução da carteira.</string>
     <string name="Settings_Donate_Info">Juntos, com o seu apoio, podemos fazer este aplicativo ainda melhor!</string>
     <string name="Settings_Donate">Doar</string>
     <string name="Settings_GetYourTokens">Pegue seus tokens</string>
