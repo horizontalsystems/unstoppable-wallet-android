@@ -54,7 +54,7 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
+    implementation(libs.kotlin.stdlib.jdk7)
     implementation("androidx.appcompat:appcompat:$appcompat_version")
     implementation("androidx.constraintlayout:constraintlayout:$constraint_version")
     implementation(libs.android.core.ktx)

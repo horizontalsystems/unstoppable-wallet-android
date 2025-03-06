@@ -4,6 +4,7 @@ androidGradlePlugin = "8.6.1"
 kotlin = "2.0.21"
 koin-bom = "4.0.0"
 compose-bom = "2024.12.01"
+kotlinStdlibJdk7 = "2.0.21"
 material = "1.12.0"
 metaplexAndroid = "1.5.0"
 navigationUiKtx = "2.8.5"
@@ -25,7 +26,7 @@ javax-inject = "1"
 appcompat = "1.7.0"
 
 horizontalsystems-ton = "763a5c3"
-horizontalsystems-bitcoin = "4d423b7"
+piratecash-bitcoin = "eb243fc"
 horizontalsystems-ethereum = "d423acf"
 horizontalsystems-blockchain-fee = "1d3bd49"
 horizontalsystems-binance = "c1509a2"
@@ -61,6 +62,7 @@ compose-material = { module = "androidx.compose.material:material" }
 compose-tooling = { module = "androidx.compose.ui:ui-tooling-preview" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+kotlin-stdlib-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlinStdlibJdk7" }
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-compose" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment-ktx" }
@@ -81,7 +83,7 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 sol4k = { module = "org.sol4k:sol4k", version.ref = "sol4k" }
 ton-kit = { group = "com.github.horizontalsystems", name = "ton-kit-android", version.ref = "horizontalsystems-ton" }
-bitcoin-kit = { group = "com.github.horizontalsystems", name = "bitcoin-kit-android", version.ref = "horizontalsystems-bitcoin" }
+bitcoin-kit = { group = "com.github.piratecash", name = "bitcoin-kit-android", version.ref = "piratecash-bitcoin" }
 ethereum-kit = { group = "com.github.horizontalsystems", name = "ethereum-kit-android", version.ref = "horizontalsystems-ethereum" }
 blockchain-fee-kit = { group = "com.github.horizontalsystems", name = "blockchain-fee-rate-kit-android", version.ref = "horizontalsystems-blockchain-fee" }
 binance-kit = { group = "com.github.horizontalsystems", name = "binance-chain-kit-android", version.ref = "horizontalsystems-binance" }
