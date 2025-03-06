@@ -223,9 +223,9 @@
     <string name="MarketGlobalMetrics_Volume">24h Vol.</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi.</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Total market value of all cryptocurrencies</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">The 24h trading volume of the crypto market</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Total Value Locked (TVL) in DeFi</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filter by chain</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">All</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn\'t have a coin</string>
@@ -233,7 +233,7 @@
     <!-- ETF-->
 
     <string name="MarketEtf_Title">Total Net Inflow</string>
-    <string name="MarketEtf_Description">The net inflow of an ETF equals its cash inflows minus outflows.</string>
+    <string name="MarketEtf_Description">The net inflow of an ETF equals its cash inflows minus outflows</string>
     <string name="MarketEtf_HighestAssets">Highest Assets</string>
     <string name="MarketEtf_LowestAssets">Lowest Assets</string>
     <string name="MarketEtf_Inflow">Inflow</string>
@@ -869,7 +869,7 @@
     <string name="Settings_Faq" translatable="false">FAQ</string>
     <string name="Settings_AppStatus">App Status</string>
     <string name="Settings_WalletConnect" translatable="false">WalletConnect</string>
-    <string name="Settings_TonConnect" translatable="false">Ton Connect</string>
+    <string name="Settings_TonConnect" translatable="false">TON Connect</string>
     <string name="Settings_RateUs">Rate Us</string>
     <string name="Settings_LaunchScreen">Launch Screen</string>
     <string name="Settings_Appearance">Appearance</string>
@@ -881,7 +881,6 @@
     <string name="Settings_Twitter" translatable="false">Twitter</string>
     <string name="Settings_JoinUnstoppables">Join Unstoppables</string>
     <string name="Settings_VipSupport">VIP Support</string>
-    <string name="Settings_VipClub">VIP Club</string>
     <string name="Settings_BotSupport">BOT Support</string>
     <string name="Settings_JoinUnstoppables_Description">Learn and master crypto via exclusive videos. Get to know us informally. Be the first to see things we work on.</string>
 
@@ -895,8 +894,8 @@
     <string name="Settings_PersonalSupport_NewRequest">New Request</string>
     <string name="Settings_PersonalSupport_Requestfailed">Request failed</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Open Telegram</string>
-    <string name="Settings_VipSupport_StartChat">Start Chat</string>
-    <string name="Settings_VipSupport_Description">Get direct assistance from our experts. A private chat will be created in Telegram to resolve your issue, and it will be closed once the problem is solved.</string>
+    <string name="Settings_VipSupport_StartChat">Join VIP Group</string>
+    <string name="Settings_VipSupport_Description">Get exclusive access to our VIP Group, where premium users and the Unstoppable Wallet team collaborate. Receive direct assistance, discuss future updates, and help shape the wallet’s evolution.</string>
 
     <string name="Settings_Donate_Info">Together, with your support, we can make this app even better!</string>
     <string name="Settings_Donate">Donate</string>
@@ -955,7 +954,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">Scam Protection</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Blacklist Checker</string>
     <string name="Premium_UpgradeFeature_VipSupport">VIP Group</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode">Privacy Mode</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Master Token Research</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Discover Trending Tokens</string>
@@ -964,7 +962,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">Stay Secure Without the Hassle</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Stay Legit and Compliant</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">Vote on the Future of Unstoppable</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode_Description">Full disconnection from data collection.</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Your all-in-one tool for deep analysis. Browse curated Top 250 token lists based on trading volume, exchange liquidity, holder behavior, and on-chain trends—all at a glance. Filter, analyze, and stay ahead.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Ditch the noise and zero in on high-potential tokens with precision. Use Advanced Search to filter through thousands of tokens by trading volume, blockchain, market cap, price trends, sector, and performance—and more. Powerful, accurate, and built for discovery.</string>
@@ -973,7 +970,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">One wrong address, and your crypto is gone forever. Unstoppable automatically scans recipient addresses for suspicious patterns and defends against the latest phishing threats, preventing you from sending funds to a hacker. Block fraudulent transfers before they happen.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Protect yourself from risky and sanctioned entities. Blacklist Checker automatically screens recipient addresses against high-risk databases, flagging scams, frauds, and sanctioned entities before you send. If an address is blacklisted, you’ll know before making a costly mistake. Secure your transactions. Keep your crypto clean. Stay compliant.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Be part of the evolution. Join the VIP Group to connect directly with our team, vote on upcoming features, and get an exclusive first look at future updates. Your voice matters—help shape the next-gen crypto wallet.</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode_BigDescription">Grants the ability to disable UI/UX data collection, ensuring complete privacy and preventing any usage analysis.</string>
 
     <string name="Premium_HighlyRatedSecurity">Highly rated security, exceptional privacy, and a truly non-custodial wallet.</string>
     <string name="Premium_ApprovedBy">Approved and Audited By:</string>
