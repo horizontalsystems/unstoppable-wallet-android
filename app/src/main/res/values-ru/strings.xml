@@ -47,6 +47,7 @@
     <string name="Button_Share">Поделиться</string>
     <string name="Button_Apply">Применить</string>
     <string name="Button_SetAmount">Установить сумму</string>
+    <string name="Button_ContinueAnyway">Всё равно продолжить</string>
     <string name="Error_OutOfRange">Не может быть меньше %1$s или более чем %2$s</string>
     <string name="Error_NotInteger">Неверное целое число</string>
     <string name="Error">Ошибка</string>
@@ -221,6 +222,7 @@
     <string name="Market_Filter_OutperformedBtc">Обошел BTC</string>
     <string name="Market_Filter_OutperformedEth">Обошел ETH</string>
     <string name="Market_Filter_OutperformedBnb">Обошел BNB</string>
+    <string name="Market_Filter_PriceCloseTo">Цена близка к</string>
     <string name="Market_Filter_PriceCloseToAth">Цена Близка к ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Цена Близка к ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Размещены на ведущих биржах</string>
@@ -242,6 +244,8 @@
     <string name="Market_Filter_Top_500">Топ 500</string>
     <string name="Market_Filter_Top_1000">Топ 1000</string>
     <string name="Market_Filter_Top_1500">Топ 1500</string>
+    <string name="Market_Filter_Top_2000">Топ 2000</string>
+    <string name="Market_Filter_Top_2500">Топ 2500</string>
     <string name="Market_Filter_ShowResults">Показать результаты</string>
     <string name="Market_Filter_ShowResults_Counter">Показать результаты: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5 млн</string>
@@ -279,6 +283,7 @@
     <string name="Market_Sorting_Losers">Теряют в цене</string>
     <string name="Market_Sorting_HighestCap">Наивысшей кап.</string>
     <string name="Market_Sorting_LowestCap">Наименьшей кап.</string>
+    <string name="Market_Filters_Select">Выбрать %d</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Мультичейн</string>
@@ -328,6 +333,7 @@
     <!--Send NFT-->
     <string name="SendNft_Title">Отправить</string>
     <!--Send-->
+    <string name="Send_EnterAddress">Введите адрес</string>
     <string name="Send_Title">Отправить %s</string>
     <string name="Send_Hint_Address">Адрес или домен</string>
     <string name="Send_Fee">Комиссия</string>
@@ -347,12 +353,26 @@
     <string name="Send_Utxo_SelectAll">Выбрать все</string>
     <string name="Send_Confirmation_Title">Подтвердить</string>
     <string name="Send_Confirmation_YouSend">Вы отправляете</string>
+    <string name="Send_Confirmation_YouReceive">Вы получите</string>
     <string name="Send_Confirmation_Mint">Минт</string>
+    <string name="Send_Confirmation_Burn">Сжигание</string>
     <string name="Send_Confirmation_To">Кому</string>
     <string name="Send_Confirmation_Own">Свой</string>
     <string name="Send_Confirmation_Method">Метод </string>
     <string name="Send_Confirmation_Send_Button">Отправить</string>
+    <string name="Send_Confirmation_Action">Действие</string>
+    <string name="Send_Processing">В процессе!</string>
+    <string name="Send_Processing_Description">Транзакция успешно отправлена. Проверьте ее статус для деталей.</string>
+    <string name="Send_Address_Recent">Недавние</string>
     <string name="Send_Address_Error_CheckLocked">Заблокировано</string>
+    <string name="Send_Address_Error_Incorrect">Неверно</string>
+    <string name="Send_Address_Error_InvalidAddress">Неверный адрес</string>
+    <string name="Send_Address_Error_Detected">Обнаружено</string>
+    <string name="Send_Address_Error_Clear">Чисто</string>
+    <string name="Send_Address_AddressCheck">Проверка адреса</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_SanctionCheck">Sanction Check</string>
     <string name="Send_Success">\u2713 Отправлено</string>
     <string name="ScanQr_CameraPermission_Title">Разрешение камеры</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Пожалуйста, дайте разрешение на доступ к камере</string>
@@ -682,6 +702,9 @@
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
+    <string name="Settings_VipSupport">VIP тех поддержка</string>
+    <string name="Settings_VipClub">VIP-клуб</string>
+    <string name="Settings_BotSupport">BOT Support</string>
     <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Введите имя вашей учетной записи Telegram, чтобы начать чат с нашей командой. Мы свяжемся с вами и начнем работать над вашей проблемой, как только увидим ее.</string>
@@ -693,6 +716,7 @@
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
     <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
+    <string name="Settings_VipSupport_StartChat">Начать чат</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_GetYourTokens">Получи токены UWT</string>
@@ -708,11 +732,47 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 минут</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <!--Premium Banner-->
+    <string name="SettingsBanner_Premium">Премиум</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Улучшите свой опыт с премиум функциями!</string>
+    <string name="SettingsBanner_PremiumTryFee">Попробовать БЕСПЛАТНО</string>
     <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Активно</string>
     <string name="SettingsSubscription_GetPremium">Получите премиум</string>
+    <string name="SettingsSubscription_RestorePurchase">Восстановить покупку</string>
+    <string name="SettingsSubscription_SubscriptionPlan">План подписки</string>
+    <string name="SettingsSubscription_SubscriptionInfo">Следующая дата платежа: %s. Вы можете управлять своей подпиской в разделе \"управление подпиской\".</string>
+    <string name="SettingsSubscription_ManageSubscription">Управление подпиской</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Премиум</string>
+    <string name="Premium_TryForFree">Попробовать БЕСПЛАТНО</string>
+    <string name="Premium_Upgrade">Обновить</string>
     <string name="Premium_Restore">Восстановить</string>
+    <string name="Premium_UpgradeText">Улучшите свой опыт с премиум функциями!</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Списки токенов</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Отслеживание трендов</string>
     <string name="Premium_UpgradeFeature_DuressMode">Режим Duress</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Защита от мошенничества</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Проверка по черным спискам</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP группа</string>
+    <string name="Premium_UpgradeFeature_PrivacyMode">Режим приватности</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Исследование токенов</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Откройте для себя популярные токены</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Торгуйте умнее, получайте прибыль быстрее</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Оставайтесь в безопасности, где бы вы ни находились</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Полный контроль без лишних забот</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Легитимность без компромиссов</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Голосуйте за будущее Unstoppable</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокого анализа. Просматривайте подборку Top 250 токенов на основе объема торгов, ликвидности бирж, поведения держателей и трендов в сети — все в одном месте. Фильтруйте, анализируйте и оставайтесь впереди.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отфильтруйте ненужное и очно сфокусируйтесь на токенах с высоким потенциалом. Используйте расширенный поиск для фильтрации тысяч токенов по объему торгов, блокчейну, капитализации, ценовым трендам, сектору и эффективности — и не только. Мощный, точный инструмент для поиска.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Не упускайте выгодные торговые возможности. Функция отслеживания трендов отправляет уведомления в режиме реального времени, основанные на сложном техническом анализе. Она поможет вам распознавать тенденции, видеть прорывы рынка и обходить подводные камни до того, как они возникнут. Реагируйте оперативно, ведите торговлю с умом и увеличивайте свою прибыль.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Ваша криптовалюта. Ваша безопасность. Инновационный режим принуждения — это ваша невидимая страховка в критических ситуациях. Создавайте несколько версий вашего кошелька, каждую с уникальным PIN-кодом, обеспечивая себе секретный запасной выход при возникновении угрозы. Столкнулись с принуждением разблокировать ваш кошелек? Просто введите специальный PIN-код и получите доступ к запасному кошельку, оставляя ваши основные активы полностью защищенными и невидимыми. Ваши реальные средства в безопасности. Ваше спокойствие — бесценно.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Один неверный адрес, и ваша крипта потеряна навсегда. Unstoppable автоматически проверяет адреса получателей на подозрительные шаблоны и защищает от новейших фишинговых угроз, предотвращая отправку средств хакерам. Блокируйте мошеннические переводы до того, как они произойдут.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Защитите себя от рисковых и санкционированных контрагентов. Blacklist Checker автоматически проверяет адреса получателей по базам высокого риска, выявляя мошеннические схемы, fraudulent-транзакции и санкционированные объекты еще до отправки средств. 
+
+Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Будьте частью развития. Присоединяйтесь к VIP-группе и получите прямой канал связи с нашей командой, возможность голосовать за будущие функции и эксклюзивный доступ к предстоящим обновлениям.
+Ваш голос имеет значение — вместе мы создаем криптокошелек нового поколения.</string>
     <string name="Appearance_MarketsTab">ВКЛАДКА РЫНКИ</string>
     <string name="Appearance_BalanceTab">ВКЛАДКА БАЛАНС</string>
     <string name="Appearance_AppIcon">ИКОНКА ПРИЛОЖЕНИЯ</string>
