@@ -47,6 +47,7 @@
     <string name="Button_Share">Compartir</string>
     <string name="Button_Apply">Aplicar</string>
     <string name="Button_SetAmount">Asignar cantidad</string>
+    <string name="Button_ContinueAnyway">Continuar de todos modos</string>
     <string name="Error_OutOfRange">No puede ser menor que %1$s o mayor que %2$s</string>
     <string name="Error_NotInteger">Número entero incorrecto</string>
     <string name="Error">Erreur</string>
@@ -186,11 +187,15 @@
     <string name="MarketGlobalMetrics_Volume">Vol. de 24h</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrada ETF</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total del mercado de todas las criptomonedas</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">El volumen de operaciones 24h del mercado de criptomonedas</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Valor total bloqueado (TVL) en DeFi</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrar por cadena</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Todo</string>
     <string name="MarketGlobalMetrics_NoCoin">Este proyecto no tiene una moneda</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Ingreso Neto Total</string>
+    <string name="MarketEtf_Description">El ingreso neto de un ETF es igual a sus entradas de efectivo menos las salidas</string>
     <string name="MarketEtf_HighestAssets">Mayores Activos</string>
     <string name="MarketEtf_LowestAssets">Activos Más Bajos</string>
     <string name="MarketEtf_Inflow">Ingreso</string>
@@ -215,6 +220,7 @@
     <string name="Market_Filter_OutperformedBtc">BTC superado</string>
     <string name="Market_Filter_OutperformedEth">ETH superado</string>
     <string name="Market_Filter_OutperformedBnb">BNB superado</string>
+    <string name="Market_Filter_PriceCloseTo">Precio cercano a</string>
     <string name="Market_Filter_PriceCloseToAth">Precio cercano a ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Precio cercano a ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listado en las principales bolsas</string>
@@ -236,6 +242,8 @@
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Top_2000">Top 2000</string>
+    <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_ShowResults">Mostrar Resultados</string>
     <string name="Market_Filter_ShowResults_Counter">Mostrar resultados: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
@@ -273,6 +281,7 @@
     <string name="Market_Sorting_Losers">Perdedores</string>
     <string name="Market_Sorting_HighestCap">Capitalización Mayor</string>
     <string name="Market_Sorting_LowestCap">Capitalización Menor</string>
+    <string name="Market_Filters_Select">Seleccionar %d</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Cadena múltiple</string>
@@ -341,12 +350,26 @@
     <string name="Send_Utxo_SelectAll">Seleccionar todo</string>
     <string name="Send_Confirmation_Title">Confirmar</string>
     <string name="Send_Confirmation_YouSend">Usted envía</string>
+    <string name="Send_Confirmation_YouReceive">Tú recibes</string>
     <string name="Send_Confirmation_Mint">Mint</string>
+    <string name="Send_Confirmation_Burn">Quemar</string>
     <string name="Send_Confirmation_To">Para</string>
     <string name="Send_Confirmation_Own">Propio</string>
     <string name="Send_Confirmation_Method">Método</string>
     <string name="Send_Confirmation_Send_Button">Enviar</string>
+    <string name="Send_Confirmation_Action">Acción</string>
+    <string name="Send_Processing">Procesando!</string>
+    <string name="Send_Processing_Description">Transacción enviada con éxito. Verifica su estado para más detalles.</string>
+    <string name="Send_Address_Recent">Recientes</string>
     <string name="Send_Address_Error_CheckLocked">Bloqueado</string>
+    <string name="Send_Address_Error_Incorrect">Inválido</string>
+    <string name="Send_Address_Error_InvalidAddress">Dirección inválida</string>
+    <string name="Send_Address_Error_Correct">Correcto</string>
+    <string name="Send_Address_Error_Detected">Detectado</string>
+    <string name="Send_Address_Error_Clear">Limpiar</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
     <string name="Send_Success">\u2713 Enviado</string>
     <string name="ScanQr_CameraPermission_Title">Permisos de cámara</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Por favor, autorice acceso a la camara</string>
@@ -677,6 +700,7 @@
     <string name="Settings_Contact_ViaEmail">vía E-mail</string>
     <string name="Settings_AutoLock">Bloqueo automático</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_BotSupport">Soporte BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Aprende y domina criptografía a través de vídeos exclusivos. Conozca informalmente. Sé el primero en ver las cosas en las que trabajamos.</string>
     <string name="Settings_PersonalSupport">Soporte personal</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Introduzca su nombre de cuenta de Telegram para iniciar un chat de asistencia personal con nuestro equipo. Nos pondremos en contacto contigo y comenzaremos a trabajar en tu problema tan pronto como lo veamos.</string>
