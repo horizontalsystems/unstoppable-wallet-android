@@ -186,15 +186,11 @@
     <string name="MarketGlobalMetrics_Volume">24小时交易量</string>
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF 输入</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">所有加密货币的总市场价值.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">加密货币市场24小时交易量.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">去中心金融（DeFi）中的锁定总价值（TVL)</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">通过区块链过滤</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">所有</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">网络总流量</string>
-    <string name="MarketEtf_Description">ETF的净流入等于其现金流入减去流出</string>
     <string name="MarketEtf_HighestAssets">最高资产</string>
     <string name="MarketEtf_LowestAssets">最低资产</string>
     <string name="MarketEtf_Inflow">流入</string>

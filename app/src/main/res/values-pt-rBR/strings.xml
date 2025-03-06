@@ -188,15 +188,11 @@
     <string name="MarketGlobalMetrics_Volume">Volume em 24 horas</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL no DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrada de ETF</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valor total de mercado de todas as criptomoedas.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">O volume de operação em 24h do mercado de cripto.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Valor total bloqueado (TVL) no DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrar por cadeia</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Todas</string>
     <string name="MarketGlobalMetrics_NoCoin">Esse projeto não tem uma moeda</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Total de Despesa líquida</string>
-    <string name="MarketEtf_Description">A entrada líquida de um ETF é igual a seus fluxos de caixa menos outflows.</string>
     <string name="MarketEtf_HighestAssets">Ativos mais altos</string>
     <string name="MarketEtf_LowestAssets">Menos Ativos</string>
     <string name="MarketEtf_Inflow">Receita</string>
@@ -729,7 +725,6 @@
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
     <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
     <string name="Settings_VipSupport">Suporte VIP</string>
-    <string name="Settings_VipClub">Clube VIP</string>
     <string name="Settings_BotSupport">Suporte por BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Aprenda e domine cripto através de vídeos exclusivos. Conheça-nos informalmente. Seja o primeiro a ver as coisas em que trabalhamos.</string>
     <string name="Settings_PersonalSupport">Suporte Pessoal</string>
@@ -742,8 +737,6 @@
     <string name="Settings_PersonalSupport_NewRequest">Nova solicitação</string>
     <string name="Settings_PersonalSupport_Requestfailed">Falha na solicitação</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
-    <string name="Settings_VipSupport_StartChat">Iniciar Chat</string>
-    <string name="Settings_VipSupport_Description">Receba assistência direta dos nossos especialistas. Um chat privado será criado no Telegram para resolver o seu problema, e ele será fechado assim que o problema for resolvido.</string>
     <string name="Settings_Donate_Info">Juntos, com o seu apoio, podemos fazer este aplicativo ainda melhor!</string>
     <string name="Settings_Donate">Doar</string>
     <string name="Settings_GetYourTokens">Pegue seus tokens</string>
@@ -796,7 +789,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">Proteção de Golpes</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Verificador de Lista Negra</string>
     <string name="Premium_UpgradeFeature_VipSupport">Grupo VIP</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode">Modo Privado</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Domine a Pesquisa de Token</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Descubra Tokens em Tendência</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Negocie Mais Inteligente, Lucre Mais Rápido</string>
@@ -804,7 +796,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">Fique Seguro Sem Complicações</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Manter Legítimo e em Conformidade</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">Votar no Futuro da Unstoppable</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode_Description">Desconexão total da coleta de dados.</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Sua ferramenta tudo-em-um para análise profunda. Navegue pelas listas de tokens Top 250 selecionados com base no volume de negociação, liquidez da corretora, comportamento do holder e tendências on-chain — tudo de uma vez. Filtre, analise e fique à frente.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Abandone o ruído e concentre-se em tokens de alto potencial com precisão. Use a Pesquisa Avançada para filtrar milhares de tokens por volume de negociação, blockchain, capitalização de mercado, tendências de preço, setor e desempenho — e muito mais. Poderoso, preciso e criado para descobrir.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Nunca mais perca uma oportunidade de negociação. O Monitoramento de Tendências fornece alertas em tempo real com base em análises técnicas avançadas, ajudando você a identificar tendências, detectar rompimentos e evitar armadilhas antes que elas aconteçam. Aja rápido, negocie de forma inteligente e maximize os ganhos.</string>
@@ -812,7 +803,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Um endereço errado e sua cripto se vai para sempre. A Unstoppable verifica automaticamente os endereços dos destinatários em busca de padrões suspeitos e defende contra as últimas ameaças de phishing, impedindo que você envie fundos para um hacker. Bloqueie transferências fraudulentas antes que elas aconteçam.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Proteja-se de entidades arriscadas e sancionadas. A Verificação de Lista Negra verifica automaticamente os endereços dos destinatários em relação a bancos de dados de alto risco, sinalizando golpes, fraudes e entidades sancionadas antes de você enviar. Se um endereço estiver na lista negra, você saberá antes de cometer um erro caro. Proteja suas transações. Mantenha sua criptomoeda limpa. Mantenha a conformidade.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Faça parte da evolução. Junte-se ao Grupo VIP para se conectar diretamente com nossa equipe, votar em recursos futuros e obter uma primeira visão exclusiva de atualizações futuras. Sua voz importa — ajude a moldar a carteira de criptomoedas de última geração.</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode_BigDescription">Concede a capacidade de desabilitar a coleta de dados de UI/UX, garantindo privacidade completa e impedindo qualquer análise de uso.</string>
     <string name="Premium_HighlyRatedSecurity">Segurança altamente qualificada, privacidade excepcional e uma carteira verdadeiramente sem custódia.</string>
     <string name="Premium_ApprovedBy">Aprovado e Auditado Por:</string>
     <string name="Premium_WhatUsersSay">O que os usuários estão dizendo:</string>

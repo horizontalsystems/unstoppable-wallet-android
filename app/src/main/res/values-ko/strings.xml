@@ -186,15 +186,11 @@
     <string name="MarketGlobalMetrics_Volume">24h 거래량</string>
     <string name="MarketGlobalMetrics_TvlInDefi">디파이(DeFi)에서의 총 예치 가치</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF 유입액</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">모든 암호화폐의 총 시장 가치\" or \"모든 가상 화폐의 총 시장 가치.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">암호화폐 시장의 24시간 거래량\" or \"가상 화폐 시장의 24시간 거래량.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">디파이 (DeFi)에서의 총 예치 가치 (TVL).</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">체인별 필터링</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">총 순유입액</string>
-    <string name="MarketEtf_Description">ETF의 순유입액은 현금 유입에서 유출을 뺀 것과 같습니다.</string>
     <string name="MarketEtf_HighestAssets">최고 자산</string>
     <string name="MarketEtf_LowestAssets">최저 자산</string>
     <string name="MarketEtf_Inflow">유입</string>

@@ -47,6 +47,7 @@
     <string name="Button_Share">Partager</string>
     <string name="Button_Apply">Appliquer</string>
     <string name="Button_SetAmount">Définir le montant</string>
+    <string name="Button_ContinueAnyway">Continuer quand même</string>
     <string name="Error_OutOfRange">Il doit contenir au moins %1$s et faire un maximum de %2$s caractères</string>
     <string name="Error_NotInteger">Les chiffres que vous avez fournis sont incorrects</string>
     <string name="Error">Erreur</string>
@@ -186,15 +187,15 @@
     <string name="MarketGlobalMetrics_Volume">Vol. 24h</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL en DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">Entrées d\'ETF</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valeur de marché totale de toutes les cryptomonnaies.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Le volume de trading de 24h du marché des cryptomonnaies.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Valeur totale verrouillée (TVL) dans DeFi.</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Valeur de marché totale de toutes les cryptomonnaies</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Le volume de trading de 24h du marché des cryptomonnaies</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">La valeur totale verrouillée (TVL) dans la finance décentralisée</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtrer par chaîne</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Tout</string>
     <string name="MarketGlobalMetrics_NoCoin">Ce projet n\'a pas de pièce de monnaie</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Flux net total</string>
-    <string name="MarketEtf_Description">Le flux net entrant d\'un ETF est égal à ses entrées de trésorerie moins ses sorties.</string>
+    <string name="MarketEtf_Description">Le flux net entrant d\'un ETF est égal à ses entrées de trésorerie moins ses sorties</string>
     <string name="MarketEtf_HighestAssets">Actifs les plus élevés</string>
     <string name="MarketEtf_LowestAssets">Les actifs les moins élevés</string>
     <string name="MarketEtf_Inflow">Flux entrant</string>
@@ -240,6 +241,8 @@
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Top_2000">Top 2000</string>
+    <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_ShowResults">Afficher les résultats</string>
     <string name="Market_Filter_ShowResults_Counter">Afficher les résultats : %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5mn</string>
@@ -351,6 +354,28 @@
     <string name="Send_Confirmation_Method">Méthode</string>
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
     <string name="Send_Address_Error_CheckLocked">Verrouillé</string>
+    <string name="Send_Address_Error_Incorrect">Invalide</string>
+    <string name="Send_Address_Error_InvalidAddress">Adresse invalide</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">Analyse l\'adresse de destination fournie pour détecter d\'éventuels risques d\'hameçonnage.</string>
+    <string name="Send_Address_PhishingCheck_Info2">RAS : Aucune activité suspecte détectée.</string>
+    <string name="Send_Address_PhishingCheck_Info3">Détecté : Il semble que quelqu\'un essaie de vous inciter à envoyer des fonds vers une adresse incorrecte. Ne continuez pas sans être absolument certain que l\'adresse est correcte. Envisagez d\'abord d\'envoyer une petite transaction test.</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">Vérifie si l\'adresse de destination figure sur des listes noires officielles ou non officielles.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">RAS : Aucun signalement sur liste noire.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Détecté : L\'adresse est sur liste noire et peut être associée à des risques juridiques ou de sécurité. Procédez avec prudence. De nombreuses plateformes d\'échange de cryptomonnaies restreignent les utilisateurs qui déposent ou retirent des fonds depuis des portefeuilles ayant interagi avec des adresses figurant sur une liste noire. Gardez cela à l\'esprit.</string>
+    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">Vérifie si l\'adresse du destinataire est soumise à des sanctions internationales, en utilisant les données de Chainalysis.com.</string>
+    <string name="Send_Address_SanctionCheck_Info2">RAS : Aucune sanction détectée.</string>
+    <string name="Send_Address_SanctionCheck_Info3">Détecté : Risque juridique potentiel. Les transactions avec cette adresse peuvent être restreintes ou illégales dans certaines juridictions.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Adresse d\'hameçonnage détectée !</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Adresse sur liste noire détectée !</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Adresse sous sanctions détectée !</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">L\'adresse que vous avez saisie pourrait être frauduleuse. Les escrocs modifient souvent les premiers et derniers caractères. Vérifiez soigneusement l\'adresse complète avant de continuer pour éviter toute perte.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">L\'adresse que vous avez saisie est signalée comme étant sur liste noire. Les transactions vers cette adresse pourraient entraîner des pertes ou d\'autres risques. Veuillez vérifier les informations du destinataire avant de continuer.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">L\'adresse que vous avez saisie est marquée comme étant sous sanctions. Les transactions vers cette adresse pourraient entraîner des pertes ou d\'autres risques. Veuillez vérifier les informations du destinataire avant de continuer.</string>
+    <string name="Send_RiskyAddress">Adresse à risque !</string>
+    <string name="Send_RiskyAddress_AlertText">Vous êtes sur le point d\'envoyer des fonds à une adresse à haut risque. Continuer peut entraîner des pertes ou d\'autres risques de sécurité. En poursuivant, vous acceptez les dangers potentiels. Êtes-vous sûr de vouloir continuer ?</string>
     <string name="Send_Success">\u2713 Envoyé</string>
     <string name="ScanQr_CameraPermission_Title">Besoin d\'un accès à la caméra</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Veuillez autoriser l\'accès à l\'appareil photo</string>
@@ -430,6 +455,7 @@
     <string name="TonConnect_Error_InvalidUrl">Adresse URL invalide</string>
     <string name="TonConnect_Unnamed">Inconnu</string>
     <string name="TonConnect_Wallet">Portefeuille</string>
+    <string name="TonConnect_ChooseWallet">Choisir un portefeuille</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Statut</string>
     <string name="WalletConnect_Approve_Hint">En cliquant sur accepter, vous autorisez cette application à afficher votre adresse publique. Il s\'agit d\'une étape importante de sécurité pour protéger vos données contre les risques potentiels d\'hameçonnage.</string>
@@ -677,6 +703,7 @@
     <string name="Settings_RateUs">Evaluez-nous</string>
     <string name="Settings_LaunchScreen">Écran de démarrage</string>
     <string name="Settings_Appearance">Apparence</string>
+    <string name="Settings_Subscription">Abonnement</string>
     <string name="Settings_Contact_ViaTelegram">par Telegram</string>
     <string name="Settings_Contact_ViaEmail">par e-mail</string>
     <string name="Settings_AutoLock">Verrouillage automatique</string>
@@ -692,6 +719,8 @@
     <string name="Settings_PersonalSupport_NewRequest">Nouvelle demande</string>
     <string name="Settings_PersonalSupport_Requestfailed">La requête a échoué</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Ouvrir Telegram</string>
+    <string name="Settings_VipSupport_StartChat">Rejoindre le Groupe VIP</string>
+    <string name="Settings_VipSupport_Description">Obtenez un accès exclusif à notre Groupe VIP, où les utilisateurs premium et l\'équipe d\'Unstoppable Wallet collaborent. Recevez une assistance directe, discutez des futures mises à jour et contribuez à façonner l\'évolution du portefeuille.</string>
     <string name="Settings_Donate_Info">Ensemble, avec votre soutien, nous pouvons encore améliorer cette application!</string>
     <string name="Settings_Donate">Faire un don</string>
     <string name="Settings_GetYourTokens">Obtenir vos tokens</string>
@@ -707,10 +736,14 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutes</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 heure</string>
     <!--Premium Banner-->
+    <string name="SettingsBanner_Premium">Premium</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Améliorez votre expérience avec les fonctionnalités Premium !</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_GetPremium">Devenez Premium</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
     <string name="Premium_Restore">Restaurer</string>
+    <string name="Premium_UpgradeText">Améliorez votre expérience avec les fonctionnalités Premium !</string>
     <string name="Premium_UpgradeFeature_DuressMode">Mode de Duress</string>
     <string name="Appearance_MarketsTab">TAB DES MARCHÉS</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
@@ -959,6 +992,7 @@
     <string name="PrivateKeys_EvmPrivateKey">Clé privée EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Permet un contrôle total des crypto-monnaies basées sur l\'EVM, c\'est-à-dire Ethereum, Binance Smart Chain, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Permet d\'exercer un contrôle total sur les actifs du portefeuille correspondant.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Permet un contrôle total du Bitcoin et des autres crypto-monnaies basées sur l\'UTXO, c\'est-à-dire Litecoin, Bitcoin Cash, Dash, etc. dans leur portefeuille respectif.</string>
     <string name="PrivateKeys_NeverShareWarning">Ne partagez jamais votre phrase de récupération avec quiconque. Une équipe imparable ne demandera jamais votre phrase de récupération.</string>
     <!-- Public Keys -->
