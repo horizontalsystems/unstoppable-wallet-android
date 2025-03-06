@@ -189,15 +189,11 @@
     <string name="MarketGlobalMetrics_Volume">Объём</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF приток</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">24-часовой объем крипторынка.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Всего заблокировано (TVL) в DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Сортировать по блокчейну</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Все</string>
     <string name="MarketGlobalMetrics_NoCoin">У этого проекта нет токена</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Общий чистый приток</string>
-    <string name="MarketEtf_Description">Чистый приток (net inflow) ETF равен разнице между поступлениями и оттоками наличных средств.</string>
     <string name="MarketEtf_HighestAssets">Наивысшие активы</string>
     <string name="MarketEtf_LowestAssets">Наименьшие активы</string>
     <string name="MarketEtf_Inflow">Приток</string>
@@ -722,7 +718,6 @@
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
     <string name="Settings_VipSupport">VIP тех поддержка</string>
-    <string name="Settings_VipClub">VIP-клуб</string>
     <string name="Settings_BotSupport">BOT Support</string>
     <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
@@ -735,7 +730,6 @@
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
     <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
-    <string name="Settings_VipSupport_StartChat">Начать чат</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_GetYourTokens">Получи токены UWT</string>
@@ -784,7 +778,6 @@
     <string name="Premium_UpgradeFeature_AddressPhishing">Защита от мошенничества</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Проверка по черным спискам</string>
     <string name="Premium_UpgradeFeature_VipSupport">VIP группа</string>
-    <string name="Premium_UpgradeFeature_PrivacyMode">Режим приватности</string>
     <string name="Premium_UpgradeFeature_TokenInsights_Description">Исследование токенов</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Откройте для себя популярные токены</string>
     <string name="Premium_UpgradeFeature_TradeSignals_Description">Торгуйте умнее, получайте прибыль быстрее</string>
@@ -878,7 +871,7 @@
     <string name="SettingsSecurity_EditDuressPin">Изменить Duress код</string>
     <string name="SettingsSecurity_DisableDuressPin">Отключить Duress код</string>
     <string name="SettingsSecurity_DuressPinDescription">Специализированный режим, разработанный для обеспечения безопасности выбранных кошельков в условиях принуждения.</string>
-    <string name="SettingsSecurity_ManageKeys">Управление кошельками</string>
+    <string name="SettingsSecurity_ManageKeys">Кошельки</string>
     <string name="SettingsSecurity_AppRestartWarning">Это действие перезапустит Unstoppable Кошелек.</string>
     <string name="SettingsSecurity_TorConnectionDescription">Во время использования этого приложения полностью анонимизировать ваш интернет. Обратите внимание, что в некоторых случаях функция WalletConnect для DeFi приложений может быть очень медленной или вообще не работать.</string>
     <string name="SettingsSecurity_SortingShuffle">Перемешать</string>
