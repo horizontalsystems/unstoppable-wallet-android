@@ -187,15 +187,11 @@
     <string name="MarketGlobalMetrics_Volume">24 Std. Vol.</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF Inflow</string>
-    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Gesamtmarktwert aller Kryptowährungen.</string>
-    <string name="MarketGlobalMetrics_VolumeDescription">Das 24h Handelsvolumen des Krypto-Marktes.</string>
-    <string name="MarketGlobalMetrics_TvlInDefiDescription">Gesamtwert gesperrt (TVL) in DeFi.</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtern nach Kette</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Alle</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Gesamtnettonzufluss</string>
-    <string name="MarketEtf_Description">Der Nettogeldzufluss eines ETFs entspricht seinen Geldeingängen abzüglich der Abflüsse.</string>
     <string name="MarketEtf_HighestAssets">Höchste Vermögenswerte</string>
     <string name="MarketEtf_LowestAssets">Niedrigste Vermögenswerte</string>
     <string name="MarketEtf_Inflow">Zufluss</string>
