@@ -189,11 +189,15 @@
     <string name="MarketGlobalMetrics_Volume">Объём</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL в DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF приток</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Общая рыночная стоимость всех криптовалют</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">24-часовой объем крипторынка</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Всего заблокировано (TVL) в DeFi</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Сортировать по блокчейну</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Все</string>
     <string name="MarketGlobalMetrics_NoCoin">У этого проекта нет токена</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Общий чистый приток</string>
+    <string name="MarketEtf_Description">Чистый приток (net inflow) ETF равен разнице между поступлениями и оттоками наличных средств</string>
     <string name="MarketEtf_HighestAssets">Наивысшие активы</string>
     <string name="MarketEtf_LowestAssets">Наименьшие активы</string>
     <string name="MarketEtf_Inflow">Приток</string>
@@ -730,6 +734,8 @@
     <string name="Settings_PersonalSupport_NewRequest">Новый запрос</string>
     <string name="Settings_PersonalSupport_Requestfailed">Ошибка запроса</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Открыть Telegram</string>
+    <string name="Settings_VipSupport_StartChat">Присоединиться к VIP-группе</string>
+    <string name="Settings_VipSupport_Description">Получите эксклюзивный доступ к нашей VIP-группе, где премиальные пользователи и команда Unstoppable Wallet работают сообща. Получайте прямую поддержку, обсуждайте будущие обновления и помогайте формировать развитие кошелька.</string>
     <string name="Settings_Donate_Info">С вашей поддержкой мы вместе сможем сделать это приложение еще лучше!</string>
     <string name="Settings_Donate">Поддержи нас</string>
     <string name="Settings_GetYourTokens">Получи токены UWT</string>
