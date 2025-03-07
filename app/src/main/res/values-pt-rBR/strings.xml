@@ -162,7 +162,7 @@
     <string name="Market_Signals">Sinais</string>
     <string name="Market_Volume">Volume</string>
     <string name="Market_MarketCap">Capitalização de mercado</string>
-    <string name="Market_TVL">TVL</string>
+    <string name="Market_TVL">VTB</string>
     <string name="Market_Signal_Description">Os sinais abaixo são baseados nos indicadores técnicos de preço das Bandas de Bollinger e RSI ao longo dos últimos aproximadamente 30 dias. Esses sinais são algorítmicos e podem mudar com frequência.</string>
     <string name="Market_Signal_StrongBuy_Description">Alta confiança em aumento de preço.</string>
     <string name="Market_Signal_Buy_Description">Provável aumento de preço no futuro próximo.</string>
@@ -312,7 +312,7 @@
     <string name="Balance_Receive_AddressFormatDescription">Escolha um formato para fornecer um endereço a receber.</string>
     <string name="Balance_Receive_AddressFormat">Formato do Endereço</string>
     <string name="Balance_Receive_AddressFormat_RecommendedAddressType">O formato de endereço em dinheiro é preferido para receber Bitcoin Cash (BCH) devido à sua experiência e compatibilidade melhoradas. No entanto, ambos os formatos de endereço podem ser usados internamente para receber BCH, independentemente do formato de endereço do remetente.</string>
-    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">O formato Nativo SegWit é preferido em Bitcoin para melhorar a taxa de transferência e a segurança. Todos os formatos de endereço (Taproot, SegWit, Legacy) podem ser usados intermudanças para receber BTC independentemente do formato de endereço do remetente, permitindo transações ininterruptas entre diferentes tipos de moedas.</string>
+    <string name="Balance_Receive_AddressFormat_RecommendedDerivation">O formato SegWit Nativo é preferido em Bitcoin para melhorar a taxa de transferência e a segurança. Todos os formatos de endereço (Taproot, SegWit, Legacy) podem ser usados intermudanças para receber BTC independentemente do formato de endereço do remetente, permitindo transações ininterruptas entre diferentes tipos de moedas.</string>
     <string name="Balance_Receive_Account">Conta</string>
     <string name="Balance_Receive_NotActive">Não ativo</string>
     <string name="Balance_Receive_Amount">Montante</string>
@@ -1216,11 +1216,11 @@
     <string name="CoinAnalytics_Holders_Info1">Número total de endereços únicos que contêm o token em várias blockchains.</string>
     <string name="CoinAnalytics_Holders_Info2">As 10 principais carteiras que possuem o token em cada blockchain.</string>
     <string name="CoinAnalytics_Holders_TrackedBlockchains">Blockchains rastreadas: Ethereum, Binance Smart Chain, Optimism, Arbitrum, Celo, Cronos, Avalanche, Fantom, Polygon</string>
-    <string name="CoinAnalytics_ProjectTVL_Info1">Valor-Total-Bloqueado (ou ativos sob gestão) nos contratos inteligentes do projeto.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info2">Gráfico mostrando a variação de Valor-Total-Bloqueado nos contratos inteligentes do projeto durante o período de 1 ano.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info3">Classificação do token com base no Valor-Total-Bloqueado atual.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info4">Lista de todos os tokens classificados com base no Valor-Total-Bloqueado atual.</string>
-    <string name="CoinAnalytics_ProjectTVL_Info5">Valor de Mercado / proporção TVL para o projeto.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info1">Valor Total Bloqueado (ou ativos sob gestão) nos contratos inteligentes do projeto.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info2">Gráfico mostrando a variação de Valor Total Bloqueado nos contratos inteligentes do projeto durante o período de 1 ano.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info3">Classificação do token com base no Valor Total Bloqueado atual.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info4">Lista de todos os tokens classificados com base no Valor Total Bloqueado atual.</string>
+    <string name="CoinAnalytics_ProjectTVL_Info5">Valor de Mercado / proporção VTB para o projeto.</string>
     <string name="CoinAnalytics_ProjectNoAnalyticData">Este projeto não tem dados analíticos</string>
     <string name="CoinAnalytics_CexVolume">Volume CEX</string>
     <string name="CoinAnalytics_CexVolumeRank">Ranking do Volume CEX</string>
@@ -1237,9 +1237,9 @@
     <string name="CoinAnalytics_TransactionCount">Contagem de transações</string>
     <string name="CoinAnalytics_TransactionCountRank">Ranking de Contador Tx</string>
     <string name="CoinAnalytics_Holders">Detentores</string>
-    <string name="CoinAnalytics_ProjectTvl">Projeto TVL</string>
-    <string name="CoinAnalytics_ProjectTvl_FullTitle">Projeto TVB (Total de Valor Bloqueado)</string>
-    <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / TVB</string>
+    <string name="CoinAnalytics_ProjectTvl">Projeto VTB</string>
+    <string name="CoinAnalytics_ProjectTvl_FullTitle">Projeto VTB (Valor Total Bloqueado)</string>
+    <string name="CoinAnalytics_TvlRatio">Proporção de Capital de M. / VTB</string>
     <string name="CoinAnalytics_ProjectRevenue">Receita do Projeto</string>
     <string name="CoinAnalytics_ProjectFee">Taxa do Projeto</string>
     <string name="CoinAnalytics_ProjectRevenueRank">Ranking da Receita do Projeto</string>
@@ -1267,7 +1267,7 @@
     <string name="Coin_Analytics_OverallScore_DexVolume">A pontuação geral é baseada no volume médio diário de trading em trocas descentralizadas nos últimos 7 dias.</string>
     <string name="Coin_Analytics_OverallScore_DexLiquidity">A pontuação geral é baseada na liquidez total disponível em trocas descentralizadas.</string>
     <string name="Coin_Analytics_OverallScore_ActiveAddresses">A pontuação geral é baseada na média diária ativa dos últimos 7 dias.</string>
-    <string name="Coin_Analytics_OverallScore_ProjectTvl">A pontuação geral é baseada no valor total bloqueado (ativos sob gerenciação) no projeto representado pelo token fornecido.</string>
+    <string name="Coin_Analytics_OverallScore_ProjectTvl">A pontuação geral é baseada no valor total bloqueado (ativos sob gestão) no projeto representado pelo token fornecido.</string>
     <string name="Coin_Analytics_OverallScore_TransactionCount">A pontuação geral é baseada na contagem média de transações diárias nos últimos 7 dias.</string>
     <string name="Coin_Analytics_OverallScore_Holders">A pontuação geral é baseada no número total de endereços mantendo o respectivo token.</string>
     <string name="Coin_Analytics_Period_30m">30 Minutos</string>
