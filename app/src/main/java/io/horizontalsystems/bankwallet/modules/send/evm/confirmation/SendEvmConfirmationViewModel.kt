@@ -17,6 +17,7 @@ import io.horizontalsystems.bankwallet.modules.send.evm.SendEvmData
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SectionViewItem
 import io.horizontalsystems.bankwallet.modules.sendevmtransaction.SendEvmTransactionViewItemFactory
 import io.horizontalsystems.erc20kit.decorations.OutgoingEip20Decoration
+import io.horizontalsystems.ethereumkit.decorations.OutgoingDecoration
 import io.horizontalsystems.ethereumkit.models.TransactionData
 import io.horizontalsystems.marketkit.models.BlockchainType
 import io.horizontalsystems.nftkit.decorations.OutgoingEip1155Decoration
@@ -76,6 +77,10 @@ class SendEvmConfirmationViewModel(
             }
 
             is OutgoingEip1155Decoration -> {
+                transactionDecoration.to.eip55
+            }
+
+            is OutgoingDecoration -> {
                 transactionDecoration.to.eip55
             }
 
