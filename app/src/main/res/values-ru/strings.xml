@@ -238,6 +238,8 @@
     <string name="Market_Filter_StrongSell">Активно продавать</string>
     <string name="Market_Filter_Sell">Продавать</string>
     <string name="Market_Filter_RiskToTrade">Риски</string>
+    <string name="Market_Filter_ATH_Description">(Наивысшее за всё время)</string>
+    <string name="Market_Filter_ATL_Description">(Наименьшее за всё время)</string>
     <string name="Market_Filter_Top_100">Топ 100</string>
     <string name="Market_Filter_Top_200">Топ 200</string>
     <string name="Market_Filter_Top_300">Топ 300</string>
