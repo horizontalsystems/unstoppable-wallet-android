@@ -47,6 +47,7 @@
     <string name="Button_Share">Teilen</string>
     <string name="Button_Apply">Übernehmen</string>
     <string name="Button_SetAmount">Setze Betrag</string>
+    <string name="Button_ContinueAnyway">Trotzdem fortfahren</string>
     <string name="Error_OutOfRange">Es muss mindestens %1$s enthalten und darf maximal %2$s Zeichen lang sein</string>
     <string name="Error_NotInteger">Die von Dir angegebenen Zahlen sind nicht richtig</string>
     <string name="Error">Fehler</string>
@@ -220,6 +221,7 @@
     <string name="Market_Filter_OutperformedBtc">Übertraf BTC</string>
     <string name="Market_Filter_OutperformedEth">Übertraf ETH</string>
     <string name="Market_Filter_OutperformedBnb">Übertraf BNB</string>
+    <string name="Market_Filter_PriceCloseTo">Preis zum Schließen</string>
     <string name="Market_Filter_PriceCloseToAth">Preis nahe an ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Preis nahe zum ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listé sur les principales bourses</string>
@@ -235,6 +237,8 @@
     <string name="Market_Filter_StrongSell">Stark Verkaufen</string>
     <string name="Market_Filter_Sell">Verkaufen</string>
     <string name="Market_Filter_RiskToTrade">Riskant</string>
+    <string name="Market_Filter_ATH_Description">(Allzeithoch)</string>
+    <string name="Market_Filter_ATL_Description">(Allzeittief)</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_200">Top 200</string>
     <string name="Market_Filter_Top_300">Top 300</string>
@@ -280,6 +284,7 @@
     <string name="Market_Sorting_Losers">Verlierer</string>
     <string name="Market_Sorting_HighestCap">Höchste Obergrenze</string>
     <string name="Market_Sorting_LowestCap">Niedrigste Obergrenze</string>
+    <string name="Market_Filters_Select">%d auswählen</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Mehrkettig</string>
@@ -358,10 +363,35 @@
     <string name="Send_Confirmation_Send_Button">Senden</string>
     <string name="Send_Confirmation_Action">Aktion</string>
     <string name="Send_Processing">Verarbeite!</string>
+    <string name="Send_Processing_Description">Transaktion erfolgreich gesendet. Überprüfen Sie den Status für Details.</string>
     <string name="Send_Address_Recent">Neueste</string>
     <string name="Send_Address_Error_CheckLocked">Gesperrt</string>
     <string name="Send_Address_Error_Incorrect">Ungültig</string>
     <string name="Send_Address_Error_InvalidAddress">Ungültige Adresse</string>
+    <string name="Send_Address_Error_Correct">Korrekt</string>
+    <string name="Send_Address_Error_Detected">Erkannt</string>
+    <string name="Send_Address_Error_Clear">Unbedenklich</string>
+    <string name="Send_Address_AddressCheck">Adressprüfung</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">Analysiert die angegebene Zieladresse auf potenzielle Phishing-Risiken.</string>
+    <string name="Send_Address_PhishingCheck_Info2">Unbedenklich: Keine verdächtigen Aktivitäten erkannt.</string>
+    <string name="Send_Address_PhishingCheck_Info3">Erkannt: Es scheint, dass jemand versucht, Sie dazu zu bringen, Gelder an eine falsche Adresse zu senden. Fahren Sie nur fort, wenn Sie absolut sicher sind, dass die Adresse korrekt ist. Erwägen Sie, zunächst eine kleine Testtransaktion zu senden.</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">Prüft, ob die Zieladresse auf offiziellen oder inoffiziellen Schwarzlisten geführt wird.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">Unbedenklich: Keine Einträge auf Schwarzlisten.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Erkannt: Die Adresse ist auf einer Schwarzliste und könnte mit rechtlichen oder Sicherheitsrisiken verbunden sein. Gehen Sie mit Vorsicht vor. Viele Kryptobörsen beschränken Nutzer, die Gelder von Wallets einzahlen oder abheben, die mit Adressen auf Schwarzlisten interagiert haben. Behalten Sie das im Hinterkopf.</string>
+    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">Überprüft, ob die Adresse des Empfängers internationalen Sanktionen unterliegt, unter Verwendung von Daten von Chainalysis.com.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Unbedenklich: Keine Sanktionen erkannt.</string>
+    <string name="Send_Address_SanctionCheck_Info3">Erkannt: Potenzielles rechtliches Risiko. Transaktionen mit dieser Adresse könnten in bestimmten Rechtsgebieten eingeschränkt oder illegal sein.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Phishing-Adresse erkannt!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Adresse auf Schwarzliste erkannt!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Sanktionierte Adresse erkannt!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Die von Ihnen eingegebene Adresse könnte betrügerisch sein. Betrüger ändern oft die ersten und letzten Zeichen. Überprüfen Sie die vollständige Adresse sorgfältig, bevor Sie fortfahren, um Verluste zu vermeiden.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Die von Ihnen eingegebene Adresse ist als auf einer Schwarzliste markiert. Transaktionen an diese Adresse könnten zu Verlusten oder anderen Risiken führen. Bitte überprüfen Sie die Details des Empfängers, bevor Sie fortfahren.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Die von Ihnen eingegebene Adresse ist als sanktioniert markiert. Transaktionen an diese Adresse könnten zu Verlusten oder anderen Risiken führen. Bitte überprüfen Sie die Details des Empfängers, bevor Sie fortfahren.</string>
+    <string name="Send_RiskyAddress">Risikoreiche Adresse!</string>
+    <string name="Send_RiskyAddress_AlertText">Sie sind dabei, Gelder an eine risikoreiche Adresse zu senden. Das Fortfahren kann zu Verlusten oder anderen Sicherheitsrisiken führen. Durch das Fortfahren akzeptieren Sie die potenziellen Gefahren. Sind Sie sicher, dass Sie fortfahren möchten?</string>
     <string name="Send_Success">\u2713 Gesendet</string>
     <string name="ScanQr_CameraPermission_Title">Erlaubnis nötig, um die Kamera zu verwalten</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Bitte erteilen Sie der Kamera Genehmigung</string>
@@ -441,6 +471,7 @@
     <string name="TonConnect_Error_InvalidUrl">Ungültige URL-Adresse</string>
     <string name="TonConnect_Unnamed">Unbenannt</string>
     <string name="TonConnect_Wallet">Wallet</string>
+    <string name="TonConnect_ChooseWallet">Wallet auswählen</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Status</string>
     <string name="WalletConnect_Approve_Hint">Indem Sie auf \"Genehmigen\" klicken, erlauben Sie dieser App, Ihre öffentliche Adresse anzuzeigen. Dies ist ein wichtiger Sicherheitsschritt, um Ihre Daten vor potenziellen Phishing-Risiken zu schützen.</string>
@@ -688,6 +719,7 @@
     <string name="Settings_RateUs">Bewerten Sie uns</string>
     <string name="Settings_LaunchScreen">Startbildschirm</string>
     <string name="Settings_Appearance">Darstellung</string>
+    <string name="Settings_Subscription">Abonnement</string>
     <string name="Settings_Contact_ViaTelegram">via Telegramm</string>
     <string name="Settings_Contact_ViaEmail">per e-Mail</string>
     <string name="Settings_AutoLock">Auto-Sperren</string>
@@ -703,6 +735,8 @@
     <string name="Settings_PersonalSupport_NewRequest">Neue Zahlungsaufforderung</string>
     <string name="Settings_PersonalSupport_Requestfailed">Anfrage fehlgeschlagen</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Telegram öffnen</string>
+    <string name="Settings_VipSupport_StartChat">VIP-Gruppe beitreten</string>
+    <string name="Settings_VipSupport_Description">Erhalten Sie exklusiven Zugang zu unserer VIP-Gruppe, in der Premium-Nutzer und das Unstoppable Wallet-Team zusammenarbeiten. Erhalten Sie direkte Unterstützung, diskutieren Sie zukünftige Updates und helfen Sie, die Entwicklung der Wallet mitzugestalten.</string>
     <string name="Settings_Donate_Info">Gemeinsam können wir mit Ihrer Unterstützung diese App noch besser machen!</string>
     <string name="Settings_Donate">Spenden</string>
     <string name="Settings_GetYourTokens">Token erhalten</string>
@@ -718,11 +752,62 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 Minuten</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 Stunde</string>
     <!--Premium Banner-->
+    <string name="SettingsBanner_Premium">Premium</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Verbessern Sie Ihre Erfahrung mit Premium-Funktionen!</string>
+    <string name="SettingsBanner_PremiumTryFee">KOSTENLOS testen</string>
     <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Aktiv</string>
     <string name="SettingsSubscription_GetPremium">Premium erhalten</string>
+    <string name="SettingsSubscription_RestorePurchase">Kauf wiederherstellen</string>
+    <string name="SettingsSubscription_SubscriptionPlan">Abonnementplan</string>
+    <string name="SettingsSubscription_SubscriptionInfo">Nächstes Zahlungsdatum: %s. Sie können Ihr Abonnement im Bereich \"Abonnement verwalten\" verwalten.</string>
+    <string name="SettingsSubscription_ManageSubscription">Abonnement verwalten</string>
+    <string name="Period_Days">%s Tage</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
+    <string name="Premium_ChoosePlanForYou">Plan auswählen</string>
+    <string name="Premium_EnjoyFreePeriod">Genießen Sie die ersten %s KOSTENLOS.</string>
+    <string name="Premium_CancelSubscriptionInfo">Sie können Ihr Abonnement jederzeit kündigen.</string>
+    <string name="Premium_GetFreePeriod">%s KOSTENLOS erhalten</string>
+    <string name="Premium_Subscribe">Abonnieren</string>
+    <string name="Premium_AddPromoCode">Promo-Code hinzufügen</string>
+    <string name="Premium_TryForFree">KOSTENLOS testen</string>
+    <string name="Premium_Upgrade">Upgrade</string>
     <string name="Premium_Restore">Wiederherstellen</string>
+    <string name="Premium_Annually">Jährlich</string>
+    <string name="Premium_Monthly">Monatlich</string>
+    <string name="Premium_ThankYouForSubscription">Vielen Dank für Ihr \nAbonnement!</string>
+    <string name="Premium_YouHaveActivatedPlan">Sie haben den %s-Plan aktiviert.</string>
+    <string name="Premium_GoToApp">Zur App</string>
+    <string name="Premium_UpgradeText">Verbessern Sie Ihre Erfahrung mit Premium-Funktionen!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Genießen Sie die volle Leistung der App.</string>
+    <string name="Premium_SelectSubscription">Abonnement auswählen</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Token-Listen</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Erweiterte Suche</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Trends beobachten</string>
     <string name="Premium_UpgradeFeature_DuressMode">Duress-Modus</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Scam-Schutz</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">SchwarzListen-Prüfer</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP Gruppe</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Meistern Sie Token-Recherche</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Entdecken Sie trendende Token</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Smarter handeln, schneller profitieren</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Bleiben Sie sicher, wo immer Sie sind</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Bleiben Sie sicher ohne Umstände</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Bleiben Sie legal und konform</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Stimmen Sie über die Zukunft von Unstoppable ab</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ihr All-in-One-Tool für tiefgehende Analysen. Durchsuchen Sie kuratierte Top-250-Token-Listen basierend auf Handelsvolumen, Börsen-Liquidität, Halterverhalten und On-Chain-Trends – alles auf einen Blick. Filtern, analysieren und bleiben Sie voraus.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Lassen Sie den Lärm hinter sich und konzentrieren Sie sich präzise auf Token mit hohem Potenzial. Nutzen Sie die Erweiterte Suche, um Tausende von Token nach Handelsvolumen, Blockchain, Marktkapitalisierung, Preistrends, Sektor und Performance zu filtern – und mehr. Leistungsstark, präzise und für Entdeckungen konzipiert.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Verpassen Sie nie wieder eine Handelsgelegenheit. Watch Trends liefert Echtzeit-Benachrichtigungen, unterstützt durch fortschrittliche technische Analyse, die Ihnen hilft, Trends zu identifizieren, Ausbrüche zu erkennen und Fallstricke zu vermeiden, bevor sie passieren. Handeln Sie schnell, traden Sie smart und maximieren Sie Ihre Gewinne.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Ihre Krypto. Ihre Sicherheit. Der Notfallmodus ermöglicht es Ihnen, mehrere alternative Wallet-Konfigurationen zu erstellen, jede mit einer separaten PIN, und bietet so einen versteckten Ausweg in Hochrisikosituationen. Wenn Sie gezwungen werden, Ihre Wallet zu entsperren, verwenden Sie einfach die Notfall-PIN, um auf eine sekundäre Wallet zuzugreifen, ohne dass kritische Vermögenswerte preisgegeben werden. Ihre tatsächlichen Gelder bleiben verborgen. Ihre Sicherheit bleibt intakt.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Eine falsche Adresse, und Ihre Kryptowährung ist für immer verloren. Unstoppable scannt automatisch Empfängeradressen auf verdächtige Muster und schützt vor den neuesten Phishing-Bedrohungen, um zu verhindern, dass Sie Gelder an einen Hacker senden. Blockieren Sie betrügerische Überweisungen, bevor sie passieren.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Schützen Sie sich vor risikoreichen und sanktionierten Entitäten. Der Schwarzlisten-Prüfer überprüft automatisch Empfängeradressen gegen Hochrisiko-Datenbanken und markiert Betrug, Fälschungen und sanktionierte Entitäten, bevor Sie senden. Wenn eine Adresse auf der Schwarzliste steht, erfahren Sie es, bevor Sie einen kostspieligen Fehler machen. Sichern Sie Ihre Transaktionen. Halten Sie Ihre Kryptowährung sauber. Bleiben Sie konform.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Seien Sie Teil der Evolution. Treten Sie der VIP-Gruppe bei, um direkt mit unserem Team in Kontakt zu treten, über kommende Funktionen abzustimmen und einen exklusiven ersten Blick auf zukünftige Updates zu erhalten. Ihre Stimme zählt – helfen Sie mit, die nächste Generation der Krypto-Wallet zu gestalten.</string>
+    <string name="Premium_HighlyRatedSecurity">Hochbewertete Sicherheit, außergewöhnliche Privatsphäre und eine wirklich nicht-verwaltete Wallet.</string>
+    <string name="Premium_ApprovedBy">Genehmigt und geprüft von:</string>
+    <string name="Premium_WhatUsersSay">Was Benutzer sagen:</string>
+    <string name="Premium_SubscriptionPeriod_Month">monate</string>
+    <string name="Premium_SubscriptionPeriod_Year">jahr</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">APP ICON</string>
@@ -764,6 +849,7 @@
     <string name="Privacy_BulletedText2">Es gibt keine Benutzerkonten oder Datenbanken, die Benutzerdaten speichern.</string>
     <string name="Privacy_BulletedText3">Wenn erlaubt, teilt die Brieftasche App-Nutzungsgewohnheiten mit dem unaufhaltsamen Team. Dies ist zu verstehen, welche Funktionen von unseren Benutzern verwendet werden (oder nicht). Als datenschutzorientierte App brauchen wir eine Möglichkeit, unsere Bemühungen zu bewerten, und ohne dies haben wir keine Ahnung, ob die von uns erstellten Funktionen genutzt werden oder nicht.</string>
     <string name="ShareUiData">UI-Daten teilen</string>
+    <string name="ShareUiDataDescription">Diese Einstellung ermöglicht es Ihnen, UI/UX-Analysen zu deaktivieren und vollständige Vertraulichkeit zu gewährleisten.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Neu hinzufügen</string>
@@ -972,6 +1058,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM privater Schlüssel</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Gewährt volle Kontrolle über EVM-basierte Kryptos, d.h. Ethereum, Binance Smart Chain etc innerhalb der jeweiligen Wallet.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Gewährt die volle Kontrolle über die Vermögenswerte auf der jeweiligen Brieftasche.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Gewährt volle Kontrolle über Bitcoin und andere auf UTXO basierende Kryptos, z.B. Litecoin, Bitcoin Cash, Dash, etc. innerhalb der jeweiligen Wallet.</string>
     <string name="PrivateKeys_NeverShareWarning">Teilen Sie niemals Ihre Wiederherstellungsphrase mit niemandem. Das unaufhaltsame Team wird niemals nach Ihrer Wiederherstellungsphrase fragen.</string>
     <!-- Public Keys -->
