@@ -47,6 +47,7 @@
     <string name="Button_Share">分享</string>
     <string name="Button_Apply">应用</string>
     <string name="Button_SetAmount">设定金额</string>
+    <string name="Button_ContinueAnyway">仍然繼續</string>
     <string name="Error_OutOfRange">不能小于 %1$s 或大于 %2$s</string>
     <string name="Error_NotInteger">错误的整数</string>
     <string name="Error">出错</string>
@@ -186,11 +187,15 @@
     <string name="MarketGlobalMetrics_Volume">24小时交易量</string>
     <string name="MarketGlobalMetrics_TvlInDefi">DeFi锁定</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF 输入</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">所有加密货币的总市场价值</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">加密货币市场24小时交易量</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">去中心金融（DeFi）中的锁定总价值（TVL)</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">通过区块链过滤</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">所有</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">网络总流量</string>
+    <string name="MarketEtf_Description">ETF的净流入等于其现金流入减去流出</string>
     <string name="MarketEtf_HighestAssets">最高资产</string>
     <string name="MarketEtf_LowestAssets">最低资产</string>
     <string name="MarketEtf_Inflow">流入</string>
@@ -215,6 +220,7 @@
     <string name="Market_Filter_OutperformedBtc">跑赢BTC</string>
     <string name="Market_Filter_OutperformedEth">跑赢ETH</string>
     <string name="Market_Filter_OutperformedBnb">跑赢BNB</string>
+    <string name="Market_Filter_PriceCloseTo">關閉價格</string>
     <string name="Market_Filter_PriceCloseToAth">接近历史最高价</string>
     <string name="Market_Filter_PriceCloseToAtl">接近历史最低价</string>
     <string name="Market_Filter_ListedOnTopExchanges">列在顶级交易所上</string>
@@ -230,12 +236,16 @@
     <string name="Market_Filter_StrongSell">强烈建议卖出</string>
     <string name="Market_Filter_Sell">出售</string>
     <string name="Market_Filter_RiskToTrade">有风险</string>
+    <string name="Market_Filter_ATH_Description">(歷史最高點)</string>
+    <string name="Market_Filter_ATL_Description">(歷史最低點)</string>
     <string name="Market_Filter_Top_100">前100名</string>
     <string name="Market_Filter_Top_200">前200名</string>
     <string name="Market_Filter_Top_300">前300名</string>
     <string name="Market_Filter_Top_500">前500名</string>
     <string name="Market_Filter_Top_1000">前1000名</string>
     <string name="Market_Filter_Top_1500">前1500名</string>
+    <string name="Market_Filter_Top_2000">前2000名</string>
+    <string name="Market_Filter_Top_2500">前2500名</string>
     <string name="Market_Filter_ShowResults">显示结果</string>
     <string name="Market_Filter_ShowResults_Counter">显示结果：%d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5百万</string>
@@ -273,6 +283,7 @@
     <string name="Market_Sorting_Losers">跌幅最大者</string>
     <string name="Market_Sorting_HighestCap">市值由高到低</string>
     <string name="Market_Sorting_LowestCap">市值由低到高</string>
+    <string name="Market_Filters_Select">選擇 %d</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">多链</string>
@@ -322,6 +333,7 @@
     <!--Send NFT-->
     <string name="SendNft_Title">发送​​</string>
     <!--Send-->
+    <string name="Send_EnterAddress">输入地址</string>
     <string name="Send_Title">发送%s</string>
     <string name="Send_Hint_Address">地址或域名</string>
     <string name="Send_Fee">费用</string>
@@ -341,12 +353,44 @@
     <string name="Send_Utxo_SelectAll">全选</string>
     <string name="Send_Confirmation_Title">确认</string>
     <string name="Send_Confirmation_YouSend">您发送</string>
+    <string name="Send_Confirmation_YouReceive">您收到</string>
     <string name="Send_Confirmation_Mint">薄荷绿</string>
+    <string name="Send_Confirmation_Burn">燃烧</string>
     <string name="Send_Confirmation_To">接收人</string>
     <string name="Send_Confirmation_Own">自有</string>
     <string name="Send_Confirmation_Method">方法</string>
     <string name="Send_Confirmation_Send_Button">发送​​</string>
+    <string name="Send_Confirmation_Action">操作</string>
+    <string name="Send_Processing">正在处理!</string>
+    <string name="Send_Processing_Description">交易發送成功。查看其狀態以獲取詳情。</string>
+    <string name="Send_Address_Recent">最近</string>
     <string name="Send_Address_Error_CheckLocked">锁住</string>
+    <string name="Send_Address_Error_Incorrect">无效</string>
+    <string name="Send_Address_Error_InvalidAddress">无效地址</string>
+    <string name="Send_Address_Error_Correct">正確</string>
+    <string name="Send_Address_Error_Detected">已檢測</string>
+    <string name="Send_Address_Error_Clear">清除</string>
+    <string name="Send_Address_AddressCheck">地址檢查</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">分析提供的目標地址是否存在潛在釣魚風險。</string>
+    <string name="Send_Address_PhishingCheck_Info2">清除：未檢測到可疑活動。</string>
+    <string name="Send_Address_PhishingCheck_Info3">已檢測：似乎有人可能試圖誘騙您向錯誤地址發送資金。除非絕對確定地址正確，否則請勿繼續。考慮先發送小額測試交易。</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">檢查目標地址是否列在官方或非官方黑名單上。</string>
+    <string name="Send_Address_BlacklistCheck_Info2">清除：無黑名單標記。</string>
+    <string name="Send_Address_BlacklistCheck_Info3">已檢測：該地址已被列入黑名單，可能與法律或安全風險相關。請謹慎操作。許多加密貨幣交易所會限制與曾經與黑名單地址互動的錢包進行存款或提款的用戶。請謹記這一點。</string>
+    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">使用來自Chainalysis.com的數據，驗證接收者的地址是否受國際制裁。</string>
+    <string name="Send_Address_SanctionCheck_Info2">清除：未檢測到制裁。</string>
+    <string name="Send_Address_SanctionCheck_Info3">已檢測：存在潛在法律風險。在某些司法管轄區，與此地址的交易可能受到限制或被視為非法。</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">檢測到釣魚地址！</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">檢測到黑名單地址！</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">檢測到受制裁地址！</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">您輸入的地址可能是欺詐性的。詐騙者通常會更改首尾字符。在繼續之前請仔細驗證完整地址，以避免損失。</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">您輸入的地址被標記為黑名單。向此地址進行交易可能導致損失或其他風險。繼續之前請驗證接收者的詳細信息。</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">您輸入的地址被標記為受制裁。向此地址進行交易可能導致損失或其他風險。繼續之前請驗證接收者的詳細信息。</string>
+    <string name="Send_RiskyAddress">風險地址！</string>
+    <string name="Send_RiskyAddress_AlertText">您即將向高風險地址發送資金。繼續可能導致資金損失或其他安全風險。繼續操作即表示您接受潛在危險。您確定要繼續嗎？</string>
     <string name="Send_Success">\u2713已发送</string>
     <string name="ScanQr_CameraPermission_Title">允许打开相机权限</string>
     <string name="ScanQr_PleaseGrantCameraPermission">请授予相机权限</string>
@@ -426,6 +470,7 @@
     <string name="TonConnect_Error_InvalidUrl">无效的URL地址</string>
     <string name="TonConnect_Unnamed">未命名</string>
     <string name="TonConnect_Wallet">钱包</string>
+    <string name="TonConnect_ChooseWallet">選擇錢包</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">状态</string>
     <string name="WalletConnect_Approve_Hint">点击批准，表示您允许此应用查看您的公开地址。这是保护您的数据免受潜在钓鱼风险威胁的重要安全步骤。</string>
@@ -673,10 +718,12 @@
     <string name="Settings_RateUs">评价我们</string>
     <string name="Settings_LaunchScreen">启动屏幕</string>
     <string name="Settings_Appearance">外观</string>
+    <string name="Settings_Subscription">訂閱</string>
     <string name="Settings_Contact_ViaTelegram">通过 Telegram</string>
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_BotSupport">BOT 支持</string>
     <string name="Settings_JoinUnstoppables_Description">通过独家视频学习和掌握加密。非正式地了解我们。成为第一个看看我们正在工作的事情。</string>
     <string name="Settings_PersonalSupport">个人支持</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">请输入您的 Telegram 帳號名稱，開始与我們的团队的個人支援聊天。 一旦我们看到这个问题，我们就会回到您的面前。</string>
@@ -688,6 +735,8 @@
     <string name="Settings_PersonalSupport_NewRequest">新建请求</string>
     <string name="Settings_PersonalSupport_Requestfailed">请求失败</string>
     <string name="Settings_PersonalSupport_OpenTelegram">打开 Telegram</string>
+    <string name="Settings_VipSupport_StartChat">加入貴賓群組</string>
+    <string name="Settings_VipSupport_Description">獲得專屬訪問我們的貴賓群組的權限，高級用戶和Unstoppable錢包團隊在此協作。接收直接協助、討論未來更新，並幫助塑造錢包的發展。</string>
     <string name="Settings_Donate_Info">在你的支持下，我们可以使这个应用更好！</string>
     <string name="Settings_Donate">捐助</string>
     <string name="Settings_GetYourTokens">获取代币</string>
@@ -703,11 +752,62 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 分钟</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 小时</string>
     <!--Premium Banner-->
+    <string name="SettingsBanner_Premium">高級版</string>
+    <string name="SettingsBanner_PremiumBannerDescription">使用高級版功能升級您的體驗！</string>
+    <string name="SettingsBanner_PremiumTryFee">免費試用</string>
     <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">已啟用</string>
     <string name="SettingsSubscription_GetPremium">成为付费会员</string>
+    <string name="SettingsSubscription_RestorePurchase">恢復購買</string>
+    <string name="SettingsSubscription_SubscriptionPlan">訂閱計劃</string>
+    <string name="SettingsSubscription_SubscriptionInfo">下次付款日期：%s。您可以在管理訂閱部分管理您的訂閱。</string>
+    <string name="SettingsSubscription_ManageSubscription">管理訂閱</string>
+    <string name="Period_Days">%s 天</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">高級版</string>
+    <string name="Premium_ChoosePlanForYou">選擇方案</string>
+    <string name="Premium_EnjoyFreePeriod">享受前 %s 免費。</string>
+    <string name="Premium_CancelSubscriptionInfo">您可以隨時取消您的訂閱。</string>
+    <string name="Premium_GetFreePeriod">免費獲取 %s</string>
+    <string name="Premium_Subscribe">訂閱</string>
+    <string name="Premium_AddPromoCode">添加優惠碼</string>
+    <string name="Premium_TryForFree">免費試用</string>
+    <string name="Premium_Upgrade">升級</string>
     <string name="Premium_Restore">恢复自</string>
+    <string name="Premium_Annually">年度</string>
+    <string name="Premium_Monthly">月度</string>
+    <string name="Premium_ThankYouForSubscription">感謝您的\n訂閱！</string>
+    <string name="Premium_YouHaveActivatedPlan">您已啟用 %s 方案。</string>
+    <string name="Premium_GoToApp">前往應用程式</string>
+    <string name="Premium_UpgradeText">使用高級版功能升級您的體驗！</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
+    <string name="Premium_SelectSubscription">選擇訂閱</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">代幣列表</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">進階搜尋</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">觀察趨勢</string>
     <string name="Premium_UpgradeFeature_DuressMode">服用模式</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">詐騙防護</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">黑名單檢查</string>
+    <string name="Premium_UpgradeFeature_VipSupport">貴賓群組</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">掌握代幣研究</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">發現熱門代幣</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">更智能交易，更快獲利</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">無論身在何處都保持安全</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">無憂保持安全</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">保持合法與合規</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">為Unstoppable的未來投票</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">您的一站式深度分析工具。瀏覽根據交易量、交易所流動性、持有者行為和鏈上趨勢策劃的前250名代幣列表—一目了然。篩選、分析並保持領先。</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">摒棄雜訊，精準鎖定高潛力代幣。使用進階搜尋功能，通過交易量、區塊鏈、市值、價格趨勢、行業和表現等條件篩選數千種代幣。強大、精準且專為發現而設計。</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">不再錯過任何交易機會。觀察趨勢提供由先進技術分析驅動的實時警報，幫助您在趨勢發生前識別、發現突破點並避免陷阱。快速行動，智能交易，最大化收益。</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">您的加密貨幣。您的安全。脅迫模式讓您創建多個備用錢包設置，每個都有單獨的PIN碼，在高風險情況下提供隱藏的逃生路線。如果被迫解鎖您的錢包，只需使用脅迫PIN碼訪問次要錢包，不會暴露關鍵資產。您的真實資金保持隱藏。您的安全完好無損。</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">一個錯誤的地址，您的加密貨幣將永遠消失。Unstoppable自動掃描接收地址的可疑模式，防禦最新的網絡釣魚威脅，防止您向駭客發送資金。在詐騙交易發生前阻止它們。</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">保護自己免受風險和受制裁實體的侵害。黑名單檢查自動對照高風險數據庫篩選接收地址，在您發送前標記詐騙、欺詐和受制裁實體。如果一個地址被列入黑名單，您將在犯下代價高昂的錯誤前知道。保護您的交易。保持您的加密貨幣清潔。保持合規。</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">成為進化的一部分。加入貴賓群組，直接與我們的團隊聯繫，為即將推出的功能投票，並獨家先睹未來更新。您的聲音很重要—幫助塑造下一代加密錢包。</string>
+    <string name="Premium_HighlyRatedSecurity">高評價的安全性、卓越的隱私性和真正的非託管錢包。</string>
+    <string name="Premium_ApprovedBy">經以下機構批准和審核：</string>
+    <string name="Premium_WhatUsersSay">用戶評價：</string>
+    <string name="Premium_SubscriptionPeriod_Month">月</string>
+    <string name="Premium_SubscriptionPeriod_Year">年</string>
     <string name="Appearance_MarketsTab">市场标签</string>
     <string name="Appearance_BalanceTab">余额标签</string>
     <string name="Appearance_AppIcon">应用图标</string>
@@ -749,6 +849,7 @@
     <string name="Privacy_BulletedText2">我们没有用户账户或存储用户数据的数据库。</string>
     <string name="Privacy_BulletedText3">如果允许，钱包将与不可阻挡团队分享应用程序使用习惯。这是为了了解我们的用户正在使用哪些功能（或未使用）。作为一个关注隐私的应用程序，我们需要一种评估我们努力的方式，如果没有这个，我们就无法知道我们构建的功能是否被使用。</string>
     <string name="ShareUiData">共享界面数据</string>
+    <string name="ShareUiDataDescription">此設置允許您禁用UI/UX分析並確保完全的隱私性。</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">添加新的</string>
@@ -953,6 +1054,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM 私钥</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">授予对基于加密货币的EVM的完全控制，即在相应钱包内的以太坊、币安智能链等。</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">授予对相应钱包上的资产的完全控制。</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">授予对比特币和基于加密货币的其他未花费交易输出（UTXO）的完全控制，即在相应钱包内的莱特币、比特币现金、达世币等。</string>
     <string name="PrivateKeys_NeverShareWarning">永远不会与任何人分享您的恢复短语。无法阻止的团队将永远不会要求您的恢复短语。</string>
     <!-- Public Keys -->

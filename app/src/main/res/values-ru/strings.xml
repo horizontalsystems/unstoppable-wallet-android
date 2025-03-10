@@ -238,6 +238,8 @@
     <string name="Market_Filter_StrongSell">Активно продавать</string>
     <string name="Market_Filter_Sell">Продавать</string>
     <string name="Market_Filter_RiskToTrade">Риски</string>
+    <string name="Market_Filter_ATH_Description">(Наивысшее за всё время)</string>
+    <string name="Market_Filter_ATL_Description">(Наименьшее за всё время)</string>
     <string name="Market_Filter_Top_100">Топ 100</string>
     <string name="Market_Filter_Top_200">Топ 200</string>
     <string name="Market_Filter_Top_300">Топ 300</string>
@@ -367,6 +369,7 @@
     <string name="Send_Address_Error_CheckLocked">Заблокировано</string>
     <string name="Send_Address_Error_Incorrect">Неверно</string>
     <string name="Send_Address_Error_InvalidAddress">Неверный адрес</string>
+    <string name="Send_Address_Error_Correct">Правильно</string>
     <string name="Send_Address_Error_Detected">Обнаружено</string>
     <string name="Send_Address_Error_Clear">Чисто</string>
     <string name="Send_Address_AddressCheck">Проверка адреса</string>
@@ -609,6 +612,7 @@
     <string name="Transactions_ContractCall">Вызов контракта</string>
     <string name="Transactions_ExternalContractCall">Внешний вызов</string>
     <string name="Transactions_ContractCreation">Создание контракта</string>
+    <string name="Transactions_ContractDeploy">Развёртывание контракта</string>
     <string name="Transactions_To">кому %s</string>
     <string name="Transactions_From">от %s</string>
     <string name="Transaction_Unlimited_CoinCode">безлимитный %s</string>
@@ -761,10 +765,13 @@
     <string name="SettingsSubscription_SubscriptionPlan">План подписки</string>
     <string name="SettingsSubscription_SubscriptionInfo">Следующая дата платежа: %s. Вы можете управлять своей подпиской в разделе \"управление подпиской\".</string>
     <string name="SettingsSubscription_ManageSubscription">Управление подпиской</string>
+    <string name="Period_Days">%s дня</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Премиум</string>
     <string name="Premium_ChoosePlanForYou">Выберите план</string>
+    <string name="Premium_EnjoyFreePeriod">Наслаждайтесь первым %s БЕСПЛАТНО.</string>
     <string name="Premium_CancelSubscriptionInfo">Вы можете отменить подписку в любое время.</string>
+    <string name="Premium_GetFreePeriod">Получите %s БЕСПЛАТНО</string>
     <string name="Premium_Subscribe">Подписаться</string>
     <string name="Premium_AddPromoCode">Ввести промокод</string>
     <string name="Premium_TryForFree">Попробовать БЕСПЛАТНО</string>
@@ -773,6 +780,7 @@
     <string name="Premium_Annually">Ежегодно</string>
     <string name="Premium_Monthly">Ежемесячно</string>
     <string name="Premium_ThankYouForSubscription">Благодарим вас \nза подписку!</string>
+    <string name="Premium_YouHaveActivatedPlan">Вы активировали план %s.</string>
     <string name="Premium_GoToApp">Перейти в приложение</string>
     <string name="Premium_UpgradeText">Улучшите свой опыт с премиум функциями!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
