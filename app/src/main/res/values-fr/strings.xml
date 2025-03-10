@@ -220,6 +220,7 @@
     <string name="Market_Filter_OutperformedBtc">A surpassé BTC</string>
     <string name="Market_Filter_OutperformedEth">A surpassé ETH</string>
     <string name="Market_Filter_OutperformedBnb">A surpassé BNB</string>
+    <string name="Market_Filter_PriceCloseTo">Prix de clôture</string>
     <string name="Market_Filter_PriceCloseToAth">Prix proche d\'ATH</string>
     <string name="Market_Filter_PriceCloseToAtl">Prix proche d\'ATL</string>
     <string name="Market_Filter_ListedOnTopExchanges">Listé sur les meilleures bourses</string>
@@ -235,6 +236,8 @@
     <string name="Market_Filter_StrongSell">Vente forte</string>
     <string name="Market_Filter_Sell">Vendre</string>
     <string name="Market_Filter_RiskToTrade">Risqué</string>
+    <string name="Market_Filter_ATH_Description">(Plus Haut Historique)</string>
+    <string name="Market_Filter_ATL_Description">(Plus Bas Historique)</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_200">Top 200</string>
     <string name="Market_Filter_Top_300">Top 300</string>
@@ -280,6 +283,7 @@
     <string name="Market_Sorting_Losers">Perdants</string>
     <string name="Market_Sorting_HighestCap">Cap. marché la plus forte</string>
     <string name="Market_Sorting_LowestCap">Cap. marché la plus basse</string>
+    <string name="Market_Filters_Select">Sélectionner %d</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-chaîne</string>
@@ -329,6 +333,7 @@
     <!--Send NFT-->
     <string name="SendNft_Title">Envoyer</string>
     <!--Send-->
+    <string name="Send_EnterAddress">Entrer l\'adresse</string>
     <string name="Send_Title">Envoyer %s</string>
     <string name="Send_Hint_Address">Adresse ou domaine</string>
     <string name="Send_Fee">Frais</string>
@@ -348,14 +353,24 @@
     <string name="Send_Utxo_SelectAll">Tout sélectionner</string>
     <string name="Send_Confirmation_Title">Confirmer</string>
     <string name="Send_Confirmation_YouSend">Vous envoyez</string>
+    <string name="Send_Confirmation_YouReceive">Vous Recevez</string>
     <string name="Send_Confirmation_Mint">Mint</string>
+    <string name="Send_Confirmation_Burn">Brûlure</string>
     <string name="Send_Confirmation_To">À</string>
     <string name="Send_Confirmation_Own">Propriétaire</string>
     <string name="Send_Confirmation_Method">Méthode</string>
     <string name="Send_Confirmation_Send_Button">Envoyer</string>
+    <string name="Send_Confirmation_Action">Action</string>
+    <string name="Send_Processing">Traitement en cours!</string>
+    <string name="Send_Processing_Description">Transaction envoyée avec succès. Vérifiez son statut pour plus de détails.</string>
+    <string name="Send_Address_Recent">Récent</string>
     <string name="Send_Address_Error_CheckLocked">Verrouillé</string>
     <string name="Send_Address_Error_Incorrect">Invalide</string>
     <string name="Send_Address_Error_InvalidAddress">Adresse invalide</string>
+    <string name="Send_Address_Error_Correct">Correcte</string>
+    <string name="Send_Address_Error_Detected">Détectée</string>
+    <string name="Send_Address_Error_Clear">Effacer</string>
+    <string name="Send_Address_AddressCheck">Vérification d\'adresse</string>
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
     <string name="Send_Address_PhishingCheck_Info1">Analyse l\'adresse de destination fournie pour détecter d\'éventuels risques d\'hameçonnage.</string>
     <string name="Send_Address_PhishingCheck_Info2">RAS : Aucune activité suspecte détectée.</string>
@@ -708,6 +723,7 @@
     <string name="Settings_Contact_ViaEmail">par e-mail</string>
     <string name="Settings_AutoLock">Verrouillage automatique</string>
     <string name="Settings_JoinUnstoppables">Soyez Unstoppable</string>
+    <string name="Settings_BotSupport">Support BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Apprenez et maîtrisez les crypto-monnaies grâce à des vidéos exclusives. Faites connaissance avec nous de manière informelle. Soyez les premiers à voir les projets sur lesquels nous travaillons.</string>
     <string name="Settings_PersonalSupport">Assistance Personnelle</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Entrez le nom de votre compte Telegram pour commencer une conversation de soutien personnelle avec notre équipe. Nous reviendrons vers vous et commencerons à travailler sur votre problème dès que nous le verrons.</string>
@@ -738,13 +754,60 @@
     <!--Premium Banner-->
     <string name="SettingsBanner_Premium">Premium</string>
     <string name="SettingsBanner_PremiumBannerDescription">Améliorez votre expérience avec les fonctionnalités Premium !</string>
+    <string name="SettingsBanner_PremiumTryFee">Essayez GRATUITEMENT</string>
     <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Actif</string>
     <string name="SettingsSubscription_GetPremium">Devenez Premium</string>
+    <string name="SettingsSubscription_RestorePurchase">Restaurer l\'achat</string>
+    <string name="SettingsSubscription_SubscriptionPlan">Plan d\'abonnement</string>
+    <string name="SettingsSubscription_SubscriptionInfo">Prochaine date de paiement : %s. Vous pouvez gérer votre abonnement dans la section Gérer l\'abonnement.</string>
+    <string name="SettingsSubscription_ManageSubscription">Gérer l\'abonnement</string>
+    <string name="Period_Days">%s jours</string>
     <!--Premium Screens-->
     <string name="Premium_Title">Premium</string>
+    <string name="Premium_ChoosePlanForYou">Choisir le plan</string>
+    <string name="Premium_EnjoyFreePeriod">Profitez des premiers %s GRATUITS.</string>
+    <string name="Premium_CancelSubscriptionInfo">Vous pouvez annuler votre abonnement à tout moment.</string>
+    <string name="Premium_GetFreePeriod">Obtenez %s GRATUIT</string>
+    <string name="Premium_Subscribe">S\'abonner</string>
+    <string name="Premium_AddPromoCode">Ajouter un code promo</string>
+    <string name="Premium_TryForFree">Essayez GRATUITEMENT</string>
+    <string name="Premium_Upgrade">Mettre à niveau</string>
     <string name="Premium_Restore">Restaurer</string>
+    <string name="Premium_Annually">Annuellement</string>
+    <string name="Premium_Monthly">Mensuellement</string>
+    <string name="Premium_ThankYouForSubscription">Merci pour votre \nabonnement !</string>
+    <string name="Premium_YouHaveActivatedPlan">Vous avez activé le plan %s.</string>
+    <string name="Premium_GoToApp">Aller à l\'App</string>
     <string name="Premium_UpgradeText">Améliorez votre expérience avec les fonctionnalités Premium !</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Profitez de toute la puissance de l\'application.</string>
+    <string name="Premium_SelectSubscription">Sélectionner l\'abonnement</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Listes de jetons</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Recherche avancée</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Regarder les Tendances</string>
     <string name="Premium_UpgradeFeature_DuressMode">Mode de Duress</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Protection contre les arnaques</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Vérificateur de liste noire</string>
+    <string name="Premium_UpgradeFeature_VipSupport">GROUPE VIP</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Maîtrisez la recherche de jetons</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Découvrez les jetons tendance</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Tradez plus intelligemment, profitez plus rapidement</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Restez en sécurité où que vous alliez</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Restez en sécurité sans contraintes</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Restez légitime et conforme</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Votez pour l\'avenir d\'Unstoppable</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Votre outil tout-en-un pour une analyse approfondie. Parcourez des listes sélectionnées des 250 meilleurs jetons selon le volume d\'échanges, la liquidité des plateformes, le comportement des détenteurs et les tendances on-chain—le tout en un coup d\'œil. Filtrez, analysez et gardez une longueur d\'avance.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Éliminez le bruit et concentrez-vous avec précision sur les jetons à fort potentiel. Utilisez la Recherche Avancée pour filtrer des milliers de jetons par volume d\'échanges, blockchain, capitalisation boursière, tendances de prix, secteur et performance—et bien plus encore. Puissant, précis et conçu pour la découverte.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Ne manquez plus jamais une opportunité de trading. Le Suivi des Tendances vous livre des alertes en temps réel alimentées par une analyse technique avancée, vous aidant à identifier les tendances, repérer les percées et éviter les pièges avant qu\'ils ne surviennent. Agissez vite, tradez intelligemment et maximisez vos gains.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Vos cryptos. Votre sécurité. Le Mode sous Contrainte vous permet de créer plusieurs configurations alternatives de portefeuille, chacune avec un code PIN distinct, offrant une échappatoire cachée dans les situations à haut risque. Si vous êtes forcé de déverrouiller votre portefeuille, utilisez simplement le code PIN de contrainte pour accéder à un portefeuille secondaire sans exposer vos actifs critiques. Vos fonds réels restent cachés. Votre sécurité reste intacte.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Une seule adresse erronée, et vos cryptos disparaissent à jamais. Unstoppable analyse automatiquement les adresses des destinataires pour détecter les modèles suspects et vous protège contre les dernières menaces d\'hameçonnage, vous empêchant d\'envoyer des fonds à un pirate informatique. Bloquez les transferts frauduleux avant qu\'ils ne se produisent.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Protégez-vous des entités à risque et sous sanctions. Le Vérificateur de Liste Noire filtre automatiquement les adresses des destinataires par rapport aux bases de données à haut risque, signalant les arnaques, fraudes et entités sanctionnées avant tout envoi. Si une adresse est sur liste noire, vous le saurez avant de commettre une erreur coûteuse. Sécurisez vos transactions. Gardez vos cryptos propres. Restez conforme.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Faites partie de l\'évolution. Rejoignez le Groupe VIP pour vous connecter directement avec notre équipe, voter sur les fonctionnalités à venir et obtenir un aperçu exclusif des futures mises à jour. Votre voix compte—aidez à façonner le portefeuille crypto de nouvelle génération.</string>
+    <string name="Premium_HighlyRatedSecurity">Sécurité hautement évaluée, confidentialité exceptionnelle et un portefeuille véritablement non-custodial.</string>
+    <string name="Premium_ApprovedBy">Approuvé et audité par :</string>
+    <string name="Premium_WhatUsersSay">Ce que disent les utilisateurs :</string>
+    <string name="Premium_SubscriptionPeriod_Month">mois</string>
+    <string name="Premium_SubscriptionPeriod_Year">année</string>
     <string name="Appearance_MarketsTab">TAB DES MARCHÉS</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">ICON APPLICATION</string>
@@ -786,6 +849,7 @@
     <string name="Privacy_BulletedText2">Il n\'y a pas de comptes utilisateurs ni de bases de données stockant les données des utilisateurs.</string>
     <string name="Privacy_BulletedText3">Si autorisé, le portefeuille partagera les habitudes d\'utilisation de l\'application avec l\'équipe d\'Unstoppable. Cela permet de comprendre quelles fonctionnalités sont utilisées (ou non) par nos utilisateurs. Étant une application axée sur la confidentialité, nous avons besoin d\'une manière d\'évaluer nos efforts, et sans cela, nous n\'avons aucune idée si les fonctionnalités que nous avons développées sont utilisées ou non.</string>
     <string name="ShareUiData">Partager les données UI</string>
+    <string name="ShareUiDataDescription">Ce paramètre vous permet de désactiver les analyses d\'interface utilisateur et de garantir une confidentialité totale.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Ajouter un Nouveau</string>

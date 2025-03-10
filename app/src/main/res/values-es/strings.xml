@@ -331,6 +331,7 @@
     <!--Send NFT-->
     <string name="SendNft_Title">Enviar</string>
     <!--Send-->
+    <string name="Send_EnterAddress">Introduce una dirección</string>
     <string name="Send_Title">Enviar %s</string>
     <string name="Send_Hint_Address">Dominio o dirección</string>
     <string name="Send_Fee">Comisión</string>
@@ -367,9 +368,27 @@
     <string name="Send_Address_Error_Correct">Correcto</string>
     <string name="Send_Address_Error_Detected">Detectado</string>
     <string name="Send_Address_Error_Clear">Limpiar</string>
+    <string name="Send_Address_AddressCheck">Verificación de Dirección</string>
     <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">Analiza la dirección de destino proporcionada en busca de posibles riesgos de phishing.</string>
+    <string name="Send_Address_PhishingCheck_Info2">Limpio: No se detectó actividad sospechosa.</string>
+    <string name="Send_Address_PhishingCheck_Info3">Detectado: Parece que alguien podría estar intentando engañarte para que envíes fondos a una dirección incorrecta. No procedas a menos que estés absolutamente seguro de que la dirección es correcta. Considera enviar primero una pequeña transacción de prueba.</string>
     <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">Verifica si la dirección de destino está listada en listas negras oficiales o no oficiales.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">Limpio: Sin indicadores de lista negra.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Detectado: La dirección está en lista negra y puede estar asociada con riesgos legales o de seguridad. Procede con precaución. Muchos exchanges de criptomonedas restringen a usuarios que depositan o retiran fondos de carteras que han interactuado con direcciones en listas negras. Ten esto en cuenta.</string>
     <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">Verifica si la dirección del destinatario está sujeta a sanciones internacionales, utilizando datos de Chainalysis.com.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Limpio: No se detectaron sanciones.</string>
+    <string name="Send_Address_SanctionCheck_Info3">Detectado: Riesgo legal potencial. Las transacciones con esta dirección pueden estar restringidas o ser ilegales en ciertas jurisdicciones.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">¡Dirección de Phishing Detectada!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">¡Dirección en Lista Negra Detectada!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">¡Dirección Sancionada Detectada!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">La dirección que ingresaste puede ser fraudulenta. Los estafadores a menudo alteran los primeros y últimos caracteres. Verifica cuidadosamente la dirección completa antes de proceder para evitar pérdidas.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">La dirección que ingresaste está marcada como incluida en lista negra. Las transacciones a esta dirección podrían conducir a pérdidas u otros riesgos. Por favor, verifica los detalles del destinatario antes de proceder.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">La dirección que ingresaste está marcada como sujeta a sanciones. Las transacciones a esta dirección podrían conducir a pérdidas u otros riesgos. Por favor, verifica los detalles del destinatario antes de proceder.</string>
+    <string name="Send_RiskyAddress">¡Dirección de Riesgo!</string>
+    <string name="Send_RiskyAddress_AlertText">Estás a punto de enviar fondos a una dirección de alto riesgo. Continuar puede resultar en pérdida u otros riesgos de seguridad. Al continuar, aceptas los peligros potenciales. ¿Estás seguro de que deseas proceder?</string>
     <string name="Send_Success">\u2713 Enviado</string>
     <string name="ScanQr_CameraPermission_Title">Permisos de cámara</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Por favor, autorice acceso a la camara</string>
@@ -449,6 +468,7 @@
     <string name="TonConnect_Error_InvalidUrl">Dirección URL inválida</string>
     <string name="TonConnect_Unnamed">Sin nombre</string>
     <string name="TonConnect_Wallet">Monedero</string>
+    <string name="TonConnect_ChooseWallet">Elige una Cartera</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Estado</string>
     <string name="WalletConnect_Approve_Hint">Al hacer clic en aprobar, usted puede permitir que esta aplicación vea su dirección pública. Esto es un paso importante de seguridad para proteger sus datos de posibles riesgos de phishing.</string>
@@ -696,6 +716,7 @@
     <string name="Settings_RateUs">Califícanos</string>
     <string name="Settings_LaunchScreen">Pantalla de lanzamiento</string>
     <string name="Settings_Appearance">Apariencia</string>
+    <string name="Settings_Subscription">Suscripción</string>
     <string name="Settings_Contact_ViaTelegram">vía Telegram</string>
     <string name="Settings_Contact_ViaEmail">vía E-mail</string>
     <string name="Settings_AutoLock">Bloqueo automático</string>
@@ -712,6 +733,8 @@
     <string name="Settings_PersonalSupport_NewRequest">Nueva requisición</string>
     <string name="Settings_PersonalSupport_Requestfailed">Error en la solicitud</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
+    <string name="Settings_VipSupport_StartChat">Únete al Grupo VIP</string>
+    <string name="Settings_VipSupport_Description">Obtén acceso exclusivo a nuestro Grupo VIP, donde usuarios premium y el equipo de Unstoppable Wallet colaboran. Recibe asistencia directa, discute futuras actualizaciones y ayuda a dar forma a la evolución de la cartera.</string>
     <string name="Settings_Donate_Info">¡Junto con tu apoyo, podemos hacer esta aplicación aún mejor!</string>
     <string name="Settings_Donate">Donar</string>
     <string name="Settings_GetYourTokens">Obtener tokens</string>
@@ -727,11 +750,62 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 minutos</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 hora</string>
     <!--Premium Banner-->
+    <string name="SettingsBanner_Premium">Premium</string>
+    <string name="SettingsBanner_PremiumBannerDescription">¡Mejora tu experiencia con funciones Premium!</string>
+    <string name="SettingsBanner_PremiumTryFee">Prueba GRATIS</string>
     <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Activo</string>
     <string name="SettingsSubscription_GetPremium">Hazte usuario Premium</string>
+    <string name="SettingsSubscription_RestorePurchase">Restaurar Compra</string>
+    <string name="SettingsSubscription_SubscriptionPlan">Plan de Suscripción</string>
+    <string name="SettingsSubscription_SubscriptionInfo">Próxima fecha de pago: %s. Puedes gestionar tu suscripción en la sección Gestionar Suscripción.</string>
+    <string name="SettingsSubscription_ManageSubscription">Gestionar Suscripción</string>
+    <string name="Period_Days">%s días</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
+    <string name="Premium_ChoosePlanForYou">Elige el plan</string>
+    <string name="Premium_EnjoyFreePeriod">Disfruta de los primeros %s GRATIS.</string>
+    <string name="Premium_CancelSubscriptionInfo">Puedes cancelar tu suscripción en cualquier momento.</string>
+    <string name="Premium_GetFreePeriod">Obtén %s GRATIS</string>
+    <string name="Premium_Subscribe">Suscribir</string>
+    <string name="Premium_AddPromoCode">Añadir Código Promocional</string>
+    <string name="Premium_TryForFree">Prueba GRATIS</string>
+    <string name="Premium_Upgrade">Mejorar</string>
     <string name="Premium_Restore">Restaurar</string>
+    <string name="Premium_Annually">Anual</string>
+    <string name="Premium_Monthly">Mensual</string>
+    <string name="Premium_ThankYouForSubscription">¡Gracias por tu \nsuscripción!</string>
+    <string name="Premium_YouHaveActivatedPlan">Has activado el plan %s.</string>
+    <string name="Premium_GoToApp">Ir a la App</string>
+    <string name="Premium_UpgradeText">¡Mejora tu experiencia con funciones Premium!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Disfruta de todo el poder de la aplicación.</string>
+    <string name="Premium_SelectSubscription">Seleccionar Suscripción</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Listas de Tokens</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Búsqueda Avanzada</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Observador de Tendencias</string>
     <string name="Premium_UpgradeFeature_DuressMode">Modo Duración</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Protección contra Estafas</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Verificador de Lista Negra</string>
+    <string name="Premium_UpgradeFeature_VipSupport">Grupo VIP</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Domina la Investigación de Tokens</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Descubre Tokens en Tendencia</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Opera más Inteligentemente, Obtén Beneficios más Rápido</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Mantente Seguro Dondequiera que Vayas</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Mantente Seguro sin Complicaciones</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Mantente Legítimo y Conforme</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Vota sobre el Futuro de Unstoppable</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Tu herramienta todo en uno para análisis profundo. Navega por listas curadas de los 250 mejores tokens basadas en volumen de trading, liquidez en exchanges, comportamiento de holders y tendencias on-chain—todo de un vistazo. Filtra, analiza y mantente a la vanguardia.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Elimina el ruido y concéntrate en tokens de alto potencial con precisión. Usa la Búsqueda Avanzada para filtrar miles de tokens por volumen de trading, blockchain, capitalización de mercado, tendencias de precios, sector y rendimiento—y más. Potente, preciso y diseñado para el descubrimiento.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Nunca más pierdas una oportunidad de trading. Observador de Tendencias ofrece alertas en tiempo real impulsadas por análisis técnico avanzado, ayudándote a identificar tendencias, detectar breakouts y evitar obstáculos antes de que ocurran. Actúa rápido, opera con inteligencia y maximiza las ganancias.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Tu cripto. Tu seguridad. El Modo Coacción te permite crear múltiples configuraciones alternativas de cartera, cada una con un PIN separado, proporcionando una ruta de escape oculta en situaciones de alto riesgo. Si te obligan a desbloquear tu cartera, simplemente usa el PIN de coacción para acceder a una cartera secundaria sin exponer activos críticos. Tus fondos reales permanecen ocultos. Tu seguridad permanece intacta.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Una dirección incorrecta, y tu cripto se pierde para siempre. Unstoppable escanea automáticamente las direcciones de destinatarios en busca de patrones sospechosos y te defiende contra las últimas amenazas de phishing, evitando que envíes fondos a un hacker. Bloquea transferencias fraudulentas antes de que ocurran.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Protégete de entidades riesgosas y sancionadas. El Verificador de Lista Negra examina automáticamente las direcciones de destinatarios contra bases de datos de alto riesgo, marcando estafas, fraudes y entidades sancionadas antes de que envíes. Si una dirección está en la lista negra, lo sabrás antes de cometer un error costoso. Asegura tus transacciones. Mantén tu cripto limpio. Permanece conforme.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Sé parte de la evolución. Únete al Grupo VIP para conectarte directamente con nuestro equipo, votar sobre próximas funcionalidades y obtener una mirada exclusiva anticipada a futuras actualizaciones. Tu voz importa—ayuda a dar forma a la cartera crypto de próxima generación.</string>
+    <string name="Premium_HighlyRatedSecurity">Seguridad altamente valorada, privacidad excepcional y una cartera verdaderamente no custodial.</string>
+    <string name="Premium_ApprovedBy">Aprobado y Auditado Por:</string>
+    <string name="Premium_WhatUsersSay">Lo que dicen los usuarios:</string>
+    <string name="Premium_SubscriptionPeriod_Month">mes</string>
+    <string name="Premium_SubscriptionPeriod_Year">año</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">ICONO APP</string>
@@ -773,6 +847,7 @@
     <string name="Privacy_BulletedText2">No hay cuentas de usuario o bases de datos almacenando datos de usuario.</string>
     <string name="Privacy_BulletedText3">Si se permite el monedero compartirá los hábitos de uso de la aplicación con el equipo imparable. Esto es para entender qué características están siendo utilizadas (o no) por nuestros usuarios. Siendo una aplicación enfocada a la privacidad, necesitamos alguna forma de evaluar nuestros esfuerzos y sin esto no tenemos ni idea de si las características que construimos están siendo usadas o no.</string>
     <string name="ShareUiData">Compartir datos de UI</string>
+    <string name="ShareUiDataDescription">Esta configuración te permite desactivar el análisis de UI/UX y garantizar total confidencialidad.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Añadir Nuevo</string>
@@ -977,6 +1052,7 @@
     <string name="PrivateKeys_EvmPrivateKey">Clave Privada EVM</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Otorga un control total sobre criptomonedas basadas en Ethereum, Binance Smart Chain, etc dentro de cada monedero correspondiente.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">Otorga total control sobre los activos de la respectiva cartera.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Otorga control total sobre Bitcoin y otras criptomonedas basadas en UTXO, es decir, Litecoin, Bitcoin Cash, Dash, etc. dentro de su respectiva cartera.</string>
     <string name="PrivateKeys_NeverShareWarning">Nunca comparta su frase de recuperación con nadie. El equipo imparable nunca pedirá su frase de recuperación.</string>
     <!-- Public Keys -->

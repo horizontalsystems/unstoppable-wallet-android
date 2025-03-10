@@ -47,6 +47,7 @@
     <string name="Button_Share">Paylaş</string>
     <string name="Button_Apply">Uygula</string>
     <string name="Button_SetAmount">Miktarı Ayarla</string>
+    <string name="Button_ContinueAnyway">Yine de Devam Et</string>
     <string name="Error_OutOfRange">%1$s\'den küçük veya %2$s\'den büyük olamaz</string>
     <string name="Error_NotInteger">Hatalı tam sayı numarası</string>
     <string name="Error">Hata</string>
@@ -186,11 +187,15 @@
     <string name="MarketGlobalMetrics_Volume">24s Hacim</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF Girişi</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Tüm kripto paraların toplam piyasa değeri</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Kripto piyasa 24 saatlik işlem hacmi</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">DeFi\'deki Toplam Kilit Değer (TVL)</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Zincir ile filtrele</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Hepsi</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Toplam Net Giriş</string>
+    <string name="MarketEtf_Description">Bir ETF\'nin net girişi, nakit girişlerinin çıkışlardan çıkarılmasıyla eşittir</string>
     <string name="MarketEtf_HighestAssets">En Yüksek Varlıklar</string>
     <string name="MarketEtf_LowestAssets">En Düşük Varlıklar</string>
     <string name="MarketEtf_Inflow">Giriş</string>
@@ -215,6 +220,7 @@
     <string name="Market_Filter_OutperformedBtc">BTC\'yi Geride Bıraktı</string>
     <string name="Market_Filter_OutperformedEth">ETH\'yi Geride Bıraktı</string>
     <string name="Market_Filter_OutperformedBnb">BNB\'yi Geride Bıraktı</string>
+    <string name="Market_Filter_PriceCloseTo">Kapanış fiyatı</string>
     <string name="Market_Filter_PriceCloseToAth">ATH\'ye Yakın Fiyat</string>
     <string name="Market_Filter_PriceCloseToAtl">ATL\'ye Yakın Fiyat</string>
     <string name="Market_Filter_ListedOnTopExchanges">En İyi Borsalarda Listelenmiş</string>
@@ -230,12 +236,16 @@
     <string name="Market_Filter_StrongSell">Kuvvetli Satış</string>
     <string name="Market_Filter_Sell">Sat</string>
     <string name="Market_Filter_RiskToTrade">Riskli</string>
+    <string name="Market_Filter_ATH_Description">(Tüm Zamanların En Yükseği)</string>
+    <string name="Market_Filter_ATL_Description">(Tüm Zamanların En Düşüğü)</string>
     <string name="Market_Filter_Top_100">Top 100</string>
     <string name="Market_Filter_Top_200">Top 200</string>
     <string name="Market_Filter_Top_300">Top 300</string>
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Top_2000">Top 2000</string>
+    <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_ShowResults">Sonuçları Göster</string>
     <string name="Market_Filter_ShowResults_Counter">Sonuçları Göster: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
@@ -273,6 +283,7 @@
     <string name="Market_Sorting_Losers">Kaybedenler</string>
     <string name="Market_Sorting_HighestCap">En Yüksek</string>
     <string name="Market_Sorting_LowestCap">En Düşük</string>
+    <string name="Market_Filters_Select">%d Seç</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">Multi-Chain</string>
@@ -322,6 +333,7 @@
     <!--Send NFT-->
     <string name="SendNft_Title">Gönder</string>
     <!--Send-->
+    <string name="Send_EnterAddress">Adres Girin</string>
     <string name="Send_Title">%s gönder</string>
     <string name="Send_Hint_Address">Adres veya Domain</string>
     <string name="Send_Fee">Masraf</string>
@@ -341,12 +353,44 @@
     <string name="Send_Utxo_SelectAll">Tümünü Seç</string>
     <string name="Send_Confirmation_Title">Onayla</string>
     <string name="Send_Confirmation_YouSend">Gönderdiğiniz</string>
+    <string name="Send_Confirmation_YouReceive">Alacağınız</string>
     <string name="Send_Confirmation_Mint">Mint</string>
+    <string name="Send_Confirmation_Burn">Burn</string>
     <string name="Send_Confirmation_To">Alan</string>
     <string name="Send_Confirmation_Own">Kendi</string>
     <string name="Send_Confirmation_Method">Yöntem</string>
     <string name="Send_Confirmation_Send_Button">Gönder</string>
+    <string name="Send_Confirmation_Action">İşlem</string>
+    <string name="Send_Processing">İşleniyor!</string>
+    <string name="Send_Processing_Description">İşlem başarıyla gönderildi. Ayrıntılar için durumunu kontrol edin.</string>
+    <string name="Send_Address_Recent">Son İşlemler</string>
     <string name="Send_Address_Error_CheckLocked">Kilitli</string>
+    <string name="Send_Address_Error_Incorrect">Geçersiz</string>
+    <string name="Send_Address_Error_InvalidAddress">Geçersiz adres</string>
+    <string name="Send_Address_Error_Correct">Doğru</string>
+    <string name="Send_Address_Error_Detected">Tespit Edildi</string>
+    <string name="Send_Address_Error_Clear">Temizle</string>
+    <string name="Send_Address_AddressCheck">Adres Kontrolü</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">Sağlanan hedef adresi olası oltalama riskleri için analiz eder.</string>
+    <string name="Send_Address_PhishingCheck_Info2">Temiz: Şüpheli aktivite tespit edilmedi.</string>
+    <string name="Send_Address_PhishingCheck_Info3">Tespit Edildi: Birisi sizi yanlış bir adrese para göndermeye kandırmaya çalışıyor gibi görünüyor. Adresin doğru olduğundan kesinlikle emin olmadıkça devam etmeyin. Önce küçük bir test işlemi göndermeyi düşünün.</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">Hedef adresin resmi veya gayri resmi kara listelerde listelenip listelenmediğini kontrol eder.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">Temiz: Kara liste işareti yok.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">Tespit Edildi: Adres kara listeye alınmıştır ve yasal veya güvenlik riskleriyle ilişkili olabilir. Dikkatli ilerleyin. Birçok kripto borsası, kara listeye alınmış adreslerle etkileşime girmiş cüzdanlardan para yatıran veya çeken kullanıcıları kısıtlar. Bunu aklınızda bulundurun.</string>
+    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">Chainalysis.com\'dan alınan verileri kullanarak, alıcının adresinin uluslararası yaptırımlara tabi olup olmadığını doğrular.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Temiz: Yaptırım tespit edilmedi.</string>
+    <string name="Send_Address_SanctionCheck_Info3">Tespit Edildi: Potansiyel yasal risk. Bu adresle yapılan işlemler belirli yargı bölgelerinde kısıtlanabilir veya yasadışı olabilir.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">Oltalama Adresi Tespit Edildi!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">Kara Listeye Alınmış Adres Tespit Edildi!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">Yaptırım Uygulanan Adres Tespit Edildi!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">Girdiğiniz adres sahte olabilir. Dolandırıcılar genellikle ilk ve son karakterleri değiştirirler. Kayıpları önlemek için devam etmeden önce tam adresi dikkatlice doğrulayın.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">Girdiğiniz adres kara listeye alınmış olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">Girdiğiniz adres yaptırım altında olarak işaretlenmiştir. Bu adrese yapılan işlemler kayıplara veya diğer risklere yol açabilir. Lütfen devam etmeden önce alıcının bilgilerini doğrulayın.</string>
+    <string name="Send_RiskyAddress">Riskli Adres!</string>
+    <string name="Send_RiskyAddress_AlertText">Yüksek riskli bir adrese fon göndermek üzeresiniz. Devam etmek, para kaybına veya diğer güvenlik risklerine yol açabilir. Devam ederek potansiyel tehlikeleri kabul etmiş olursunuz. Devam etmek istediğinizden emin misiniz?</string>
     <string name="Send_Success">\u2713 Gönderilen</string>
     <string name="ScanQr_CameraPermission_Title">Kamera izni bulunmamaktadır</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Lütfen kamere erişim izni verin</string>
@@ -430,6 +474,7 @@
     <string name="TonConnect_Error_InvalidUrl">Geçersiz URL Adresi</string>
     <string name="TonConnect_Unnamed">İsimsiz</string>
     <string name="TonConnect_Wallet">Cüzdanı</string>
+    <string name="TonConnect_ChooseWallet">Cüzdan Seçin</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">Durum</string>
     <string name="WalletConnect_Approve_Hint">Onayla butonunu tıklayarak, bu uygulamanın açık adresinizi görüntülemesine izin vermiş olursunuz. Bu, verilerinizi olası kimlik hırsızlığı risklerinden korumak için önemli bir güvenlik adımıdır.</string>
@@ -677,6 +722,7 @@
     <string name="Settings_RateUs">Bizi Değerlendirin</string>
     <string name="Settings_LaunchScreen">Başlangıç Ekranı</string>
     <string name="Settings_Appearance">Görünüm</string>
+    <string name="Settings_Subscription">Abonelik</string>
     <string name="Settings_Contact_ViaTelegram">Telegram aracılığıyla</string>
     <string name="Settings_Contact_ViaEmail">E-posta yoluyla</string>
     <string name="Settings_AutoLock">Otomatik kilit</string>
@@ -692,6 +738,8 @@
     <string name="Settings_PersonalSupport_NewRequest">Yeni istek</string>
     <string name="Settings_PersonalSupport_Requestfailed">Talep Başarısız oldu</string>
     <string name="Settings_PersonalSupport_OpenTelegram">Abrir Telegram</string>
+    <string name="Settings_VipSupport_StartChat">VIP Gruba Katılın</string>
+    <string name="Settings_VipSupport_Description">Premium kullanıcıların ve Unstoppable Wallet ekibinin işbirliği yaptığı VIP Grubumuza özel erişim kazanın. Doğrudan destek alın, gelecek güncellemeler hakkında tartışın ve cüzdanın gelişimine katkıda bulunun.</string>
     <string name="Settings_Donate_Info">Desteğinizle birlikte bu uygulamayı daha da iyi hale getirebiliriz!</string>
     <string name="Settings_Donate">Bağış yapmak</string>
     <string name="Settings_GetYourTokens">Tokenlarınızı alın</string>
@@ -707,11 +755,62 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30 dakika</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1 saat</string>
     <!--Premium Banner-->
+    <string name="SettingsBanner_Premium">Premium</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Premium özelliklerle deneyiminizi yükseltin!</string>
+    <string name="SettingsBanner_PremiumTryFee">ÜCRETSİZ Deneyin</string>
     <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">Aktif</string>
     <string name="SettingsSubscription_GetPremium">Get Premium</string>
+    <string name="SettingsSubscription_RestorePurchase">Satın Almayı Geri Yükle</string>
+    <string name="SettingsSubscription_SubscriptionPlan">Abonelik Planı</string>
+    <string name="SettingsSubscription_SubscriptionInfo">Bir sonraki ödeme tarihi: %s. Aboneliğinizi Abonelik Yönetimi bölümünden yönetebilirsiniz.</string>
+    <string name="SettingsSubscription_ManageSubscription">Aboneliği Yönet</string>
+    <string name="Period_Days">%s gün</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">Premium</string>
+    <string name="Premium_ChoosePlanForYou">Planı seçin</string>
+    <string name="Premium_EnjoyFreePeriod">İlk %s ÜCRETSİZ olarak kullanın.</string>
+    <string name="Premium_CancelSubscriptionInfo">Aboneliğinizi istediğiniz zaman iptal edebilirsiniz.</string>
+    <string name="Premium_GetFreePeriod">%s ÜCRETSİZ Alın</string>
+    <string name="Premium_Subscribe">Abone Ol</string>
+    <string name="Premium_AddPromoCode">Promosyon Kodu Ekle</string>
+    <string name="Premium_TryForFree">ÜCRETSİZ Deneyin</string>
+    <string name="Premium_Upgrade">Yükselt</string>
     <string name="Premium_Restore">Geri Yükle</string>
+    <string name="Premium_Annually">Yıllık</string>
+    <string name="Premium_Monthly">Aylık</string>
+    <string name="Premium_ThankYouForSubscription">Aboneliğiniz için \nteşekkürler!</string>
+    <string name="Premium_YouHaveActivatedPlan">%s planını etkinleştirdiniz.</string>
+    <string name="Premium_GoToApp">Uygulamaya Git</string>
+    <string name="Premium_UpgradeText">Premium özelliklerle deneyiminizi yükseltin!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
+    <string name="Premium_SelectSubscription">Abonelik Seçin</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Token Listeleri</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">Gelişmiş Arama</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Trendleri İzleyin</string>
     <string name="Premium_UpgradeFeature_DuressMode">Duress Modu</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Dolandırıcılık Koruması</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Kara Liste Kontrolcüsü</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP Grup</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Token Araştırmasında Ustalaşın</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Trend Olan Tokenleri Keşfedin</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Daha Akıllı Ticaret, Daha Hızlı Kâr</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Nereye Giderseniz Gidin Güvende Kalın</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Zahmet Çekmeden Güvende Kalın</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Meşru ve Uyumlu Kalın</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Unstoppable\'ın Geleceği Hakkında Oy Verin</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Derinlemesine analiz için tek araçınız. İşlem hacmi, borsa likiditesi, yatırımcı davranışı ve zincir üstü trendlere dayalı olarak düzenlenmiş En İyi 250 token listesine göz atın—hepsi tek bir bakışta. Filtreleyin, analiz edin ve öne geçin.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Gereksiz detayları bırakın ve yüksek potansiyelli tokenlere hassasiyetle odaklanın. Gelişmiş Arama\'yı kullanarak binlerce tokeni işlem hacmi, blok zinciri, piyasa değeri, fiyat trendleri, sektör ve performansa göre filtreleyebilirsiniz—ve daha fazlası. Güçlü, doğru ve keşif için tasarlanmış.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Bir daha hiçbir ticaret fırsatını kaçırmayın. Trendleri İzleyin, gelişmiş teknik analize dayalı gerçek zamanlı uyarılar sunarak trendleri belirlemenize, ani yükselişleri tespit etmenize ve sorunları önceden fark etmenize yardımcı olur. Hızlı hareket edin, akıllı ticaret yapın ve kazançlarınızı maksimize edin.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">Sizin kripto paranız. Sizin güvenliğiniz. Baskı Modu, her biri ayrı PIN ile birden fazla alternatif cüzdan kurulumu oluşturmanıza olanak tanır ve yüksek riskli durumlarda gizli bir kaçış yolu sağlar. Cüzdanınızın kilidini açmaya zorlanırsanız, kritik varlıklarınızı ifşa etmeden ikincil bir cüzdana erişmek için baskı PIN\'ini kullanmanız yeterlidir. Gerçek fonlarınız gizli kalır. Güvenliğiniz bozulmaz.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Yanlış bir adres ve kripto paranız sonsuza dek kaybolabilir. Unstoppable, alıcı adresleri şüpheli kalıplar için otomatik olarak tarar ve en son oltalama tehditlerine karşı savunma sağlayarak fonlarınızı bir bilgisayar korsanına göndermenizi önler. Gerçekleşmeden önce sahte transferleri engelleyin.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Kendinizi riskli ve yaptırım uygulanan kuruluşlardan koruyun. Kara Liste Kontrolcüsü, göndermeden önce alıcı adresleri yüksek riskli veritabanlarına karşı otomatik olarak tarar ve dolandırıcılık, sahtekarlık ve yaptırım uygulanan kuruluşları işaretler. Bir adres kara listeye alınmışsa, maliyetli bir hata yapmadan önce bileceksiniz. İşlemlerinizi güvence altına alın. Kripto paranızı temiz tutun. Uyumlu kalın.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Gelişimin bir parçası olun. Ekibimizle doğrudan bağlantı kurmak, gelecek özellikler hakkında oy kullanmak ve gelecekteki güncellemelere özel bir ilk bakış elde etmek için VIP Gruba katılın. Sesiniz önemlidir—yeni nesil kripto cüzdanını şekillendirmeye yardımcı olun.</string>
+    <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
+    <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
+    <string name="Premium_WhatUsersSay">Kullanıcılar ne diyor:</string>
+    <string name="Premium_SubscriptionPeriod_Month">ay</string>
+    <string name="Premium_SubscriptionPeriod_Year">yıl</string>
     <string name="Appearance_MarketsTab">MARKETS TAB</string>
     <string name="Appearance_BalanceTab">BALANCE TAB</string>
     <string name="Appearance_AppIcon">UYGULAMA IKONLARI</string>
@@ -753,6 +852,7 @@
     <string name="Privacy_BulletedText2">Kullanıcı hesapları veya kullanıcı verilerini depolayan veritabanları yoktur.</string>
     <string name="Privacy_BulletedText3">İzin verilirse, cüzdan, Unstoppable ekibiyle uygulama kullanım alışkanlıklarını paylaşacak. Bu, kullanıcılarımızın hangi özellikleri kullandığını (veya kullanmadığını) anlamak için. Gizliliğe odaklanan bir uygulama olarak, çabalarımızı değerlendirmenin bir yolu olmalı ve bu olmadan, oluşturduğumuz özelliklerin kullanılıp kullanılmadığını bilmiyoruz.</string>
     <string name="ShareUiData">UI Verilerini Paylaş</string>
+    <string name="ShareUiDataDescription">Bu ayar, UI/UX analizlerini devre dışı bırakmanıza ve tam gizlilik sağlamanıza olanak tanır.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">Yeni ekle</string>
@@ -962,6 +1062,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM Özel anahtar</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">Ilgili cüzdan içinde EVM tabanlı kripto, yani Ethereum, Binance Smart Chain vb. Üzerinde tam kontrol sağlar.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">İlgili cüzdandaki varlıklar üzerinde tam kontrol sağlar.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">Ilgili cüzdan içinde Bitcoin ve diğer UTXO tabanlı kriptolar üzerinde tam kontrol sağlar, yani Litecoin, Bitcoin Cash, Dash vb.</string>
     <string name="PrivateKeys_NeverShareWarning">Kurtarma ifadenizi asla kimseyle paylaşmayın. Unstoppable ekip asla kurtarma ifadenizi istemez.</string>
     <!-- Public Keys -->
