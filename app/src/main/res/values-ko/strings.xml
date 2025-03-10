@@ -47,6 +47,7 @@
     <string name="Button_Share">공유</string>
     <string name="Button_Apply">적용</string>
     <string name="Button_SetAmount">금액 설정</string>
+    <string name="Button_ContinueAnyway">계속 진행하기</string>
     <string name="Error_OutOfRange">%1$s 이하나 %2$s 이상이어야 합니다.</string>
     <string name="Error_NotInteger">잘못된 정수 숫자</string>
     <string name="Error">오류</string>
@@ -186,11 +187,15 @@
     <string name="MarketGlobalMetrics_Volume">24h 거래량</string>
     <string name="MarketGlobalMetrics_TvlInDefi">디파이(DeFi)에서의 총 예치 가치</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF 유입액</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">모든 암호화폐의 총 시장 가치\" or \"모든 가상 화폐의 총 시장 가치</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">암호화폐 시장의 24시간 거래량\" or \"가상 화폐 시장의 24시간 거래량</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">디파이 (DeFi)에서의 총 예치 가치 (TVL)</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">체인별 필터링</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">모든</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">총 순유입액</string>
+    <string name="MarketEtf_Description">ETF의 순유입액은 현금 유입에서 유출을 뺀 것과 같습니다</string>
     <string name="MarketEtf_HighestAssets">최고 자산</string>
     <string name="MarketEtf_LowestAssets">최저 자산</string>
     <string name="MarketEtf_Inflow">유입</string>
@@ -215,6 +220,7 @@
     <string name="Market_Filter_OutperformedBtc">BTC를 능가했습니다</string>
     <string name="Market_Filter_OutperformedEth">ETH를 능가했습니다</string>
     <string name="Market_Filter_OutperformedBnb">BNB를 능가했습니다</string>
+    <string name="Market_Filter_PriceCloseTo">가격 임박</string>
     <string name="Market_Filter_PriceCloseToAth">최고가에 가까운 가격</string>
     <string name="Market_Filter_PriceCloseToAtl">ATL 가격에 근접</string>
     <string name="Market_Filter_ListedOnTopExchanges">주요 거래소에 상장됨</string>
@@ -230,12 +236,16 @@
     <string name="Market_Filter_StrongSell">강한 매도</string>
     <string name="Market_Filter_Sell">매도</string>
     <string name="Market_Filter_RiskToTrade">위험</string>
+    <string name="Market_Filter_ATH_Description">(역대 최고가)</string>
+    <string name="Market_Filter_ATL_Description">(역대 최저가)</string>
     <string name="Market_Filter_Top_100">상위 100</string>
     <string name="Market_Filter_Top_200">상위 200</string>
     <string name="Market_Filter_Top_300">상위 300</string>
     <string name="Market_Filter_Top_500">상위 500</string>
     <string name="Market_Filter_Top_1000">상위 1000</string>
     <string name="Market_Filter_Top_1500">상위 1500</string>
+    <string name="Market_Filter_Top_2000">상위 2000</string>
+    <string name="Market_Filter_Top_2500">상위 2500</string>
     <string name="Market_Filter_ShowResults">결과 보기</string>
     <string name="Market_Filter_ShowResults_Counter">결과 표시: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5백만</string>
@@ -273,6 +283,7 @@
     <string name="Market_Sorting_Losers">해자</string>
     <string name="Market_Sorting_HighestCap">가장 높은 시가총액</string>
     <string name="Market_Sorting_LowestCap">가장 낮은 시가총액</string>
+    <string name="Market_Filters_Select">%d 선택</string>
     <!--Coin Markets-->
     <!--TVL Rank-->
     <string name="TvlRank_MultiChain">다중 체인</string>
@@ -322,6 +333,7 @@
     <!--Send NFT-->
     <string name="SendNft_Title">전송</string>
     <!--Send-->
+    <string name="Send_EnterAddress">주소 입력</string>
     <string name="Send_Title">전송 %s</string>
     <string name="Send_Hint_Address">주소 또는 도메인</string>
     <string name="Send_Fee">수수료</string>
@@ -341,12 +353,44 @@
     <string name="Send_Utxo_SelectAll">전체 선택</string>
     <string name="Send_Confirmation_Title">확인</string>
     <string name="Send_Confirmation_YouSend">보냅니다</string>
+    <string name="Send_Confirmation_YouReceive">받는 금액</string>
     <string name="Send_Confirmation_Mint">민트</string>
+    <string name="Send_Confirmation_Burn">번</string>
     <string name="Send_Confirmation_To">에게</string>
     <string name="Send_Confirmation_Own">아군</string>
     <string name="Send_Confirmation_Method">메소드</string>
     <string name="Send_Confirmation_Send_Button">전송</string>
+    <string name="Send_Confirmation_Action">작업</string>
+    <string name="Send_Processing">처리 중!</string>
+    <string name="Send_Processing_Description">트랜잭션이 성공적으로 전송되었습니다. 자세한 내용은 상태를 확인하세요.</string>
+    <string name="Send_Address_Recent">최근의</string>
     <string name="Send_Address_Error_CheckLocked">잠김</string>
+    <string name="Send_Address_Error_Incorrect">무효</string>
+    <string name="Send_Address_Error_InvalidAddress">잘못된 주소</string>
+    <string name="Send_Address_Error_Correct">정확함</string>
+    <string name="Send_Address_Error_Detected">감지됨</string>
+    <string name="Send_Address_Error_Clear">안전함</string>
+    <string name="Send_Address_AddressCheck">주소 확인</string>
+    <string name="Send_Address_PhishingCheck">Phishing Check</string>
+    <string name="Send_Address_PhishingCheck_Info1">제공된 목적지 주소의 잠재적 피싱 위험을 분석합니다.</string>
+    <string name="Send_Address_PhishingCheck_Info2">안전함: 의심스러운 활동이 감지되지 않았습니다.</string>
+    <string name="Send_Address_PhishingCheck_Info3">감지됨: 누군가 잘못된 주소로 자금을 보내도록 속이려는 시도가 있는 것 같습니다. 주소가 정확하다고 확신하지 않는 한 진행하지 마세요. 먼저 소액 테스트 트랜잭션을 보내는 것을 고려해 보세요.</string>
+    <string name="Send_Address_BlacklistCheck">Blacklist Check</string>
+    <string name="Send_Address_BlacklistCheck_Info1">목적지 주소가 공식 또는 비공식 블랙리스트에 등록되어 있는지 확인합니다.</string>
+    <string name="Send_Address_BlacklistCheck_Info2">안전함: 블랙리스트 표시가 없습니다.</string>
+    <string name="Send_Address_BlacklistCheck_Info3">감지됨: 해당 주소는 블랙리스트에 등록되어 있으며 법적 또는 보안 위험과 관련되어 있을 수 있습니다. 주의하여 진행하세요. 많은 암호화폐 거래소는 블랙리스트에 등록된 주소와 상호 작용한 지갑에서 자금을 입금하거나 출금하는 사용자를 제한합니다. 이 점을 염두에 두세요.</string>
+    <string name="Send_Address_SanctionCheck">Sanctions Check</string>
+    <string name="Send_Address_SanctionCheck_Info1">수신자의 주소가 Chainalysis.com의 데이터를 사용하여 국제 제재 대상인지 확인합니다.</string>
+    <string name="Send_Address_SanctionCheck_Info2">Clear: No sanctions detected.안전함: 제재가 감지되지 않았습니다.</string>
+    <string name="Send_Address_SanctionCheck_Info3">감지됨: 잠재적 법적 위험. 이 주소와의 거래는 특정 관할권에서 제한되거나 불법일 수 있습니다.</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected">피싱 주소 감지됨!</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected">블랙리스트 등록 주소 감지됨!</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected">제재 대상 주소 감지됨!</string>
+    <string name="Send_Address_ErrorMessage_PhishingDetected_Description">입력한 주소가 사기성일 수 있습니다. 사기꾼들은 종종 처음과 마지막 문자를 변경합니다. 손실을 방지하기 위해 진행하기 전에 전체 주소를 주의 깊게 확인하세요.</string>
+    <string name="Send_Address_ErrorMessage_BlacklistDetected_Description">입력한 주소가 블랙리스트에 등록된 것으로 표시되어 있습니다. 이 주소로의 거래는 손실이나 기타 위험을 초래할 수 있습니다. 수신자 정보를 진행하기 전에 확인하세요.</string>
+    <string name="Send_Address_ErrorMessage_SanctionDetected_Description">입력한 주소가 제재 대상으로 표시되어 있습니다. 이 주소로의 거래는 손실이나 기타 위험을 초래할 수 있습니다. 수신자 정보를 진행하기 전에 확인하세요.</string>
+    <string name="Send_RiskyAddress">위험한 주소!</string>
+    <string name="Send_RiskyAddress_AlertText">고위험 주소로 자금을 보내려고 합니다. 진행하면 손실이나 기타 보안 위험이 발생할 수 있습니다. 계속 진행하면 잠재적 위험을 수락하는 것입니다. 정말로 진행하시겠습니까?</string>
     <string name="Send_Success">\u2713 보냄</string>
     <string name="ScanQr_CameraPermission_Title">카메라 접근 권한</string>
     <string name="ScanQr_PleaseGrantCameraPermission">카메라 권한을 허용하십시오</string>
@@ -430,6 +474,7 @@
     <string name="TonConnect_Error_InvalidUrl">잘못된 주소</string>
     <string name="TonConnect_Unnamed">이름없음</string>
     <string name="TonConnect_Wallet">지갑</string>
+    <string name="TonConnect_ChooseWallet">지갑 선택</string>
     <!--WalletConnect-->
     <string name="WalletConnect_Status">상태</string>
     <string name="WalletConnect_Approve_Hint">승인을 눌러 이 앱이 귀하의 공공 주소를 볼 수 있도록 허용하십시오. 이것은 잠재적인 피싱 위험으로부터 데이터를 보호하기 위한 중요한 보안 단계 입니다.</string>
@@ -677,6 +722,7 @@
     <string name="Settings_RateUs">앱 평가</string>
     <string name="Settings_LaunchScreen">시작 화면</string>
     <string name="Settings_Appearance">모양</string>
+    <string name="Settings_Subscription">구독</string>
     <string name="Settings_Contact_ViaTelegram">텔레그램을 통해</string>
     <string name="Settings_Contact_ViaEmail">이메일로</string>
     <string name="Settings_AutoLock">자동 잠금</string>
@@ -692,6 +738,8 @@
     <string name="Settings_PersonalSupport_NewRequest">요청</string>
     <string name="Settings_PersonalSupport_Requestfailed">요청 실패</string>
     <string name="Settings_PersonalSupport_OpenTelegram">오픈 텔레그램</string>
+    <string name="Settings_VipSupport_StartChat">VIP 그룹 참여하기</string>
+    <string name="Settings_VipSupport_Description">프리미엄 사용자와 Unstoppable Wallet 팀이 협력하는 VIP 그룹에 독점 액세스하세요. 직접적인 지원을 받고, 향후 업데이트에 대해 논의하며, 지갑의 발전 방향을 함께 만들어 나가세요.</string>
     <string name="Settings_Donate_Info">함께, 여러분의 지원으로 우리는 이 앱을 더 좋게 만들 수 있습니다!</string>
     <string name="Settings_Donate">후원하기</string>
     <string name="Settings_GetYourTokens">토큰 받기</string>
@@ -707,11 +755,62 @@
     <string name="SettingsSecurity_AutoLock_After30Min">30분</string>
     <string name="SettingsSecurity_AutoLock_After1Hour">1시간</string>
     <!--Premium Banner-->
+    <string name="SettingsBanner_Premium">프리미엄</string>
+    <string name="SettingsBanner_PremiumBannerDescription">프리미엄 기능으로 경험을 업그레이드하세요!</string>
+    <string name="SettingsBanner_PremiumTryFee">업그레이드</string>
     <!--Setting Subscription -->
+    <string name="SettingsSubscription_Active">활성</string>
     <string name="SettingsSubscription_GetPremium">Get Premium</string>
+    <string name="SettingsSubscription_RestorePurchase">구매 복원</string>
+    <string name="SettingsSubscription_SubscriptionPlan">구독 플랜</string>
+    <string name="SettingsSubscription_SubscriptionInfo">다음 결제일: %s. 구독 관리 섹션에서 구독을 관리할 수 있습니다.</string>
+    <string name="SettingsSubscription_ManageSubscription">구독 관리</string>
+    <string name="Period_Days">%s일</string>
     <!--Premium Screens-->
+    <string name="Premium_Title">프리미엄</string>
+    <string name="Premium_ChoosePlanForYou">플랜 선택하기</string>
+    <string name="Premium_EnjoyFreePeriod">첫 %s 무료로 이용하세요.</string>
+    <string name="Premium_CancelSubscriptionInfo">언제든지 구독을 취소할 수 있습니다.</string>
+    <string name="Premium_GetFreePeriod">%s 무료로 받기</string>
+    <string name="Premium_Subscribe">구독하기</string>
+    <string name="Premium_AddPromoCode">프로모 코드 추가</string>
+    <string name="Premium_TryForFree">업그레이드</string>
+    <string name="Premium_Upgrade">업그레이드</string>
     <string name="Premium_Restore">복구</string>
+    <string name="Premium_Annually">연간</string>
+    <string name="Premium_Monthly">월간</string>
+    <string name="Premium_ThankYouForSubscription">구독해 주셔서 감사합니다!</string>
+    <string name="Premium_YouHaveActivatedPlan">%s 플랜이 활성화되었습니다.</string>
+    <string name="Premium_GoToApp">앱으로 이동</string>
+    <string name="Premium_UpgradeText">프리미엄 기능으로 경험을 업그레이드하세요!</string>
+    <string name="Premium_EnjoyFullPowerOfTheApp">앱의 모든 기능을 마음껏 즐기세요.</string>
+    <string name="Premium_SelectSubscription">구독 선택</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">토큰 리스트</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch">고급 검색</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">트렌드 지켜보기</string>
     <string name="Premium_UpgradeFeature_DuressMode">긴급 상황 모드</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">사기 보호</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">블랙리스트 체커</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP 그룹</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">토큰 리서치 마스터</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">트렌딩 토큰 발견하기</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">더 똑똑하게 거래하고, 더 빠르게 수익 창출</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">어디서든 안전하게</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">번거로움 없이 안전하게</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">합법적이고 규정을 준수하세요</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Unstoppable의 미래에 투표하세요</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">심층 분석을 위한 올인원 도구입니다. 거래량, 거래소 유동성, 보유자 행동 패턴 및 온체인 트렌드를 기반으로 엄선된 상위 250개 토큰 목록을 한눈에 살펴보세요. 필터링, 분석하고 항상 앞서 나가세요.</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">불필요한 정보는 배제하고 높은 잠재력을 가진 토큰을 정확하게 찾아보세요. 고급 검색을 사용하여 거래량, 블록체인, 시가총액, 가격 동향, 섹터 및 성과 등 수천 개의 토큰을 필터링하세요. 강력하고 정확하며 발견을 위해 설계되었습니다.</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">더 이상 거래 기회를 놓치지 마세요. 트렌드 지켜보기는 고급 기술 분석을 통해 실시간 알림을 제공하여 트렌드를 식별하고, 돌파 신호를 포착하며, 발생하기 전에 위험 요소를 피할 수 있도록 도와줍니다. 신속하게 행동하고, 똑똑하게 거래하며, 수익을 최대화하세요.</string>
+    <string name="Premium_UpgradeFeature_DuressMode_BigDescription">당신의 암호화폐. 당신의 보안. 긴급 상황 모드는 각각 다른 PIN을 가진 여러 개의 대체 지갑 설정을 생성할 수 있게 하여 위험한 상황에서 숨겨진 탈출 경로를 제공합니다. 지갑 잠금 해제를 강요받은 경우, 간단히 긴급 PIN을 사용하여 중요한 자산이 노출되지 않는 보조 지갑에 접근할 수 있습니다. 실제 자금은 숨겨진 채로 유지됩니다. 당신의 보안은 그대로 유지됩니다.</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">주소 하나만 잘못 입력하면 암호화폐가 영원히 사라질 수 있습니다. Unstoppable은 수신자 주소의 의심스러운 패턴을 자동으로 스캔하고 최신 피싱 위협으로부터 방어하여 해커에게 자금을 보내는 것을 방지합니다. 사기성 거래가 발생하기 전에 차단하세요.</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">위험하거나 제재 대상인 엔티티로부터 자신을 보호하세요. 블랙리스트 체커는 수신자 주소를 고위험 데이터베이스와 자동으로 대조하여 송금 전에 사기, 사기 및 제재 대상 엔티티를 표시합니다. 주소가 블랙리스트에 등록되어 있다면, 비용이 많이 드는 실수를 하기 전에 알 수 있습니다. 거래를 안전하게 하세요. 암호화폐를 깨끗하게 유지하세요. 규정을 준수하세요.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">진화의 일부가 되세요. VIP 그룹에 가입하여 우리 팀과 직접 연결하고, 다가오는 기능에 투표하며, 향후 업데이트에 대한 독점적인 선견을 얻으세요. 당신의 의견이 중요합니다—차세대 암호화폐 지갑을 함께 만들어 나가세요.</string>
+    <string name="Premium_HighlyRatedSecurity">높은 평가를 받는 보안, 탁월한 개인 정보 보호, 그리고 진정한 비수탁형 지갑.</string>
+    <string name="Premium_ApprovedBy">다음 기관에서 승인 및 감사:</string>
+    <string name="Premium_WhatUsersSay">사용자들의 평가:</string>
+    <string name="Premium_SubscriptionPeriod_Month">월</string>
+    <string name="Premium_SubscriptionPeriod_Year">년</string>
     <string name="Appearance_MarketsTab">마켓 탭</string>
     <string name="Appearance_BalanceTab">잔고 탭</string>
     <string name="Appearance_AppIcon">앱 아이콘</string>
@@ -753,6 +852,7 @@
     <string name="Privacy_BulletedText2">사용자 계정이나 사용자 데이터를 저장하는 데이터베이스가 없습니다.</string>
     <string name="Privacy_BulletedText3">허용된 경우, 지갑은 앱 사용 습관을 Unstoppable 팀과 공유할 것입니다. 이는 사용자가 어떤 기능을 사용하고 있는지 (또는 사용하지 않는지) 이해하기 위한 것입니다. 개인 정보 보호를 중시하는 앱이지만, 우리의 노력을 평가할 방법이 필요합니다. 이를 통해 만든 기능이 사용되고 있는지 여부를 알 수 없기 때문입니다.</string>
     <string name="ShareUiData">UI 데이터 공유</string>
+    <string name="ShareUiDataDescription">이 설정을 통해 UI/UX 분석을 비활성화하고 완전한 기밀성을 보장할 수 있습니다.</string>
     <!-- Security Center -->
     <!--Evm Network-->
     <string name="EvmNetwork_AddNew">신규로 추가</string>
@@ -961,6 +1061,7 @@
     <string name="PrivateKeys_EvmPrivateKey">EVM 개인 키</string>
     <string name="PrivateKeys_EvmPrivateKeyDescription">각 지갑 내에서 EVM 기반 암호화, 즉 이더리움, 바이낸스 스마트 체인 등에 대한 완전한 제어 권한을 부여합니다.</string>
     <string name="PrivateKeys_Bip32RootKeyDescription">각 지갑의 자산에 대한 모든 권한을 부여합니다.</string>
+    <string name="PrivateKeys_AccountExtendedPrivateKey">Account Extended Private Key</string>
     <string name="PrivateKeys_AccountExtendedPrivateKeyDescription">각 지갑 내에서 비트코인 및 기타 UTXO 기반 암호화, 즉 라이트코인, 비트코인 캐시, 대시 등을 완벽하게 제어할 수 있습니다.</string>
     <string name="PrivateKeys_NeverShareWarning">복구 문구를 누구와도 공유하지 마십시오. Unstoppable 팀은 복구 문구를 요구하지 않습니다.</string>
     <!-- Public Keys -->
