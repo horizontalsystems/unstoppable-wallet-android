@@ -187,11 +187,15 @@
     <string name="MarketGlobalMetrics_Volume">24 Std. Vol.</string>
     <string name="MarketGlobalMetrics_TvlInDefi">TVL in DeFi</string>
     <string name="MarketGlobalMetrics_EtfInflow">ETF Inflow</string>
+    <string name="MarketGlobalMetrics_TotalMarketCapDescription">Gesamtmarktwert aller Kryptowährungen</string>
+    <string name="MarketGlobalMetrics_VolumeDescription">Das 24h Handelsvolumen des Krypto-Marktes</string>
+    <string name="MarketGlobalMetrics_TvlInDefiDescription">Gesamtwert gesperrt (TVL) in DeFi</string>
     <string name="MarketGlobalMetrics_ChainSelectorTitle">Filtern nach Kette</string>
     <string name="MarketGlobalMetrics_ChainSelectorAll">Alle</string>
     <string name="MarketGlobalMetrics_NoCoin">This project doesn’t have a coin</string>
     <!-- ETF-->
     <string name="MarketEtf_Title">Gesamtnettonzufluss</string>
+    <string name="MarketEtf_Description">Der Nettogeldzufluss eines ETFs entspricht seinen Geldeingängen abzüglich der Abflüsse</string>
     <string name="MarketEtf_HighestAssets">Höchste Vermögenswerte</string>
     <string name="MarketEtf_LowestAssets">Niedrigste Vermögenswerte</string>
     <string name="MarketEtf_Inflow">Zufluss</string>
@@ -237,6 +241,8 @@
     <string name="Market_Filter_Top_500">Top 500</string>
     <string name="Market_Filter_Top_1000">Top 1000</string>
     <string name="Market_Filter_Top_1500">Top 1500</string>
+    <string name="Market_Filter_Top_2000">Top 2000</string>
+    <string name="Market_Filter_Top_2500">Top 2500</string>
     <string name="Market_Filter_ShowResults">Ergebnisse anzeigen</string>
     <string name="Market_Filter_ShowResults_Counter">Ergebnisse anzeigen: %d</string>
     <string name="Market_Filter_Range_0_5M">&lt; 5M</string>
@@ -323,6 +329,7 @@
     <!--Send NFT-->
     <string name="SendNft_Title">Senden</string>
     <!--Send-->
+    <string name="Send_EnterAddress">Adresse eingeben</string>
     <string name="Send_Title">%s senden</string>
     <string name="Send_Hint_Address">Adresse oder Domäne</string>
     <string name="Send_Fee">Gebühr</string>
@@ -342,12 +349,19 @@
     <string name="Send_Utxo_SelectAll">Alle auswählen</string>
     <string name="Send_Confirmation_Title">Bestätigen</string>
     <string name="Send_Confirmation_YouSend">Sie Senden</string>
+    <string name="Send_Confirmation_YouReceive">Sie erhalten</string>
     <string name="Send_Confirmation_Mint">Mint</string>
+    <string name="Send_Confirmation_Burn">Burn</string>
     <string name="Send_Confirmation_To">An</string>
     <string name="Send_Confirmation_Own">Eigene</string>
     <string name="Send_Confirmation_Method">Methode</string>
     <string name="Send_Confirmation_Send_Button">Senden</string>
+    <string name="Send_Confirmation_Action">Aktion</string>
+    <string name="Send_Processing">Verarbeite!</string>
+    <string name="Send_Address_Recent">Neueste</string>
     <string name="Send_Address_Error_CheckLocked">Gesperrt</string>
+    <string name="Send_Address_Error_Incorrect">Ungültig</string>
+    <string name="Send_Address_Error_InvalidAddress">Ungültige Adresse</string>
     <string name="Send_Success">\u2713 Gesendet</string>
     <string name="ScanQr_CameraPermission_Title">Erlaubnis nötig, um die Kamera zu verwalten</string>
     <string name="ScanQr_PleaseGrantCameraPermission">Bitte erteilen Sie der Kamera Genehmigung</string>
