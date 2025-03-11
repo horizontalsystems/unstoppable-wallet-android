@@ -723,6 +723,7 @@
     <string name="Settings_Contact_ViaEmail">通过电子邮件</string>
     <string name="Settings_AutoLock">自动锁定</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_VipSupport">貴賓群組</string>
     <string name="Settings_BotSupport">BOT 支持</string>
     <string name="Settings_JoinUnstoppables_Description">通过独家视频学习和掌握加密。非正式地了解我们。成为第一个看看我们正在工作的事情。</string>
     <string name="Settings_PersonalSupport">个人支持</string>

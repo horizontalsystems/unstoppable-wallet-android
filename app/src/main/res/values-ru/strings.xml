@@ -725,7 +725,7 @@
     <string name="Settings_Contact_ViaEmail">по электронной почте</string>
     <string name="Settings_AutoLock">Блокировка</string>
     <string name="Settings_JoinUnstoppables">Продолжить</string>
-    <string name="Settings_VipSupport">VIP тех поддержка</string>
+    <string name="Settings_VipSupport">VIP группа</string>
     <string name="Settings_BotSupport">BOT Support</string>
     <string name="Settings_JoinUnstoppables_Description">Изучайте и осваивайте криптовалюты с помощью эксклюзивных видео. Узнавайте о нас неформально. Будьте первыми, кто увидит то, над чем мы работаем.</string>
     <string name="Settings_PersonalSupport">Персональная поддержка</string>
@@ -756,7 +756,7 @@
     <string name="SettingsSecurity_AutoLock_After1Hour">1 час</string>
     <!--Premium Banner-->
     <string name="SettingsBanner_Premium">Премиум</string>
-    <string name="SettingsBanner_PremiumBannerDescription">Улучшите свой опыт с премиум функциями!</string>
+    <string name="SettingsBanner_PremiumBannerDescription">Откройте новые возможности с Премиум-доступом!</string>
     <string name="SettingsBanner_PremiumTryFee">Попробовать БЕСПЛАТНО</string>
     <!--Setting Subscription -->
     <string name="SettingsSubscription_Active">Активно</string>
@@ -782,22 +782,22 @@
     <string name="Premium_ThankYouForSubscription">Благодарим вас \nза подписку!</string>
     <string name="Premium_YouHaveActivatedPlan">Вы активировали план %s.</string>
     <string name="Premium_GoToApp">Перейти в приложение</string>
-    <string name="Premium_UpgradeText">Улучшите свой опыт с премиум функциями!</string>
+    <string name="Premium_UpgradeText">Откройте новые возможности с Премиум-доступом!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">Списки токенов</string>
+    <string name="Premium_UpgradeFeature_TokenInsights">Обзор токенов</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
-    <string name="Premium_UpgradeFeature_TradeSignals">Отслеживание трендов</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Мониторинг трендов</string>
     <string name="Premium_UpgradeFeature_DuressMode">Режим Duress</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing">Защита от мошенничества</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist">Проверка по черным спискам</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Scam-защита</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Blacklist проверка</string>
     <string name="Premium_UpgradeFeature_VipSupport">VIP группа</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Исследование токенов</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Откройте для себя популярные токены</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Торгуйте умнее, получайте прибыль быстрее</string>
-    <string name="Premium_UpgradeFeature_DuressMode_Description">Оставайтесь в безопасности, где бы вы ни находились</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Полный контроль без лишних забот</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Легитимность без компромиссов</string>
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Проверенная аналитика криптовалют</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Раскрывайте перспективные токены</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Профессиональный подход, ускоренная прибыль</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Неуязвимость в любой ситуации</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Простая защита от мошенников</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Гарантия легальности ваших операций</string>
     <string name="Premium_UpgradeFeature_VipSupport_Description">Голосуйте за будущее Unstoppable</string>
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокого анализа. Просматривайте подборку Top 250 токенов на основе объема торгов, ликвидности бирж, поведения держателей и трендов в сети — все в одном месте. Фильтруйте, анализируйте и оставайтесь впереди.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отфильтруйте ненужное и очно сфокусируйтесь на токенах с высоким потенциалом. Используйте расширенный поиск для фильтрации тысяч токенов по объему торгов, блокчейну, капитализации, ценовым трендам, сектору и эффективности — и не только. Мощный, точный инструмент для поиска.</string>

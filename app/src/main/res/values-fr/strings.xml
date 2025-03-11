@@ -723,6 +723,7 @@
     <string name="Settings_Contact_ViaEmail">par e-mail</string>
     <string name="Settings_AutoLock">Verrouillage automatique</string>
     <string name="Settings_JoinUnstoppables">Soyez Unstoppable</string>
+    <string name="Settings_VipSupport">GROUPE VIP</string>
     <string name="Settings_BotSupport">Support BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Apprenez et maîtrisez les crypto-monnaies grâce à des vidéos exclusives. Faites connaissance avec nous de manière informelle. Soyez les premiers à voir les projets sur lesquels nous travaillons.</string>
     <string name="Settings_PersonalSupport">Assistance Personnelle</string>

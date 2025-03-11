@@ -727,7 +727,7 @@
     <string name="Settings_Contact_ViaEmail">por e-mail</string>
     <string name="Settings_AutoLock">Auto-Bloqueio</string>
     <string name="Settings_JoinUnstoppables">Seja Unstoppable</string>
-    <string name="Settings_VipSupport">Suporte VIP</string>
+    <string name="Settings_VipSupport">Grupo VIP</string>
     <string name="Settings_BotSupport">Suporte por BOT</string>
     <string name="Settings_JoinUnstoppables_Description">Aprenda e domine cripto através de vídeos exclusivos. Conheça-nos informalmente. Seja o primeiro a ver as coisas em que trabalhamos.</string>
     <string name="Settings_PersonalSupport">Suporte Pessoal</string>
