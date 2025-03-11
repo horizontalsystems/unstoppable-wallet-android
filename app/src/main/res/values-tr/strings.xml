@@ -727,6 +727,7 @@
     <string name="Settings_Contact_ViaEmail">E-posta yoluyla</string>
     <string name="Settings_AutoLock">Otomatik kilit</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_VipSupport">VIP Grup</string>
     <string name="Settings_JoinUnstoppables_Description">Özel videolar aracılığıyla kripto para birimini öğrenin ve ustalaşın. Bizi resmi olmayan bir şekilde tanıyın. Üzerinde çalıştığımız şeyleri ilk gören siz olun.</string>
     <string name="Settings_PersonalSupport">Kişisel Destek</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Takımımızla kişisel destek sohbeti başlatmak için Telegram hesap adınızı girin. Sorununuzu gördüğümüzde hemen size geri dönecek ve çalışmaya başlayacağız.</string>
