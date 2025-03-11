@@ -206,21 +206,21 @@ private fun SettingSections(
                     }
                 }
             )
-        }, {
-            HsSettingCell(
-                title = R.string.Settings_TonConnect,
-                icon = R.drawable.ic_ton_connect_24,
-                value = null,
-                counterBadge = null,
-                onClick = {
-                    navController.slideFromRight(R.id.tcListFragment)
-
-                    stat(
-                        page = StatPage.Settings,
-                        event = StatEvent.Open(StatPage.TonConnect)
-                    )
-                }
-            )
+//        }, {
+//            HsSettingCell(
+//                title = R.string.Settings_TonConnect,
+//                icon = R.drawable.ic_ton_connect_24,
+//                value = null,
+//                counterBadge = null,
+//                onClick = {
+//                    navController.slideFromRight(R.id.tcListFragment)
+//
+//                    stat(
+//                        page = StatPage.Settings,
+//                        event = StatEvent.Open(StatPage.TonConnect)
+//                    )
+//                }
+//            )
         }, {
             HsSettingCell(
                 R.string.BackupManager_Title,
