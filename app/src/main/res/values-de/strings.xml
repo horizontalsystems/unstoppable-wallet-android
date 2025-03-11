@@ -724,6 +724,7 @@
     <string name="Settings_Contact_ViaEmail">per e-Mail</string>
     <string name="Settings_AutoLock">Auto-Sperren</string>
     <string name="Settings_JoinUnstoppables">Sei unaufhaltsam</string>
+    <string name="Settings_VipSupport">VIP Gruppe</string>
     <string name="Settings_JoinUnstoppables_Description">Lernen Sie Kryptographie über exklusive Videos. Lernen Sie uns informell kennen. Sei der Erste, der Dinge sieht, an denen wir arbeiten.</string>
     <string name="Settings_PersonalSupport">Persönlicher Support</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Geben Sie Ihren Telegram-Kontonamen ein, um einen persönlichen Support-Chat mit unserem Team zu starten. Wir werden uns mit Ihnen in Verbindung setzen und anfangen, an Ihrem Problem zu arbeiten, sobald wir es sehen.</string>
