@@ -8,8 +8,8 @@ object UserSubscriptionManager {
 
     private val predefinedSubscriptions = listOf(
         Subscription(
-            id = "test.subscription_3",
-            name = "PRO",
+            id = "premium",
+            name = "Premium",
             description = "",
             actions = listOf(
                 TokenInsights,
