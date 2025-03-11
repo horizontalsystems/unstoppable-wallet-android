@@ -165,15 +165,15 @@ fun SelectSubscriptionScreen(
                         )
                     }
                     VSpacer(24.dp)
-                    subhead2_grey(
-                        text = stringResource(R.string.Premium_WhatUsersSay),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 32.dp),
-                        textAlign = TextAlign.Center
-                    )
-                    VSpacer(16.dp)
-                    ReviewSliderBlock()
+//                    subhead2_grey(
+//                        text = stringResource(R.string.Premium_WhatUsersSay),
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(horizontal = 32.dp),
+//                        textAlign = TextAlign.Center
+//                    )
+//                    VSpacer(16.dp)
+//                    ReviewSliderBlock()
                     VSpacer(52.dp)
                 }
             }
