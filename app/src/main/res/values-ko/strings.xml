@@ -727,6 +727,7 @@
     <string name="Settings_Contact_ViaEmail">이메일로</string>
     <string name="Settings_AutoLock">자동 잠금</string>
     <string name="Settings_JoinUnstoppables">Be Unstoppable</string>
+    <string name="Settings_VipSupport">VIP 그룹</string>
     <string name="Settings_JoinUnstoppables_Description">독점 비디오로 암호화폐를 배우고 정복하세요. 비공식적으로 우리를 알아가세요. 우리가 작업하는 것들을 가장 먼저 보실 수 있습니다.</string>
     <string name="Settings_PersonalSupport">개인 지원</string>
     <string name="Settings_PersonalSupport_EnterTelegramAccountDescription">Telegram 계정 이름을 입력하여 저희 팀과 개인 지원 채팅을 시작하세요. 문제가 확인되는 즉시 연락을 드리고 문제 해결을 시작하겠습니다.</string>
