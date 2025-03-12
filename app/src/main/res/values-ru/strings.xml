@@ -785,20 +785,23 @@
     <string name="Premium_UpgradeText">Откройте новые возможности с Премиум-доступом!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Наслаждайтесь полным функционалом приложения.</string>
     <string name="Premium_SelectSubscription">Выбрать подписку</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">Обзор токенов</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights">Аналитика</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Расширенный поиск</string>
-    <string name="Premium_UpgradeFeature_TradeSignals">Мониторинг трендов</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Сигналы и тренды</string>
     <string name="Premium_UpgradeFeature_DuressMode">Режим Duress</string>
     <string name="Premium_UpgradeFeature_AddressPhishing">Scam-защита</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">Blacklist проверка</string>
     <string name="Premium_UpgradeFeature_VipSupport">VIP группа</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Проверенная аналитика криптовалют</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Откройте для себя тренд-токены</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Торгуйте умнее, зарабатывайте быстрее</string>
-    <string name="Premium_UpgradeFeature_DuressMode_Description">Будьте в безопасности везде</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Надёжная защита от мошенничества без лишних забот</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Гарантия легальности ваших операций</string>
-    <string name="Premium_UpgradeFeature_VipSupport_Description">Голосуйте за будущее Unstoppable</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Доступ к топ-100 спискам по ключевым критериям</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Многоуровневая фильтрация по множеству параметров</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Авто-мониторинг рыночных трендов для ваших токенов</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Умная безопасность средств при физической угрозе</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Эффективная авто-защита против скам и фишинг-атак</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Гарантия легальности ваших крипто-операций</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Доступ к команде и к будущей разработке.</string>
+
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ваш универсальный инструмент для глубокого анализа. Просматривайте подборку Top 250 токенов на основе объема торгов, ликвидности бирж, поведения держателей и трендов в сети — все в одном месте. Фильтруйте, анализируйте и оставайтесь впереди.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Отфильтруйте ненужное и очно сфокусируйтесь на токенах с высоким потенциалом. Используйте расширенный поиск для фильтрации тысяч токенов по объему торгов, блокчейну, капитализации, ценовым трендам, сектору и эффективности — и не только. Мощный, точный инструмент для поиска.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Не упускайте выгодные торговые возможности. Функция отслеживания трендов отправляет уведомления в режиме реального времени, основанные на сложном техническом анализе. Она поможет вам распознавать тенденции, видеть прорывы рынка и обходить подводные камни до того, как они возникнут. Реагируйте оперативно, ведите торговлю с умом и увеличивайте свою прибыль.</string>
@@ -809,7 +812,8 @@
 Если адрес находится в черном списке, вы узнаете об этом до совершения дорогостоящей ошибки. Обезопасьте свои транзакции. Держите криптовалютные операции чистыми. Оставайтесь в рамках закона.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Будьте частью развития. Присоединяйтесь к VIP-группе и получите прямой канал связи с нашей командой, возможность голосовать за будущие функции и эксклюзивный доступ к предстоящим обновлениям.
 Ваш голос имеет значение — вместе мы создаем криптокошелек нового поколения.</string>
-    <string name="Premium_HighlyRatedSecurity">Высоко оцененная безопасность, исключительная приватность и по-настоящему некастодиальный кошелек.</string>
+
+    <string name="Premium_HighlyRatedSecurity">Высокий уровень безопасности, полная конфиденциальность и по-настоящему некостодиальный кошелек.</string>
     <string name="Premium_ApprovedBy">Одобрено и проверено:</string>
     <string name="Premium_WhatUsersSay">Что говорят пользователи:</string>
     <string name="Premium_SubscriptionPeriod_Month">месяц</string>

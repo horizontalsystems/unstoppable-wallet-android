@@ -786,20 +786,23 @@
     <string name="Premium_UpgradeText">Premium özelliklerle deneyiminizi yükseltin!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Uygulamanın tüm gücünün keyfini çıkarın.</string>
     <string name="Premium_SelectSubscription">Abonelik Seçin</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">Token Listeleri</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights">Token Analitiği</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Gelişmiş Arama</string>
-    <string name="Premium_UpgradeFeature_TradeSignals">Trendleri İzleyin</string>
-    <string name="Premium_UpgradeFeature_DuressMode">Duress Modu</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Sinyaller ve Trendler</string>
+    <string name="Premium_UpgradeFeature_DuressMode">Tehdit Modu</string>
     <string name="Premium_UpgradeFeature_AddressPhishing">Dolandırıcılık Koruması</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist">Kara Liste Kontrolcüsü</string>
-    <string name="Premium_UpgradeFeature_VipSupport">VIP Grup</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Token Araştırmasında Ustalaşın</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Trend Olan Tokenleri Keşfedin</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Daha Akıllı Ticaret, Daha Hızlı Kâr</string>
-    <string name="Premium_UpgradeFeature_DuressMode_Description">Nereye Giderseniz Gidin Güvende Kalın</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Zahmet Çekmeden Güvende Kalın</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Meşru ve Uyumlu Kalın</string>
-    <string name="Premium_UpgradeFeature_VipSupport_Description">Unstoppable\'ın Geleceği Hakkında Oy Verin</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Kara Liste Kontrolü</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP Grubu</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Önemli kriterlere göre ilk 100 listelerine erişim</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Çoklu parametreler üzerinden çok seviyeli filtreleme</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Tokenleriniz için piyasa trendlerinin otomatik takibi</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Fiziksel tehditler sırasında akıllı fon güvenliği</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Dolandırıcılık ve oltalama saldırılarına karşı etkili otomatik koruma</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Kripto işlemlerinizin yasallığı için garanti</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Ekibe erişim ve gelecekteki geliştirmeler için oy kullanma hakkı</string>
+
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Derinlemesine analiz için tek araçınız. İşlem hacmi, borsa likiditesi, yatırımcı davranışı ve zincir üstü trendlere dayalı olarak düzenlenmiş En İyi 250 token listesine göz atın—hepsi tek bir bakışta. Filtreleyin, analiz edin ve öne geçin.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Gereksiz detayları bırakın ve yüksek potansiyelli tokenlere hassasiyetle odaklanın. Gelişmiş Arama\'yı kullanarak binlerce tokeni işlem hacmi, blok zinciri, piyasa değeri, fiyat trendleri, sektör ve performansa göre filtreleyebilirsiniz—ve daha fazlası. Güçlü, doğru ve keşif için tasarlanmış.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Bir daha hiçbir ticaret fırsatını kaçırmayın. Trendleri İzleyin, gelişmiş teknik analize dayalı gerçek zamanlı uyarılar sunarak trendleri belirlemenize, ani yükselişleri tespit etmenize ve sorunları önceden fark etmenize yardımcı olur. Hızlı hareket edin, akıllı ticaret yapın ve kazançlarınızı maksimize edin.</string>
@@ -807,6 +810,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Yanlış bir adres ve kripto paranız sonsuza dek kaybolabilir. Unstoppable, alıcı adresleri şüpheli kalıplar için otomatik olarak tarar ve en son oltalama tehditlerine karşı savunma sağlayarak fonlarınızı bir bilgisayar korsanına göndermenizi önler. Gerçekleşmeden önce sahte transferleri engelleyin.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Kendinizi riskli ve yaptırım uygulanan kuruluşlardan koruyun. Kara Liste Kontrolcüsü, göndermeden önce alıcı adresleri yüksek riskli veritabanlarına karşı otomatik olarak tarar ve dolandırıcılık, sahtekarlık ve yaptırım uygulanan kuruluşları işaretler. Bir adres kara listeye alınmışsa, maliyetli bir hata yapmadan önce bileceksiniz. İşlemlerinizi güvence altına alın. Kripto paranızı temiz tutun. Uyumlu kalın.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Gelişimin bir parçası olun. Ekibimizle doğrudan bağlantı kurmak, gelecek özellikler hakkında oy kullanmak ve gelecekteki güncellemelere özel bir ilk bakış elde etmek için VIP Gruba katılın. Sesiniz önemlidir—yeni nesil kripto cüzdanını şekillendirmeye yardımcı olun.</string>
+
     <string name="Premium_HighlyRatedSecurity">Yüksek güvenlik derecesi, olağanüstü gizlilik ve gerçek anlamda emanet edilmeyen bir cüzdan.</string>
     <string name="Premium_ApprovedBy">Tarafından Onaylanmış ve Denetlenmiş:</string>
     <string name="Premium_WhatUsersSay">Kullanıcılar ne diyor:</string>

@@ -783,20 +783,23 @@
     <string name="Premium_UpgradeText">Verbessern Sie Ihre Erfahrung mit Premium-Funktionen!</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">Genießen Sie die volle Leistung der App.</string>
     <string name="Premium_SelectSubscription">Abonnement auswählen</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">Token-Listen</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights">Token-Analysen</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">Erweiterte Suche</string>
-    <string name="Premium_UpgradeFeature_TradeSignals">Trends beobachten</string>
-    <string name="Premium_UpgradeFeature_DuressMode">Duress-Modus</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing">Scam-Schutz</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist">SchwarzListen-Prüfer</string>
-    <string name="Premium_UpgradeFeature_VipSupport">VIP Gruppe</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">Meistern Sie Token-Recherche</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Entdecken Sie trendende Token</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">Smarter handeln, schneller profitieren</string>
-    <string name="Premium_UpgradeFeature_DuressMode_Description">Bleiben Sie sicher, wo immer Sie sind</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Bleiben Sie sicher ohne Umstände</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Bleiben Sie legal und konform</string>
-    <string name="Premium_UpgradeFeature_VipSupport_Description">Stimmen Sie über die Zukunft von Unstoppable ab</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">Signale und Trends</string>
+    <string name="Premium_UpgradeFeature_DuressMode">Notfall-Modus</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing">Betrugsschutz</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist">Blacklist-Prüfung</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP-Gruppe</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">Zugriff auf Top-100 Listen nach Schlüsselkriterien</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">Mehrstufige Filterung über mehrere Parameter</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">Automatische Überwachung von Markttrends für Ihre Tokens</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">Intelligente Fondssicherheit bei physischen Bedrohungen</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">Effektiver automatischer Schutz gegen Betrug und Phishing-Angriffe</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">Garantie der Legalität für Ihre Krypto-Transaktionen</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">Zugang zum Team und Mitsprache bei zukünftigen Entwicklungen</string>
+
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">Ihr All-in-One-Tool für tiefgehende Analysen. Durchsuchen Sie kuratierte Top-250-Token-Listen basierend auf Handelsvolumen, Börsen-Liquidität, Halterverhalten und On-Chain-Trends – alles auf einen Blick. Filtern, analysieren und bleiben Sie voraus.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">Lassen Sie den Lärm hinter sich und konzentrieren Sie sich präzise auf Token mit hohem Potenzial. Nutzen Sie die Erweiterte Suche, um Tausende von Token nach Handelsvolumen, Blockchain, Marktkapitalisierung, Preistrends, Sektor und Performance zu filtern – und mehr. Leistungsstark, präzise und für Entdeckungen konzipiert.</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">Verpassen Sie nie wieder eine Handelsgelegenheit. Watch Trends liefert Echtzeit-Benachrichtigungen, unterstützt durch fortschrittliche technische Analyse, die Ihnen hilft, Trends zu identifizieren, Ausbrüche zu erkennen und Fallstricke zu vermeiden, bevor sie passieren. Handeln Sie schnell, traden Sie smart und maximieren Sie Ihre Gewinne.</string>
@@ -804,6 +807,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">Eine falsche Adresse, und Ihre Kryptowährung ist für immer verloren. Unstoppable scannt automatisch Empfängeradressen auf verdächtige Muster und schützt vor den neuesten Phishing-Bedrohungen, um zu verhindern, dass Sie Gelder an einen Hacker senden. Blockieren Sie betrügerische Überweisungen, bevor sie passieren.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">Schützen Sie sich vor risikoreichen und sanktionierten Entitäten. Der Schwarzlisten-Prüfer überprüft automatisch Empfängeradressen gegen Hochrisiko-Datenbanken und markiert Betrug, Fälschungen und sanktionierte Entitäten, bevor Sie senden. Wenn eine Adresse auf der Schwarzliste steht, erfahren Sie es, bevor Sie einen kostspieligen Fehler machen. Sichern Sie Ihre Transaktionen. Halten Sie Ihre Kryptowährung sauber. Bleiben Sie konform.</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">Seien Sie Teil der Evolution. Treten Sie der VIP-Gruppe bei, um direkt mit unserem Team in Kontakt zu treten, über kommende Funktionen abzustimmen und einen exklusiven ersten Blick auf zukünftige Updates zu erhalten. Ihre Stimme zählt – helfen Sie mit, die nächste Generation der Krypto-Wallet zu gestalten.</string>
+
     <string name="Premium_HighlyRatedSecurity">Hochbewertete Sicherheit, außergewöhnliche Privatsphäre und eine wirklich nicht-verwaltete Wallet.</string>
     <string name="Premium_ApprovedBy">Genehmigt und geprüft von:</string>
     <string name="Premium_WhatUsersSay">Was Benutzer sagen:</string>
