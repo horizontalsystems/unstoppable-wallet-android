@@ -783,20 +783,23 @@
     <string name="Premium_UpgradeText">使用高級版功能升級您的體驗！</string>
     <string name="Premium_EnjoyFullPowerOfTheApp">盡享應用程式的全部功能。</string>
     <string name="Premium_SelectSubscription">選擇訂閱</string>
-    <string name="Premium_UpgradeFeature_TokenInsights">代幣列表</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights">代幣分析</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch">進階搜尋</string>
-    <string name="Premium_UpgradeFeature_TradeSignals">觀察趨勢</string>
-    <string name="Premium_UpgradeFeature_DuressMode">服用模式</string>
+    <string name="Premium_UpgradeFeature_TradeSignals">信號與趨勢</string>
+    <string name="Premium_UpgradeFeature_DuressMode">脅迫模式</string>
     <string name="Premium_UpgradeFeature_AddressPhishing">詐騙防護</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist">黑名單檢查</string>
-    <string name="Premium_UpgradeFeature_VipSupport">貴賓群組</string>
-    <string name="Premium_UpgradeFeature_TokenInsights_Description">掌握代幣研究</string>
-    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">發現熱門代幣</string>
-    <string name="Premium_UpgradeFeature_TradeSignals_Description">更智能交易，更快獲利</string>
-    <string name="Premium_UpgradeFeature_DuressMode_Description">無論身在何處都保持安全</string>
-    <string name="Premium_UpgradeFeature_AddressPhishing_Description">無憂保持安全</string>
-    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">保持合法與合規</string>
-    <string name="Premium_UpgradeFeature_VipSupport_Description">為Unstoppable的未來投票</string>
+    <string name="Premium_UpgradeFeature_VipSupport">VIP群組</string>
+
+    <string name="Premium_UpgradeFeature_TokenInsights_Description">按關鍵標準獲取前100名列表</string>
+    <string name="Premium_UpgradeFeature_AdvancedSearch_Description">多參數多層級篩選</string>
+    <string name="Premium_UpgradeFeature_TradeSignals_Description">自動監控您代幣的市場趨勢</string>
+    <string name="Premium_UpgradeFeature_DuressMode_Description">面對實體威脅時的智能資金安全保障</string>
+    <string name="Premium_UpgradeFeature_AddressPhishing_Description">有效自動防護詐騙和釣魚攻擊</string>
+    <string name="Premium_UpgradeFeature_AddressBlacklist_Description">確保您的加密貨幣操作合法性</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">獲取團隊聯繫並參與未來發展投票</string>
+
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">您的一站式深度分析工具。瀏覽根據交易量、交易所流動性、持有者行為和鏈上趨勢策劃的前250名代幣列表—一目了然。篩選、分析並保持領先。</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">摒棄雜訊，精準鎖定高潛力代幣。使用進階搜尋功能，通過交易量、區塊鏈、市值、價格趨勢、行業和表現等條件篩選數千種代幣。強大、精準且專為發現而設計。</string>
     <string name="Premium_UpgradeFeature_TradeSignals_BigDescription">不再錯過任何交易機會。觀察趨勢提供由先進技術分析驅動的實時警報，幫助您在趨勢發生前識別、發現突破點並避免陷阱。快速行動，智能交易，最大化收益。</string>
@@ -804,6 +807,7 @@
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">一個錯誤的地址，您的加密貨幣將永遠消失。Unstoppable自動掃描接收地址的可疑模式，防禦最新的網絡釣魚威脅，防止您向駭客發送資金。在詐騙交易發生前阻止它們。</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">保護自己免受風險和受制裁實體的侵害。黑名單檢查自動對照高風險數據庫篩選接收地址，在您發送前標記詐騙、欺詐和受制裁實體。如果一個地址被列入黑名單，您將在犯下代價高昂的錯誤前知道。保護您的交易。保持您的加密貨幣清潔。保持合規。</string>
     <string name="Premium_UpgradeFeature_VipSupport_BigDescription">成為進化的一部分。加入貴賓群組，直接與我們的團隊聯繫，為即將推出的功能投票，並獨家先睹未來更新。您的聲音很重要—幫助塑造下一代加密錢包。</string>
+
     <string name="Premium_HighlyRatedSecurity">高評價的安全性、卓越的隱私性和真正的非託管錢包。</string>
     <string name="Premium_ApprovedBy">經以下機構批准和審核：</string>
     <string name="Premium_WhatUsersSay">用戶評價：</string>
