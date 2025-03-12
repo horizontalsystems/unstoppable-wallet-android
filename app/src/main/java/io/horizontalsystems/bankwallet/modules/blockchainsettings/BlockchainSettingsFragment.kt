@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -51,7 +52,9 @@ private fun BlockchainSettingsScreen(
 ) {
 
     Surface(color = ComposeAppTheme.colors.tyler) {
-        Column {
+        Column(
+            modifier = Modifier.navigationBarsPadding()
+        ) {
             AppBar(
                 title = stringResource(R.string.BlockchainSettings_Title),
                 navigationIcon = {

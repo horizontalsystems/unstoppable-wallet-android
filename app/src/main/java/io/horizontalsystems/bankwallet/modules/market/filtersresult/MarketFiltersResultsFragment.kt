@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
@@ -86,7 +87,10 @@ private fun SearchResultsScreen(
     var scrollToTopAfterUpdate by rememberSaveable { mutableStateOf(false) }
     var openSortingSelector by rememberSaveable { mutableStateOf(false) }
 
-    Surface(color = ComposeAppTheme.colors.tyler) {
+    Surface(
+        color = ComposeAppTheme.colors.tyler,
+        modifier = Modifier.navigationBarsPadding()
+    ) {
         Column {
             AppBar(
                 title = stringResource(R.string.Market_AdvancedSearch_Results),

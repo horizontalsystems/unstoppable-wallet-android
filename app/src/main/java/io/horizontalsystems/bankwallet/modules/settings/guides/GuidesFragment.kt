@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -59,7 +60,11 @@ fun GuidesScreen(navController: NavController) {
     val selectedCategory = uiState.selectedCategory
     val expandedSections = uiState.expandedSections
 
-    Column(modifier = Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+    Column(
+        modifier = Modifier
+            .background(color = ComposeAppTheme.colors.tyler)
+            .navigationBarsPadding()
+    ) {
         AppBar(
             title = stringResource(R.string.Guides_Title),
             navigationIcon = {

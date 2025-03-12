@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -76,7 +77,11 @@ class MetricsPageFragment : BaseComposeFragment() {
     ) {
         val uiState = viewModel.uiState
 
-        Column(Modifier.background(color = ComposeAppTheme.colors.tyler)) {
+        Column(
+            Modifier
+                .background(color = ComposeAppTheme.colors.tyler)
+                .navigationBarsPadding()
+        ) {
             AppBar(
                 menuItems = listOf(
                     MenuItem(

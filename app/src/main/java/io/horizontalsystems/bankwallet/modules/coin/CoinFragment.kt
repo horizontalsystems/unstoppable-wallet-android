@@ -2,6 +2,7 @@ package io.horizontalsystems.bankwallet.modules.coin
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -136,7 +137,9 @@ fun CoinTabs(
         }
     ) { innerPaddings ->
         Column(
-            modifier = Modifier.padding(innerPaddings)
+            modifier = Modifier
+                .padding(innerPaddings)
+                .navigationBarsPadding()
         ) {
             val selectedTab = tabs[pagerState.currentPage]
             val tabItems = tabs.map {
