@@ -4,6 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -117,7 +118,9 @@ fun CategoryScreen(
         },
     ) { innerPaddings ->
         Column(
-            modifier = Modifier.padding(innerPaddings)
+            modifier = Modifier
+                .padding(innerPaddings)
+                .navigationBarsPadding()
         ) {
             HSSwipeRefresh(
                 refreshing = isRefreshing,

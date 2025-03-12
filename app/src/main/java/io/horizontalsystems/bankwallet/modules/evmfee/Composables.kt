@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -312,7 +313,9 @@ fun ButtonsGroupWithShade(
     ButtonsContent: @Composable (() -> Unit)
 ) {
     Column(
-        modifier = Modifier.offset(y = -(24.dp))
+        modifier = Modifier
+            .offset(y = -(24.dp))
+            .navigationBarsPadding()
     ) {
         Box(
             modifier = Modifier
@@ -325,9 +328,7 @@ fun ButtonsGroupWithShade(
                 )
         )
         Box(
-            modifier = Modifier
-                .background(ComposeAppTheme.colors.tyler)
-                .padding(bottom = 8.dp) // With 24dp offset actual padding will be 32dp
+            modifier = Modifier.background(ComposeAppTheme.colors.tyler)
         ) {
             ButtonsContent()
         }

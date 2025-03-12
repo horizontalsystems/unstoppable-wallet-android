@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -77,7 +78,9 @@ fun MarketSearchScreen(viewModel: MarketSearchViewModel, navController: NavContr
 
     val uiState = viewModel.uiState
 
-    Column {
+    Column(
+        modifier = Modifier.navigationBarsPadding()
+    ) {
         SearchBar(
             title = stringResource(R.string.Market_Search),
             searchHintText = stringResource(R.string.Market_Search),
