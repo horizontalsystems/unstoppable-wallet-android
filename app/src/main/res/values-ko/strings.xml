@@ -801,7 +801,7 @@
     <string name="Premium_UpgradeFeature_DuressMode_Description">물리적 위협 상황에서 스마트 자금 보안</string>
     <string name="Premium_UpgradeFeature_AddressPhishing_Description">사기 및 피싱 공격에 대한 효과적인 자동 보호</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_Description">암호화폐 거래의 합법성 보장</string>
-    <string name="Premium_UpgradeFeature_VipSupport_Description">팀 접근 및 향후 개발에 대한 투표 참여</string>
+    <string name="Premium_UpgradeFeature_VipSupport_Description">지갑 팀에 접근하여 신속한 기술 지원을 받으세요.</string>
 
     <string name="Premium_UpgradeFeature_TokenInsights_BigDescription">심층 분석을 위한 올인원 도구입니다. 거래량, 거래소 유동성, 보유자 행동 패턴 및 온체인 트렌드를 기반으로 엄선된 상위 250개 토큰 목록을 한눈에 살펴보세요. 필터링, 분석하고 항상 앞서 나가세요.</string>
     <string name="Premium_UpgradeFeature_AdvancedSearch_BigDescription">불필요한 정보는 배제하고 높은 잠재력을 가진 토큰을 정확하게 찾아보세요. 고급 검색을 사용하여 거래량, 블록체인, 시가총액, 가격 동향, 섹터 및 성과 등 수천 개의 토큰을 필터링하세요. 강력하고 정확하며 발견을 위해 설계되었습니다.</string>
@@ -809,7 +809,7 @@
     <string name="Premium_UpgradeFeature_DuressMode_BigDescription">당신의 암호화폐. 당신의 보안. 긴급 상황 모드는 각각 다른 PIN을 가진 여러 개의 대체 지갑 설정을 생성할 수 있게 하여 위험한 상황에서 숨겨진 탈출 경로를 제공합니다. 지갑 잠금 해제를 강요받은 경우, 간단히 긴급 PIN을 사용하여 중요한 자산이 노출되지 않는 보조 지갑에 접근할 수 있습니다. 실제 자금은 숨겨진 채로 유지됩니다. 당신의 보안은 그대로 유지됩니다.</string>
     <string name="Premium_UpgradeFeature_AddressPhishing_BigDescription">주소 하나만 잘못 입력하면 암호화폐가 영원히 사라질 수 있습니다. Unstoppable은 수신자 주소의 의심스러운 패턴을 자동으로 스캔하고 최신 피싱 위협으로부터 방어하여 해커에게 자금을 보내는 것을 방지합니다. 사기성 거래가 발생하기 전에 차단하세요.</string>
     <string name="Premium_UpgradeFeature_AddressBlacklist_BigDescription">위험하거나 제재 대상인 엔티티로부터 자신을 보호하세요. 블랙리스트 체커는 수신자 주소를 고위험 데이터베이스와 자동으로 대조하여 송금 전에 사기, 사기 및 제재 대상 엔티티를 표시합니다. 주소가 블랙리스트에 등록되어 있다면, 비용이 많이 드는 실수를 하기 전에 알 수 있습니다. 거래를 안전하게 하세요. 암호화폐를 깨끗하게 유지하세요. 규정을 준수하세요.</string>
-    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">진화의 일부가 되세요. VIP 그룹에 가입하여 우리 팀과 직접 연결하고, 다가오는 기능에 투표하며, 향후 업데이트에 대한 독점적인 선견을 얻으세요. 당신의 의견이 중요합니다—차세대 암호화폐 지갑을 함께 만들어 나가세요.</string>
+    <string name="Premium_UpgradeFeature_VipSupport_BigDescription">진화의 일원이 되세요. VIP 그룹에 가입하여 기술 지원을 위해 저희 팀과 직접 연결하세요. 예정된 기능에 투표하고, 향후 업데이트에 대한 독점 미리보기를 받으세요. 당신의 의견이 중요합니다—차세대 암호화폐 지갑을 함께 만들어 나가세요.</string>
 
     <string name="Premium_HighlyRatedSecurity">높은 평가를 받는 보안, 탁월한 개인 정보 보호, 그리고 진정한 비수탁형 지갑.</string>
     <string name="Premium_ApprovedBy">다음 기관에서 승인 및 감사:</string>
