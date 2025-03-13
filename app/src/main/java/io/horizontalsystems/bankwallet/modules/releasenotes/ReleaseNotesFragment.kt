@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -85,7 +86,11 @@ fun ReleaseNotesScreen(
             }
         }
     ) {
-        Column(Modifier.padding(it)) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .navigationBarsPadding()
+        ) {
             MarkdownContent(
                 modifier = Modifier.weight(1f),
                 viewState = viewModel.viewState,

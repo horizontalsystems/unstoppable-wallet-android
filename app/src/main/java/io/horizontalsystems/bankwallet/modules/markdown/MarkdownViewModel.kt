@@ -5,14 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.core.INetworkManager
 import io.horizontalsystems.bankwallet.core.managers.ConnectivityManager
+import io.horizontalsystems.bankwallet.core.providers.Translator
 import io.horizontalsystems.bankwallet.entities.ViewState
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.commonmark.parser.Parser
 import java.net.URL
+import java.util.Calendar
 
 class MarkdownViewModel(
     private val networkManager: INetworkManager,
@@ -63,7 +66,13 @@ class MarkdownViewModel(
 
         document.accept(markdownVisitor)
 
-        return markdownVisitor.blocks + MarkdownBlock.Footer()
+        return markdownVisitor.blocks + MarkdownBlock.Footer(getFooterText())
+    }
+
+    private fun getFooterText(): String {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val footerText = Translator.getString(R.string.FooterText, currentYear)
+        return footerText
     }
 
     private suspend fun getContent(): String {
