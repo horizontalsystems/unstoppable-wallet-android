@@ -54,9 +54,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import io.horizontalsystems.bankwallet.R
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionChoosePlanViewModel
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.badge
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.descriptionStringRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.iconRes
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.stringRepresentation
+import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.title
 import io.horizontalsystems.bankwallet.modules.usersubscription.BuySubscriptionModel.titleStringRes
 import io.horizontalsystems.bankwallet.ui.compose.ComposeAppTheme
 import io.horizontalsystems.bankwallet.ui.compose.Steel20
@@ -138,11 +140,11 @@ fun SelectSubscriptionBottomSheet(
             ) {
                 uiState.basePlans.forEachIndexed { index, basePlan ->
                     SubscriptionOption(
-                        title = basePlan.id,
+                        title = basePlan.title(),
                         price = basePlan.stringRepresentation(),
                         note = "",
                         isSelected = selectedItemIndex == index,
-                        badgeText = null,
+                        badgeText = basePlan.badge(),
                         onClick = {
                             viewModel.select(index)
                         }

@@ -30,6 +30,8 @@ class BuySubscriptionChoosePlanViewModel : ViewModelUiState<BuySubscriptionChoos
         viewModelScope.launch {
             try {
                 basePlans = UserSubscriptionManager.getBasePlans(subscriptionId)
+                    .sortedByDescending { it.pricingPhases.last().numberOfDays }
+
                 refreshFreeTrialPeriod()
 
                 emitState()
